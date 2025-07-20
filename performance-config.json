@@ -1,0 +1,122 @@
+{
+  "budgets": {
+    "resources": {
+      "totalJavaScript": {
+        "budget": 153600,
+        "unit": "bytes",
+        "description": "Total JavaScript bundle size"
+      },
+      "totalCSS": {
+        "budget": 61440,
+        "unit": "bytes", 
+        "description": "Total CSS bundle size"
+      },
+      "totalImages": {
+        "budget": 512000,
+        "unit": "bytes",
+        "description": "Total image assets size"
+      },
+      "totalFonts": {
+        "budget": 102400,
+        "unit": "bytes",
+        "description": "Total font assets size"
+      },
+      "totalBundle": {
+        "budget": 1048576,
+        "unit": "bytes",
+        "description": "Total bundle size"
+      }
+    },
+    "timing": {
+      "domContentLoaded": {
+        "budget": 2000,
+        "unit": "ms",
+        "description": "DOM Content Loaded event timing"
+      },
+      "loadComplete": {
+        "budget": 4000,
+        "unit": "ms",
+        "description": "Complete page load timing"
+      },
+      "firstPaint": {
+        "budget": 1000,
+        "unit": "ms",
+        "description": "First Paint timing"
+      },
+      "firstContentfulPaint": {
+        "budget": 1500,
+        "unit": "ms",
+        "description": "First Contentful Paint timing"
+      }
+    },
+    "coreWebVitals": {
+      "largestContentfulPaint": {
+        "budget": 2500,
+        "unit": "ms",
+        "description": "Largest Contentful Paint (LCP)"
+      },
+      "firstInputDelay": {
+        "budget": 100,
+        "unit": "ms",
+        "description": "First Input Delay (FID)"
+      },
+      "cumulativeLayoutShift": {
+        "budget": 0.1,
+        "unit": "ratio",
+        "description": "Cumulative Layout Shift (CLS)"
+      }
+    }
+  },
+  "thresholds": {
+    "performance": {
+      "good": 90,
+      "poor": 50
+    },
+    "accessibility": {
+      "good": 95,
+      "poor": 80
+    },
+    "bestPractices": {
+      "good": 90,
+      "poor": 70
+    },
+    "seo": {
+      "good": 95,
+      "poor": 80
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "interval": 300000,
+    "retentionDays": 30,
+    "alerting": {
+      "enabled": true,
+      "consecutiveFailures": 3,
+      "degradationThreshold": 10
+    }
+  },
+  "analytics": {
+    "trackingId": "G-CIN4FOUNDATION",
+    "enabledMetrics": [
+      "core-web-vitals",
+      "performance-timing",
+      "resource-usage",
+      "user-interactions",
+      "errors"
+    ],
+    "customDimensions": {
+      "performanceRating": "custom_parameter_1",
+      "budgetStatus": "custom_parameter_2"
+    }
+  },
+  "reporting": {
+    "formats": ["json", "html", "console"],
+    "destinations": {
+      "localStorage": true,
+      "console": true,
+      "analytics": true
+    },
+    "includeRecommendations": true,
+    "includeTrends": true
+  }
+}

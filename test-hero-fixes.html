@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Section Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Hero section specific styles */
+    #hero {
+      background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #ecfdf5 100%);
+    }
+
+    /* Hero content animations */
+    .hero-headline {
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .hero-headline span:nth-child(2) {
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+      hyphens: none;
+      white-space: nowrap;
+    }
+
+    /* Professional highlight text effect */
+    .highlight-text {
+      position: relative;
+      display: inline-block;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      background: linear-gradient(120deg, transparent 0%, transparent 50%, rgba(59, 130, 246, 0.1) 50%, rgba(59, 130, 246, 0.1) 100%);
+      background-size: 220% 100%;
+      background-position: 100% 0;
+      font-weight: 600;
+      border-radius: 4px;
+      padding: 2px 4px;
+      margin: 0 1px;
+    }
+
+    .highlight-text::before {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #1e40af, #059669);
+      transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      border-radius: 1px;
+    }
+
+    .highlight-text:hover {
+      background-position: 0% 0;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(30, 64, 175, 0.15);
+    }
+
+    .highlight-text:hover::before {
+      width: 100%;
+    }
+
+    /* Fix for responsive text sizing to prevent cutoff */
+    @media (max-width: 640px) {
+      .hero-headline {
+        line-height: 1.2;
+        font-size: clamp(1.875rem, 8vw, 2.25rem) !important;
+      }
+      
+      .hero-headline span:nth-child(2) {
+        white-space: normal;
+        word-break: break-word;
+        font-size: clamp(1.875rem, 7.5vw, 2.25rem) !important;
+      }
+    }
+
+    .hero-content {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .hero-content {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .animate-gradient {
+      background-size: 200% 200%;
+      animation: gradient 3s ease infinite;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
+      <div class="text-center max-w-5xl mx-auto hero-content">
+        <!-- Main Headline -->
+        <h1 class="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 hero-headline">
+          <span class="block text-gray-900 mb-1 sm:mb-2">Building the</span>
+          <span class="block bg-gradient-to-r from-blue-900 via-blue-700 to-emerald-600 bg-clip-text text-transparent animate-gradient gradient-text-safe px-2 sm:px-0">
+            Operating System
+          </span>
+          <span class="block text-gray-900">for a More Intelligent Society</span>
+        </h1>
+        
+        <!-- Elevator Pitch -->
+        <div class="mb-8 sm:mb-12 space-y-4 sm:space-y-6 hero-pitch px-2 sm:px-0">
+          <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
+            The Collective Intelligence Network is architecting a <strong class="text-blue-900 highlight-text">decentralized, AI-driven ecosystem</strong> 
+            to enable <strong class="text-emerald-700 highlight-text">intelligence compounding</strong> and scalable, trustless collaboration.
+          </p>
+          <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto">
+            We're building a <strong class="highlight-text">comfort-first, post-scarcity economy</strong> where human creativity and AI capabilities 
+            work together to solve humanity's greatest challenges.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

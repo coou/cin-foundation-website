@@ -1,0 +1,94 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build project
+        run: npm run build
+        
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.12.x
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          
+      - name: Run Performance Budget Check
+        run: npm run performance:budget
+        
+      - name: Run Performance Monitoring
+        run: npm run performance:monitor
+          
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 30
+          
+      - name: Comment PR with Lighthouse results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            try {
+              const resultsPath = '.lighthouseci/lhr-*.json';
+              const results = fs.readdirSync('.lighthouseci/')
+                .filter(file => file.startsWith('lhr-') && file.endsWith('.json'))
+                .map(file => JSON.parse(fs.readFileSync(path.join('.lighthouseci', file), 'utf8')));
+              
+              if (results.length > 0) {
+                const latestResult = results[results.length - 1];
+                const scores = latestResult.categories;
+                
+                const comment = `## 🔍 Lighthouse Performance Report
+                
+| Category | Score | Status |
+|----------|-------|--------|
+| Performance | ${Math.round(scores.performance.score * 100)} | ${scores.performance.score >= 0.95 ? '✅' : '⚠️'} |
+| Accessibility | ${Math.round(scores.accessibility.score * 100)} | ${scores.accessibility.score >= 0.95 ? '✅' : '⚠️'} |
+| Best Practices | ${Math.round(scores['best-practices'].score * 100)} | ${scores['best-practices'].score >= 0.90 ? '✅' : '⚠️'} |
+| SEO | ${Math.round(scores.seo.score * 100)} | ${scores.seo.score >= 0.95 ? '✅' : '⚠️'} |
+
+**Core Web Vitals:**
+- LCP: ${latestResult.audits['largest-contentful-paint'].displayValue}
+- FID: ${latestResult.audits['max-potential-fid'] ? latestResult.audits['max-potential-fid'].displayValue : 'N/A'}
+- CLS: ${latestResult.audits['cumulative-layout-shift'].displayValue}
+
+[View detailed report](${latestResult.finalUrl})
+                `;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              }
+            } catch (error) {
+              console.log('Could not generate Lighthouse comment:', error.message);
+            }

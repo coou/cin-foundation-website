@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fixed Layout Dynamic Slogan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Fixed Layout Hero Section */
+    .hero-headline.fixed-layout {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .slogan-line {
+      display: block;
+      width: 100%;
+      margin-bottom: 0.5em;
+      min-height: 1.2em;
+      position: relative;
+    }
+
+    .slogan-line.main-concept {
+      margin-bottom: 0.8em;
+    }
+
+    .static-text {
+      color: #1f2937; /* gray-800 */
+    }
+
+    /* Dynamic Slogan Components with Fixed Sizing */
+
+    /* Rotating Action (Building) - Warm colors */
+    .rotating-action {
+      background: linear-gradient(
+        45deg,
+        #dc2626,    /* red-600 */
+        #f59e0b,    /* amber-500 */
+        #eab308,    /* yellow-500 */
+        #f97316,    /* orange-500 */
+        #dc2626     /* red-600 */
+      ) !important;
+      background-size: 300% 300% !important;
+      animation: warm-gradient 6s ease-in-out infinite !important;
+      display: inline-block;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      color: transparent !important;
+      transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+      min-width: 200px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Rotating Creation (Operating System) - Full spectrum */
+    .rotating-creation {
+      background: linear-gradient(
+        45deg,
+        #1e40af,    /* blue-800 */
+        #7c3aed,    /* violet-600 */
+        #dc2626,    /* red-600 */
+        #f59e0b,    /* amber-500 */
+        #eab308,    /* yellow-500 */
+        #8b5cf6,    /* violet-500 */
+        #3b82f6,    /* blue-500 */
+        #059669,    /* emerald-600 */
+        #dc2626,    /* red-600 */
+        #f59e0b     /* amber-500 */
+      ) !important;
+      background-size: 400% 400% !important;
+      animation: enhanced-gradient 8s ease-in-out infinite !important;
+      min-height: 1.2em;
+      display: inline-block;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      color: transparent !important;
+      position: relative;
+      transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+      min-width: 300px;
+      text-align: center;
+    }
+
+    /* Rotating Vision (for a More...) - Cool colors */
+    .rotating-vision {
+      background: linear-gradient(
+        45deg,
+        #1e40af,    /* blue-800 */
+        #7c3aed,    /* violet-600 */
+        #059669,    /* emerald-600 */
+        #0891b2,    /* cyan-600 */
+        #8b5cf6,    /* violet-500 */
+        #3b82f6     /* blue-500 */
+      ) !important;
+      background-size: 350% 350% !important;
+      animation: cool-gradient 7s ease-in-out infinite !important;
+      display: inline-block;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      color: transparent !important;
+      transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+      min-width: 400px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Gradient animations */
+    @keyframes warm-gradient {
+      0% { background-position: 0% 50%; }
+      25% { background-position: 100% 25%; }
+      50% { background-position: 50% 100%; }
+      75% { background-position: 25% 0%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes enhanced-gradient {
+      0% { background-position: 0% 50%; }
+      25% { background-position: 100% 50%; }
+      50% { background-position: 50% 100%; }
+      75% { background-position: 100% 0%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes cool-gradient {
+      0% { background-position: 0% 50%; }
+      33% { background-position: 100% 0%; }
+      66% { background-position: 0% 100%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Responsive adjustments for fixed layout */
+    @media (max-width: 640px) {
+      .rotating-action { min-width: 150px; }
+      .rotating-creation { min-width: 200px; }
+      .rotating-vision { min-width: 250px; }
+      
+      .hero-headline.fixed-layout {
+        min-height: 50vh;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .rotating-action { min-width: 250px; }
+      .rotating-creation { min-width: 400px; }
+      .rotating-vision { min-width: 500px; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <section class="relative min-h-screen flex items-center justify-center">
+    <div class="text-center max-w-7xl mx-auto">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 hero-headline fixed-layout">
+        <div class="slogan-line">
+          <span class="rotating-action" id="rotating-action">Building</span>
+          <span class="static-text"> the</span>
+        </div>
+        <div class="slogan-line main-concept">
+          <span class="rotating-creation" id="rotating-creation">Operating System</span>
+        </div>
+        <div class="slogan-line">
+          <span class="rotating-vision" id="rotating-vision">for a More Intelligent Society</span>
+        </div>
+      </h1>
+      
+      <div class="mt-8">
+        <p class="text-gray-600 mb-4">Fixed layout with vibrant gradients and smooth fade transitions!</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Simplified version for testing
+    class DynamicSloganComponent {
+      constructor(elementId, phrases, config = {}) {
+        this.element = document.getElementById(elementId);
+        this.phrases = phrases;
+        this.currentIndex = 0;
+        this.isAnimating = false;
+        
+        this.config = {
+          minInterval: config.minInterval || 4000,
+          maxInterval: config.maxInterval || 8000,
+          startDelay: config.startDelay || 0,
+          effects: config.effects || ['fade', 'slideUp', 'slideDown', 'scale', 'blur']
+        };
+        
+        if (this.element && this.phrases.length > 1) {
+          this.init();
+        }
+      }
+      
+      init() {
+        const startDelay = this.config.startDelay + Math.random() * 2000;
+        
+        setTimeout(() => {
+          this.startRotation();
+        }, startDelay);
+      }
+      
+      startRotation() {
+        const scheduleNext = () => {
+          const interval = this.config.minInterval + 
+            Math.random() * (this.config.maxInterval - this.config.minInterval);
+          
+          setTimeout(() => {
+            if (!this.isAnimating) {
+              this.rotateText();
+            }
+            scheduleNext();
+          }, interval);
+        };
+        
+        scheduleNext();
+      }
+      
+      rotateText() {
+        if (!this.element || this.isAnimating) return;
+        
+        this.isAnimating = true;
+        
+        const effect = this.config.effects[Math.floor(Math.random() * this.config.effects.length)];
+        
+        switch(effect) {
+          case 'slideUp':
+            this.slideUpTransition();
+            break;
+          case 'slideDown':
+            this.slideDownTransition();
+            break;
+          case 'scale':
+            this.scaleTransition();
+            break;
+          case 'blur':
+            this.blurTransition();
+            break;
+          default:
+            this.fadeTransition();
+        }
+      }
+      
+      fadeTransition() {
+        const fadeDuration = 300 + Math.random() * 200;
+        
+        this.element.style.transition = `opacity ${fadeDuration}ms ease-in-out`;
+        this.element.style.opacity = '0';
+        
+        setTimeout(() => {
+          this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+          this.element.textContent = this.phrases[this.currentIndex];
+          
+          this.element.style.opacity = '1';
+          
+          setTimeout(() => {
+            this.isAnimating = false;
+          }, fadeDuration);
+          
+        }, fadeDuration);
+      }
+      
+      slideUpTransition() {
+        const duration = 400 + Math.random() * 200;
+        
+        this.element.style.transition = `opacity ${duration}ms ease-out, transform ${duration}ms ease-out`;
+        this.element.style.opacity = '0';
+        this.element.style.transform = 'translateY(-20px)';
+        
+        setTimeout(() => {
+          this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+          this.element.textContent = this.phrases[this.currentIndex];
+          
+          this.element.style.transform = 'translateY(20px)';
+          
+          setTimeout(() => {
+            this.element.style.opacity = '1';
+            this.element.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+              this.isAnimating = false;
+            }, duration);
+          }, 50);
+          
+        }, duration);
+      }
+      
+      slideDownTransition() {
+        const duration = 400 + Math.random() * 200;
+        
+        this.element.style.transition = `opacity ${duration}ms ease-out, transform ${duration}ms ease-out`;
+        this.element.style.opacity = '0';
+        this.element.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+          this.element.textContent = this.phrases[this.currentIndex];
+          
+          this.element.style.transform = 'translateY(-20px)';
+          
+          setTimeout(() => {
+            this.element.style.opacity = '1';
+            this.element.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+              this.isAnimating = false;
+            }, duration);
+          }, 50);
+          
+        }, duration);
+      }
+      
+      scaleTransition() {
+        const duration = 350 + Math.random() * 150;
+        
+        this.element.style.transition = `opacity ${duration}ms ease-in-out, transform ${duration}ms ease-in-out`;
+        this.element.style.opacity = '0';
+        this.element.style.transform = 'scale(0.8)';
+        
+        setTimeout(() => {
+          this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+          this.element.textContent = this.phrases[this.currentIndex];
+          
+          this.element.style.transform = 'scale(1.1)';
+          
+          setTimeout(() => {
+            this.element.style.opacity = '1';
+            this.element.style.transform = 'scale(1)';
+            
+            setTimeout(() => {
+              this.isAnimating = false;
+            }, duration);
+          }, 50);
+          
+        }, duration);
+      }
+      
+      blurTransition() {
+        const duration = 400 + Math.random() * 200;
+        
+        this.element.style.transition = `opacity ${duration}ms ease-in-out, filter ${duration}ms ease-in-out`;
+        this.element.style.opacity = '0';
+        this.element.style.filter = 'blur(10px)';
+        
+        setTimeout(() => {
+          this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+          this.element.textContent = this.phrases[this.currentIndex];
+          
+          this.element.style.opacity = '1';
+          this.element.style.filter = 'blur(0px)';
+          
+          setTimeout(() => {
+            this.isAnimating = false;
+          }, duration);
+          
+        }, duration);
+      }
+    }
+
+    // Initialize components
+    const actionPhrases = ["Building", "Architecting", "Crafting", "Cultivating", "Unlocking"];
+    const creationPhrases = ["Operating System", "Core Protocol", "Trust Substrate", "Global Brain", "Social Fabric"];
+    const visionPhrases = ["for a More Intelligent Society", "for a More Compassionate World", "for a Just and Abundant World"];
+    
+    new DynamicSloganComponent('rotating-action', actionPhrases, {
+      minInterval: 3000, maxInterval: 6000, startDelay: 1000,
+      effects: ['fade', 'slideUp', 'scale']
+    });
+    
+    new DynamicSloganComponent('rotating-creation', creationPhrases, {
+      minInterval: 2000, maxInterval: 4000, startDelay: 2000,
+      effects: ['fade', 'slideDown', 'blur', 'scale']
+    });
+    
+    new DynamicSloganComponent('rotating-vision', visionPhrases, {
+      minInterval: 4000, maxInterval: 8000, startDelay: 3000,
+      effects: ['fade', 'slideUp', 'blur']
+    });
+  </script>
+</body>
+</html>

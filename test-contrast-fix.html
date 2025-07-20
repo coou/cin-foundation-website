@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contrast Fix Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Accessibility improvements - ensure proper contrast ratios */
+    .primary-cta {
+      background-color: #1e40af !important; /* blue-800 - better contrast */
+      color: #ffffff !important;
+    }
+
+    .primary-cta:hover {
+      background-color: #1d4ed8 !important; /* blue-700 */
+    }
+
+    .secondary-cta {
+      background-color: #ffffff !important;
+      color: #1e40af !important; /* blue-800 - better contrast */
+      border-color: #1e40af !important;
+    }
+
+    .secondary-cta:hover {
+      background-color: #eff6ff !important; /* blue-50 */
+      color: #1e40af !important;
+    }
+
+    /* Ensure all text has proper contrast */
+    .text-blue-900 {
+      color: #1e40af !important; /* Use blue-800 instead for better contrast */
+    }
+
+    .text-emerald-700 {
+      color: #047857 !important; /* Maintain emerald-700 as it has good contrast */
+    }
+
+    .text-gray-600 {
+      color: #4b5563 !important; /* Ensure gray-600 has sufficient contrast */
+    }
+
+    .text-gray-700 {
+      color: #374151 !important; /* Ensure gray-700 has sufficient contrast */
+    }
+
+    /* Professional highlight text effect with refined transitions */
+    .highlight-text {
+      position: relative;
+      display: inline-block;
+      transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin: 0 1px;
+      font-weight: 600;
+      background-color: transparent;
+      box-shadow: inset 0 0 0 0 rgba(30, 64, 175, 0.08);
+    }
+
+    .highlight-text::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, #1e40af, #047857);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .highlight-text:hover {
+      box-shadow: inset 0 -24px 0 0 rgba(30, 64, 175, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .highlight-text:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <section class="relative min-h-screen flex items-center justify-center">
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
+      <div class="text-center max-w-5xl mx-auto">
+        <!-- Test the CTA buttons with improved contrast -->
+        <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-8 sm:mb-12">
+          <!-- Primary CTA Button -->
+          <a href="#vision" class="primary-cta group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-blue-800 text-white rounded-lg sm:rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-semibold text-base sm:text-lg relative overflow-hidden">
+            <span class="relative z-10">Explore Our Vision</span>
+            <svg class="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+          
+          <!-- Secondary CTA Button -->
+          <a href="#research" class="secondary-cta group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white text-blue-800 border-2 border-blue-800 rounded-lg sm:rounded-xl hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-semibold text-base sm:text-lg">
+            <svg class="mr-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>Read the Whitepaper</span>
+          </a>
+        </div>
+        
+        <!-- Test highlighted text -->
+        <div class="mb-8 sm:mb-12 space-y-4 sm:space-y-6 px-2 sm:px-0">
+          <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
+            The Collective Intelligence Network is architecting a <strong class="text-blue-900 highlight-text">decentralized, AI-driven ecosystem</strong> 
+            to enable <strong class="text-emerald-700 highlight-text">intelligence compounding</strong> and scalable, trustless collaboration.
+          </p>
+          <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto">
+            We're building a <strong class="highlight-text">comfort-first, post-scarcity economy</strong> where human creativity and AI capabilities 
+            work together to solve humanity's greatest challenges.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Fix Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Vibrant rotating text gradient - override Tailwind */
+    .rotating-text {
+      background: linear-gradient(
+        45deg,
+        #1e40af,    /* blue-800 */
+        #7c3aed,    /* violet-600 */
+        #dc2626,    /* red-600 */
+        #f59e0b,    /* amber-500 */
+        #eab308,    /* yellow-500 */
+        #8b5cf6,    /* violet-500 */
+        #3b82f6,    /* blue-500 */
+        #059669,    /* emerald-600 */
+        #dc2626,    /* red-600 */
+        #f59e0b     /* amber-500 */
+      ) !important;
+      background-size: 400% 400% !important;
+      animation: enhanced-gradient 8s ease-in-out infinite !important;
+      min-height: 1.2em;
+      display: inline-block;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      color: transparent !important;
+      position: relative;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    @keyframes enhanced-gradient {
+      0% { background-position: 0% 50%; }
+      25% { background-position: 100% 50%; }
+      50% { background-position: 50% 100%; }
+      75% { background-position: 100% 0%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <section class="relative min-h-screen flex items-center justify-center">
+    <div class="text-center max-w-5xl mx-auto">
+      <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">
+        <span class="block text-gray-900 mb-3 sm:mb-4">Building the</span>
+        <span class="block bg-clip-text text-transparent px-2 sm:px-0 rotating-text" id="rotating-text">
+          Operating System
+        </span>
+        <span class="block text-gray-900">for a More Intelligent Society</span>
+      </h1>
+      
+      <div class="mt-8">
+        <p class="text-gray-600 mb-4">Should show vibrant gradient and smooth transitions</p>
+        <button onclick="testTransition()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          Test Manual Transition
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Prevent multiple instances
+    if (!window.rotatingTextInstance) {
+      class RotatingText {
+        constructor() {
+          this.phrases = [
+            "Operating System", "Core Protocol", "Foundational Layer", "Trust Substrate",
+            "Economic Engine", "Value Spectrum", "Collective Mind", "Global Brain",
+            "Social Fabric", "Digital Mycelium", "Social Compass", "Human Roadmap"
+          ];
+          
+          this.currentIndex = 0;
+          this.element = document.getElementById('rotating-text');
+          this.isAnimating = false;
+          this.rotationInterval = null;
+          this.typeInterval = null;
+          this.eraseInterval = null;
+          
+          if (this.element) {
+            this.init();
+          }
+        }
+        
+        init() {
+          if (this.rotationInterval) {
+            clearInterval(this.rotationInterval);
+          }
+          
+          setTimeout(() => {
+            this.startRotation();
+          }, 3000);
+        }
+        
+        startRotation() {
+          if (this.rotationInterval) {
+            clearInterval(this.rotationInterval);
+          }
+          
+          this.rotationInterval = setInterval(() => {
+            if (!this.isAnimating) {
+              this.rotateText();
+            }
+          }, 5000);
+        }
+        
+        rotateText() {
+          if (!this.element || this.isAnimating) return;
+          
+          this.isAnimating = true;
+          
+          const effects = ['fade', 'typewriter'];
+          const effect = effects[this.currentIndex % 2];
+          
+          if (effect === 'typewriter') {
+            this.typewriterTransition();
+          } else {
+            this.fadeTransition();
+          }
+        }
+        
+        typewriterTransition() {
+          this.clearIntervals();
+          
+          const currentText = this.element.textContent;
+          let currentLength = currentText.length;
+          
+          this.eraseInterval = setInterval(() => {
+            if (currentLength > 0) {
+              this.element.textContent = currentText.substring(0, currentLength - 1);
+              currentLength--;
+            } else {
+              clearInterval(this.eraseInterval);
+              
+              setTimeout(() => {
+                this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+                const newText = this.phrases[this.currentIndex];
+                let newLength = 0;
+                
+                this.typeInterval = setInterval(() => {
+                  if (newLength <= newText.length) {
+                    this.element.textContent = newText.substring(0, newLength);
+                    newLength++;
+                  } else {
+                    clearInterval(this.typeInterval);
+                    this.isAnimating = false;
+                  }
+                }, 50);
+                
+              }, 200);
+            }
+          }, 30);
+        }
+        
+        fadeTransition() {
+          this.element.style.opacity = '0';
+          this.element.style.transform = 'translateY(-10px)';
+          
+          setTimeout(() => {
+            this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+            this.element.textContent = this.phrases[this.currentIndex];
+            
+            this.element.style.opacity = '1';
+            this.element.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+              this.isAnimating = false;
+            }, 300);
+            
+          }, 300);
+        }
+        
+        clearIntervals() {
+          if (this.typeInterval) {
+            clearInterval(this.typeInterval);
+            this.typeInterval = null;
+          }
+          if (this.eraseInterval) {
+            clearInterval(this.eraseInterval);
+            this.eraseInterval = null;
+          }
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          window.rotatingTextInstance = new RotatingText();
+        });
+      } else {
+        window.rotatingTextInstance = new RotatingText();
+      }
+    }
+    
+    function testTransition() {
+      if (window.rotatingTextInstance && !window.rotatingTextInstance.isAnimating) {
+        window.rotatingTextInstance.rotateText();
+      }
+    }
+  </script>
+</body>
+</html>

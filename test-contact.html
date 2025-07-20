@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Section Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <!-- Contact Section -->
+  <section id="contact" class="py-24 px-4 bg-gradient-to-br from-gray-50 to-blue-50/30">
+    <div class="container mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-gray-900">Get Involved</h2>
+      
+      <!-- Email Contact with Copy-to-Clipboard -->
+      <div class="text-center mb-12">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="mailto:contact@cin-foundation.org" 
+             class="inline-flex items-center px-8 py-4 bg-blue-900 text-white rounded-xl hover:bg-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-semibold text-lg group">
+            <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            contact@cin-foundation.org
+          </a>
+          
+          <button id="copy-email-btn" 
+                  class="inline-flex items-center px-6 py-4 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 font-medium group"
+                  title="Copy email to clipboard">
+            <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <span id="copy-text">Copy Email</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Copy email to clipboard functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const copyButton = document.getElementById('copy-email-btn');
+      const copyText = document.getElementById('copy-text');
+      
+      if (copyButton && copyText) {
+        copyButton.addEventListener('click', async () => {
+          const email = 'contact@cin-foundation.org';
+          
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(email);
+              showCopySuccess(copyText);
+            } else {
+              const textArea = document.createElement('textarea');
+              textArea.value = email;
+              textArea.style.position = 'fixed';
+              textArea.style.left = '-999999px';
+              textArea.style.top = '-999999px';
+              document.body.appendChild(textArea);
+              textArea.focus();
+              textArea.select();
+              
+              const successful = document.execCommand('copy');
+              document.body.removeChild(textArea);
+              
+              if (successful) {
+                showCopySuccess(copyText);
+              } else {
+                showCopyError(copyText);
+              }
+            }
+          } catch (err) {
+            console.error('Failed to copy email:', err);
+            showCopyError(copyText);
+          }
+        });
+      }
+    });
+
+    function showCopySuccess(copyText) {
+      const originalText = copyText.textContent;
+      copyText.textContent = 'Copied!';
+      copyText.parentElement.classList.add('bg-emerald-100', 'text-emerald-700');
+      copyText.parentElement.classList.remove('bg-gray-100', 'text-gray-700');
+      
+      setTimeout(() => {
+        copyText.textContent = originalText;
+        copyText.parentElement.classList.remove('bg-emerald-100', 'text-emerald-700');
+        copyText.parentElement.classList.add('bg-gray-100', 'text-gray-700');
+      }, 2000);
+    }
+
+    function showCopyError(copyText) {
+      const originalText = copyText.textContent;
+      copyText.textContent = 'Failed to copy';
+      copyText.parentElement.classList.add('bg-red-100', 'text-red-700');
+      copyText.parentElement.classList.remove('bg-gray-100', 'text-gray-700');
+      
+      setTimeout(() => {
+        copyText.textContent = originalText;
+        copyText.parentElement.classList.remove('bg-red-100', 'text-red-700');
+        copyText.parentElement.classList.add('bg-gray-100', 'text-gray-700');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

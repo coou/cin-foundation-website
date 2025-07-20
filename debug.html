@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold text-blue-900 mb-8">Debug Test</h1>
+    <p class="text-gray-700 mb-4">If you can see this styled text, Tailwind CSS is working.</p>
+    
+    <!-- Test Contact Section -->
+    <div class="bg-white rounded-xl shadow-md p-8">
+      <h2 class="text-2xl font-semibold mb-4">Contact Test</h2>
+      <button id="copy-email-btn" class="px-4 py-2 bg-blue-900 text-white rounded hover:bg-blue-800">
+        Copy Email
+      </button>
+      <p id="status" class="mt-4 text-gray-600"></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Debug page loaded successfully');
+      
+      const copyButton = document.getElementById('copy-email-btn');
+      const status = document.getElementById('status');
+      
+      copyButton.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText('contact@cin-foundation.org');
+          status.textContent = 'Email copied successfully!';
+          status.className = 'mt-4 text-green-600';
+        } catch (err) {
+          status.textContent = 'Failed to copy email';
+          status.className = 'mt-4 text-red-600';
+          console.error('Copy failed:', err);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

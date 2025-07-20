@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rotating Text Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Enhanced rotating text with vibrant gradient */
+    .rotating-text {
+      background: linear-gradient(
+        45deg,
+        #1e40af,    /* blue-800 */
+        #7c3aed,    /* violet-600 */
+        #dc2626,    /* red-600 */
+        #f59e0b,    /* amber-500 */
+        #eab308,    /* yellow-500 */
+        #8b5cf6,    /* violet-500 */
+        #3b82f6,    /* blue-500 */
+        #059669,    /* emerald-600 */
+        #dc2626,    /* red-600 */
+        #f59e0b     /* amber-500 */
+      ) !important;
+      background-size: 400% 400% !important;
+      animation: enhanced-gradient 8s ease-in-out infinite, text-fade 0.5s ease-in-out !important;
+      transition: all 0.5s ease-in-out;
+      min-height: 1.2em;
+      display: inline-block;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      color: transparent !important;
+    }
+
+    @keyframes enhanced-gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      25% {
+        background-position: 100% 50%;
+      }
+      50% {
+        background-position: 50% 100%;
+      }
+      75% {
+        background-position: 100% 0%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes text-fade {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Text rotation animation */
+    .rotating-text.fade-out {
+      animation: fade-out 0.3s ease-in-out forwards;
+    }
+
+    .rotating-text.fade-in {
+      animation: fade-in 0.3s ease-in-out forwards;
+    }
+
+    @keyframes fade-out {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <section class="relative min-h-screen flex items-center justify-center">
+    <div class="text-center max-w-5xl mx-auto">
+      <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">
+        <span class="block text-gray-900 mb-3 sm:mb-4">Building the</span>
+        <span class="block rotating-text px-2 sm:px-0" id="rotating-text">
+          Operating System
+        </span>
+        <span class="block text-gray-900">for a More Intelligent Society</span>
+      </h1>
+    </div>
+  </section>
+
+  <script>
+    // Rotating text functionality
+    class RotatingText {
+      constructor() {
+        this.phrases = [
+          // Category 1: Foundational & Technical Metaphors
+          "Operating System",
+          "Core Protocol",
+          "Foundational Layer",
+          "Trust Substrate",
+          "Coordination Framework",
+          "Social Algorithm",
+          "Decentralized Kernel",
+          "Global Source Code",
+          "Public Mainframe",
+          "Trust Architecture",
+          "Societal Stack",
+          
+          // Category 2: Economic & Value Metaphors
+          "Economic Engine",
+          "Value Spectrum",
+          "Trust Ledger",
+          "Reputation Economy",
+          "Comfort Compass",
+          "Post-Scarcity Blueprint",
+          "Engine of Abundance",
+          "Currency of Trust",
+          "Public Balance Sheet",
+          "Ledger of Contribution",
+          
+          // Category 3: Cognitive & Intelligence Metaphors
+          "Collective Mind",
+          "Global Brain",
+          "Shared Consciousness",
+          "Planetary Nervous System",
+          "Public Imagination",
+          "Civic Superintelligence",
+          "Distributed Mind",
+          "Symbiotic Intellect",
+          "Networked Mind",
+          "Human Exocortex",
+          
+          // Category 4: Biological & Ecological Metaphors
+          "Social Fabric",
+          "Digital Mycelium",
+          "Human Hive Mind",
+          "Economic Ecosystem",
+          "Social Genome",
+          "Planetary Immune System",
+          "Civic Root System",
+          "Symbiotic Superorganism",
+          "Digital Biosphere",
+          "Collective Metabolism",
+          
+          // Category 5: Navigational & Architectural Metaphors
+          "Social Compass",
+          "Human Roadmap",
+          "Architectural Blueprint",
+          "Moral Compass",
+          "Star Chart to the Future",
+          "Societal Scaffolding",
+          "Bridge to a Better World",
+          "New Public Square",
+          "Civic Architecture",
+          "Framework for Flourishing"
+        ];
+        
+        this.currentIndex = 0;
+        this.element = document.getElementById('rotating-text');
+        this.isAnimating = false;
+        
+        if (this.element) {
+          this.init();
+        }
+      }
+      
+      init() {
+        // Start the rotation after a delay
+        setTimeout(() => {
+          this.startRotation();
+        }, 2000); // Wait 2 seconds before starting rotation
+      }
+      
+      startRotation() {
+        setInterval(() => {
+          if (!this.isAnimating) {
+            this.rotateText();
+          }
+        }, 3000); // Change text every 3 seconds for demo
+      }
+      
+      rotateText() {
+        if (!this.element || this.isAnimating) return;
+        
+        this.isAnimating = true;
+        
+        // Fade out current text
+        this.element.classList.add('fade-out');
+        
+        setTimeout(() => {
+          // Change to next phrase
+          this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+          this.element.textContent = this.phrases[this.currentIndex];
+          
+          // Remove fade-out and add fade-in
+          this.element.classList.remove('fade-out');
+          this.element.classList.add('fade-in');
+          
+          setTimeout(() => {
+            // Clean up classes
+            this.element.classList.remove('fade-in');
+            this.isAnimating = false;
+          }, 300);
+          
+        }, 300); // Wait for fade-out to complete
+      }
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      new RotatingText();
+    });
+  </script>
+</body>
+</html>

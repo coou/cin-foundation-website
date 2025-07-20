@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modular Dynamic Slogan Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Dynamic Slogan Components */
+
+    /* Rotating Action (Building) - Warm colors */
+    .rotating-action {
+      background: linear-gradient(
+        45deg,
+        #dc2626,    /* red-600 */
+        #f59e0b,    /* amber-500 */
+        #eab308,    /* yellow-500 */
+        #f97316,    /* orange-500 */
+        #dc2626     /* red-600 */
+      );
+      background-size: 300% 300%;
+      animation: warm-gradient 6s ease-in-out infinite;
+      display: inline-block;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+      min-width: 120px;
+      text-align: left;
+    }
+
+    /* Rotating Creation (Operating System) - Full spectrum */
+    .rotating-creation {
+      background: linear-gradient(
+        45deg,
+        #1e40af,    /* blue-800 */
+        #7c3aed,    /* violet-600 */
+        #dc2626,    /* red-600 */
+        #f59e0b,    /* amber-500 */
+        #eab308,    /* yellow-500 */
+        #8b5cf6,    /* violet-500 */
+        #3b82f6,    /* blue-500 */
+        #059669,    /* emerald-600 */
+        #dc2626,    /* red-600 */
+        #f59e0b     /* amber-500 */
+      );
+      background-size: 400% 400%;
+      animation: enhanced-gradient 8s ease-in-out infinite;
+      min-height: 1.2em;
+      display: inline-block;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    /* Rotating Vision (for a More...) - Cool colors */
+    .rotating-vision {
+      background: linear-gradient(
+        45deg,
+        #1e40af,    /* blue-800 */
+        #7c3aed,    /* violet-600 */
+        #059669,    /* emerald-600 */
+        #0891b2,    /* cyan-600 */
+        #8b5cf6,    /* violet-500 */
+        #3b82f6     /* blue-500 */
+      );
+      background-size: 350% 350%;
+      animation: cool-gradient 7s ease-in-out infinite;
+      display: inline-block;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    /* Gradient animations */
+    @keyframes warm-gradient {
+      0% { background-position: 0% 50%; }
+      25% { background-position: 100% 25%; }
+      50% { background-position: 50% 100%; }
+      75% { background-position: 25% 0%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes enhanced-gradient {
+      0% { background-position: 0% 50%; }
+      25% { background-position: 100% 50%; }
+      50% { background-position: 50% 100%; }
+      75% { background-position: 100% 0%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes cool-gradient {
+      0% { background-position: 0% 50%; }
+      33% { background-position: 100% 0%; }
+      66% { background-position: 0% 100%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <section class="relative min-h-screen flex items-center justify-center">
+    <div class="text-center max-w-5xl mx-auto">
+      <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">
+        <span class="block text-gray-900 mb-3 sm:mb-4">
+          <span class="rotating-action" id="rotating-action">Building</span> the
+        </span>
+        <span class="block bg-clip-text text-transparent px-2 sm:px-0 rotating-creation" id="rotating-creation">
+          Operating System
+        </span>
+        <span class="block text-gray-900">
+          <span class="rotating-vision" id="rotating-vision">for a More Intelligent Society</span>
+        </span>
+      </h1>
+      
+      <div class="mt-8">
+        <p class="text-gray-600 mb-4">Three independent components with randomized timing and effects!</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="font-semibold text-red-600 mb-2">Action Component</h3>
+            <p>Warm colors (reds, ambers, oranges)</p>
+            <p>6-12 second intervals</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="font-semibold text-purple-600 mb-2">Creation Component</h3>
+            <p>Full spectrum colors</p>
+            <p>4-8 second intervals</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="font-semibold text-blue-600 mb-2">Vision Component</h3>
+            <p>Cool colors (blues, purples, greens)</p>
+            <p>8-15 second intervals</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Include the dynamic slogan script inline for testing
+    class DynamicSloganComponent {
+      constructor(elementId, phrases, config = {}) {
+        this.element = document.getElementById(elementId);
+        this.phrases = phrases;
+        this.currentIndex = 0;
+        this.isAnimating = false;
+        
+        this.config = {
+          minInterval: config.minInterval || 4000,
+          maxInterval: config.maxInterval || 8000,
+          minTypeSpeed: config.minTypeSpeed || 40,
+          maxTypeSpeed: config.maxTypeSpeed || 80,
+          minEraseSpeed: config.minEraseSpeed || 20,
+          maxEraseSpeed: config.maxEraseSpeed || 50,
+          pauseBetween: config.pauseBetween || 200,
+          startDelay: config.startDelay || 0,
+          effects: config.effects || ['fade', 'typewriter']
+        };
+        
+        this.intervals = [];
+        
+        if (this.element && this.phrases.length > 1) {
+          this.init();
+        }
+      }
+      
+      init() {
+        const startDelay = this.config.startDelay + Math.random() * 2000;
+        
+        setTimeout(() => {
+          this.startRotation();
+        }, startDelay);
+      }
+      
+      startRotation() {
+        const scheduleNext = () => {
+          const interval = this.config.minInterval + 
+            Math.random() * (this.config.maxInterval - this.config.minInterval);
+          
+          const timeout = setTimeout(() => {
+            if (!this.isAnimating) {
+              this.rotateText();
+            }
+            scheduleNext();
+          }, interval);
+          
+          this.intervals.push(timeout);
+        };
+        
+        scheduleNext();
+      }
+      
+      rotateText() {
+        if (!this.element || this.isAnimating) return;
+        
+        this.isAnimating = true;
+        
+        const effect = this.config.effects[Math.floor(Math.random() * this.config.effects.length)];
+        
+        if (effect === 'typewriter') {
+          this.typewriterTransition();
+        } else {
+          this.fadeTransition();
+        }
+      }
+      
+      typewriterTransition() {
+        const currentText = this.element.textContent;
+        let currentLength = currentText.length;
+        
+        const eraseSpeed = this.config.minEraseSpeed + 
+          Math.random() * (this.config.maxEraseSpeed - this.config.minEraseSpeed);
+        
+        const eraseInterval = setInterval(() => {
+          if (currentLength > 0) {
+            this.element.textContent = currentText.substring(0, currentLength - 1);
+            currentLength--;
+          } else {
+            clearInterval(eraseInterval);
+            
+            const pause = this.config.pauseBetween + Math.random() * 300;
+            
+            setTimeout(() => {
+              this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+              const newText = this.phrases[this.currentIndex];
+              let newLength = 0;
+              
+              const typeSpeed = this.config.minTypeSpeed + 
+                Math.random() * (this.config.maxTypeSpeed - this.config.minTypeSpeed);
+              
+              const typeInterval = setInterval(() => {
+                if (newLength <= newText.length) {
+                  this.element.textContent = newText.substring(0, newLength);
+                  newLength++;
+                } else {
+                  clearInterval(typeInterval);
+                  this.isAnimating = false;
+                }
+              }, typeSpeed);
+              
+            }, pause);
+          }
+        }, eraseSpeed);
+      }
+      
+      fadeTransition() {
+        const fadeDuration = 200 + Math.random() * 200;
+        
+        this.element.style.transition = `opacity ${fadeDuration}ms ease-in-out, transform ${fadeDuration}ms ease-in-out`;
+        this.element.style.opacity = '0';
+        this.element.style.transform = 'translateY(-5px)';
+        
+        setTimeout(() => {
+          this.currentIndex = (this.currentIndex + 1) % this.phrases.length;
+          this.element.textContent = this.phrases[this.currentIndex];
+          
+          this.element.style.opacity = '1';
+          this.element.style.transform = 'translateY(0)';
+          
+          setTimeout(() => {
+            this.isAnimating = false;
+          }, fadeDuration);
+          
+        }, fadeDuration);
+      }
+    }
+
+    // Initialize components
+    if (!window.testComponents) {
+      const actionPhrases = ["Building", "Architecting", "Crafting", "Cultivating", "Unlocking"];
+      const creationPhrases = ["Operating System", "Core Protocol", "Trust Substrate", "Global Brain", "Social Fabric"];
+      const visionPhrases = ["for a More Intelligent Society", "for a More Compassionate World", "for a Just and Abundant World"];
+      
+      window.testComponents = [
+        new DynamicSloganComponent('rotating-action', actionPhrases, {
+          minInterval: 3000, maxInterval: 6000, startDelay: 1000
+        }),
+        new DynamicSloganComponent('rotating-creation', creationPhrases, {
+          minInterval: 2000, maxInterval: 4000, startDelay: 2000
+        }),
+        new DynamicSloganComponent('rotating-vision', visionPhrases, {
+          minInterval: 4000, maxInterval: 8000, startDelay: 3000
+        })
+      ];
+    }
+  </script>
+</body>
+</html>
