@@ -32,7 +32,7 @@
   <meta property="twitter:image" content="./assets/images/og-image.svg">
 
   <title>CIN Foundation - Building the Operating System for a More Intelligent Society</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com/3.2.7">
   <script>
     tailwind.config = {
       theme: {
@@ -44,12 +44,30 @@
           },
           fontFamily: {
             'sans': ['Inter', 'system-ui', 'sans-serif']
+          },
+          screens: {
+            'sm': '640px',
+            'md': '768px',
+            'lg': '1024px',
+            'xl': '1280px',
+            '2xl': '1536px'
           }
         }
       }
     }
   </script>
   <link rel="stylesheet" href="./styles/main.css">
+  <style>
+    /* Ensure our custom styles override Tailwind defaults */
+    .section-padding { padding: 6rem 0 !important; }
+    .section-title { font-size: 2.5rem !important; font-weight: 700 !important; text-align: center !important; margin-bottom: 3rem !important; color: #1e3a8a !important; }
+    .responsive-card { background: white !important; padding: 2rem !important; border-radius: 1rem !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important; }
+    .primary-cta { background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important; }
+    @media (min-width: 640px) {
+      .section-padding { padding: 8rem 0 !important; }
+      .section-title { font-size: 3rem !important; }
+    }
+  </style>
   <link rel="icon" type="image/png" href="./assets/images/logo-2.PNG">
   <link rel="canonical" href="https://cin-foundation.org/">
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
