@@ -8,9 +8,12 @@
     "build": "npm run build:css",
     "build:css": "node build-css.js",
     "deploy": "npm run build && firebase deploy",
+    "deploy:custom": "npm run build && firebase deploy --only hosting:custom-domain",
     "serve": "firebase serve",
     "test": "echo 'No tests specified'",
-    "generate-favicon": "node generate-favicon.js"
+    "generate-favicon": "node generate-favicon.js",
+    "setup-dns": "node setup-cloudflare-dns.js",
+    "setup-dns-auto": "node cloudflare-dns-auto.js"
   },
   "keywords": [
     "collective-intelligence",
