@@ -637,16 +637,15 @@
                 of how we're building a decentralized, AI-driven ecosystem for intelligence compounding and trustless
                 collaboration.
               </p>
-              <a href="./assets/documents/cin_whitepaper.pdf"
-                class="inline-flex items-center px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 group"
-                download>
-                <svg class="w-5 h-5 mr-2 group-hover:animate-bounce" fill="none" stroke="currentColor"
+              <button id="whitepaper-coming-soon-btn"
+                class="inline-flex items-center px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 group cursor-pointer">
+                <svg class="w-5 h-5 mr-2 group-hover:animate-pulse" fill="none" stroke="currentColor"
                   viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="font-medium">Download Whitepaper</span>
-              </a>
+                <span class="font-medium">Coming Soon</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1198,6 +1197,72 @@
 
   <script type="module" src="./scripts/dynamic-slogan.js"></script>
   <script type="module" src="./scripts/main.js"></script>
+
+  <!-- Coming Soon Modal -->
+  <div id="coming-soon-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+      <div class="p-8 text-center">
+        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Whitepaper Coming Soon!</h3>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+          We're putting the finishing touches on our comprehensive whitepaper. It will be available soon with detailed insights into the CIN Foundation's vision and technical architecture.
+        </p>
+        <div class="flex gap-3 justify-center">
+          <button id="modal-close-btn" class="px-6 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors duration-200 font-medium">
+            Got it
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('coming-soon-modal');
+      const modalContent = document.getElementById('modal-content');
+      const openBtn = document.getElementById('whitepaper-coming-soon-btn');
+      const closeBtn = document.getElementById('modal-close-btn');
+
+      function openModal() {
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modalContent.classList.remove('scale-95', 'opacity-0');
+          modalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      }
+
+      function closeModal() {
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          modal.classList.add('hidden');
+        }, 300);
+      }
+
+      openBtn.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      
+      // Close modal when clicking outside
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Close modal with Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+          closeModal();
+        }
+      });
+    });
+  </script>
+
 </body>
 
 </html>
