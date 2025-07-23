@@ -32,7 +32,7 @@
   <meta property="twitter:image" content="./assets/images/og-image.svg">
 
   <title>CIN Foundation - Building the Operating System for a More Intelligent Society</title>
-  <script src="https://cdn.tailwindcss.com/3.2.7">
+  <script src="https://cdn.tailwindcss.com/3.2.7"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -64,45 +64,103 @@
     .responsive-card { background: white !important; padding: 2rem !important; border-radius: 1rem !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important; }
     .primary-cta { background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important; }
     
-    /* Fix rotating text styles */
-    .rotating-action, .rotating-creation, .rotating-vision {
+    /* CRITICAL FIX: Force rotating text styles with !important */
+    #rotating-action, #rotating-creation, #rotating-vision {
       display: inline-block !important;
       position: relative !important;
       overflow: hidden !important;
+      font-size: 3rem !important;
+      font-weight: 700 !important;
+      line-height: 1.2 !important;
+      margin: 0.25rem 0 !important;
+      padding: 0 !important;
+      width: auto !important;
+      height: auto !important;
     }
     
-    .rotating-action {
+    /* Hero headline styles */
+    .hero-headline {
+      font-size: 3rem !important;
+      line-height: 1.2 !important;
+      font-weight: 700 !important;
+      text-align: center !important;
+    }
+    
+    .slogan-line {
+      margin: 0.5rem 0 !important;
+      display: block !important;
+      width: 100% !important;
+    }
+    
+    /* Gradient text effects with direct ID selectors for maximum specificity */
+    #rotating-action {
       background: linear-gradient(45deg, #ef4444, #f97316, #eab308) !important;
       background-size: 200% 200% !important;
       animation: gradientShift 3s ease-in-out infinite !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
+      color: transparent !important;
+      font-size: 3rem !important;
     }
     
-    .rotating-creation {
+    #rotating-creation {
       background: linear-gradient(45deg, #8b5cf6, #a855f7, #c084fc) !important;
       background-size: 200% 200% !important;
       animation: gradientShift 4s ease-in-out infinite !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
+      color: transparent !important;
+      font-size: 3rem !important;
     }
     
-    .rotating-vision {
+    #rotating-vision {
       background: linear-gradient(45deg, #3b82f6, #06b6d4, #10b981) !important;
       background-size: 200% 200% !important;
       animation: gradientShift 5s ease-in-out infinite !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
+      color: transparent !important;
+      font-size: 3rem !important;
     }
     
+    /* Responsive font sizes with ID selectors */
+    @media (min-width: 640px) {
+      #rotating-action, #rotating-creation, #rotating-vision {
+        font-size: 3.5rem !important;
+      }
+      .hero-headline {
+        font-size: 3.5rem !important;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      #rotating-action, #rotating-creation, #rotating-vision {
+        font-size: 4rem !important;
+      }
+      .hero-headline {
+        font-size: 4rem !important;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      #rotating-action, #rotating-creation, #rotating-vision {
+        font-size: 4.5rem !important;
+      }
+      .hero-headline {
+        font-size: 4.5rem !important;
+      }
+    }
+    
+    /* Ensure animation works */
     @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+      0%, 100% { background-position: 0% 50% !important; }
+      50% { background-position: 100% 50% !important; }
     }
     
+    /* Additional responsive styles */
     @media (min-width: 640px) {
       .section-padding { padding: 8rem 0 !important; }
       .section-title { font-size: 3rem !important; }

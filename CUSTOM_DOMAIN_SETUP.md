@@ -94,9 +94,10 @@ npm run dev
 ## ✅ Verification
 
 After setup, your site will be available at:
-- https://collectiveintelligencenetwork.org
-- https://www.collectiveintelligencenetwork.org
-- https://cin-foundation.web.app (original)
+- https://collectiveintelligencenetwork.org (custom domain)
+- https://www.collectiveintelligencenetwork.org (www subdomain)
+- https://collectiveintelligencenetwork-org.web.app (Firebase subdomain)
+- https://cin-foundation.web.app (original main site)
 
 ## 🔍 Troubleshooting
 
