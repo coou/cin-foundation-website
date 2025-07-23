@@ -68,96 +68,132 @@
     #rotating-action, #rotating-creation, #rotating-vision {
       display: inline-block !important;
       position: relative !important;
-      overflow: hidden !important;
-      font-size: 3rem !important;
+      overflow: visible !important;
       font-weight: 700 !important;
-      line-height: 1.2 !important;
-      margin: 0.25rem 0 !important;
-      padding: 0 !important;
+      line-height: 1.3 !important;
+      margin: 0.5rem 0 !important;
+      padding: 0.25rem 0 !important;
       width: auto !important;
       height: auto !important;
+      white-space: nowrap !important;
     }
     
-    /* Hero headline styles */
+    /* Hero headline container with proper sizing */
     .hero-headline {
-      font-size: 3rem !important;
-      line-height: 1.2 !important;
       font-weight: 700 !important;
       text-align: center !important;
+      line-height: 1.3 !important;
+      padding: 2rem 1rem !important;
+      max-width: 95vw !important;
+      margin: 0 auto !important;
+      overflow: visible !important;
     }
     
     .slogan-line {
-      margin: 0.5rem 0 !important;
+      margin: 0.75rem 0 !important;
       display: block !important;
       width: 100% !important;
+      overflow: visible !important;
+      white-space: nowrap !important;
     }
     
-    /* Gradient text effects with direct ID selectors for maximum specificity */
+    /* Beautiful animated gradients with wave effects */
     #rotating-action {
-      background: linear-gradient(45deg, #ef4444, #f97316, #eab308) !important;
-      background-size: 200% 200% !important;
-      animation: gradientShift 3s ease-in-out infinite !important;
+      background: linear-gradient(45deg, #ef4444, #f97316, #eab308, #84cc16, #06b6d4) !important;
+      background-size: 400% 400% !important;
+      animation: waveGradient 6s ease-in-out infinite !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
       color: transparent !important;
-      font-size: 3rem !important;
     }
     
     #rotating-creation {
-      background: linear-gradient(45deg, #8b5cf6, #a855f7, #c084fc) !important;
-      background-size: 200% 200% !important;
-      animation: gradientShift 4s ease-in-out infinite !important;
+      background: linear-gradient(45deg, #8b5cf6, #a855f7, #c084fc, #e879f9, #06b6d4, #10b981) !important;
+      background-size: 400% 400% !important;
+      animation: waveGradient 8s ease-in-out infinite !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
       color: transparent !important;
-      font-size: 3rem !important;
     }
     
     #rotating-vision {
-      background: linear-gradient(45deg, #3b82f6, #06b6d4, #10b981) !important;
-      background-size: 200% 200% !important;
-      animation: gradientShift 5s ease-in-out infinite !important;
+      background: linear-gradient(45deg, #3b82f6, #06b6d4, #10b981, #84cc16, #eab308, #f97316) !important;
+      background-size: 400% 400% !important;
+      animation: waveGradient 10s ease-in-out infinite !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
       color: transparent !important;
-      font-size: 3rem !important;
     }
     
-    /* Responsive font sizes with ID selectors */
-    @media (min-width: 640px) {
+    /* Responsive font sizes that scale to fit viewport */
+    /* Mobile first - very small screens */
+    #rotating-action, #rotating-creation, #rotating-vision {
+      font-size: clamp(1.5rem, 8vw, 2.5rem) !important;
+    }
+    .hero-headline {
+      font-size: clamp(1.5rem, 8vw, 2.5rem) !important;
+    }
+    
+    /* Small screens */
+    @media (min-width: 480px) {
       #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: 3.5rem !important;
+        font-size: clamp(2rem, 7vw, 3rem) !important;
       }
       .hero-headline {
-        font-size: 3.5rem !important;
+        font-size: clamp(2rem, 7vw, 3rem) !important;
       }
     }
     
+    /* Medium screens */
     @media (min-width: 768px) {
       #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: 4rem !important;
+        font-size: clamp(2.5rem, 6vw, 4rem) !important;
       }
       .hero-headline {
-        font-size: 4rem !important;
+        font-size: clamp(2.5rem, 6vw, 4rem) !important;
       }
     }
     
+    /* Large screens */
     @media (min-width: 1024px) {
       #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: 4.5rem !important;
+        font-size: clamp(3rem, 5vw, 5rem) !important;
       }
       .hero-headline {
-        font-size: 4.5rem !important;
+        font-size: clamp(3rem, 5vw, 5rem) !important;
       }
     }
     
-    /* Ensure animation works */
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50% !important; }
-      50% { background-position: 100% 50% !important; }
+    /* Extra large screens */
+    @media (min-width: 1440px) {
+      #rotating-action, #rotating-creation, #rotating-vision {
+        font-size: clamp(3.5rem, 4vw, 6rem) !important;
+      }
+      .hero-headline {
+        font-size: clamp(3.5rem, 4vw, 6rem) !important;
+      }
+    }
+    
+    /* Beautiful wave-like gradient animation */
+    @keyframes waveGradient {
+      0% { 
+        background-position: 0% 50% !important; 
+      }
+      25% { 
+        background-position: 100% 25% !important; 
+      }
+      50% { 
+        background-position: 100% 75% !important; 
+      }
+      75% { 
+        background-position: 0% 100% !important; 
+      }
+      100% { 
+        background-position: 0% 50% !important; 
+      }
     }
     
     /* Additional responsive styles */
