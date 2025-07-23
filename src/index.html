@@ -63,6 +63,46 @@
     .section-title { font-size: 2.5rem !important; font-weight: 700 !important; text-align: center !important; margin-bottom: 3rem !important; color: #1e3a8a !important; }
     .responsive-card { background: white !important; padding: 2rem !important; border-radius: 1rem !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important; }
     .primary-cta { background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important; }
+    
+    /* Fix rotating text styles */
+    .rotating-action, .rotating-creation, .rotating-vision {
+      display: inline-block !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    
+    .rotating-action {
+      background: linear-gradient(45deg, #ef4444, #f97316, #eab308) !important;
+      background-size: 200% 200% !important;
+      animation: gradientShift 3s ease-in-out infinite !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+    
+    .rotating-creation {
+      background: linear-gradient(45deg, #8b5cf6, #a855f7, #c084fc) !important;
+      background-size: 200% 200% !important;
+      animation: gradientShift 4s ease-in-out infinite !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+    
+    .rotating-vision {
+      background: linear-gradient(45deg, #3b82f6, #06b6d4, #10b981) !important;
+      background-size: 200% 200% !important;
+      animation: gradientShift 5s ease-in-out infinite !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
     @media (min-width: 640px) {
       .section-padding { padding: 8rem 0 !important; }
       .section-title { font-size: 3rem !important; }
