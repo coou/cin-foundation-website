@@ -85,12 +85,13 @@
       font-weight: 800 !important;
       text-align: center !important;
       line-height: 1.1 !important;
-      padding: 1rem 0.5rem !important;
-      max-width: 98vw !important;
+      padding: 1rem 1rem !important;
+      max-width: 95vw !important;
       margin: 0 auto !important;
       overflow: visible !important;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
       letter-spacing: -0.02em !important;
+      box-sizing: border-box !important;
     }
     
     .slogan-line {
@@ -101,11 +102,11 @@
       white-space: nowrap !important;
     }
     
-    /* Beautiful animated gradients with wave effects - FORCE OVERRIDE */
+    /* Beautiful animated gradients with wave effects - FORCE DYNAMIC ANIMATION */
     #rotating-action {
-      background: linear-gradient(90deg, #ef4444 0%, #f97316 25%, #eab308 50%, #84cc16 75%, #06b6d4 100%) !important;
-      background-size: 300% 100% !important;
-      animation: waveGradient 4s linear infinite !important;
+      background: linear-gradient(45deg, #ef4444, #f97316, #eab308, #84cc16, #06b6d4, #8b5cf6) !important;
+      background-size: 600% 600% !important;
+      animation: flowingGradient 3s ease-in-out infinite !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
@@ -115,9 +116,9 @@
     }
     
     #rotating-creation {
-      background: linear-gradient(90deg, #8b5cf6 0%, #a855f7 20%, #c084fc 40%, #e879f9 60%, #06b6d4 80%, #10b981 100%) !important;
-      background-size: 300% 100% !important;
-      animation: waveGradient 5s linear infinite !important;
+      background: linear-gradient(45deg, #8b5cf6, #a855f7, #c084fc, #e879f9, #06b6d4, #10b981, #84cc16) !important;
+      background-size: 600% 600% !important;
+      animation: flowingGradient 4s ease-in-out infinite !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
@@ -127,9 +128,9 @@
     }
     
     #rotating-vision {
-      background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 20%, #10b981 40%, #84cc16 60%, #eab308 80%, #f97316 100%) !important;
-      background-size: 300% 100% !important;
-      animation: waveGradient 6s linear infinite !important;
+      background: linear-gradient(45deg, #3b82f6, #06b6d4, #10b981, #84cc16, #eab308, #f97316, #ef4444) !important;
+      background-size: 600% 600% !important;
+      animation: flowingGradient 5s ease-in-out infinite !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
@@ -138,65 +139,71 @@
       filter: none !important;
     }
     
-    /* Responsive font sizes that scale to fit viewport - TIGHTER SCALING */
+    /* Responsive font sizes that AGGRESSIVELY scale to prevent cutoff */
     /* Mobile first - very small screens */
     #rotating-action, #rotating-creation, #rotating-vision {
-      font-size: clamp(1.8rem, 9vw, 3.5rem) !important;
+      font-size: clamp(1.2rem, 12vw, 2.8rem) !important;
     }
     .hero-headline {
-      font-size: clamp(1.8rem, 9vw, 3.5rem) !important;
+      font-size: clamp(1.2rem, 12vw, 2.8rem) !important;
     }
     
     /* Small screens */
     @media (min-width: 480px) {
       #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: clamp(2.2rem, 8vw, 4rem) !important;
+        font-size: clamp(1.5rem, 10vw, 3.2rem) !important;
       }
       .hero-headline {
-        font-size: clamp(2.2rem, 8vw, 4rem) !important;
+        font-size: clamp(1.5rem, 10vw, 3.2rem) !important;
       }
     }
     
     /* Medium screens */
     @media (min-width: 768px) {
       #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: clamp(2.8rem, 7vw, 5rem) !important;
+        font-size: clamp(2rem, 8vw, 4rem) !important;
       }
       .hero-headline {
-        font-size: clamp(2.8rem, 7vw, 5rem) !important;
+        font-size: clamp(2rem, 8vw, 4rem) !important;
       }
     }
     
     /* Large screens */
     @media (min-width: 1024px) {
       #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: clamp(3.5rem, 6vw, 6rem) !important;
+        font-size: clamp(2.5rem, 6vw, 5rem) !important;
       }
       .hero-headline {
-        font-size: clamp(3.5rem, 6vw, 6rem) !important;
+        font-size: clamp(2.5rem, 6vw, 5rem) !important;
       }
     }
     
     /* Extra large screens */
     @media (min-width: 1440px) {
       #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: clamp(4rem, 5vw, 7rem) !important;
+        font-size: clamp(3rem, 4vw, 6rem) !important;
       }
       .hero-headline {
-        font-size: clamp(4rem, 5vw, 7rem) !important;
+        font-size: clamp(3rem, 4vw, 6rem) !important;
       }
     }
     
-    /* Beautiful wave-like gradient animation - SIMPLIFIED FOR COMPATIBILITY */
-    @keyframes waveGradient {
+    /* Dynamic flowing gradient animation - ENHANCED MOVEMENT */
+    @keyframes flowingGradient {
       0% { 
-        background-position: 0% 0% !important; 
+        background-position: 0% 50% !important; 
+      }
+      25% { 
+        background-position: 100% 25% !important; 
       }
       50% { 
-        background-position: 100% 0% !important; 
+        background-position: 200% 75% !important; 
+      }
+      75% { 
+        background-position: 300% 25% !important; 
       }
       100% { 
-        background-position: 0% 0% !important; 
+        background-position: 400% 50% !important; 
       }
     }
     
