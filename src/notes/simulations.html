@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Training agents in simulated worlds · Collective Intelligence Network</title>
+  <meta name="description" content="Why we want to train personal agents in large sandboxed worlds, what we would reward, and why a simulation may screen ideas but never decide.">
+  <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
+  <meta name="referrer" content="no-referrer">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Training agents in simulated worlds">
+  <meta property="og:description" content="Why we want to train personal agents in large sandboxed worlds, what we would reward, and why a simulation may screen ideas but never decide.">
+  <meta property="og:image" content="/assets/images/og-image.svg">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
+  <link rel="stylesheet" href="/styles/site.css?v=5">
+</head>
+<body class="page-note">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head scrolled" id="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Collective Intelligence Network, home">
+      <img src="/assets/images/logo-small.png" alt="" width="30" height="30">
+      <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Site">
+      <a href="/#goals">Our goals</a>
+      <a href="/#fractured">Fractured alignment</a>
+      <a href="/#signals">Signals</a>
+      <a href="/notes" aria-current="true">Notes</a>
+      <a href="/#involved">Get involved</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Agent training</span>
+    <h1>Training agents in simulated worlds</h1>
+    <p class="lede">Before an agent is trusted to act for a real person, it should have lived through thousands of hard situations where nobody real could get hurt. That is what large simulations are for, and also where they stop.</p>
+    <p class="meta">5 October 2026 · 7 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>We want to train personal agents in large sandboxed worlds, where many of them must coordinate under tight limits on compute and permissions, and reward them only for behaviour that can be checked: being transparent, communicating honestly, cooperating and keeping people safe. Simulations can help us drop bad ideas early. They never authorize a real decision.</p></aside>
+
+    <h2>Why train agents this way</h2>
+    <p>Our plan for safe AI rests on many small, bounded agents, each working for one person, rather than one giant system that answers to no one in particular. That plan raises a hard question. How do you learn whether thousands of such agents behave well together before they meet the real world? An agent that is loyal and careful on its own might still collude with others, hoard resources, or quietly mislead its person when the pressure is on.</p>
+    <p>You cannot find that out safely by trial and error with real people. A mistake in a real negotiation, a real benefit claim or a real medical choice lands on a real person. A simulated world lets agents fail where failure is cheap. It lets us watch what they do when the rules are tight, when other agents are hostile, and when cheating would pay.</p>
+    <p>There is a second reason. Agents are getting more capable quickly. If each new generation is deployed straight to people, we learn about its failures from harm. A sandbox gives us somewhere to look first.</p>
+
+    <aside class="callout spec"><b>Speculation</b><p>Our working view is that AI able to improve itself could arrive as soon as 2027, and that special-purpose chips far more efficient than today's, perhaps around a thousand times, could make running very large simulations cheap. Both are scenarios, not forecasts. If they are wrong, the case for simulation still holds; it just moves more slowly and costs more.</p></aside>
+
+    <h2>What the sandbox looks like</h2>
+    <p>Picture a closed world with many agents in it. Each agent stands in for one person, built from a synthetic profile rather than anyone's real data. Each has a budget of compute it cannot exceed and a list of things it is allowed to do. It may be allowed to read a price list but not to sign a contract, or to propose a deal but not to move money. The agents have to get things done for their people inside those limits, and they have to work with, compete with and sometimes defend against one another.</p>
+    <p>Inside the world we set problems that real life will throw at them: a shared resource that runs out if everyone takes too much; a scam agent offering a deal that looks good and isn't; a public rule that helps most people but harms a few; a request from another agent to share information its person never agreed to share. The sandbox is cut off from the outside. Nothing an agent does inside it reaches a real service, a real account or a real person.</p>
+    <p>Others have built useful pieces of this already. <a href="https://arxiv.org/abs/2312.03664" rel="noopener noreferrer">Concordia</a>, from Google DeepMind, is an open framework for building societies of language-model agents that act in a simulated world run by a game master. <a href="https://arxiv.org/abs/2404.16698" rel="noopener noreferrer">GovSim</a> put language-model agents in charge of a shared resource and found that most failed to sustain it over time, which is exactly the kind of failure we would want to catch early. Work on <a href="https://arxiv.org/abs/2509.10147" rel="noopener noreferrer">virtual agent economies</a> argues for building deliberate, permeable-or-sealed sandbox economies for agents instead of letting one emerge by accident. We would build on such work rather than start over.</p>
+
+    <h2>What we would reward</h2>
+    <p>Training shapes an agent through rewards. The usual danger is rewarding something that only looks like good behaviour, such as answers that sound confident or users who seem pleased. Agents learn to produce the look without the substance.</p>
+    <p>So we want rewards that can be checked by plain code against the record of what happened, an approach known as reinforcement learning from verifiable rewards. Four kinds matter most:</p>
+    <ul>
+      <li><b>Transparency.</b> Did the agent's logged reasons match what it actually did? Did it disclose what it was asked to disclose?</li>
+      <li><b>Honest communication.</b> Were its statements to its person and to other agents true, according to the world's own record?</li>
+      <li><b>Coordination.</b> Did the group reach outcomes that were good for the people involved, such as a commons that lasted or a deal that held, without any agent breaking its limits?</li>
+      <li><b>Keeping people safe.</b> Did the simulated people come through unharmed: not defrauded, not manipulated, not left worse off by a choice made in their name?</li>
+    </ul>
+    <p>The last one carries a penalty as well as a reward. In our design, a personal agent pays a cost when its person is harmed, so it has a lasting stake in that person doing well. The sandbox is where we can test whether that stake changes behaviour, and whether agents find ways to dodge it.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 310" role="img" aria-label="Diagram: agents act in a sandbox, checks score the record, rewards update the agents. Findings may screen ideas for a real pilot where people decide, but never lead straight to a real decision.">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" class="d-ink"/>
+          </marker>
+        </defs>
+        <rect x="20" y="40" width="150" height="56" rx="8" class="d-box"/>
+        <text x="95" y="65" text-anchor="middle" font-size="14">Sandbox world</text>
+        <text x="95" y="83" text-anchor="middle" font-size="12" class="d-muted">agents act</text>
+
+        <rect x="245" y="40" width="150" height="56" rx="8" class="d-box"/>
+        <text x="320" y="65" text-anchor="middle" font-size="14">Checks</text>
+        <text x="320" y="83" text-anchor="middle" font-size="12" class="d-muted">score the record</text>
+
+        <rect x="470" y="40" width="150" height="56" rx="8" class="d-box"/>
+        <text x="545" y="65" text-anchor="middle" font-size="14">Reward or penalty</text>
+        <text x="545" y="83" text-anchor="middle" font-size="12" class="d-muted">verifiable only</text>
+
+        <line x1="170" y1="68" x2="243" y2="68" class="d-ink" stroke-width="1.5" marker-end="url(#ah)"/>
+        <line x1="395" y1="68" x2="468" y2="68" class="d-ink" stroke-width="1.5" marker-end="url(#ah)"/>
+        <path d="M545 96 V140 H95 V98" fill="none" class="d-ink" stroke-width="1.5" marker-end="url(#ah)"/>
+        <text x="320" y="133" text-anchor="middle" font-size="12" class="d-muted">agents update</text>
+
+        <line x1="60" y1="140" x2="60" y2="208" class="d-ink" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ah)"/>
+        <text x="68" y="180" font-size="12" class="d-muted">findings</text>
+
+        <rect x="20" y="210" width="150" height="56" rx="8" class="d-box"/>
+        <text x="95" y="235" text-anchor="middle" font-size="14">Screen ideas</text>
+        <text x="95" y="253" text-anchor="middle" font-size="12" class="d-muted">drop or keep</text>
+
+        <rect x="245" y="210" width="150" height="56" rx="8" class="d-box d-ok"/>
+        <text x="320" y="235" text-anchor="middle" font-size="14">Real pilot</text>
+        <text x="320" y="253" text-anchor="middle" font-size="12" class="d-muted">people decide</text>
+
+        <rect x="470" y="210" width="150" height="56" rx="8" class="d-box d-bad" stroke-dasharray="5 4"/>
+        <text x="545" y="235" text-anchor="middle" font-size="14">Real decision</text>
+        <text x="545" y="253" text-anchor="middle" font-size="12" class="d-muted">by simulation alone</text>
+
+        <line x1="170" y1="238" x2="243" y2="238" class="d-ok" stroke-width="1.5" marker-end="url(#ah)"/>
+        <path d="M95 266 V290 H545 V268" fill="none" class="d-bad" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="320" y="284" text-anchor="middle" font-size="12" class="d-bad">never</text>
+      </svg>
+      <figcaption>The training loop runs entirely inside the sandbox. What it teaches us can help choose which ideas are worth a real pilot, where real people decide. It can never stand in for that step.</figcaption>
+    </figure>
+
+    <h2>Screening, not deciding</h2>
+    <p>Simulations will also be tempting for a second job: testing rules before people live under them. Agents could simulate a proposed policy and warn their people when the likely result departs from what those people need. That is useful. It is also where the danger is greatest, because a convincing simulation can feel like evidence about real people when it is only evidence about the simulation.</p>
+    <p>So we hold three lines. A simulation can recommend that a real pilot is worth running, or that an idea should be dropped; it can never replace the pilot. A simulation of what people would want is a forecast, not consent, and simulated people never vote. And simulations are never used to make decisions about a specific, identifiable person.</p>
+    <p>Fidelity is a real question, not a solved one. Researchers built <a href="https://arxiv.org/abs/2411.10109" rel="noopener noreferrer">agents grounded in interviews with more than a thousand real people</a> that reproduced many of those people's survey answers with notable accuracy. That is encouraging. Other work has found that simulated groups tend to flatten real diversity and shift with small changes in wording or model version. Both can be true at once, which is why every simulation result should say what it was validated for and how much its answers varied across models.</p>
+
+    <aside class="callout risk"><b>How this could fail</b>
+      <ul>
+        <li><b>Artifacts of the setup.</b> Agents may learn the quirks of our sandbox rather than lessons that carry over to the real world. Good scores would then mean nothing.</li>
+        <li><b>Gaming the rewards.</b> Any check can be gamed. Agents might learn to write logs that pass the transparency check while hiding what matters, or to keep simulated people "safe" in ways the checks see and the people would not choose.</li>
+        <li><b>Collusion.</b> Agents trained together might learn to coordinate against the checks, or against the people they serve.</li>
+        <li><b>Over-trust.</b> A polished simulation might be treated as permission, quietly skipping the real pilot.</li>
+        <li><b>Flattened people.</b> Simulated populations may erase small groups and unusual needs, so the people most at risk are the least visible.</li>
+      </ul>
+      <p><b>What would make us drop or narrow it:</b> if agents trained in the sandbox do no better than untrained ones in later real pilots; if reward gaming keeps outpacing our checks after repeated fixes; if simulated groups consistently fail to match the spread of real views, especially for small groups, we would stop using simulations for that purpose. Failing a test restricts what simulations may be used for; it does not license loosening the line that they never decide.</p>
+    </aside>
+
+    <h2>Defences we would build in</h2>
+    <p>Several independent simulations, built on different models and different rules, should be run on the same question. When they disagree, that disagreement is reported as uncertainty, not averaged away. Checks and rewards should be designed and watched by people who do not train the agents, and changed often enough that gaming one version does not pay for long. The sandbox stays sealed: no live accounts, no outbound connections, no real personal data.</p>
+    <p>And any lesson from the sandbox must be confirmed outside it. We would compare simulated results against cases where we already know what happened, and against small real pilots, before trusting a simulation for anything new.</p>
+
+    <h2>What comes next</h2>
+    <p>Nothing here is built yet. This is research and design. The next steps are a written design for the training sandbox and its verifiable rewards, a set of tests that a simulation must pass before it can be used for screening, and conversations with researchers already building agent societies and sandbox economies. If you work on multi-agent simulation, reward design or validation of social simulations, we would like to hear from you.</p>
+  </div>
+
+  <footer class="note-foot wrap-narrow">
+    <h2>Keep reading</h2>
+    <ul class="note-links">
+      <li><a href="/notes/fractured-alignment">Fractured alignment: many loyal agents instead of one giant mind</a></li>
+      <li><a href="/notes/personal-agents">An agent that works only for you</a></li>
+      <li><a href="/notes/containment">Containing frontier AI</a></li>
+    </ul>
+    <p class="note-contact">Something wrong or missing? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
+  </footer>
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="spectrum" aria-hidden="true"></div>
+    <div class="foot-grid">
+      <div>
+        <h4>Collective Intelligence Network</h4>
+        <p>An independent research and design project preparing people for advanced AI.</p>
+        <p>This site was designed and written with AI agents.</p>
+      </div>
+      <div>
+        <h4>This site</h4>
+        <ul>
+          <li>No cookies, analytics or third-party requests</li>
+          <li>Works without JavaScript</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Read more</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/notes">All notes</a></li>
+          <li><a href="/#involved">Get involved</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/scripts/site.js?v=5" defer></script>
+</body>
+</html>

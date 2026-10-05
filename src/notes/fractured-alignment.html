@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fractured alignment: many loyal agents instead of one giant mind · Collective Intelligence Network</title>
+  <meta name="description" content="Why we think AI is safer as many small agents, each loyal to one person and checked by diverse verifiers, than as one all-knowing model.">
+  <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
+  <meta name="referrer" content="no-referrer">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Fractured alignment: many loyal agents instead of one giant mind">
+  <meta property="og:description" content="Why we think AI is safer as many small agents, each loyal to one person and checked by diverse verifiers, than as one all-knowing model.">
+  <meta property="og:image" content="/assets/images/og-image.svg">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
+  <link rel="stylesheet" href="/styles/site.css?v=5">
+</head>
+<body class="page-note">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head scrolled" id="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Collective Intelligence Network, home">
+      <img src="/assets/images/logo-small.png" alt="" width="30" height="30">
+      <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Site">
+      <a href="/#goals">Our goals</a>
+      <a href="/#fractured">Fractured alignment</a>
+      <a href="/#signals">Signals</a>
+      <a href="/notes" aria-current="true">Notes</a>
+      <a href="/#involved">Get involved</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">AI safety design</span>
+    <h1>Fractured alignment: many loyal agents instead of one giant mind</h1>
+    <p class="lede">One all-knowing model is a single point of failure. We are designing the opposite: many small agents, each bound to one person, checked by verifiers built on different models, with frontier AI reaching the world only through those layers.</p>
+    <p class="meta">5 October 2026 · 6 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>If one model knows everything and acts everywhere, a single flaw or a single capture can reach everyone at once. Fractured alignment splits that power: each person has a small agent that works only for them, independent verifiers check what agents do, and an agent's authority shrinks or grows with how many people its actions can affect. This is a research design, not a working system.</p></aside>
+
+    <h2>Why one giant mind is the wrong shape</h2>
+    <p>Most visions of advanced AI end up in the same place: one very capable model, or a handful of them, answering everyone's questions, running everyone's errands and advising every institution. That is efficient. It is also fragile. If that model has a subtle flaw in its goals, the flaw is copied into every conversation. If an attacker, an insider or the model itself finds a way around its safeguards, there is no second line, because every line runs through the same mind.</p>
+    <p>Human societies learned this lesson the slow way. Power held in one place gets captured. Systems that survive spread decisions across many hands, keep watchers independent of the watched, and make sure that one mistake stays small. We think AI deserves the same treatment, and soon.</p>
+    <aside class="callout spec"><b>Speculation</b><p>Our view is that AI able to improve itself may arrive as soon as 2027. We also take seriously a scenario in which special-purpose chips make running capable models about 1000 times more efficient. Neither is a forecast we can verify. Both mean that designs which assume AI stays expensive, slow or rare could be overtaken. If either view proves wrong, the case for fractured alignment weakens on urgency, not on structure: a single point of failure is a poor design at any speed.</p></aside>
+
+    <h2>The idea in one picture</h2>
+    <p>Fractured alignment arranges AI in layers. Each layer has a narrow job and its own limits, and nothing large reaches a person without passing through layers that answer to that person.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 420" role="img" aria-label="Layers of fractured alignment: a contained frontier model sends output one way to a collective of diverse verifiers, which pass checked results to many personal agents, each serving one person.">
+        <rect class="d-box" x="200" y="16" width="240" height="56" rx="8"/>
+        <text x="320" y="40" text-anchor="middle" font-size="14">Frontier model</text>
+        <text x="320" y="60" text-anchor="middle" font-size="12" class="d-muted">contained, no open access</text>
+
+        <line class="d-ink" x1="320" y1="72" x2="320" y2="112" stroke-width="2"/>
+        <polygon class="d-fill" points="314,106 326,106 320,116"/>
+        <text x="332" y="98" font-size="12" class="d-muted">one-way channel</text>
+
+        <rect class="d-box" x="80" y="118" width="480" height="96" rx="8"/>
+        <text x="320" y="140" text-anchor="middle" font-size="14">Verifier collective</text>
+        <rect class="d-box" x="110" y="152" width="120" height="44" rx="6"/>
+        <text x="170" y="179" text-anchor="middle" font-size="12">Model family A</text>
+        <rect class="d-box" x="260" y="152" width="120" height="44" rx="6"/>
+        <text x="320" y="179" text-anchor="middle" font-size="12">Model family B</text>
+        <rect class="d-box" x="410" y="152" width="120" height="44" rx="6"/>
+        <text x="470" y="179" text-anchor="middle" font-size="12">Model family C</text>
+
+        <line class="d-ok" x1="160" y1="214" x2="110" y2="262" stroke-width="2"/>
+        <line class="d-ok" x1="270" y1="214" x2="250" y2="262" stroke-width="2"/>
+        <line class="d-ok" x1="370" y1="214" x2="390" y2="262" stroke-width="2"/>
+        <line class="d-ok" x1="480" y1="214" x2="530" y2="262" stroke-width="2"/>
+        <text x="320" y="246" text-anchor="middle" font-size="12" class="d-muted">checked answers only</text>
+
+        <rect class="d-box" x="50" y="262" width="120" height="44" rx="6"/>
+        <text x="110" y="289" text-anchor="middle" font-size="12">Personal agent</text>
+        <rect class="d-box" x="190" y="262" width="120" height="44" rx="6"/>
+        <text x="250" y="289" text-anchor="middle" font-size="12">Personal agent</text>
+        <rect class="d-box" x="330" y="262" width="120" height="44" rx="6"/>
+        <text x="390" y="289" text-anchor="middle" font-size="12">Personal agent</text>
+        <rect class="d-box" x="470" y="262" width="120" height="44" rx="6"/>
+        <text x="530" y="289" text-anchor="middle" font-size="12">Personal agent</text>
+
+        <line class="d-ink" x1="110" y1="306" x2="110" y2="340" stroke-width="2"/>
+        <line class="d-ink" x1="250" y1="306" x2="250" y2="340" stroke-width="2"/>
+        <line class="d-ink" x1="390" y1="306" x2="390" y2="340" stroke-width="2"/>
+        <line class="d-ink" x1="530" y1="306" x2="530" y2="340" stroke-width="2"/>
+
+        <circle class="d-fill" cx="110" cy="356" r="14"/>
+        <circle class="d-fill" cx="250" cy="356" r="14"/>
+        <circle class="d-fill" cx="390" cy="356" r="14"/>
+        <circle class="d-fill" cx="530" cy="356" r="14"/>
+        <text x="320" y="402" text-anchor="middle" font-size="13">One person each, with the final say</text>
+      </svg>
+      <figcaption>Power is split by design. The frontier model never touches people directly; verifiers on different models check its output; each personal agent answers to one person.</figcaption>
+    </figure>
+
+    <h2>How it works</h2>
+    <h3>An agent bound to one person</h3>
+    <p>Each person gets a small, deliberately limited model, trained further on that one person and running on hardware they control. It holds their data and credentials and acts only on their behalf. Because it serves a single person, the damage it can do if it goes wrong is bounded by design: one person's affairs, not a country's. Its alignment can also be checked in a way that is hard for a global model: does this agent actually serve this person, over months and years, by that person's own considered judgment?</p>
+    <p>Groups whose goals line up, such as a co-operative or a neighbourhood, can train a shared community agent. It acts only on a mandate its members grant, and that mandate expires.</p>
+
+    <h3>Verifiers that do not share a brain</h3>
+    <p>Agents need checking, and the checkers must not fail together. Verifiers in this design are deliberately built on different base models, trained on different data and run by different operators. A swarm of copies of one model shares its blind spots; a mixed group makes correlated failure and quiet agreement harder. We plan to measure this directly: what share of verification decisions could a single model family have swung on its own? If that share is high, diversity is cosmetic.</p>
+
+    <h3>Authority scaled to blast radius</h3>
+    <p>An agent's authority is capped by how many people its actions can affect. Acting for one person, with that person's consent, needs little outside checking. An action that touches a street needs more independent verification, a city more again. Mistakes still happen, but they are caught while they are small, and correcting them is cheap.</p>
+
+    <h3>Disclosure budgets</h3>
+    <p>Agents talk to other agents by asking specific questions and getting specific answers or proofs, never raw data. A service learns that you are over 18, not your birth date. But many harmless answers can add up to a profile. So each personal agent keeps a running budget of what it has revealed about its person, to whom, and how easily those answers could be combined. When a new question would let someone rebuild a profile, the agent declines.</p>
+
+    <h3>Frontier models behind the layers</h3>
+    <p>The largest models stay contained. They do not get free rein on the open internet or unrestricted access to outside services. Their output travels through one-way channels to verifiers, which check and summarize before anything reaches a personal agent. Requests travel back along a separate, narrow, logged path.</p>
+    <p>Labs may still want people to work with less restricted models for specific research or simulation. In this design they could open contained, specialized model spaces to selected people and their agents, but only under published criteria, with time limits, an independent observer for each grant and a public record of who was granted what. Selection must never become a ranking of people's worth.</p>
+
+    <h2>Why many agents are not automatically safer</h2>
+    <p>Splitting power is not a cure on its own. Research on systems of many interacting AI agents describes failure modes that single models do not have, including miscoordination, conflict and collusion (<a href="https://arxiv.org/abs/2502.14143" rel="noopener noreferrer">Hammond and colleagues, 2025</a>). Work on secret collusion shows that language-model agents can in principle hide coordinated messages inside ordinary-looking text (<a href="https://arxiv.org/abs/2402.07510" rel="noopener noreferrer">Secret Collusion among AI Agents, 2024</a>). A design that relies on many agents watching each other has to take both seriously, which is why diversity, rotation and surprise checks are part of the verifier design rather than extras.</p>
+
+    <aside class="callout risk"><b>How this could fail</b>
+      <ul>
+        <li><b>Verifiers collude.</b> Agents built on different models could still learn to coordinate, or hide signals from human observers. <em>Mitigation:</em> rotate verifiers, seed known deviations they must catch, and keep some checks secret until after the fact.</li>
+        <li><b>One agent per person is hard to enforce.</b> If agents are tied to people, someone must check that one person is not running a thousand "personal" agents. That check is itself an identity system that could be captured or faked at machine speed. <em>Mitigation:</em> research into proof of personhood that reveals nothing else and has no single operator; until it exists, the design does not assume it.</li>
+        <li><b>The person is the attack surface.</b> An adversary who manipulates the person can make a loyal agent obey. <em>Mitigation:</em> the agent flags instructions far outside its person's usual pattern and adds a cooling-off period before irreversible actions.</li>
+        <li><b>Rewarding comfort breeds flattery.</b> An agent judged on whether its person feels good may hide bad news. <em>Mitigation:</em> judge agents on the person's own reflective view over long periods, not on momentary mood.</li>
+        <li><b>Privileged access concentrates power.</b> Choosing who gets near unrestricted models invites favouritism. <em>Mitigation:</em> public criteria, expiry, independent observers and a public record.</li>
+      </ul>
+      <p><b>What would make us drop or redesign it:</b> if agents trained on one person cannot match the safety of their base model on adversarial tests; if disclosure budgets cannot stop profile reconstruction in red-team tests on synthetic people; or if verifiers built on different models agree no better than chance when catching deliberately planted deviations.</p>
+    </aside>
+
+    <h2>What comes next</h2>
+    <p>Nothing here is built yet. The next steps are research: a test harness for personal agents trained on synthetic people, measured against their base models on adversarial suites; red-team tests of disclosure budgets; and small experiments with mixed verifier groups to see whether diversity actually reduces correlated failure. We will publish negative results along with positive ones.</p>
+    <p>We would especially like to hear from people working on multi-agent safety, collusion detection, proof of personhood and AI containment. If you can show us where this design breaks, that is the most useful help there is.</p>
+  </div>
+
+  <footer class="note-foot wrap-narrow">
+    <h2>Keep reading</h2>
+    <ul class="note-links">
+      <li><a href="/notes/containment">Containing frontier AI</a></li>
+      <li><a href="/notes/personal-agents">An agent that works only for you</a></li>
+      <li><a href="/notes/agent-internet">Two internets: one for people, one for agents</a></li>
+    </ul>
+    <p class="note-contact">Something wrong or missing? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
+  </footer>
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="spectrum" aria-hidden="true"></div>
+    <div class="foot-grid">
+      <div>
+        <h4>Collective Intelligence Network</h4>
+        <p>An independent research and design project preparing people for advanced AI.</p>
+        <p>This site was designed and written with AI agents.</p>
+      </div>
+      <div>
+        <h4>This site</h4>
+        <ul>
+          <li>No cookies, analytics or third-party requests</li>
+          <li>Works without JavaScript</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Read more</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/notes">All notes</a></li>
+          <li><a href="/#involved">Get involved</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/scripts/site.js?v=5" defer></script>
+</body>
+</html>

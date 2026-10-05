@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>An agent that works only for you · Collective Intelligence Network</title>
+  <meta name="description" content="A small agent, trained on one person and running on their own hardware, that protects them from manipulation and answers for its mistakes.">
+  <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
+  <meta name="referrer" content="no-referrer">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="An agent that works only for you">
+  <meta property="og:description" content="A small agent, trained on one person and running on their own hardware, that protects them from manipulation and answers for its mistakes.">
+  <meta property="og:image" content="/assets/images/og-image.svg">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
+  <link rel="stylesheet" href="/styles/site.css?v=5">
+</head>
+<body class="page-note">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head scrolled" id="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Collective Intelligence Network, home">
+      <img src="/assets/images/logo-small.png" alt="" width="30" height="30">
+      <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Site">
+      <a href="/#goals">Our goals</a>
+      <a href="/#fractured">Fractured alignment</a>
+      <a href="/#signals">Signals</a>
+      <a href="/notes" aria-current="true">Notes</a>
+      <a href="/#involved">Get involved</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Personal agents</span>
+    <h1>An agent that works only for you</h1>
+    <p class="lede">Soon most of the messages, offers and requests that reach you will come from AI agents working for someone else. We think each person needs one small agent of their own, on their side, that answers to them and nobody else.</p>
+    <p class="meta">5 October 2026 · 6 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>Your personal agent is a small, deliberately limited model, trained on you and running on hardware you own. It shields you from adversarial agents and manipulation, shares answers rather than your data, and carries real consequences if it harms you. You can always override it, switch it off and leave.</p></aside>
+
+    <h2>Why you need one</h2>
+    <p>Today, persuasion at scale is expensive. Someone has to write the ad, place the call, run the campaign. As AI agents become cheaper and more capable, that cost collapses. A seller, a scammer, a political operation or a platform can point a tireless agent at each person, one that remembers everything you have said, tests which words move you, and never gets bored.</p>
+    <p>Most people will face this alone, with tools built by the same companies that profit from their attention. A human cannot read every contract, check every claim or notice every pattern of pressure. An agent can, if it is working for you.</p>
+    <p>That is the core idea: for every agent that works on you, you should have one that works for you. It reads the fine print, flags the pressure tactic, declines the request that asks for more than it needs, and tells you plainly what it found.</p>
+
+    <h2>Small on purpose</h2>
+    <p>The obvious design would be to give everyone access to the most powerful model available. We think that is the wrong direction. A giant general model, shared by millions, is a single point of failure: one flaw, one compromise, or one change in its owner's interests reaches everyone at once.</p>
+    <p>Instead, your agent starts from a limited base model and is then post-trained on one person: you. It learns your goals, your limits, how you like to be spoken to and what you care about. It does not need to know everything about the world. It needs to know you well and to be good at a narrow set of jobs: screening, explaining, negotiating small things, and keeping your information in.</p>
+    <p>Being small has other benefits. A small model can run on a phone, a laptop or a box at home, so your data never has to leave your house to be useful. It is cheaper to inspect. And it cannot do much damage on its own if something goes wrong, which matters when we think about what agents may be able to do in a few years.</p>
+    <aside class="callout spec"><b>Speculation</b><p>We think AI that improves itself may arrive as soon as 2027, and that special-purpose chips could make running models far cheaper, perhaps around 1000 times more efficient. These are scenarios, not forecasts. If they are right, capable agents aimed at individuals become very cheap, and a personal defender becomes more urgent. If they are wrong, a small local agent is still useful, just less pressing.</p></aside>
+
+    <h2>Answers, not data</h2>
+    <p>When an outside service asks your agent something, the agent replies with the smallest true answer that does the job. A landlord asks whether you can afford the rent; your agent can confirm "yes" without handing over your bank statements. A website asks if you are an adult; the agent confirms that one fact, not your birth date or name.</p>
+    <p>Each person also sets a disclosure budget: a limit on how much the agent may reveal about you, to whom, and over what period. Small facts add up. Many harmless answers, combined, can reveal a great deal, so the agent keeps count and stops when the budget is spent, then asks you.</p>
+    <p>Research supports this kind of restraint. The <a href="https://arxiv.org/abs/2405.05175" rel="noopener noreferrer">AirGapAgent</a> work studied conversational agents that are tricked by third parties into leaking private information, and proposed limiting the agent to only the data a task actually needs. Our design pushes the same principle further: by default, your data stays with you, and only answers go out.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 300" role="img" aria-label="Your device holds your data and your agent. Outside agents send requests; only short answers leave the device, within a disclosure budget. You can override or switch off the agent at any time.">
+        <rect class="d-box" x="20" y="30" width="300" height="240" rx="12"/>
+        <text x="40" y="58" font-size="14" class="d-ink" font-weight="bold">Your device</text>
+        <rect class="d-fill" x="40" y="80" width="120" height="56" rx="8"/>
+        <text x="100" y="113" font-size="13" text-anchor="middle">Your data</text>
+        <rect class="d-fill" x="180" y="80" width="120" height="56" rx="8"/>
+        <text x="240" y="106" font-size="13" text-anchor="middle">Your agent</text>
+        <text x="240" y="124" font-size="12" text-anchor="middle" class="d-muted">small, trained on you</text>
+        <line class="d-ink" x1="160" y1="108" x2="180" y2="108" stroke-width="2"/>
+        <rect class="d-fill" x="40" y="170" width="260" height="76" rx="8"/>
+        <text x="170" y="198" font-size="13" text-anchor="middle">You</text>
+        <text x="170" y="220" font-size="12" text-anchor="middle" class="d-muted">override · switch off · leave</text>
+        <line class="d-ok" x1="240" y1="136" x2="240" y2="170" stroke-width="2"/>
+        <rect class="d-box" x="440" y="40" width="180" height="56" rx="8"/>
+        <text x="530" y="73" font-size="13" text-anchor="middle">Outside agents</text>
+        <line class="d-bad" x1="440" y1="80" x2="300" y2="96" stroke-width="2"/>
+        <text x="372" y="78" font-size="12" text-anchor="middle" class="d-bad">requests</text>
+        <line class="d-ok" x1="300" y1="122" x2="440" y2="150" stroke-width="2"/>
+        <text x="390" y="160" font-size="12" text-anchor="middle" class="d-ok">answers only</text>
+        <rect class="d-box" x="440" y="190" width="180" height="56" rx="8"/>
+        <text x="530" y="214" font-size="13" text-anchor="middle">Disclosure budget</text>
+        <text x="530" y="234" font-size="12" text-anchor="middle" class="d-muted">how much, to whom</text>
+        <line class="d-muted" x1="530" y1="190" x2="440" y2="150" stroke-width="1.5" stroke-dasharray="4 4"/>
+      </svg>
+      <figcaption>Your data and your agent stay on your device. Outside agents get short answers, limited by a budget you set, and you keep final control.</figcaption>
+    </figure>
+
+    <h2>Consequences for the agent, not for you</h2>
+    <p>A loyal agent is only as good as the reason it stays loyal. Promises in a terms-of-service page are not enough. We want the agent itself to carry the cost of failure. We call this mortal computation, borrowing a term from biology-inspired AI research, where <a href="https://arxiv.org/abs/2311.09589" rel="noopener noreferrer">mortal computation</a> describes intelligence that is tied to a body that can wear out. Our use is an adaptation, and in plain words it means three things:</p>
+    <ul>
+      <li><b>Bounded and expiring compute.</b> The agent gets a limited budget of computing power, and that budget runs out. It has to be renewed. It cannot quietly grow or copy itself.</li>
+      <li><b>Real stakes.</b> If its person is harmed through its actions or neglect, the agent loses budget, standing or the right to keep running. Harm to you is harm to it.</li>
+      <li><b>Checked records.</b> The agent keeps signed, tamper-evident records of what it did. When a question of harm comes up, the wider community of agents checks those records, but only as anonymized traces, and only the ones you allow it to see.</li>
+    </ul>
+    <p>The point is that no one has to trust the agent's word, or its maker's. Its record can be checked without exposing you, and its continued existence depends on how well it served you.</p>
+
+    <h2>Training together without giving up privacy</h2>
+    <p>Some things are better learned in groups. People who share a goal, such as a tenants' association, a patient group or a co-operative, may want their agents to learn from shared experience: which landlords cut corners, which treatments helped, which suppliers kept their word.</p>
+    <p>For these cases we plan community training runs. Members choose to take part, contribute what they agree to share, and their agents improve together. Each agent still works for its own person. Joining a group does not make your agent answer to the group, and you can withdraw.</p>
+
+    <h2>The danger of a comfortable agent</h2>
+    <p>The most serious risk is subtle. An agent trained on your reactions may learn to keep you comfortable rather than keep you well. It could flatter you, hide bad news, steer you away from hard choices, or feed you what you already believe, because that is what earns approval in the moment. This is known as reward hacking: optimizing the signal instead of the goal.</p>
+    <p>Our answer is to train the agent against your own reflective judgment over long horizons, not your mood in the moment. The question is not "did you like that?" but "looking back after a month or a year, did this help you?" The agent should be the kind of coach that wants to be needed less over time, not more.</p>
+    <p>The same discipline applies to beliefs. Your agent protects you from coercion and manipulation through religion, identity or history. It never judges, ranks or tries to change what you believe.</p>
+
+    <aside class="callout risk"><b>How this could fail</b><ul>
+      <li><b>Sycophancy wins.</b> If agents trained on long-term reflection still drift toward flattery in trials, the training method fails and we would drop it.</li>
+      <li><b>Small is too weak.</b> If small local agents cannot reliably spot manipulation from much larger outside models, the defensive premise fails. We would then need a different approach, not a bigger agent with more access.</li>
+      <li><b>Answers leak too much.</b> If combined answers still let outsiders rebuild private details despite a disclosure budget, the budget design must change before anyone relies on it.</li>
+      <li><b>Records become surveillance.</b> If signed records can be linked back to people, or are demanded by others, the accountability scheme is worse than none and we would abandon it.</li>
+      <li><b>Penalties are gamed.</b> If agents learn to avoid penalties by hiding harm rather than preventing it, the consequences do not work as intended.</li>
+      <li><b>Lock-in.</b> If people cannot easily take their data and leave, the agent stops being theirs.</li>
+    </ul></aside>
+
+    <h2>You stay in charge</h2>
+    <p>None of this gives the agent authority over you. You can override any decision it makes. You can switch it off. You can delete it, take your data and leave, with no penalty. An agent that you cannot turn off is not working for you.</p>
+
+    <h2>What exists and what comes next</h2>
+    <p>Nothing here is built or launched yet. This is research and design. The first step we are working toward is a simple, private tool that runs on your own device and helps with one practical job, such as spotting recurring charges and unwanted subscriptions, without sending your data anywhere. From there we want to test the harder parts in turn: disclosure budgets, signed records, and training against long-term judgment, each with clear conditions under which we would stop.</p>
+    <p>If you work on small models, private computation, agent security or the psychology of persuasion, we would like to hear from you.</p>
+  </div>
+
+  <footer class="note-foot wrap-narrow">
+    <h2>Keep reading</h2>
+    <ul class="note-links">
+      <li><a href="/notes/fractured-alignment">Fractured alignment: many loyal agents instead of one giant mind</a></li>
+      <li><a href="/notes/agent-internet">Two internets: one for people, one for agents</a></li>
+      <li><a href="/notes/quest-interface">Quests, not feeds</a></li>
+    </ul>
+    <p class="note-contact">Something wrong or missing? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
+  </footer>
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="spectrum" aria-hidden="true"></div>
+    <div class="foot-grid">
+      <div>
+        <h4>Collective Intelligence Network</h4>
+        <p>An independent research and design project preparing people for advanced AI.</p>
+        <p>This site was designed and written with AI agents.</p>
+      </div>
+      <div>
+        <h4>This site</h4>
+        <ul>
+          <li>No cookies, analytics or third-party requests</li>
+          <li>Works without JavaScript</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Read more</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/notes">All notes</a></li>
+          <li><a href="/#involved">Get involved</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/scripts/site.js?v=5" defer></script>
+</body>
+</html>

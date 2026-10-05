@@ -358,3 +358,85 @@ section + section { border-top: 1px solid var(--rule); }
 /* related organizations */
 .orgs b a { color: inherit; text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: .2em; }
 .orgs b a:hover { text-decoration-color: currentColor; }
+
+/* signals: the oversight gap chart */
+.sig-figure { margin: 0 0 2rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: clamp(1rem, 3vw, 2rem); }
+.sig-chart { width: 100%; height: auto; font: 600 13px var(--mono); }
+.sig-chart .grid line { stroke: var(--rule); stroke-width: 1.5; }
+.sig-chart .gap { fill: var(--accent); opacity: .14; }
+.sig-chart .gap-future { fill: url(#hatch); opacity: .5; }
+.sig-chart .hatch { stroke: var(--accent); stroke-width: 1; opacity: .35; }
+.sig-chart .now { stroke: var(--ink-3); stroke-dasharray: 3 5; }
+.sig-chart path { fill: none; }
+.sig-chart .l-cap { stroke: var(--ink); stroke-width: 3.5; }
+.sig-chart .l-ov { stroke: var(--ok); stroke-width: 3.5; }
+.sig-chart .l-bad { stroke: var(--accent); stroke-width: 3; }
+.sig-chart .fut { stroke-dasharray: 9 7; }
+.sig-chart .gap, .sig-chart .gap-future { stroke: none; }
+.sig-chart .dot-cap { fill: var(--ink); } .sig-chart .dot-ov { fill: var(--ok); }
+.sig-chart text { fill: var(--ink-2); }
+.sig-chart .t-cap { fill: var(--ink); } .sig-chart .t-ov { fill: var(--ok); }
+.sig-chart .t-good { fill: var(--ok); } .sig-chart .t-bad, .sig-chart .t-gap { fill: var(--accent); }
+.sig-chart .t-now, .sig-chart .t-axis { fill: var(--ink-3); font-size: 11px; letter-spacing: .12em; }
+.sig-figure figcaption { margin-top: .8rem; font-size: .85rem; color: var(--ink-3); }
+.fam-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+@media (max-width: 1000px) { .fam-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .fam-grid { grid-template-columns: 1fr; } }
+.fam-card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 1.25rem; display: grid; gap: .6rem; align-content: start; }
+.fam-card h3 { font-size: 1.15rem; margin: 0; }
+.fam-card ul { margin: 0; padding-left: 1.1rem; font-size: .9rem; color: var(--ink-2); }
+.fam-card li + li { margin-top: .25rem; }
+.feeds { font: 700 .68rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; justify-self: start; padding: .35rem .5rem; border-radius: 6px; border: 1px solid currentColor; }
+.feeds.cap { color: var(--ink); } .feeds.ov { color: var(--ok); }
+.dir { margin: 0; font-size: .85rem; color: var(--ink-2); border-top: 1px solid var(--rule); padding-top: .5rem; }
+.dir b { display: block; font: 700 .7rem/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.dir.bad b { color: var(--accent); } .dir.good b { color: var(--ok); }
+.more { margin-top: 1.5rem; font-weight: 600; }
+.more a { color: var(--accent); }
+
+/* ---------- notes (article pages) ---------- */
+.wrap-narrow { width: min(100% - 2.5rem, 44rem); margin-inline: auto; }
+.note { padding: clamp(6rem, 12vw, 8rem) 0 4rem; }
+.note-head { display: grid; gap: 1rem; margin-bottom: 2.5rem; }
+.note-head h1 { font-family: var(--serif); font-size: clamp(2.1rem, 5vw, 3.2rem); line-height: 1.1; margin: 0; letter-spacing: -.01em; }
+.note .back { font: 600 .85rem var(--mono); color: var(--ink-3); text-decoration: none; }
+.note .back:hover { color: var(--accent); }
+.note .meta { font: 500 .8rem var(--mono); color: var(--ink-3); margin: 0; }
+.note-body { font-size: 1.08rem; line-height: 1.75; }
+.note-body h2 { font-family: var(--serif); font-size: 1.6rem; line-height: 1.25; margin: 2.6rem 0 .8rem; }
+.note-body h3 { font-size: 1.15rem; margin: 1.8rem 0 .5rem; }
+.note-body p, .note-body ul, .note-body ol { margin: 0 0 1.1rem; }
+.note-body li + li { margin-top: .35rem; }
+.note-body blockquote { margin: 1.6rem 0; padding: .2rem 0 .2rem 1.2rem; border-left: 3px solid var(--accent); font-family: var(--serif); font-size: 1.25rem; color: var(--ink); }
+.callout { margin: 1.8rem 0; padding: 1.1rem 1.3rem; border-radius: var(--radius); background: var(--card); border: 1px solid var(--rule); border-left: 4px solid var(--ok); }
+.callout > b { display: block; font: 700 .72rem/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ok); margin-bottom: .4rem; }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout.spec { border-left-color: var(--gold); } .callout.spec > b { color: var(--gold); }
+.callout.risk { border-left-color: var(--accent); } .callout.risk > b { color: var(--accent); }
+.diagram { margin: 2rem 0; padding: 1.2rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); }
+.diagram svg { width: 100%; height: auto; font: 600 13px var(--mono); }
+.diagram figcaption { margin-top: .7rem; font-size: .85rem; color: var(--ink-3); }
+.diagram .d-ink { stroke: var(--ink); fill: none; } .diagram .d-ok { stroke: var(--ok); fill: none; }
+.diagram .d-bad { stroke: var(--accent); fill: none; } .diagram .d-muted { stroke: var(--ink-3); fill: none; }
+.diagram .d-fill { fill: var(--paper-2); stroke: var(--rule); } .diagram .d-box { fill: var(--card); stroke: var(--ink); }
+.diagram text { fill: var(--ink-2); stroke: none; } .diagram text.d-ok { fill: var(--ok); } .diagram text.d-bad { fill: var(--accent); } .diagram text.d-ink { fill: var(--ink); }
+.tbl { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: .95rem; }
+.tbl th, .tbl td { text-align: left; padding: .6rem .5rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tbl th { font: 700 .75rem var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.note-foot { margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--rule); }
+.note-foot h2 { font-family: var(--serif); font-size: 1.3rem; }
+.note-links { list-style: none; padding: 0; display: grid; gap: .6rem; }
+.note-links a { font-weight: 600; }
+.note-contact { color: var(--ink-3); font-size: .9rem; }
+/* notes index */
+.notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+@media (max-width: 900px) { .notes-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .notes-grid { grid-template-columns: 1fr; } }
+.note-card { display: grid; gap: .5rem; align-content: start; padding: 1.3rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); text-decoration: none; transition: border-color .2s, transform .2s; }
+.note-card:hover { border-color: var(--accent); transform: translateY(-2px); color: inherit; }
+.note-card .k { font: 700 .7rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.note-card h3 { font-family: var(--serif); font-size: 1.3rem; line-height: 1.2; margin: 0; }
+.note-card p { margin: 0; font-size: .93rem; color: var(--ink-2); }
+
+.g-more { margin: .8rem 0 0; font-size: .9rem; font-weight: 600; }
+.g-more a { color: var(--accent); }
