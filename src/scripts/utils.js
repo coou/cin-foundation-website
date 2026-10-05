@@ -1,5 +1,5 @@
 /**
- * Utility functions for the CIN Foundation website
+ * Utility functions for the Collective Intelligence Network website
  */
 
 /**

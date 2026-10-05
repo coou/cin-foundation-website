@@ -307,7 +307,7 @@ function announcePageLoad() {
   announcement.setAttribute('aria-live', 'polite');
   announcement.setAttribute('aria-atomic', 'true');
   announcement.className = 'sr-only';
-  announcement.textContent = 'CIN Foundation website loaded successfully';
+  announcement.textContent = 'Collective Intelligence Network website loaded successfully';
   document.body.appendChild(announcement);
   
   // Remove announcement after screen readers have processed it

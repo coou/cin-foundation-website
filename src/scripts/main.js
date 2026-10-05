@@ -11,15 +11,10 @@ import { initializeLazyLoading, preloadResources } from './lazy-loading.js';
 
 // Site configuration
 const siteConfig = {
-  title: "CIN Foundation",
-  description: "Building the Operating System for a More Intelligent Society",
+  title: "Collective Intelligence Network",
+  description: "Information and reasoning for people and communities",
   contact: {
-    email: "contact@collectiveintelligencenetwork.org",
-    social: {
-      linkedin: "https://linkedin.com/company/cin-foundation",
-      twitter: "https://twitter.com/cin_foundation",
-      github: "https://github.com/cin-foundation"
-    }
+    email: "contact@collectiveintelligencenetwork.org"
   }
 };
 
@@ -45,13 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeHeroAnimations();
   initializeScrollEffects();
   initializePerformanceOptimizations();
-  
-  // Update copyright year dynamically
-  const currentYear = new Date().getFullYear();
-  const copyrightElement = document.querySelector('footer p');
-  if (copyrightElement) {
-    copyrightElement.textContent = `© ${currentYear} CIN Foundation. All rights reserved.`;
-  }
 });
 
 // Hero section animations and interactions

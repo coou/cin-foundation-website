@@ -68,34 +68,16 @@ class DynamicSloganComponent {
 }
 
 // Initialize components
+// Phrases are limited to what the CIN documents support: information and reasoning for people,
+// data ownership, verification and staged testing. No money, economy, hive-mind or abundance claims.
 const actionPhrases = [
-  "Building the", "Architecting the", "Designing the", "Engineering the", "Forging the", "Crafting the",
-  "Assembling the", "Weaving the", "Scaffolding the", "Cultivating the", "Nurturing the", "Seeding the",
-  "Growing the", "Fostering the", "Enabling the", "Unlocking the", "Pioneering the", "Imagining the",
-  "Bootstrapping the", "Catalyzing the"
+  "Building the", "Designing the", "Researching the", "Testing the"
 ];
 const creationPhrases = [
-  "Operating System", "Core Protocol", "Foundational Layer", "Trust Substrate",
-  "Coordination Framework", "Social Algorithm", "Decentralized Kernel", "Global Source Code",
-  "Public Mainframe", "Trust Architecture", "Societal Stack", "Economic Engine",
-  "Value Spectrum", "Trust Ledger", "Reputation Economy", "Comfort Compass",
-  "Post-Scarcity Blueprint", "Engine of Abundance", "Currency of Trust", "Public Balance Sheet",
-  "Ledger of Contribution", "Collective Mind", "Global Brain", "Shared Consciousness",
-  "Planetary Nervous System", "Public Imagination", "Civic Superintelligence", "Distributed Mind",
-  "Symbiotic Intellect", "Networked Mind", "Human Exocortex", "Social Fabric",
-  "Digital Mycelium", "Human Hive Mind", "Economic Ecosystem", "Social Genome",
-  "Planetary Immune System", "Civic Root System", "Symbiotic Superorganism", "Digital Biosphere",
-  "Collective Metabolism", "Social Compass", "Human Roadmap", "Architectural Blueprint",
-  "Moral Compass", "Star Chart to the Future", "Societal Scaffolding", "Bridge to a Better World",
-  "New Public Square", "Civic Architecture", "Framework for Flourishing"
+  "Information Layer", "Reasoning Tools", "Personal Twin", "Verification Practice", "Decision Support"
 ];
 const visionPhrases = [
-  "for a More Intelligent Society", "for a More Compassionate World", "for a More Equitable Society",
-  "for a More Collaborative Humanity", "for a Society Built on Trust", "for a Just and Humane Future",
-  "for a World of Shared Purpose", "for a Comfort-First Society", "for a World Without Scarcity",
-  "for an Economy of Purpose", "for a Just and Abundant World", "for a Future of Collective Flourishing",
-  "for a World of Effortless Contribution", "for a More Resilient Future", "for a More Adaptive Civilization",
-  "for a More Conscious World", "for a Symbiotic Future", "for a Planetary Awakening"
+  "for Better Decisions", "for Informed Communities", "for Honest Evidence", "for Shared Decisions", "for People and Places"
 ];
 
 new DynamicSloganComponent('rotating-action', actionPhrases, {
