@@ -4,11 +4,9 @@
   "description": "Website for the Collective Intelligence Network (CIN), an independent research and design project",
   "type": "module",
   "scripts": {
-    "dev": "npm run build:css && npx http-server src -p 3000 -o",
-    "build": "npm run build:css",
-    "build:css": "tailwindcss -i ./src/styles/input.css -o ./src/styles/main.css --minify",
-    "deploy": "npm run build && firebase deploy",
-    "deploy:custom": "npm run build && firebase deploy --only hosting:custom-domain",
+    "dev": "npx http-server src -p 3000 -c-1",
+    "build": "node -e \"console.log('Static site in src/: nothing to build')\"",
+    "deploy": "echo Deployment is manual through the GitHub workflow after steward approval && exit 1",
     "serve": "firebase serve",
     "test": "echo 'No tests specified'",
     "generate-favicon": "node generate-favicon.js",
@@ -32,12 +30,8 @@
     "url": "https://github.com/cin-foundation/website/issues"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
     "http-server": "^14.1.1",
-    "png-to-ico": "^2.1.8",
-    "postcss": "^8.5.6",
-    "postcss-cli": "^11.0.1",
-    "tailwindcss": "^3.4.17"
+    "png-to-ico": "^2.1.8"
   },
   "engines": {
     "node": ">=16.0.0",

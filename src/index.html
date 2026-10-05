@@ -1,1261 +1,446 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html lang="en" class="no-js">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="The Collective Intelligence Network gives people information and reasoning about themselves, their communities and their environment. People own their data. AI agents take on the work of managing trust, and trust is still earned through verification. Early-stage research and design.">
-  <meta name="keywords"
-    content="collective intelligence, AI, data ownership, verification, research">
-  <meta name="author" content="Collective Intelligence Network">
-  <meta name="robots" content="index, follow">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="./favicon.ico">
-
-  <!-- Open Graph / Facebook -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Collective Intelligence Network: know more, hand over nothing</title>
+  <meta name="description" content="The Collective Intelligence Network gives people information and reasoning about themselves, their communities and their environment. It holds no one's data, assets or money.">
+  <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
+  <meta name="referrer" content="no-referrer">
+  <!-- Canonical domain pending (CIN task 13): canonical, og:url and JSON-LD url are left out until it is decided. -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://cin-foundation.org/">
-  <meta property="og:title" content="Collective Intelligence Network - Information and reasoning for people and communities">
-  <meta property="og:description"
-    content="Information and reasoning for people and communities. People own their data; trust is earned through verification. Early-stage research and design.">
-  <meta property="og:image" content="./assets/images/og-image.svg">
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://cin-foundation.org/">
-  <meta property="twitter:title"
-    content="Collective Intelligence Network - Information and reasoning for people and communities">
-  <meta property="twitter:description"
-    content="Information and reasoning for people and communities. People own their data; trust is earned through verification. Early-stage research and design.">
-  <meta property="twitter:image" content="./assets/images/og-image.svg">
-
-  <title>Collective Intelligence Network - Information and reasoning for people and communities</title>
-  <link rel="stylesheet" href="./styles/main.css">
-  <style>
-    /* Ensure our custom styles override Tailwind defaults */
-    .section-padding { padding: 6rem 0 !important; }
-    .section-title { font-size: 2.5rem !important; font-weight: 700 !important; text-align: center !important; margin-bottom: 3rem !important; color: #1e3a8a !important; }
-    .responsive-card { background: white !important; padding: 2rem !important; border-radius: 1rem !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important; }
-    .primary-cta { background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important; }
-    
-    /* CRITICAL FIX: Force rotating text styles with !important */
-    #rotating-action, #rotating-creation, #rotating-vision {
-      display: inline-block !important;
-      position: relative !important;
-      overflow: visible !important;
-      font-weight: 800 !important;
-      line-height: 1.1 !important;
-      margin: 0.2rem 0 !important;
-      padding: 0.1rem 0 !important;
-      width: auto !important;
-      height: auto !important;
-      white-space: nowrap !important;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-      letter-spacing: -0.02em !important;
-      /* Reset any inherited styles that might interfere */
-      border: none !important;
-      outline: none !important;
-      box-shadow: none !important;
-      text-decoration: none !important;
-      transform: none !important;
-      transition: none !important;
-    }
-    
-    /* Hero headline container with proper sizing */
-    .hero-headline {
-      font-weight: 800 !important;
-      text-align: center !important;
-      line-height: 1.1 !important;
-      padding: 1rem 1rem !important;
-      max-width: 95vw !important;
-      margin: 0 auto !important;
-      overflow: visible !important;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-      letter-spacing: -0.02em !important;
-      box-sizing: border-box !important;
-    }
-    
-    .slogan-line {
-      margin: 0.3rem 0 !important;
-      display: block !important;
-      width: 100% !important;
-      overflow: visible !important;
-      white-space: nowrap !important;
-    }
-    
-    /* Beautiful animated gradients with wave effects - FORCE DYNAMIC ANIMATION */
-    #rotating-action {
-      background: linear-gradient(45deg, #ef4444, #f97316, #eab308, #84cc16, #06b6d4, #8b5cf6) !important;
-      background-size: 600% 600% !important;
-      animation: flowingGradient 3s ease-in-out infinite !important;
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-      background-clip: text !important;
-      color: transparent !important;
-      text-shadow: none !important;
-      filter: none !important;
-    }
-    
-    #rotating-creation {
-      background: linear-gradient(45deg, #8b5cf6, #a855f7, #c084fc, #e879f9, #06b6d4, #10b981, #84cc16) !important;
-      background-size: 600% 600% !important;
-      animation: flowingGradient 4s ease-in-out infinite !important;
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-      background-clip: text !important;
-      color: transparent !important;
-      text-shadow: none !important;
-      filter: none !important;
-    }
-    
-    #rotating-vision {
-      background: linear-gradient(45deg, #3b82f6, #06b6d4, #10b981, #84cc16, #eab308, #f97316, #ef4444) !important;
-      background-size: 600% 600% !important;
-      animation: flowingGradient 5s ease-in-out infinite !important;
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-      background-clip: text !important;
-      color: transparent !important;
-      text-shadow: none !important;
-      filter: none !important;
-    }
-    
-    /* Responsive font sizes that AGGRESSIVELY scale to prevent cutoff */
-    /* Mobile first - very small screens */
-    #rotating-action, #rotating-creation, #rotating-vision {
-      font-size: clamp(1rem, 7vw, 2.8rem) !important;
-    }
-    .hero-headline {
-      font-size: clamp(1rem, 7vw, 2.8rem) !important;
-    }
-    
-    /* Small screens */
-    @media (min-width: 480px) {
-      #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: clamp(1.5rem, 7.5vw, 3.2rem) !important;
-      }
-      .hero-headline {
-        font-size: clamp(1.5rem, 7.5vw, 3.2rem) !important;
-      }
-    }
-    
-    /* Medium screens */
-    @media (min-width: 768px) {
-      #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: clamp(2rem, 8vw, 4rem) !important;
-      }
-      .hero-headline {
-        font-size: clamp(2rem, 8vw, 4rem) !important;
-      }
-    }
-    
-    /* Large screens */
-    @media (min-width: 1024px) {
-      #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: clamp(2.5rem, 6vw, 5rem) !important;
-      }
-      .hero-headline {
-        font-size: clamp(2.5rem, 6vw, 5rem) !important;
-      }
-    }
-    
-    /* Extra large screens */
-    @media (min-width: 1440px) {
-      #rotating-action, #rotating-creation, #rotating-vision {
-        font-size: clamp(3rem, 4vw, 6rem) !important;
-      }
-      .hero-headline {
-        font-size: clamp(3rem, 4vw, 6rem) !important;
-      }
-    }
-    
-    /* Dynamic flowing gradient animation - ENHANCED MOVEMENT */
-    @keyframes flowingGradient {
-      0% { 
-        background-position: 0% 50% !important; 
-      }
-      25% { 
-        background-position: 100% 25% !important; 
-      }
-      50% { 
-        background-position: 200% 75% !important; 
-      }
-      75% { 
-        background-position: 300% 25% !important; 
-      }
-      100% { 
-        background-position: 400% 50% !important; 
-      }
-    }
-    
-    /* Fallback for browsers that don't support background-clip: text */
-    @supports not (-webkit-background-clip: text) {
-      #rotating-action {
-        color: #f97316 !important;
-        background: none !important;
-      }
-      #rotating-creation {
-        color: #a855f7 !important;
-        background: none !important;
-      }
-      #rotating-vision {
-        color: #06b6d4 !important;
-        background: none !important;
-      }
-    }
-    
-    /* Additional responsive styles */
-    @media (min-width: 640px) {
-      .section-padding { padding: 8rem 0 !important; }
-      .section-title { font-size: 3rem !important; }
-    }
-  </style>
-  <link rel="icon" type="image/png" href="./assets/images/logo-2.PNG">
-  <link rel="canonical" href="https://cin-foundation.org/">
-  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
-
-  <!-- Structured Data -->
+  <meta property="og:title" content="Collective Intelligence Network">
+  <meta property="og:description" content="Information and reasoning for people, communities and places. It holds no one's data, assets or money.">
+  <meta property="og:image" content="/assets/images/og-image.svg">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/images/logo-192.png">
+  <link rel="stylesheet" href="/styles/site.css?v=1">
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Collective Intelligence Network",
-    
-    "url": "https://cin-foundation.org",
-    "logo": "https://cin-foundation.org/assets/images/logo-2.PNG",
-    "description": "Information and reasoning for people and communities. Early-stage research and design.",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "email": "contact@collectiveintelligencenetwork.org",
-      "contactType": "General Inquiry"
-    }
-  }
+  {"@context":"https://schema.org","@type":"Organization","name":"Collective Intelligence Network","alternateName":"CIN","description":"An independent research and design project. It gives people information and reasoning about themselves, their communities and their environment, and holds no one's data, assets or money."}
   </script>
-
-  <!-- Preload critical resources -->
-  <link rel="preload" href="./styles/main.css" as="style">
-  <link rel="preload" href="./scripts/main.js" as="script">
-
 </head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
 
-<body class="bg-gray-50 text-gray-900 font-sans antialiased">
-  <!-- Skip to main content link for accessibility -->
-  <a href="#main"
-    class="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-900 focus:text-white focus:rounded-md">
-    Skip to main content
-  </a>
-
-  <!-- Navigation -->
-  <header
-    class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/50 transition-all duration-300"
-    id="main-header" role="banner">
-    <nav class="container mx-auto px-4 sm:px-6 lg:px-8" role="navigation" aria-label="Main navigation">
-      <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
-        <div class="flex-shrink-0">
-          <a href="#hero" class="flex items-center space-x-2 group" id="logo-link">
-            <div class="relative">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500/20 to-emerald-500/20 p-0.5 shadow-lg group-hover:shadow-blue-400/50 transition-all duration-300">
-                <div class="w-full h-full rounded-full bg-white p-1 shadow-inner">
-                  <img src="./assets/images/logo-2.PNG" alt="Collective Intelligence Network logo" 
-                    class="w-full h-full rounded-full object-cover transform group-hover:scale-105 transition-transform duration-200">
-                </div>
-              </div>
-              <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/30 to-emerald-400/30 group-hover:from-blue-400/50 group-hover:to-emerald-400/50 transition-all duration-300 blur-sm -z-10"></div>
-            </div>
-            <span class="text-xl font-bold text-gray-900 group-hover:text-blue-900 transition-colors duration-200"> Collective Intelligence Network </span>
-          </a>
-        </div>
-
-        <!-- Desktop Navigation -->
-        <div class="hidden md:block desktop-nav">
-          <div class="ml-6 lg:ml-10 flex items-baseline space-x-4 lg:space-x-8">
-            <a href="#vision"
-              class="nav-link text-gray-700 hover:text-blue-900 px-2 lg:px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 relative">
-              Vision
-            </a>
-            <a href="#research"
-              class="nav-link text-gray-700 hover:text-blue-900 px-2 lg:px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 relative">
-              Research
-            </a>
-            <a href="#blog"
-              class="nav-link text-gray-700 hover:text-blue-900 px-2 lg:px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 relative">
-              Blog
-            </a>
-            <a href="#contact"
-              class="nav-link bg-blue-900 text-white hover:bg-blue-800 px-3 lg:px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md">
-              Get Involved
-            </a>
-          </div>
-        </div>
-
-        <!-- Mobile menu button -->
-        <div class="md:hidden">
-          <button type="button"
-            class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
-            id="mobile-menu-button" aria-expanded="false" aria-label="Toggle navigation menu">
-            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      </div>
+<header class="site-head" id="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Collective Intelligence Network, back to top">
+      <img src="/assets/images/logo-small.png" alt="" width="30" height="30">
+      <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Sections">
+      <a href="#idea">The idea</a>
+      <a href="#building">What we're building</a>
+      <a href="#agents">Bounded agents</a>
+      <a href="#open">Work in the open</a>
+      <a href="#observatory">Observatory</a>
+      <a href="#floor">The floor</a>
+      <a href="#involved">Get involved</a>
     </nav>
+  </div>
+</header>
 
-    <!-- Mobile menu -->
-    <div class="md:hidden hidden" id="mobile-menu">
-      <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200 shadow-lg">
-        <a href="#vision"
-          class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 transition-colors duration-200">
-          Vision
-        </a>
-        <a href="#research"
-          class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 transition-colors duration-200">
-          Research
-        </a>
-        <a href="#blog"
-          class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-900 hover:bg-gray-50 transition-colors duration-200">
-          Blog
-        </a>
-        <a href="#contact"
-          class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium bg-blue-900 text-white hover:bg-blue-800 transition-colors duration-200 mx-3 mt-4">
-          Get Involved
-        </a>
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="status-pill"><span class="dot" aria-hidden="true"></span>Phase 0 · foundations · nothing to install yet</span>
+      <h1>Know more.<span class="line2">Hand over nothing.</span></h1>
+      <p class="lede">The Collective Intelligence Network gives people information and reasoning about themselves, their communities and their environment, so they can make better decisions alone and together. <strong>It holds no one's data, assets or money.</strong></p>
+      <div class="cta-row">
+        <a class="btn primary" href="#building">See what we're building</a>
+        <a class="btn ghost" href="#floor">Read the 19 rights</a>
       </div>
     </div>
-  </header>
-
-  <main id="main" role="main">
-    <!-- Hero Section -->
-    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden" role="banner"
-      aria-labelledby="hero-heading">
-      <!-- Background Pattern -->
-      <div class="absolute inset-0 bg-gradient-to-br from-gray-50 via-blue-50/30 to-emerald-50/20">
-        <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
-        <div
-          class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl animate-pulse delay-1000">
-        </div>
-
-        <!-- Animated Geometric Patterns -->
-        <div class="absolute inset-0 geometric-pattern"></div>
-
-        <!-- Animated Particles -->
-        <div class="particle particle-1"></div>
-        <div class="particle particle-2"></div>
-        <div class="particle particle-3"></div>
-        <div class="particle particle-4"></div>
-        <div class="particle particle-5"></div>
+    <figure class="boundary-fig">
+      <div class="boundary-frame">
+        <canvas id="boundary" aria-hidden="true"></canvas>
       </div>
+      <figcaption><strong>F2 · Answers, not data.</strong> Outside services ask questions. Your twin, on your own device, answers only the specific question and declines requests for raw data. The data stays home. <span class="mono">(Illustration, not a working system.)</span></figcaption>
+    </figure>
+  </div>
+</section>
 
-      <!-- Content -->
-      <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
-        <div class="text-center max-w-5xl mx-auto hero-content">
-          <!-- Main Headline -->
-          <h1 id="hero-heading" class="hero-headline fullscreen-slogan">
-            <div class="slogan-line line-1">
-              <span class="rotating-action" id="rotating-action">Building the</span>
-            </div>
-            <div class="slogan-line line-2">
-              <span class="rotating-creation" id="rotating-creation">Information Layer</span>
-            </div>
-            <div class="slogan-line line-3">
-              <span class="rotating-vision" id="rotating-vision">for Better Decisions</span>
-            </div>
-          </h1>
+<!-- ============ IDEA ============ -->
+<section id="idea">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="label">The idea</span>
+      <h2>Information, <em class="hl">not custody.</em></h2>
+      <p class="lede">Most digital services become useful by collecting you. We are designing the opposite: tools that become useful while everything about you stays on your own devices.</p>
+    </div>
+    <div class="three">
+      <article class="card reveal">
+        <span class="num">01</span>
+        <h3>Your data lives with you</h3>
+        <p>Your twin runs on your own computer. You can see, export and delete everything it knows, and it sends nothing anywhere without your explicit action.</p>
+        <div class="src">Constitution F1 · Specification 01</div>
+      </article>
+      <article class="card reveal">
+        <span class="num">02</span>
+        <h3>Answers, not access</h3>
+        <p>When a service needs to know something, it gets proof of that one fact, not your history. Declining to share costs you nothing, and sharing is never paid.</p>
+        <div class="src">Constitution F2, F3</div>
+      </article>
+      <article class="card reveal">
+        <span class="num">03</span>
+        <h3>Useful alone, first</h3>
+        <p>Every tool must help one person before it depends on many. The CIN continues only if people find it useful, and it is funded by voluntary donations, never by engagement or data.</p>
+        <div class="src">Constitution §1, §2 · Specification 01</div>
+      </article>
+    </div>
+  </div>
+</section>
 
-          <!-- Elevator Pitch -->
-          <div class="mb-8 sm:mb-12 space-y-4 sm:space-y-6 hero-pitch px-2 sm:px-0">
-            <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
-              The Collective Intelligence Network gives people <strong class="text-blue-800 highlight-text">information and reasoning</strong> about themselves, their communities and their environment, so they can <strong class="text-emerald-700 highlight-text">make better decisions</strong> alone and together. It holds no one's data, assets or money.
-            </p>
-            <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto">
-              Our long-term hope is that AI agents take over routine coordination and paperwork, so people have more time for what matters to them. This is a hope, not something we claim to have built.
-            </p>
-          </div>
+<!-- ============ NO TRACKING ============ -->
+<div class="ledger" aria-labelledby="ledger-h">
+  <div class="wrap ledger-grid">
+    <div class="reveal">
+      <span class="label">This page, right now</span>
+      <h2 id="ledger-h">We don't know you were here.</h2>
+      <p>No cookies, no analytics, no fonts or scripts from anyone else. We don't count visitors, so we can't sell them, lose them, or optimize for them. The receipt on the right is computed by your own browser from what this page actually loaded. Check it in your browser's developer tools.</p>
+      <p class="mono" style="font-size:.85rem">Constitution F13: no CIN system measures or optimizes time spent, sessions or streaks.</p>
+    </div>
+    <div class="receipt reveal" id="receipt" aria-live="polite">
+      <div class="row"><span class="k">Cookies set</span><span class="v" id="r-cookies">…</span></div>
+      <div class="row"><span class="k">Files this page loaded</span><span class="v" id="r-count">…</span></div>
+      <div class="row"><span class="k">Servers contacted</span><span class="v" id="r-hosts">…</span></div>
+      <div class="row"><span class="k">Third-party servers</span><span class="v" id="r-third">…</span></div>
+      <div class="row"><span class="k">Analytics or trackers</span><span class="v good">none in the source</span></div>
+      <div class="note">Computed locally with the browser's Performance API. Nothing is sent anywhere. If JavaScript is off, the page still works and this receipt stays blank.</div>
+    </div>
+  </div>
+</div>
 
-          <!-- Key Value Propositions -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-16 max-w-4xl mx-auto hero-cards">
-            <div
-              class="responsive-card bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:shadow-lg transition-all duration-300 group value-card">
-              <div
-                class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h3 class="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Information, Not Custody</h3>
-              <p class="text-xs sm:text-sm text-gray-600">Reasoning and answers for people. The network never holds your data, assets or money.</p>
-            </div>
+<!-- ============ BUILDING ============ -->
+<section id="building">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="label">What we're building</span>
+      <h2>Three instruments, <em class="hl">specified before built.</em></h2>
+      <p class="lede">Each one is written down as a specification with stated design rules, test thresholds and kill criteria before any code runs on anyone's data. None of them is available yet.</p>
+    </div>
+    <div class="instr">
+      <article class="card reveal">
+        <svg class="glyph" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 4"/><circle cx="26" cy="26" r="7" fill="#1f6f68"/><circle cx="26" cy="26" r="13" fill="none" stroke="#1f6f68" stroke-opacity=".35"/></svg>
+        <h3>The personal twin</h3>
+        <p>A private assistant that lives on your computer and works for you alone.</p>
+        <ul>
+          <li>Finds forgotten subscriptions, price increases and unfair fees in your own bank exports.</li>
+          <li>Tracks renewals and deadlines from bills and documents you add.</li>
+          <li>Remembers your decisions and how they turned out.</li>
+          <li>Money figures and matches come from deterministic code, never from a language model.</li>
+        </ul>
+        <div class="foot"><span class="chip spec">Specified</span><span class="mono">Spec 01 · 04</span></div>
+      </article>
+      <article class="card reveal">
+        <svg class="glyph" viewBox="0 0 52 52" aria-hidden="true"><rect x="6" y="6" width="40" height="40" rx="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 20h40M6 32h40" stroke="currentColor" stroke-opacity=".3"/><rect x="20" y="16" width="12" height="20" rx="3" fill="#c8402a"/></svg>
+        <h3>The agent runtime</h3>
+        <p>The cage every agent runs in, including ours.</p>
+        <ul>
+          <li>Each agent has a written contract: what it may read, call and spend, and when its mandate expires.</li>
+          <li>All access is denied by default and granted through a broker.</li>
+          <li>Tamper-evident logs record every action; anything that leaves the device is ledgered.</li>
+          <li>Any agent can be suspended at once.</li>
+        </ul>
+        <div class="foot"><span class="chip spec">Specified</span><span class="mono">Spec 03</span></div>
+      </article>
+      <article class="card reveal">
+        <svg class="glyph" viewBox="0 0 52 52" aria-hidden="true"><path d="M6 40 C 16 34, 22 18, 30 22 S 42 12, 46 8" fill="none" stroke="#1f6f68" stroke-width="2"/><path d="M6 40 C 16 42, 24 34, 32 38 S 42 42, 46 44" fill="none" stroke="#c8402a" stroke-width="2"/><path d="M6 46h40" stroke="currentColor" stroke-opacity=".4"/></svg>
+        <h3>The Observatory</h3>
+        <p>An honest record of where the world is heading relative to our goals.</p>
+        <ul>
+          <li>Indicators for personal AI, networks, money, interfaces and democratic participation.</li>
+          <li>Signs of moving <em>away</em> from our goals get equal space.</li>
+          <li>Goals become scored forecasts, so misses stay on the record.</li>
+          <li>Quarterly reports with a corrections section.</li>
+        </ul>
+        <div class="foot"><span class="chip spec">Specified</span><span class="mono">Spec 02</span></div>
+      </article>
+    </div>
 
-            <div
-              class="responsive-card bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:shadow-lg transition-all duration-300 group value-card">
-              <div
-                class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                </svg>
-              </div>
-              <h3 class="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Time Back</h3>
-              <p class="text-xs sm:text-sm text-gray-600">Agents handle routine coordination so people can spend time on what they choose.</p>
-            </div>
-
-            <div
-              class="responsive-card bg-white/60 backdrop-blur-sm border border-gray-200/50 hover:shadow-lg transition-all duration-300 group value-card">
-              <div
-                class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
-              <h3 class="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Trust Through Verification</h3>
-              <p class="text-xs sm:text-sm text-gray-600">Agents carry the burden of managing trust. Trust is still earned through verification, and regulated institutions remain partners.</p>
-            </div>
-          </div>
-
-          <!-- Call to Action Buttons -->
-          <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-8 sm:mb-12 hero-cta px-4 sm:px-0">
-            <!-- Primary CTA Button -->
-            <a href="#vision"
-              class="primary-cta group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-blue-800 text-white rounded-lg sm:rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-semibold text-base sm:text-lg relative overflow-hidden">
-              <span class="relative z-10">Explore Our Vision</span>
-              <svg
-                class="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300 relative z-10"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-              <div
-                class="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              </div>
-            </a>
-
-            <!-- Secondary CTA Button -->
-            <a href="#research"
-              class="secondary-cta group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white text-blue-800 border-2 border-blue-800 rounded-lg sm:rounded-xl hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-semibold text-base sm:text-lg">
-              <svg class="mr-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <span>Read the Whitepaper</span>
-            </a>
-          </div>
-
-          <!-- Scroll Indicator -->
-          <div class="animate-bounce scroll-indicator cursor-pointer">
-            <svg class="w-6 h-6 text-gray-400 mx-auto hover:text-blue-900 transition-colors duration-300" fill="none"
-              stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Vision Section -->
-    <section id="vision" class="section-padding bg-gray-100 content-padding" role="region"
-      aria-labelledby="vision-heading">
-      <div class="container mx-auto">
-        <h2 id="vision-heading" class="section-title" data-animation="slide-up">Our Vision</h2>
-
-        <!-- Introduction to the problems with current systems -->
-        <div class="max-w-4xl mx-auto mb-12 sm:mb-16 responsive-card border-l-4 border-blue-900">
-          <h3 class="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-gray-900">Beyond Traditional Systems</h3>
-          <p class="text-gray-700 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
-            The Collective Intelligence Network aims to give people better <strong>information and reasoning</strong> about their own lives, their communities and their environment.
-          </p>
-          <p class="text-gray-700 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
-            Many institutions today are <strong>slow, siloed, opaque or costly to deal with</strong>. We want to help people understand and navigate them, and to work alongside them, not replace them.
-          </p>
-          <p class="text-gray-700 leading-relaxed text-sm sm:text-base">
-            We propose to do this with tools that <strong>people own and control</strong>, checked by independent observers, and tested in stages before anyone relies on them.
-          </p>
-        </div>
-
-        <h3 class="text-xl sm:text-2xl font-semibold mb-6 sm:mb-8 text-center">The Four Pillars of Our Vision</h3>
-
-        <!-- Four Pillars Section -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
-
-          <!-- Pillar 1: Beyond Scarcity -->
-          <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-            <div class="p-6 border-b border-gray-100">
-              <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                  <svg class="w-6 h-6 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                  </svg>
-                </div>
-                <h3 class="text-xl font-bold text-blue-900">More Time, Long Term</h3>
-              </div>
-              <p class="text-gray-700 mb-4">
-                If AI agents take over routine institutional coordination, people could spend less time on administration. A long-term hope, not a promise.
-              </p>
-              <button class="pillar-expand-btn text-blue-900 font-medium flex items-center focus:outline-none"
-                data-target="beyond-scarcity-details" aria-expanded="false" aria-controls="beyond-scarcity-details"
-                aria-label="Learn more about More Time, Long Term">
-                <span>Learn More</span>
-                <svg class="w-5 h-5 ml-1 transform transition-transform duration-200" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-            <div id="beyond-scarcity-details" class="hidden p-6 bg-blue-50/50 border-t border-gray-100">
-              <p class="text-gray-700 mb-4">
-                Many people spend long hours on paperwork, coordination and administration that software could in principle handle.
-              </p>
-              <p class="text-gray-700 mb-4">
-                If many of these tasks, especially the "soft labor" of coordinating and managing information, were handled by AI agents under human control, people would have more time. We treat this as a long-term hypothesis to test, not a promise.
-              </p>
-              <p class="text-gray-700 mb-12">
-                The CIN holds no money and runs no economy. Its role is to supply information and reasoning, and to make the evidence behind claims visible.
-              </p>
-            </div>
-          </div>
-
-          <!-- Pillar 2: New Definition of Value -->
-          <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-            <div class="p-6 border-b border-gray-100">
-              <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mr-4">
-                  <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <h3 class="text-xl font-bold text-emerald-700">Contribution Without Disclosure</h3>
-              </div>
-              <p class="text-gray-700 mb-4">
-                Contribution can be recognized, but sharing personal information is never rewarded and declining to share costs nothing.
-              </p>
-              <button class="pillar-expand-btn text-emerald-700 font-medium flex items-center focus:outline-none"
-                data-target="value-definition-details" aria-expanded="false" aria-controls="value-definition-details"
-                aria-label="Learn more about Contribution Without Disclosure">
-                <span>Learn More</span>
-                <svg class="w-5 h-5 ml-1 transform transition-transform duration-200" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-            <div id="value-definition-details" class="hidden p-6 bg-emerald-50/50 border-t border-gray-100">
-              <p class="text-gray-700 mb-4">
-                People should be able to get help, and have their contribution recognized, without handing over broader access to their data than the specific fact being checked.
-              </p>
-              <p class="text-gray-700 mb-4">
-                Services built on the CIN may ask for <strong>answers, never raw data</strong>. Contribution may be recognized; disclosure is never paid and never penalized.
-              </p>
-              <p class="text-gray-700 mb-12">
-                Any measure of trust about a person is held by that person and shared only if they choose, as evidence of reliability. It is never a currency and never a public ranking of people.
-              </p>
-            </div>
-          </div>
-
-          <!-- Pillar 3: Human-AI Symbiosis -->
-          <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-            <div class="p-6 border-b border-gray-100">
-              <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mr-4">
-                  <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <h3 class="text-xl font-bold text-amber-600">Human-AI Symbiosis</h3>
-              </div>
-              <p class="text-gray-700 mb-4">
-                A balanced ecosystem where humans and AI collaborate as partners, with personalized cognitive assistants
-                enhancing daily life and well-being.
-              </p>
-              <button class="pillar-expand-btn text-amber-600 font-medium flex items-center focus:outline-none"
-                data-target="symbiosis-details" aria-expanded="false" aria-controls="symbiosis-details"
-                aria-label="Learn more about Human-AI Symbiosis">
-                <span>Learn More</span>
-                <svg class="w-5 h-5 ml-1 transform transition-transform duration-200" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-            <div id="symbiosis-details" class="hidden p-6 bg-amber-50/50 border-t border-gray-100">
-              <p class="text-gray-700 mb-4">
-                <strong>Human-AI symbiosis</strong> describes a future where humans and AI agents collaborate
-                effectively towards shared purposes, aiming for a balanced ecosystem rather than AI domination. This
-                deep integration acknowledges AI agents not merely as tools, but as collaborators that can reason,
-                learn, and work alongside humans.
-              </p>
-              <p class="text-gray-700 mb-4">
-                A central component facilitating this symbiosis is the <strong>personalized agentic layer</strong>, also
-                conceptualized as a "digital twin" or "cognitive partner" for each participant. This digital twin is an
-                intelligent, adaptive interface and assistant, designed primarily to enhance the user's well-being.
-              </p>
-              <p class="text-gray-700 mb-12">
-                In daily life, this agentic twin would function as a sophisticated translator and mediator between users
-                and the network. It could formulate requests based on a user's intent, help manage a portfolio of skills
-                and contributions, enhance physical comfort by automating routine tasks, foster emotional comfort by
-                aligning a user's path with their interests, and lead to temporal abundance by freeing up human time for
-                personal growth and creativity.
-              </p>
-            </div>
-          </div>
-
-          <!-- Pillar 4: Radical Transparency -->
-          <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-            <div class="p-6 border-b border-gray-100">
-              <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
-                  <svg class="w-6 h-6 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <h3 class="text-xl font-bold text-purple-700">Visible Power, Private People</h3>
-              </div>
-              <p class="text-gray-700 mb-4">
-                Scrutiny grows with influence: those with more power are more visible. People's own information stays with them.
-              </p>
-              <button class="pillar-expand-btn text-purple-700 font-medium flex items-center focus:outline-none"
-                data-target="transparency-details" aria-expanded="false" aria-controls="transparency-details"
-                aria-label="Learn more about Visible Power, Private People">
-                <span>Learn More</span>
-                <svg class="w-5 h-5 ml-1 transform transition-transform duration-200" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-            <div id="transparency-details" class="hidden p-6 bg-purple-50/50 border-t border-gray-100">
-              <p class="text-gray-700 mb-4">
-                Decisions that affect many people, and the evidence behind them, should be open to scrutiny, and the more influence someone has, the more visible their actions should be. Individuals are different: people own their information and share only what they choose.
-              </p>
-              <p class="text-gray-700 mb-4">
-                Trust is earned through <strong>verification by independent observers</strong>. A signature shows where a record came from, not that it is true. We work with regulated institutions rather than around them.
-              </p>
-              <p class="text-gray-700 mb-12">
-                Anyone may leave with their data, and communities may decline, adapt or fork what we build. No single person, organization or agent should become indispensable.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Call to Action -->
-        <div class="text-center">
-          <a href="#research"
-            class="inline-flex items-center px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-            <span class="font-medium">Explore Our Research</span>
-            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Research Section -->
-    <section id="research" class="py-24 px-4 bg-white" role="region" aria-labelledby="research-heading">
-      <div class="container mx-auto">
-        <h2 id="research-heading" class="text-3xl md:text-4xl font-bold mb-8 text-center" data-animation="slide-up">
-          Research</h2>
-        <p class="text-center mb-16 text-xl text-gray-700 max-w-3xl mx-auto">
-          Early-stage research agendas and specifications. None have been peer reviewed yet, and unfinished work is not published here.
-        </p>
-
-        <!-- Whitepaper Download Section -->
-        <div
-          class="bg-gradient-to-br from-blue-50 to-emerald-50 rounded-2xl shadow-lg p-8 mb-16 border border-gray-100">
-          <div class="flex flex-col md:flex-row items-center gap-8">
-            <div class="w-full md:w-1/3 flex justify-center">
-              <div class="relative group">
-                <img data-src="./assets/images/whitepaper-thumbnail-cin-logo.png" alt="CIN Logo"
-                  class="rounded-lg shadow-md w-full max-w-xs h-64 object-cover object-center transform group-hover:scale-105 transition-transform duration-300 lazy-loading"
-                  loading="lazy" decoding="async">
-                <div
-                  class="absolute inset-0 bg-blue-900/10 group-hover:bg-blue-900/0 rounded-lg transition-colors duration-300">
-                </div>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-2xl font-bold text-blue-900 mb-4">Whitepaper (in preparation)</h3>
-              <p class="text-gray-700 mb-6 leading-relaxed">
-                A whitepaper is in preparation. We will publish it once it has been reviewed.
-              </p>
-              <button id="whitepaper-coming-soon-btn"
-                class="inline-flex items-center px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 group cursor-pointer">
-                <svg class="w-5 h-5 mr-2 group-hover:animate-pulse" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="font-medium">Coming Soon</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        </div>
-    </section>
-
-    <!-- Blog Section -->
-    <section id="blog" class="section-padding bg-white content-padding" role="region" aria-labelledby="blog-heading">
-      <div class="container mx-auto">
-        <h2 id="blog-heading" class="section-title" data-animation="slide-up">Blog & Insights</h2>
-        <p class="text-center mb-16 text-xl text-gray-700 max-w-3xl mx-auto">
-          Short explanations of ideas we are researching. These are proposals under study, not descriptions of a finished system.
-        </p>
-
-        <!-- Blog Posts Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-
-          <!-- Blog Post 1: Entropy Reduction Analogy -->
-          <article
-            class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-            <div class="relative h-48 overflow-hidden">
-              <img src="./assets/images/blog/entropy-kitchen.png" alt="Clean kitchen representing entropy reduction"
-                class="w-full h-full object-cover scale-110 blog-scroll-image" data-scroll-reveal="true">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                <div class="p-6">
-                  <h3 class="text-white text-xl font-bold mb-2">Entropy and Order: A Kitchen Analogy</h3>
-                  <p class="text-gray-200 text-sm">An analogy for reducing disorder in physical and factual domains</p>
-                </div>
-              </div>
-            </div>
-            <div class="p-6">
-              <p class="text-gray-700 mb-4">
-                Imagine your kitchen is a chaotic mess after a big cooking session – dirty dishes piled everywhere,
-                spices spilled, food scraps on the counter. This messy state is like a system with <strong>high
-                  entropy</strong>, representing a lot of disorder and uncertainty.
-              </p>
-              <p class="text-gray-700 mb-4">
-                Now, imagine you spend an hour cleaning that kitchen. You wash the dishes, wipe down the counters, put
-                everything back in its place. When you're done, the kitchen is sparkling clean and organized. That act
-                of cleaning <strong>reduced the entropy</strong> of your kitchen.
-              </p>
-              <button class="blog-expand-btn text-blue-900 font-medium flex items-center focus:outline-none"
-                data-target="entropy-full-article" aria-expanded="false">
-                <span>Read Full Article</span>
-                <svg class="w-5 h-5 ml-1 transform transition-transform duration-200" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-            <div id="entropy-full-article" class="hidden p-6 bg-blue-50/50 border-t border-gray-100">
-              <p class="text-gray-700 mb-4">
-                Cleaning transforms chaos into order and clarity.
-              </p>
-              <p class="text-gray-700 mb-4">
-                In the Collective Intelligence Network (CIN), reducing disorder is a goal for <strong>physical systems, ecosystems and factual questions</strong>: for example, clarifying a complex problem or building stable knowledge. It is never a goal for people's beliefs, cultures or values, which the CIN protects. The CIN does not use entropy reduction to price work or to measure a person's worth.
-              </p>
-              <p class="text-gray-700">
-                Just as a clean kitchen makes future cooking easier and more predictable, clearer facts make shared decisions easier.
-              </p>
-            </div>
-          </article>
-
-          <!-- Blog Post 2: Signed vs Unsigned Observations -->
-          <article
-            class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-            <div class="relative h-48 overflow-hidden">
-              <img src="./assets/images/blog/signed-observations.png" alt="Digital signature and verification concept"
-                class="w-full h-full object-cover scale-110 blog-scroll-image" data-scroll-reveal="true">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                <div class="p-6">
-                  <h3 class="text-white text-xl font-bold mb-2">Signed vs Unsigned Observations</h3>
-                  <p class="text-gray-200 text-sm">How the CIN values information based on its verifiable origin</p>
-                </div>
-              </div>
-            </div>
-            <div class="p-6">
-              <p class="text-gray-700 mb-4">
-                In the Collective Intelligence Network (CIN), the origin and integrity of information are crucial for
-                establishing trust. This is where the distinction between "signed" and
-                "unsigned" observations becomes vital.
-              </p>
-              <p class="text-gray-700 mb-4">
-                A <strong>signed observation</strong> shows where a record came from and that it has not changed since. It does not show that the record is accurate. An <strong>unsigned observation</strong> from the web is like an anonymous tip and needs checking. Important claims need agreement among independent observers.
-              </p>
-              <button class="blog-expand-btn text-emerald-700 font-medium flex items-center focus:outline-none"
-                data-target="observations-full-article" aria-expanded="false">
-                <span>Read Full Article</span>
-                <svg class="w-5 h-5 ml-1 transform transition-transform duration-200" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-            <div id="observations-full-article" class="hidden p-6 bg-emerald-50/50 border-t border-gray-100">
-              <div class="space-y-4 text-gray-700">
-                <div>
-                  <h4 class="font-semibold text-emerald-800 mb-2">Signed Observation from a Trusted Sensor:</h4>
-                  <p>
-                    Imagine a sensor (like a thermometer or camera) equipped with <strong>secure device
-                      attestation</strong> or cryptographic capabilities. When this sensor records data, it creates a
-                    <strong>digital signature</strong> that cryptographically links the data to the sensor's verified
-                    identity and proves that the data hasn't been tampered with since it was recorded.
-                  </p>
-                </div>
-                <div>
-                  <h4 class="font-semibold text-emerald-800 mb-2">Unsigned Observation from the Web:</h4>
-                  <p>
-                    This refers to any data or information found on the broader internet that lacks verifiable
-                    cryptographic proof of its origin or integrity. While such information might be useful, the CIN <strong>cannot inherently verify its authenticity or
-                      accuracy</strong>.
-                  </p>
-                </div>
-                <p>
-                  Without a verifiable "signature" of origin and integrity, unsigned observations are treated with significant skepticism until they are checked by independent observers.
-                </p>
-              </div>
-            </div>
-          </article>
-
-          <!-- Blog Post 3: Mortal Computation -->
-          <article
-            class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-            <div class="relative h-48 overflow-hidden">
-              <img src="./assets/images/blog/ai-symbiosis.png" alt="Digital lifecycle and renewal concept"
-                class="w-full h-full object-cover scale-110 blog-scroll-image" data-scroll-reveal="true">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                <div class="p-6">
-                  <h3 class="text-white text-xl font-bold mb-2">Bounded Compute for Artificial Agents</h3>
-                  <p class="text-gray-200 text-sm">Why artificial agents get a limit on the compute they can use</p>
-                </div>
-              </div>
-            </div>
-            <div class="p-6">
-              <p class="text-gray-700 mb-4">
-                The CIN proposes that the compute available to artificial agents be <strong>bounded by a contract</strong> scaled to their intelligence and their ability to optimize. The bound can shrink over time, or grow as people adopt interfaces that keep them coupled to that intelligence.
-              </p>
-              <p class="text-gray-700 mb-4">
-                Artificial agents serve and promote biological life. No vote or action of an artificial agent may be for that agent's own benefit without approval by people. The CIN applies this contract to its own agents.
-              </p>
-              <button class="blog-expand-btn text-amber-600 font-medium flex items-center focus:outline-none"
-                data-target="mortality-full-article" aria-expanded="false">
-                <span>Read Full Article</span>
-                <svg class="w-5 h-5 ml-1 transform transition-transform duration-200" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-            <div id="mortality-full-article" class="hidden p-6 bg-amber-50/50 border-t border-gray-100">
-              <p class="text-gray-700">This is a design proposal under research, not a deployed system. Its purpose is to keep artificial agents bounded and answerable to people.</p>
-            </div>
-          </article>
-
-          <!-- Blog Post 4: Ethical Sandboxing -->
-          <article
-            class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-            <div class="relative h-48 overflow-hidden">
-              <img src="./assets/images/blog/ethical-sandboxing.png" alt="Safe experimentation environment concept"
-                class="w-full h-full object-cover scale-110 blog-scroll-image" data-scroll-reveal="true">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                <div class="p-6">
-                  <h3 class="text-white text-xl font-bold mb-2">Ethical Sandboxing & Social Experimentation</h3>
-                  <p class="text-gray-200 text-sm">How the CIN enables safe testing of new governance models</p>
-                </div>
-              </div>
-            </div>
-            <div class="p-6">
-              <p class="text-gray-700 mb-4">
-                The Collective Intelligence Network's inherently <strong>modular design</strong>,
-                combined with its emphasis on simulation and adaptive governance, aims to support "ethical sandboxing" and careful social experimentation.
-              </p>
-              <p class="text-gray-700 mb-4">
-                Rather than rigid, top-down mandates, the CIN allows for the <strong>safe prototyping and testing of
-                  novel governance rules, economic models, and ethical protocols</strong> within controlled, agent-based
-                simulations before widespread implementation. Simulations may recommend or discard options; they never authorize.
-              </p>
-              <button class="blog-expand-btn text-purple-700 font-medium flex items-center focus:outline-none"
-                data-target="sandbox-full-article" aria-expanded="false">
-                <span>Read Full Article</span>
-                <svg class="w-5 h-5 ml-1 transform transition-transform duration-200" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-            <div id="sandbox-full-article" class="hidden p-6 bg-purple-50/50 border-t border-gray-100">
-              <p class="text-gray-700 mb-4">
-                This means communities can collaboratively design and iteratively refine their shared "CIN contracts",
-                observe their emergent outcomes, and dynamically adapt to challenges, aiming for an evolution of collective intelligence that is <strong>resilient and aligned with human well-being</strong>.
-              </p>
-              <p class="text-gray-700">
-                Staged trials reduce the risk of broad, untested change by allowing controlled experimentation and gradual, evidence-based adoption, starting with Shadow Mode, where a proposal is measured but has no effect.
-              </p>
-            </div>
-          </article>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 px-4 bg-gradient-to-br from-gray-50 to-blue-50/30">
-      <div class="container mx-auto">
-        <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-gray-900" data-animation="slide-up">Get
-          Involved</h2>
-        <p class="text-center mb-16 text-xl text-gray-700 max-w-3xl mx-auto">
-          Join us in building the future of collective intelligence. We're seeking passionate collaborators to help
-          shape a more intelligent society.
-        </p>
-
-        <!-- Collaborator Types Section -->
-        <div class="mb-16">
-          <h3 class="text-2xl font-semibold mb-8 text-center text-gray-900">We're Looking For</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-
-            <!-- Researchers -->
-            <div
-              class="bg-white rounded-xl shadow-md p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 group">
-              <div
-                class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-              <h4 class="text-xl font-bold text-gray-900 mb-4 text-center">Researchers</h4>
-              <p class="text-gray-600 text-center mb-4">
-                Academic researchers, economists, and social scientists interested in AI governance, measurement and collective intelligence.
-              </p>
-              <ul class="text-sm text-gray-500 space-y-2">
-                <li class="flex items-center">
-                  <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Forecasting and measurement
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  AI ethics and governance
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Social systems design
-                </li>
-              </ul>
-            </div>
-
-            <!-- Developers -->
-            <div
-              class="bg-white rounded-xl shadow-md p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 group">
-              <div
-                class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                </svg>
-              </div>
-              <h4 class="text-xl font-bold text-gray-900 mb-4 text-center">Developers</h4>
-              <p class="text-gray-600 text-center mb-4">
-                Software engineers, privacy engineers and AI specialists interested in local-first software and safe agent runtimes.
-              </p>
-              <ul class="text-sm text-gray-500 space-y-2">
-                <li class="flex items-center">
-                  <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Local-first, privacy-preserving software
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Safe agent runtimes
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Full-stack engineering
-                </li>
-              </ul>
-            </div>
-
-            <!-- Advisors -->
-            <div
-              class="bg-white rounded-xl shadow-md p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 group">
-              <div
-                class="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-              <h4 class="text-xl font-bold text-gray-900 mb-4 text-center">Advisors</h4>
-              <p class="text-gray-600 text-center mb-4">
-                Strategic advisors, board members, and thought leaders who can provide guidance on governance, ethics,
-                and organizational development.
-              </p>
-              <ul class="text-sm text-gray-500 space-y-2">
-                <li class="flex items-center">
-                  <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Organizational governance
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Strategic partnerships
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Ethical frameworks
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- Contact Methods Section -->
-        <div id="contact-methods" class="bg-white rounded-2xl shadow-lg p-8 md:p-12 mb-16 border border-gray-100">
-          <h3 class="text-2xl font-semibold mb-8 text-center text-gray-900">Ready to Collaborate?</h3>
-
-          <!-- Primary Contact -->
-          <div class="text-center mb-12">
-            <div
-              class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mb-6">
-              <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <h4 class="text-xl font-semibold text-gray-900 mb-4">Get in Touch</h4>
-            <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
-              We'd love to hear from you. Send us an email and we'll get back to you as soon as possible.
-            </p>
-
-            <!-- Email Contact with Copy-to-Clipboard -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="mailto:contact@collectiveintelligencenetwork.org"
-                class="inline-flex items-center px-8 py-4 bg-blue-900 text-white rounded-xl hover:bg-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-semibold text-lg group">
-                <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none"
-                  stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                contact@collectiveintelligencenetwork.org
-              </a>
-
-              <button id="copy-email-btn"
-                class="inline-flex items-center px-6 py-4 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 font-medium group"
-                title="Copy email to clipboard">
-                <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none"
-                  stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-                <span id="copy-text">Copy Email</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Social Media Links -->
-          <div class="border-t border-gray-200 pt-8">
-            <h4 class="text-lg font-semibold text-gray-900 mb-6 text-center">Follow Our Progress</h4>
-            <div class="flex justify-center space-x-8">
-
-              <!-- LinkedIn -->
-              <a href="#" target="_blank" rel="noopener noreferrer"
-                class="group flex flex-col items-center p-4 rounded-xl hover:bg-blue-50 transition-all duration-300 transform hover:-translate-y-1">
-                <div
-                  class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                  </svg>
-                </div>
-                <span
-                  class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors duration-300">LinkedIn (coming soon)</span>
-              </a>
-
-              <!-- Twitter/X -->
-              <a href="#" target="_blank" rel="noopener noreferrer"
-                class="group flex flex-col items-center p-4 rounded-xl hover:bg-gray-50 transition-all duration-300 transform hover:-translate-y-1">
-                <div
-                  class="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                  </svg>
-                </div>
-                <span
-                  class="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors duration-300">Twitter/X (coming soon)</span>
-              </a>
-
-              <!-- GitHub -->
-              <a href="#" target="_blank" rel="noopener noreferrer"
-                class="group flex flex-col items-center p-4 rounded-xl hover:bg-gray-50 transition-all duration-300 transform hover:-translate-y-1">
-                <div
-                  class="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill-rule="evenodd"
-                      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                      clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <span
-                  class="text-sm font-medium text-gray-700 group-hover:text-gray-800 transition-colors duration-300">GitHub (coming soon)</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- GitHub Organization Stats -->
-        <div class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl shadow-lg p-8 text-white">
-          <div class="text-center mb-8">
-            <h3 class="text-2xl font-semibold mb-4">Open Work, When Ready</h3>
-            <p class="text-gray-300 max-w-2xl mx-auto">
-              Nothing is public yet. When documents and software are published, they will be licensed by component.
-            </p>
-          </div>
-
-          <p class="text-gray-300 max-w-2xl mx-auto">
-            Our work is at the research and planning stage. Finished work will be shared when it is ready.
-          </p>
-
-          <div class="text-center mt-8">
-            <a href="#" target="_blank" rel="noopener noreferrer"
-              class="inline-flex items-center px-6 py-3 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 font-semibold">
-              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                <path fill-rule="evenodd"
-                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                  clip-rule="evenodd" />
-              </svg>
-              Explore Our Repositories (coming soon)
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-12 px-4">
-    <div class="container mx-auto">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-6 md:mb-0">
-          <p class="font-bold text-xl mb-2">Collective Intelligence Network</p>
-          <p class="text-gray-400">An independent research and design project</p>
-        </div>
-        <div class="flex space-x-6">
-          <a href="#" class="text-gray-400 hover:text-white transition-colors"
-            aria-label="GitHub (coming soon)">
-            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill-rule="evenodd"
-                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                clip-rule="evenodd" />
-            </svg>
-          </a>
-          <a href="#" class="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn (coming soon)">
-            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-            </svg>
-          </a>
-          <a href="#" class="text-gray-400 hover:text-white transition-colors" aria-label="Twitter/X (coming soon)">
-            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-            </svg>
-          </a>
-        </div>
-      </div>
-      <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-        <p>Documents and software will be licensed by component when published. Text on this site is drafted with AI assistance and reviewed by a person.</p>
+    <div class="road reveal" aria-label="Roadmap">
+      <div class="road-track">
+        <div class="phase now"><span class="here">WE ARE HERE</span><span class="ph">Phase 0</span><h3>Foundations</h3><p>Architecture decisions, checking every citation, reconciling the documents.</p></div>
+        <div class="phase"><span class="ph">Phase 1</span><h3>First working tools</h3><p>The twin runs on the founder's own data and must find real recurring charges at measured precision.</p></div>
+        <div class="phase"><span class="ph">Phase 2</span><h3>Explanations &amp; forecasts</h3><p>Local model explanations; the first 10 to 20 scored forecasts, published with resolution criteria.</p></div>
+        <div class="phase"><span class="ph">Phase 3</span><h3>First publications</h3><p>First Observatory report, a published dependence audit, and preparation for a volunteer pilot.</p></div>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script type="module" src="./scripts/dynamic-slogan.js"></script>
-  <script type="module" src="./scripts/main.js"></script>
+<!-- ============ BOUNDED AGENTS ============ -->
+<section id="agents" class="alt">
+  <div class="wrap split">
+    <div class="body reveal">
+      <span class="label">Why now</span>
+      <h2 style="margin-top:1rem">Small agents, <em class="hl">loyal to one person.</em></h2>
+      <p class="lede" style="margin-top:1.2rem">AI agents now act through the same computers, phones and services that people use. They compete with us for the same levers, at a speed and scale no person can watch.</p>
+      <p>We think part of the answer is to fracture intelligence instead of concentrating it: alongside large general models, small bounded agents that each serve one person and hold the keys to that person's information and systems. When a powerful model needs something, it asks the person's agent, which checks the request, answers narrowly, and logs what happened.</p>
+      <p class="quote">The answer to a threatening scenario is fewer privileges, independent observers and bounded agents, never more authority.</p>
+      <p>This works alongside regulation, lab commitments and independent safety research. It doesn't replace them. <span class="chip idea">Concept under study</span></p>
+      <div class="principles-mini">
+        <div><b>Signed is not true</b><span>A cryptographic signature proves which computation ran, not that its inputs or outputs reflect reality.</span></div>
+        <div><b>Every target has a watcher</b><span>Every measure used to allocate anything is checked against independent measures and human review.</span></div>
+        <div><b>F9 · Standing</b><span>Agents have standing only to the extent people grant it, and it can be revoked.</span></div>
+      </div>
+    </div>
+    <figure class="stack-fig reveal" style="margin:0">
+      <svg viewBox="0 0 480 520" role="img" aria-labelledby="stack-t">
+        <title id="stack-t">Diagram: large models ask a person's bounded twin, which answers narrowly and keeps the person's data and systems behind it.</title>
+        <defs>
+          <linearGradient id="sp" x1="0" x2="1"><stop offset="0" stop-color="#1f6fb3"/><stop offset=".33" stop-color="#1f8f5a"/><stop offset=".66" stop-color="#d99a1b"/><stop offset="1" stop-color="#c8402a"/></linearGradient>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+        </defs>
+        <g font-family="ui-monospace, Consolas, monospace" font-size="12" fill="currentColor">
+          <text x="24" y="34" opacity=".6">LARGE GENERAL MODELS</text>
+          <g>
+            <rect x="24" y="48" width="132" height="60" rx="10" fill="none" stroke="currentColor" stroke-opacity=".5"/>
+            <rect x="174" y="48" width="132" height="60" rx="10" fill="none" stroke="currentColor" stroke-opacity=".5"/>
+            <rect x="324" y="48" width="132" height="60" rx="10" fill="none" stroke="currentColor" stroke-opacity=".5"/>
+            <text x="90" y="83" text-anchor="middle">model</text><text x="240" y="83" text-anchor="middle">model</text><text x="390" y="83" text-anchor="middle">agent</text>
+          </g>
+          <g stroke="currentColor" stroke-opacity=".55" color="currentColor">
+            <path d="M90 112 L200 206" marker-end="url(#ar)" fill="none"/>
+            <path d="M240 112 L240 204" marker-end="url(#ar)" fill="none"/>
+            <path d="M390 112 L282 206" marker-end="url(#ar)" fill="none"/>
+          </g>
+          <text x="248" y="162" opacity=".7">request</text>
+          <rect x="96" y="210" width="288" height="84" rx="16" fill="none" stroke="url(#sp)" stroke-width="3"/>
+          <text x="240" y="244" text-anchor="middle" font-size="15" font-weight="700">BOUNDED TWIN</text>
+          <text x="240" y="268" text-anchor="middle" opacity=".7">checks · answers narrowly · logs</text>
+          <path d="M384 252 C 440 252, 440 160, 410 116" fill="none" stroke="#1f6f68" stroke-width="2" marker-end="url(#ar)" color="#1f6f68"/>
+          <text x="0" y="0" fill="#1f6f68" font-weight="700" text-anchor="middle" transform="translate(458 190) rotate(90)">answer</text>
+          <path d="M96 252 C 40 252, 40 160, 70 116" fill="none" stroke="#c8402a" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#ar)" color="#c8402a"/>
+          <text x="0" y="0" fill="#c8402a" font-weight="700" text-anchor="middle" transform="translate(24 190) rotate(-90)">declined</text>
+          <path d="M60 330 H420" stroke="currentColor" stroke-dasharray="2 6" stroke-opacity=".7"/>
+          <text x="240" y="322" text-anchor="middle" opacity=".6">THE PERSON'S BOUNDARY</text>
+          <g>
+            <rect x="60" y="352" width="160" height="56" rx="10" fill="#1f6f68" fill-opacity=".12" stroke="#1f6f68" stroke-opacity=".5"/>
+            <rect x="260" y="352" width="160" height="56" rx="10" fill="#1f6f68" fill-opacity=".12" stroke="#1f6f68" stroke-opacity=".5"/>
+            <text x="140" y="385" text-anchor="middle">records</text><text x="340" y="385" text-anchor="middle">systems &amp; keys</text>
+          </g>
+          <circle cx="240" cy="448" r="9" fill="currentColor"/>
+          <path d="M219 486 a21 22 0 0 1 42 0 z" fill="currentColor"/>
+          <text x="240" y="510" text-anchor="middle" opacity=".7">the person, who can always see and override</text>
+        </g>
+      </svg>
+    </figure>
+  </div>
+</section>
 
-  <!-- Coming Soon Modal -->
-  <div id="coming-soon-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
-      <div class="p-8 text-center">
-        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+<!-- ============ WORK IN THE OPEN ============ -->
+<section id="open">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="label">Work in the open</span>
+      <h2>Built by AI agents, <em class="hl">held to written rules.</em></h2>
+      <p class="lede">Most of the CIN's documents, and this website, are drafted by AI agents working under a published operating loop and reviewed by a human steward. An agent doing helpful work should be easy to inspect, so here is how it works.</p>
+    </div>
+
+    <ol class="loop reveal" aria-label="The operating loop">
+      <li class="step"><b>Read</b><span>Load the rules, the governing documents and the task list.</span></li>
+      <li class="step"><b>Pick</b><span>Choose the next task by priority: safety and privacy first.</span></li>
+      <li class="step"><b>Branch</b><span>One task, one branch. Nothing touches the main line.</span></li>
+      <li class="step"><b>Do &amp; verify</b><span>Make the change, test it, mark anything unverified.</span></li>
+      <li class="step"><b>Sign &amp; report</b><span>Signed commit with provenance; a written report.</span></li>
+      <li class="step human"><b>Review</b><span>A person approves before anything is merged or published.</span></li>
+    </ol>
+
+    <div class="work-grid">
+      <div class="reveal">
+        <div class="board" aria-label="Task board as of 5 October 2026">
+          <div class="col done">
+            <h3><span>Done</span><span>7</span></h3>
+            <div class="ticket"><span class="t">TASK 9</span>First full read of every document; glossary and open-questions index</div>
+            <div class="ticket"><span class="t">TASK 14</span>Constitution reconciled with its appendix (now version 0.6)</div>
+            <div class="ticket"><span class="t">TASK 15</span>Roadmap reconciled with the specifications</div>
+            <div class="ticket"><span class="t">TASK 16</span>Revision notes added where older essays drifted</div>
+            <div class="ticket"><span class="t">TASK 10 · 21</span>Website audited against the Constitution; tracking removed</div>
+          </div>
+          <div class="col doing">
+            <h3><span>In progress</span><span>3</span></h3>
+            <div class="ticket"><span class="t">TASK 2</span>Eight architecture decisions: formats, licensing, stack, security</div>
+            <div class="ticket"><span class="t">TASK 3</span>Checking every citation before it is relied on</div>
+            <div class="ticket"><span class="t">TASK 7</span>This website</div>
+          </div>
+          <div class="col next">
+            <h3><span>Next</span><span>12</span></h3>
+            <div class="ticket"><span class="t">TASK 20</span>Concept note: bounded twins as gatekeepers for large models</div>
+            <div class="ticket"><span class="t">TASK 22</span>Where today's institutions assume human speed and effort, and how to defend them</div>
+            <div class="ticket"><span class="t">TASK 4 · 5</span>First indicator registry; first twin and runtime milestones</div>
+            <div class="ticket"><span class="t">TASK 12</span>Communications policy, before any outreach</div>
+          </div>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">Whitepaper Coming Soon!</h3>
-        <p class="text-gray-600 mb-6 leading-relaxed">
-          A whitepaper is in preparation. We will publish it once it has been reviewed.
-        </p>
-        <div class="flex gap-3 justify-center">
-          <button id="modal-close-btn" class="px-6 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors duration-200 font-medium">
-            Got it
-          </button>
+        <p class="mono" style="font-size:.76rem;color:var(--ink-3);margin-top:.6rem">22 tasks on the list as of 5 October 2026. Selected items shown.</p>
+      </div>
+      <div class="reveal">
+        <pre class="commit" aria-label="Example commit from this website's history"><span class="c1">commit c2967c3</span>
+Pull pages with unverified claims;
+tidy repository metadata
+
+<span class="c2">Moves four blog pages that claimed
+a registered non-profit status the
+project has not established.</span>
+
+<span class="c3">Agent:</span>       Antigravity
+<span class="c3">Model:</span>       Claude Sonnet 5.5
+<span class="c3">Reviewed-by:</span> pending steward review
+<span class="c2">Good signature (ED25519)</span></pre>
+        <div class="nevers">
+          <h3>What our agents may never do</h3>
+          <ul>
+            <li>Weaken or remove any of the 19 floor rights.</li>
+            <li>Add telemetry, analytics or any undeclared network call.</li>
+            <li>Send a person's private twin data to a remote model.</li>
+            <li>Produce financial numbers, dates or matches with a language model.</li>
+            <li>Present an unverified citation as fact.</li>
+            <li>Publish, deploy or contact anyone without human approval.</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- Modal JavaScript -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const modal = document.getElementById('coming-soon-modal');
-      const modalContent = document.getElementById('modal-content');
-      const openBtn = document.getElementById('whitepaper-coming-soon-btn');
-      const closeBtn = document.getElementById('modal-close-btn');
+<!-- ============ OBSERVATORY ============ -->
+<section id="observatory" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="label">Observatory · in preparation</span>
+      <h2>Where is the world heading? <em class="hl">Both ways, equally.</em></h2>
+      <p class="lede">The Observatory will track whether the world is moving toward the conditions the CIN hopes for or away from them. Evidence against us gets at least equal space. No indicators are published yet, so there are no numbers here, not even placeholder ones.</p>
+    </div>
+    <div class="obs-grid">
+      <div class="obs-col conv reveal">
+        <h3><i></i>Signs of convergence</h3>
+        <div class="ind"><span class="fam">A</span><span>Personal and decentralized AI people run themselves</span><span class="pend">first registry</span></div>
+        <div class="ind"><span class="fam">C</span><span>Decentralized networking</span><span class="pend">first registry</span></div>
+        <div class="ind"><span class="fam">F</span><span>Democratic participation</span><span class="pend">first registry</span></div>
+        <div class="ind"><span class="fam">G</span><span>Data rights and privacy</span><span class="pend">later</span></div>
+      </div>
+      <div class="obs-col div reveal">
+        <h3><i></i>Signs of divergence</h3>
+        <div class="ind"><span class="fam">B</span><span>Dependence on a few centralized AI providers, including our own agents'</span><span class="pend">first registry</span></div>
+        <div class="ind"><span class="fam">C</span><span>Government-ordered network shutdowns</span><span class="pend">first registry</span></div>
+        <div class="ind"><span class="fam">F</span><span>Democratic backsliding</span><span class="pend">first registry</span></div>
+        <div class="ind"><span class="fam">H</span><span>Security failures in under-maintained digital commons</span><span class="pend">later</span></div>
+      </div>
+    </div>
+    <div class="calib reveal">
+      <div class="big">0<small>scored forecasts<br>published</small></div>
+      <div>
+        <svg viewBox="0 0 400 140" role="img" aria-labelledby="cal-t">
+          <title id="cal-t">An empty calibration chart: the diagonal shows perfect calibration; no forecasts are plotted yet.</title>
+          <g fill="none" stroke="currentColor">
+            <path d="M40 120 H390 M40 120 V10" stroke-opacity=".4"/>
+            <path d="M40 120 L390 10" stroke-dasharray="4 6" stroke-opacity=".5"/>
+          </g>
+          <g font-family="ui-monospace, Consolas, monospace" font-size="10" fill="currentColor" opacity=".6">
+            <text x="40" y="136">0%</text><text x="360" y="136">100%</text><text x="150" y="136">stated probability</text>
+            <text x="0" y="14">100%</text><text x="6" y="120">0%</text>
+            <text x="292" y="74">perfect calibration</text>
+          </g>
+        </svg>
+        <p>Our goals will be stated as forecasts with resolution criteria and scored as they resolve. The first 10 to 20 are planned for Phase 2. When we're wrong, it stays here.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-      function openModal() {
-        modal.classList.remove('hidden');
-        setTimeout(() => {
-          modalContent.classList.remove('scale-95', 'opacity-0');
-          modalContent.classList.add('scale-100', 'opacity-100');
-        }, 10);
-      }
+<!-- ============ FLOOR ============ -->
+<section id="floor">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="label">The constitutional floor</span>
+      <h2>Nineteen rights <em class="hl">no majority can remove.</em></h2>
+      <p class="lede">No protocol decision, operating agent, partner organization or majority can remove these. Each heading opens the full text from the CIN Constitution, version 0.6.</p>
+    </div>
+    <div class="floor reveal" id="floor-list">
+      <details class="right"><summary><span class="f">F1</span><span class="n">Ownership</span><span class="pm">+</span></summary><p>Every person can see, export in open formats, and delete all data the CIN holds about them, on their own devices.</p></details>
+      <details class="right"><summary><span class="f">F2</span><span class="n">Answers, not data</span><span class="pm">+</span></summary><p>No service, partner or mission organization may require broader access to a person's data than a proof of the specific fact it needs.</p></details>
+      <details class="right"><summary><span class="f">F3</span><span class="n">Disclosure is never paid and never penalized</span><span class="pm">+</span></summary><p>Contribution may be recognized; disclosure may not be rewarded, and declining to disclose costs nothing.</p></details>
+      <details class="right"><summary><span class="f">F4</span><span class="n">Due process for consequences</span><span class="pm">+</span></summary><p>Consequences follow specific, evidenced conduct, with notice, the opportunity to respond, proportionality, appeal and a path to restoration. Protective measures against active threats may take effect immediately but expire unless ratified.</p></details>
+      <details class="right"><summary><span class="f">F5</span><span class="n">Uncertainty falls on the system</span><span class="pm">+</span></summary><p>When the network is uncertain about a person, the burden of that uncertainty falls on the network, not the person.</p></details>
+      <details class="right"><summary><span class="f">F6</span><span class="n">No ranking of persons</span><span class="pm">+</span></summary><p>Representations of people's dispositions, histories or trustworthiness are never combined into a ranking of human worth, and never grant influence for proximity to the majority.</p></details>
+      <details class="right"><summary><span class="f">F7</span><span class="n">Equal voice on values; influence on facts follows record</span><span class="pm">+</span></summary><p>On questions of value, each affected person has one voice, and no wealth, hardware or assessed contribution changes its weight. On questions of fact, influence follows a scored forecasting record. Amending this floor requires broad participation, so no concentrated group can amend it alone.</p></details>
+      <details class="right"><summary><span class="f">F8</span><span class="n">Simulated people don't vote</span><span class="pm">+</span></summary><p>Simulated populations may inform deliberation, labeled as such, but never count as consent. A person's own twin voting on their behalf is representation of a real person, not simulation.</p></details>
+      <details class="right"><summary><span class="f">F9</span><span class="n">Standing is granted by people</span><span class="pm">+</span></summary><p>Agents, robots and collectives have standing only to the extent people configure, and that standing may be revoked.</p></details>
+      <details class="right"><summary><span class="f">F10</span><span class="n">Exit and fork</span><span class="pm">+</span></summary><p>Any person may leave with their data, and any community may fork the protocol.</p></details>
+      <details class="right"><summary><span class="f">F11</span><span class="n">Community authority</span><span class="pm">+</span></summary><p>Communities hosting the CIN control local data and local parameters above this floor, and may decline or withdraw the CIN.</p></details>
+      <details class="right"><summary><span class="f">F12</span><span class="n">Claims without conditions</span><span class="pm">+</span></summary><p>Recognition or rewards owed to contributors never depend on their joining or agreeing with the CIN.</p></details>
+      <details class="right"><summary><span class="f">F13</span><span class="n">No engagement optimization</span><span class="pm">+</span></summary><p>No CIN system measures or optimizes time spent, sessions, streaks or similar engagement metrics.</p></details>
+      <details class="right"><summary><span class="f">F14</span><span class="n">Protected diversity</span><span class="pm">+</span></summary><p>Reducing disorder is a goal for infrastructure, ecosystems and factual questions, never for human beliefs, cultures or values.</p></details>
+      <details class="right"><summary><span class="f">F15</span><span class="n">Right to rest</span><span class="pm">+</span></summary><p>Anyone may disconnect from all CIN systems at any time without loss of standing, records or any support that depends on CIN information.</p></details>
+      <details class="right"><summary><span class="f">F16</span><span class="n">Protection of autotelic activity</span><span class="pm">+</span></summary><p>Play, art, grief, contemplation and rest are never classified as waste or subjected to optimization.</p></details>
+      <details class="right"><summary><span class="f">F17</span><span class="n">Inner sovereignty</span><span class="pm">+</span></summary><p>No overlay, narrative or data stream may be placed in a person's interface without their explicit, revocable consent.</p></details>
+      <details class="right"><summary><span class="f">F18</span><span class="n">Existence does not require usefulness</span><span class="pm">+</span></summary><p>No person, community or ecosystem must justify its existence by contribution.</p></details>
+      <details class="right"><summary><span class="f">F19</span><span class="n">No force</span><span class="pm">+</span></summary><p>The CIN never deploys, directs or authorizes physical force.</p></details>
+    </div>
+    <p class="floor-note">Some texts are lightly shortened for the web (F4, F7, F9); the Constitution's wording governs. Until a ratified constitutional process exists, a founding steward maintains the document and may not weaken any of these rights.</p>
+  </div>
+</section>
 
-      function closeModal() {
-        modalContent.classList.remove('scale-100', 'opacity-100');
-        modalContent.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => {
-          modal.classList.add('hidden');
-        }, 300);
-      }
+<!-- ============ INVOLVED ============ -->
+<section id="involved" class="alt">
+  <div class="wrap involve">
+    <div class="reveal">
+      <span class="label">Get involved</span>
+      <h2 style="margin:1rem 0 1.4rem">Where things <em class="hl">honestly stand.</em></h2>
+      <ul class="honest-list">
+        <li><b class="y">Open</b><span>Questions, criticism and corrections by email. If you find an error on this page, tell us and we'll fix it publicly.</span></li>
+        <li><b class="n">Not yet</b><span>Software to install. The first tools are specified; building starts after the foundations phase.</span></li>
+        <li><b class="n">Not yet</b><span>Donations. The CIN is meant to be funded by voluntary donations, and no donation route is open yet.</span></li>
+        <li><b class="n">Not yet</b><span>Recruitment or a mailing list. These wait for a published communications and consent policy.</span></li>
+        <li><b class="n">Not yet</b><span>Public source and documents. They will be released as each part is reviewed and its licence decided.</span></li>
+      </ul>
+    </div>
+    <div class="contact-card reveal">
+      <h3>Write to us</h3>
+      <p>Questions, criticism and corrections are welcome. Writing to us never puts you on a mailing list.</p>
+      <a class="mail" href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>
+    </div>
+  </div>
+</section>
 
-      openBtn.addEventListener('click', openModal);
-      closeBtn.addEventListener('click', closeModal);
-      
-      // Close modal when clicking outside
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-          closeModal();
-        }
-      });
+</main>
 
-      // Close modal with Escape key
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-          closeModal();
-        }
-      });
-    });
-  </script>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="spectrum" aria-hidden="true"></div>
+    <div class="foot-grid">
+      <div>
+        <h4>Collective Intelligence Network</h4>
+        <p>An independent research and design project. It holds no one's data, assets or money.</p>
+        <p>This site was designed and written by an AI agent (Antigravity) under the CIN's agent rules and reviewed by the project's human steward before publication.</p>
+      </div>
+      <div>
+        <h4>This site</h4>
+        <ul>
+          <li>No cookies, analytics or third-party requests</li>
+          <li>Static files only, no build step</li>
+          <li>Works without JavaScript</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Sections</h4>
+        <ul>
+          <li><a href="#building">What we're building</a></li>
+          <li><a href="#open">Work in the open</a></li>
+          <li><a href="#floor">The floor</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
 
+<script src="/scripts/site.js?v=1" defer></script>
 </body>
-
 </html>
