@@ -153,10 +153,10 @@
 
     // the twin (center)
     ctx.fillStyle = colors.ink;
-    ctx.beginPath(); ctx.arc(cx, cy, R * 0.16, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, R * 0.2, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = colors.card;
-    ctx.font = '700 ' + Math.max(9, Math.round(R * 0.11)) + 'px ui-monospace, Consolas, monospace';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('twin', cx, cy + 1);
+    ctx.font = '700 ' + Math.max(8, Math.round(R * 0.085)) + 'px ui-monospace, Consolas, monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('your', cx, cy - R * 0.05); ctx.fillText('agent', cx, cy + R * 0.07);
     ctx.fillStyle = colors.ink3; ctx.font = '600 ' + Math.max(9, Math.round(W / 50)) + 'px ui-monospace, Consolas, monospace';
     ctx.fillText('YOUR DEVICE', cx, cy + R + Math.max(14, W / 32));
 
