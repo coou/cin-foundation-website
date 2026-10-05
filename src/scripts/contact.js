@@ -1,7 +1,6 @@
 // Contact section functionality
 document.addEventListener('DOMContentLoaded', () => {
   initializeCopyToClipboard();
-  initializeGitHubStats();
 });
 
 // Copy email to clipboard functionality
@@ -87,120 +86,6 @@ function showCopyError(copyText) {
     copyText.parentElement.classList.remove('bg-red-100', 'text-red-700');
     copyText.parentElement.classList.add('bg-gray-100', 'text-gray-700');
   }, 2000);
-}
-
-// GitHub organization statistics
-async function initializeGitHubStats() {
-  const reposElement = document.getElementById('github-repos');
-  const contributorsElement = document.getElementById('github-contributors');
-  const commitsElement = document.getElementById('github-commits');
-  
-  if (!reposElement || !contributorsElement || !commitsElement) {
-    return;
-  }
-  
-  try {
-    // Fetch organization data
-    const orgResponse = await fetch('https://api.github.com/orgs/cin-foundation');
-    await orgResponse.json(); // We don't use orgData currently
-    
-    // Fetch repositories
-    const reposResponse = await fetch('https://api.github.com/orgs/cin-foundation/repos?per_page=100');
-    const reposData = await reposResponse.json();
-    
-    if (Array.isArray(reposData)) {
-      // Update repositories count
-      animateNumber(reposElement, reposData.length);
-      
-      // Calculate total contributors and commits
-      const totalContributors = new Set();
-      let totalCommits = 0;
-      
-      // Fetch contributors and commits for each repository
-      const repoPromises = reposData.slice(0, 10).map(async (repo) => {
-        try {
-          // Fetch contributors for this repo
-          const contributorsResponse = await fetch(`https://api.github.com/repos/${repo.full_name}/contributors?per_page=100`);
-          if (contributorsResponse.ok) {
-            const contributors = await contributorsResponse.json();
-            if (Array.isArray(contributors)) {
-              contributors.forEach(contributor => {
-                if (contributor.login) {
-                  totalContributors.add(contributor.login);
-                }
-              });
-            }
-          }
-          
-          // Fetch commits count for this repo
-          const commitsResponse = await fetch(`https://api.github.com/repos/${repo.full_name}/commits?per_page=1`);
-          if (commitsResponse.ok) {
-            const linkHeader = commitsResponse.headers.get('Link');
-            if (linkHeader) {
-              const match = linkHeader.match(/page=(\d+)>; rel="last"/);
-              if (match) {
-                totalCommits += parseInt(match[1]);
-              }
-            } else {
-              // If no pagination, there's likely only one page
-              const commits = await commitsResponse.json();
-              if (Array.isArray(commits)) {
-                totalCommits += commits.length;
-              }
-            }
-          }
-        } catch (error) {
-          console.warn(`Failed to fetch data for repo ${repo.name}:`, error);
-        }
-      });
-      
-      await Promise.all(repoPromises);
-      
-      // Update the UI with animated numbers
-      animateNumber(contributorsElement, totalContributors.size);
-      animateNumber(commitsElement, totalCommits);
-      
-    } else {
-      // Fallback to placeholder numbers if API fails
-      animateNumber(reposElement, 8);
-      animateNumber(contributorsElement, 12);
-      animateNumber(commitsElement, 150);
-    }
-    
-  } catch (error) {
-    console.warn('Failed to fetch GitHub stats:', error);
-    
-    // Show placeholder numbers with animation
-    animateNumber(reposElement, 8);
-    animateNumber(contributorsElement, 12);
-    animateNumber(commitsElement, 150);
-  }
-}
-
-// Animate number counting up
-function animateNumber(element, targetNumber) {
-  const duration = 2000; // 2 seconds
-  const startTime = Date.now();
-  const startNumber = 0;
-  
-  function updateNumber() {
-    const elapsed = Date.now() - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    
-    // Use easing function for smooth animation
-    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-    const currentNumber = Math.floor(startNumber + (targetNumber - startNumber) * easeOutQuart);
-    
-    element.textContent = currentNumber.toLocaleString();
-    
-    if (progress < 1) {
-      requestAnimationFrame(updateNumber);
-    } else {
-      element.textContent = targetNumber.toLocaleString();
-    }
-  }
-  
-  updateNumber();
 }
 
 // Add hover effects for social media links

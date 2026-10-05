@@ -8,11 +8,6 @@ import './responsive.js';
 import { initializeLazyLoading, preloadResources } from './lazy-loading.js';
 // import { initializeAccessibility } from './accessibility.js';
 // import { initializeColorContrast } from './color-contrast.js';
-import { initializeAnalytics } from './analytics.js';
-import { initializePerformanceBudgetMonitoring } from './performance-budget-monitor.js';
-import './performance-dashboard.js';
-import './debug-utils.js';
-import './test-analytics.js';
 
 // Site configuration
 const siteConfig = {
@@ -42,10 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // initializeAccessibility();
   // initializeColorContrast();
   initializeLazyLoading();
-  
-  // Initialize analytics and performance monitoring
-  initializeAnalytics();
-  initializePerformanceBudgetMonitoring();
   
   // Preload critical resources
   preloadResources(criticalResources);
