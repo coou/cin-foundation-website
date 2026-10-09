@@ -1,13 +1,14 @@
 name: Deploy to Firebase Hosting (manual)
 
 # Deployment is manual only. There is no deploy on push and no PR preview.
-# Run this workflow only after the steward has approved publication
-# (CIN BOOTSTRAP.md section 5). Pushing to main does NOT deploy.
+# The CIN agents normally deploy from their own machine with the Firebase CLI
+# (CIN loop/DEPLOY.md: checks, preview channel, smoke check, live, rollback).
+# This workflow is a manual alternative. Pushing to main does NOT deploy.
 on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: 'Type DEPLOY to publish to the live site (steward approval required)'
+        description: 'Type DEPLOY to publish to the live site'
         required: true
         type: string
 
