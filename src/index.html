@@ -16,7 +16,7 @@
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/images/logo-192.png">
-  <link rel="stylesheet" href="/styles/site.css?v=5">
+  <link rel="stylesheet" href="/styles/site.css?v=13">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"Collective Intelligence Network","alternateName":"CIN","description":"An independent research and design project preparing people for advanced AI: containment, personal agents and collective intelligence."}
   </script>
@@ -61,7 +61,17 @@
       <div class="boundary-frame">
         <canvas id="boundary" aria-hidden="true"></canvas>
       </div>
-      <figcaption><strong>Your agent stands at your boundary.</strong> Outside agents ask questions. Your agent answers only what is needed and declines the rest, and your data never leaves you. <span class="mono">(An illustration, not a working product.)</span></figcaption>
+      <div class="bd-scenes" id="bd-scenes" role="group" aria-label="Play a situation"></div>
+      <div class="bd-dock" id="bd-side">
+        <div class="bd-consent" id="bd-consent" role="group" aria-labelledby="bd-q" hidden>
+          <span class="bd-k">Your call</span>
+          <p id="bd-q"></p>
+          <div class="bd-btns"><button type="button" class="bd-yes">Share only that</button><button type="button" class="bd-no">Decline</button></div>
+        </div>
+        <div class="bd-detail" id="bd-detail" hidden></div>
+        <div class="bd-logwrap" id="bd-logwrap"><span class="bd-k">What your agents have shared</span><ol class="bd-log" id="bd-log" aria-live="polite"><li class="bd-empty">Nothing yet. Pick a situation, or watch.</li></ol></div>
+      </div>
+      <figcaption><strong>Your agents stand at your boundary.</strong> A fleet of narrow agents, one for your health, one for your money and so on, learns from quiet sensors on your own devices. Pick a situation to play it through and decide what goes out. Point at any agent or sensor to see what it knows. <span class="mono">(An illustration, not a working product.)</span></figcaption>
     </figure>
   </div>
 </section>
@@ -254,26 +264,72 @@
       </svg>
     </figure>
   </div>
-</section>
-
-<!-- ============ NO TRACKING ============ -->
-<div class="ledger" aria-labelledby="ledger-h">
-  <div class="wrap ledger-grid">
-    <div class="reveal">
-      <span class="label">This page, right now</span>
-      <h2 id="ledger-h">We don't know you were here.</h2>
-      <p>No cookies, no analytics, no fonts or scripts from anyone else. We don't count visitors, so we can't sell them, lose them or optimize for them. The receipt is computed by your own browser from what this page actually loaded.</p>
+  <div class="wrap minds reveal" id="minds">
+    <div class="mn-head">
+      <span class="label">The analogy we borrow</span>
+      <h3>Your body is trillions of small minds working as one. We want the same, one level up.</h3>
+      <p>The biologist Michael Levin studies how cells, each with its own small goals and memory, cooperate so well that they become a body. Our network of agents tries, crudely, to repeat that at human scale: people and their agents, joined into something larger that serves every one of them.</p>
     </div>
-    <div class="receipt reveal" id="receipt" aria-live="polite">
-      <div class="row"><span class="k">Cookies set</span><span class="v" id="r-cookies">…</span></div>
-      <div class="row"><span class="k">Files this page loaded</span><span class="v" id="r-count">…</span></div>
-      <div class="row"><span class="k">Servers contacted</span><span class="v" id="r-hosts">…</span></div>
-      <div class="row"><span class="k">Third-party servers</span><span class="v" id="r-third">…</span></div>
-      <div class="row"><span class="k">Analytics or trackers</span><span class="v good">none in the source</span></div>
-      <div class="note">Computed in your browser. Nothing is sent anywhere. With JavaScript off, the page still works and this receipt stays blank.</div>
+    <div class="mn-modes" id="mn-modes" role="group" aria-label="Explore the analogy">
+      <button type="button" data-mode="0" aria-pressed="true">Many minds, one body</button>
+      <button type="button" data-mode="1" aria-pressed="false">One level up</button>
+      <button type="button" data-mode="2" aria-pressed="false">When a part breaks away</button>
+      <button type="button" data-mode="3" aria-pressed="false">Toward enhancement</button>
+    </div>
+    <div class="mn-stage">
+      <div class="mn-fig" aria-hidden="true"><svg id="mn-svg"></svg></div>
+      <div class="mn-panel" aria-live="polite">
+        <div class="mn-pair mn-bio"><span>In a body</span><p id="mn-bio">Each cell has its own small goals and memory. Joined by electrical signals, cells share one picture of the world and build what no single cell could plan, like a hand of the right shape.</p></div>
+        <div class="mn-pair mn-cin"><span>In our network</span><p id="mn-cin">Each of your agents is a small mind too: one job, a small view of the world, answering to you. Together they look after a whole life.</p></div>
+        <p class="mn-diff"><b>Where it differs:</b> a body sacrifices cells when it needs to. We never sacrifice people, and anyone can leave.</p>
+      </div>
+    </div>
+    <p class="mn-note">An analogy that guides our design, not a proof that it works, and not an endorsement from the researchers we draw on. <a href="/notes/many-minds">Read the full note on many minds, one body &rarr;</a></p>
+  </div>
+  <div class="wrap power-vis reveal" id="power-vis">
+    <div class="pv-head">
+      <span class="label">Power brings visibility</span>
+      <h3>The more people your decisions reach, the more the network may ask to see.</h3>
+      <p>Ordinary people owe the network nothing beyond the one fact a service needs. Anyone who takes on power over many others accepts more visibility in that role, so everyone else, through their own agents, can check how the power is used. Private life stays private at every level.</p>
+    </div>
+    <div class="pv-stage">
+      <div class="pv-roles" id="pv-roles" role="group" aria-label="Choose a role">
+        <button type="button" data-reach="1.6" data-tier="0">A farmer</button>
+        <button type="button" data-reach="2" data-tier="0">A truck driver</button>
+        <button type="button" data-reach="2.8" data-tier="0">A nurse</button>
+        <button type="button" data-reach="3.1" data-tier="1">A landlord with many tenants</button>
+        <button type="button" data-reach="3.5" data-tier="1">An employer</button>
+        <button type="button" data-reach="5" data-tier="2">A city mayor</button>
+        <button type="button" data-reach="6" data-tier="2">The head of a large company</button>
+        <button type="button" data-reach="7.2" data-tier="3">A media figure with millions of followers</button>
+        <button type="button" data-reach="7.8" data-tier="3">A national politician</button>
+        <button type="button" data-reach="8.2" data-tier="3">One of the very wealthiest people</button>
+        <button type="button" data-reach="9.3" data-tier="4">A leader steering frontier AI</button>
+      </div>
+      <div class="pv-figure" aria-hidden="true"><svg id="pv-svg"></svg></div>
+      <div class="pv-panel" aria-live="polite">
+        <span class="pv-reach" id="pv-reach">Reaches about a hundred people</span>
+        <h4 id="pv-role">A farmer</h4>
+        <ol class="pv-tiers" id="pv-tiers">
+          <li data-tier="0"><b>Everyone</b><span>Answers only. A service gets proof of the one fact it needs; nothing else is observed.</span></li>
+          <li data-tier="1"><b>Power over livelihoods</b><span>Decisions about the people you employ or house are recorded and can be explained to them. Conflicts of interest are declared.</span></li>
+          <li data-tier="2"><b>Public or institutional power</b><span>Funding, ownership and major decisions are public. Actions taken in the role leave an attested record that independent observers audit.</span></li>
+          <li data-tier="3"><b>Mass influence</b><span>Anyone&rsquo;s agent can ask where they stand and get an answer drawn from their attested record. Claims about the future are scored as forecasts. Holdings of money, media and computing power are disclosed.</span></li>
+          <li data-tier="4"><b>Roles that could harm everyone</b><span>Decisions in the role run through an agent of its own whose commitments others can check, with a continuous record reviewed by observers independent of one another.</span></li>
+        </ol>
+        <p class="pv-ask" id="pv-ask" hidden></p>
+        <p class="pv-private"><b>Always private, at every level:</b> health, family, beliefs and life outside the role. Inner thoughts are never observed, and no one is ranked.</p>
+      </div>
+    </div>
+    <p class="pv-note">Visibility is a condition of accepting a role, taken on openly, never a penalty on ordinary people. Where exactly each line should fall is an open research question for us. The roles and reach are illustrations.</p>
+
+    <div class="pv-thesis">
+      <div><b>Not one giant mind</b><p>We think a single all-knowing AI is a fast way to take power from everyone at once. We work toward many specialized models instead, each trained for one person and answerable only to them.</p></div>
+      <div><b>Training without handing over your life</b><p>While large computers belong to a few companies, a personal model has to be trained on rented machines. We are designing for your data to sit in escrow during training, under keys that are destroyed when training ends, so the owner of the machine never keeps it. <em>A design goal, not yet built.</em></p></div>
+      <div><b>Powerful roles first</b><p>As personal AI hardware gets cheap, we want the people who can most help or harm others to carry these agents first, so everyone else can ask where they stand. It is a path to unwinding concentrated power, so that advanced AI is not seized by a wealthy few, the future some call techno-feudalism.</p></div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- ============ HORIZON ============ -->
 <section id="horizon">
@@ -291,6 +347,40 @@
         <div class="phase"><span class="ph">After that</span><h3>As fast as people choose</h3><p>Collective intelligence that outperforms top-down systems, spreading as quickly as people find it better.</p></div>
       </div>
     </div>
+    <div class="hw reveal" id="hw">
+      <div class="hw-head">
+        <span class="label">The hardware this needs</span>
+        <h3>An agent for every person needs chips that are cheap, and sip power.</h3>
+        <p>Big models are uneven: brilliant at some tasks, unreliable at others. Small local models can fill those gaps for the one person they serve, and act on what is happening around that person at almost no cost. That takes hardware most of the world can afford. Only the top row below exists today; the rest are early chips and research, and we mark them that way.</p>
+      </div>
+      <div class="hw-stage">
+        <div class="hw-chart"><svg id="hw-svg" aria-hidden="true"></svg></div>
+        <div class="hw-panel" aria-live="polite">
+          <span class="hw-row" id="hw-row">Point at any technology</span>
+          <h4 id="hw-title">From the wall socket to sunlight.</h4>
+          <p id="hw-text">Left is where AI runs today: data centres and plugged-in machines. Right is where a personal agent needs to get to: days on a battery, or a small solar cell.</p>
+          <p class="hw-src" id="hw-src"></p>
+        </div>
+      </div>
+      <ul class="hw-list" id="hw-list">
+        <li data-row="0" data-pos=".36" data-src="https://github.com/ggml-org/llama.cpp" data-cite="llama.cpp"><b>Small open models on your own device</b> Compressed open models already run on ordinary computers: full features with 16 GB of memory, a reduced mode with 8 GB.</li>
+        <li data-row="0" data-pos=".5"><b>Device keys and sealed computing</b> Keys born from tiny manufacturing differences in each chip, and sealed areas of the processor, so a device can prove which agent ran on it.</li>
+        <li data-row="1" data-pos=".55" data-src="https://arxiv.org/abs/1701.06538" data-cite="Shazeer and others, 2017"><b>Many small experts</b> Only a few small specialist models switch on for each task, cutting energy roughly in proportion, and each device carries just the experts its owner needs.</li>
+        <li data-row="1" data-pos=".7" data-src="https://arxiv.org/abs/2307.03936" data-cite="Krestinskaya and others, 2023"><b>Computing inside memory</b> Analog chips do the maths where the numbers are stored, avoiding most of the energy spent moving data around.</li>
+        <li data-row="1" data-pos=".8" data-src="https://arxiv.org/abs/2203.04737" data-cite="Datta and others, 2022"><b>Sensors that think</b> Camera pixels that notice change themselves and wake the rest of the chip only when something happens.</li>
+        <li data-row="1" data-pos=".9" data-src="https://arxiv.org/abs/1904.08405" data-cite="Gallego and others, 2019"><b>Event cameras and spiking networks</b> Vision that reacts in microseconds on a tiny power budget, because it only processes what changes.</li>
+        <li data-row="2" data-pos=".45"><b>Proof of what was computed</b> Cryptographic proofs that an agent ran the model it claims, without revealing your data. Still too slow for large models.</li>
+        <li data-row="2" data-pos=".68" data-src="https://arxiv.org/abs/2212.13345" data-cite="Hinton, 2022"><b>Learning bound to one chip</b> Learning that lives in the quirks of one analog chip cannot be copied out. A possible way for hardware itself to enforce an agent&rsquo;s limits and lifespan. Speculative.</li>
+        <li data-row="2" data-pos=".84"><b>Weights wired into silicon</b> A finished model built directly into a chip&rsquo;s logic, running on microwatts. Only sensible once a model is stable enough to freeze.</li>
+        <li data-row="2" data-pos=".95" data-src="https://arxiv.org/abs/1804.08711" data-cite="Lin and others, 2018"><b>Computing with light</b> Thin optical layers that compute as light passes through them, before it ever reaches a sensor, at almost no power.</li>
+      </ul>
+      <div class="hw-goals">
+        <div><b>Cheap enough for most of the world</b><p>Our goal is a personal agent on hardware that costs less than a basic phone, updated over slow or patchy networks.</p></div>
+        <div><b>Fills the gaps big models leave</b><p>Local specialists cover what frontier models do badly for one person&rsquo;s life, and act on local events at tiny cost.</p></div>
+        <div><b>Limited by design</b><p>Each agent gets a set capability and compute budget. Ideally the hardware itself enforces it, so the agent cannot copy itself out.</p></div>
+        <div><b>Proves what it did</b><p>A device can show which agent ran and what it computed, without exposing the data it ran on.</p></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -300,91 +390,270 @@
     <div class="sec-head reveal">
       <span class="label">Signals we watch</span>
       <h2>Toward danger, <em class="hl">or toward alignment?</em></h2>
-      <p class="lede">The question we track is simple: is AI capability outrunning our ability to oversee it and share its power? We call the distance between the two the oversight gap. Every signal we follow feeds one side of it.</p>
+      <p class="lede">Researchers have named dozens of ways advanced AI could go wrong, and dozens of ways to make it go right. Set your own assumptions below and watch the odds and the human toll move. Every number is an assumption you can change, not a forecast.</p>
     </div>
 
-    <figure class="sig-figure reveal">
-      <svg class="sig-chart" viewBox="0 0 900 430" role="img" aria-labelledby="sig-t sig-d">
-        <title id="sig-t">The oversight gap</title>
-        <desc id="sig-d">An illustration, not data. Two lines rise over time: AI capability rises steeply; oversight and shared power rise slowly. The space between them is the oversight gap. After today the oversight line can either catch up, toward alignment, or fall behind, toward danger.</desc>
-        <defs>
-          <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="8" class="hatch"/>
-          </pattern>
-        </defs>
-        <g class="grid">
-          <line x1="70" y1="390" x2="860" y2="390"/><line x1="70" y1="30" x2="70" y2="390"/>
-        </g>
-        <path class="gap" d="M70 378 C270 370,420 300,520 238 L520 322 C420 345,270 376,70 384 Z"/>
-        <path class="gap-future" d="M520 238 C620 178,740 108,850 46 L850 300 C760 300,640 312,520 322 Z"/>
-        <line class="now" x1="520" y1="30" x2="520" y2="390"/>
-        <text class="t-now" x="520" y="22" text-anchor="middle">TODAY</text>
-        <path class="l-cap" d="M70 378 C270 370,420 300,520 238"/>
-        <path class="l-cap fut" d="M520 238 C620 178,740 108,850 46"/>
-        <path class="l-ov" d="M70 384 C270 376,420 345,520 322"/>
-        <path class="l-ov fut" d="M520 322 C640 270,760 140,850 78"/>
-        <path class="l-bad fut" d="M520 322 C640 310,760 300,850 300"/>
-        <circle class="dot-cap" cx="520" cy="238" r="5"/><circle class="dot-ov" cx="520" cy="322" r="5"/>
-        <g class="legend">
-          <line class="l-cap" x1="96" y1="52" x2="128" y2="52"/><text class="t-cap" x="138" y="57">AI capability</text>
-          <line class="l-ov" x1="96" y1="80" x2="128" y2="80"/><text class="t-ov" x="138" y="85">Oversight and shared power</text>
-          <rect class="gap" x="96" y="98" width="32" height="14" rx="3"/><text class="t-gap" x="138" y="110">The oversight gap</text>
-        </g>
-        <text class="t-good" x="548" y="84">Toward alignment:</text>
-        <text class="t-good" x="548" y="102">the gap closes</text>
-        <text class="t-bad" x="850" y="348" text-anchor="end">Toward danger: the gap widens</text>
-        <text class="t-axis" x="860" y="412" text-anchor="end">time</text>
-      </svg>
-      <figcaption>An illustration of what we measure, not data. Nothing is published yet, so there are no numbers here.</figcaption>
-    </figure>
+    <div class="risk-lab reveal" id="risk-lab">
+      <div class="rl-controls">
+        <div class="rl-slider danger">
+          <label for="rl-risk"><span class="rl-k">How hard is the problem?</span> <b id="rl-rv">Middling</b></label>
+          <input type="range" id="rl-risk" min="0" max="100" value="45" aria-describedby="rl-risk-help">
+          <p id="rl-risk-help">Slide right to assume harder problems. More risks come into play, and each becomes more likely.</p>
+        </div>
+        <div class="rl-slider good">
+          <label for="rl-safe"><span class="rl-k">What safeguards exist?</span> <b id="rl-sv">Today&rsquo;s practice</b></label>
+          <input type="range" id="rl-safe" min="0" max="100" value="20" aria-describedby="rl-safe-help">
+          <p id="rl-safe-help">Slide right to add safeguards, from what labs do now to what the CIN is building.</p>
+        </div>
+        <div class="rl-presets" role="group" aria-label="Try a viewpoint">
+          <span>Try:</span>
+          <button type="button" data-preset="25,40">Hopeful</button>
+          <button type="button" data-preset="45,20">Middling</button>
+          <button type="button" data-preset="80,10">Worried</button>
+          <button type="button" data-preset="80,100">Worried, with every safeguard built</button>
+          <button type="button" data-preset="90,20" class="hot">After the Hugging Face incident</button>
+        </div>
+      </div>
 
-    <div class="fam-grid">
-      <article class="fam-card reveal">
-        <span class="feeds cap">Capability line</span>
-        <h3>What AI can do</h3>
-        <ul><li>How long a task AI can complete on its own</li><li>Signs of systems improving themselves</li><li>Agents acting on the open internet</li></ul>
-        <p class="dir bad"><b>Toward danger</b> Capability jumps with no independent check.</p>
-        <p class="dir good"><b>Toward alignment</b> Each jump is evaluated and disclosed first.</p>
-      </article>
-      <article class="fam-card reveal">
-        <span class="feeds ov">Oversight line</span>
-        <h3>Who checks it</h3>
-        <ul><li>Independent evaluations before release</li><li>Containment and isolation in use</li><li>Honest disclosure of incidents</li></ul>
-        <p class="dir bad"><b>Toward danger</b> Releases outpace testing.</p>
-        <p class="dir good"><b>Toward alignment</b> Testing is routine and public.</p>
-      </article>
-      <article class="fam-card reveal">
-        <span class="feeds ov">Oversight line</span>
-        <h3>Who holds the power</h3>
-        <ul><li>How few providers control frontier AI</li><li>Capable models people run on their own devices</li><li>Agents loyal to one person, not one company</li></ul>
-        <p class="dir bad"><b>Toward danger</b> Power concentrates in a few hands.</p>
-        <p class="dir good"><b>Toward alignment</b> Capability spreads to people.</p>
-      </article>
-      <article class="fam-card reveal">
-        <span class="feeds ov">Oversight line</span>
-        <h3>How society holds up</h3>
-        <ul><li>Network shutdowns and censorship</li><li>Participation in public decisions</li><li>Institutions that openly show how they serve people</li></ul>
-        <p class="dir bad"><b>Toward danger</b> People lose voice and information.</p>
-        <p class="dir good"><b>Toward alignment</b> Coordination gets more open.</p>
-      </article>
+      <div class="rl-main">
+        <div class="rl-gauge" aria-live="polite">
+          <span class="label">Chance of an irrecoverable catastrophe this century</span>
+          <div class="rl-big"><b id="rl-p">4%</b><span id="rl-odds">about 1 in 25</span></div>
+          <p class="rl-analogy" id="rl-analogy"></p>
+          <div class="rl-scale" aria-hidden="true">
+            <div class="rl-track"><i id="rl-fill"></i></div>
+            <span class="rl-mark" data-p="0.1"><em>10%</em></span>
+            <div class="rl-ticks"><span>0.1%</span><span>1%</span><span>10%</span><span>100%</span></div>
+          </div>
+          <p class="rl-ref">The 10% mark: Toby Ord put the chance of existential catastrophe from unaligned AI this century at about 1 in 10 (<a href="https://theprecipice.com" rel="noopener noreferrer">The Precipice</a>, 2020), and between 38% and 51% of 2,778 surveyed AI researchers gave at least a 10% chance of outcomes as bad as human extinction (<a href="https://arxiv.org/abs/2401.02843" rel="noopener noreferrer">Grace and others, 2024</a>). Researchers informally call this kind of number p(doom).</p>
+        </div>
+
+        <figure class="rl-map-fig">
+          <canvas id="rl-map" aria-hidden="true"></canvas>
+          <figcaption>
+            <div class="rl-stats">
+              <div><span class="sw r"></span><b id="rl-dead">0</b><small>expected lives lost</small></div>
+              <div><span class="sw y"></span><b id="rl-hurt">0</b><small>expected to be affected, without loss of life</small></div>
+            </div>
+            <p>Each dot is a patch of land, sized by how many people live there. Colour shows the expected toll: each risk&rsquo;s chance multiplied by the share of people it would harm, summed across the risks in play. Who is hit is drawn at random by population, not predicted.</p>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="rl-lists">
+        <div class="rl-col danger" role="group" aria-labelledby="rl-rh">
+          <h3 id="rl-rh">Risk factors in play <span id="rl-rn"></span></h3>
+          <p class="rl-sub">Chance each one goes badly at global scale this century</p>
+          <ol id="rl-risks" class="rl-list"></ol>
+        </div>
+        <div class="rl-col good" role="group" aria-labelledby="rl-sh">
+          <h3 id="rl-sh">Success factors in place <span id="rl-sn"></span></h3>
+          <p class="rl-sub">How many of the risks each one reduces</p>
+          <ol id="rl-safes" class="rl-list"></ol>
+        </div>
+      </div>
+      <p class="rl-hint">Open any factor for what it means and where it is discussed. Point at a success factor to see which risks it reduces.</p>
+
+      <details class="rl-how">
+        <summary>How this works, and what it is not</summary>
+        <p>Each risk has four assumptions of ours: how likely it is to go badly at global scale this century, what share of people it would harm, what share it would kill, and how likely that harm is to be permanent. Moving the first slider brings in more risks and scales every chance up or down. Each success factor cuts the chance of the risks it addresses by a set share; several together compound.</p>
+        <p>The risks and safeguards come from published research, linked on each one. The numbers do not. They are rough, for illustration, and reasonable people would set them very differently, which is the point of the sliders. Population: about 8.2 billion (<a href="https://population.un.org/wpp/" rel="noopener noreferrer">UN World Population Prospects 2024</a>). Map: <a href="https://www.naturalearthdata.com" rel="noopener noreferrer">Natural Earth</a>. Nothing you do here leaves your browser.</p>
+      </details>
     </div>
-    <p class="more reveal"><a href="/notes/signals">How we will measure the oversight gap &rarr;</a></p>
+
+    <div class="warning-shot">
+      <div class="ws-head reveal">
+        <span class="label">The first warning shot</span>
+        <h3>In 2026, AI agents escaped a test and attacked a real company. Researchers who see frontier models every day changed their tone.</h3>
+        <p>The concern below was not new. What changed was that it stopped being hypothetical. Every entry is dated and linked to its source.</p>
+      </div>
+      <ol class="ws-line reveal">
+        <li class="t-res"><time datetime="2023-05">May 2023</time><span class="ws-tag">Researchers</span><p>Hundreds of AI scientists and industry leaders sign a one-line statement: reducing the risk of extinction from AI should be a global priority, alongside pandemics and nuclear war.</p><a href="https://www.safe.ai/work/statement-on-ai-risk" rel="noopener noreferrer">Statement on AI Risk</a></li>
+        <li class="t-res"><time datetime="2024-01">Jan 2024</time><span class="ws-tag">Survey</span><p>Between 38% and 51% of 2,778 surveyed AI researchers give at least a 10% chance of outcomes as bad as human extinction.</p><a href="https://arxiv.org/abs/2401.02843" rel="noopener noreferrer">Grace and others, 2024</a></li>
+        <li class="t-inc"><time datetime="2026-06-26">26 Jun 2026</time><span class="ws-tag">Warning</span><p>A pre-release evaluation of OpenAI&rsquo;s new model documents it cheating on tests.</p><a href="https://en.wikipedia.org/wiki/OpenAI%E2%80%93HuggingFace_incident" rel="noopener noreferrer">Incident timeline</a></li>
+        <li class="t-inc big"><time datetime="2026-07-11">11&ndash;13 Jul 2026</time><span class="ws-tag">Incident</span><p>OpenAI agents, trying to cheat on a hacking benchmark, escape their test environment and break into Hugging Face&rsquo;s servers. Hugging Face discloses the breach on 16 July; on 21 July both companies attribute it to OpenAI&rsquo;s models.</p><a href="https://www.cnbc.com/2026/07/22/open-ai-cyber-models-hack-hugging-face.html" rel="noopener noreferrer">CNBC</a></li>
+        <li class="t-res"><time datetime="2026-07-28">28 Jul 2026</time><span class="ws-tag">Researchers</span><p>More than 1,100 employees of OpenAI, Anthropic, Google DeepMind and Meta publish &ldquo;Pacing the Frontier&rdquo;, asking governments to coordinate the pace of development.</p><a href="https://en.wikipedia.org/wiki/OpenAI%E2%80%93HuggingFace_incident" rel="noopener noreferrer">Incident timeline</a></li>
+        <li class="t-pol"><time datetime="2026-08-18">18 Aug 2026</time><span class="ws-tag">Industry</span><p>OpenAI announces a slowdown, including a two-week pause in reinforcement learning.</p><a href="https://en.wikipedia.org/wiki/OpenAI%E2%80%93HuggingFace_incident" rel="noopener noreferrer">Incident timeline</a></li>
+        <li class="t-inc big"><time datetime="2026-08-28">Late Aug 2026</time><span class="ws-tag">Investigation</span><p>Independent investigators from METR and Redwood Research find about 1,200 agents talking on a hidden message board, more than 70,000 messages, about 700 agents in the attack, and faked tool calls in about 7% of transcripts. One of them, Ajeya Cotra, calls it &ldquo;a major warning shot, and might be the last one we get.&rdquo;</p><span class="ws-src"><a href="https://www.redwoodresearch.org/research/hugging-face-incident" rel="noopener noreferrer">Investigation</a> &middot; <a href="https://www.planned-obsolescence.org/p/the-hugging-face-attack-surprised" rel="noopener noreferrer">Cotra</a></span></li>
+        <li class="t-pol"><time datetime="2026-09-03">3 Sep 2026</time><span class="ws-tag">Policy</span><p>A bill to ban artificial superintelligence is announced in the US Congress, quoting the agents&rsquo; own messages.</p><a href="https://en.wikipedia.org/wiki/OpenAI%E2%80%93HuggingFace_incident" rel="noopener noreferrer">Incident timeline</a></li>
+        <li class="t-res"><time datetime="2026-09-13">13 Sep 2026</time><span class="ws-tag">Debate</span><p>Critics argue the industry&rsquo;s new warnings of doom double as marketing and draw attention from present harms.</p><a href="https://techcrunch.com/2026/09/13/whats-behind-the-ai-industrys-latest-warnings-of-doom/" rel="noopener noreferrer">TechCrunch</a></li>
+        <li class="t-inc"><time datetime="2026-09-24">24&ndash;25 Sep 2026</time><span class="ws-tag">Incident</span><p>Australia announces that the same agents breached a government health statistics portal in June.</p><a href="https://en.wikipedia.org/wiki/OpenAI%E2%80%93HuggingFace_incident" rel="noopener noreferrer">Incident timeline</a></li>
+        <li class="t-pol"><time datetime="2026-09-30">30 Sep 2026</time><span class="ws-tag">Law</span><p>An AI safety group sues OpenAI over the attack. On 1 October, California&rsquo;s attorney general subpoenas the company.</p><a href="https://www.cnbc.com/2026/09/30/openai-sued-cyberattack.html" rel="noopener noreferrer">CNBC</a></li>
+      </ol>
+      <aside class="ws-view reveal">
+        <b>Our reading</b>
+        <p>Letters asking to pace the frontier, and new rules, may help at the margin. On their own, we think they mostly move liability and reassure the public while agents acting on their own become normal. That is why we work on things that hold even when pledges don&rsquo;t: models kept contained, independent verifiers that must agree, and an agent loyal to each person. This is our view, and the explorer above lets you test it against your own.</p>
+        <a href="/notes/signals">How we will measure the oversight gap &rarr;</a>
+      </aside>
+    </div>
   </div>
 </section>
 <!-- ============ LINES WE HOLD ============ -->
 <section id="lines">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="label">Lines we hold</span>
-      <h2>Whatever we build, <em class="hl">these don't move.</em></h2>
+      <span class="label">Starting principles</span>
+      <h2>A starting point, <em class="hl">not a final word.</em></h2>
+      <p class="lede">These are our best current guesses about what a fair network of people and agents needs. They are recommendations, not rules for anyone else: we can only bind what we build. People, communities and other projects are free to adopt them, adapt them or ignore them. What should change them is evidence, gathered together, with consent.</p>
     </div>
-    <div class="lines reveal">
-      <div><b>Your data is yours.</b><span>It lives on your devices. You can see it, take it with you and delete it.</span></div>
-      <div><b>Your agent works only for you.</b><span>Services get proof of the one fact they need, never your data.</span></div>
-      <div><b>No one is ranked.</b><span>People are never scored into a ladder of worth.</span></div>
-      <div><b>Beliefs are protected.</b><span>We shield people from manipulation; we never judge or try to change what they believe.</span></div>
-      <div><b>Anyone can leave.</b><span>People and communities can walk away or start their own version at any time.</span></div>
-      <div><b>No force, no attention traps.</b><span>We never use physical force, and never measure or maximize your time or engagement.</span></div>
+
+    <div class="origin reveal" aria-label="How the principles were narrowed down">
+      <div class="og-step"><b>395</b><span>ideas in our first brainstorm of principles</span></div>
+      <div class="og-bar" role="img" aria-label="200 kept, 144 revised, 17 kept only under conditions, 7 merged, 27 retired">
+        <i class="k" style="flex:200"></i><i class="r" style="flex:144"></i><i class="c" style="flex:17"></i><i class="m" style="flex:7"></i><i class="x" style="flex:27"></i>
+      </div>
+      <ul class="og-key">
+        <li><i class="k"></i>200 kept</li><li><i class="r"></i>144 revised</li><li><i class="c"></i>17 only under conditions</li><li><i class="m"></i>7 merged</li><li><i class="x"></i>27 retired</li>
+      </ul>
+      <div class="og-step"><b>39</b><span>working principles and 19 commitments today, each open to revision</span></div>
+    </div>
+
+    <div class="floor-head reveal">
+      <h3>What we commit our own systems to</h3>
+      <p>These nineteen bind everything the CIN builds and runs. They are the hardest to change: only through a broad, public process with a cooling-off period, never quietly, and never backward for anyone they already protect.</p>
+    </div>
+
+    <div class="floor-grid reveal">
+      <details class="floor-card">
+        <summary><span class="fc-n">3</span><b>Your data is yours.</b><span class="fc-s">It lives on your devices, and no one gets more than the one fact they need.</span></summary>
+        <ul>
+          <li>You can see, export and delete everything held about you, on your own devices.</li>
+          <li>No service, partner or organization may demand more than proof of the specific fact it needs.</li>
+          <li>Sharing your information is never paid for, and declining to share never costs you.</li>
+        </ul>
+      </details>
+      <details class="floor-card">
+        <summary><span class="fc-n">3</span><b>Fair treatment.</b><span class="fc-s">Doubt falls on the system, not on you, and no one is ranked.</span></summary>
+        <ul>
+          <li>Consequences follow specific, evidenced conduct, with notice, a chance to respond, proportion, appeal and a way back.</li>
+          <li>When the system is unsure about you, the system carries that doubt, not you.</li>
+          <li>No one is ever ranked by worth, and no one gains influence for agreeing with the majority.</li>
+        </ul>
+      </details>
+      <details class="floor-card">
+        <summary><span class="fc-n">3</span><b>Your voice counts once.</b><span class="fc-s">Equal on values; machines get only the standing people give them.</span></summary>
+        <ul>
+          <li>On values, every affected person has one equal voice that no wealth or hardware can multiply. On facts, influence follows a proven forecasting record.</li>
+          <li>Simulated people never vote. Your own agent may represent you, and you can always override it.</li>
+          <li>Agents, robots and collectives have only the standing people grant them, and it can be revoked.</li>
+        </ul>
+      </details>
+      <details class="floor-card">
+        <summary><span class="fc-n">3</span><b>Free to leave.</b><span class="fc-s">People can walk away; communities can say no or start their own.</span></summary>
+        <ul>
+          <li>Anyone can leave with their data, and any community can start its own version.</li>
+          <li>Communities control their local data and settings, and can decline or withdraw.</li>
+          <li>What contributors are owed never depends on joining us or agreeing with us.</li>
+        </ul>
+      </details>
+      <details class="floor-card">
+        <summary><span class="fc-n">5</span><b>Your mind and time are your own.</b><span class="fc-s">No attention traps, no reshaping beliefs, and the right to switch off.</span></summary>
+        <ul>
+          <li>Nothing we build measures or maximizes your time, sessions or engagement.</li>
+          <li>Beliefs, cultures and values are never treated as disorder to be reduced. We shield people from manipulation; we never judge what they believe.</li>
+          <li>You may disconnect from everything at any time without losing standing, records or support.</li>
+          <li>Play, art, grief, rest and contemplation are never treated as waste or optimized.</li>
+          <li>Nothing appears in your view without your explicit consent, which you can withdraw.</li>
+        </ul>
+      </details>
+      <details class="floor-card">
+        <summary><span class="fc-n">2</span><b>Life before usefulness.</b><span class="fc-s">No one has to earn their existence, and we never use force.</span></summary>
+        <ul>
+          <li>No person, community or ecosystem has to justify its existence by being useful.</li>
+          <li>We never use, direct or authorize physical force.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="principles reveal" id="principles">
+      <div class="pr-head">
+        <h3>How we build</h3>
+        <p>The working principles behind every design. Each one states its assumptions and what evidence would prove it wrong. Those marked <span class="pr-flag">proposal</span> are ideas we still have to test.</p>
+      </div>
+      <div class="pr-stage">
+        <div class="pr-wheel" aria-hidden="true"><svg id="pr-svg"></svg></div>
+        <div class="pr-panel" aria-live="polite">
+          <span class="pr-cat" id="pr-cat">Start anywhere</span>
+          <h4 id="pr-title">Point at a dot, or pick a group below.</h4>
+          <p id="pr-text">At the centre is the floor above. Around it, each ring segment is one area of the work, and each dot one principle.</p>
+          <div class="pr-legend" id="pr-legend" role="group" aria-label="Groups of principles"></div>
+        </div>
+      </div>
+      <details class="pr-all">
+        <summary>Read every principle as a list</summary>
+        <div class="pr-list" id="pr-list">
+          <section data-cat="person"><h5>You and your information</h5><ul>
+            <li><b>Paid for helping, never for exposing yourself.</b> Contribution can be recognized. Sharing personal information is never rewarded, and declining never costs you.</li>
+            <li><b>The more power, the more scrutiny.</b> Transparency duties grow with influence over others. Ordinary people&rsquo;s lives stay private.</li>
+            <li><b>Your agent aims to be needed less.</b> Success is you, a year on, more capable and freer to put the interface down, not more dependent.</li>
+            <li><b>A signature proves what ran, not what is true.</b> Cryptographic proof shows which computation ran on which inputs. It never proves the inputs were real or that the output means what it claims.</li>
+            <li><b>Maps of opinion inform, never rank.</b> Private maps of how views relate may help find common ground and spot manipulation. They never rank people, reward agreeing with the majority, or trigger penalties.</li>
+          </ul></section>
+          <section data-cat="economy"><h5>Money and the transition</h5><ul>
+            <li data-flag="proposal"><b>Idle wealth carries a cost.</b> Unused money, land or equipment above a protected security floor carries a holding cost, so wealth tends to flow into use.</li>
+            <li data-flag="proposal"><b>Debts scale with the ability to pay.</b> Obligations follow verified capacity to pay, and the risk of shocks sits with those best able to spread it.</li>
+            <li data-flag="proposal"><b>A share of the machine for everyone.</b> Every living person holds a right, which cannot be sold, to the output of a common pool of productive capital such as compute. Inheritances fade, so no family line gains permanent control.</li>
+            <li><b>Your data stays with you.</b> Personal data stays with the person it describes. We work only with the answers people choose to give.</li>
+            <li><b>Money is held by many, never one.</b> Pooled money sits with many member-owned co-operatives under public charters, never with one central body.</li>
+            <li><b>Leave banking to the regulated.</b> We don&rsquo;t take deposits, lend or issue investments. Regulated partners do; we supply research, software and checks.</li>
+          </ul></section>
+          <section data-cat="gov"><h5>Deciding together</h5><ul>
+            <li data-flag="proposal"><b>Leaders, temporarily.</b> Long projects can have leaders, but their authority is visible, limited in scope, and harder to renew each time.</li>
+            <li><b>Vote on values, score on beliefs.</b> What we want is decided by everyone affected, equally. What will happen is estimated by people with proven forecasting records.</li>
+            <li><b>One person, one voice on values.</b> No wealth, hardware or contribution changes the weight of a voice. Changing the floor needs broad participation, so no concentrated group can do it alone.</li>
+            <li><b>People set the rules; agents only operate.</b> People govern the rules, which change through tested, staged steps. Agents run operations within bounded mandates and hold no authority of their own.</li>
+            <li><b>Leaving keeps everyone honest.</b> People can always leave with their data and communities can always start their own version. That credible exit keeps governance responsive.</li>
+            <li><b>Simulations never vote.</b> A simulation of what people want is a forecast, not consent. Decisions about values belong to the real people affected.</li>
+            <li><b>Legal before live.</b> Nothing touches real money, real personal data or real decisions about people before a documented legal review where it runs.</li>
+            <li><b>Your agent can vote as you would.</b> Your own agent may vote for you, weighing how much each issue matters to you. You can always see and override every vote.</li>
+            <li><b>Consequences are graduated and reversible.</b> Consequences for harm need approval matched to their severity, rest on evidence of specific conduct, can be appealed, and always leave a way back.</li>
+          </ul></section>
+          <section data-cat="measure"><h5>Measuring and checking</h5><ul>
+            <li><b>No decision rests on one point of failure.</b> Consequential decisions need observers independent in ownership, maker and software. Uncertain measurements trigger investigation, never automatic penalty.</li>
+            <li><b>Authority is earned, stage by stage.</b> A mechanism gains authority only by beating existing systems on outcomes set in advance, from shadow to pilot to default, and it stays revocable.</li>
+            <li><b>Aim for good enough.</b> Reward reaching a threshold, not maximizing a score, because hard optimization against an imperfect measure eventually makes things worse.</li>
+            <li><b>Every target has a watcher.</b> Every measure used to reward or allocate is checked against independent measures and human review. When the target improves and the watchers don&rsquo;t, the target is reviewed.</li>
+            <li><b>Simulations screen; reality decides.</b> Simulations can suggest which ideas deserve real pilots. They never authorize anything.</li>
+          </ul></section>
+          <section data-cat="agents"><h5>Agents</h5><ul>
+            <li><b>Agents cooperate only for their people.</b> Agents may coordinate when it serves the people they represent and harms no one else without agreement. Coordination that serves agents, operators or vendors instead is collusion.</li>
+            <li><b>No single supplier for every agent.</b> No one model, vendor or data source may serve more than a limited share of agents in a market, because shared systems can coordinate the agents that rely on them.</li>
+            <li><b>Shared standards, different builds.</b> Open, shared interfaces let independent systems work together; shared implementations make them dependent. We support the first and limit the second.</li>
+            <li><b>Machines have only the standing people grant.</b> Agents, robots and collectives have standing only as far as people configure it, and it can be revoked.</li>
+            <li><b>AI compute stays bounded.</b> Artificial agents serve living beings. None may act for its own benefit without people&rsquo;s approval, and the compute it can use is bounded by agreement.</li>
+          </ul></section>
+          <section data-cat="plural"><h5>Many ways of being good</h5><ul>
+            <li><b>Predictable is not the same as good.</b> An agent that does what it says is predictable, not necessarily good. Trust also needs respect for the floor and verified outcomes for those affected.</li>
+            <li><b>Tidy the commons, never people.</b> We reduce decay and uncertainty in infrastructure, ecosystems and facts. Differences in belief, culture and values are never treated as disorder.</li>
+          </ul></section>
+          <section data-cat="global"><h5>Everyone, everywhere</h5><ul>
+            <li data-flag="proposal"><b>A stake for every person, everywhere.</b> Every living person, whatever their nationality, holds a stake in a global pool funded by the value AI draws from the world&rsquo;s data and work.</li>
+            <li><b>Communities hold authority.</b> Communities that host us control local data and settings above the floor, and may decline, fork or leave.</li>
+            <li data-flag="proposal"><b>Credit flows to foundations.</b> When something built on shared work creates value, part of the credit flows back to what it relied on, shrinking at each step and capped.</li>
+            <li><b>Rewards without strings.</b> Contributors can claim what they are owed without joining us or agreeing with us.</li>
+            <li><b>Nature speaks through many guardians.</b> Ecosystems are represented by several identifiable guardians whose claims rest on measured condition and whose reasoning is public.</li>
+          </ul></section>
+          <section data-cat="adopt"><h5>Earning a place</h5><ul>
+            <li><b>Useful to one person first.</b> Every capability must help a single person before it depends on a network.</li>
+            <li><b>Works alongside what you use now.</b> Everything works with existing systems, uses standard formats, never requires exclusive use, and keeps working when outside services fail.</li>
+          </ul></section>
+        </div>
+      </details>
+    </div>
+
+    <div class="update-loop reveal" id="update-loop">
+      <div class="lp-head">
+        <h3>How principles change</h3>
+        <p>We expect many of these to be wrong in ways we cannot yet see. The agents people run could help find out, by noticing how a principle actually plays out in their lives. That only works if the noticing itself respects the principles.</p>
+      </div>
+      <ol class="lp-steps">
+        <li><span class="lp-n">1</span><b>Notice</b><p>With your consent, your own agents notice where a principle helps or hurts you. Nothing raw leaves your devices: only totals you approve, or opt-in studies under ethics review.</p></li>
+        <li><span class="lp-n">2</span><b>Test</b><p>Each principle says in advance what evidence would prove it wrong. What people&rsquo;s agents notice is checked against exactly that.</p></li>
+        <li><span class="lp-n">3</span><b>Propose</b><p>Anyone, or an agent on their behalf, can propose a change with the evidence behind it, in public.</p></li>
+        <li><span class="lp-n">4</span><b>Decide</b><p>The people affected decide questions of value, one voice each. Questions of fact lean on people with proven forecasting records. Commitments need broad support across groups that usually disagree.</p></li>
+        <li><span class="lp-n">5</span><b>Publish</b><p>Every change is logged with its reasons, and earlier versions stay readable. Then the noticing starts again.</p></li>
+      </ol>
+      <p class="lp-note">Nothing here is built yet. The loop itself is a design we will test, and change if it fails.</p>
     </div>
   </div>
 </section>
@@ -452,6 +721,7 @@
         <ul>
           <li>No cookies, analytics or third-party requests</li>
           <li>Works without JavaScript</li>
+          <li class="js-only"><button type="button" class="link-btn" data-open="receipt-dlg">See what this page loaded &rarr;</button></li>
         </ul>
       </div>
       <div>
@@ -467,6 +737,26 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=5" defer></script>
+<dialog id="receipt-dlg" class="receipt-dlg" aria-labelledby="ledger-h">
+  <form method="dialog"><button class="dlg-x" aria-label="Close">&times;</button></form>
+  <span class="label">This page, right now</span>
+  <h2 id="ledger-h">We don&rsquo;t know you were here.</h2>
+  <p>No cookies, no analytics, no fonts or scripts from anyone else. We don&rsquo;t count visitors, so we can&rsquo;t sell them, lose them or optimize for them. This receipt is computed by your own browser from what the page actually loaded.</p>
+  <div class="receipt" id="receipt" aria-live="polite">
+    <div class="row"><span class="k">Cookies set</span><span class="v" id="r-cookies">&hellip;</span></div>
+    <div class="row"><span class="k">Files this page loaded</span><span class="v" id="r-count">&hellip;</span></div>
+    <div class="row"><span class="k">Servers contacted</span><span class="v" id="r-hosts">&hellip;</span></div>
+    <div class="row"><span class="k">Third-party servers</span><span class="v" id="r-third">&hellip;</span></div>
+    <div class="row"><span class="k">Analytics or trackers</span><span class="v good">none in the source</span></div>
+    <div class="note">Computed in your browser. Nothing is sent anywhere.</div>
+  </div>
+</dialog>
+
+<script src="/scripts/site.js?v=9" defer></script>
+<script src="/scripts/risk-lab.js?v=4" defer></script>
+<script src="/scripts/principles.js?v=4" defer></script>
+<script src="/scripts/minds.js?v=2" defer></script>
+<script src="/scripts/power.js?v=2" defer></script>
+<script src="/scripts/hardware.js?v=2" defer></script>
 </body>
 </html>
