@@ -48,7 +48,7 @@ These practices reduce the risk; they do not guarantee anything. Any new measure
 ## Sources
 
 - Marilyn Strathern, "'Improving ratings': audit in the British University system", *European Review* 5(3), 305–321, 1997. https://www.cambridge.org/core/journals/european-review/article/improving-ratings-audit-in-the-british-university-system/FC2EE640C0C44E3DB87C29FB666E9AAB
-- Michael G. Vann, *The Great Hanoi Rat Hunt: Empire, Disease, and Modernity in French Colonial Vietnam*, Oxford University Press, 2019. [check publication year: 2018 or 2019]
+- Michael G. Vann, *The Great Hanoi Rat Hunt: Empire, Disease, and Modernity in French Colonial Vietnam*, Oxford University Press, ISBN 9780190602697. [check publication year against the publisher's page before publishing: listings show 2018 and 2019]
 - Consumer Financial Protection Bureau, "Consumer Financial Protection Bureau fines Wells Fargo $100 million for widespread illegal practice of secretly opening unauthorized accounts", 8 September 2016. https://www.consumerfinance.gov/about-us/newsroom/consumer-financial-protection-bureau-fines-wells-fargo-100-million-widespread-illegal-practice-secretly-opening-unauthorized-accounts/
 - David Manheim and Scott Garrabrant, "Categorizing Variants of Goodhart's Law", 2018. https://arxiv.org/abs/1803.04585
 - Leo Gao, John Schulman and Jacob Hilton, "Scaling Laws for Reward Model Overoptimization", 2022. https://arxiv.org/abs/2210.10760
