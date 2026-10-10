@@ -6,6 +6,26 @@ export const DEFAULT_TWIN_STATE = Object.freeze({
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
 
+export function isGrantExpired(grant, asOfTime = null) {
+  if (!grant || !grant.expires_at) return false;
+  let nowMs;
+  if (asOfTime === null || asOfTime === undefined) {
+    nowMs = Date.now();
+  } else if (typeof asOfTime === 'string') {
+    nowMs = Date.parse(asOfTime);
+  } else if (asOfTime instanceof Date) {
+    nowMs = asOfTime.getTime();
+  } else if (typeof asOfTime === 'number' && Number.isFinite(asOfTime)) {
+    nowMs = asOfTime;
+  } else {
+    throw new Error('Invalid asOfTime provided');
+  }
+  if (isNaN(nowMs)) throw new Error('Invalid asOfTime provided');
+  const expMs = Date.parse(grant.expires_at);
+  if (isNaN(expMs)) return true;
+  return nowMs >= expMs;
+}
+
 export function validateTwinState(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
     return { ok: false, error: 'Twin state must be an object' };
@@ -34,7 +54,7 @@ export function validateTwinState(raw) {
     if (!g || typeof g !== 'object' || Array.isArray(g)) {
       return { ok: false, error: `grant at index ${i} must be an object` };
     }
-    if (Object.keys(g).some((k) => k !== 'who' && k !== 'what' && k !== 'at')) {
+    if (Object.keys(g).some((k) => k !== 'who' && k !== 'what' && k !== 'at' && k !== 'expires_at')) {
       return { ok: false, error: `grant at index ${i} has unknown fields` };
     }
     if (typeof g.who !== 'string' || !g.who.trim() || g.who.trim().length > 60) {
@@ -46,7 +66,14 @@ export function validateTwinState(raw) {
     if (typeof g.at !== 'string' || !ISO_RE.test(g.at) || isNaN(Date.parse(g.at))) {
       return { ok: false, error: `grant at index ${i} at field must be an ISO date string` };
     }
-    cleanGrants.push({ who: g.who.trim(), what: g.what.trim(), at: g.at });
+    let cleanExpiresAt = null;
+    if (g.expires_at !== undefined && g.expires_at !== null) {
+      if (typeof g.expires_at !== 'string' || !ISO_RE.test(g.expires_at) || isNaN(Date.parse(g.expires_at))) {
+        return { ok: false, error: `grant at index ${i} expires_at field must be an ISO date string or null` };
+      }
+      cleanExpiresAt = g.expires_at;
+    }
+    cleanGrants.push({ who: g.who.trim(), what: g.what.trim(), at: g.at, expires_at: cleanExpiresAt });
   }
   return { ok: true, value: { topics: cleanTopics, grants: cleanGrants } };
 }
@@ -66,7 +93,7 @@ export function serializeTwinState(state) {
   return JSON.stringify(check.value, null, 2);
 }
 
-export function evaluateAccessRequest(state, service, requestedScope) {
+export function evaluateAccessRequest(state, service, requestedScope, asOfTime = null) {
   const check = validateTwinState(state);
   if (!check.ok) {
     return { allowed: false, reason: 'Invalid twin state: ' + check.error };
@@ -77,6 +104,21 @@ export function evaluateAccessRequest(state, service, requestedScope) {
   if (typeof requestedScope !== 'string' || !requestedScope.trim() || requestedScope.trim().length > 80) {
     return { allowed: false, reason: 'Requested scope must be a non-empty string up to 80 characters' };
   }
+  if (asOfTime !== null && asOfTime !== undefined) {
+    let testMs;
+    if (typeof asOfTime === 'string') {
+      testMs = Date.parse(asOfTime);
+    } else if (asOfTime instanceof Date) {
+      testMs = asOfTime.getTime();
+    } else if (typeof asOfTime === 'number' && Number.isFinite(asOfTime)) {
+      testMs = asOfTime;
+    } else {
+      return { allowed: false, reason: 'Invalid asOfTime parameter' };
+    }
+    if (isNaN(testMs)) {
+      return { allowed: false, reason: 'Invalid asOfTime parameter' };
+    }
+  }
   const cleanService = service.trim().toLowerCase();
   const cleanScope = requestedScope.trim().toLowerCase();
   if (check.value.grants.length === 0) {
@@ -86,11 +128,19 @@ export function evaluateAccessRequest(state, service, requestedScope) {
   if (matchingServiceGrants.length === 0) {
     return { allowed: false, reason: 'Service not in authorized grant list' };
   }
+  let sawScopeMatchButExpired = false;
   for (const g of matchingServiceGrants) {
     const scopes = g.what.toLowerCase().split(',').map((s) => s.trim()).filter(Boolean);
     if (scopes.includes('*') || scopes.includes(cleanScope)) {
+      if (isGrantExpired(g, asOfTime)) {
+        sawScopeMatchButExpired = true;
+        continue;
+      }
       return { allowed: true, reason: 'Authorized by active grant', grant: g };
     }
+  }
+  if (sawScopeMatchButExpired) {
+    return { allowed: false, reason: 'Grant has expired' };
   }
   return { allowed: false, reason: 'Service authorized, but requested scope not granted' };
 }
@@ -99,7 +149,7 @@ export function createConsentReceipt(grant, subjectId = 'local-user') {
   if (!grant || typeof grant !== 'object' || Array.isArray(grant)) {
     throw new Error('Grant must be an object');
   }
-  if (Object.keys(grant).some((k) => k !== 'who' && k !== 'what' && k !== 'at')) {
+  if (Object.keys(grant).some((k) => k !== 'who' && k !== 'what' && k !== 'at' && k !== 'expires_at')) {
     throw new Error('Grant has unknown fields');
   }
   if (typeof grant.who !== 'string' || !grant.who.trim() || grant.who.trim().length > 60) {
@@ -110,6 +160,13 @@ export function createConsentReceipt(grant, subjectId = 'local-user') {
   }
   if (typeof grant.at !== 'string' || !ISO_RE.test(grant.at) || isNaN(Date.parse(grant.at))) {
     throw new Error('Grant at field must be an ISO date string');
+  }
+  let receiptExpiresAt = null;
+  if (grant.expires_at !== undefined && grant.expires_at !== null) {
+    if (typeof grant.expires_at !== 'string' || !ISO_RE.test(grant.expires_at) || isNaN(Date.parse(grant.expires_at))) {
+      throw new Error('Grant expires_at field must be an ISO date string or null');
+    }
+    receiptExpiresAt = grant.expires_at;
   }
   if (subjectId !== undefined) {
     if (typeof subjectId !== 'string' || !subjectId.trim() || subjectId.trim().length > 80) {
@@ -129,8 +186,8 @@ export function createConsentReceipt(grant, subjectId = 'local-user') {
     recipient: cleanWho,
     purposes_and_scopes: scopes,
     timestamp: grant.at,
-    status: 'granted',
+    expires_at: receiptExpiresAt,
+    status: receiptExpiresAt && isGrantExpired(grant) ? 'expired' : 'granted',
     jurisdiction_or_policy: 'Local device sovereignty (client-side only)'
   });
 }
-
