@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js';
-import { validateTwinState, deserializeTwinState, serializeTwinState } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -15,6 +15,28 @@ function renderGrants() {
   if (!state.grants.length) ul.appendChild(el('li', 'muted', 'Nobody yet. Your twin refuses everyone you have not listed.'));
   state.grants.forEach((g, i) => {
     const li = el('li'); li.append(el('b', null, g.who), document.createTextNode(' may see ' + g.what + ' '));
+    const rec = el('button', 'btn', 'Receipt');
+    rec.style.marginRight = '0.4rem';
+    rec.onclick = () => {
+      const status = document.getElementById('data-status');
+      try {
+        const receipt = createConsentReceipt(g);
+        const blob = new Blob([JSON.stringify(receipt, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const safeWho = g.who.replace(/[^a-z0-9_-]/gi, '_').toLowerCase();
+        a.href = url;
+        a.download = `cin-consent-receipt-${safeWho}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        if (status) status.textContent = 'Downloaded consent receipt for ' + g.who + '.';
+      } catch (err) {
+        if (status) status.textContent = 'Could not generate consent receipt.';
+      }
+    };
+    li.appendChild(rec);
     const x = el('button', 'btn', 'Revoke'); x.onclick = () => { const next = state.grants.filter((_, idx) => idx !== i); if (save({ ...state, grants: next })) { state.grants = next; renderGrants(); } };
     li.appendChild(x); ul.appendChild(li);
   });
