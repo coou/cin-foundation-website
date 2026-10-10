@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, calculatePersonalTrajectory } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -52,14 +52,42 @@ function renderGrants() {
 
 function renderQuest() {
   const ul = document.getElementById('quest');
-  if (!state.topics.length) return;
+  const summaryBox = document.getElementById('trajectory-summary');
+  if (!state.topics.length) {
+    if (ul) {
+      ul.textContent = '';
+      ul.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
+    }
+    if (summaryBox) summaryBox.textContent = '';
+    return;
+  }
   getJSON('/data/signals.json').then((sigs) => {
-    const mine = new Set(state.topics.flatMap(words));
-    const scored = sigs.map((s) => ({ s, n: words(s.title + ' ' + s.summary).filter((w) => mine.has(w)).length })).filter((x) => x.n).sort((a, b) => b.n - a.n).slice(0, 3);
+    const trajectory = calculatePersonalTrajectory(state.topics, sigs);
     ul.textContent = '';
-    if (!scored.length) { ul.appendChild(el('li', 'muted', 'Nothing today touches your topics.')); return; }
-    scored.forEach(({ s }) => { const li = el('li'); const a = el('a', null, s.title); a.href = /^https?:/.test(s.url) ? s.url : '#'; a.rel = 'noopener noreferrer'; li.append(a, el('div', 'muted', s.summary)); ul.appendChild(li); });
-  }).catch(() => { ul.textContent = ''; ul.appendChild(el('li', 'muted', 'Today’s sources could not be loaded.')); });
+    if (!trajectory.matching_signals.length) {
+      ul.appendChild(el('li', 'muted', 'Nothing today touches your topics.'));
+      if (summaryBox) summaryBox.textContent = '';
+      return;
+    }
+    trajectory.matching_signals.slice(0, 3).forEach((s) => {
+      const li = el('li');
+      const a = el('a', null, s.title);
+      a.href = /^https?:/.test(s.url) ? s.url : '#';
+      a.rel = 'noopener noreferrer';
+      const badge = el('small', 'muted', ` (${s.direction}, weight ${s.weight})`);
+      li.append(a, badge, el('div', 'muted', s.summary || ''));
+      ul.appendChild(li);
+    });
+    if (summaryBox) {
+      summaryBox.textContent = '';
+      const p = el('p', 'muted', `Personal alignment balance: ${trajectory.score.toFixed(1)} / 100 (${trajectory.toward_count} toward, ${trajectory.away_count} away across ${trajectory.total_matching} matching source(s)). Computed locally.`);
+      summaryBox.appendChild(p);
+    }
+  }).catch(() => {
+    ul.textContent = '';
+    ul.appendChild(el('li', 'muted', 'Today’s sources could not be loaded.'));
+    if (summaryBox) summaryBox.textContent = '';
+  });
 }
 
 const f = document.getElementById('interests');
@@ -121,6 +149,7 @@ if (wipeBtn) wipeBtn.onclick = () => {
   try { localStorage.removeItem(KEY); } catch (e) { /* nothing */ }
   state = { topics: [], grants: [] }; f.reset(); renderGrants();
   const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
+  const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
