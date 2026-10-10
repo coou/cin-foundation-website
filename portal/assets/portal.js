@@ -28,16 +28,31 @@ export function mountAuth(onUser) {
           const out = el('button', 'btn', 'Sign out'); out.onclick = () => signOut(b.auth); box.appendChild(out);
         } else {
           const inn = el('button', 'btn primary', 'Sign in with Google');
-          inn.onclick = () => signInWithPopup(b.auth, new GoogleAuthProvider()).catch((e) => {
-            const why = e && e.code === 'auth/operation-not-allowed' ? 'Sign-in is being switched on; try again soon.' : 'Sign-in did not complete.';
-            box.appendChild(el('span', 'muted', ' ' + why));
-          });
-          box.appendChild(inn);
+          const msg = el('span', 'muted');                 // one message, replaced on every attempt
+          msg.setAttribute('role', 'status');
+          inn.onclick = () => {
+            msg.textContent = '';
+            signInWithPopup(b.auth, new GoogleAuthProvider()).catch((e) => { msg.textContent = signInProblem(e && e.code); });
+          };
+          box.append(inn, msg);
         }
       }
       onUser(user);
     });
   });
+}
+
+function signInProblem(code) {
+  const known = {
+    'auth/configuration-not-found': 'Sign-in is not switched on for this site yet.',
+    'auth/operation-not-allowed': 'Google sign-in is not switched on for this site yet.',
+    'auth/unauthorized-domain': 'Sign-in is not allowed from this address yet.',
+    'auth/popup-blocked': 'Your browser blocked the sign-in window. Allow pop-ups for this site and try again.',
+    'auth/popup-closed-by-user': 'The sign-in window was closed before finishing.',
+    'auth/cancelled-popup-request': 'Another sign-in window is already open.',
+    'auth/network-request-failed': 'Sign-in could not reach Google. Check your connection.',
+  };
+  return known[code] || 'Sign-in did not complete' + (code ? ' (' + code.replace('auth/', '') + ').' : '.');
 }
 
 export function bars(host, cats) {

@@ -1,5 +1,5 @@
 // Network home: headline numbers, the live trajectory and the latest ideas.
-import { backend, mountAuth, el, getJSON, ago, bars } from './portal.js';
+import { backend, mountAuth, el, getJSON, ago, bars } from './portal.js?v=2';
 import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 mountAuth(() => {});

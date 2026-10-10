@@ -1,5 +1,5 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
-import { mountAuth, el, getJSON } from './portal.js';
+import { mountAuth, el, getJSON } from './portal.js?v=2';
 import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired } from './twin-core.js';
 
 mountAuth(() => {});

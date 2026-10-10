@@ -1,5 +1,5 @@
 // Transparency dashboard: what the agents read, built, checked and published (data refreshed every hour).
-import { mountAuth, el, getJSON, ago } from './portal.js';
+import { mountAuth, el, getJSON, ago } from './portal.js?v=2';
 
 function table(host, head, rows) {
   const t = el('table'); const tr = el('tr'); head.forEach((h) => tr.appendChild(el('th', null, h))); t.appendChild(tr);

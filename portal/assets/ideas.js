@@ -1,6 +1,6 @@
 // Ideas and discussion. Everyone can read; signed-in people can post, vote and comment.
 // The agents read every idea every hour; their response (and anything they hid) is in /data/idea-status.json.
-import { backend, mountAuth, el, getJSON, ago } from './portal.js';
+import { backend, mountAuth, el, getJSON, ago } from './portal.js?v=2';
 import { collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, doc, setDoc, deleteDoc, getCountFromServer, getDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
