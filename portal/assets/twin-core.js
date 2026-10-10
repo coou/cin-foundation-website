@@ -15,6 +15,21 @@ export const ALLOWED_ACTION_STATUSES = Object.freeze([
   'rejected'
 ]);
 
+export const ALLOWED_OBLIGATION_CATEGORIES = Object.freeze([
+  'renewal',
+  'contract',
+  'warranty',
+  'tax',
+  'document',
+  'other'
+]);
+
+export const ALLOWED_OBLIGATION_STATUSES = Object.freeze([
+  'active',
+  'completed',
+  'dismissed'
+]);
+
 export const ALLOWED_EVENT_TYPES = Object.freeze([
   'topics_updated',
   'grant_created',
@@ -25,6 +40,9 @@ export const ALLOWED_EVENT_TYPES = Object.freeze([
   'action_approved',
   'action_denied',
   'action_cleared',
+  'obligation_added',
+  'obligation_resolved',
+  'obligation_removed',
   'data_exported',
   'data_imported',
   'log_cleared'
@@ -35,7 +53,8 @@ export const DEFAULT_TWIN_STATE = Object.freeze({
   grants: Object.freeze([]),
   contributions: Object.freeze([]),
   actions: Object.freeze([]),
-  events: Object.freeze([])
+  events: Object.freeze([]),
+  obligations: Object.freeze([])
 });
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
@@ -65,7 +84,7 @@ export function validateTwinState(raw) {
     return { ok: false, error: 'Twin state must be an object' };
   }
   const keys = Object.keys(raw);
-  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions' && k !== 'events')) {
+  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions' && k !== 'events' && k !== 'obligations')) {
     return { ok: false, error: 'Unknown field in twin state' };
   }
   if (!Array.isArray(raw.topics) || raw.topics.length > 20) {
@@ -214,7 +233,39 @@ export function validateTwinState(raw) {
     cleanEvents.push({ id: e.id.trim(), type: eventType, detail: e.detail.trim(), at: e.at });
   }
 
-  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions, events: cleanEvents } };
+  const rawObligations = raw.obligations !== undefined ? raw.obligations : [];
+  if (!Array.isArray(rawObligations) || rawObligations.length > 50) return { ok: false, error: 'obligations must be a list of at most 50 items' };
+  const cleanObligations = [];
+  const CALENDAR_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  for (let i = 0; i < rawObligations.length; i++) {
+    const o = rawObligations[i];
+    if (!o || typeof o !== 'object' || Array.isArray(o)) return { ok: false, error: `obligation at index ${i} must be an object` };
+    if (Object.keys(o).some((k) => !['id', 'title', 'category', 'due_date', 'lead_days', 'status', 'notes', 'at', 'resolved_at'].includes(k))) return { ok: false, error: `obligation at index ${i} has unknown fields` };
+    if (typeof o.id !== 'string' || !o.id.trim() || o.id.trim().length > 40 || !/^[a-zA-Z0-9_-]+$/.test(o.id.trim())) return { ok: false, error: `obligation at index ${i} id must be an alphanumeric string up to 40 characters` };
+    if (typeof o.title !== 'string' || !o.title.trim() || o.title.trim().length > 80) return { ok: false, error: `obligation at index ${i} title must be a string up to 80 characters` };
+    const cat = typeof o.category === 'string' ? o.category.trim().toLowerCase() : '';
+    if (!ALLOWED_OBLIGATION_CATEGORIES.includes(cat)) return { ok: false, error: `obligation at index ${i} category must be one of: ${ALLOWED_OBLIGATION_CATEGORIES.join(', ')}` };
+    if (typeof o.due_date !== 'string' || !CALENDAR_DATE_RE.test(o.due_date) || isNaN(Date.parse(o.due_date + 'T00:00:00Z'))) return { ok: false, error: `obligation at index ${i} due_date must be a valid YYYY-MM-DD date string` };
+    if (typeof o.lead_days !== 'number' || !Number.isInteger(o.lead_days) || o.lead_days < 0 || o.lead_days > 365) return { ok: false, error: `obligation at index ${i} lead_days must be an integer between 0 and 365` };
+    const status = typeof o.status === 'string' ? o.status.trim().toLowerCase() : '';
+    if (!ALLOWED_OBLIGATION_STATUSES.includes(status)) return { ok: false, error: `obligation at index ${i} status must be one of: ${ALLOWED_OBLIGATION_STATUSES.join(', ')}` };
+    let cleanNotes = null;
+    if (o.notes !== undefined && o.notes !== null) {
+      if (typeof o.notes !== 'string' || o.notes.trim().length > 100) return { ok: false, error: `obligation at index ${i} notes must be a string up to 100 characters or null` };
+      cleanNotes = o.notes.trim();
+    }
+    if (typeof o.at !== 'string' || !ISO_RE.test(o.at) || isNaN(Date.parse(o.at))) return { ok: false, error: `obligation at index ${i} at field must be an ISO date string` };
+    let cleanResolvedAt = null;
+    if (o.resolved_at !== undefined && o.resolved_at !== null) {
+      if (typeof o.resolved_at !== 'string' || !ISO_RE.test(o.resolved_at) || isNaN(Date.parse(o.resolved_at))) return { ok: false, error: `obligation at index ${i} resolved_at must be an ISO date string or null` };
+      cleanResolvedAt = o.resolved_at;
+    }
+    if (status === 'active' && cleanResolvedAt !== null) return { ok: false, error: `obligation at index ${i} active obligation cannot have resolved_at` };
+    if (status !== 'active' && !cleanResolvedAt) return { ok: false, error: `obligation at index ${i} resolved_at required when status is not active` };
+    cleanObligations.push({ id: o.id.trim(), title: o.title.trim(), category: cat, due_date: o.due_date, lead_days: o.lead_days, status, notes: cleanNotes, at: o.at, resolved_at: cleanResolvedAt });
+  }
+
+  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions, events: cleanEvents, obligations: cleanObligations } };
 }
 
 export function deserializeTwinState(jsonStr) {
@@ -786,3 +837,102 @@ export function queueAccessAsPendingAction(state, service, requestedScope, times
   if (!val.ok) return { ok: false, error: val.error };
   return { ok: true, state: val.value, action: Object.freeze(newAction) };
 }
+
+/**
+ * Calculate deterministic urgency for an obligation relative to a reference date.
+ * Fail-closed: invalid obligation or date throws Error.
+ */
+export function calculateObligationUrgency(obligation, asOfDate = null) {
+  if (!obligation || typeof obligation !== 'object' || Array.isArray(obligation)) {
+    throw new Error('obligation must be an object');
+  }
+  if (typeof obligation.due_date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(obligation.due_date)) {
+    throw new Error('obligation due_date must be a valid YYYY-MM-DD date string');
+  }
+  const lead = typeof obligation.lead_days === 'number' && Number.isInteger(obligation.lead_days) ? obligation.lead_days : 30;
+  let asOfMs;
+  if (asOfDate === null || asOfDate === undefined) {
+    const now = new Date();
+    asOfMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  } else if (typeof asOfDate === 'string') {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(asOfDate)) {
+      asOfMs = Date.parse(asOfDate + 'T00:00:00Z');
+    } else {
+      const parsed = Date.parse(asOfDate);
+      if (isNaN(parsed)) throw new Error('Invalid asOfDate provided');
+      const d = new Date(parsed);
+      asOfMs = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    }
+  } else if (asOfDate instanceof Date && !isNaN(asOfDate.getTime())) {
+    asOfMs = Date.UTC(asOfDate.getUTCFullYear(), asOfDate.getUTCMonth(), asOfDate.getUTCDate());
+  } else {
+    throw new Error('Invalid asOfDate provided');
+  }
+  if (isNaN(asOfMs)) throw new Error('Invalid asOfDate provided');
+  const dueMs = Date.parse(obligation.due_date + 'T00:00:00Z');
+  if (isNaN(dueMs)) throw new Error('Invalid due_date');
+  const daysRemaining = Math.round((dueMs - asOfMs) / 86400000);
+  const isOverdue = daysRemaining < 0;
+  const isDue = daysRemaining === 0;
+  const isUrgent = daysRemaining >= 0 && daysRemaining <= lead;
+  return Object.freeze({
+    days_remaining: daysRemaining,
+    is_overdue: isOverdue,
+    is_due: isDue,
+    is_urgent: isUrgent
+  });
+}
+
+/**
+ * Summarize a list of obligations into aggregate counts. Fail-closed.
+ */
+export function summarizeObligations(obligations, asOfDate = null) {
+  if (!Array.isArray(obligations)) {
+    return Object.freeze({
+      total: 0,
+      active: 0,
+      urgent: 0,
+      overdue: 0,
+      completed: 0,
+      dismissed: 0,
+      by_category: Object.freeze({})
+    });
+  }
+  const byCategory = {};
+  for (const c of ALLOWED_OBLIGATION_CATEGORIES) byCategory[c] = 0;
+  let active = 0, urgent = 0, overdue = 0, completed = 0, dismissed = 0, total = 0;
+  for (let i = 0; i < obligations.length; i++) {
+    const o = obligations[i];
+    if (!o || typeof o !== 'object' || Array.isArray(o) || typeof o.id !== 'string') continue;
+    const cat = typeof o.category === 'string' ? o.category.trim().toLowerCase() : '';
+    if (ALLOWED_OBLIGATION_CATEGORIES.includes(cat)) {
+      byCategory[cat] = (byCategory[cat] || 0) + 1;
+    }
+    const status = typeof o.status === 'string' ? o.status.trim().toLowerCase() : '';
+    if (status === 'completed') {
+      completed++;
+      total++;
+    } else if (status === 'dismissed') {
+      dismissed++;
+      total++;
+    } else if (status === 'active') {
+      active++;
+      total++;
+      try {
+        const u = calculateObligationUrgency(o, asOfDate);
+        if (u.is_overdue) overdue++;
+        else if (u.is_urgent) urgent++;
+      } catch (e) { /* ignore */ }
+    }
+  }
+  return Object.freeze({
+    total,
+    active,
+    urgent,
+    overdue,
+    completed,
+    dismissed,
+    by_category: Object.freeze(byCategory)
+  });
+}
+
