@@ -1,10 +1,11 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
-const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || { topics: [], grants: [] }; } catch (e) { return { topics: [], grants: [] }; } };
-const save = (s) => { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { /* storage unavailable: the twin forgets on reload */ } };
+const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [] }; } catch (e) { return { topics: [], grants: [] }; } };
+const save = (s) => { const c = validateTwinState(s); if (!c.ok) return false; try { localStorage.setItem(KEY, JSON.stringify(c.value)); return true; } catch (e) { return false; } };
 let state = load();
 
 function words(text) { return (text || '').toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2); }
@@ -14,7 +15,7 @@ function renderGrants() {
   if (!state.grants.length) ul.appendChild(el('li', 'muted', 'Nobody yet. Your twin refuses everyone you have not listed.'));
   state.grants.forEach((g, i) => {
     const li = el('li'); li.append(el('b', null, g.who), document.createTextNode(' may see ' + g.what + ' '));
-    const x = el('button', 'btn', 'Revoke'); x.onclick = () => { state.grants.splice(i, 1); save(state); renderGrants(); };
+    const x = el('button', 'btn', 'Revoke'); x.onclick = () => { const next = state.grants.filter((_, idx) => idx !== i); if (save({ ...state, grants: next })) { state.grants = next; renderGrants(); } };
     li.appendChild(x); ul.appendChild(li);
   });
 }
@@ -33,8 +34,61 @@ function renderQuest() {
 
 const f = document.getElementById('interests');
 f.elements.topics.value = state.topics.join(', ');
-f.onsubmit = (e) => { e.preventDefault(); state.topics = f.elements.topics.value.split(',').map((t) => t.trim()).filter(Boolean).slice(0, 20); save(state); document.getElementById('saved').textContent = 'Saved on this device only.'; renderQuest(); };
+f.onsubmit = (e) => {
+  e.preventDefault();
+  const topics = f.elements.topics.value.split(',').map((t) => t.trim().slice(0, 60)).filter(Boolean).slice(0, 20);
+  const next = { ...state, topics };
+  if (save(next)) { state = next; document.getElementById('saved').textContent = 'Saved on this device only.'; renderQuest(); }
+  else { document.getElementById('saved').textContent = 'Could not save topics.'; }
+};
+
 const g = document.getElementById('grant');
-g.onsubmit = (e) => { e.preventDefault(); const who = g.elements.who.value.trim(), what = g.elements.what.value.trim(); if (!who || !what) return; state.grants.push({ who, what, at: new Date().toISOString() }); save(state); g.reset(); renderGrants(); };
-document.getElementById('wipe').onclick = () => { try { localStorage.removeItem(KEY); } catch (e) { /* nothing stored */ } state = { topics: [], grants: [] }; f.reset(); renderGrants(); document.getElementById('quest').textContent = ''; };
+g.onsubmit = (e) => {
+  e.preventDefault();
+  const status = document.getElementById('data-status');
+  if (state.grants.length >= 50) { if (status) status.textContent = 'Maximum of 50 grants reached. Revoke an existing grant first.'; return; }
+  const who = g.elements.who.value.trim().slice(0, 60), what = g.elements.what.value.trim().slice(0, 80);
+  if (!who || !what) return;
+  const next = { ...state, grants: state.grants.concat([{ who, what, at: new Date().toISOString() }]) };
+  if (save(next)) { state = next; g.reset(); renderGrants(); }
+};
+
+const exportBtn = document.getElementById('export');
+if (exportBtn) exportBtn.onclick = () => {
+  const status = document.getElementById('data-status');
+  try {
+    const blob = new Blob([serializeTwinState(state)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a');
+    a.href = url; a.download = 'cin-twin-backup.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    if (status) status.textContent = 'Backup downloaded as cin-twin-backup.json.';
+  } catch (err) { if (status) status.textContent = 'Could not create backup file.'; }
+};
+
+const importInput = document.getElementById('import-file');
+if (importInput) importInput.onchange = (e) => {
+  const status = document.getElementById('data-status');
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  if (file.size > 200000) { if (status) status.textContent = 'File is too large (maximum 200 KB).'; importInput.value = ''; return; }
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const res = deserializeTwinState(evt.target && evt.target.result);
+    if (!res.ok) { if (status) status.textContent = 'Could not restore backup: ' + res.error; importInput.value = ''; return; }
+    if (save(res.value)) {
+      state = res.value; f.elements.topics.value = state.topics.join(', '); renderGrants(); renderQuest();
+      if (status) status.textContent = 'Backup restored successfully on this device.';
+    }
+    importInput.value = '';
+  };
+  reader.readAsText(file);
+};
+
+const wipeBtn = document.getElementById('wipe');
+if (wipeBtn) wipeBtn.onclick = () => {
+  try { localStorage.removeItem(KEY); } catch (e) { /* nothing */ }
+  state = { topics: [], grants: [] }; f.reset(); renderGrants();
+  const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
+  const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
+};
+
 renderGrants(); renderQuest();
