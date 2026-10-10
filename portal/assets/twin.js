@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -14,7 +14,15 @@ function renderGrants() {
   const ul = document.getElementById('grants'); ul.textContent = '';
   if (!state.grants.length) ul.appendChild(el('li', 'muted', 'Nobody yet. Your twin refuses everyone you have not listed.'));
   state.grants.forEach((g, i) => {
-    const li = el('li'); li.append(el('b', null, g.who), document.createTextNode(' may see ' + g.what + ' '));
+    const li = el('li');
+    let validityNote = ' ';
+    if (g.expires_at) {
+      const expDate = g.expires_at.slice(0, 10);
+      validityNote = isGrantExpired(g) ? ` (expired ${expDate}) ` : ` (expires ${expDate}) `;
+    } else {
+      validityNote = ' (indefinite) ';
+    }
+    li.append(el('b', null, g.who), document.createTextNode(' may see ' + g.what + validityNote));
     const rec = el('button', 'btn', 'Receipt');
     rec.style.marginRight = '0.4rem';
     rec.onclick = () => {
@@ -71,7 +79,10 @@ g.onsubmit = (e) => {
   if (state.grants.length >= 50) { if (status) status.textContent = 'Maximum of 50 grants reached. Revoke an existing grant first.'; return; }
   const who = g.elements.who.value.trim().slice(0, 60), what = g.elements.what.value.trim().slice(0, 80);
   if (!who || !what) return;
-  const next = { ...state, grants: state.grants.concat([{ who, what, at: new Date().toISOString() }]) };
+  const duration = parseInt(g.elements.duration ? g.elements.duration.value : '30', 10);
+  const now = new Date();
+  const expires_at = duration > 0 ? new Date(now.getTime() + duration * 86400000).toISOString() : null;
+  const next = { ...state, grants: state.grants.concat([{ who, what, at: now.toISOString(), expires_at }]) };
   if (save(next)) { state = next; g.reset(); renderGrants(); }
 };
 
