@@ -726,5 +726,63 @@ export function summarizeEvents(events) {
   return Object.freeze({ total: validTotal, by_type: Object.freeze(by_type), latest: latest ? Object.freeze({ ...latest }) : null });
 }
 
-
-
+/**
+ * Queue an access request as a pending action when unauthorized or requiring explicit review.
+ * Fail-closed: invalid state or parameters reject with { ok: false, error: ... }.
+ *
+ * @param {object} state Current twin state
+ * @param {string} service Service/assistant making the request
+ * @param {string} requestedScope Requested scope
+ * @param {string|Date|number|null} timestamp Optional timestamp (defaults to now)
+ * @param {string|null} id Optional custom action ID
+ * @returns {object} { ok: boolean, state?: object, action?: object, error?: string }
+ */
+export function queueAccessAsPendingAction(state, service, requestedScope, timestamp = null, id = null) {
+  const check = validateTwinState(state);
+  if (!check.ok) return { ok: false, error: 'Invalid twin state: ' + check.error };
+  if (typeof service !== 'string' || !service.trim() || service.trim().length > 60) {
+    return { ok: false, error: 'Service identifier must be a non-empty string up to 60 characters' };
+  }
+  if (typeof requestedScope !== 'string' || !requestedScope.trim() || requestedScope.trim().length > 80) {
+    return { ok: false, error: 'Requested scope must be a non-empty string up to 80 characters' };
+  }
+  let atIso;
+  if (timestamp === null || timestamp === undefined) {
+    atIso = new Date().toISOString();
+  } else if (typeof timestamp === 'string') {
+    if (!ISO_RE.test(timestamp) || isNaN(Date.parse(timestamp))) {
+      return { ok: false, error: 'timestamp must be an ISO date string' };
+    }
+    atIso = timestamp;
+  } else if (timestamp instanceof Date && !isNaN(timestamp.getTime())) {
+    atIso = timestamp.toISOString();
+  } else if (typeof timestamp === 'number' && Number.isFinite(timestamp)) {
+    atIso = new Date(timestamp).toISOString();
+  } else {
+    return { ok: false, error: 'Invalid timestamp parameter' };
+  }
+  let actionId = id || ('act-' + Date.parse(atIso).toString(36) + '-' + Math.random().toString(36).slice(2, 6));
+  if (typeof actionId !== 'string' || !actionId.trim() || actionId.trim().length > 40 || !/^[a-zA-Z0-9_-]+$/.test(actionId.trim())) {
+    return { ok: false, error: 'Invalid action id' };
+  }
+  const desc = `Access requested: ${requestedScope.trim()}`;
+  if (desc.length > 100) {
+    return { ok: false, error: 'Generated action description exceeds 100 characters' };
+  }
+  const newAction = {
+    id: actionId.trim(),
+    who: service.trim(),
+    description: desc,
+    at: atIso,
+    status: 'pending',
+    decided_at: null
+  };
+  const existing = Array.isArray(check.value.actions) ? check.value.actions : [];
+  if (existing.length >= 50) {
+    return { ok: false, error: 'Pending actions queue reached maximum capacity of 50' };
+  }
+  const candidate = { ...check.value, actions: existing.concat([newAction]) };
+  const val = validateTwinState(candidate);
+  if (!val.ok) return { ok: false, error: val.error };
+  return { ok: true, state: val.value, action: Object.freeze(newAction) };
+}

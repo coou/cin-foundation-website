@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -372,7 +372,57 @@ if (wipeBtn) wipeBtn.onclick = () => {
   f.reset(); renderGrants(); renderContributions(); renderActions(); renderEvents();
   const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
   const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
+  const evalBox = document.getElementById('access-eval-result'); if (evalBox) evalBox.textContent = '';
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
-renderGrants(); renderQuest(); renderContributions(); renderActions(); renderEvents();
+function renderAccessInspector() {
+  const form = document.getElementById('verify-access');
+  const resultBox = document.getElementById('access-eval-result');
+  if (!form || !resultBox) return;
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const service = form.elements.service ? form.elements.service.value.trim().slice(0, 60) : '';
+    const scope = form.elements.scope ? form.elements.scope.value.trim().slice(0, 80) : '';
+    resultBox.textContent = '';
+    if (!service || !scope) {
+      resultBox.appendChild(el('p', 'muted', 'Enter both a service and requested scope to test permission.'));
+      return;
+    }
+    const evalRes = evaluateAccessRequest(state, service, scope);
+    const p = el('p');
+    if (evalRes.allowed) {
+      p.className = 'status-ok';
+      let grantDetail = '';
+      if (evalRes.grant && evalRes.grant.expires_at) {
+        grantDetail = ` (valid until ${evalRes.grant.expires_at.slice(0, 10)})`;
+      } else if (evalRes.grant) {
+        grantDetail = ' (indefinite)';
+      }
+      p.append(el('b', null, 'Allowed: '), document.createTextNode(`Permitted by active grant for "${evalRes.grant ? evalRes.grant.who : service}"${grantDetail}.`));
+      resultBox.appendChild(p);
+    } else {
+      p.className = 'muted';
+      p.append(el('b', null, 'Denied: '), document.createTextNode(evalRes.reason || 'Not permitted.'));
+      resultBox.appendChild(p);
+      const queueBtn = el('button', 'btn', 'Queue as pending action');
+      queueBtn.style.marginTop = '0.4rem';
+      queueBtn.onclick = () => {
+        const queued = queueAccessAsPendingAction(state, service, scope);
+        if (queued.ok) {
+          if (saveAndRender(queued.state, 'action_queued', `Access request queued for ${service}`)) {
+            renderActions();
+            renderEvents();
+            resultBox.textContent = '';
+            resultBox.appendChild(el('p', 'muted', `Queued pending review: "${service}" requesting "${scope}".`));
+          }
+        } else {
+          resultBox.appendChild(el('p', 'muted', 'Could not queue action: ' + queued.error));
+        }
+      };
+      resultBox.appendChild(queueBtn);
+    }
+  };
+}
+
+renderGrants(); renderQuest(); renderContributions(); renderActions(); renderEvents(); renderAccessInspector();
