@@ -1,10 +1,10 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
-const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [], events: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [], events: [] }; } };
+const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [] }; } };
 const save = (s) => { const c = validateTwinState(s); if (!c.ok) return false; try { localStorage.setItem(KEY, JSON.stringify(c.value)); return true; } catch (e) { return false; } };
 let state = load();
 
@@ -241,7 +241,7 @@ if (importInput) importInput.onchange = (e) => {
     if (!res.ok) { if (status) status.textContent = 'Could not restore backup: ' + res.error; importInput.value = ''; return; }
     if (saveAndRender(res.value, 'data_imported', 'Restored backup on this device')) {
       f.elements.topics.value = state.topics.join(', ');
-      renderGrants(); renderQuest(); renderContributions(); renderActions(); renderEvents();
+      renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents();
       if (status) status.textContent = 'Backup restored successfully on this device.';
     }
     importInput.value = '';
@@ -368,13 +368,119 @@ if (clearEventsBtn) {
 const wipeBtn = document.getElementById('wipe');
 if (wipeBtn) wipeBtn.onclick = () => {
   try { localStorage.removeItem(KEY); } catch (e) { /* nothing */ }
-  state = { topics: [], grants: [], contributions: [], actions: [], events: [] };
-  f.reset(); renderGrants(); renderContributions(); renderActions(); renderEvents();
+  state = { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [] };
+  f.reset(); renderGrants(); renderContributions(); renderObligations(); renderActions(); renderEvents();
   const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
   const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
   const evalBox = document.getElementById('access-eval-result'); if (evalBox) evalBox.textContent = '';
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
+
+function renderObligations() {
+  const ul = document.getElementById('obligations');
+  const summaryBox = document.getElementById('obligation-summary');
+  if (!ul) return;
+  ul.textContent = '';
+  const obs = state.obligations || [];
+  if (!obs.length) {
+    ul.appendChild(el('li', 'muted', 'No obligations tracked yet. Add renewals, warranties, or deadlines.'));
+    if (summaryBox) summaryBox.textContent = '';
+    return;
+  }
+  const summary = summarizeObligations(obs);
+  obs.forEach((o, i) => {
+    const li = el('li');
+    let urgencyBadge = '';
+    if (o.status === 'active') {
+      const u = calculateObligationUrgency(o);
+      if (u.is_overdue) {
+        urgencyBadge = ` [overdue ${Math.abs(u.days_remaining)}d] `;
+      } else if (u.is_due) {
+        urgencyBadge = ' [due today] ';
+      } else if (u.is_urgent) {
+        urgencyBadge = ` [urgent: ${u.days_remaining}d left] `;
+      } else {
+        urgencyBadge = ` [${u.days_remaining}d left] `;
+      }
+    } else {
+      urgencyBadge = ` [${o.status}] `;
+    }
+    const catBadge = el('small', 'muted', `[${o.category}] `);
+    const badge = el('small', 'muted', urgencyBadge);
+    li.append(catBadge, el('b', null, o.title), badge, document.createTextNode(` (due ${o.due_date})`));
+    if (o.notes) {
+      li.append(document.createTextNode(' — ' + o.notes));
+    }
+    if (o.status === 'active') {
+      const compBtn = el('button', 'btn', 'Complete');
+      compBtn.style.margin = '0 0.3rem 0 0.5rem';
+      compBtn.onclick = () => {
+        const now = new Date();
+        const updated = { ...o, status: 'completed', resolved_at: now.toISOString() };
+        const next = { ...state, obligations: obs.map((item, idx) => (idx === i ? updated : item)) };
+        if (saveAndRender(next, 'obligation_resolved', `Completed obligation: ${o.title}`)) {
+          renderObligations();
+          renderEvents();
+        }
+      };
+      li.appendChild(compBtn);
+    }
+    const delBtn = el('button', 'btn', 'Remove');
+    delBtn.style.marginLeft = '0.3rem';
+    delBtn.onclick = () => {
+      const next = { ...state, obligations: obs.filter((_, idx) => idx !== i) };
+      if (saveAndRender(next, 'obligation_removed', `Removed obligation: ${o.title}`)) {
+        renderObligations();
+        renderEvents();
+      }
+    };
+    li.appendChild(delBtn);
+    ul.appendChild(li);
+  });
+  if (summaryBox) {
+    summaryBox.textContent = '';
+    summaryBox.appendChild(el('p', 'muted', `Obligations: ${summary.active} active (${summary.urgent} urgent, ${summary.overdue} overdue), ${summary.completed} completed. Guarded locally.`));
+  }
+}
+
+const obForm = document.getElementById('obligation');
+if (obForm) {
+  obForm.onsubmit = (e) => {
+    e.preventDefault();
+    const status = document.getElementById('data-status');
+    const currentObs = state.obligations || [];
+    if (currentObs.length >= 50) {
+      if (status) status.textContent = 'Maximum of 50 obligations reached. Remove an older entry first.';
+      return;
+    }
+    const title = obForm.elements.title ? obForm.elements.title.value.trim().slice(0, 80) : '';
+    const category = obForm.elements.category ? obForm.elements.category.value.trim().toLowerCase() : 'other';
+    const dueDate = obForm.elements.due_date ? obForm.elements.due_date.value.trim() : '';
+    const leadDays = parseInt(obForm.elements.lead_days ? obForm.elements.lead_days.value : '30', 10);
+    const notesRaw = obForm.elements.notes ? obForm.elements.notes.value.trim().slice(0, 100) : '';
+    const notes = notesRaw || null;
+    if (!title || !dueDate) return;
+    const now = new Date();
+    const id = 'obl-' + now.getTime().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
+    const newOb = {
+      id,
+      title,
+      category,
+      due_date: dueDate,
+      lead_days: Number.isInteger(leadDays) ? leadDays : 30,
+      status: 'active',
+      notes,
+      at: now.toISOString(),
+      resolved_at: null
+    };
+    const next = { ...state, obligations: currentObs.concat([newOb]) };
+    if (saveAndRender(next, 'obligation_added', `Added [${category}] ${title.slice(0, 40)}`)) {
+      obForm.reset();
+      renderObligations();
+      renderEvents();
+    }
+  };
+}
 
 function renderAccessInspector() {
   const form = document.getElementById('verify-access');
@@ -425,4 +531,4 @@ function renderAccessInspector() {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderActions(); renderEvents(); renderAccessInspector();
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector();

@@ -4,6 +4,8 @@ import {
   ALLOWED_CONTRIBUTION_KINDS,
   ALLOWED_ACTION_STATUSES,
   ALLOWED_EVENT_TYPES,
+  ALLOWED_OBLIGATION_CATEGORIES,
+  ALLOWED_OBLIGATION_STATUSES,
   DEFAULT_TWIN_STATE,
   validateTwinState,
   deserializeTwinState,
@@ -19,7 +21,9 @@ import {
   summarizeActions,
   recordTwinEvent,
   summarizeEvents,
-  queueAccessAsPendingAction
+  queueAccessAsPendingAction,
+  calculateObligationUrgency,
+  summarizeObligations
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -30,6 +34,7 @@ test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
   assert.throws(() => { DEFAULT_TWIN_STATE.contributions.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.actions.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.events.push('x'); });
+  assert.throws(() => { DEFAULT_TWIN_STATE.obligations.push('x'); });
 });
 
 test('validateTwinState accepts well-formed data and is deterministic', () => {
@@ -103,14 +108,16 @@ test('deserialize and serialize handle valid data and errors', () => {
     grants: [],
     contributions: [{ what: 'code test', kind: 'code', at: '2026-10-10T12:00:00.000Z', impact: null }],
     actions: [],
-    events: []
+    events: [],
+    obligations: []
   });
-  // Backward compatibility when contributions, actions, and events omitted
+  // Backward compatibility when contributions, actions, events, and obligations omitted
   const legacy = deserializeTwinState(JSON.stringify({ topics: ['health'], grants: [] }));
   assert.equal(legacy.ok, true);
   assert.deepEqual(legacy.value.contributions, []);
   assert.deepEqual(legacy.value.actions, []);
   assert.deepEqual(legacy.value.events, []);
+  assert.deepEqual(legacy.value.obligations, []);
 
   assert.equal(deserializeTwinState('{bad').ok, false);
   assert.throws(() => serializeTwinState({ bad: 1 }));
@@ -739,4 +746,104 @@ test('queueAccessAsPendingAction enforces queue capacity cap of 50', () => {
   const res = queueAccessAsPendingAction(state, 'new-agent', 'read data');
   assert.equal(res.ok, false);
   assert.match(res.error, /maximum capacity/i);
+});
+
+test('validateTwinState accepts well-formed obligations and handles optional notes', () => {
+  const state = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [
+      {
+        id: 'obl-1',
+        title: 'Passport renewal',
+        category: 'document',
+        due_date: '2026-12-01',
+        lead_days: 60,
+        status: 'active',
+        notes: 'Expiring in winter',
+        at: '2026-10-10T12:00:00.000Z',
+        resolved_at: null
+      },
+      {
+        id: 'obl-2',
+        title: 'Car insurance',
+        category: 'contract',
+        due_date: '2026-10-15',
+        lead_days: 14,
+        status: 'completed',
+        notes: null,
+        at: '2026-10-01T10:00:00.000Z',
+        resolved_at: '2026-10-10T15:00:00.000Z'
+      }
+    ]
+  };
+  const res = validateTwinState(state);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.obligations.length, 2);
+  assert.equal(res.value.obligations[0].title, 'Passport renewal');
+  assert.equal(res.value.obligations[1].status, 'completed');
+});
+
+test('validateTwinState rejects malformed obligations fail-closed', () => {
+  const base = { topics: [], grants: [], contributions: [], actions: [], events: [] };
+  const bad = [
+    { ...base, obligations: 'bad' },
+    { ...base, obligations: [{ id: '1', title: 't', category: 'tax', due_date: '2026-10-10', lead_days: 30, status: 'active', at: '2026-10-10T00:00:00Z', resolved_at: null, unknown: 1 }] },
+    { ...base, obligations: [{ id: '1', title: 't', category: 'invalid', due_date: '2026-10-10', lead_days: 30, status: 'active', at: '2026-10-10T00:00:00Z', resolved_at: null }] },
+    { ...base, obligations: [{ id: '1', title: 't', category: 'tax', due_date: '2026-10-10', lead_days: 30, status: 'pending', at: '2026-10-10T00:00:00Z', resolved_at: null }] },
+    { ...base, obligations: [{ id: '1', title: 't', category: 'tax', due_date: '10/10/2026', lead_days: 30, status: 'active', at: '2026-10-10T00:00:00Z', resolved_at: null }] },
+    { ...base, obligations: [{ id: '1', title: 't', category: 'tax', due_date: '2026-10-10', lead_days: -5, status: 'active', at: '2026-10-10T00:00:00Z', resolved_at: null }] },
+    { ...base, obligations: [{ id: '1', title: 't', category: 'tax', due_date: '2026-10-10', lead_days: 30, status: 'active', at: '2026-10-10T00:00:00Z', resolved_at: '2026-10-10T00:00:00Z' }] },
+    { ...base, obligations: [{ id: '1', title: 't', category: 'tax', due_date: '2026-10-10', lead_days: 30, status: 'completed', at: '2026-10-10T00:00:00Z', resolved_at: null }] }
+  ];
+  for (const b of bad) assert.equal(validateTwinState(b).ok, false);
+});
+
+test('calculateObligationUrgency evaluates overdue, due today, and urgent states deterministically', () => {
+  const ref = '2026-10-10';
+  const u1 = calculateObligationUrgency({ due_date: '2026-10-08', lead_days: 30 }, ref);
+  assert.deepEqual({ d: u1.days_remaining, ov: u1.is_overdue, due: u1.is_due, urg: u1.is_urgent }, { d: -2, ov: true, due: false, urg: false });
+  const u2 = calculateObligationUrgency({ due_date: '2026-10-10', lead_days: 14 }, ref);
+  assert.deepEqual({ d: u2.days_remaining, ov: u2.is_overdue, due: u2.is_due, urg: u2.is_urgent }, { d: 0, ov: false, due: true, urg: true });
+  const u3 = calculateObligationUrgency({ due_date: '2026-10-20', lead_days: 14 }, ref);
+  assert.deepEqual({ d: u3.days_remaining, ov: u3.is_overdue, urg: u3.is_urgent }, { d: 10, ov: false, urg: true });
+  const u4 = calculateObligationUrgency({ due_date: '2026-11-30', lead_days: 14 }, ref);
+  assert.deepEqual({ d: u4.days_remaining, ov: u4.is_overdue, urg: u4.is_urgent }, { d: 51, ov: false, urg: false });
+});
+
+test('calculateObligationUrgency fails closed on invalid inputs', () => {
+  assert.throws(() => calculateObligationUrgency(null));
+  assert.throws(() => calculateObligationUrgency({ due_date: 'invalid' }));
+  assert.throws(() => calculateObligationUrgency({ due_date: '2026-10-10' }, 'bad-date'));
+});
+
+test('summarizeObligations aggregates counts and breakdowns correctly', () => {
+  const obs = [
+    { id: '1', category: 'renewal', due_date: '2026-10-05', lead_days: 30, status: 'active' }, // overdue
+    { id: '2', category: 'contract', due_date: '2026-10-15', lead_days: 14, status: 'active' }, // urgent
+    { id: '3', category: 'warranty', due_date: '2026-12-31', lead_days: 30, status: 'active' }, // normal active
+    { id: '4', category: 'tax', due_date: '2026-09-30', lead_days: 30, status: 'completed' }, // completed
+    { id: '5', category: 'other', due_date: '2026-10-01', lead_days: 30, status: 'dismissed' }  // dismissed
+  ];
+  const summary = summarizeObligations(obs, '2026-10-10');
+  assert.equal(summary.total, 5);
+  assert.equal(summary.active, 3);
+  assert.equal(summary.overdue, 1);
+  assert.equal(summary.urgent, 1);
+  assert.equal(summary.completed, 1);
+  assert.equal(summary.dismissed, 1);
+  assert.equal(summary.by_category.renewal, 1);
+  assert.equal(summary.by_category.contract, 1);
+  assert.equal(summary.by_category.warranty, 1);
+  assert.equal(summary.by_category.tax, 1);
+  assert.equal(summary.by_category.other, 1);
+  assert.equal(summary.by_category.document, 0);
+
+  // Invalid input handling
+  const empty = summarizeObligations(null);
+  assert.equal(empty.total, 0);
+  assert.equal(empty.active, 0);
 });
