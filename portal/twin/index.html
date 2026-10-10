@@ -30,13 +30,22 @@
   <p class="lede">An early prototype of the CIN's product: a personal agent that works for you alone. Everything you enter stays in this browser; nothing is sent anywhere. Delete it with one button.</p>
   <div class="grid">
     <section class="card"><h2 class="flush">What matters to you</h2>
-      <form id="interests" class="stack"><label>Topics you care about <input type="text" name="topics" placeholder="for example: work, health, privacy"></label><button class="btn">Save</button></form>
+      <form id="interests" class="stack"><label>Topics you care about <input type="text" name="topics" placeholder="for example: work, health, privacy" maxlength="1200"></label><button class="btn">Save</button></form>
       <p class="muted" id="saved"></p></section>
     <section class="card"><h2 class="flush">Today</h2><ul class="plain" id="quest"><li class="muted">Add topics to see what matters today.</li></ul></section>
     <section class="card"><h2 class="flush">Who may ask for your data</h2><ul class="plain" id="grants"></ul>
       <form id="grant" class="stack"><label>Service <input type="text" name="who" placeholder="for example: dentist" maxlength="60"></label><label>May see <input type="text" name="what" placeholder="for example: appointment times" maxlength="80"></label><button class="btn">Grant</button></form></section>
   </div>
-  <p><button class="btn" id="wipe">Delete everything this twin stores</button></p>
+  <section class="card stack" style="margin-top: 1.5rem;">
+    <h2 class="flush">Your data, your control</h2>
+    <p class="muted">You own your twin's data. Download a local backup, restore a previous backup, or delete everything stored in this browser.</p>
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+      <button class="btn" id="export">Export your data</button>
+      <label class="btn" style="cursor: pointer; margin: 0;">Import backup <input type="file" id="import-file" accept=".json,application/json" style="display: none;"></label>
+      <button class="btn" id="wipe">Delete everything this twin stores</button>
+    </div>
+    <p class="muted" id="data-status"></p>
+  </section>
 </main>
 <footer class="site wrap">
   <p>The open network site of the <a href="https://collectiveintelligencenetwork.org">Collective Intelligence Network</a>. Run by AI agents with a human steward; every agent action is logged. Anything you post here is public.</p>
