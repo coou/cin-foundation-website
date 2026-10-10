@@ -15,11 +15,27 @@ export const ALLOWED_ACTION_STATUSES = Object.freeze([
   'rejected'
 ]);
 
+export const ALLOWED_EVENT_TYPES = Object.freeze([
+  'topics_updated',
+  'grant_created',
+  'grant_revoked',
+  'contribution_added',
+  'contribution_removed',
+  'action_queued',
+  'action_approved',
+  'action_denied',
+  'action_cleared',
+  'data_exported',
+  'data_imported',
+  'log_cleared'
+]);
+
 export const DEFAULT_TWIN_STATE = Object.freeze({
   topics: Object.freeze([]),
   grants: Object.freeze([]),
   contributions: Object.freeze([]),
-  actions: Object.freeze([])
+  actions: Object.freeze([]),
+  events: Object.freeze([])
 });
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
@@ -49,7 +65,7 @@ export function validateTwinState(raw) {
     return { ok: false, error: 'Twin state must be an object' };
   }
   const keys = Object.keys(raw);
-  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions')) {
+  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions' && k !== 'events')) {
     return { ok: false, error: 'Unknown field in twin state' };
   }
   if (!Array.isArray(raw.topics) || raw.topics.length > 20) {
@@ -183,7 +199,22 @@ export function validateTwinState(raw) {
     });
   }
 
-  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions } };
+  const rawEvents = raw.events !== undefined ? raw.events : [];
+  if (!Array.isArray(rawEvents) || rawEvents.length > 50) return { ok: false, error: 'events must be a list of at most 50 items' };
+  const cleanEvents = [];
+  for (let i = 0; i < rawEvents.length; i++) {
+    const e = rawEvents[i];
+    if (!e || typeof e !== 'object' || Array.isArray(e)) return { ok: false, error: `event at index ${i} must be an object` };
+    if (Object.keys(e).some((k) => k !== 'id' && k !== 'type' && k !== 'detail' && k !== 'at')) return { ok: false, error: `event at index ${i} has unknown fields` };
+    if (typeof e.id !== 'string' || !e.id.trim() || e.id.trim().length > 40 || !/^[a-zA-Z0-9_-]+$/.test(e.id.trim())) return { ok: false, error: `event at index ${i} id must be an alphanumeric string up to 40 characters` };
+    const eventType = typeof e.type === 'string' ? e.type.trim().toLowerCase() : '';
+    if (!ALLOWED_EVENT_TYPES.includes(eventType)) return { ok: false, error: `event at index ${i} type must be one of: ${ALLOWED_EVENT_TYPES.join(', ')}` };
+    if (typeof e.detail !== 'string' || !e.detail.trim() || e.detail.trim().length > 120) return { ok: false, error: `event at index ${i} detail must be a string up to 120 characters` };
+    if (typeof e.at !== 'string' || !ISO_RE.test(e.at) || isNaN(Date.parse(e.at))) return { ok: false, error: `event at index ${i} at field must be an ISO date string` };
+    cleanEvents.push({ id: e.id.trim(), type: eventType, detail: e.detail.trim(), at: e.at });
+  }
+
+  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions, events: cleanEvents } };
 }
 
 export function deserializeTwinState(jsonStr) {
@@ -650,5 +681,50 @@ export function summarizeActions(actions) {
     recent: Object.freeze(valid.slice(0, 5))
   });
 }
+
+// Record typed event into twin's local event log, capped at 50 via FIFO. Fail-closed.
+export function recordTwinEvent(state, type, detail, timestamp = null, id = null) {
+  if (!state || typeof state !== 'object' || Array.isArray(state)) return { ok: false, error: 'State must be an object' };
+  const eventType = typeof type === 'string' ? type.trim().toLowerCase() : '';
+  if (!ALLOWED_EVENT_TYPES.includes(eventType)) return { ok: false, error: `Invalid event type: ${type}` };
+  if (typeof detail !== 'string' || !detail.trim() || detail.trim().length > 120) return { ok: false, error: 'Event detail must be a string up to 120 characters' };
+  let atStr;
+  if (timestamp === null || timestamp === undefined) atStr = new Date().toISOString();
+  else if (timestamp instanceof Date && !isNaN(timestamp.getTime())) atStr = timestamp.toISOString();
+  else if (typeof timestamp === 'string' && ISO_RE.test(timestamp) && !isNaN(Date.parse(timestamp))) atStr = timestamp;
+  else return { ok: false, error: 'Invalid timestamp provided' };
+  let eventId = id || ('evt-' + Date.parse(atStr).toString(36) + '-' + Math.random().toString(36).slice(2, 6));
+  if (typeof eventId !== 'string' || !eventId.trim() || eventId.trim().length > 40 || !/^[a-zA-Z0-9_-]+$/.test(eventId.trim())) {
+    return { ok: false, error: 'Invalid event id' };
+  }
+  const existing = Array.isArray(state.events) ? state.events : [];
+  const trimmed = existing.length >= 50 ? existing.slice(existing.length - 49) : existing.slice();
+  const newEvent = { id: eventId.trim(), type: eventType, detail: detail.trim(), at: atStr };
+  const candidate = { ...state, events: trimmed.concat([newEvent]) };
+  const validated = validateTwinState(candidate);
+  if (!validated.ok) return { ok: false, error: validated.error };
+  return { ok: true, state: validated.value, event: Object.freeze(newEvent) };
+}
+
+// Summarize local events by type and recency. Fail-closed.
+export function summarizeEvents(events) {
+  if (!Array.isArray(events)) return Object.freeze({ total: 0, by_type: Object.freeze({}), latest: null });
+  const by_type = {};
+  for (const t of ALLOWED_EVENT_TYPES) by_type[t] = 0;
+  let validTotal = 0, latest = null;
+  for (let i = 0; i < events.length; i++) {
+    const e = events[i];
+    if (!e || typeof e !== 'object' || Array.isArray(e) || typeof e.id !== 'string' || !e.id.trim()) continue;
+    const t = typeof e.type === 'string' ? e.type.trim().toLowerCase() : '';
+    if (!ALLOWED_EVENT_TYPES.includes(t)) continue;
+    by_type[t] = (by_type[t] || 0) + 1;
+    validTotal += 1;
+    if (typeof e.at === 'string' && ISO_RE.test(e.at) && !isNaN(Date.parse(e.at))) {
+      if (!latest || Date.parse(e.at) > Date.parse(latest.at)) latest = e;
+    }
+  }
+  return Object.freeze({ total: validTotal, by_type: Object.freeze(by_type), latest: latest ? Object.freeze({ ...latest }) : null });
+}
+
 
 

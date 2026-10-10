@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   ALLOWED_CONTRIBUTION_KINDS,
   ALLOWED_ACTION_STATUSES,
+  ALLOWED_EVENT_TYPES,
   DEFAULT_TWIN_STATE,
   validateTwinState,
   deserializeTwinState,
@@ -15,7 +16,9 @@ import {
   calculatePersonalTrajectory,
   summarizeContributions,
   evaluateActionDecision,
-  summarizeActions
+  summarizeActions,
+  recordTwinEvent,
+  summarizeEvents
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -25,6 +28,7 @@ test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
   assert.throws(() => { DEFAULT_TWIN_STATE.grants.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.contributions.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.actions.push('x'); });
+  assert.throws(() => { DEFAULT_TWIN_STATE.events.push('x'); });
 });
 
 test('validateTwinState accepts well-formed data and is deterministic', () => {
@@ -97,13 +101,15 @@ test('deserialize and serialize handle valid data and errors', () => {
     topics: ['health'],
     grants: [],
     contributions: [{ what: 'code test', kind: 'code', at: '2026-10-10T12:00:00.000Z', impact: null }],
-    actions: []
+    actions: [],
+    events: []
   });
-  // Backward compatibility when contributions and actions omitted
+  // Backward compatibility when contributions, actions, and events omitted
   const legacy = deserializeTwinState(JSON.stringify({ topics: ['health'], grants: [] }));
   assert.equal(legacy.ok, true);
   assert.deepEqual(legacy.value.contributions, []);
   assert.deepEqual(legacy.value.actions, []);
+  assert.deepEqual(legacy.value.events, []);
 
   assert.equal(deserializeTwinState('{bad').ok, false);
   assert.throws(() => serializeTwinState({ bad: 1 }));
@@ -545,5 +551,133 @@ test('summarizeActions aggregates counts and handles invalid inputs fail-closed'
   assert.equal(summary.rejected, 1);
   assert.equal(summary.recent[0].id, '3');
 });
+
+test('validateTwinState accepts well-formed events and enforces backward compatibility', () => {
+  const wellFormed = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [
+      { id: 'evt-1', type: 'topics_updated', detail: 'Updated topics', at: '2026-10-10T10:00:00.000Z' },
+      { id: 'evt-2', type: 'grant_created', detail: 'Granted dentist access', at: '2026-10-10T11:00:00.000Z' }
+    ]
+  };
+  const res = validateTwinState(wellFormed);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.events.length, 2);
+  assert.equal(res.value.events[0].id, 'evt-1');
+  assert.equal(res.value.events[0].type, 'topics_updated');
+
+  // Backward compatibility: events omitted
+  const omitted = { topics: [], grants: [] };
+  const resOmitted = validateTwinState(omitted);
+  assert.equal(resOmitted.ok, true);
+  assert.deepEqual(resOmitted.value.events, []);
+});
+
+test('validateTwinState rejects malformed events fail-closed', () => {
+  // Not an array
+  assert.equal(validateTwinState({ topics: [], grants: [], events: 'bad' }).ok, false);
+  // Non-object item
+  assert.equal(validateTwinState({ topics: [], grants: [], events: ['not-an-object'] }).ok, false);
+  // Unknown field in event
+  assert.equal(validateTwinState({
+    topics: [], grants: [],
+    events: [{ id: 'e1', type: 'topics_updated', detail: 'ok', at: '2026-10-10T10:00:00.000Z', extra: 123 }]
+  }).ok, false);
+  // Invalid event type
+  assert.equal(validateTwinState({
+    topics: [], grants: [],
+    events: [{ id: 'e1', type: 'unrecognized_type', detail: 'ok', at: '2026-10-10T10:00:00.000Z' }]
+  }).ok, false);
+  // Invalid id format
+  assert.equal(validateTwinState({
+    topics: [], grants: [],
+    events: [{ id: 'bad id with spaces!', type: 'topics_updated', detail: 'ok', at: '2026-10-10T10:00:00.000Z' }]
+  }).ok, false);
+  // Detail too long (>120 chars)
+  assert.equal(validateTwinState({
+    topics: [], grants: [],
+    events: [{ id: 'e1', type: 'topics_updated', detail: 'a'.repeat(121), at: '2026-10-10T10:00:00.000Z' }]
+  }).ok, false);
+  // Malformed date
+  assert.equal(validateTwinState({
+    topics: [], grants: [],
+    events: [{ id: 'e1', type: 'topics_updated', detail: 'ok', at: 'not-a-date' }]
+  }).ok, false);
+  // Over maximum 50 events
+  const tooMany = Array.from({ length: 51 }, (_, i) => ({
+    id: `e-${i}`,
+    type: 'topics_updated',
+    detail: 'ok',
+    at: '2026-10-10T10:00:00.000Z'
+  }));
+  assert.equal(validateTwinState({ topics: [], grants: [], events: tooMany }).ok, false);
+});
+
+test('recordTwinEvent appends typed events and enforces FIFO cap of 50', () => {
+  const base = { topics: [], grants: [], contributions: [], actions: [], events: [] };
+  const r1 = recordTwinEvent(base, 'topics_updated', 'Added privacy topic', '2026-10-10T10:00:00.000Z', 'evt-custom-1');
+  assert.equal(r1.ok, true);
+  assert.equal(r1.state.events.length, 1);
+  assert.equal(r1.event.id, 'evt-custom-1');
+  assert.equal(r1.event.type, 'topics_updated');
+  assert.equal(r1.event.detail, 'Added privacy topic');
+
+  // Append up to 50
+  let current = base;
+  for (let i = 0; i < 50; i++) {
+    const res = recordTwinEvent(current, 'action_queued', `Action ${i}`, '2026-10-10T10:00:00.000Z', `evt-${i}`);
+    assert.equal(res.ok, true);
+    current = res.state;
+  }
+  assert.equal(current.events.length, 50);
+  assert.equal(current.events[0].id, 'evt-0');
+
+  // Adding 51st event evicts oldest via FIFO
+  const r51 = recordTwinEvent(current, 'grant_created', 'New grant added', '2026-10-10T11:00:00.000Z', 'evt-51');
+  assert.equal(r51.ok, true);
+  assert.equal(r51.state.events.length, 50);
+  assert.equal(r51.state.events[0].id, 'evt-1'); // evt-0 was dropped
+  assert.equal(r51.state.events[49].id, 'evt-51'); // newest event at the end
+});
+
+test('recordTwinEvent fails closed on invalid inputs', () => {
+  const base = { topics: [], grants: [], contributions: [], actions: [], events: [] };
+  assert.equal(recordTwinEvent(null, 'topics_updated', 'ok').ok, false);
+  assert.equal(recordTwinEvent(base, 'unsupported_type', 'ok').ok, false);
+  assert.equal(recordTwinEvent(base, 'topics_updated', '').ok, false);
+  assert.equal(recordTwinEvent(base, 'topics_updated', 'a'.repeat(121)).ok, false);
+  assert.equal(recordTwinEvent(base, 'topics_updated', 'ok', 'not-a-timestamp').ok, false);
+  assert.equal(recordTwinEvent(base, 'topics_updated', 'ok', new Date('invalid')).ok, false);
+  assert.equal(recordTwinEvent(base, 'topics_updated', 'ok', null, 'bad id!').ok, false);
+});
+
+test('summarizeEvents aggregates counts and handles invalid inputs fail-closed', () => {
+  assert.deepEqual(summarizeEvents(null), { total: 0, by_type: {}, latest: null });
+  assert.deepEqual(summarizeEvents('bad'), { total: 0, by_type: {}, latest: null });
+
+  const events = [
+    { id: '1', type: 'topics_updated', detail: 'd1', at: '2026-10-10T10:00:00.000Z' },
+    { id: '2', type: 'grant_created', detail: 'd2', at: '2026-10-10T11:00:00.000Z' },
+    { id: '3', type: 'grant_created', detail: 'd3', at: '2026-10-10T12:00:00.000Z' }
+  ];
+  const summary = summarizeEvents(events);
+  assert.equal(summary.total, 3);
+  assert.equal(summary.by_type.topics_updated, 1);
+  assert.equal(summary.by_type.grant_created, 2);
+  assert.equal(summary.by_type.grant_revoked, 0);
+  assert.equal(summary.latest.id, '3');
+
+  // Does not let invalid timestamp in first item poison latest for subsequent valid events
+  const poisoned = [
+    { id: 'bad-1', type: 'topics_updated', detail: 'd1', at: 'invalid-date' },
+    { id: 'good-2', type: 'grant_created', detail: 'd2', at: '2026-10-10T15:00:00.000Z' }
+  ];
+  const summary2 = summarizeEvents(poisoned);
+  assert.equal(summary2.latest.id, 'good-2');
+});
+
 
 
