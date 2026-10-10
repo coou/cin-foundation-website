@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  ALLOWED_CONTRIBUTION_KINDS,
   DEFAULT_TWIN_STATE,
   validateTwinState,
   deserializeTwinState,
@@ -10,7 +11,8 @@ import {
   isGrantExpired,
   extractWords,
   scoreSignalRelevance,
-  calculatePersonalTrajectory
+  calculatePersonalTrajectory,
+  summarizeContributions
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -18,6 +20,7 @@ test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
   assert.equal(res.ok, true);
   assert.throws(() => { DEFAULT_TWIN_STATE.topics.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.grants.push('x'); });
+  assert.throws(() => { DEFAULT_TWIN_STATE.contributions.push('x'); });
 });
 
 test('validateTwinState accepts well-formed data and is deterministic', () => {
@@ -83,10 +86,19 @@ test('validateTwinState enforces grant structure and ISO date format', () => {
 });
 
 test('deserialize and serialize handle valid data and errors', () => {
-  const json = JSON.stringify({ topics: ['health'], grants: [] });
+  const json = JSON.stringify({ topics: ['health'], grants: [], contributions: [{ what: 'code test', kind: 'code', at: '2026-10-10T12:00:00.000Z', impact: null }] });
   const parsed = deserializeTwinState(json);
   assert.equal(parsed.ok, true);
-  assert.deepEqual(JSON.parse(serializeTwinState(parsed.value)), { topics: ['health'], grants: [] });
+  assert.deepEqual(JSON.parse(serializeTwinState(parsed.value)), {
+    topics: ['health'],
+    grants: [],
+    contributions: [{ what: 'code test', kind: 'code', at: '2026-10-10T12:00:00.000Z', impact: null }]
+  });
+  // Backward compatibility when contributions omitted
+  const legacy = deserializeTwinState(JSON.stringify({ topics: ['health'], grants: [] }));
+  assert.equal(legacy.ok, true);
+  assert.deepEqual(legacy.value.contributions, []);
+
   assert.equal(deserializeTwinState('{bad').ok, false);
   assert.throws(() => serializeTwinState({ bad: 1 }));
 });
@@ -335,3 +347,102 @@ test('calculatePersonalTrajectory evaluates pure away balance at 0.0', () => {
   assert.equal(res.score, 0.0);
   assert.equal(res.net_balance, -3);
 });
+
+test('validateTwinState accepts well-formed contributions and enforces backward compatibility', () => {
+  const legacyState = { topics: ['privacy'], grants: [] };
+  const resLegacy = validateTwinState(legacyState);
+  assert.equal(resLegacy.ok, true);
+  assert.deepEqual(resLegacy.value.contributions, []);
+
+  const stateWithContribs = {
+    topics: ['code'],
+    grants: [],
+    contributions: [
+      { what: 'Built local test fixture', kind: 'code', at: '2026-10-10T12:00:00.000Z', impact: 'deterministic test suite' },
+      { what: 'Reviewed peer draft', kind: 'review', at: '2026-10-10T13:00:00.000Z', impact: null }
+    ]
+  };
+  const res = validateTwinState(stateWithContribs);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.contributions.length, 2);
+  assert.equal(res.value.contributions[0].kind, 'code');
+  assert.equal(res.value.contributions[1].impact, null);
+});
+
+test('validateTwinState rejects malformed contributions fail-closed', () => {
+  const base = { topics: [], grants: [] };
+
+  // Unknown top-level key
+  assert.equal(validateTwinState({ ...base, extra: 'bad' }).ok, false);
+
+  // Non-array contributions
+  assert.equal(validateTwinState({ ...base, contributions: 'invalid' }).ok, false);
+
+  // Exceeds max count of 50
+  const excess = Array.from({ length: 51 }, (_, i) => ({
+    what: `Contrib ${i}`, kind: 'code', at: '2026-10-10T12:00:00.000Z'
+  }));
+  assert.equal(validateTwinState({ ...base, contributions: excess }).ok, false);
+
+  // Unknown contribution field
+  assert.equal(validateTwinState({
+    ...base,
+    contributions: [{ what: 'code change', kind: 'code', at: '2026-10-10T12:00:00.000Z', points: 100 }]
+  }).ok, false);
+
+  // Empty or invalid 'what'
+  assert.equal(validateTwinState({
+    ...base,
+    contributions: [{ what: '', kind: 'code', at: '2026-10-10T12:00:00.000Z' }]
+  }).ok, false);
+  assert.equal(validateTwinState({
+    ...base,
+    contributions: [{ what: 'x'.repeat(101), kind: 'code', at: '2026-10-10T12:00:00.000Z' }]
+  }).ok, false);
+
+  // Invalid kind
+  assert.equal(validateTwinState({
+    ...base,
+    contributions: [{ what: 'work', kind: 'unapproved_category', at: '2026-10-10T12:00:00.000Z' }]
+  }).ok, false);
+
+  // Invalid date
+  assert.equal(validateTwinState({
+    ...base,
+    contributions: [{ what: 'work', kind: 'code', at: 'not-an-iso-date' }]
+  }).ok, false);
+
+  // Impact too long
+  assert.equal(validateTwinState({
+    ...base,
+    contributions: [{ what: 'work', kind: 'code', at: '2026-10-10T12:00:00.000Z', impact: 'x'.repeat(101) }]
+  }).ok, false);
+});
+
+test('summarizeContributions aggregates metrics and handles empty or invalid inputs fail-closed', () => {
+  // Invalid inputs
+  assert.deepEqual(summarizeContributions(null), { total: 0, by_kind: {}, recent: [] });
+  assert.deepEqual(summarizeContributions('bad'), { total: 0, by_kind: {}, recent: [] });
+  assert.deepEqual(summarizeContributions([]), { total: 0, by_kind: {}, recent: [] });
+
+  const items = [
+    { what: 'First code patch', kind: 'code', at: '2026-10-08T10:00:00.000Z', impact: 'v1' },
+    { what: 'Second code patch', kind: 'code', at: '2026-10-09T10:00:00.000Z', impact: 'v2' },
+    { what: 'Review draft', kind: 'review', at: '2026-10-10T09:00:00.000Z' },
+    { what: 'Compute node run', kind: 'compute', at: '2026-10-10T11:00:00.000Z' },
+    { what: 'Verification check', kind: 'verification', at: '2026-10-10T12:00:00.000Z' },
+    { what: 'Community guide', kind: 'community', at: '2026-10-10T13:00:00.000Z' }
+  ];
+
+  const summary = summarizeContributions(items);
+  assert.equal(summary.total, 6);
+  assert.equal(summary.by_kind.code, 2);
+  assert.equal(summary.by_kind.review, 1);
+  assert.equal(summary.by_kind.compute, 1);
+  assert.equal(summary.by_kind.verification, 1);
+  assert.equal(summary.by_kind.community, 1);
+  assert.equal(summary.recent.length, 5); // Capped at top 5 recent
+  assert.equal(summary.recent[0].what, 'Community guide'); // Sorted descending by timestamp
+  assert.equal(summary.recent[1].what, 'Verification check');
+});
+
