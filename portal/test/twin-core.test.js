@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   ALLOWED_CONTRIBUTION_KINDS,
+  ALLOWED_ACTION_STATUSES,
   DEFAULT_TWIN_STATE,
   validateTwinState,
   deserializeTwinState,
@@ -12,7 +13,9 @@ import {
   extractWords,
   scoreSignalRelevance,
   calculatePersonalTrajectory,
-  summarizeContributions
+  summarizeContributions,
+  evaluateActionDecision,
+  summarizeActions
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -21,6 +24,7 @@ test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
   assert.throws(() => { DEFAULT_TWIN_STATE.topics.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.grants.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.contributions.push('x'); });
+  assert.throws(() => { DEFAULT_TWIN_STATE.actions.push('x'); });
 });
 
 test('validateTwinState accepts well-formed data and is deterministic', () => {
@@ -92,12 +96,14 @@ test('deserialize and serialize handle valid data and errors', () => {
   assert.deepEqual(JSON.parse(serializeTwinState(parsed.value)), {
     topics: ['health'],
     grants: [],
-    contributions: [{ what: 'code test', kind: 'code', at: '2026-10-10T12:00:00.000Z', impact: null }]
+    contributions: [{ what: 'code test', kind: 'code', at: '2026-10-10T12:00:00.000Z', impact: null }],
+    actions: []
   });
-  // Backward compatibility when contributions omitted
+  // Backward compatibility when contributions and actions omitted
   const legacy = deserializeTwinState(JSON.stringify({ topics: ['health'], grants: [] }));
   assert.equal(legacy.ok, true);
   assert.deepEqual(legacy.value.contributions, []);
+  assert.deepEqual(legacy.value.actions, []);
 
   assert.equal(deserializeTwinState('{bad').ok, false);
   assert.throws(() => serializeTwinState({ bad: 1 }));
@@ -445,4 +451,99 @@ test('summarizeContributions aggregates metrics and handles empty or invalid inp
   assert.equal(summary.recent[0].what, 'Community guide'); // Sorted descending by timestamp
   assert.equal(summary.recent[1].what, 'Verification check');
 });
+
+test('validateTwinState accepts well-formed actions and preserves backward compatibility', () => {
+  const legacy = { topics: ['code'], grants: [], contributions: [] };
+  const resLegacy = validateTwinState(legacy);
+  assert.equal(resLegacy.ok, true);
+  assert.deepEqual(resLegacy.value.actions, []);
+
+  const withActions = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [
+      { id: 'act-1', who: 'calendar-agent', description: 'Schedule meeting', at: '2026-10-10T14:00:00.000Z', status: 'pending', decided_at: null },
+      { id: 'act-2', who: 'notes-sync', description: 'Export summary', at: '2026-10-10T14:05:00.000Z', status: 'approved', decided_at: '2026-10-10T14:06:00.000Z' }
+    ]
+  };
+  const res = validateTwinState(withActions);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.actions.length, 2);
+  assert.equal(res.value.actions[0].status, 'pending');
+  assert.equal(res.value.actions[1].status, 'approved');
+});
+
+test('validateTwinState rejects malformed actions fail-closed', () => {
+  const base = { topics: [], grants: [], contributions: [] };
+
+  // Unknown top-level key
+  assert.equal(validateTwinState({ ...base, actions: [], bad: 1 }).ok, false);
+
+  // Non-array
+  assert.equal(validateTwinState({ ...base, actions: 'bad' }).ok, false);
+
+  // Missing id or non-alphanumeric id
+  assert.equal(validateTwinState({ ...base, actions: [{ id: '', who: 'agent', description: 'do work', at: '2026-10-10T12:00:00Z', status: 'pending' }] }).ok, false);
+  assert.equal(validateTwinState({ ...base, actions: [{ id: 'bad id spaces', who: 'agent', description: 'do work', at: '2026-10-10T12:00:00Z', status: 'pending' }] }).ok, false);
+
+  // Missing or empty who
+  assert.equal(validateTwinState({ ...base, actions: [{ id: 'a1', who: '', description: 'do work', at: '2026-10-10T12:00:00Z', status: 'pending' }] }).ok, false);
+
+  // Invalid status
+  assert.equal(validateTwinState({ ...base, actions: [{ id: 'a1', who: 'agent', description: 'do work', at: '2026-10-10T12:00:00Z', status: 'unknown_status' }] }).ok, false);
+
+  // Missing decided_at when status is approved
+  assert.equal(validateTwinState({ ...base, actions: [{ id: 'a1', who: 'agent', description: 'do work', at: '2026-10-10T12:00:00Z', status: 'approved', decided_at: null }] }).ok, false);
+
+  // Rejects pending action with non-null decided_at
+  assert.equal(validateTwinState({ ...base, actions: [{ id: 'a1', who: 'agent', description: 'do work', at: '2026-10-10T12:00:00Z', status: 'pending', decided_at: '2026-10-10T12:01:00Z' }] }).ok, false);
+
+  // Unknown field in action object
+  assert.equal(validateTwinState({ ...base, actions: [{ id: 'a1', who: 'agent', description: 'do work', at: '2026-10-10T12:00:00Z', status: 'pending', extra: 123 }] }).ok, false);
+});
+
+test('evaluateActionDecision transitions status and timestamps decision fail-closed', () => {
+  const pendingAction = { id: 'act-1', who: 'agent', description: 'Update profile', at: '2026-10-10T12:00:00.000Z', status: 'pending', decided_at: null };
+
+  const app = evaluateActionDecision(pendingAction, 'approved', '2026-10-10T12:01:00.000Z');
+  assert.equal(app.ok, true);
+  assert.equal(app.action.status, 'approved');
+  assert.equal(app.action.decided_at, '2026-10-10T12:01:00.000Z');
+
+  const rej = evaluateActionDecision(pendingAction, 'rejected', '2026-10-10T12:02:00.000Z');
+  assert.equal(rej.ok, true);
+  assert.equal(rej.action.status, 'rejected');
+  assert.equal(rej.action.decided_at, '2026-10-10T12:02:00.000Z');
+
+  // Rejects already finalized (non-pending) actions
+  assert.equal(evaluateActionDecision(app.action, 'approved').ok, false);
+  assert.equal(evaluateActionDecision(rej.action, 'approved').ok, false);
+
+  // Rejects malformed action or action with unknown fields
+  assert.equal(evaluateActionDecision({ ...pendingAction, extra: 'bad' }, 'approved').ok, false);
+  assert.equal(evaluateActionDecision({ id: 'act-1' }, 'approved').ok, false);
+
+  // Rejects invalid decisions
+  assert.equal(evaluateActionDecision(pendingAction, 'maybe').ok, false);
+  assert.equal(evaluateActionDecision(null, 'approved').ok, false);
+});
+
+test('summarizeActions aggregates counts and handles invalid inputs fail-closed', () => {
+  assert.deepEqual(summarizeActions(null), { total: 0, pending: 0, approved: 0, rejected: 0, recent: [] });
+  assert.deepEqual(summarizeActions([]), { total: 0, pending: 0, approved: 0, rejected: 0, recent: [] });
+
+  const list = [
+    { id: '1', who: 'a', description: 'd1', at: '2026-10-10T10:00:00.000Z', status: 'pending', decided_at: null },
+    { id: '2', who: 'b', description: 'd2', at: '2026-10-10T11:00:00.000Z', status: 'approved', decided_at: '2026-10-10T11:01:00.000Z' },
+    { id: '3', who: 'c', description: 'd3', at: '2026-10-10T12:00:00.000Z', status: 'rejected', decided_at: '2026-10-10T12:01:00.000Z' }
+  ];
+  const summary = summarizeActions(list);
+  assert.equal(summary.total, 3);
+  assert.equal(summary.pending, 1);
+  assert.equal(summary.approved, 1);
+  assert.equal(summary.rejected, 1);
+  assert.equal(summary.recent[0].id, '3');
+});
+
 
