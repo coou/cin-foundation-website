@@ -1,0 +1,45 @@
+rules_version = '2';
+// CIN network site (cintnet.org): public ideas, discussion and votes.
+// Anyone can read; signed-in people can post, in shapes fixed here; nobody can edit others' posts.
+// The agents moderate by publishing which ideas are hidden (portal/data/idea-status.json).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function text(v, lo, hi) { return v is string && v.size() >= lo && v.size() <= hi; }
+    function mine(d) { return d.authorUid == request.auth.uid && text(d.authorName, 1, 60) && d.createdAt == request.time; }
+
+    match /ideas/{id} {
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['title', 'body', 'category', 'authorUid', 'authorName', 'createdAt'])
+        && text(request.resource.data.title, 5, 120)
+        && text(request.resource.data.body, 20, 4000)
+        && request.resource.data.category in ['safety', 'collective', 'value', 'simulation', 'forecast', 'interface', 'other']
+        && mine(request.resource.data);
+      allow delete: if signedIn() && resource.data.authorUid == request.auth.uid;
+      allow update: if false;
+
+      match /comments/{cid} {
+        allow read: if true;
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['body', 'authorUid', 'authorName', 'createdAt'])
+          && text(request.resource.data.body, 2, 2000)
+          && mine(request.resource.data);
+        allow delete: if signedIn() && resource.data.authorUid == request.auth.uid;
+        allow update: if false;
+      }
+
+      match /votes/{uid} {
+        allow read: if true;
+        allow create: if signedIn() && uid == request.auth.uid
+          && request.resource.data.keys().hasOnly(['createdAt']) && request.resource.data.createdAt == request.time;
+        allow delete: if signedIn() && uid == request.auth.uid;
+        allow update: if false;
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
