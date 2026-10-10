@@ -1,10 +1,10 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, calculatePersonalTrajectory, summarizeContributions } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
-const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [] }; } catch (e) { return { topics: [], grants: [], contributions: [] }; } };
+const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [] }; } };
 const save = (s) => { const c = validateTwinState(s); if (!c.ok) return false; try { localStorage.setItem(KEY, JSON.stringify(c.value)); return true; } catch (e) { return false; } };
 let state = load();
 
@@ -208,7 +208,7 @@ if (importInput) importInput.onchange = (e) => {
     const res = deserializeTwinState(evt.target && evt.target.result);
     if (!res.ok) { if (status) status.textContent = 'Could not restore backup: ' + res.error; importInput.value = ''; return; }
     if (save(res.value)) {
-      state = res.value; f.elements.topics.value = state.topics.join(', '); renderGrants(); renderQuest(); renderContributions();
+      state = res.value; f.elements.topics.value = state.topics.join(', '); renderGrants(); renderQuest(); renderContributions(); renderActions();
       if (status) status.textContent = 'Backup restored successfully on this device.';
     }
     importInput.value = '';
@@ -216,13 +216,80 @@ if (importInput) importInput.onchange = (e) => {
   reader.readAsText(file);
 };
 
+function renderActions() {
+  const ul = document.getElementById('actions');
+  const summaryBox = document.getElementById('action-summary');
+  if (!ul) return;
+  ul.textContent = '';
+  const acts = state.actions || [];
+  if (!acts.length) {
+    ul.appendChild(el('li', 'muted', 'No pending requests. Local assistants and services cannot run actions without your review.'));
+    if (summaryBox) summaryBox.textContent = '';
+    return;
+  }
+  const summary = summarizeActions(acts);
+  acts.forEach((a, i) => {
+    const li = el('li');
+    const badge = el('small', 'muted', ` [${a.status}] `);
+    li.append(badge, el('b', null, a.who), document.createTextNode(' requested: ' + a.description));
+    if (a.status === 'pending') {
+      const decide = (decision) => {
+        const dec = evaluateActionDecision(a, decision);
+        if (dec.ok) {
+          const next = acts.map((item, idx) => (idx === i ? dec.action : item));
+          if (save({ ...state, actions: next })) { state.actions = next; renderActions(); }
+        }
+      };
+      const appBtn = el('button', 'btn', 'Approve');
+      appBtn.style.margin = '0 0.3rem 0 0.5rem';
+      appBtn.onclick = () => decide('approved');
+      const rejBtn = el('button', 'btn', 'Deny');
+      rejBtn.onclick = () => decide('rejected');
+      li.append(appBtn, rejBtn);
+    } else {
+      const clearBtn = el('button', 'btn', 'Clear');
+      clearBtn.style.marginLeft = '0.5rem';
+      clearBtn.onclick = () => {
+        const next = acts.filter((_, idx) => idx !== i);
+        if (save({ ...state, actions: next })) { state.actions = next; renderActions(); }
+      };
+      li.appendChild(clearBtn);
+    }
+    ul.appendChild(li);
+  });
+  if (summaryBox) {
+    summaryBox.textContent = '';
+    summaryBox.appendChild(el('p', 'muted', `Actions: ${summary.pending} pending, ${summary.approved} approved, ${summary.rejected} denied. Guarded locally.`));
+  }
+}
+
+const actionForm = document.getElementById('action-request');
+if (actionForm) {
+  actionForm.onsubmit = (e) => {
+    e.preventDefault();
+    const status = document.getElementById('data-status');
+    const currentActions = state.actions || [];
+    if (currentActions.length >= 50) {
+      if (status) status.textContent = 'Maximum of 50 actions reached. Clear an older entry first.';
+      return;
+    }
+    const who = actionForm.elements.who ? actionForm.elements.who.value.trim().slice(0, 60) : '';
+    const desc = actionForm.elements.description ? actionForm.elements.description.value.trim().slice(0, 100) : '';
+    if (!who || !desc) return;
+    const now = new Date();
+    const newAction = { id: 'act-' + now.getTime().toString(36), who, description: desc, at: now.toISOString(), status: 'pending', decided_at: null };
+    const next = { ...state, actions: currentActions.concat([newAction]) };
+    if (save(next)) { state = next; actionForm.reset(); renderActions(); }
+  };
+}
+
 const wipeBtn = document.getElementById('wipe');
 if (wipeBtn) wipeBtn.onclick = () => {
   try { localStorage.removeItem(KEY); } catch (e) { /* nothing */ }
-  state = { topics: [], grants: [], contributions: [] }; f.reset(); renderGrants(); renderContributions();
+  state = { topics: [], grants: [], contributions: [], actions: [] }; f.reset(); renderGrants(); renderContributions(); renderActions();
   const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
   const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
-renderGrants(); renderQuest(); renderContributions();
+renderGrants(); renderQuest(); renderContributions(); renderActions();
