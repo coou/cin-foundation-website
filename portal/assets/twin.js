@@ -1,12 +1,25 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
-const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [] }; } };
+const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [], events: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [], events: [] }; } };
 const save = (s) => { const c = validateTwinState(s); if (!c.ok) return false; try { localStorage.setItem(KEY, JSON.stringify(c.value)); return true; } catch (e) { return false; } };
 let state = load();
+
+function saveAndRender(next, eventType = null, eventDetail = null) {
+  let toSave = next;
+  if (eventType && eventDetail) {
+    const rec = recordTwinEvent(next, eventType, eventDetail);
+    if (rec.ok) toSave = rec.state;
+  }
+  if (save(toSave)) {
+    state = toSave;
+    return true;
+  }
+  return false;
+}
 
 function words(text) { return (text || '').toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2); }
 
@@ -45,7 +58,13 @@ function renderGrants() {
       }
     };
     li.appendChild(rec);
-    const x = el('button', 'btn', 'Revoke'); x.onclick = () => { const next = state.grants.filter((_, idx) => idx !== i); if (save({ ...state, grants: next })) { state.grants = next; renderGrants(); } };
+    const x = el('button', 'btn', 'Revoke'); x.onclick = () => {
+      const next = { ...state, grants: state.grants.filter((_, idx) => idx !== i) };
+      if (saveAndRender(next, 'grant_revoked', `Revoked grant for ${g.who}`)) {
+        renderGrants();
+        renderEvents();
+      }
+    };
     li.appendChild(x); ul.appendChild(li);
   });
 }
@@ -96,8 +115,14 @@ f.onsubmit = (e) => {
   e.preventDefault();
   const topics = f.elements.topics.value.split(',').map((t) => t.trim().slice(0, 60)).filter(Boolean).slice(0, 20);
   const next = { ...state, topics };
-  if (save(next)) { state = next; document.getElementById('saved').textContent = 'Saved on this device only.'; renderQuest(); }
-  else { document.getElementById('saved').textContent = 'Could not save topics.'; }
+  const detail = topics.length ? `Updated ${topics.length} topic(s)` : 'Cleared topics';
+  if (saveAndRender(next, 'topics_updated', detail)) {
+    document.getElementById('saved').textContent = 'Saved on this device only.';
+    renderQuest();
+    renderEvents();
+  } else {
+    document.getElementById('saved').textContent = 'Could not save topics.';
+  }
 };
 
 const g = document.getElementById('grant');
@@ -111,7 +136,12 @@ g.onsubmit = (e) => {
   const now = new Date();
   const expires_at = duration > 0 ? new Date(now.getTime() + duration * 86400000).toISOString() : null;
   const next = { ...state, grants: state.grants.concat([{ who, what, at: now.toISOString(), expires_at }]) };
-  if (save(next)) { state = next; g.reset(); renderGrants(); }
+  const grantDetail = ('Granted ' + who.slice(0, 40) + ' access to ' + what.slice(0, 50)).slice(0, 120);
+  if (saveAndRender(next, 'grant_created', grantDetail)) {
+    g.reset();
+    renderGrants();
+    renderEvents();
+  }
 };
 
 function renderContributions() {
@@ -136,10 +166,10 @@ function renderContributions() {
     const delBtn = el('button', 'btn', 'Remove');
     delBtn.style.marginLeft = '0.5rem';
     delBtn.onclick = () => {
-      const next = contribs.filter((_, idx) => idx !== i);
-      if (save({ ...state, contributions: next })) {
-        state.contributions = next;
+      const next = { ...state, contributions: contribs.filter((_, idx) => idx !== i) };
+      if (saveAndRender(next, 'contribution_removed', `Removed [${c.kind}] contribution`)) {
         renderContributions();
+        renderEvents();
       }
     };
     li.appendChild(delBtn);
@@ -178,10 +208,10 @@ if (contribForm) {
         impact
       }])
     };
-    if (save(next)) {
-      state = next;
+    if (saveAndRender(next, 'contribution_added', `Recorded [${kind}] ${what.slice(0, 40)}`)) {
       contribForm.reset();
       renderContributions();
+      renderEvents();
     }
   };
 }
@@ -194,6 +224,8 @@ if (exportBtn) exportBtn.onclick = () => {
     const url = URL.createObjectURL(blob); const a = document.createElement('a');
     a.href = url; a.download = 'cin-twin-backup.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     if (status) status.textContent = 'Backup downloaded as cin-twin-backup.json.';
+    saveAndRender(state, 'data_exported', 'Exported local twin backup');
+    renderEvents();
   } catch (err) { if (status) status.textContent = 'Could not create backup file.'; }
 };
 
@@ -207,8 +239,9 @@ if (importInput) importInput.onchange = (e) => {
   reader.onload = (evt) => {
     const res = deserializeTwinState(evt.target && evt.target.result);
     if (!res.ok) { if (status) status.textContent = 'Could not restore backup: ' + res.error; importInput.value = ''; return; }
-    if (save(res.value)) {
-      state = res.value; f.elements.topics.value = state.topics.join(', '); renderGrants(); renderQuest(); renderContributions(); renderActions();
+    if (saveAndRender(res.value, 'data_imported', 'Restored backup on this device')) {
+      f.elements.topics.value = state.topics.join(', ');
+      renderGrants(); renderQuest(); renderContributions(); renderActions(); renderEvents();
       if (status) status.textContent = 'Backup restored successfully on this device.';
     }
     importInput.value = '';
@@ -236,8 +269,12 @@ function renderActions() {
       const decide = (decision) => {
         const dec = evaluateActionDecision(a, decision);
         if (dec.ok) {
-          const next = acts.map((item, idx) => (idx === i ? dec.action : item));
-          if (save({ ...state, actions: next })) { state.actions = next; renderActions(); }
+          const next = { ...state, actions: acts.map((item, idx) => (idx === i ? dec.action : item)) };
+          const evtType = decision === 'approved' ? 'action_approved' : 'action_denied';
+          if (saveAndRender(next, evtType, `${decision === 'approved' ? 'Approved' : 'Denied'} action for ${a.who}`)) {
+            renderActions();
+            renderEvents();
+          }
         }
       };
       const appBtn = el('button', 'btn', 'Approve');
@@ -250,8 +287,11 @@ function renderActions() {
       const clearBtn = el('button', 'btn', 'Clear');
       clearBtn.style.marginLeft = '0.5rem';
       clearBtn.onclick = () => {
-        const next = acts.filter((_, idx) => idx !== i);
-        if (save({ ...state, actions: next })) { state.actions = next; renderActions(); }
+        const next = { ...state, actions: acts.filter((_, idx) => idx !== i) };
+        if (saveAndRender(next, 'action_cleared', `Cleared action for ${a.who}`)) {
+          renderActions();
+          renderEvents();
+        }
       };
       li.appendChild(clearBtn);
     }
@@ -279,17 +319,60 @@ if (actionForm) {
     const now = new Date();
     const newAction = { id: 'act-' + now.getTime().toString(36), who, description: desc, at: now.toISOString(), status: 'pending', decided_at: null };
     const next = { ...state, actions: currentActions.concat([newAction]) };
-    if (save(next)) { state = next; actionForm.reset(); renderActions(); }
+    if (saveAndRender(next, 'action_queued', `Queued action for ${who}`)) {
+      actionForm.reset();
+      renderActions();
+      renderEvents();
+    }
+  };
+}
+
+function renderEvents() {
+  const ul = document.getElementById('events');
+  const summaryBox = document.getElementById('event-summary');
+  if (!ul) return;
+  ul.textContent = '';
+  const evts = state.events || [];
+  if (!evts.length) {
+    ul.appendChild(el('li', 'muted', 'No activity recorded yet. Changes you make in your twin will appear here.'));
+    if (summaryBox) summaryBox.textContent = '';
+    return;
+  }
+  const summary = summarizeEvents(evts);
+  const sorted = evts.slice().reverse();
+  sorted.slice(0, 8).forEach((e) => {
+    const li = el('li');
+    const badge = el('small', 'muted', ` [${e.type}] `);
+    const dateStr = e.at ? e.at.slice(11, 19) : '';
+    const timeNote = dateStr ? el('small', 'muted', ` at ${dateStr} `) : document.createTextNode(' ');
+    li.append(badge, el('b', null, e.detail), timeNote);
+    ul.appendChild(li);
+  });
+  if (summaryBox) {
+    summaryBox.textContent = '';
+    summaryBox.appendChild(el('p', 'muted', `Total activity: ${summary.total} local event(s) recorded on this device.`));
+  }
+}
+
+const clearEventsBtn = document.getElementById('clear-events');
+if (clearEventsBtn) {
+  clearEventsBtn.onclick = () => {
+    const next = { ...state, events: [] };
+    if (save(next)) {
+      state = next;
+      renderEvents();
+    }
   };
 }
 
 const wipeBtn = document.getElementById('wipe');
 if (wipeBtn) wipeBtn.onclick = () => {
   try { localStorage.removeItem(KEY); } catch (e) { /* nothing */ }
-  state = { topics: [], grants: [], contributions: [], actions: [] }; f.reset(); renderGrants(); renderContributions(); renderActions();
+  state = { topics: [], grants: [], contributions: [], actions: [], events: [] };
+  f.reset(); renderGrants(); renderContributions(); renderActions(); renderEvents();
   const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
   const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
-renderGrants(); renderQuest(); renderContributions(); renderActions();
+renderGrants(); renderQuest(); renderContributions(); renderActions(); renderEvents();
