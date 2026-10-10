@@ -7,7 +7,10 @@ import {
   serializeTwinState,
   evaluateAccessRequest,
   createConsentReceipt,
-  isGrantExpired
+  isGrantExpired,
+  extractWords,
+  scoreSignalRelevance,
+  calculatePersonalTrajectory
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -202,4 +205,133 @@ test('createConsentReceipt produces valid ISO-27560 compatible structured receip
   assert.throws(() => createConsentReceipt(grant, 's'.repeat(81)));
   const custom = createConsentReceipt(grant, 'custom-id');
   assert.equal(custom.subject, 'custom-id');
+});
+
+test('extractWords tokenizes, normalizes, and retains tokens of length >= 2', () => {
+  assert.deepEqual(extractWords('Local AI and ML Privacy!'), ['local', 'ai', 'and', 'ml', 'privacy']);
+  assert.deepEqual(extractWords(''), []);
+  assert.deepEqual(extractWords(null), []);
+  assert.deepEqual(extractWords(123), []);
+  assert.deepEqual(extractWords('a b c'), []); // single characters dropped
+});
+
+test('scoreSignalRelevance evaluates individual signal fail-closed', () => {
+  assert.equal(scoreSignalRelevance(null, ['ai']).relevance, 0);
+  assert.equal(scoreSignalRelevance({ title: 'AI' }, null).relevance, 0);
+  assert.equal(scoreSignalRelevance({ title: 'AI' }, []).relevance, 0);
+
+  const sig = { title: 'Local AI Assistant', summary: 'Runs entirely on device with privacy.' };
+  const r1 = scoreSignalRelevance(sig, ['ai', 'privacy']);
+  assert.equal(r1.relevance, 2);
+  assert.deepEqual(r1.matched_tokens, ['ai', 'privacy']);
+
+  const r2 = scoreSignalRelevance(sig, new Set(['assistant', 'device']));
+  assert.equal(r2.relevance, 2);
+  assert.deepEqual(r2.matched_tokens, ['assistant', 'device']);
+});
+
+test('calculatePersonalTrajectory returns neutral baseline on empty or invalid inputs', () => {
+  const emptyRes = calculatePersonalTrajectory([], []);
+  assert.equal(emptyRes.total_matching, 0);
+  assert.equal(emptyRes.score, 50.0);
+  assert.equal(emptyRes.net_balance, 0);
+  assert.deepEqual(emptyRes.matching_signals, []);
+
+  const nullRes = calculatePersonalTrajectory(null, null);
+  assert.equal(nullRes.total_matching, 0);
+  assert.equal(nullRes.score, 50.0);
+
+  const nonArrayRes = calculatePersonalTrajectory(['privacy'], 'not-an-array');
+  assert.equal(nonArrayRes.total_matching, 0);
+  assert.equal(nonArrayRes.score, 50.0);
+});
+
+test('calculatePersonalTrajectory matches topics, counts direction, and weights score correctly', () => {
+  const topics = ['privacy', 'local AI'];
+  const signals = [
+    {
+      id: 'S-1',
+      title: 'Local AI model runs on device with full privacy',
+      summary: 'No cloud communication required.',
+      direction: 'toward',
+      weight: 2,
+      categories: ['person', 'agents', 'person'] // duplicate category to test deduplication
+    },
+    {
+      id: 'S-2',
+      title: 'Cloud assistant leaks user privacy data',
+      summary: 'Centralized telemetry breach observed.',
+      direction: 'away',
+      weight: 1,
+      categories: ['person']
+    },
+    {
+      id: 'S-3',
+      title: 'Autonomous vehicle navigation in urban logistics',
+      summary: 'Route optimization under congestion.',
+      direction: 'toward',
+      weight: 3,
+      categories: ['economy']
+    }
+  ];
+
+  const res = calculatePersonalTrajectory(topics, signals);
+  assert.equal(res.total_matching, 2);
+  assert.equal(res.toward_count, 1);
+  assert.equal(res.away_count, 1);
+  assert.equal(res.neutral_count, 0);
+  assert.equal(res.weighted_toward, 2);
+  assert.equal(res.weighted_away, 1);
+  assert.equal(res.net_balance, 1); // 2 - 1 = +1
+  assert.equal(res.score, 66.7);
+  // Deduplicated person category count: 1 from S-1 + 1 from S-2 = 2
+  assert.deepEqual(res.category_counts, { person: 2, agents: 1 });
+  assert.deepEqual(res.topics_matched, ['ai', 'local', 'privacy']);
+
+  // Most relevant signal first (S-1 has more matched word hits)
+  assert.equal(res.matching_signals[0].id, 'S-1');
+  assert.equal(res.matching_signals[0].summary, 'No cloud communication required.');
+  assert.equal(res.matching_signals[1].id, 'S-2');
+  assert.equal(res.matching_signals[1].summary, 'Centralized telemetry breach observed.');
+
+  // Verify deep freeze
+  assert.throws(() => { res.matching_signals[0].categories.push('hacked'); });
+  assert.throws(() => { res.matching_signals.push({}); });
+});
+
+test('calculatePersonalTrajectory stably sorts identical relevance and weight', () => {
+  const topics = ['privacy'];
+  const signals = [
+    { id: 'S-B', title: 'Beta privacy note', direction: 'toward', weight: 1 },
+    { id: 'S-A', title: 'Alpha privacy note', direction: 'toward', weight: 1 }
+  ];
+  const res = calculatePersonalTrajectory(topics, signals);
+  assert.equal(res.matching_signals[0].id, 'S-A');
+  assert.equal(res.matching_signals[1].id, 'S-B');
+});
+
+test('calculatePersonalTrajectory safely ignores malformed signal items', () => {
+  const topics = ['privacy'];
+  const signals = [
+    null,
+    123,
+    'invalid',
+    [],
+    { title: 'Privacy safe', summary: 'Good', direction: 'toward', weight: 2 }
+  ];
+  const res = calculatePersonalTrajectory(topics, signals);
+  assert.equal(res.total_matching, 1);
+  assert.equal(res.score, 100.0); // 100% toward
+});
+
+test('calculatePersonalTrajectory evaluates pure away balance at 0.0', () => {
+  const topics = ['security'];
+  const signals = [
+    { title: 'Security vulnerability found', summary: 'Critical exploit', direction: 'away', weight: 3 }
+  ];
+  const res = calculatePersonalTrajectory(topics, signals);
+  assert.equal(res.total_matching, 1);
+  assert.equal(res.away_count, 1);
+  assert.equal(res.score, 0.0);
+  assert.equal(res.net_balance, -3);
 });
