@@ -18,7 +18,8 @@ import {
   evaluateActionDecision,
   summarizeActions,
   recordTwinEvent,
-  summarizeEvents
+  summarizeEvents,
+  queueAccessAsPendingAction
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -679,5 +680,63 @@ test('summarizeEvents aggregates counts and handles invalid inputs fail-closed',
   assert.equal(summary2.latest.id, 'good-2');
 });
 
+test('queueAccessAsPendingAction creates well-formed pending action and appends to state', () => {
+  const base = { topics: [], grants: [], contributions: [], actions: [], events: [] };
+  const res = queueAccessAsPendingAction(base, 'calendar-agent', 'read schedules', '2026-10-10T12:00:00.000Z', 'act-test-01');
+  assert.equal(res.ok, true);
+  assert.equal(res.action.id, 'act-test-01');
+  assert.equal(res.action.who, 'calendar-agent');
+  assert.equal(res.action.description, 'Access requested: read schedules');
+  assert.equal(res.action.at, '2026-10-10T12:00:00.000Z');
+  assert.equal(res.action.status, 'pending');
+  assert.equal(res.action.decided_at, null);
 
+  assert.equal(res.state.actions.length, 1);
+  assert.deepEqual(res.state.actions[0], res.action);
 
+  const val = validateTwinState(res.state);
+  assert.equal(val.ok, true);
+});
+
+test('queueAccessAsPendingAction fails closed on invalid state or parameters', () => {
+  const base = { topics: [], grants: [], contributions: [], actions: [], events: [] };
+
+  // Invalid state
+  assert.equal(queueAccessAsPendingAction(null, 'svc', 'scope').ok, false);
+  assert.equal(queueAccessAsPendingAction({ extra: 1 }, 'svc', 'scope').ok, false);
+
+  // Invalid service
+  assert.equal(queueAccessAsPendingAction(base, '', 'scope').ok, false);
+  assert.equal(queueAccessAsPendingAction(base, '   ', 'scope').ok, false);
+  assert.equal(queueAccessAsPendingAction(base, 123, 'scope').ok, false);
+  assert.equal(queueAccessAsPendingAction(base, 'a'.repeat(61), 'scope').ok, false);
+
+  // Invalid scope
+  assert.equal(queueAccessAsPendingAction(base, 'svc', '').ok, false);
+  assert.equal(queueAccessAsPendingAction(base, 'svc', '   ').ok, false);
+  assert.equal(queueAccessAsPendingAction(base, 'svc', null).ok, false);
+  assert.equal(queueAccessAsPendingAction(base, 'svc', 'a'.repeat(81)).ok, false);
+
+  // Invalid timestamp
+  assert.equal(queueAccessAsPendingAction(base, 'svc', 'scope', 'not-a-date').ok, false);
+  assert.equal(queueAccessAsPendingAction(base, 'svc', 'scope', new Date('invalid')).ok, false);
+
+  // Invalid id
+  assert.equal(queueAccessAsPendingAction(base, 'svc', 'scope', null, 'bad id!').ok, false);
+  assert.equal(queueAccessAsPendingAction(base, 'svc', 'scope', null, 'a'.repeat(41)).ok, false);
+});
+
+test('queueAccessAsPendingAction enforces queue capacity cap of 50', () => {
+  const fullActions = Array.from({ length: 50 }, (_, i) => ({
+    id: `act-${i}`,
+    who: 'test-agent',
+    description: `request ${i}`,
+    at: '2026-10-10T12:00:00.000Z',
+    status: 'pending',
+    decided_at: null
+  }));
+  const state = { topics: [], grants: [], contributions: [], actions: fullActions, events: [] };
+  const res = queueAccessAsPendingAction(state, 'new-agent', 'read data');
+  assert.equal(res.ok, false);
+  assert.match(res.error, /maximum capacity/i);
+});
