@@ -9,10 +9,17 @@ export const ALLOWED_CONTRIBUTION_KINDS = Object.freeze([
   'other'
 ]);
 
+export const ALLOWED_ACTION_STATUSES = Object.freeze([
+  'pending',
+  'approved',
+  'rejected'
+]);
+
 export const DEFAULT_TWIN_STATE = Object.freeze({
   topics: Object.freeze([]),
   grants: Object.freeze([]),
-  contributions: Object.freeze([])
+  contributions: Object.freeze([]),
+  actions: Object.freeze([])
 });
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
@@ -42,7 +49,7 @@ export function validateTwinState(raw) {
     return { ok: false, error: 'Twin state must be an object' };
   }
   const keys = Object.keys(raw);
-  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions')) {
+  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions')) {
     return { ok: false, error: 'Unknown field in twin state' };
   }
   if (!Array.isArray(raw.topics) || raw.topics.length > 20) {
@@ -124,7 +131,59 @@ export function validateTwinState(raw) {
     });
   }
 
-  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions } };
+  const rawActions = raw.actions !== undefined ? raw.actions : [];
+  if (!Array.isArray(rawActions) || rawActions.length > 50) {
+    return { ok: false, error: 'actions must be a list of at most 50 items' };
+  }
+  const cleanActions = [];
+  for (let i = 0; i < rawActions.length; i++) {
+    const a = rawActions[i];
+    if (!a || typeof a !== 'object' || Array.isArray(a)) {
+      return { ok: false, error: `action at index ${i} must be an object` };
+    }
+    if (Object.keys(a).some((k) => k !== 'id' && k !== 'who' && k !== 'description' && k !== 'at' && k !== 'status' && k !== 'decided_at')) {
+      return { ok: false, error: `action at index ${i} has unknown fields` };
+    }
+    if (typeof a.id !== 'string' || !a.id.trim() || a.id.trim().length > 40 || !/^[a-zA-Z0-9_-]+$/.test(a.id.trim())) {
+      return { ok: false, error: `action at index ${i} id must be an alphanumeric string up to 40 characters` };
+    }
+    if (typeof a.who !== 'string' || !a.who.trim() || a.who.trim().length > 60) {
+      return { ok: false, error: `action at index ${i} who field invalid` };
+    }
+    if (typeof a.description !== 'string' || !a.description.trim() || a.description.trim().length > 100) {
+      return { ok: false, error: `action at index ${i} description must be a string up to 100 characters` };
+    }
+    if (typeof a.at !== 'string' || !ISO_RE.test(a.at) || isNaN(Date.parse(a.at))) {
+      return { ok: false, error: `action at index ${i} at field must be an ISO date string` };
+    }
+    const status = typeof a.status === 'string' ? a.status.trim().toLowerCase() : '';
+    if (!ALLOWED_ACTION_STATUSES.includes(status)) {
+      return { ok: false, error: `action at index ${i} status must be one of: ${ALLOWED_ACTION_STATUSES.join(', ')}` };
+    }
+    let cleanDecidedAt = null;
+    if (a.decided_at !== undefined && a.decided_at !== null) {
+      if (typeof a.decided_at !== 'string' || !ISO_RE.test(a.decided_at) || isNaN(Date.parse(a.decided_at))) {
+        return { ok: false, error: `action at index ${i} decided_at must be an ISO date string or null` };
+      }
+      cleanDecidedAt = a.decided_at;
+    }
+    if (status === 'pending' && cleanDecidedAt !== null) {
+      return { ok: false, error: `action at index ${i} pending action cannot have decided_at` };
+    }
+    if (status !== 'pending' && !cleanDecidedAt) {
+      return { ok: false, error: `action at index ${i} decided_at required when status is not pending` };
+    }
+    cleanActions.push({
+      id: a.id.trim(),
+      who: a.who.trim(),
+      description: a.description.trim(),
+      at: a.at,
+      status,
+      decided_at: cleanDecidedAt
+    });
+  }
+
+  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions } };
 }
 
 export function deserializeTwinState(jsonStr) {
@@ -479,4 +538,117 @@ export function summarizeContributions(contributions) {
     recent: Object.freeze(valid.slice(0, 5))
   });
 }
+
+/**
+ * Evaluate and record a decision on a proposed action.
+ * Fail-closed: invalid action or decision returns an error object.
+ *
+ * @param {object} action The action to decide
+ * @param {'approved'|'rejected'} decision The decision
+ * @param {string|Date|number|null} decidedAt Optional timestamp
+ * @returns {object} { ok: boolean, action?: object, error?: string }
+ */
+export function evaluateActionDecision(action, decision, decidedAt = null) {
+  if (!action || typeof action !== 'object' || Array.isArray(action)) {
+    return { ok: false, error: 'Action must be an object' };
+  }
+  const keys = Object.keys(action);
+  if (keys.some((k) => k !== 'id' && k !== 'who' && k !== 'description' && k !== 'at' && k !== 'status' && k !== 'decided_at')) {
+    return { ok: false, error: 'Action has unknown fields' };
+  }
+  if (typeof action.id !== 'string' || !action.id.trim() || action.id.trim().length > 40 || !/^[a-zA-Z0-9_-]+$/.test(action.id.trim())) {
+    return { ok: false, error: 'Invalid or missing action id' };
+  }
+  if (typeof action.who !== 'string' || !action.who.trim() || action.who.trim().length > 60) {
+    return { ok: false, error: 'Invalid or missing action who' };
+  }
+  if (typeof action.description !== 'string' || !action.description.trim() || action.description.trim().length > 100) {
+    return { ok: false, error: 'Invalid or missing action description' };
+  }
+  if (typeof action.at !== 'string' || !ISO_RE.test(action.at) || isNaN(Date.parse(action.at))) {
+    return { ok: false, error: 'Invalid or missing action at timestamp' };
+  }
+  const currentStatus = typeof action.status === 'string' ? action.status.trim().toLowerCase() : '';
+  if (currentStatus !== 'pending') {
+    return { ok: false, error: 'Only pending actions can be decided' };
+  }
+  const cleanDecision = typeof decision === 'string' ? decision.trim().toLowerCase() : '';
+  if (cleanDecision !== 'approved' && cleanDecision !== 'rejected') {
+    return { ok: false, error: "Decision must be 'approved' or 'rejected'" };
+  }
+  let atIso;
+  if (decidedAt === null || decidedAt === undefined) {
+    atIso = new Date().toISOString();
+  } else if (typeof decidedAt === 'string') {
+    if (!ISO_RE.test(decidedAt) || isNaN(Date.parse(decidedAt))) {
+      return { ok: false, error: 'decidedAt must be an ISO date string' };
+    }
+    atIso = decidedAt;
+  } else if (decidedAt instanceof Date && !isNaN(decidedAt.getTime())) {
+    atIso = decidedAt.toISOString();
+  } else if (typeof decidedAt === 'number' && Number.isFinite(decidedAt)) {
+    atIso = new Date(decidedAt).toISOString();
+  } else {
+    return { ok: false, error: 'Invalid decidedAt parameter' };
+  }
+
+  const updated = {
+    id: action.id.trim(),
+    who: action.who.trim(),
+    description: action.description.trim(),
+    at: action.at,
+    status: cleanDecision,
+    decided_at: atIso
+  };
+  return { ok: true, action: Object.freeze(updated) };
+}
+
+/**
+ * Summarize actions by status and recency.
+ * Fail-closed: invalid or non-array input returns baseline summary.
+ *
+ * @param {object[]} actions List of actions
+ * @returns {object} { total: number, pending: number, approved: number, rejected: number, recent: object[] }
+ */
+export function summarizeActions(actions) {
+  if (!Array.isArray(actions)) {
+    return Object.freeze({
+      total: 0,
+      pending: 0,
+      approved: 0,
+      rejected: 0,
+      recent: Object.freeze([])
+    });
+  }
+  let pending = 0;
+  let approved = 0;
+  let rejected = 0;
+  const valid = [];
+  for (let i = 0; i < actions.length; i++) {
+    const a = actions[i];
+    if (!a || typeof a !== 'object' || Array.isArray(a)) continue;
+    if (typeof a.id !== 'string' || !a.id.trim()) continue;
+    const st = typeof a.status === 'string' ? a.status.trim().toLowerCase() : '';
+    if (st === 'pending') pending += 1;
+    else if (st === 'approved') approved += 1;
+    else if (st === 'rejected') rejected += 1;
+    valid.push(Object.freeze({
+      id: a.id.trim(),
+      who: typeof a.who === 'string' ? a.who.trim() : 'unknown',
+      description: typeof a.description === 'string' ? a.description.trim() : '',
+      at: typeof a.at === 'string' ? a.at : '',
+      status: st || 'unknown',
+      decided_at: typeof a.decided_at === 'string' ? a.decided_at : null
+    }));
+  }
+  valid.sort((a, b) => (b.at || '').localeCompare(a.at || ''));
+  return Object.freeze({
+    total: valid.length,
+    pending,
+    approved,
+    rejected,
+    recent: Object.freeze(valid.slice(0, 5))
+  });
+}
+
 
