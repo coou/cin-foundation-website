@@ -1,7 +1,18 @@
 // Pure core logic for twin state management and validation.
+export const ALLOWED_CONTRIBUTION_KINDS = Object.freeze([
+  'code',
+  'review',
+  'knowledge',
+  'compute',
+  'verification',
+  'community',
+  'other'
+]);
+
 export const DEFAULT_TWIN_STATE = Object.freeze({
   topics: Object.freeze([]),
-  grants: Object.freeze([])
+  grants: Object.freeze([]),
+  contributions: Object.freeze([])
 });
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
@@ -31,7 +42,7 @@ export function validateTwinState(raw) {
     return { ok: false, error: 'Twin state must be an object' };
   }
   const keys = Object.keys(raw);
-  if (keys.some((k) => k !== 'topics' && k !== 'grants')) {
+  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions')) {
     return { ok: false, error: 'Unknown field in twin state' };
   }
   if (!Array.isArray(raw.topics) || raw.topics.length > 20) {
@@ -75,7 +86,45 @@ export function validateTwinState(raw) {
     }
     cleanGrants.push({ who: g.who.trim(), what: g.what.trim(), at: g.at, expires_at: cleanExpiresAt });
   }
-  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants } };
+
+  const rawContributions = raw.contributions !== undefined ? raw.contributions : [];
+  if (!Array.isArray(rawContributions) || rawContributions.length > 50) {
+    return { ok: false, error: 'contributions must be a list of at most 50 items' };
+  }
+  const cleanContributions = [];
+  for (let i = 0; i < rawContributions.length; i++) {
+    const c = rawContributions[i];
+    if (!c || typeof c !== 'object' || Array.isArray(c)) {
+      return { ok: false, error: `contribution at index ${i} must be an object` };
+    }
+    if (Object.keys(c).some((k) => k !== 'what' && k !== 'kind' && k !== 'at' && k !== 'impact')) {
+      return { ok: false, error: `contribution at index ${i} has unknown fields` };
+    }
+    if (typeof c.what !== 'string' || !c.what.trim() || c.what.trim().length > 100) {
+      return { ok: false, error: `contribution at index ${i} what field must be a string up to 100 characters` };
+    }
+    if (typeof c.kind !== 'string' || !ALLOWED_CONTRIBUTION_KINDS.includes(c.kind.trim().toLowerCase())) {
+      return { ok: false, error: `contribution at index ${i} kind must be one of: ${ALLOWED_CONTRIBUTION_KINDS.join(', ')}` };
+    }
+    if (typeof c.at !== 'string' || !ISO_RE.test(c.at) || isNaN(Date.parse(c.at))) {
+      return { ok: false, error: `contribution at index ${i} at field must be an ISO date string` };
+    }
+    let cleanImpact = null;
+    if (c.impact !== undefined && c.impact !== null) {
+      if (typeof c.impact !== 'string' || c.impact.trim().length > 100) {
+        return { ok: false, error: `contribution at index ${i} impact field must be a string up to 100 characters or null` };
+      }
+      cleanImpact = c.impact.trim();
+    }
+    cleanContributions.push({
+      what: c.what.trim(),
+      kind: c.kind.trim().toLowerCase(),
+      at: c.at,
+      impact: cleanImpact
+    });
+  }
+
+  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions } };
 }
 
 export function deserializeTwinState(jsonStr) {
@@ -390,3 +439,44 @@ export function calculatePersonalTrajectory(topics, signals) {
     topics_matched: Object.freeze(Array.from(matchedWordsSet).sort())
   });
 }
+
+/**
+ * Summarize contribution records by category and chronological order.
+ * Fail-closed: invalid or non-array input returns empty baseline summary.
+ *
+ * @param {object[]} contributions List of contributions
+ * @returns {object} { total: number, by_kind: object, recent: object[] }
+ */
+export function summarizeContributions(contributions) {
+  if (!Array.isArray(contributions)) {
+    return Object.freeze({
+      total: 0,
+      by_kind: Object.freeze({}),
+      recent: Object.freeze([])
+    });
+  }
+  const byKind = Object.create(null);
+  const valid = [];
+  for (let i = 0; i < contributions.length; i++) {
+    const c = contributions[i];
+    if (!c || typeof c !== 'object' || Array.isArray(c)) continue;
+    if (typeof c.what !== 'string' || !c.what.trim()) continue;
+    const kind = typeof c.kind === 'string' && ALLOWED_CONTRIBUTION_KINDS.includes(c.kind.trim().toLowerCase())
+      ? c.kind.trim().toLowerCase()
+      : 'other';
+    byKind[kind] = (byKind[kind] || 0) + 1;
+    valid.push(Object.freeze({
+      what: c.what.trim(),
+      kind,
+      at: typeof c.at === 'string' ? c.at : '',
+      impact: typeof c.impact === 'string' && c.impact.trim() ? c.impact.trim() : null
+    }));
+  }
+  valid.sort((a, b) => (b.at || '').localeCompare(a.at || ''));
+  return Object.freeze({
+    total: valid.length,
+    by_kind: Object.freeze({ ...byKind }),
+    recent: Object.freeze(valid.slice(0, 5))
+  });
+}
+
