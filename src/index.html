@@ -16,7 +16,7 @@
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/images/logo-192.png">
-  <link rel="stylesheet" href="/styles/site.css?v=14">
+  <link rel="stylesheet" href="/styles/site.css?v=15">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"Collective Intelligence Network","alternateName":"CIN","description":"An independent research and design project preparing people for advanced AI: containment, personal agents and collective intelligence."}
   </script>
@@ -59,6 +59,10 @@
       </div>
     </div>
     <figure class="boundary-fig">
+      <div class="bd-tabs js-only" id="bd-tabs" role="tablist" aria-label="Which way">
+        <button type="button" role="tab" data-tab="in" aria-selected="true">Who asks for your data</button>
+        <button type="button" role="tab" data-tab="out" aria-selected="false">What you need</button>
+      </div>
       <div class="boundary-frame">
         <canvas id="boundary" aria-hidden="true"></canvas>
       </div>
@@ -72,7 +76,19 @@
         <div class="bd-detail" id="bd-detail" hidden></div>
         <div class="bd-logwrap" id="bd-logwrap"><span class="bd-k">What your agents have shared</span><ol class="bd-log" id="bd-log" aria-live="polite"><li class="bd-empty">Nothing yet. Pick a situation, or watch.</li></ol></div>
       </div>
-      <figcaption><strong>Your agents stand at your boundary.</strong> A fleet of narrow agents, one for your health, one for your money and so on, learns from quiet sensors on your own devices. Pick a situation to play it through and decide what goes out. Point at any agent or sensor to see what it knows. <span class="mono">(An illustration, not a working product.)</span></figcaption>
+      <div class="boundary-frame nw-frame" id="nw-frame" hidden>
+        <canvas id="network" aria-hidden="true"></canvas>
+      </div>
+      <div class="bd-scenes" id="nw-scenes" role="group" aria-label="Play a need" hidden></div>
+      <div class="bd-dock" id="nw-side" hidden>
+        <div class="bd-consent" id="nw-consent" role="group" aria-labelledby="nw-q" hidden>
+          <span class="bd-k">Your call</span>
+          <p id="nw-q"></p>
+          <div class="bd-btns"><button type="button" class="bd-yes">Yes, connect</button><button type="button" class="bd-no">Not this one</button></div>
+        </div>
+        <div class="bd-logwrap" id="nw-logwrap"><span class="bd-k">What your agents did</span><ol class="bd-log" id="nw-log" aria-live="polite"><li class="bd-empty">Pick a need, or watch.</li></ol></div>
+      </div>
+      <figcaption><span id="bd-cap"><strong>Your agents stand at your boundary.</strong> A fleet of narrow agents, one for your health, one for your money and so on, learns from quiet sensors on your own devices. Pick a situation to play it through and decide what goes out. Point at any agent or sensor to see what it knows.</span><span id="nw-cap" hidden><strong>Your needs go out, through rings of trust.</strong> Your own agents try first. Then the agents of people you trust, then friends of friends, then the wider network, each seeing less about you. Offers come back, you decide, and the shared record credits everyone who helped.</span> <span class="mono">(An illustration, not a working product.)</span></figcaption>
     </figure>
   </div>
 </section>
@@ -764,6 +780,7 @@
 <script src="/scripts/site.js?v=9" defer></script>
 <script src="/scripts/risk-lab.js?v=4" defer></script>
 <script src="/scripts/trajectory.js?v=1" defer></script>
+<script src="/scripts/network.js?v=3" defer></script>
 <script src="/scripts/principles.js?v=4" defer></script>
 <script src="/scripts/minds.js?v=2" defer></script>
 <script src="/scripts/power.js?v=2" defer></script>
