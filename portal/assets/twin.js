@@ -1,10 +1,10 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
-const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [] }; } };
+const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [] }; } };
 const save = (s) => { const c = validateTwinState(s); if (!c.ok) return false; try { localStorage.setItem(KEY, JSON.stringify(c.value)); return true; } catch (e) { return false; } };
 let state = load();
 
@@ -241,7 +241,7 @@ if (importInput) importInput.onchange = (e) => {
     if (!res.ok) { if (status) status.textContent = 'Could not restore backup: ' + res.error; importInput.value = ''; return; }
     if (saveAndRender(res.value, 'data_imported', 'Restored backup on this device')) {
       f.elements.topics.value = state.topics.join(', ');
-      renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts();
+      renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts(); renderQuests();
       if (status) status.textContent = 'Backup restored successfully on this device.';
     }
     importInput.value = '';
@@ -368,8 +368,8 @@ if (clearEventsBtn) {
 const wipeBtn = document.getElementById('wipe');
 if (wipeBtn) wipeBtn.onclick = () => {
   try { localStorage.removeItem(KEY); } catch (e) { /* nothing */ }
-  state = { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [] };
-  f.reset(); renderGrants(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts();
+  state = { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [] };
+  f.reset(); renderGrants(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts(); renderQuests();
   const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
   const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
   const evalBox = document.getElementById('access-eval-result'); if (evalBox) evalBox.textContent = '';
@@ -598,4 +598,97 @@ if (factForm) {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts();
+function renderQuests() {
+  const ul = document.getElementById('quests');
+  const summaryBox = document.getElementById('quest-summary');
+  if (!ul) return;
+  ul.textContent = '';
+  const quests = state.quests || [];
+  const summary = summarizeQuests(quests);
+  if (!quests.length) {
+    ul.appendChild(el('li', 'muted', 'No daily quests recorded yet. Add focus items to track your priorities.'));
+  }
+  quests.forEach((q, i) => {
+    const li = el('li');
+    const catBadge = el('small', 'muted', `[${q.category}] `);
+    const priorityText = q.priority === 1 ? ' [Focus] ' : ` [P${q.priority}] `;
+    const priorityBadge = el('small', 'muted', priorityText);
+    const statusText = q.completed ? ' (completed) ' : ' ';
+    const titleEl = el('b', null, q.title);
+    if (q.completed) {
+      titleEl.style.textDecoration = 'line-through';
+    }
+    li.append(catBadge, titleEl, priorityBadge, el('small', 'muted', statusText));
+
+    const toggleBtn = el('button', 'btn', q.completed ? 'Reopen' : 'Complete');
+    toggleBtn.style.marginLeft = '0.4rem';
+    toggleBtn.onclick = () => {
+      const toggled = toggleQuestCompletion(state, q.id);
+      if (toggled.ok) {
+        const evType = toggled.completed ? 'quest_completed' : 'quest_reopened';
+        const evDetail = `${toggled.completed ? 'Completed' : 'Reopened'} quest: ${q.title.slice(0, 40)}`;
+        if (saveAndRender(toggled.state, evType, evDetail)) {
+          renderQuests();
+          renderEvents();
+        }
+      }
+    };
+    li.appendChild(toggleBtn);
+
+    const delBtn = el('button', 'btn', 'Remove');
+    delBtn.style.marginLeft = '0.4rem';
+    delBtn.onclick = () => {
+      const next = { ...state, quests: quests.filter((_, idx) => idx !== i) };
+      if (saveAndRender(next, 'quest_removed', `Removed quest: ${q.title.slice(0, 40)}`)) {
+        renderQuests();
+        renderEvents();
+      }
+    };
+    li.appendChild(delBtn);
+    ul.appendChild(li);
+  });
+  if (summaryBox) {
+    summaryBox.textContent = '';
+    if (quests.length) {
+      summaryBox.appendChild(el('p', 'muted', `Quests: ${summary.pending} pending (${summary.focus_pending} focus), ${summary.completed} completed of ${summary.total} total.`));
+    }
+  }
+}
+
+const questForm = document.getElementById('quest-form');
+if (questForm) {
+  questForm.onsubmit = (e) => {
+    e.preventDefault();
+    const status = document.getElementById('data-status');
+    const currentQuests = state.quests || [];
+    if (currentQuests.length >= 50) {
+      if (status) status.textContent = 'Maximum of 50 quests reached. Remove an older entry first.';
+      return;
+    }
+    const title = questForm.elements.title ? questForm.elements.title.value.trim().slice(0, 100) : '';
+    const category = questForm.elements.category ? questForm.elements.category.value.trim().toLowerCase() : 'other';
+    const rawPriority = questForm.elements.priority ? parseInt(questForm.elements.priority.value, 10) : 2;
+    const priority = Number.isInteger(rawPriority) && rawPriority >= 1 && rawPriority <= 3 ? rawPriority : 2;
+    if (title.length < 3) return;
+    const now = new Date();
+    const id = 'quest-' + now.getTime().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
+    const newQuest = {
+      id,
+      title,
+      category,
+      priority,
+      completed: false,
+      at: now.toISOString(),
+      completed_at: null
+    };
+    const next = { ...state, quests: currentQuests.concat([newQuest]) };
+    if (saveAndRender(next, 'quest_added', `Added [${category}] ${title.slice(0, 40)}`)) {
+      questForm.reset();
+      renderQuests();
+      renderEvents();
+    }
+  };
+}
+
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts(); renderQuests();
+

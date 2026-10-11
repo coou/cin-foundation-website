@@ -7,6 +7,7 @@ import {
   ALLOWED_OBLIGATION_CATEGORIES,
   ALLOWED_OBLIGATION_STATUSES,
   ALLOWED_FACT_CATEGORIES,
+  ALLOWED_QUEST_CATEGORIES,
   DEFAULT_TWIN_STATE,
   validateTwinState,
   deserializeTwinState,
@@ -26,7 +27,10 @@ import {
   calculateObligationUrgency,
   summarizeObligations,
   summarizeFacts,
-  filterCriticalFacts
+  filterCriticalFacts,
+  toggleQuestCompletion,
+  summarizeQuests,
+  filterActiveQuests
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -39,6 +43,7 @@ test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
   assert.throws(() => { DEFAULT_TWIN_STATE.events.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.obligations.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.facts.push('x'); });
+  assert.throws(() => { DEFAULT_TWIN_STATE.quests.push('x'); });
 });
 
 test('validateTwinState accepts well-formed data and is deterministic', () => {
@@ -114,9 +119,10 @@ test('deserialize and serialize handle valid data and errors', () => {
     actions: [],
     events: [],
     obligations: [],
-    facts: []
+    facts: [],
+    quests: []
   });
-  // Backward compatibility when contributions, actions, events, obligations, and facts omitted
+  // Backward compatibility when contributions, actions, events, obligations, facts, and quests omitted
   const legacy = deserializeTwinState(JSON.stringify({ topics: ['health'], grants: [] }));
   assert.equal(legacy.ok, true);
   assert.deepEqual(legacy.value.contributions, []);
@@ -124,6 +130,7 @@ test('deserialize and serialize handle valid data and errors', () => {
   assert.deepEqual(legacy.value.events, []);
   assert.deepEqual(legacy.value.obligations, []);
   assert.deepEqual(legacy.value.facts, []);
+  assert.deepEqual(legacy.value.quests, []);
 
   assert.equal(deserializeTwinState('{bad').ok, false);
   assert.throws(() => serializeTwinState({ bad: 1 }));
@@ -976,4 +983,221 @@ test('filterCriticalFacts extracts critical facts safely', () => {
   assert.equal(crit[0].id, 'f1');
   assert.deepEqual(filterCriticalFacts(null), []);
 });
+
+test('validateTwinState accepts well-formed quests and maintains backward compatibility', () => {
+  const state = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [
+      {
+        id: 'q1',
+        title: 'Complete privacy review of twin',
+        category: 'learning',
+        priority: 1,
+        completed: false,
+        at: '2026-10-11T10:00:00.000Z',
+        completed_at: null
+      },
+      {
+        id: 'q2',
+        title: 'Submit synthetic statement fixture',
+        category: 'creation',
+        priority: 2,
+        completed: true,
+        at: '2026-10-11T09:00:00.000Z',
+        completed_at: '2026-10-11T11:00:00.000Z'
+      }
+    ]
+  };
+  const res = validateTwinState(state);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.quests.length, 2);
+  assert.equal(res.value.quests[0].id, 'q1');
+  assert.equal(res.value.quests[0].priority, 1);
+  assert.equal(res.value.quests[0].completed, false);
+  assert.equal(res.value.quests[1].completed, true);
+  assert.equal(res.value.quests[1].completed_at, '2026-10-11T11:00:00.000Z');
+});
+
+test('validateTwinState rejects malformed quests fail-closed', () => {
+  const base = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: []
+  };
+
+  // Extra top-level keys
+  assert.equal(validateTwinState({ ...base, quests: [], invalid_key: 1 }).ok, false);
+
+  // Non-array quests
+  assert.equal(validateTwinState({ ...base, quests: 'not-array' }).ok, false);
+
+  // Too many quests (> 50)
+  const tooMany = Array.from({ length: 51 }, (_, i) => ({
+    id: `q${i}`,
+    title: 'Valid quest title here',
+    category: 'learning',
+    priority: 1,
+    completed: false,
+    at: '2026-10-11T10:00:00.000Z',
+    completed_at: null
+  }));
+  assert.equal(validateTwinState({ ...base, quests: tooMany }).ok, false);
+
+  // Invalid item structure
+  assert.equal(validateTwinState({ ...base, quests: [null] }).ok, false);
+  assert.equal(validateTwinState({ ...base, quests: ['string'] }).ok, false);
+
+  // Unknown fields
+  const validQ = {
+    id: 'q1',
+    title: 'Valid quest title here',
+    category: 'learning',
+    priority: 1,
+    completed: false,
+    at: '2026-10-11T10:00:00.000Z',
+    completed_at: null
+  };
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, extra: 1 }] }).ok, false);
+
+  // Invalid id
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, id: '' }] }).ok, false);
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, id: 'bad id with spaces' }] }).ok, false);
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, id: 'a'.repeat(45) }] }).ok, false);
+
+  // Invalid title bounds (< 3 or > 100)
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, title: 'ab' }] }).ok, false);
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, title: 'a'.repeat(105) }] }).ok, false);
+
+  // Invalid category
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, category: 'unknown' }] }).ok, false);
+
+  // Non-integer or out-of-range priority
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, priority: 0 }] }).ok, false);
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, priority: 4 }] }).ok, false);
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, priority: 1.5 }] }).ok, false);
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, priority: true }] }).ok, false);
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, priority: '1' }] }).ok, false);
+
+  // Invalid completed boolean
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, completed: 'yes' }] }).ok, false);
+
+  // Invalid at timestamp
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, at: 'not-a-date' }] }).ok, false);
+
+  // Uncompleted with completed_at set
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, completed: false, completed_at: '2026-10-11T10:00:00.000Z' }] }).ok, false);
+
+  // Completed with invalid completed_at
+  assert.equal(validateTwinState({ ...base, quests: [{ ...validQ, completed: true, completed_at: 'invalid-date' }] }).ok, false);
+});
+
+test('toggleQuestCompletion toggles completion and updates completed_at fail-closed', () => {
+  const initial = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [
+      {
+        id: 'q1',
+        title: 'Review proposal',
+        category: 'community',
+        priority: 1,
+        completed: false,
+        at: '2026-10-11T10:00:00.000Z',
+        completed_at: null
+      }
+    ]
+  };
+
+  // Toggle to completed
+  const t1 = toggleQuestCompletion(initial, 'q1', '2026-10-11T12:00:00.000Z');
+  assert.equal(t1.ok, true);
+  assert.equal(t1.completed, true);
+  assert.equal(t1.state.quests[0].completed, true);
+  assert.equal(t1.state.quests[0].completed_at, '2026-10-11T12:00:00.000Z');
+
+  // Toggle back to uncompleted
+  const t2 = toggleQuestCompletion(t1.state, 'q1', '2026-10-11T13:00:00.000Z');
+  assert.equal(t2.ok, true);
+  assert.equal(t2.completed, false);
+  assert.equal(t2.state.quests[0].completed, false);
+  assert.equal(t2.state.quests[0].completed_at, null);
+
+  // Fail closed on nonexistent id
+  const badId = toggleQuestCompletion(initial, 'nonexistent');
+  assert.equal(badId.ok, false);
+
+  // Fail closed on invalid state or time
+  assert.equal(toggleQuestCompletion(null, 'q1').ok, false);
+  assert.equal(toggleQuestCompletion(initial, 'q1', 'invalid-time').ok, false);
+  assert.equal(toggleQuestCompletion(initial, 'q1', new Date('invalid')).ok, false);
+});
+
+test('summarizeQuests aggregates metrics, pending, focus, and categories fail-closed', () => {
+  const quests = [
+    { id: 'q1', category: 'learning', priority: 1, completed: false },
+    { id: 'q2', category: 'creation', priority: 2, completed: false },
+    { id: 'q3', category: 'community', priority: 1, completed: true },
+    { id: 'q4', category: 'other', priority: 3, completed: false },
+    { id: 'bad', category: 'unknown-cat', priority: 1, completed: false }
+  ];
+
+  const sum = summarizeQuests(quests);
+  assert.equal(sum.total, 4);
+  assert.equal(sum.completed, 1);
+  assert.equal(sum.pending, 3);
+  assert.equal(sum.focus_pending, 1); // only q1 is pending with priority 1
+  assert.equal(sum.by_category.learning, 1);
+  assert.equal(sum.by_category.creation, 1);
+  assert.equal(sum.by_category.community, 1);
+  assert.equal(sum.by_category.other, 1);
+
+  // Null or invalid input
+  const empty = summarizeQuests(null);
+  assert.equal(empty.total, 0);
+  assert.equal(empty.completed, 0);
+  assert.equal(empty.pending, 0);
+  assert.equal(empty.focus_pending, 0);
+});
+
+test('filterActiveQuests filters completed and sorts by priority and at limit', () => {
+  const quests = [
+    { id: 'q1', title: 'Task Low', priority: 3, completed: false, at: '2026-10-11T08:00:00.000Z' },
+    { id: 'q2', title: 'Task Done', priority: 1, completed: true, at: '2026-10-11T09:00:00.000Z' },
+    { id: 'q3', title: 'Task High A', priority: 1, completed: false, at: '2026-10-11T10:00:00.000Z' },
+    { id: 'q4', title: 'Task High B', priority: 1, completed: false, at: '2026-10-11T07:00:00.000Z' },
+    { id: 'q5', title: 'Task Normal', priority: 2, completed: false, at: '2026-10-11T06:00:00.000Z' },
+    { id: 'q6', title: 'Task Tie B', priority: 1, completed: false, at: '2026-10-11T07:00:00.000Z' }
+  ];
+
+  const active = filterActiveQuests(quests, 3);
+  assert.equal(active.length, 3);
+  // Priority 1 tasks first, sorted by at ascending, then id ascending: q4, q6, q3
+  assert.equal(active[0].id, 'q4');
+  assert.equal(active[1].id, 'q6');
+  assert.equal(active[2].id, 'q3');
+
+  // Limit 0 returns empty array
+  assert.deepEqual(filterActiveQuests(quests, 0), []);
+
+  // Edge cases with malformed or missing fields
+  assert.deepEqual(filterActiveQuests([{}, {}]), []);
+  assert.deepEqual(filterActiveQuests([{ priority: 1, at: null }, { priority: 1, at: '2026-10-11T00:00:00.000Z' }]), []);
+  assert.deepEqual(filterActiveQuests(null), []);
+});
+
 
