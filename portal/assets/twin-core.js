@@ -39,6 +39,15 @@ export const ALLOWED_FACT_CATEGORIES = Object.freeze([
   'other'
 ]);
 
+export const ALLOWED_QUEST_CATEGORIES = Object.freeze([
+  'learning',
+  'creation',
+  'community',
+  'health',
+  'maintenance',
+  'other'
+]);
+
 export const ALLOWED_EVENT_TYPES = Object.freeze([
   'topics_updated',
   'grant_created',
@@ -54,6 +63,10 @@ export const ALLOWED_EVENT_TYPES = Object.freeze([
   'obligation_removed',
   'fact_added',
   'fact_removed',
+  'quest_added',
+  'quest_completed',
+  'quest_reopened',
+  'quest_removed',
   'data_exported',
   'data_imported',
   'log_cleared'
@@ -66,7 +79,8 @@ export const DEFAULT_TWIN_STATE = Object.freeze({
   actions: Object.freeze([]),
   events: Object.freeze([]),
   obligations: Object.freeze([]),
-  facts: Object.freeze([])
+  facts: Object.freeze([]),
+  quests: Object.freeze([])
 });
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
@@ -96,7 +110,7 @@ export function validateTwinState(raw) {
     return { ok: false, error: 'Twin state must be an object' };
   }
   const keys = Object.keys(raw);
-  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions' && k !== 'events' && k !== 'obligations' && k !== 'facts')) {
+  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions' && k !== 'events' && k !== 'obligations' && k !== 'facts' && k !== 'quests')) {
     return { ok: false, error: 'Unknown field in twin state' };
   }
   if (!Array.isArray(raw.topics) || raw.topics.length > 20) {
@@ -293,7 +307,31 @@ export function validateTwinState(raw) {
     cleanFacts.push({ id: f.id.trim(), category: cat, statement: f.statement.trim(), critical: f.critical, at: f.at });
   }
 
-  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions, events: cleanEvents, obligations: cleanObligations, facts: cleanFacts } };
+  const rawQuests = raw.quests !== undefined ? raw.quests : [];
+  if (!Array.isArray(rawQuests) || rawQuests.length > 50) return { ok: false, error: 'quests must be a list of at most 50 items' };
+  const cleanQuests = [];
+  for (let i = 0; i < rawQuests.length; i++) {
+    const q = rawQuests[i];
+    if (!q || typeof q !== 'object' || Array.isArray(q)) return { ok: false, error: `quest at index ${i} must be an object` };
+    if (Object.keys(q).some((k) => !['id', 'title', 'category', 'priority', 'completed', 'at', 'completed_at'].includes(k))) return { ok: false, error: `quest at index ${i} has unknown fields` };
+    if (typeof q.id !== 'string' || !q.id.trim() || q.id.trim().length > 40 || !/^[a-zA-Z0-9_-]+$/.test(q.id.trim())) return { ok: false, error: `quest at index ${i} id must be an alphanumeric string up to 40 characters` };
+    if (typeof q.title !== 'string' || !q.title.trim() || q.title.trim().length < 3 || q.title.trim().length > 100) return { ok: false, error: `quest at index ${i} title must be a string between 3 and 100 characters` };
+    const cat = typeof q.category === 'string' ? q.category.trim().toLowerCase() : '';
+    if (!ALLOWED_QUEST_CATEGORIES.includes(cat)) return { ok: false, error: `quest at index ${i} category must be one of: ${ALLOWED_QUEST_CATEGORIES.join(', ')}` };
+    if (typeof q.priority !== 'number' || !Number.isInteger(q.priority) || q.priority < 1 || q.priority > 3) return { ok: false, error: `quest at index ${i} priority must be an integer between 1 and 3` };
+    if (typeof q.completed !== 'boolean') return { ok: false, error: `quest at index ${i} completed must be a boolean` };
+    if (typeof q.at !== 'string' || !ISO_RE.test(q.at) || isNaN(Date.parse(q.at))) return { ok: false, error: `quest at index ${i} at field must be an ISO date string` };
+    let cleanCompletedAt = null;
+    if (q.completed_at !== undefined && q.completed_at !== null) {
+      if (typeof q.completed_at !== 'string' || !ISO_RE.test(q.completed_at) || isNaN(Date.parse(q.completed_at))) return { ok: false, error: `quest at index ${i} completed_at must be an ISO date string or null` };
+      cleanCompletedAt = q.completed_at;
+    }
+    if (!q.completed && cleanCompletedAt !== null) return { ok: false, error: `quest at index ${i} uncompleted quest cannot have completed_at` };
+    if (q.completed && !cleanCompletedAt) return { ok: false, error: `quest at index ${i} completed quest must have a valid completed_at timestamp` };
+    cleanQuests.push({ id: q.id.trim(), title: q.title.trim(), category: cat, priority: q.priority, completed: q.completed, at: q.at, completed_at: cleanCompletedAt });
+  }
+
+  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions, events: cleanEvents, obligations: cleanObligations, facts: cleanFacts, quests: cleanQuests } };
 }
 
 export function deserializeTwinState(jsonStr) {
@@ -995,3 +1033,113 @@ export function filterCriticalFacts(facts) {
   if (!Array.isArray(facts)) return [];
   return facts.filter((f) => f && typeof f === 'object' && f.critical === true);
 }
+
+export function toggleQuestCompletion(state, questId, asOfTime = null) {
+  const check = validateTwinState(state);
+  if (!check.ok) return { ok: false, error: 'Invalid twin state: ' + check.error };
+  if (typeof questId !== 'string' || !questId.trim()) return { ok: false, error: 'questId must be a non-empty string' };
+  const qId = questId.trim();
+  const currentQuests = check.value.quests;
+  const index = currentQuests.findIndex((q) => q.id === qId);
+  if (index === -1) return { ok: false, error: 'Quest not found: ' + qId };
+
+  let timeStr;
+  if (asOfTime === null || asOfTime === undefined) {
+    timeStr = new Date().toISOString();
+  } else if (typeof asOfTime === 'string') {
+    if (!ISO_RE.test(asOfTime) || isNaN(Date.parse(asOfTime))) {
+      return { ok: false, error: 'Invalid asOfTime ISO date string' };
+    }
+    timeStr = asOfTime;
+  } else if (asOfTime instanceof Date) {
+    if (isNaN(asOfTime.getTime())) {
+      return { ok: false, error: 'Invalid asOfTime provided' };
+    }
+    timeStr = asOfTime.toISOString();
+  } else {
+    return { ok: false, error: 'Invalid asOfTime provided' };
+  }
+
+  const existing = currentQuests[index];
+  const nextCompleted = !existing.completed;
+  const updatedQuest = {
+    ...existing,
+    completed: nextCompleted,
+    completed_at: nextCompleted ? timeStr : null
+  };
+
+  const nextQuests = currentQuests.map((q, idx) => (idx === index ? updatedQuest : q));
+  const nextState = {
+    ...check.value,
+    quests: nextQuests
+  };
+  return { ok: true, state: nextState, completed: nextCompleted };
+}
+
+export function summarizeQuests(quests) {
+  if (!Array.isArray(quests)) {
+    return Object.freeze({
+      total: 0,
+      completed: 0,
+      pending: 0,
+      focus_pending: 0,
+      by_category: Object.freeze({})
+    });
+  }
+  let total = 0;
+  let completed = 0;
+  let pending = 0;
+  let focus_pending = 0;
+  const byCategory = {};
+  for (const cat of ALLOWED_QUEST_CATEGORIES) {
+    byCategory[cat] = 0;
+  }
+  for (const q of quests) {
+    if (q && typeof q === 'object' && !Array.isArray(q)) {
+      const cat = typeof q.category === 'string' ? q.category.trim().toLowerCase() : '';
+      if (ALLOWED_QUEST_CATEGORIES.includes(cat)) {
+        total++;
+        byCategory[cat] = (byCategory[cat] || 0) + 1;
+        if (q.completed === true) {
+          completed++;
+        } else {
+          pending++;
+          if (q.priority === 1) {
+            focus_pending++;
+          }
+        }
+      }
+    }
+  }
+  return Object.freeze({
+    total,
+    completed,
+    pending,
+    focus_pending,
+    by_category: Object.freeze(byCategory)
+  });
+}
+
+export function filterActiveQuests(quests, limit = 3) {
+  if (!Array.isArray(quests)) return [];
+  const safeLimit = typeof limit === 'number' && Number.isInteger(limit) && limit >= 0 ? limit : 3;
+  if (safeLimit === 0) return [];
+  return quests
+    .filter((q) => q && typeof q === 'object' && q.completed === false && typeof q.title === 'string' && q.title.trim())
+    .sort((a, b) => {
+      const pA = typeof a.priority === 'number' && Number.isFinite(a.priority) ? a.priority : 2;
+      const pB = typeof b.priority === 'number' && Number.isFinite(b.priority) ? b.priority : 2;
+      if (pA !== pB) {
+        return pA - pB;
+      }
+      const atA = typeof a.at === 'string' ? a.at : '';
+      const atB = typeof b.at === 'string' ? b.at : '';
+      const cmpAt = atA.localeCompare(atB);
+      if (cmpAt !== 0) return cmpAt;
+      const idA = typeof a.id === 'string' ? a.id : '';
+      const idB = typeof b.id === 'string' ? b.id : '';
+      return idA.localeCompare(idB);
+    })
+    .slice(0, safeLimit);
+}
+
