@@ -30,6 +30,15 @@ export const ALLOWED_OBLIGATION_STATUSES = Object.freeze([
   'dismissed'
 ]);
 
+export const ALLOWED_FACT_CATEGORIES = Object.freeze([
+  'medical',
+  'dietary',
+  'emergency',
+  'preference',
+  'boundary',
+  'other'
+]);
+
 export const ALLOWED_EVENT_TYPES = Object.freeze([
   'topics_updated',
   'grant_created',
@@ -43,6 +52,8 @@ export const ALLOWED_EVENT_TYPES = Object.freeze([
   'obligation_added',
   'obligation_resolved',
   'obligation_removed',
+  'fact_added',
+  'fact_removed',
   'data_exported',
   'data_imported',
   'log_cleared'
@@ -54,7 +65,8 @@ export const DEFAULT_TWIN_STATE = Object.freeze({
   contributions: Object.freeze([]),
   actions: Object.freeze([]),
   events: Object.freeze([]),
-  obligations: Object.freeze([])
+  obligations: Object.freeze([]),
+  facts: Object.freeze([])
 });
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
@@ -84,7 +96,7 @@ export function validateTwinState(raw) {
     return { ok: false, error: 'Twin state must be an object' };
   }
   const keys = Object.keys(raw);
-  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions' && k !== 'events' && k !== 'obligations')) {
+  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions' && k !== 'events' && k !== 'obligations' && k !== 'facts')) {
     return { ok: false, error: 'Unknown field in twin state' };
   }
   if (!Array.isArray(raw.topics) || raw.topics.length > 20) {
@@ -265,7 +277,23 @@ export function validateTwinState(raw) {
     cleanObligations.push({ id: o.id.trim(), title: o.title.trim(), category: cat, due_date: o.due_date, lead_days: o.lead_days, status, notes: cleanNotes, at: o.at, resolved_at: cleanResolvedAt });
   }
 
-  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions, events: cleanEvents, obligations: cleanObligations } };
+  const rawFacts = raw.facts !== undefined ? raw.facts : [];
+  if (!Array.isArray(rawFacts) || rawFacts.length > 50) return { ok: false, error: 'facts must be a list of at most 50 items' };
+  const cleanFacts = [];
+  for (let i = 0; i < rawFacts.length; i++) {
+    const f = rawFacts[i];
+    if (!f || typeof f !== 'object' || Array.isArray(f)) return { ok: false, error: `fact at index ${i} must be an object` };
+    if (Object.keys(f).some((k) => k !== 'id' && k !== 'category' && k !== 'statement' && k !== 'critical' && k !== 'at')) return { ok: false, error: `fact at index ${i} has unknown fields` };
+    if (typeof f.id !== 'string' || !f.id.trim() || f.id.trim().length > 40 || !/^[a-zA-Z0-9_-]+$/.test(f.id.trim())) return { ok: false, error: `fact at index ${i} id must be an alphanumeric string up to 40 characters` };
+    const cat = typeof f.category === 'string' ? f.category.trim().toLowerCase() : '';
+    if (!ALLOWED_FACT_CATEGORIES.includes(cat)) return { ok: false, error: `fact at index ${i} category must be one of: ${ALLOWED_FACT_CATEGORIES.join(', ')}` };
+    if (typeof f.statement !== 'string' || !f.statement.trim() || f.statement.trim().length > 140) return { ok: false, error: `fact at index ${i} statement must be a string up to 140 characters` };
+    if (typeof f.critical !== 'boolean') return { ok: false, error: `fact at index ${i} critical must be a boolean` };
+    if (typeof f.at !== 'string' || !ISO_RE.test(f.at) || isNaN(Date.parse(f.at))) return { ok: false, error: `fact at index ${i} at field must be an ISO date string` };
+    cleanFacts.push({ id: f.id.trim(), category: cat, statement: f.statement.trim(), critical: f.critical, at: f.at });
+  }
+
+  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions, events: cleanEvents, obligations: cleanObligations, facts: cleanFacts } };
 }
 
 export function deserializeTwinState(jsonStr) {
@@ -936,3 +964,34 @@ export function summarizeObligations(obligations, asOfDate = null) {
   });
 }
 
+export function summarizeFacts(facts) {
+  if (!Array.isArray(facts)) return Object.freeze({ total: 0, critical_count: 0, by_category: Object.freeze({}) });
+  let total = 0;
+  let critical_count = 0;
+  const byCategory = {};
+  for (const cat of ALLOWED_FACT_CATEGORIES) {
+    byCategory[cat] = 0;
+  }
+  for (const f of facts) {
+    if (f && typeof f === 'object' && !Array.isArray(f)) {
+      const cat = typeof f.category === 'string' ? f.category.trim().toLowerCase() : '';
+      if (ALLOWED_FACT_CATEGORIES.includes(cat)) {
+        total++;
+        byCategory[cat] = (byCategory[cat] || 0) + 1;
+        if (f.critical === true) {
+          critical_count++;
+        }
+      }
+    }
+  }
+  return Object.freeze({
+    total,
+    critical_count,
+    by_category: Object.freeze(byCategory)
+  });
+}
+
+export function filterCriticalFacts(facts) {
+  if (!Array.isArray(facts)) return [];
+  return facts.filter((f) => f && typeof f === 'object' && f.critical === true);
+}
