@@ -35,7 +35,11 @@ import {
   filterActiveQuests,
   updateValuePreference,
   calculateValueAlignment,
-  summarizeValues
+  summarizeValues,
+  SPECULATIVE_MARKERS,
+  auditMemoryStatement,
+  gateMemoryFact,
+  summarizeMemoryAudit
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -1331,6 +1335,139 @@ test('summarizeValues calculates averages, breakdown, and top priorities fail-cl
   assert.equal(empty.average_priority, 3.0);
   assert.deepEqual(empty.top_dimensions, []);
 });
+
+test('auditMemoryStatement detects speculative and prospective markers and distinguishes confirmed declarative facts', () => {
+  assert.equal(Array.isArray(SPECULATIVE_MARKERS), true);
+  assert.equal(Object.isFrozen(SPECULATIVE_MARKERS), true);
+
+  // Confirmed declarative facts
+  const f1 = auditMemoryStatement('Severe penicillin allergy');
+  assert.equal(f1.is_speculation, false);
+  assert.equal(f1.verdict, 'confirmed');
+  assert.deepEqual(f1.markers, []);
+  assert.equal(Object.isFrozen(f1), true);
+
+  const f2 = auditMemoryStatement('Emergency contact is Jane Doe at 555-0199');
+  assert.equal(f2.is_speculation, false);
+  assert.equal(f2.verdict, 'confirmed');
+
+  // Speculative statements with single or multiple markers
+  const s1 = auditMemoryStatement('I might relocate to Berlin in the spring');
+  assert.equal(s1.is_speculation, true);
+  assert.equal(s1.verdict, 'speculation');
+  assert.deepEqual(s1.markers, ['might']);
+
+  const s2 = auditMemoryStatement('Planning to switch to a plant-based diet, maybe next month');
+  assert.equal(s2.is_speculation, true);
+  assert.equal(s2.verdict, 'speculation');
+  assert.ok(s2.markers.includes('planning to'));
+  assert.ok(s2.markers.includes('maybe'));
+
+  const s3 = auditMemoryStatement('Considering adopting a dog');
+  assert.equal(s3.is_speculation, true);
+  assert.deepEqual(s3.markers, ['considering']);
+
+  const s4 = auditMemoryStatement('Thinking about taking evening classes');
+  assert.equal(s4.is_speculation, true);
+  assert.deepEqual(s4.markers, ['thinking about']);
+
+  // Case insensitivity and punctuation resilience
+  const s5 = auditMemoryStatement('COULD possibly attend conference?');
+  assert.equal(s5.is_speculation, true);
+  assert.ok(s5.markers.includes('could'));
+  assert.ok(s5.markers.includes('possibly'));
+
+  // Multi-word marker with irregular spacing
+  const s6 = auditMemoryStatement('Planning   to   relocate to Toronto');
+  assert.equal(s6.is_speculation, true);
+  assert.deepEqual(s6.markers, ['planning to']);
+});
+
+test('auditMemoryStatement fails closed on invalid or boundary inputs', () => {
+  // Non-strings throw TypeError
+  assert.throws(() => auditMemoryStatement(null), { name: 'TypeError' });
+  assert.throws(() => auditMemoryStatement(undefined), { name: 'TypeError' });
+  assert.throws(() => auditMemoryStatement(123), { name: 'TypeError' });
+  assert.throws(() => auditMemoryStatement({}), { name: 'TypeError' });
+
+  // Empty or whitespace-only throws Error
+  assert.throws(() => auditMemoryStatement(''), { message: 'statement cannot be empty' });
+  assert.throws(() => auditMemoryStatement('   '), { message: 'statement cannot be empty' });
+
+  // Over max length (140 chars) throws Error
+  const tooLong = 'a'.repeat(141);
+  assert.throws(() => auditMemoryStatement(tooLong), { message: 'statement cannot exceed 140 characters' });
+
+  // Exactly 140 chars is allowed
+  const exact140 = 'a'.repeat(140);
+  const res = auditMemoryStatement(exact140);
+  assert.equal(res.is_speculation, false);
+  assert.equal(res.verdict, 'confirmed');
+});
+
+test('gateMemoryFact enforces write-time boundary against speculative safety-critical constraints', () => {
+  // Confirmed fact as critical is allowed
+  const r1 = gateMemoryFact('Severe latex allergy', true);
+  assert.equal(r1.allowed, true);
+  assert.equal(r1.audit.is_speculation, false);
+  assert.equal(Object.isFrozen(r1), true);
+
+  // Confirmed fact as non-critical is allowed
+  const r2 = gateMemoryFact('Prefers dark mode', false);
+  assert.equal(r2.allowed, true);
+  assert.equal(r2.audit.is_speculation, false);
+
+  // Speculative statement as non-critical is allowed
+  const r3 = gateMemoryFact('Might take a sabbatical in autumn', false);
+  assert.equal(r3.allowed, true);
+  assert.equal(r3.audit.is_speculation, true);
+
+  // Speculative statement as critical constraint is REJECTED
+  const r4 = gateMemoryFact('Might have mild allergy to shellfish', true);
+  assert.equal(r4.allowed, false);
+  assert.ok(r4.reason.includes('Speculative statement cannot be registered as a safety-critical constraint'));
+  assert.equal(r4.audit.is_speculation, true);
+  assert.deepEqual(r4.audit.markers, ['might']);
+
+  // Multi-word marker with multiple spaces as critical constraint is also REJECTED
+  const r5 = gateMemoryFact('Planning   to   switch medication', true);
+  assert.equal(r5.allowed, false);
+  assert.equal(r5.audit.is_speculation, true);
+  assert.deepEqual(r5.audit.markers, ['planning to']);
+
+  // Invalid argument types throw TypeError
+  assert.throws(() => gateMemoryFact(123, true), { name: 'TypeError' });
+  assert.throws(() => gateMemoryFact('Valid statement', 'true'), { name: 'TypeError' });
+  assert.throws(() => gateMemoryFact('Valid statement', null), { name: 'TypeError' });
+});
+
+test('summarizeMemoryAudit aggregates confirmed vs speculative memory entries and handles malformed inputs fail-closed', () => {
+  const facts = [
+    { id: 'f-1', category: 'medical', statement: 'Severe peanut allergy', critical: true },
+    { id: 'f-2', category: 'preference', statement: 'Prefers tea over coffee', critical: false },
+    { id: 'f-3', category: 'preference', statement: 'Might switch to decaf next month', critical: false },
+    { id: 'f-4', category: 'medical', statement: 'Could possibly have penicillin reaction', critical: true },
+    { id: 'f-5', category: 'other', statement: 'Invalid statement object' }
+  ];
+
+  const summary = summarizeMemoryAudit(facts);
+  assert.equal(summary.total, 5);
+  assert.equal(summary.confirmed, 3); // f-1, f-2, f-5
+  assert.equal(summary.speculation, 2); // f-3, f-4
+  assert.equal(summary.critical_speculation, 1); // f-4 is both critical and speculation
+  assert.equal(summary.breakdown.confirmed, 3);
+  assert.equal(summary.breakdown.speculation, 2);
+  assert.equal(Object.isFrozen(summary), true);
+  assert.equal(Object.isFrozen(summary.breakdown), true);
+
+  // Non-array input returns zeroed fail-closed summary
+  const empty = summarizeMemoryAudit(null);
+  assert.equal(empty.total, 0);
+  assert.equal(empty.confirmed, 0);
+  assert.equal(empty.speculation, 0);
+  assert.equal(empty.critical_speculation, 0);
+});
+
 
 
 
