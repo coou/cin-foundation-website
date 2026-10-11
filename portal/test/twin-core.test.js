@@ -8,6 +8,8 @@ import {
   ALLOWED_OBLIGATION_STATUSES,
   ALLOWED_FACT_CATEGORIES,
   ALLOWED_QUEST_CATEGORIES,
+  ALLOWED_VALUE_DIMENSIONS,
+  DEFAULT_VALUES,
   DEFAULT_TWIN_STATE,
   validateTwinState,
   deserializeTwinState,
@@ -30,7 +32,10 @@ import {
   filterCriticalFacts,
   toggleQuestCompletion,
   summarizeQuests,
-  filterActiveQuests
+  filterActiveQuests,
+  updateValuePreference,
+  calculateValueAlignment,
+  summarizeValues
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -120,9 +125,17 @@ test('deserialize and serialize handle valid data and errors', () => {
     events: [],
     obligations: [],
     facts: [],
-    quests: []
+    quests: [],
+    values: {
+      commons: 3,
+      containment: 3,
+      ecology: 3,
+      learning: 3,
+      resilience: 3,
+      wellbeing: 3
+    }
   });
-  // Backward compatibility when contributions, actions, events, obligations, facts, and quests omitted
+  // Backward compatibility when contributions, actions, events, obligations, facts, quests, and values omitted
   const legacy = deserializeTwinState(JSON.stringify({ topics: ['health'], grants: [] }));
   assert.equal(legacy.ok, true);
   assert.deepEqual(legacy.value.contributions, []);
@@ -131,6 +144,7 @@ test('deserialize and serialize handle valid data and errors', () => {
   assert.deepEqual(legacy.value.obligations, []);
   assert.deepEqual(legacy.value.facts, []);
   assert.deepEqual(legacy.value.quests, []);
+  assert.deepEqual(legacy.value.values, DEFAULT_VALUES);
 
   assert.equal(deserializeTwinState('{bad').ok, false);
   assert.throws(() => serializeTwinState({ bad: 1 }));
@@ -1199,5 +1213,124 @@ test('filterActiveQuests filters completed and sorts by priority and at limit', 
   assert.deepEqual(filterActiveQuests([{ priority: 1, at: null }, { priority: 1, at: '2026-10-11T00:00:00.000Z' }]), []);
   assert.deepEqual(filterActiveQuests(null), []);
 });
+
+test('validateTwinState accepts well-formed values and enforces bounds', () => {
+  const valid = {
+    topics: [],
+    grants: [],
+    values: {
+      commons: 5,
+      resilience: 4,
+      wellbeing: 2,
+      learning: 5,
+      containment: 4,
+      ecology: 1
+    }
+  };
+  const res = validateTwinState(valid);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.values.commons, 5);
+  assert.equal(res.value.values.ecology, 1);
+});
+
+test('validateTwinState rejects malformed values fail-closed', () => {
+  // Unknown dimension
+  assert.equal(validateTwinState({ topics: [], grants: [], values: { commons: 3, unknownDim: 4 } }).ok, false);
+  // Score < 1
+  assert.equal(validateTwinState({ topics: [], grants: [], values: { commons: 0 } }).ok, false);
+  // Score > 5
+  assert.equal(validateTwinState({ topics: [], grants: [], values: { commons: 6 } }).ok, false);
+  // NaN, Inf, Boolean
+  assert.equal(validateTwinState({ topics: [], grants: [], values: { commons: NaN } }).ok, false);
+  assert.equal(validateTwinState({ topics: [], grants: [], values: { commons: Infinity } }).ok, false);
+  assert.equal(validateTwinState({ topics: [], grants: [], values: { commons: true } }).ok, false);
+  assert.equal(validateTwinState({ topics: [], grants: [], values: 'bad' }).ok, false);
+  assert.equal(validateTwinState({ topics: [], grants: [], values: null }).ok, false);
+});
+
+test('updateValuePreference updates dimension score and validates inputs fail-closed', () => {
+  const base = DEFAULT_TWIN_STATE;
+  const res = updateValuePreference(base, 'commons', 5);
+  assert.equal(res.ok, true);
+  assert.equal(res.state.values.commons, 5);
+  assert.equal(res.score, 5);
+  assert.equal(res.dimension, 'commons');
+
+  // Case normalization
+  const resNorm = updateValuePreference(base, '  RESILIENCE  ', 4);
+  assert.equal(resNorm.ok, true);
+  assert.equal(resNorm.state.values.resilience, 4);
+
+  // Reject invalid dimension
+  assert.equal(updateValuePreference(base, 'invalid', 4).ok, false);
+  assert.equal(updateValuePreference(base, 123, 4).ok, false);
+
+  // Reject out-of-range or non-numeric score
+  assert.equal(updateValuePreference(base, 'commons', 6).ok, false);
+  assert.equal(updateValuePreference(base, 'commons', 0).ok, false);
+  assert.equal(updateValuePreference(base, 'commons', NaN).ok, false);
+  assert.equal(updateValuePreference(base, 'commons', true).ok, false);
+
+  // Reject invalid state
+  assert.equal(updateValuePreference(null, 'commons', 4).ok, false);
+});
+
+test('calculateValueAlignment computes alignment score correctly fail-closed', () => {
+  const vals = {
+    commons: 5,
+    resilience: 5,
+    wellbeing: 1,
+    learning: 5,
+    containment: 1,
+    ecology: 1
+  };
+  // Action tagged with commons and learning (both 5) -> alignment is (5+5)/(2*5) = 1.0
+  const high = calculateValueAlignment(vals, ['commons', 'learning']);
+  assert.equal(high.alignment, 1.0);
+  assert.deepEqual(high.matched_dimensions, ['commons', 'learning']);
+
+  // Action tagged with wellbeing and containment (both 1) -> alignment is (1+1)/(2*5) = 0.2
+  const low = calculateValueAlignment(vals, ['wellbeing', 'containment']);
+  assert.equal(low.alignment, 0.2);
+
+  // Mixed matching
+  const mixed = calculateValueAlignment(vals, ['commons', 'ecology']);
+  assert.equal(mixed.alignment, 0.6);
+
+  // Filters out unknown dimensions safely
+  const filtered = calculateValueAlignment(vals, ['commons', 'unknown_tag']);
+  assert.equal(filtered.alignment, 1.0);
+  assert.deepEqual(filtered.matched_dimensions, ['commons']);
+
+  // Empty or invalid inputs return 0.0
+  assert.equal(calculateValueAlignment(vals, []).alignment, 0.0);
+  assert.equal(calculateValueAlignment(vals, ['unknown_tag']).alignment, 0.0);
+  assert.equal(calculateValueAlignment(null, ['commons']).alignment, 0.0);
+  assert.equal(calculateValueAlignment(vals, null).alignment, 0.0);
+});
+
+test('summarizeValues calculates averages, breakdown, and top priorities fail-closed', () => {
+  const vals = {
+    commons: 5,
+    resilience: 4,
+    wellbeing: 2,
+    learning: 5,
+    containment: 3,
+    ecology: 5
+  };
+  const summary = summarizeValues(vals);
+  // Average of 5+4+2+5+3+5 = 24 / 6 = 4.0
+  assert.equal(summary.average_priority, 4.0);
+  // Top dimensions should be commons, learning, ecology (all tied at 5)
+  assert.deepEqual(summary.top_dimensions.slice().sort(), ['commons', 'ecology', 'learning']);
+  assert.equal(summary.by_dimension.commons, 5);
+  assert.equal(summary.by_dimension.wellbeing, 2);
+
+  // Null or invalid input returns defaults
+  const empty = summarizeValues(null);
+  assert.equal(empty.average_priority, 3.0);
+  assert.deepEqual(empty.top_dimensions, []);
+});
+
 
 

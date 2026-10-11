@@ -1,10 +1,10 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
-const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [] }; } };
+const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [], values: DEFAULT_VALUES }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [], values: DEFAULT_VALUES }; } };
 const save = (s) => { const c = validateTwinState(s); if (!c.ok) return false; try { localStorage.setItem(KEY, JSON.stringify(c.value)); return true; } catch (e) { return false; } };
 let state = load();
 
@@ -241,7 +241,7 @@ if (importInput) importInput.onchange = (e) => {
     if (!res.ok) { if (status) status.textContent = 'Could not restore backup: ' + res.error; importInput.value = ''; return; }
     if (saveAndRender(res.value, 'data_imported', 'Restored backup on this device')) {
       f.elements.topics.value = state.topics.join(', ');
-      renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts(); renderQuests();
+      renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts(); renderQuests(); renderValues();
       if (status) status.textContent = 'Backup restored successfully on this device.';
     }
     importInput.value = '';
@@ -368,8 +368,8 @@ if (clearEventsBtn) {
 const wipeBtn = document.getElementById('wipe');
 if (wipeBtn) wipeBtn.onclick = () => {
   try { localStorage.removeItem(KEY); } catch (e) { /* nothing */ }
-  state = { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [] };
-  f.reset(); renderGrants(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts(); renderQuests();
+  state = { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [], values: DEFAULT_VALUES };
+  f.reset(); renderGrants(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts(); renderQuests(); renderValues();
   const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
   const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
   const evalBox = document.getElementById('access-eval-result'); if (evalBox) evalBox.textContent = '';
@@ -690,5 +690,58 @@ if (questForm) {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts(); renderQuests();
+function renderValues() {
+  const ul = document.getElementById('values-list');
+  const summaryBox = document.getElementById('value-summary');
+  if (!ul) return;
+  ul.textContent = '';
+  const values = state.values || DEFAULT_VALUES;
+  const summary = summarizeValues(values);
+  for (const dim of ALLOWED_VALUE_DIMENSIONS) {
+    const li = el('li');
+    const score = values[dim] !== undefined ? values[dim] : 3;
+    const nameEl = el('b', null, dim.charAt(0).toUpperCase() + dim.slice(1));
+    const scoreBadge = el('small', 'muted', ` [Priority ${score}/5] `);
+    li.append(nameEl, scoreBadge);
+
+    const resetBtn = el('button', 'btn', 'Reset (3)');
+    resetBtn.style.marginLeft = '0.4rem';
+    resetBtn.onclick = () => {
+      const updated = updateValuePreference(state, dim, 3);
+      if (updated.ok) {
+        if (saveAndRender(updated.state, 'value_preference_updated', `Reset ${dim} priority to 3`)) {
+          renderValues();
+          renderEvents();
+        }
+      }
+    };
+    li.appendChild(resetBtn);
+    ul.appendChild(li);
+  }
+  if (summaryBox) {
+    summaryBox.textContent = '';
+    const topText = summary.top_dimensions.length ? summary.top_dimensions.join(', ') : 'none';
+    summaryBox.appendChild(el('p', 'muted', `Average priority: ${summary.average_priority}/5. Top focus: ${topText}. Stored locally.`));
+  }
+}
+
+const valueForm = document.getElementById('value-form');
+if (valueForm) {
+  valueForm.onsubmit = (e) => {
+    e.preventDefault();
+    const dim = valueForm.elements.dimension ? valueForm.elements.dimension.value.trim().toLowerCase() : '';
+    const rawScore = valueForm.elements.score ? parseInt(valueForm.elements.score.value, 10) : 3;
+    const score = Number.isInteger(rawScore) && rawScore >= 1 && rawScore <= 5 ? rawScore : 3;
+    const updated = updateValuePreference(state, dim, score);
+    if (updated.ok) {
+      if (saveAndRender(updated.state, 'value_preference_updated', `Set ${dim} priority to ${score}`)) {
+        renderValues();
+        renderEvents();
+      }
+    }
+  };
+}
+
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts(); renderQuests(); renderValues();
+
 
