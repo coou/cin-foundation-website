@@ -1092,7 +1092,7 @@ export function filterCriticalFacts(facts) {
 }
 
 /**
- * Audit a memory statement for speculative or prospective markers (AgentMemGate).
+ * Audit a memory statement for speculative or prospective wording markers.
  * Fails closed on non-string or malformed inputs.
  */
 export function auditMemoryStatement(statement) {
@@ -1107,7 +1107,19 @@ export function auditMemoryStatement(statement) {
     throw new Error('statement cannot exceed 140 characters');
   }
 
-  const lower = ' ' + trimmed.toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
+  let sanitized = trimmed;
+  // Skip 'could kill/harm/hurt' (toxicity/allergy constraints, not speculative)
+  sanitized = sanitized.replace(/\bcould\s+(?:kill|harm|hurt)\b/gi, '__safety_constraint__');
+  // Skip 'may not' (prohibitions/mandates, not speculative)
+  sanitized = sanitized.replace(/\bmay\s+not\b/gi, '__prohibition__');
+  // Skip 'may' when capitalised mid-sentence as a month, or preceded by month prepositions
+  sanitized = sanitized.replace(/(?<!^|[.!?]\s+)\bMay\b/g, '__month__');
+  sanitized = sanitized.replace(/\b(?:in|during|by|before|after|until|since|of)\s+May\b/gi, '__month__');
+  // Skip negated prospective/speculative markers
+  sanitized = sanitized.replace(/\b(?:not|never)\s+considering\b/gi, '__negated_marker__');
+  sanitized = sanitized.replace(/\b(?:not|never)\s+(?:planning\s+to|thinking\s+(?:of|about)|intends\s+to|hoping\s+to)\b/gi, '__negated_marker__');
+
+  const lower = ' ' + sanitized.toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
   const matched = [];
 
   for (const marker of SPECULATIVE_MARKERS) {
@@ -1129,8 +1141,9 @@ export function auditMemoryStatement(statement) {
 }
 
 /**
- * Gate a memory fact before persistence, preventing speculation contamination
- * from entering safety-critical boundaries.
+ * Gate a memory fact before persistence.
+ * Never blocks the person from saving what they mark critical; warns and requests
+ * confirmation when speculative wording markers are detected on a critical constraint.
  */
 export function gateMemoryFact(statement, isCritical) {
   if (typeof statement !== 'string') {
@@ -1142,13 +1155,15 @@ export function gateMemoryFact(statement, isCritical) {
   const audit = auditMemoryStatement(statement);
   if (isCritical && audit.is_speculation) {
     return Object.freeze({
-      allowed: false,
-      reason: 'Speculative statement cannot be registered as a safety-critical constraint (' + audit.markers.join(', ') + ')',
+      allowed: true,
+      needs_confirmation: true,
+      reason: 'Contains speculative wording markers (' + audit.markers.join(', ') + '); confirmation recommended before saving as safety-critical constraint',
       audit
     });
   }
   return Object.freeze({
     allowed: true,
+    needs_confirmation: false,
     reason: audit.is_speculation
       ? 'Allowed as unconfirmed speculation'
       : 'Allowed as confirmed declarative fact',

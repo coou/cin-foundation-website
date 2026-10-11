@@ -571,7 +571,7 @@ function renderFacts() {
   if (summaryBox) {
     summaryBox.textContent = '';
     if (facts.length) {
-      summaryBox.appendChild(el('p', 'muted', `Memory store: ${summary.total} total (${summary.critical_count} safety-critical, ${auditSummary.confirmed} confirmed facts, ${auditSummary.speculation} speculations). Protected by write-time memory gate.`));
+      summaryBox.appendChild(el('p', 'muted', `Memory store: ${summary.total} total (${summary.critical_count} safety-critical, ${auditSummary.confirmed} confirmed facts). ${auditSummary.speculation} marked as possibly unconfirmed (wording check only).`));
     }
   }
 }
@@ -597,25 +597,45 @@ if (factForm) {
       return;
     }
 
-    const now = new Date();
-    const id = 'fact-' + now.getTime().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
-    const newFact = {
-      id,
-      category,
-      statement,
-      critical: isCritical,
-      at: now.toISOString()
+    const saveFact = () => {
+      const now = new Date();
+      const id = 'fact-' + now.getTime().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
+      const newFact = {
+        id,
+        category,
+        statement,
+        critical: isCritical,
+        at: now.toISOString()
+      };
+      const next = { ...state, facts: currentFacts.concat([newFact]) };
+      const eventDetail = gate.audit.is_speculation
+        ? `Added [${category}] (unconfirmed) ${statement.slice(0, 30)}`
+        : `Added [${category}] ${statement.slice(0, 40)}`;
+      if (saveAndRender(next, 'fact_added', eventDetail)) {
+        factForm.reset();
+        if (status) status.textContent = '';
+        renderFacts();
+        renderEvents();
+      }
     };
-    const next = { ...state, facts: currentFacts.concat([newFact]) };
-    const eventDetail = gate.audit.is_speculation
-      ? `Added [${category}] (speculation) ${statement.slice(0, 30)}`
-      : `Added [${category}] ${statement.slice(0, 40)}`;
-    if (saveAndRender(next, 'fact_added', eventDetail)) {
-      factForm.reset();
-      if (status) status.textContent = '';
-      renderFacts();
-      renderEvents();
+
+    if (isCritical && gate.needs_confirmation) {
+      if (status) {
+        status.textContent = '';
+        const warnP = el('p', 'muted', (gate.reason || 'This statement contains speculative wording.') + ' ');
+        const confirmBtn = el('button', 'btn', 'Save anyway');
+        confirmBtn.type = 'button';
+        confirmBtn.style.marginLeft = '0.5rem';
+        confirmBtn.onclick = () => {
+          saveFact();
+        };
+        warnP.appendChild(confirmBtn);
+        status.appendChild(warnP);
+      }
+      return;
     }
+
+    saveFact();
   };
 }
 

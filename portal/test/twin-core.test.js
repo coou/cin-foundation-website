@@ -1405,33 +1405,38 @@ test('auditMemoryStatement fails closed on invalid or boundary inputs', () => {
   assert.equal(res.verdict, 'confirmed');
 });
 
-test('gateMemoryFact enforces write-time boundary against speculative safety-critical constraints', () => {
-  // Confirmed fact as critical is allowed
+test('gateMemoryFact does not block safety-critical constraints and flags unconfirmed markers for confirmation', () => {
+  // Confirmed fact as critical is allowed without confirmation
   const r1 = gateMemoryFact('Severe latex allergy', true);
   assert.equal(r1.allowed, true);
+  assert.equal(r1.needs_confirmation, false);
   assert.equal(r1.audit.is_speculation, false);
   assert.equal(Object.isFrozen(r1), true);
 
-  // Confirmed fact as non-critical is allowed
+  // Confirmed fact as non-critical is allowed without confirmation
   const r2 = gateMemoryFact('Prefers dark mode', false);
   assert.equal(r2.allowed, true);
+  assert.equal(r2.needs_confirmation, false);
   assert.equal(r2.audit.is_speculation, false);
 
-  // Speculative statement as non-critical is allowed
+  // Speculative statement as non-critical is allowed without confirmation
   const r3 = gateMemoryFact('Might take a sabbatical in autumn', false);
   assert.equal(r3.allowed, true);
+  assert.equal(r3.needs_confirmation, false);
   assert.equal(r3.audit.is_speculation, true);
 
-  // Speculative statement as critical constraint is REJECTED
+  // Speculative statement as critical constraint is ALLOWED with needs_confirmation: true (never blocks)
   const r4 = gateMemoryFact('Might have mild allergy to shellfish', true);
-  assert.equal(r4.allowed, false);
-  assert.ok(r4.reason.includes('Speculative statement cannot be registered as a safety-critical constraint'));
+  assert.equal(r4.allowed, true);
+  assert.equal(r4.needs_confirmation, true);
+  assert.ok(r4.reason.includes('confirmation recommended'));
   assert.equal(r4.audit.is_speculation, true);
   assert.deepEqual(r4.audit.markers, ['might']);
 
-  // Multi-word marker with multiple spaces as critical constraint is also REJECTED
+  // Multi-word marker as critical constraint is allowed with needs_confirmation: true
   const r5 = gateMemoryFact('Planning   to   switch medication', true);
-  assert.equal(r5.allowed, false);
+  assert.equal(r5.allowed, true);
+  assert.equal(r5.needs_confirmation, true);
   assert.equal(r5.audit.is_speculation, true);
   assert.deepEqual(r5.audit.markers, ['planning to']);
 
@@ -1439,6 +1444,63 @@ test('gateMemoryFact enforces write-time boundary against speculative safety-cri
   assert.throws(() => gateMemoryFact(123, true), { name: 'TypeError' });
   assert.throws(() => gateMemoryFact('Valid statement', 'true'), { name: 'TypeError' });
   assert.throws(() => gateMemoryFact('Valid statement', null), { name: 'TypeError' });
+});
+
+test('gateMemoryFact and auditMemoryStatement accept sentence-aware safety-critical constraints and save each entry', () => {
+  const criticalSentences = [
+    'Penicillin could kill me, never accept it',
+    'I may not drive after 9pm by court order',
+    'Birthday is in May',
+    'I am NOT considering selling my house'
+  ];
+
+  let state = {
+    topics: ['health', 'safety'],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  criticalSentences.forEach((sentence, idx) => {
+    // 1. Audit recognizes sentence as confirmed without false speculative flagging
+    const audit = auditMemoryStatement(sentence);
+    assert.equal(audit.is_speculation, false, `Expected confirmed for: ${sentence}`);
+    assert.equal(audit.verdict, 'confirmed');
+    assert.deepEqual(audit.markers, []);
+
+    // 2. Gate allows entry without blocking or requiring confirmation
+    const gate = gateMemoryFact(sentence, true);
+    assert.equal(gate.allowed, true);
+    assert.equal(gate.needs_confirmation, false);
+
+    // 3. Fact is saved into twin state and validated
+    const newFact = {
+      id: `fact-crit-${idx + 1}`,
+      category: 'medical',
+      statement: sentence,
+      critical: true,
+      at: '2026-10-11T12:00:00.000Z'
+    };
+    state = {
+      ...state,
+      facts: state.facts.concat([newFact])
+    };
+
+    const validated = validateTwinState(state);
+    assert.equal(validated.ok, true, `Validation failed after saving: ${sentence}`);
+    assert.equal(validated.value.facts.length, idx + 1);
+    assert.equal(validated.value.facts[idx].statement, sentence);
+    assert.equal(validated.value.facts[idx].critical, true);
+  });
+
+  // Verify all 4 constraints end with the entry saved in state
+  assert.equal(state.facts.length, 4);
+  assert.equal(filterCriticalFacts(state.facts).length, 4);
 });
 
 test('summarizeMemoryAudit aggregates confirmed vs speculative memory entries and handles malformed inputs fail-closed', () => {
