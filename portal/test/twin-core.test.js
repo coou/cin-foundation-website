@@ -6,6 +6,7 @@ import {
   ALLOWED_EVENT_TYPES,
   ALLOWED_OBLIGATION_CATEGORIES,
   ALLOWED_OBLIGATION_STATUSES,
+  ALLOWED_FACT_CATEGORIES,
   DEFAULT_TWIN_STATE,
   validateTwinState,
   deserializeTwinState,
@@ -23,7 +24,9 @@ import {
   summarizeEvents,
   queueAccessAsPendingAction,
   calculateObligationUrgency,
-  summarizeObligations
+  summarizeObligations,
+  summarizeFacts,
+  filterCriticalFacts
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -35,6 +38,7 @@ test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
   assert.throws(() => { DEFAULT_TWIN_STATE.actions.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.events.push('x'); });
   assert.throws(() => { DEFAULT_TWIN_STATE.obligations.push('x'); });
+  assert.throws(() => { DEFAULT_TWIN_STATE.facts.push('x'); });
 });
 
 test('validateTwinState accepts well-formed data and is deterministic', () => {
@@ -109,15 +113,17 @@ test('deserialize and serialize handle valid data and errors', () => {
     contributions: [{ what: 'code test', kind: 'code', at: '2026-10-10T12:00:00.000Z', impact: null }],
     actions: [],
     events: [],
-    obligations: []
+    obligations: [],
+    facts: []
   });
-  // Backward compatibility when contributions, actions, events, and obligations omitted
+  // Backward compatibility when contributions, actions, events, obligations, and facts omitted
   const legacy = deserializeTwinState(JSON.stringify({ topics: ['health'], grants: [] }));
   assert.equal(legacy.ok, true);
   assert.deepEqual(legacy.value.contributions, []);
   assert.deepEqual(legacy.value.actions, []);
   assert.deepEqual(legacy.value.events, []);
   assert.deepEqual(legacy.value.obligations, []);
+  assert.deepEqual(legacy.value.facts, []);
 
   assert.equal(deserializeTwinState('{bad').ok, false);
   assert.throws(() => serializeTwinState({ bad: 1 }));
@@ -847,3 +853,127 @@ test('summarizeObligations aggregates counts and breakdowns correctly', () => {
   assert.equal(empty.total, 0);
   assert.equal(empty.active, 0);
 });
+
+test('validateTwinState accepts well-formed facts and maintains backward compatibility', () => {
+  const base = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: []
+  };
+  // Backward compatibility: omitted facts
+  const resOmitted = validateTwinState(base);
+  assert.equal(resOmitted.ok, true);
+  assert.deepEqual(resOmitted.value.facts, []);
+
+  // Well-formed facts list
+  const stateWithFacts = {
+    ...base,
+    facts: [
+      {
+        id: 'fact-med-1',
+        category: 'medical',
+        statement: 'Severe penicillin allergy, anaphylaxis risk',
+        critical: true,
+        at: '2026-10-10T12:00:00.000Z'
+      },
+      {
+        id: 'fact-diet-2',
+        category: 'dietary',
+        statement: 'Vegetarian, strictly avoid gelatin',
+        critical: false,
+        at: '2026-10-10T12:05:00.000Z'
+      }
+    ]
+  };
+  const resValid = validateTwinState(stateWithFacts);
+  assert.equal(resValid.ok, true);
+  assert.equal(resValid.value.facts.length, 2);
+  assert.equal(resValid.value.facts[0].id, 'fact-med-1');
+  assert.equal(resValid.value.facts[0].category, 'medical');
+  assert.equal(resValid.value.facts[0].critical, true);
+  assert.equal(resValid.value.facts[1].category, 'dietary');
+  assert.equal(resValid.value.facts[1].critical, false);
+});
+
+test('validateTwinState rejects malformed facts fail-closed', () => {
+  const base = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: []
+  };
+
+  const badCases = [
+    { facts: 'not-an-array' },
+    { facts: [null] },
+    { facts: ['not-an-object'] },
+    { facts: [{ id: 'f1', category: 'medical', statement: 'ok', critical: true, at: '2026-10-10T00:00:00.000Z', extra: 1 }] },
+    { facts: [{ id: '', category: 'medical', statement: 'ok', critical: true, at: '2026-10-10T00:00:00.000Z' }] },
+    { facts: [{ id: 'bad id with spaces!', category: 'medical', statement: 'ok', critical: true, at: '2026-10-10T00:00:00.000Z' }] },
+    { facts: [{ id: 'f1', category: 'unknown-category', statement: 'ok', critical: true, at: '2026-10-10T00:00:00.000Z' }] },
+    { facts: [{ id: 'f1', category: 'medical', statement: '', critical: true, at: '2026-10-10T00:00:00.000Z' }] },
+    { facts: [{ id: 'f1', category: 'medical', statement: 'a'.repeat(141), critical: true, at: '2026-10-10T00:00:00.000Z' }] },
+    { facts: [{ id: 'f1', category: 'medical', statement: 'ok', critical: 'yes', at: '2026-10-10T00:00:00.000Z' }] },
+    { facts: [{ id: 'f1', category: 'medical', statement: 'ok', critical: true, at: 'not-a-date' }] }
+  ];
+
+  for (const bc of badCases) {
+    const res = validateTwinState({ ...base, ...bc });
+    assert.equal(res.ok, false, `Expected failure for: ${JSON.stringify(bc)}`);
+  }
+});
+
+test('summarizeFacts aggregates metrics and handles empty or invalid inputs fail-closed', () => {
+  const facts = [
+    { id: 'f1', category: 'medical', statement: 'Allergy', critical: true, at: '2026-10-10T00:00:00.000Z' },
+    { id: 'f2', category: 'emergency', statement: 'Contact ICE', critical: true, at: '2026-10-10T00:00:00.000Z' },
+    { id: 'f3', category: 'boundary', statement: 'No telemetry', critical: true, at: '2026-10-10T00:00:00.000Z' },
+    { id: 'f4', category: 'preference', statement: 'Dark mode', critical: false, at: '2026-10-10T00:00:00.000Z' },
+    { id: 'f5', category: 'other', statement: 'Note', critical: false, at: '2026-10-10T00:00:00.000Z' }
+  ];
+
+  const summary = summarizeFacts(facts);
+  assert.equal(summary.total, 5);
+  assert.equal(summary.critical_count, 3);
+  assert.equal(summary.by_category.medical, 1);
+  assert.equal(summary.by_category.emergency, 1);
+  assert.equal(summary.by_category.boundary, 1);
+  assert.equal(summary.by_category.preference, 1);
+  assert.equal(summary.by_category.other, 1);
+  assert.equal(summary.by_category.dietary, 0);
+
+  // Mixed items and case normalization
+  const mixed = summarizeFacts([
+    null,
+    'not-an-object',
+    { id: 'f1', category: 'Medical', statement: 'Allergy', critical: true },
+    { id: 'f2', category: 'DIETARY', statement: 'Peanuts', critical: false },
+    { id: 'f3', category: 'invalid-cat', statement: 'Bad', critical: true }
+  ]);
+  assert.equal(mixed.total, 2);
+  assert.equal(mixed.critical_count, 1);
+  assert.equal(mixed.by_category.medical, 1);
+  assert.equal(mixed.by_category.dietary, 1);
+
+  // Invalid / empty handling
+  const empty = summarizeFacts(null);
+  assert.equal(empty.total, 0);
+  assert.equal(empty.critical_count, 0);
+});
+
+test('filterCriticalFacts extracts critical facts safely', () => {
+  const facts = [
+    { id: 'f1', category: 'medical', statement: 'Allergy', critical: true, at: '2026-10-10T00:00:00.000Z' },
+    { id: 'f2', category: 'preference', statement: 'Quiet', critical: false, at: '2026-10-10T00:00:00.000Z' }
+  ];
+  const crit = filterCriticalFacts(facts);
+  assert.equal(crit.length, 1);
+  assert.equal(crit[0].id, 'f1');
+  assert.deepEqual(filterCriticalFacts(null), []);
+});
+

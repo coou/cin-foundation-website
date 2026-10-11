@@ -1,10 +1,10 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
-const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [] }; } };
+const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); const c = validateTwinState(r); return c.ok ? c.value : { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [] }; } catch (e) { return { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [] }; } };
 const save = (s) => { const c = validateTwinState(s); if (!c.ok) return false; try { localStorage.setItem(KEY, JSON.stringify(c.value)); return true; } catch (e) { return false; } };
 let state = load();
 
@@ -241,7 +241,7 @@ if (importInput) importInput.onchange = (e) => {
     if (!res.ok) { if (status) status.textContent = 'Could not restore backup: ' + res.error; importInput.value = ''; return; }
     if (saveAndRender(res.value, 'data_imported', 'Restored backup on this device')) {
       f.elements.topics.value = state.topics.join(', ');
-      renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents();
+      renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts();
       if (status) status.textContent = 'Backup restored successfully on this device.';
     }
     importInput.value = '';
@@ -368,8 +368,8 @@ if (clearEventsBtn) {
 const wipeBtn = document.getElementById('wipe');
 if (wipeBtn) wipeBtn.onclick = () => {
   try { localStorage.removeItem(KEY); } catch (e) { /* nothing */ }
-  state = { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [] };
-  f.reset(); renderGrants(); renderContributions(); renderObligations(); renderActions(); renderEvents();
+  state = { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [] };
+  f.reset(); renderGrants(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts();
   const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
   const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
   const evalBox = document.getElementById('access-eval-result'); if (evalBox) evalBox.textContent = '';
@@ -531,4 +531,71 @@ function renderAccessInspector() {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector();
+function renderFacts() {
+  const ul = document.getElementById('facts');
+  const summaryBox = document.getElementById('fact-summary');
+  if (!ul) return;
+  ul.textContent = '';
+  const facts = state.facts || [];
+  const summary = summarizeFacts(facts);
+  if (!facts.length) {
+    ul.appendChild(el('li', 'muted', 'No critical memories or constraints recorded yet. Your twin retains these on this device.'));
+  }
+  facts.forEach((f, i) => {
+    const li = el('li');
+    const catBadge = el('small', 'muted', `[${f.category}] `);
+    const criticalBadge = f.critical ? el('small', 'muted', ' [critical constraint] ') : document.createTextNode(' ');
+    li.append(catBadge, el('b', null, f.statement), criticalBadge);
+    const delBtn = el('button', 'btn', 'Remove');
+    delBtn.style.marginLeft = '0.4rem';
+    delBtn.onclick = () => {
+      const next = { ...state, facts: facts.filter((_, idx) => idx !== i) };
+      if (saveAndRender(next, 'fact_removed', `Removed fact: ${f.statement.slice(0, 40)}`)) {
+        renderFacts();
+        renderEvents();
+      }
+    };
+    li.appendChild(delBtn);
+    ul.appendChild(li);
+  });
+  if (summaryBox) {
+    summaryBox.textContent = '';
+    if (facts.length) {
+      summaryBox.appendChild(el('p', 'muted', `Critical memory: ${summary.total} total (${summary.critical_count} safety-critical). Preserved locally.`));
+    }
+  }
+}
+
+const factForm = document.getElementById('fact');
+if (factForm) {
+  factForm.onsubmit = (e) => {
+    e.preventDefault();
+    const status = document.getElementById('data-status');
+    const currentFacts = state.facts || [];
+    if (currentFacts.length >= 50) {
+      if (status) status.textContent = 'Maximum of 50 facts reached. Remove an older entry first.';
+      return;
+    }
+    const statement = factForm.elements.statement ? factForm.elements.statement.value.trim().slice(0, 140) : '';
+    const category = factForm.elements.category ? factForm.elements.category.value.trim().toLowerCase() : 'other';
+    const isCritical = factForm.elements.critical ? factForm.elements.critical.checked : false;
+    if (!statement) return;
+    const now = new Date();
+    const id = 'fact-' + now.getTime().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
+    const newFact = {
+      id,
+      category,
+      statement,
+      critical: isCritical,
+      at: now.toISOString()
+    };
+    const next = { ...state, facts: currentFacts.concat([newFact]) };
+    if (saveAndRender(next, 'fact_added', `Added [${category}] ${statement.slice(0, 40)}`)) {
+      factForm.reset();
+      renderFacts();
+      renderEvents();
+    }
+  };
+}
+
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts();
