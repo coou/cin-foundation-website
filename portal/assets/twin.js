@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -327,6 +327,46 @@ if (actionForm) {
   };
 }
 
+const auditActionForm = document.getElementById('audit-action');
+if (auditActionForm) {
+  auditActionForm.onsubmit = (e) => {
+    e.preventDefault();
+    const resultBox = document.getElementById('boundary-audit-result');
+    if (!resultBox) return;
+    resultBox.textContent = '';
+
+    const who = auditActionForm.elements.who ? auditActionForm.elements.who.value.trim().slice(0, 60) : '';
+    const action = auditActionForm.elements.action ? auditActionForm.elements.action.value.trim().slice(0, 100) : '';
+    const scope = auditActionForm.elements.scope ? auditActionForm.elements.scope.value.trim().slice(0, 80) : '';
+
+    if (!who || !action) return;
+
+    const audit = auditBoundaryAction(state, { who, action, scope: scope || undefined });
+    const verdictP = el('p', null);
+    const badgeText = audit.verdict === 'pass'
+      ? 'Pass: Authorized'
+      : audit.verdict === 'require_confirmation'
+        ? 'Require Confirmation: Elevated Risk'
+        : 'Block: Boundary Violation';
+
+    const badgeColor = audit.verdict === 'pass' ? '#2e7d32' : audit.verdict === 'require_confirmation' ? '#ed6c02' : '#d32f2f';
+    const badge = el('strong', null, `[${badgeText}] `);
+    badge.style.color = badgeColor;
+    verdictP.appendChild(badge);
+    verdictP.appendChild(document.createTextNode(`Risk level: ${audit.risk_level}`));
+    resultBox.appendChild(verdictP);
+
+    if (audit.reasons.length > 0) {
+      const ul = el('ul', 'plain');
+      audit.reasons.forEach((r) => {
+        const li = el('li', 'muted', '• ' + r);
+        ul.appendChild(li);
+      });
+      resultBox.appendChild(ul);
+    }
+  };
+}
+
 function renderEvents() {
   const ul = document.getElementById('events');
   const summaryBox = document.getElementById('event-summary');
@@ -373,6 +413,7 @@ if (wipeBtn) wipeBtn.onclick = () => {
   const q = document.getElementById('quest'); q.textContent = ''; q.appendChild(el('li', 'muted', 'Add topics to see what matters today.'));
   const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
   const evalBox = document.getElementById('access-eval-result'); if (evalBox) evalBox.textContent = '';
+  const auditBox = document.getElementById('boundary-audit-result'); if (auditBox) auditBox.textContent = '';
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
