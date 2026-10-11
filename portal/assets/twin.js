@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -538,14 +538,24 @@ function renderFacts() {
   ul.textContent = '';
   const facts = state.facts || [];
   const summary = summarizeFacts(facts);
+  const auditSummary = summarizeMemoryAudit(facts);
   if (!facts.length) {
     ul.appendChild(el('li', 'muted', 'No critical memories or constraints recorded yet. Your twin retains these on this device.'));
   }
   facts.forEach((f, i) => {
     const li = el('li');
     const catBadge = el('small', 'muted', `[${f.category}] `);
+    let auditBadge = null;
+    try {
+      const audit = auditMemoryStatement(f.statement);
+      if (audit.is_speculation) {
+        auditBadge = el('small', 'muted', ` [speculation: ${audit.markers.join(', ')}] `);
+      }
+    } catch (e) {
+      /* ignore */
+    }
     const criticalBadge = f.critical ? el('small', 'muted', ' [critical constraint] ') : document.createTextNode(' ');
-    li.append(catBadge, el('b', null, f.statement), criticalBadge);
+    li.append(catBadge, el('b', null, f.statement), auditBadge || document.createTextNode(' '), criticalBadge);
     const delBtn = el('button', 'btn', 'Remove');
     delBtn.style.marginLeft = '0.4rem';
     delBtn.onclick = () => {
@@ -561,7 +571,7 @@ function renderFacts() {
   if (summaryBox) {
     summaryBox.textContent = '';
     if (facts.length) {
-      summaryBox.appendChild(el('p', 'muted', `Critical memory: ${summary.total} total (${summary.critical_count} safety-critical). Preserved locally.`));
+      summaryBox.appendChild(el('p', 'muted', `Memory store: ${summary.total} total (${summary.critical_count} safety-critical, ${auditSummary.confirmed} confirmed facts). ${auditSummary.speculation} marked as possibly unconfirmed (wording check only).`));
     }
   }
 }
@@ -580,21 +590,52 @@ if (factForm) {
     const category = factForm.elements.category ? factForm.elements.category.value.trim().toLowerCase() : 'other';
     const isCritical = factForm.elements.critical ? factForm.elements.critical.checked : false;
     if (!statement) return;
-    const now = new Date();
-    const id = 'fact-' + now.getTime().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
-    const newFact = {
-      id,
-      category,
-      statement,
-      critical: isCritical,
-      at: now.toISOString()
-    };
-    const next = { ...state, facts: currentFacts.concat([newFact]) };
-    if (saveAndRender(next, 'fact_added', `Added [${category}] ${statement.slice(0, 40)}`)) {
-      factForm.reset();
-      renderFacts();
-      renderEvents();
+
+    const gate = gateMemoryFact(statement, isCritical);
+    if (!gate.allowed) {
+      if (status) status.textContent = gate.reason;
+      return;
     }
+
+    const saveFact = () => {
+      const now = new Date();
+      const id = 'fact-' + now.getTime().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
+      const newFact = {
+        id,
+        category,
+        statement,
+        critical: isCritical,
+        at: now.toISOString()
+      };
+      const next = { ...state, facts: currentFacts.concat([newFact]) };
+      const eventDetail = gate.audit.is_speculation
+        ? `Added [${category}] (unconfirmed) ${statement.slice(0, 30)}`
+        : `Added [${category}] ${statement.slice(0, 40)}`;
+      if (saveAndRender(next, 'fact_added', eventDetail)) {
+        factForm.reset();
+        if (status) status.textContent = '';
+        renderFacts();
+        renderEvents();
+      }
+    };
+
+    if (isCritical && gate.needs_confirmation) {
+      if (status) {
+        status.textContent = '';
+        const warnP = el('p', 'muted', (gate.reason || 'This statement contains speculative wording.') + ' ');
+        const confirmBtn = el('button', 'btn', 'Save anyway');
+        confirmBtn.type = 'button';
+        confirmBtn.style.marginLeft = '0.5rem';
+        confirmBtn.onclick = () => {
+          saveFact();
+        };
+        warnP.appendChild(confirmBtn);
+        status.appendChild(warnP);
+      }
+      return;
+    }
+
+    saveFact();
   };
 }
 

@@ -39,6 +39,27 @@ export const ALLOWED_FACT_CATEGORIES = Object.freeze([
   'other'
 ]);
 
+export const SPECULATIVE_MARKERS = Object.freeze([
+  'might',
+  'may',
+  'maybe',
+  'could',
+  'perhaps',
+  'possibly',
+  'probably',
+  'considering',
+  'planning to',
+  'plans to',
+  'thinking of',
+  'thinking about',
+  'intends to',
+  'hoping to',
+  'likely to',
+  'tentatively',
+  'unconfirmed',
+  'hypothetically'
+]);
+
 export const ALLOWED_QUEST_CATEGORIES = Object.freeze([
   'learning',
   'creation',
@@ -1068,6 +1089,135 @@ export function summarizeFacts(facts) {
 export function filterCriticalFacts(facts) {
   if (!Array.isArray(facts)) return [];
   return facts.filter((f) => f && typeof f === 'object' && f.critical === true);
+}
+
+/**
+ * Audit a memory statement for speculative or prospective wording markers.
+ * Fails closed on non-string or malformed inputs.
+ */
+export function auditMemoryStatement(statement) {
+  if (typeof statement !== 'string') {
+    throw new TypeError('statement must be a string');
+  }
+  const trimmed = statement.trim();
+  if (trimmed.length === 0) {
+    throw new Error('statement cannot be empty');
+  }
+  if (trimmed.length > 140) {
+    throw new Error('statement cannot exceed 140 characters');
+  }
+
+  let sanitized = trimmed;
+  // Skip 'could kill/harm/hurt' (toxicity/allergy constraints, not speculative)
+  sanitized = sanitized.replace(/\bcould\s+(?:kill|harm|hurt)\b/gi, '__safety_constraint__');
+  // Skip 'may not' (prohibitions/mandates, not speculative)
+  sanitized = sanitized.replace(/\bmay\s+not\b/gi, '__prohibition__');
+  // Skip 'may' when capitalised mid-sentence as a month, or preceded by month prepositions
+  sanitized = sanitized.replace(/(?<!^|[.!?]\s+)\bMay\b/g, '__month__');
+  sanitized = sanitized.replace(/\b(?:in|during|by|before|after|until|since|of)\s+May\b/gi, '__month__');
+  // Skip negated prospective/speculative markers
+  sanitized = sanitized.replace(/\b(?:not|never)\s+considering\b/gi, '__negated_marker__');
+  sanitized = sanitized.replace(/\b(?:not|never)\s+(?:planning\s+to|thinking\s+(?:of|about)|intends\s+to|hoping\s+to)\b/gi, '__negated_marker__');
+
+  const lower = ' ' + sanitized.toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
+  const matched = [];
+
+  for (const marker of SPECULATIVE_MARKERS) {
+    const padded = ' ' + marker + ' ';
+    if (lower.includes(padded)) {
+      matched.push(marker);
+    }
+  }
+
+  const isSpeculation = matched.length > 0;
+  return Object.freeze({
+    is_speculation: isSpeculation,
+    markers: Object.freeze(matched),
+    verdict: isSpeculation ? 'speculation' : 'confirmed',
+    reason: isSpeculation
+      ? 'Contains speculative markers: ' + matched.join(', ')
+      : 'Declarative statement without speculative markers'
+  });
+}
+
+/**
+ * Gate a memory fact before persistence.
+ * Never blocks the person from saving what they mark critical; warns and requests
+ * confirmation when speculative wording markers are detected on a critical constraint.
+ */
+export function gateMemoryFact(statement, isCritical) {
+  if (typeof statement !== 'string') {
+    throw new TypeError('statement must be a string');
+  }
+  if (typeof isCritical !== 'boolean') {
+    throw new TypeError('isCritical must be a boolean');
+  }
+  const audit = auditMemoryStatement(statement);
+  if (isCritical && audit.is_speculation) {
+    return Object.freeze({
+      allowed: true,
+      needs_confirmation: true,
+      reason: 'Contains speculative wording markers (' + audit.markers.join(', ') + '); confirmation recommended before saving as safety-critical constraint',
+      audit
+    });
+  }
+  return Object.freeze({
+    allowed: true,
+    needs_confirmation: false,
+    reason: audit.is_speculation
+      ? 'Allowed as unconfirmed speculation'
+      : 'Allowed as confirmed declarative fact',
+    audit
+  });
+}
+
+/**
+ * Aggregate summary of confirmed vs speculative memory facts.
+ */
+export function summarizeMemoryAudit(facts) {
+  if (!Array.isArray(facts)) {
+    return Object.freeze({
+      total: 0,
+      confirmed: 0,
+      speculation: 0,
+      critical_speculation: 0,
+      breakdown: Object.freeze({ confirmed: 0, speculation: 0 })
+    });
+  }
+
+  let total = 0;
+  let confirmed = 0;
+  let speculation = 0;
+  let criticalSpeculation = 0;
+
+  for (const f of facts) {
+    if (!f || typeof f !== 'object' || Array.isArray(f) || typeof f.statement !== 'string') continue;
+    try {
+      const audit = auditMemoryStatement(f.statement);
+      total++;
+      if (audit.is_speculation) {
+        speculation++;
+        if (f.critical === true) {
+          criticalSpeculation++;
+        }
+      } else {
+        confirmed++;
+      }
+    } catch (e) {
+      // ignore invalid statements
+    }
+  }
+
+  return Object.freeze({
+    total,
+    confirmed,
+    speculation,
+    critical_speculation: criticalSpeculation,
+    breakdown: Object.freeze({
+      confirmed,
+      speculation
+    })
+  });
 }
 
 export function toggleQuestCompletion(state, questId, asOfTime = null) {
