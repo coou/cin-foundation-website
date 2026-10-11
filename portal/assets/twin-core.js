@@ -48,6 +48,24 @@ export const ALLOWED_QUEST_CATEGORIES = Object.freeze([
   'other'
 ]);
 
+export const ALLOWED_VALUE_DIMENSIONS = Object.freeze([
+  'commons',
+  'resilience',
+  'wellbeing',
+  'learning',
+  'containment',
+  'ecology'
+]);
+
+export const DEFAULT_VALUES = Object.freeze({
+  commons: 3,
+  resilience: 3,
+  wellbeing: 3,
+  learning: 3,
+  containment: 3,
+  ecology: 3
+});
+
 export const ALLOWED_EVENT_TYPES = Object.freeze([
   'topics_updated',
   'grant_created',
@@ -67,6 +85,7 @@ export const ALLOWED_EVENT_TYPES = Object.freeze([
   'quest_completed',
   'quest_reopened',
   'quest_removed',
+  'value_preference_updated',
   'data_exported',
   'data_imported',
   'log_cleared'
@@ -80,7 +99,8 @@ export const DEFAULT_TWIN_STATE = Object.freeze({
   events: Object.freeze([]),
   obligations: Object.freeze([]),
   facts: Object.freeze([]),
-  quests: Object.freeze([])
+  quests: Object.freeze([]),
+  values: DEFAULT_VALUES
 });
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
@@ -110,7 +130,7 @@ export function validateTwinState(raw) {
     return { ok: false, error: 'Twin state must be an object' };
   }
   const keys = Object.keys(raw);
-  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions' && k !== 'events' && k !== 'obligations' && k !== 'facts' && k !== 'quests')) {
+  if (keys.some((k) => k !== 'topics' && k !== 'grants' && k !== 'contributions' && k !== 'actions' && k !== 'events' && k !== 'obligations' && k !== 'facts' && k !== 'quests' && k !== 'values')) {
     return { ok: false, error: 'Unknown field in twin state' };
   }
   if (!Array.isArray(raw.topics) || raw.topics.length > 20) {
@@ -331,7 +351,23 @@ export function validateTwinState(raw) {
     cleanQuests.push({ id: q.id.trim(), title: q.title.trim(), category: cat, priority: q.priority, completed: q.completed, at: q.at, completed_at: cleanCompletedAt });
   }
 
-  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions, events: cleanEvents, obligations: cleanObligations, facts: cleanFacts, quests: cleanQuests } };
+  const rawValues = raw.values !== undefined ? raw.values : DEFAULT_VALUES;
+  if (!rawValues || typeof rawValues !== 'object' || Array.isArray(rawValues)) {
+    return { ok: false, error: 'values must be an object' };
+  }
+  if (Object.keys(rawValues).some((k) => !ALLOWED_VALUE_DIMENSIONS.includes(k))) {
+    return { ok: false, error: 'values contains unknown dimension' };
+  }
+  const cleanValues = {};
+  for (const dim of ALLOWED_VALUE_DIMENSIONS) {
+    const val = rawValues[dim] !== undefined ? rawValues[dim] : DEFAULT_VALUES[dim];
+    if (typeof val !== 'number' || typeof val === 'boolean' || !Number.isFinite(val) || val < 1 || val > 5) {
+      return { ok: false, error: `value dimension ${dim} must be a finite number between 1 and 5` };
+    }
+    cleanValues[dim] = Math.round(val);
+  }
+
+  return { ok: true, value: { topics: cleanTopics, grants: cleanGrants, contributions: cleanContributions, actions: cleanActions, events: cleanEvents, obligations: cleanObligations, facts: cleanFacts, quests: cleanQuests, values: cleanValues } };
 }
 
 export function deserializeTwinState(jsonStr) {
@@ -1141,5 +1177,81 @@ export function filterActiveQuests(quests, limit = 3) {
       return idA.localeCompare(idB);
     })
     .slice(0, safeLimit);
+}
+
+export function updateValuePreference(state, dimension, score) {
+  const check = validateTwinState(state);
+  if (!check.ok) return { ok: false, error: 'Invalid twin state: ' + check.error };
+  if (typeof dimension !== 'string') return { ok: false, error: 'Dimension must be a string' };
+  const cleanDim = dimension.trim().toLowerCase();
+  if (!ALLOWED_VALUE_DIMENSIONS.includes(cleanDim)) {
+    return { ok: false, error: `Dimension must be one of: ${ALLOWED_VALUE_DIMENSIONS.join(', ')}` };
+  }
+  if (typeof score !== 'number' || typeof score === 'boolean' || !Number.isFinite(score) || score < 1 || score > 5) {
+    return { ok: false, error: 'Score must be a finite number between 1 and 5' };
+  }
+  const rounded = Math.round(score);
+  const nextValues = {
+    ...check.value.values,
+    [cleanDim]: rounded
+  };
+  const nextState = {
+    ...check.value,
+    values: nextValues
+  };
+  return { ok: true, state: nextState, dimension: cleanDim, score: rounded };
+}
+
+export function calculateValueAlignment(values, actionDimensions) {
+  if (!values || typeof values !== 'object' || Array.isArray(values)) {
+    return Object.freeze({ alignment: 0.0, matched_dimensions: Object.freeze([]) });
+  }
+  if (!Array.isArray(actionDimensions) || actionDimensions.length === 0) {
+    return Object.freeze({ alignment: 0.0, matched_dimensions: Object.freeze([]) });
+  }
+  const cleanDims = actionDimensions
+    .map((d) => (typeof d === 'string' ? d.trim().toLowerCase() : ''))
+    .filter((d) => ALLOWED_VALUE_DIMENSIONS.includes(d));
+  if (cleanDims.length === 0) {
+    return Object.freeze({ alignment: 0.0, matched_dimensions: Object.freeze([]) });
+  }
+  let totalScore = 0;
+  for (const d of cleanDims) {
+    const s = typeof values[d] === 'number' && Number.isFinite(values[d]) ? values[d] : 3;
+    totalScore += s;
+  }
+  const alignment = Math.round((totalScore / (cleanDims.length * 5.0)) * 100) / 100;
+  return Object.freeze({
+    alignment,
+    matched_dimensions: Object.freeze(cleanDims)
+  });
+}
+
+export function summarizeValues(values) {
+  if (!values || typeof values !== 'object' || Array.isArray(values)) {
+    return Object.freeze({
+      average_priority: 3.0,
+      top_dimensions: Object.freeze([]),
+      by_dimension: Object.freeze({})
+    });
+  }
+  let sum = 0;
+  let count = 0;
+  const byDim = {};
+  for (const dim of ALLOWED_VALUE_DIMENSIONS) {
+    const val = typeof values[dim] === 'number' && Number.isFinite(values[dim]) ? values[dim] : 3;
+    byDim[dim] = val;
+    sum += val;
+    count++;
+  }
+  const avg = count > 0 ? Math.round((sum / count) * 10) / 10 : 3.0;
+  const sorted = [...ALLOWED_VALUE_DIMENSIONS].sort((a, b) => byDim[b] - byDim[a]);
+  const maxVal = byDim[sorted[0]];
+  const top = sorted.filter((d) => byDim[d] === maxVal);
+  return Object.freeze({
+    average_priority: avg,
+    top_dimensions: Object.freeze(top),
+    by_dimension: Object.freeze(byDim)
+  });
 }
 
