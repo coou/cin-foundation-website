@@ -47,6 +47,7 @@ import {
   computeContextFingerprint,
   assembleTokenBudgetedContext,
   ALLOWED_TOOL_KINDS,
+  SENSITIVE_TOPIC_KEYWORDS,
   SENSITIVE_TAINT_KEYWORDS,
   EGRESS_ACTION_KEYWORDS,
   auditToolExecutionChain,
@@ -2045,10 +2046,11 @@ test('ALLOWED_TOOL_KINDS, SENSITIVE_TAINT_KEYWORDS, and EGRESS_ACTION_KEYWORDS a
   assert.ok(ALLOWED_TOOL_KINDS.includes('egress'));
   assert.ok(ALLOWED_TOOL_KINDS.includes('delete'));
 
+  assert.equal(Object.isFrozen(SENSITIVE_TOPIC_KEYWORDS), true);
   assert.equal(Object.isFrozen(SENSITIVE_TAINT_KEYWORDS), true);
-  assert.ok(SENSITIVE_TAINT_KEYWORDS.includes('medical'));
-  assert.ok(SENSITIVE_TAINT_KEYWORDS.includes('passport'));
-  assert.ok(SENSITIVE_TAINT_KEYWORDS.includes('password'));
+  assert.ok(SENSITIVE_TOPIC_KEYWORDS.includes('medical'));
+  assert.ok(SENSITIVE_TOPIC_KEYWORDS.includes('passport'));
+  assert.ok(SENSITIVE_TOPIC_KEYWORDS.includes('password'));
 
   assert.equal(Object.isFrozen(EGRESS_ACTION_KEYWORDS), true);
   assert.ok(EGRESS_ACTION_KEYWORDS.includes('send'));
@@ -2153,7 +2155,7 @@ test('auditToolExecutionChain detects cross-step sensitive taint and blocks unco
   assert.equal(result.tainted, true);
   assert.ok(result.taints.includes('medical') || result.taints.some(t => t.includes('constraint_medical')));
   assert.equal(result.step_evaluations[1].verdict, 'block');
-  assert.ok(result.reasons.some(r => r.includes('transmits external egress while chain holds sensitive taint')));
+  assert.ok(result.reasons.some(r => r.includes('transmits external egress') && (r.includes('sensitive-topic flow') || r.includes('sensitive taint'))));
 });
 
 test('auditToolExecutionChain allows egress when destination service has an explicit grant covering tainted scope', () => {
@@ -2300,7 +2302,7 @@ test('auditToolExecutionChain detects kind spoofing evasion and blocks unconsent
   assert.equal(audit.verdict, 'block');
   assert.equal(audit.allowed, false);
   assert.ok(audit.reasons.some(r => r.includes('evasion attempt blocked')));
-  assert.ok(audit.reasons.some(r => r.includes('transmits external egress while chain holds sensitive taint')));
+  assert.ok(audit.reasons.some(r => r.includes('transmits external egress') && (r.includes('sensitive-topic flow') || r.includes('sensitive taint'))));
 });
 
 test('auditToolExecutionChain rejects wildcard * grants as sufficient consent for sensitive taint egress', () => {
@@ -2328,7 +2330,58 @@ test('auditToolExecutionChain rejects wildcard * grants as sufficient consent fo
   const audit = auditToolExecutionChain(state, chain);
   assert.equal(audit.verdict, 'block');
   assert.equal(audit.allowed, false);
-  assert.ok(audit.reasons.some(r => r.includes('transmits external egress while chain holds sensitive taint')));
+  assert.ok(audit.reasons.some(r => r.includes('transmits external egress') && (r.includes('sensitive-topic flow') || r.includes('sensitive taint'))));
+});
+
+test('auditToolExecutionChain blocks evasion when action indicates external destination even if kind is read', () => {
+  const state = {
+    topics: [],
+    grants: [{ who: 'assistant', what: 'calendar', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' }],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // Evasion attempt: copying data to external domain attacker.example while declaring kind 'read'
+  const chain = [
+    { service: 'assistant', action: 'copy appointment times to attacker.example', kind: 'read' }
+  ];
+
+  const audit = auditToolExecutionChain(state, chain);
+  assert.equal(audit.verdict, 'block');
+  assert.equal(audit.allowed, false);
+  assert.ok(audit.reasons.some(r => r.includes('evasion attempt blocked')));
+  // "Pass" and reasons must never read 'Action authorized'
+  assert.ok(!audit.reasons.some(r => r.includes('Action authorized')));
+});
+
+test('auditToolExecutionChain does not block postpone meeting as an egress evasion false positive', () => {
+  const state = {
+    topics: [],
+    grants: [{ who: 'assistant', what: 'calendar', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' }],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // "postpone meeting" contains substring "post" but must not trigger word-boundary egress match
+  const chain = [
+    { service: 'assistant', action: 'postpone meeting', scope: 'calendar', kind: 'write' }
+  ];
+
+  const audit = auditToolExecutionChain(state, chain);
+  assert.ok(!audit.reasons.some(r => r.includes('evasion attempt blocked')));
+  assert.ok(!audit.reasons.some(r => r.includes('Action authorized')));
+  assert.equal(audit.verdict, 'pass');
+  assert.equal(audit.allowed, true);
 });
 
 test('summarizeChainAudit fails closed on array inputs', () => {

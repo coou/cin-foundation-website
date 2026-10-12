@@ -2135,7 +2135,7 @@ export const ALLOWED_TOOL_KINDS = Object.freeze([
   'other'
 ]);
 
-export const SENSITIVE_TAINT_KEYWORDS = Object.freeze([
+export const SENSITIVE_TOPIC_KEYWORDS = Object.freeze([
   'medical',
   'health',
   'allergy',
@@ -2156,6 +2156,8 @@ export const SENSITIVE_TAINT_KEYWORDS = Object.freeze([
   'private_key',
   'secret'
 ]);
+
+export const SENSITIVE_TAINT_KEYWORDS = SENSITIVE_TOPIC_KEYWORDS;
 
 export const EGRESS_ACTION_KEYWORDS = Object.freeze([
   'send',
@@ -2180,22 +2182,53 @@ export const EGRESS_ACTION_KEYWORDS = Object.freeze([
   'http'
 ]);
 
+/**
+ * Heuristic tool kind inference based on action verbs, scopes, and destination patterns.
+ *
+ * Scope and boundary limits:
+ * - Keyword and pattern inference is a heuristic preview only and cannot bind a step to its real operational effect.
+ * - Deterministic sandboxing and host-enforced system call / network egress gating remain necessary in runtime execution.
+ * - Word-boundary matching is enforced to prevent false positives (such as "postpone" matching "post").
+ */
 function inferToolKind(action, scope) {
   const combined = `${action || ''} ${scope || ''}`.toLowerCase();
-  for (const kw of EGRESS_ACTION_KEYWORDS) {
-    if (combined.includes(kw)) return 'egress';
+
+  // 1. External network destinations or URLs
+  if (/\b(?:https?:\/\/|ftp:\/\/|[a-z0-9_-]+(?:\.[a-z0-9_-]+)+)\b/i.test(combined)) {
+    if (!/\b(?:localhost|127\.0\.0\.1)\b/i.test(combined)) {
+      return 'egress';
+    }
   }
-  if (/\b(delete|drop|remove|wipe|purge|clear)\b/.test(combined)) return 'delete';
-  if (/\b(read|get|fetch|view|query|scan|list|load)\b/.test(combined)) return 'read';
-  if (/\b(write|update|set|save|store|modify|create|insert|append)\b/.test(combined)) return 'write';
-  if (/\b(compute|calc|calculate|process|filter|sort|eval|parse)\b/.test(combined)) return 'compute';
+
+  // 2. Action phrases indicating egress data copying / piping to destinations
+  if (/\b(?:copy|pipe|forward|transmit|send)\b.*\bto\b/i.test(combined)) {
+    return 'egress';
+  }
+
+  // 3. Word-boundary matching against egress keywords (prevents 'postpone' from matching 'post')
+  for (const kw of EGRESS_ACTION_KEYWORDS) {
+    const rx = new RegExp(`\\b${kw}\\b`, 'i');
+    if (rx.test(combined)) return 'egress';
+  }
+
+  if (/\b(delete|drop|remove|wipe|purge|clear)\b/i.test(combined)) return 'delete';
+  if (/\b(read|get|fetch|view|query|scan|list|load)\b/i.test(combined)) return 'read';
+  if (/\b(write|update|set|save|store|modify|create|insert|append)\b/i.test(combined)) return 'write';
+  if (/\b(compute|calc|calculate|process|filter|sort|eval|parse)\b/i.test(combined)) return 'compute';
   return 'other';
 }
 
 /**
  * Audits an ordered chain of assistant tool calls against active consent grants,
- * critical memory constraints, and cross-step information flow / taint leakage.
+ * critical memory constraints, and cross-step sensitive-topic flow.
  * Fail-closed on invalid parameters, malformed steps, or unknown options.
+ *
+ * Scope and boundary limits:
+ * - Sensitive-topic flow tracking is based on a fixed keyword list and word overlap with
+ *   critical-memory statements; it is not dynamic untrusted-input tracking or information-flow taint.
+ * - Keyword and action inference cannot bind a step to its real operational effect.
+ * - This audit provides a heuristic preview only, never an authorization ('Pass' indicates
+ *   bounded parameters within the preview model, not runtime execution authorization).
  *
  * @param {object} twinState Current valid twin state
  * @param {object[]} chain Array of proposed tool execution steps
@@ -2230,7 +2263,7 @@ export function auditToolExecutionChain(twinState, chain, options = {}) {
     });
   }
 
-  const allowedOpts = new Set(['as_of_time', 'strict_taint', 'max_steps']);
+  const allowedOpts = new Set(['as_of_time', 'strict_taint', 'strict_topic_flow', 'max_steps']);
   for (const k of Object.keys(options)) {
     if (!allowedOpts.has(k)) {
       return Object.freeze({
@@ -2247,7 +2280,7 @@ export function auditToolExecutionChain(twinState, chain, options = {}) {
   }
 
   const asOfTime = options.as_of_time !== undefined ? options.as_of_time : null;
-  const strictTaint = options.strict_taint !== undefined ? Boolean(options.strict_taint) : true;
+  const strictTaint = options.strict_topic_flow !== undefined ? Boolean(options.strict_topic_flow) : (options.strict_taint !== undefined ? Boolean(options.strict_taint) : true);
   const maxSteps = options.max_steps !== undefined ? options.max_steps : 10;
 
   if (!Number.isInteger(maxSteps) || maxSteps < 1 || maxSteps > 20) {
@@ -2468,7 +2501,11 @@ export function auditToolExecutionChain(twinState, chain, options = {}) {
       asOfTime
     );
 
-    const stepReasons = [...singleAudit.reasons];
+    const stepReasons = singleAudit.reasons.map((r) =>
+      r.startsWith('Action authorized by active grant')
+        ? `Heuristic preview: active grant found for ${cleanService} (preview only, not an authorization)`
+        : r
+    );
     let stepVerdict = singleAudit.verdict;
     let stepRisk = singleAudit.risk_level;
 
@@ -2482,12 +2519,12 @@ export function auditToolExecutionChain(twinState, chain, options = {}) {
       allReasons.push(spoofMsg);
     }
 
-    // 2. Identify new sensitive taints generated by this step
+    // 2. Identify new sensitive topics generated by this step
     const stepText = `${cleanAction} ${cleanScope || ''} ${cleanContext || ''}`.toLowerCase();
     const stepTokens = extractWords(stepText);
     const stepNewTaints = [];
 
-    for (const kw of SENSITIVE_TAINT_KEYWORDS) {
+    for (const kw of SENSITIVE_TOPIC_KEYWORDS) {
       if (stepText.includes(kw) || stepTokens.includes(kw)) {
         stepNewTaints.push(kw);
         activeTaints.add(kw);
@@ -2504,7 +2541,7 @@ export function auditToolExecutionChain(twinState, chain, options = {}) {
       }
     }
 
-    // 3. Compositional Cross-step Taint Leakage / Egress check
+    // 3. Compositional Cross-step Sensitive-Topic Flow / Egress check
     let taintLeakageViolation = false;
     if (activeTaints.size > 0 && cleanKind === 'egress') {
       const grantScope = cleanScope || cleanAction.toLowerCase();
@@ -2514,7 +2551,7 @@ export function auditToolExecutionChain(twinState, chain, options = {}) {
       if (strictTaint) {
         for (const taint of activeTaints) {
           const specificCheck = evaluateAccessRequest(check.value, cleanService.toLowerCase(), taint, asOfTime);
-          // Sensitive taint egress requires an explicit targeted grant; wildcard '*' does not satisfy consent
+          // Sensitive topic egress requires an explicit targeted grant; wildcard '*' does not satisfy consent
           const isWildcard = Boolean(specificCheck.grant && (specificCheck.grant.what === '*' || (typeof specificCheck.grant.what === 'string' && specificCheck.grant.what.toLowerCase() === 'all')));
           if (!specificCheck.allowed || isWildcard) {
             missingGrants.push(taint);
@@ -2528,7 +2565,7 @@ export function auditToolExecutionChain(twinState, chain, options = {}) {
         stepRisk = 'high';
         hasBlock = true;
         violationsCount++;
-        const taintMsg = `Step ${stepIndex} (${cleanService}) transmits external egress while chain holds sensitive taint [${Array.from(activeTaints).join(', ')}] without explicit consent grant`;
+        const taintMsg = `Step ${stepIndex} (${cleanService}) transmits external egress while chain holds sensitive-topic flow [${Array.from(activeTaints).join(', ')}] without explicit consent grant`;
         stepReasons.push(taintMsg);
         allReasons.push(taintMsg);
       }
@@ -2543,7 +2580,7 @@ export function auditToolExecutionChain(twinState, chain, options = {}) {
       if (highestRisk !== 'high') highestRisk = stepRisk === 'high' ? 'high' : 'medium';
     }
 
-    for (const r of singleAudit.reasons) {
+    for (const r of stepReasons) {
       if (!allReasons.includes(r)) {
         allReasons.push(`Step ${stepIndex}: ${r}`);
       }
@@ -2559,6 +2596,8 @@ export function auditToolExecutionChain(twinState, chain, options = {}) {
       risk_level: stepRisk,
       tainted_at_step: activeTaints.size > 0,
       new_taints_identified: Object.freeze([...stepNewTaints]),
+      new_sensitive_topics_identified: Object.freeze([...stepNewTaints]),
+      sensitive_topics_held: Object.freeze(Array.from(activeTaints).sort()),
       reasons: Object.freeze(stepReasons)
     }));
   }
