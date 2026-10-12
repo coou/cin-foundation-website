@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -573,6 +573,56 @@ function renderAccessInspector() {
   };
 }
 
+function renderReceiptInspector() {
+  const form = document.getElementById('verify-receipt');
+  const resultBox = document.getElementById('receipt-verify-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+    const rawJson = form.elements.receipt_json ? form.elements.receipt_json.value.trim() : '';
+    if (!rawJson) {
+      resultBox.appendChild(el('p', 'muted', 'Paste a consent receipt JSON to verify.'));
+      return;
+    }
+
+    let parsed;
+    try {
+      parsed = JSON.parse(rawJson);
+    } catch (err) {
+      const errP = el('p', 'muted');
+      const errBadge = el('strong', null, '[Invalid JSON] ');
+      errBadge.style.color = '#d32f2f';
+      errP.appendChild(errBadge);
+      errP.appendChild(document.createTextNode('Could not parse receipt: invalid JSON format.'));
+      resultBox.appendChild(errP);
+      return;
+    }
+
+    const res = verifyConsentReceipt(state, parsed);
+    const summary = summarizeReceiptVerification(res);
+
+    const p = el('p');
+    if (summary.valid) {
+      p.className = 'status-ok';
+      const badge = el('strong', null, '[Receipt Verified] ');
+      badge.style.color = '#2e7d32';
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(`Authorized: "${summary.recipient}" has active local consent covering ${summary.scopes_count} scope(s).`));
+      resultBox.appendChild(p);
+    } else {
+      p.className = 'muted';
+      const badge = el('strong', null, '[Verification Failed] ');
+      badge.style.color = '#d32f2f';
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(summary.reason || 'Receipt is not valid or grant was revoked.'));
+      resultBox.appendChild(p);
+    }
+  };
+}
+
+
 function renderFacts() {
   const ul = document.getElementById('facts');
   const summaryBox = document.getElementById('fact-summary');
@@ -880,6 +930,6 @@ function renderContextAssembler() {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler();
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderReceiptInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler();
 
 

@@ -51,7 +51,10 @@ import {
   SENSITIVE_TAINT_KEYWORDS,
   EGRESS_ACTION_KEYWORDS,
   auditToolExecutionChain,
-  summarizeChainAudit
+  summarizeChainAudit,
+  ALLOWED_RECEIPT_FIELDS,
+  verifyConsentReceipt,
+  summarizeReceiptVerification
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -2418,4 +2421,259 @@ test('auditToolExecutionChain output is deeply frozen and deterministic', () => 
   assert.equal(res1.risk_level, res2.risk_level);
   assert.equal(res1.tainted, res2.tainted);
 });
+
+test('ALLOWED_RECEIPT_FIELDS is deeply frozen and contains standard fields', () => {
+  assert.equal(Object.isFrozen(ALLOWED_RECEIPT_FIELDS), true);
+  assert.ok(ALLOWED_RECEIPT_FIELDS.includes('receipt_version'));
+  assert.ok(ALLOWED_RECEIPT_FIELDS.includes('subject'));
+  assert.ok(ALLOWED_RECEIPT_FIELDS.includes('recipient'));
+  assert.ok(ALLOWED_RECEIPT_FIELDS.includes('purposes_and_scopes'));
+  assert.ok(ALLOWED_RECEIPT_FIELDS.includes('timestamp'));
+  assert.ok(ALLOWED_RECEIPT_FIELDS.includes('expires_at'));
+  assert.ok(ALLOWED_RECEIPT_FIELDS.includes('status'));
+});
+
+test('verifyConsentReceipt succeeds for valid active receipt matching active grant', () => {
+  const state = {
+    topics: [],
+    grants: [
+      { who: 'dentist', what: 'appointment times', at: '2026-10-10T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' }
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const receipt = createConsentReceipt(state.grants[0]);
+  const res = verifyConsentReceipt(state, receipt, '2026-10-12T00:00:00Z');
+
+  assert.equal(res.valid, true);
+  assert.equal(res.status, 'verified');
+  assert.ok(res.reason.includes('Receipt verified against active local grant'));
+  assert.equal(res.recipient, 'dentist');
+  assert.deepEqual(res.scopes, ['appointment times']);
+  assert.equal(res.matching_grant.who, 'dentist');
+  assert.equal(Object.isFrozen(res), true);
+  assert.equal(Object.isFrozen(res.scopes), true);
+  assert.equal(Object.isFrozen(res.matching_grant), true);
+});
+
+test('verifyConsentReceipt supports multi-scope grants and wildcard * grants', () => {
+  const state = {
+    topics: [],
+    grants: [
+      { who: 'health-app', what: '*', at: '2026-10-10T00:00:00Z' }
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const receipt = {
+    receipt_version: 'ISO-27560:2023-compatible',
+    subject: 'local-user',
+    recipient: 'health-app',
+    purposes_and_scopes: ['blood_pressure', 'heart_rate'],
+    timestamp: '2026-10-10T00:00:00Z',
+    expires_at: null,
+    status: 'granted',
+    jurisdiction_or_policy: 'Local device sovereignty (client-side only)'
+  };
+
+  const res = verifyConsentReceipt(state, receipt);
+  assert.equal(res.valid, true);
+  assert.equal(res.status, 'verified');
+  assert.equal(res.recipient, 'health-app');
+});
+
+test('verifyConsentReceipt fails closed when receipt is expired', () => {
+  const state = {
+    topics: [],
+    grants: [
+      { who: 'dentist', what: 'records', at: '2026-01-01T00:00:00Z', expires_at: '2026-06-01T00:00:00Z' }
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const receipt = {
+    receipt_version: 'ISO-27560:2023-compatible',
+    subject: 'local-user',
+    recipient: 'dentist',
+    purposes_and_scopes: ['records'],
+    timestamp: '2026-01-01T00:00:00Z',
+    expires_at: '2026-06-01T00:00:00Z',
+    status: 'expired'
+  };
+
+  const res = verifyConsentReceipt(state, receipt, '2026-10-12T00:00:00Z');
+  assert.equal(res.valid, false);
+  assert.equal(res.status, 'expired');
+  assert.ok(res.reason.includes('Receipt has expired'));
+});
+
+test('verifyConsentReceipt fails closed when matching local grant was revoked', () => {
+  const state = {
+    topics: [],
+    grants: [], // grant was revoked
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const receipt = {
+    receipt_version: 'ISO-27560:2023-compatible',
+    subject: 'local-user',
+    recipient: 'clinic',
+    purposes_and_scopes: ['medical_history'],
+    timestamp: '2026-10-01T00:00:00Z',
+    expires_at: '2026-12-31T00:00:00Z',
+    status: 'granted'
+  };
+
+  const res = verifyConsentReceipt(state, receipt, '2026-10-12T00:00:00Z');
+  assert.equal(res.valid, false);
+  assert.equal(res.status, 'revoked_or_unregistered');
+  assert.ok(res.reason.includes('No active grant found'));
+});
+
+test('verifyConsentReceipt fails closed on scope mismatch', () => {
+  const state = {
+    topics: [],
+    grants: [
+      { who: 'dentist', what: 'appointment times', at: '2026-10-10T00:00:00Z' }
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const receipt = {
+    receipt_version: 'ISO-27560:2023-compatible',
+    subject: 'local-user',
+    recipient: 'dentist',
+    purposes_and_scopes: ['appointment times', 'billing_records'], // billing_records not in grant
+    timestamp: '2026-10-10T00:00:00Z',
+    expires_at: null,
+    status: 'granted'
+  };
+
+  const res = verifyConsentReceipt(state, receipt);
+  assert.equal(res.valid, false);
+  assert.equal(res.status, 'scope_mismatch');
+  assert.ok(res.reason.includes('does not authorize all scopes'));
+});
+
+test('verifyConsentReceipt rejects unknown fields and malformed structures fail-closed', () => {
+  const state = {
+    topics: [],
+    grants: [
+      { who: 'service', what: 'scope1', at: '2026-10-10T00:00:00Z' }
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // Unknown fields
+  const unkRes = verifyConsentReceipt(state, {
+    receipt_version: 'ISO-27560:2023-compatible',
+    subject: 'local-user',
+    recipient: 'service',
+    purposes_and_scopes: ['scope1'],
+    timestamp: '2026-10-10T00:00:00Z',
+    hacker: 'payload'
+  });
+  assert.equal(unkRes.valid, false);
+  assert.equal(unkRes.status, 'unknown_fields');
+
+  // Non-objects and arrays
+  assert.equal(verifyConsentReceipt(state, null).status, 'malformed_receipt');
+  assert.equal(verifyConsentReceipt(state, 'string').status, 'malformed_receipt');
+  assert.equal(verifyConsentReceipt(state, []).status, 'malformed_receipt');
+
+  // Missing or bad fields
+  assert.equal(verifyConsentReceipt(state, { subject: 'u' }).status, 'malformed_receipt');
+  assert.equal(verifyConsentReceipt(state, {
+    receipt_version: 'v',
+    subject: 'u',
+    recipient: 'r',
+    purposes_and_scopes: [],
+    timestamp: '2026-10-10T00:00:00Z'
+  }).status, 'malformed_receipt');
+
+  // Bad timestamp
+  assert.equal(verifyConsentReceipt(state, {
+    receipt_version: 'v',
+    subject: 'u',
+    recipient: 'r',
+    purposes_and_scopes: ['s'],
+    timestamp: 'not-a-date'
+  }).status, 'malformed_receipt');
+
+  // Bad asOfTime
+  const badTime = verifyConsentReceipt(state, {
+    receipt_version: 'v',
+    subject: 'u',
+    recipient: 'r',
+    purposes_and_scopes: ['s'],
+    timestamp: '2026-10-10T00:00:00Z'
+  }, 'not-a-date');
+  assert.equal(badTime.status, 'invalid_parameter');
+
+  // Invalid state
+  assert.equal(verifyConsentReceipt({ bad_state: true }, {}).status, 'invalid_state');
+});
+
+test('summarizeReceiptVerification handles valid, invalid, and malformed inputs fail-closed', () => {
+  const validRes = {
+    valid: true,
+    status: 'verified',
+    reason: 'Authorized',
+    recipient: 'dentist',
+    scopes: ['appointment times']
+  };
+  const sumValid = summarizeReceiptVerification(validRes);
+  assert.equal(sumValid.valid, true);
+  assert.equal(sumValid.status, 'verified');
+  assert.equal(sumValid.recipient, 'dentist');
+  assert.equal(sumValid.scopes_count, 1);
+  assert.equal(Object.isFrozen(sumValid), true);
+
+  const sumBad = summarizeReceiptVerification(null);
+  assert.equal(sumBad.valid, false);
+  assert.equal(sumBad.status, 'error');
+  assert.equal(sumBad.recipient, null);
+  assert.equal(sumBad.scopes_count, 0);
+
+  const sumArr = summarizeReceiptVerification([]);
+  assert.equal(sumArr.valid, false);
+  assert.equal(sumArr.status, 'error');
+});
+
 
