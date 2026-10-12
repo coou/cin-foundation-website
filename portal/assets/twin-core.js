@@ -2658,5 +2658,242 @@ export function summarizeChainAudit(auditResult) {
   });
 }
 
+export const ALLOWED_RECEIPT_FIELDS = Object.freeze([
+  'receipt_version',
+  'subject',
+  'recipient',
+  'purposes_and_scopes',
+  'timestamp',
+  'expires_at',
+  'status',
+  'jurisdiction_or_policy'
+]);
+
+/**
+ * Verify a portable ISO-27560 consent receipt against active twin state.
+ *
+ * Deterministic and fail-closed: validates structure, checks expiration, and confirms
+ * that a corresponding active grant exists in local storage covering all claimed scopes.
+ * If the grant was revoked or expired, or if scopes do not match, returns invalid.
+ *
+ * @param {object} state Current twin state
+ * @param {object} receipt The consent receipt object to verify
+ * @param {string|Date|number|null} asOfTime Reference time for expiration checks
+ * @returns {object} Deeply frozen verification result
+ */
+export function verifyConsentReceipt(state, receipt, asOfTime = null) {
+  const check = validateTwinState(state);
+  if (!check.ok) {
+    return Object.freeze({
+      valid: false,
+      status: 'invalid_state',
+      reason: 'Invalid twin state: ' + check.error
+    });
+  }
+
+  if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) {
+    return Object.freeze({
+      valid: false,
+      status: 'malformed_receipt',
+      reason: 'Receipt must be a non-null object'
+    });
+  }
+
+  const keys = Object.keys(receipt);
+  if (keys.some((k) => !ALLOWED_RECEIPT_FIELDS.includes(k))) {
+    return Object.freeze({
+      valid: false,
+      status: 'unknown_fields',
+      reason: 'Receipt contains unknown or unauthorized fields'
+    });
+  }
+
+  if (typeof receipt.receipt_version !== 'string' || !receipt.receipt_version.trim() || receipt.receipt_version.length > 60) {
+    return Object.freeze({
+      valid: false,
+      status: 'malformed_receipt',
+      reason: 'receipt_version must be a non-empty string up to 60 characters'
+    });
+  }
+
+  if (typeof receipt.subject !== 'string' || !receipt.subject.trim() || receipt.subject.length > 80) {
+    return Object.freeze({
+      valid: false,
+      status: 'malformed_receipt',
+      reason: 'subject must be a non-empty string up to 80 characters'
+    });
+  }
+
+  if (typeof receipt.recipient !== 'string' || !receipt.recipient.trim() || receipt.recipient.length > 60) {
+    return Object.freeze({
+      valid: false,
+      status: 'malformed_receipt',
+      reason: 'recipient must be a non-empty string up to 60 characters'
+    });
+  }
+
+  if (!Array.isArray(receipt.purposes_and_scopes) || receipt.purposes_and_scopes.length === 0 || receipt.purposes_and_scopes.length > 20) {
+    return Object.freeze({
+      valid: false,
+      status: 'malformed_receipt',
+      reason: 'purposes_and_scopes must be a non-empty array of up to 20 scopes'
+    });
+  }
+
+  const cleanScopes = [];
+  for (let i = 0; i < receipt.purposes_and_scopes.length; i++) {
+    const s = receipt.purposes_and_scopes[i];
+    if (typeof s !== 'string' || !s.trim() || s.trim().length > 80) {
+      return Object.freeze({
+        valid: false,
+        status: 'malformed_receipt',
+        reason: `Scope at index ${i} must be a non-empty string up to 80 characters`
+      });
+    }
+    cleanScopes.push(s.trim().toLowerCase());
+  }
+
+  if (typeof receipt.timestamp !== 'string' || !ISO_RE.test(receipt.timestamp) || isNaN(Date.parse(receipt.timestamp))) {
+    return Object.freeze({
+      valid: false,
+      status: 'malformed_receipt',
+      reason: 'timestamp must be a valid ISO date string'
+    });
+  }
+
+  let receiptExpiresMs = null;
+  if (receipt.expires_at !== undefined && receipt.expires_at !== null) {
+    if (typeof receipt.expires_at !== 'string' || !ISO_RE.test(receipt.expires_at) || isNaN(Date.parse(receipt.expires_at))) {
+      return Object.freeze({
+        valid: false,
+        status: 'malformed_receipt',
+        reason: 'expires_at must be an ISO date string or null'
+      });
+    }
+    receiptExpiresMs = Date.parse(receipt.expires_at);
+  }
+
+  if (receipt.jurisdiction_or_policy !== undefined && receipt.jurisdiction_or_policy !== null) {
+    if (typeof receipt.jurisdiction_or_policy !== 'string' || receipt.jurisdiction_or_policy.length > 120) {
+      return Object.freeze({
+        valid: false,
+        status: 'malformed_receipt',
+        reason: 'jurisdiction_or_policy must be a string up to 120 characters'
+      });
+    }
+  }
+
+  let nowMs;
+  if (asOfTime === null || asOfTime === undefined) {
+    nowMs = Date.now();
+  } else if (typeof asOfTime === 'string') {
+    nowMs = Date.parse(asOfTime);
+  } else if (asOfTime instanceof Date) {
+    nowMs = asOfTime.getTime();
+  } else if (typeof asOfTime === 'number' && Number.isFinite(asOfTime)) {
+    nowMs = asOfTime;
+  } else {
+    return Object.freeze({
+      valid: false,
+      status: 'invalid_parameter',
+      reason: 'Invalid asOfTime parameter'
+    });
+  }
+  if (isNaN(nowMs)) {
+    return Object.freeze({
+      valid: false,
+      status: 'invalid_parameter',
+      reason: 'Invalid asOfTime parameter'
+    });
+  }
+
+  if (receiptExpiresMs !== null && nowMs >= receiptExpiresMs) {
+    return Object.freeze({
+      valid: false,
+      status: 'expired',
+      reason: 'Receipt has expired as of evaluated timestamp',
+      recipient: receipt.recipient,
+      expires_at: receipt.expires_at
+    });
+  }
+
+  const cleanRecipient = receipt.recipient.trim().toLowerCase();
+  const matchingGrants = check.value.grants.filter((g) => g.who.trim().toLowerCase() === cleanRecipient);
+
+  if (matchingGrants.length === 0) {
+    return Object.freeze({
+      valid: false,
+      status: 'revoked_or_unregistered',
+      reason: 'No active grant found for recipient on this device (grant may have been revoked)',
+      recipient: receipt.recipient
+    });
+  }
+
+  let sawExpiredGrant = false;
+  for (const g of matchingGrants) {
+    const grantScopes = g.what.toLowerCase().split(',').map((s) => s.trim()).filter(Boolean);
+    const hasWildcard = grantScopes.includes('*');
+    const allScopesCovered = cleanScopes.every((rs) => hasWildcard || grantScopes.includes(rs));
+
+    if (allScopesCovered) {
+      if (isGrantExpired(g, asOfTime)) {
+        sawExpiredGrant = true;
+        continue;
+      }
+      return Object.freeze({
+        valid: true,
+        status: 'verified',
+        reason: 'Receipt verified against active local grant',
+        recipient: receipt.recipient,
+        scopes: Object.freeze([...receipt.purposes_and_scopes]),
+        matching_grant: Object.freeze({ ...g })
+      });
+    }
+  }
+
+  if (sawExpiredGrant) {
+    return Object.freeze({
+      valid: false,
+      status: 'expired',
+      reason: 'Matching local grant has expired on this device',
+      recipient: receipt.recipient
+    });
+  }
+
+  return Object.freeze({
+    valid: false,
+    status: 'scope_mismatch',
+    reason: 'Active grant does not authorize all scopes requested in receipt',
+    recipient: receipt.recipient
+  });
+}
+
+/**
+ * Summarize a consent receipt verification result for UI display and event logging.
+ *
+ * @param {object} result Output from verifyConsentReceipt
+ * @returns {object} Deeply frozen summary
+ */
+export function summarizeReceiptVerification(result) {
+  if (!result || typeof result !== 'object' || Array.isArray(result)) {
+    return Object.freeze({
+      valid: false,
+      status: 'error',
+      reason: 'Invalid verification result',
+      recipient: null,
+      scopes_count: 0
+    });
+  }
+
+  return Object.freeze({
+    valid: Boolean(result.valid),
+    status: result.status || 'unknown',
+    reason: result.reason || '',
+    recipient: result.recipient || null,
+    scopes_count: Array.isArray(result.scopes) ? result.scopes.length : 0
+  });
+}
+
+
 
 
