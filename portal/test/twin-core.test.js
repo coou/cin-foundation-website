@@ -42,7 +42,10 @@ import {
   summarizeMemoryAudit,
   CONSEQUENTIAL_RISK_KEYWORDS,
   auditBoundaryAction,
-  summarizeBoundaryAudits
+  summarizeBoundaryAudits,
+  estimateTokenCount,
+  computeContextFingerprint,
+  assembleTokenBudgetedContext
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -1742,6 +1745,290 @@ test('summarizeBoundaryAudits aggregates audit outcomes cleanly fail-closed', ()
   assert.equal(Object.isFrozen(summary), true);
 });
 
+test('estimateTokenCount estimates tokens deterministically and fails closed on non-strings', () => {
+  assert.equal(estimateTokenCount(null), 0);
+  assert.equal(estimateTokenCount(123), 0);
+  assert.equal(estimateTokenCount(''), 0);
+  assert.equal(estimateTokenCount('   '), 0);
+  assert.equal(estimateTokenCount('hello'), 2);
+  assert.equal(estimateTokenCount('You are a personal twin assistant operating strictly within the person local browser device.'), 26);
+});
 
+test('computeContextFingerprint generates stable 14-hex fingerprint and fails closed', () => {
+  assert.equal(computeContextFingerprint(''), '00000000000000');
+  assert.equal(computeContextFingerprint(null), '00000000000000');
+  const fp1 = computeContextFingerprint('System prompt prefix text');
+  const fp2 = computeContextFingerprint('System prompt prefix text');
+  assert.equal(fp1, fp2);
+  assert.equal(typeof fp1, 'string');
+  assert.equal(fp1.length, 14);
+  const fp3 = computeContextFingerprint('Different prefix text');
+  assert.notEqual(fp1, fp3);
+});
 
+test('assembleTokenBudgetedContext compiles full context across all phases under generous budget', () => {
+  const sampleState = {
+    topics: ['health', 'privacy'],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [
+      { id: 'ev-1', at: '2026-10-12T00:00:00Z', type: 'data_exported', detail: 'Local backup created' }
+    ],
+    obligations: [
+      { id: 'obl-1', title: 'Medication refill', category: 'renewal', due_date: '2026-10-15', lead_days: 7, status: 'active', notes: 'pharmacy', at: '2026-10-12T00:00:00Z' }
+    ],
+    facts: [
+      { id: 'fact-1', category: 'medical', statement: 'Severe allergy to penicillin', critical: true, at: '2026-10-12T00:00:00Z' },
+      { id: 'fact-2', category: 'preference', statement: 'Prefers dark theme interfaces', critical: false, at: '2026-10-12T00:00:00Z' }
+    ],
+    quests: [
+      { id: 'quest-1', title: 'Verify offline local models', category: 'learning', priority: 1, completed: false, at: '2026-10-12T00:00:00Z' }
+    ],
+    values: DEFAULT_VALUES
+  };
 
+  const res = assembleTokenBudgetedContext(sampleState, {
+    budget_tokens: 2048,
+    as_of_date: '2026-10-12'
+  });
+
+  assert.equal(res.ok, true);
+  assert.equal(res.budget_tokens, 2048);
+  assert.ok(res.total_estimated_tokens > 0 && res.total_estimated_tokens < 2048);
+  assert.equal(res.remaining_tokens, 2048 - res.total_estimated_tokens);
+  assert.deepEqual(res.sections_included, ['system', 'critical_facts', 'obligations', 'quests', 'facts', 'events']);
+  assert.deepEqual(res.items_packed, {
+    critical_facts: 1,
+    obligations: 1,
+    quests: 1,
+    facts: 1,
+    events: 1
+  });
+  assert.deepEqual(res.truncated_sections, []);
+  assert.ok(res.context_text.includes('### System Instructions'));
+  assert.ok(res.context_text.includes('### Safety-Critical Constraints'));
+  assert.ok(res.context_text.includes('Severe allergy to penicillin'));
+  assert.ok(res.context_text.includes('### Active Obligations & Deadlines'));
+  assert.ok(res.context_text.includes('Medication refill'));
+  assert.ok(res.context_text.includes('### Daily Quests & Priorities'));
+  assert.ok(res.context_text.includes('Verify offline local models'));
+  assert.ok(res.context_text.includes('### Contextual Facts & Preferences'));
+  assert.ok(res.context_text.includes('Prefers dark theme interfaces'));
+  assert.ok(res.context_text.includes('### Recent Local Activity'));
+  assert.ok(res.context_text.includes('Local backup created'));
+  assert.equal(typeof res.prefix_fingerprint, 'string');
+  assert.equal(res.prefix_fingerprint.length, 14);
+});
+
+test('assembleTokenBudgetedContext prioritizes topic_focus when ordering contextual facts', () => {
+  const sampleState = {
+    topics: ['health'],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [
+      { id: 'fact-1', category: 'other', statement: 'Bicycle tire pressure is 60psi', critical: false, at: '2026-10-12T00:00:00Z' },
+      { id: 'fact-2', category: 'medical', statement: 'Resting heart rate target 65bpm for cardio health', critical: false, at: '2026-10-12T00:00:00Z' }
+    ],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const res = assembleTokenBudgetedContext(sampleState, {
+    budget_tokens: 2048,
+    topic_focus: ['health']
+  });
+
+  assert.equal(res.ok, true);
+  const factIdxHealth = res.context_text.indexOf('Resting heart rate target 65bpm');
+  const factIdxBike = res.context_text.indexOf('Bicycle tire pressure is 60psi');
+  assert.ok(factIdxHealth !== -1 && factIdxBike !== -1);
+  assert.ok(factIdxHealth < factIdxBike, 'Health fact should precede non-health fact when topic_focus is health');
+});
+
+test('assembleTokenBudgetedContext preserves critical constraints and truncates lower sections when budget is constrained', () => {
+  const sampleState = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [
+      { id: 'ev-1', at: '2026-10-12T00:00:00Z', type: 'data_exported', detail: 'Event 1' },
+      { id: 'ev-2', at: '2026-10-12T00:00:00Z', type: 'data_imported', detail: 'Event 2' }
+    ],
+    obligations: [
+      { id: 'obl-1', title: 'Upcoming tax filing', category: 'tax', due_date: '2026-10-30', lead_days: 7, status: 'active', notes: null, at: '2026-10-12T00:00:00Z' }
+    ],
+    facts: [
+      { id: 'fact-1', category: 'medical', statement: 'Severe peanut allergy', critical: true, at: '2026-10-12T00:00:00Z' },
+      { id: 'fact-2', category: 'preference', statement: 'Favorite color is blue', critical: false, at: '2026-10-12T00:00:00Z' }
+    ],
+    quests: [
+      { id: 'quest-1', title: 'Complete review', category: 'learning', priority: 1, completed: false, at: '2026-10-12T00:00:00Z' }
+    ],
+    values: DEFAULT_VALUES
+  };
+
+  // Tight budget of 85 tokens
+  const res = assembleTokenBudgetedContext(sampleState, {
+    budget_tokens: 85
+  });
+
+  assert.equal(res.ok, true);
+  assert.ok(res.total_estimated_tokens <= 85);
+  // Critical constraint MUST be included
+  assert.ok(res.sections_included.includes('critical_facts'));
+  assert.ok(res.context_text.includes('Severe peanut allergy'));
+  // Lower priority sections should be truncated
+  assert.ok(res.truncated_sections.length > 0);
+});
+
+test('assembleTokenBudgetedContext fails closed when system instructions exceed budget', () => {
+  const sampleState = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const res = assembleTokenBudgetedContext(sampleState, {
+    budget_tokens: 64,
+    system_prompt: 'This is an exceedingly verbose and unnecessarily long system prompt instruction set that was deliberately designed to exceed sixty-four tokens in length by providing extended explanations and redundant sentences for testing purposes.'
+  });
+
+  assert.equal(res.ok, false);
+  assert.equal(res.error, 'budget_exceeded_by_system_prompt');
+  assert.equal(res.context_text, '');
+});
+
+test('assembleTokenBudgetedContext fails closed when safety-critical constraints cannot fit in budget', () => {
+  const sampleState = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [
+      { id: 'fact-1', category: 'medical', statement: 'Severe allergy to penicillin and cephalosporins requiring epinephrine', critical: true, at: '2026-10-12T00:00:00Z' },
+      { id: 'fact-2', category: 'boundary', statement: 'Never share medical or financial records with external calendar or shopping agents', critical: true, at: '2026-10-12T00:00:00Z' }
+    ],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // Small budget of 64 tokens cannot fit system prompt + both critical constraints
+  const res = assembleTokenBudgetedContext(sampleState, {
+    budget_tokens: 64
+  });
+
+  assert.equal(res.ok, false);
+  assert.equal(res.error, 'budget_exceeded_by_critical_constraints');
+  assert.ok(res.reason.includes('Safety-critical constraints require'));
+  assert.equal(res.context_text, '');
+});
+
+test('assembleTokenBudgetedContext fails closed on invalid state, options, or budget parameters', () => {
+  assert.equal(assembleTokenBudgetedContext(null).ok, false);
+  assert.equal(assembleTokenBudgetedContext({ bad: true }).ok, false);
+
+  const validState = { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [], values: DEFAULT_VALUES };
+  assert.equal(assembleTokenBudgetedContext(validState, null).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, 'string').ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { budget_tokens: 0 }).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { budget_tokens: -100 }).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { budget_tokens: 32 }).ok, false); // below min 64
+  assert.equal(assembleTokenBudgetedContext(validState, { budget_tokens: 50000 }).ok, false); // above max 32768
+  assert.equal(assembleTokenBudgetedContext(validState, { budget_tokens: 1024.5 }).ok, false); // non-integer
+
+  // Unknown fields must be rejected fail-closed
+  const unkRes = assembleTokenBudgetedContext(validState, { budget_tokens: 1024, unknown_field: true });
+  assert.equal(unkRes.ok, false);
+  assert.equal(unkRes.error, 'invalid_options');
+  assert.ok(unkRes.reason.includes('Unknown field'));
+
+  // Invalid option types must be rejected fail-closed
+  assert.equal(assembleTokenBudgetedContext(validState, { as_of_date: 'not-a-date' }).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { topic_focus: 'health' }).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { topic_focus: [123] }).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { include_facts: 'true' }).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { include_obligations: 0 }).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { max_events: -1 }).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { max_events: 1.5 }).ok, false);
+  assert.equal(assembleTokenBudgetedContext(validState, { system_prompt: 12345 }).ok, false);
+});
+
+test('assembleTokenBudgetedContext strictly respects budget invariant and guarantees prefix fingerprint matches context', () => {
+  const sampleState = {
+    topics: ['health'],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [
+      { id: 'ev-1', at: '2026-10-12T00:00:00Z', type: 'data_exported', detail: 'Event 1' }
+    ],
+    obligations: [
+      { id: 'obl-1', title: 'Task deadline', category: 'renewal', due_date: '2026-10-20', lead_days: 7, status: 'active', notes: null, at: '2026-10-12T00:00:00Z' }
+    ],
+    facts: [
+      { id: 'f-1', category: 'medical', statement: 'Penicillin allergy', critical: true, at: '2026-10-12T00:00:00Z' },
+      { id: 'f-2', category: 'preference', statement: 'Prefers quiet mornings', critical: false, at: '2026-10-12T00:00:00Z' }
+    ],
+    quests: [
+      { id: 'q-1', title: 'Review code', category: 'learning', priority: 1, completed: false, at: '2026-10-12T00:00:00Z' }
+    ],
+    values: DEFAULT_VALUES
+  };
+
+  // Test across tight boundary budgets
+  for (let b = 64; b <= 200; b += 7) {
+    const res = assembleTokenBudgetedContext(sampleState, { budget_tokens: b });
+    if (res.ok) {
+      assert.ok(res.total_estimated_tokens <= res.budget_tokens, `Tokens (${res.total_estimated_tokens}) must never exceed budget (${res.budget_tokens})`);
+      assert.ok(res.remaining_tokens >= 0);
+      assert.equal(res.remaining_tokens, res.budget_tokens - res.total_estimated_tokens);
+    }
+  }
+
+  // Verify prefix fingerprint matches context_text prefix
+  const res = assembleTokenBudgetedContext(sampleState, { budget_tokens: 1024 });
+  assert.equal(res.ok, true);
+  const sysSection = "### System Instructions\nYou are a personal twin assistant operating strictly within the person's local browser device.\n";
+  const critSection = "### Safety-Critical Constraints\n- [CRITICAL MEDICAL] Penicillin allergy\n";
+  const expectedPrefix = [sysSection, critSection].join('\n');
+  assert.ok(res.context_text.startsWith(expectedPrefix), 'context_text must start with exact prefix');
+  assert.equal(computeContextFingerprint(expectedPrefix), res.prefix_fingerprint);
+});
+
+test('assembleTokenBudgetedContext result is deeply frozen and deterministic', () => {
+  const sampleState = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [{ id: 'f-1', category: 'medical', statement: 'Asthma inhaler in desk', critical: true, at: '2026-10-12T00:00:00Z' }],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const res1 = assembleTokenBudgetedContext(sampleState, { budget_tokens: 1024 });
+  const res2 = assembleTokenBudgetedContext(sampleState, { budget_tokens: 1024 });
+
+  assert.equal(Object.isFrozen(res1), true);
+  assert.equal(Object.isFrozen(res1.sections_included), true);
+  assert.equal(Object.isFrozen(res1.items_packed), true);
+  assert.equal(Object.isFrozen(res1.truncated_sections), true);
+  assert.equal(res1.context_text, res2.context_text);
+  assert.equal(res1.prefix_fingerprint, res2.prefix_fingerprint);
+  assert.equal(res1.total_estimated_tokens, res2.total_estimated_tokens);
+});

@@ -1679,3 +1679,451 @@ export function summarizeBoundaryAudits(audits) {
   });
 }
 
+/**
+ * Estimate the token count for a text string deterministically.
+ * Standard edge heuristic: ~3.6 characters per token for English text.
+ * Fail-closed on invalid inputs.
+ *
+ * @param {string} text Text to estimate
+ * @returns {number} Estimated token count (integer >= 0)
+ */
+export function estimateTokenCount(text) {
+  if (typeof text !== 'string') return 0;
+  const trimmed = text.trim();
+  if (trimmed.length === 0) return 0;
+  return Math.max(1, Math.ceil(trimmed.length / 3.6));
+}
+
+/**
+ * Compute a deterministic 14-hex-character fingerprint for a text prefix.
+ * Enables cache-awareness for repeated prompt prefixes on local runtimes.
+ *
+ * @param {string} text
+ * @returns {string} 14-character hex string
+ */
+export function computeContextFingerprint(text) {
+  if (typeof text !== 'string' || text.length === 0) return '00000000000000';
+  let h1 = 0xdeadbeef, h2 = 0x41c64e6d;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+  h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+  h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(14, '0');
+}
+
+/**
+ * Assemble a token-budgeted prompt context from the twin's local state.
+ * Multi-phase packing order:
+ *   Phase 1: System prompt & boundary instructions (mandatory)
+ *   Phase 2: Safety-critical constraints & emergency facts (mandatory, fails closed if exceeded)
+ *   Phase 3: Active obligations (overdue/urgent first)
+ *   Phase 4: Focus quests (priority 1 focus first)
+ *   Phase 5: Confirmed facts (prioritizing topic focus if provided)
+ *   Phase 6: Recent twin activity events (newest first)
+ *
+ * Fail-closed:
+ *   - Invalid budget or state returns fail-closed error
+ *   - Critical constraints MUST fit within budget; if they exceed budget, returns error
+ *     rather than silently compressing safety constraints away.
+ *
+ * @param {object} twinState Validated or unvalidated twin state
+ * @param {object} options Configuration options
+ * @returns {object} Deeply frozen assembled context result
+ */
+export function assembleTokenBudgetedContext(twinState, options = {}) {
+  const validation = validateTwinState(twinState);
+  if (!validation.ok) {
+    return Object.freeze({
+      ok: false,
+      error: 'invalid_twin_state',
+      reason: 'Twin state failed validation: ' + (validation.error || 'unknown'),
+      context_text: '',
+      total_estimated_tokens: 0,
+      budget_tokens: 0,
+      remaining_tokens: 0,
+      sections_included: Object.freeze([]),
+      items_packed: Object.freeze({ critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 }),
+      truncated_sections: Object.freeze([]),
+      prefix_fingerprint: '00000000000000'
+    });
+  }
+  const state = validation.value;
+
+  if (typeof options !== 'object' || options === null || Array.isArray(options)) {
+    return Object.freeze({
+      ok: false,
+      error: 'invalid_options',
+      reason: 'Options must be a non-null object',
+      context_text: '',
+      total_estimated_tokens: 0,
+      budget_tokens: 0,
+      remaining_tokens: 0,
+      sections_included: Object.freeze([]),
+      items_packed: Object.freeze({ critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 }),
+      truncated_sections: Object.freeze([]),
+      prefix_fingerprint: '00000000000000'
+    });
+  }
+
+  const ALLOWED_CONTEXT_OPTIONS = new Set([
+    'budget_tokens',
+    'system_prompt',
+    'as_of_date',
+    'topic_focus',
+    'include_obligations',
+    'include_quests',
+    'include_facts',
+    'include_recent_events',
+    'max_events'
+  ]);
+
+  for (const k of Object.keys(options)) {
+    if (!ALLOWED_CONTEXT_OPTIONS.has(k)) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_options',
+        reason: `Unknown field in options: "${k}"`,
+        context_text: '',
+        total_estimated_tokens: 0,
+        budget_tokens: 0,
+        remaining_tokens: 0,
+        sections_included: Object.freeze([]),
+        items_packed: Object.freeze({ critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 }),
+        truncated_sections: Object.freeze([]),
+        prefix_fingerprint: '00000000000000'
+      });
+    }
+  }
+
+  if (options.system_prompt !== undefined) {
+    if (typeof options.system_prompt !== 'string' || options.system_prompt.length > 2000) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_options',
+        reason: 'system_prompt must be a string up to 2000 characters',
+        context_text: '',
+        total_estimated_tokens: 0,
+        budget_tokens: 0,
+        remaining_tokens: 0,
+        sections_included: Object.freeze([]),
+        items_packed: Object.freeze({ critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 }),
+        truncated_sections: Object.freeze([]),
+        prefix_fingerprint: '00000000000000'
+      });
+    }
+  }
+
+  if (options.as_of_date !== undefined && options.as_of_date !== null) {
+    let validDate = false;
+    if (typeof options.as_of_date === 'string') {
+      const parsed = Date.parse(options.as_of_date);
+      validDate = !isNaN(parsed);
+    } else if (options.as_of_date instanceof Date) {
+      validDate = !isNaN(options.as_of_date.getTime());
+    }
+    if (!validDate) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_options',
+        reason: 'as_of_date must be a valid ISO date string or Date object',
+        context_text: '',
+        total_estimated_tokens: 0,
+        budget_tokens: 0,
+        remaining_tokens: 0,
+        sections_included: Object.freeze([]),
+        items_packed: Object.freeze({ critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 }),
+        truncated_sections: Object.freeze([]),
+        prefix_fingerprint: '00000000000000'
+      });
+    }
+  }
+
+  if (options.topic_focus !== undefined) {
+    if (!Array.isArray(options.topic_focus) || options.topic_focus.some(t => typeof t !== 'string' || !t.trim())) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_options',
+        reason: 'topic_focus must be an array of non-empty strings',
+        context_text: '',
+        total_estimated_tokens: 0,
+        budget_tokens: 0,
+        remaining_tokens: 0,
+        sections_included: Object.freeze([]),
+        items_packed: Object.freeze({ critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 }),
+        truncated_sections: Object.freeze([]),
+        prefix_fingerprint: '00000000000000'
+      });
+    }
+  }
+
+  for (const flag of ['include_obligations', 'include_quests', 'include_facts', 'include_recent_events']) {
+    if (options[flag] !== undefined && typeof options[flag] !== 'boolean') {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_options',
+        reason: `${flag} must be a boolean`,
+        context_text: '',
+        total_estimated_tokens: 0,
+        budget_tokens: 0,
+        remaining_tokens: 0,
+        sections_included: Object.freeze([]),
+        items_packed: Object.freeze({ critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 }),
+        truncated_sections: Object.freeze([]),
+        prefix_fingerprint: '00000000000000'
+      });
+    }
+  }
+
+  if (options.max_events !== undefined) {
+    if (!Number.isInteger(options.max_events) || options.max_events <= 0) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_options',
+        reason: 'max_events must be a positive integer',
+        context_text: '',
+        total_estimated_tokens: 0,
+        budget_tokens: 0,
+        remaining_tokens: 0,
+        sections_included: Object.freeze([]),
+        items_packed: Object.freeze({ critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 }),
+        truncated_sections: Object.freeze([]),
+        prefix_fingerprint: '00000000000000'
+      });
+    }
+  }
+
+  const rawBudget = options.budget_tokens !== undefined ? options.budget_tokens : 2048;
+  if (!Number.isInteger(rawBudget) || rawBudget < 64 || rawBudget > 32768) {
+    return Object.freeze({
+      ok: false,
+      error: 'invalid_budget',
+      reason: 'budget_tokens must be an integer between 64 and 32768',
+      context_text: '',
+      total_estimated_tokens: 0,
+      budget_tokens: 0,
+      remaining_tokens: 0,
+      sections_included: Object.freeze([]),
+      items_packed: Object.freeze({ critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 }),
+      truncated_sections: Object.freeze([]),
+      prefix_fingerprint: '00000000000000'
+    });
+  }
+  const budget = rawBudget;
+
+  const systemPrompt = typeof options.system_prompt === 'string' && options.system_prompt.trim().length > 0
+    ? options.system_prompt.trim()
+    : "You are a personal twin assistant operating strictly within the person's local browser device.";
+
+  const asOfDate = options.as_of_date || null;
+  const topicFocus = Array.isArray(options.topic_focus)
+    ? options.topic_focus.map(t => t.trim().toLowerCase())
+    : [];
+
+  const sectionsIncluded = [];
+  const truncatedSections = [];
+  const itemsPacked = { critical_facts: 0, obligations: 0, quests: 0, facts: 0, events: 0 };
+  const assembledParts = [];
+
+  // Phase 1: System prompt & boundary instructions
+  const sysSection = `### System Instructions\n${systemPrompt}\n`;
+  const sysTokens = estimateTokenCount(sysSection);
+  if (sysTokens > budget) {
+    return Object.freeze({
+      ok: false,
+      error: 'budget_exceeded_by_system_prompt',
+      reason: `System prompt requires ${sysTokens} tokens which exceeds the budget of ${budget}`,
+      context_text: '',
+      total_estimated_tokens: sysTokens,
+      budget_tokens: budget,
+      remaining_tokens: 0,
+      sections_included: Object.freeze([]),
+      items_packed: Object.freeze({ ...itemsPacked }),
+      truncated_sections: Object.freeze(['system']),
+      prefix_fingerprint: '00000000000000'
+    });
+  }
+  assembledParts.push(sysSection);
+  sectionsIncluded.push('system');
+
+  // Phase 2: Safety-Critical Constraints (allergies, medical, boundaries)
+  const criticalFacts = (state.facts || []).filter(f => f && f.critical === true);
+
+  if (criticalFacts.length > 0) {
+    const critLines = ['### Safety-Critical Constraints'];
+    for (const f of criticalFacts) {
+      critLines.push(`- [CRITICAL ${f.category ? f.category.toUpperCase() : 'CONSTRAINT'}] ${f.statement}`);
+    }
+    const critSection = critLines.join('\n') + '\n';
+    const candidateParts = [sysSection, critSection];
+    const candidateTokens = estimateTokenCount(candidateParts.join('\n'));
+
+    if (candidateTokens > budget) {
+      return Object.freeze({
+        ok: false,
+        error: 'budget_exceeded_by_critical_constraints',
+        reason: `Safety-critical constraints require ${estimateTokenCount(critSection)} tokens; total ${candidateTokens} exceeds budget of ${budget}. Critical memory constraints cannot be silently dropped.`,
+        context_text: '',
+        total_estimated_tokens: candidateTokens,
+        budget_tokens: budget,
+        remaining_tokens: 0,
+        sections_included: Object.freeze([...sectionsIncluded]),
+        items_packed: Object.freeze({ ...itemsPacked }),
+        truncated_sections: Object.freeze(['critical_facts']),
+        prefix_fingerprint: '00000000000000'
+      });
+    }
+
+    assembledParts.push(critSection);
+    sectionsIncluded.push('critical_facts');
+    itemsPacked.critical_facts = criticalFacts.length;
+  }
+
+  // Exact prefix string matching assembledParts
+  const prefixTextForFingerprint = assembledParts.join('\n');
+  const prefixFingerprint = computeContextFingerprint(prefixTextForFingerprint);
+
+  function tryPackSection(sectionName, headerTitle, items, formatFn, itemCounterKey) {
+    if (!items || items.length === 0) return;
+    const header = `### ${headerTitle}\n`;
+    
+    // Check if the header alone fits in the assembled context
+    if (estimateTokenCount([...assembledParts, header].join('\n')) > budget) {
+      truncatedSections.push(sectionName);
+      return;
+    }
+
+    const packedLines = [];
+    let hadTruncation = false;
+
+    for (const item of items) {
+      const line = formatFn(item);
+      const candidateLines = [...packedLines, line];
+      const candidateSection = header + candidateLines.join('\n') + '\n';
+      const candidateTokens = estimateTokenCount([...assembledParts, candidateSection].join('\n'));
+
+      if (candidateTokens <= budget) {
+        packedLines.push(line);
+        itemsPacked[itemCounterKey] = (itemsPacked[itemCounterKey] || 0) + 1;
+      } else {
+        hadTruncation = true;
+      }
+    }
+
+    if (packedLines.length > 0) {
+      assembledParts.push(header + packedLines.join('\n') + '\n');
+      sectionsIncluded.push(sectionName);
+    }
+    if (hadTruncation || packedLines.length === 0) {
+      truncatedSections.push(sectionName);
+    }
+  }
+
+  // Phase 3: Active Obligations
+  if (options.include_obligations !== false && Array.isArray(state.obligations) && state.obligations.length > 0) {
+    const activeObs = state.obligations
+      .filter(o => o && o.status === 'active')
+      .map(o => {
+        let urgency = { days_remaining: 999, is_overdue: false, is_due: false, is_urgent: false };
+        try { urgency = calculateObligationUrgency(o, asOfDate); } catch (e) { /* ignore */ }
+        return { obligation: o, urgency };
+      });
+
+    activeObs.sort((a, b) => {
+      if (a.urgency.is_overdue !== b.urgency.is_overdue) return a.urgency.is_overdue ? -1 : 1;
+      if (a.urgency.is_due !== b.urgency.is_due) return a.urgency.is_due ? -1 : 1;
+      if (a.urgency.is_urgent !== b.urgency.is_urgent) return a.urgency.is_urgent ? -1 : 1;
+      return a.urgency.days_remaining - b.urgency.days_remaining;
+    });
+
+    tryPackSection(
+      'obligations',
+      'Active Obligations & Deadlines',
+      activeObs,
+      ({ obligation: o, urgency: u }) => {
+        const urgLabel = u.is_overdue ? 'OVERDUE' : u.is_due ? 'DUE TODAY' : u.is_urgent ? 'URGENT' : `${u.days_remaining}d`;
+        const noteStr = o.notes ? ` - ${o.notes}` : '';
+        return `- [${urgLabel}] ${o.title} (due ${o.due_date})${noteStr}`;
+      },
+      'obligations'
+    );
+  }
+
+  // Phase 4: Focus Quests
+  if (options.include_quests !== false && Array.isArray(state.quests) && state.quests.length > 0) {
+    const activeQuests = state.quests
+      .filter(q => q && !q.completed)
+      .sort((a, b) => (a.priority || 2) - (b.priority || 2));
+
+    tryPackSection(
+      'quests',
+      'Daily Quests & Priorities',
+      activeQuests,
+      q => {
+        const pLabel = q.priority === 1 ? 'FOCUS' : `P${q.priority}`;
+        return `- [${pLabel} ${q.category ? q.category.toUpperCase() : 'QUEST'}] ${q.title}`;
+      },
+      'quests'
+    );
+  }
+
+  // Phase 5: Confirmed non-critical facts
+  if (options.include_facts !== false && Array.isArray(state.facts) && state.facts.length > 0) {
+    const nonCriticalFacts = state.facts.filter(f => f && f.critical !== true);
+    if (topicFocus.length > 0) {
+      nonCriticalFacts.sort((a, b) => {
+        const aText = ((a.statement || '') + ' ' + (a.category || '')).toLowerCase();
+        const bText = ((b.statement || '') + ' ' + (b.category || '')).toLowerCase();
+        const aMatches = topicFocus.some(t => aText.includes(t)) ? 1 : 0;
+        const bMatches = topicFocus.some(t => bText.includes(t)) ? 1 : 0;
+        return bMatches - aMatches;
+      });
+    }
+
+    tryPackSection(
+      'facts',
+      'Contextual Facts & Preferences',
+      nonCriticalFacts,
+      f => `- [${f.category ? f.category.toUpperCase() : 'FACT'}] ${f.statement}`,
+      'facts'
+    );
+  }
+
+  // Phase 6: Recent Twin Events
+  if (options.include_recent_events !== false && Array.isArray(state.events) && state.events.length > 0) {
+    const maxEvents = Number.isInteger(options.max_events) && options.max_events > 0 ? options.max_events : 5;
+    const recentEvents = state.events.slice(-maxEvents).reverse();
+
+    tryPackSection(
+      'events',
+      'Recent Local Activity',
+      recentEvents,
+      e => {
+        const ts = typeof e.at === 'string' ? e.at.slice(11, 19) : '';
+        return `- [${ts || 'event'}] ${e.type}: ${e.detail}`;
+      },
+      'events'
+    );
+  }
+
+  const finalContext = assembledParts.join('\n');
+  const finalTokens = estimateTokenCount(finalContext);
+
+  return Object.freeze({
+    ok: true,
+    context_text: finalContext,
+    total_estimated_tokens: finalTokens,
+    budget_tokens: budget,
+    remaining_tokens: Math.max(0, budget - finalTokens),
+    sections_included: Object.freeze([...sectionsIncluded]),
+    items_packed: Object.freeze({ ...itemsPacked }),
+    truncated_sections: Object.freeze([...truncatedSections]),
+    prefix_fingerprint: prefixFingerprint
+  });
+}
+
+
