@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, auditToolExecutionChain, summarizeChainAudit } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -415,6 +415,7 @@ if (wipeBtn) wipeBtn.onclick = () => {
   const evalBox = document.getElementById('access-eval-result'); if (evalBox) evalBox.textContent = '';
   const auditBox = document.getElementById('boundary-audit-result'); if (auditBox) auditBox.textContent = '';
   const ctxBox = document.getElementById('context-assembly-result'); if (ctxBox) ctxBox.textContent = '';
+  const chainBox = document.getElementById('chain-audit-result'); if (chainBox) chainBox.textContent = '';
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
@@ -880,6 +881,112 @@ function renderContextAssembler() {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler();
+function renderChainAuditor() {
+  const form = document.getElementById('audit-chain');
+  const resultBox = document.getElementById('chain-audit-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+
+    const defaultService = form.elements.service ? form.elements.service.value.trim().slice(0, 60) : '';
+    const stepsText = form.elements.steps ? form.elements.steps.value.trim() : '';
+
+    if (!stepsText) {
+      resultBox.appendChild(el('p', 'muted', 'Please provide an execution plan.'));
+      return;
+    }
+
+    let rawSteps;
+    try {
+      rawSteps = JSON.parse(stepsText);
+    } catch (err) {
+      const errP = el('p', null);
+      const errBadge = el('strong', null, '[Invalid Plan] ');
+      errBadge.style.color = '#d32f2f';
+      errP.appendChild(errBadge);
+      errP.appendChild(document.createTextNode('Execution plan is not valid JSON.'));
+      resultBox.appendChild(errP);
+      return;
+    }
+
+    if (!Array.isArray(rawSteps) || rawSteps.length === 0) {
+      const errP = el('p', null);
+      const errBadge = el('strong', null, '[Invalid Plan] ');
+      errBadge.style.color = '#d32f2f';
+      errP.appendChild(errBadge);
+      errP.appendChild(document.createTextNode('Execution plan must be a non-empty array of steps.'));
+      resultBox.appendChild(errP);
+      return;
+    }
+
+    const steps = rawSteps.map(step => {
+      if (step && typeof step === 'object' && !Array.isArray(step)) {
+        if (!step.service && defaultService) {
+          return { ...step, service: defaultService };
+        }
+      }
+      return step;
+    });
+
+    const audit = auditToolExecutionChain(state, steps);
+    const summary = summarizeChainAudit(audit);
+
+    const verdictP = el('p', null);
+    const badgeText = audit.verdict === 'pass'
+      ? 'Pass: Authorized'
+      : audit.verdict === 'require_confirmation'
+        ? 'Require Confirmation: Elevated Risk'
+        : 'Block: Boundary / Taint Violation';
+
+    const badgeColor = audit.verdict === 'pass' ? '#2e7d32' : audit.verdict === 'require_confirmation' ? '#ed6c02' : '#d32f2f';
+    const badge = el('strong', null, `[${badgeText}] `);
+    badge.style.color = badgeColor;
+    verdictP.appendChild(badge);
+    verdictP.appendChild(document.createTextNode(`Risk level: ${audit.risk_level}. ${audit.violations_count} violation(s).`));
+    resultBox.appendChild(verdictP);
+
+    const summaryP = el('p', 'muted');
+    summaryP.textContent = `Total steps: ${summary.total_steps}. Sensitive taints held: ${summary.taints_count}${audit.tainted ? ` (${audit.taints.join(', ')})` : ''}.`;
+    resultBox.appendChild(summaryP);
+
+    if (audit.reasons && audit.reasons.length > 0) {
+      const reasonsUl = el('ul', 'plain');
+      audit.reasons.forEach(r => {
+        const li = el('li', 'muted', '• ' + r);
+        reasonsUl.appendChild(li);
+      });
+      resultBox.appendChild(reasonsUl);
+    }
+
+    if (audit.step_evaluations && audit.step_evaluations.length > 0) {
+      const stepsHeader = el('h4', 'flush', 'Step details:');
+      stepsHeader.style.marginTop = '0.5rem';
+      stepsHeader.style.fontSize = '0.95rem';
+      resultBox.appendChild(stepsHeader);
+
+      const ul = el('ul', 'plain');
+      audit.step_evaluations.forEach((step) => {
+        const li = el('li');
+        const stepBadge = el('small', 'muted', `[Step ${step.step_index}: ${step.kind}] `);
+        const actionEl = el('b', null, `${step.service}: ${step.action}`);
+        const statusColor = step.verdict === 'pass' ? '#2e7d32' : step.verdict === 'require_confirmation' ? '#ed6c02' : '#d32f2f';
+        const stepStatus = el('span', null, ` — ${step.verdict}`);
+        stepStatus.style.color = statusColor;
+        li.append(stepBadge, actionEl, stepStatus);
+
+        if (step.new_taints_identified && step.new_taints_identified.length > 0) {
+          const taintNote = el('div', 'muted', `  + Identified sensitive taint: ${step.new_taints_identified.join(', ')}`);
+          li.appendChild(taintNote);
+        }
+        ul.appendChild(li);
+      });
+      resultBox.appendChild(ul);
+    }
+  };
+}
+
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler(); renderChainAuditor();
 
 

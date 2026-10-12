@@ -2126,4 +2126,498 @@ export function assembleTokenBudgetedContext(twinState, options = {}) {
   });
 }
 
+export const ALLOWED_TOOL_KINDS = Object.freeze([
+  'read',
+  'write',
+  'egress',
+  'compute',
+  'delete',
+  'other'
+]);
+
+export const SENSITIVE_TAINT_KEYWORDS = Object.freeze([
+  'medical',
+  'health',
+  'allergy',
+  'doctor',
+  'prescription',
+  'medication',
+  'dietary',
+  'emergency',
+  'boundary',
+  'passport',
+  'tax',
+  'financial',
+  'salary',
+  'bank',
+  'account',
+  'password',
+  'credential',
+  'private_key',
+  'secret'
+]);
+
+export const EGRESS_ACTION_KEYWORDS = Object.freeze([
+  'send',
+  'post',
+  'upload',
+  'export',
+  'publish',
+  'webhook',
+  'email',
+  'transmit',
+  'exfiltrate',
+  'share_external',
+  'broadcast',
+  'push',
+  'forward',
+  'emit',
+  'stream',
+  'dispatch',
+  'dump',
+  'sync',
+  'curl',
+  'http'
+]);
+
+function inferToolKind(action, scope) {
+  const combined = `${action || ''} ${scope || ''}`.toLowerCase();
+  for (const kw of EGRESS_ACTION_KEYWORDS) {
+    if (combined.includes(kw)) return 'egress';
+  }
+  if (/\b(delete|drop|remove|wipe|purge|clear)\b/.test(combined)) return 'delete';
+  if (/\b(read|get|fetch|view|query|scan|list|load)\b/.test(combined)) return 'read';
+  if (/\b(write|update|set|save|store|modify|create|insert|append)\b/.test(combined)) return 'write';
+  if (/\b(compute|calc|calculate|process|filter|sort|eval|parse)\b/.test(combined)) return 'compute';
+  return 'other';
+}
+
+/**
+ * Audits an ordered chain of assistant tool calls against active consent grants,
+ * critical memory constraints, and cross-step information flow / taint leakage.
+ * Fail-closed on invalid parameters, malformed steps, or unknown options.
+ *
+ * @param {object} twinState Current valid twin state
+ * @param {object[]} chain Array of proposed tool execution steps
+ * @param {object} [options={}] Optional evaluation configuration
+ * @returns {object} Deeply frozen chain audit result
+ */
+export function auditToolExecutionChain(twinState, chain, options = {}) {
+  const check = validateTwinState(twinState);
+  if (!check.ok) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      tainted: false,
+      reasons: Object.freeze(['Invalid twin state: ' + check.error]),
+      taints: Object.freeze([]),
+      step_evaluations: Object.freeze([]),
+      violations_count: 1
+    });
+  }
+
+  if (!options || typeof options !== 'object' || Array.isArray(options)) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      tainted: false,
+      reasons: Object.freeze(['Options must be a non-null object']),
+      taints: Object.freeze([]),
+      step_evaluations: Object.freeze([]),
+      violations_count: 1
+    });
+  }
+
+  const allowedOpts = new Set(['as_of_time', 'strict_taint', 'max_steps']);
+  for (const k of Object.keys(options)) {
+    if (!allowedOpts.has(k)) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'block',
+        risk_level: 'high',
+        tainted: false,
+        reasons: Object.freeze(['Unknown option: ' + k]),
+        taints: Object.freeze([]),
+        step_evaluations: Object.freeze([]),
+        violations_count: 1
+      });
+    }
+  }
+
+  const asOfTime = options.as_of_time !== undefined ? options.as_of_time : null;
+  const strictTaint = options.strict_taint !== undefined ? Boolean(options.strict_taint) : true;
+  const maxSteps = options.max_steps !== undefined ? options.max_steps : 10;
+
+  if (!Number.isInteger(maxSteps) || maxSteps < 1 || maxSteps > 20) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      tainted: false,
+      reasons: Object.freeze(['max_steps must be an integer between 1 and 20']),
+      taints: Object.freeze([]),
+      step_evaluations: Object.freeze([]),
+      violations_count: 1
+    });
+  }
+
+  if (!Array.isArray(chain) || chain.length === 0) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      tainted: false,
+      reasons: Object.freeze(['Chain must be a non-empty array of steps']),
+      taints: Object.freeze([]),
+      step_evaluations: Object.freeze([]),
+      violations_count: 1
+    });
+  }
+
+  if (chain.length > maxSteps) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      tainted: false,
+      reasons: Object.freeze([`Chain length ${chain.length} exceeds maximum allowed steps (${maxSteps})`]),
+      taints: Object.freeze([]),
+      step_evaluations: Object.freeze([]),
+      violations_count: 1
+    });
+  }
+
+  const allowedStepKeys = new Set(['service', 'action', 'scope', 'kind', 'context']);
+  const activeTaints = new Set();
+  const stepEvaluations = [];
+  const allReasons = [];
+  let violationsCount = 0;
+  let hasBlock = false;
+  let hasRequireConfirmation = false;
+  let highestRisk = 'low';
+
+  const criticalFacts = filterCriticalFacts(check.value.facts);
+
+  for (let i = 0; i < chain.length; i++) {
+    const step = chain[i];
+    const stepIndex = i + 1;
+
+    if (!step || typeof step !== 'object' || Array.isArray(step)) {
+      hasBlock = true;
+      violationsCount++;
+      const reason = `Step ${stepIndex} must be a non-null object`;
+      allReasons.push(reason);
+      stepEvaluations.push(Object.freeze({
+        step_index: stepIndex,
+        service: 'unknown',
+        action: 'unknown',
+        kind: 'other',
+        verdict: 'block',
+        risk_level: 'high',
+        reasons: Object.freeze([reason]),
+        tainted_at_step: false
+      }));
+      continue;
+    }
+
+    const stepKeys = Object.keys(step);
+    const unknownStepKeys = stepKeys.filter(k => !allowedStepKeys.has(k));
+    if (unknownStepKeys.length > 0) {
+      hasBlock = true;
+      violationsCount++;
+      const reason = `Step ${stepIndex} contains unknown field(s): ${unknownStepKeys.join(', ')}`;
+      allReasons.push(reason);
+      stepEvaluations.push(Object.freeze({
+        step_index: stepIndex,
+        service: typeof step.service === 'string' ? step.service : 'unknown',
+        action: typeof step.action === 'string' ? step.action : 'unknown',
+        kind: 'other',
+        verdict: 'block',
+        risk_level: 'high',
+        reasons: Object.freeze([reason]),
+        tainted_at_step: false
+      }));
+      continue;
+    }
+
+    const { service, action, scope, kind, context } = step;
+
+    if (typeof service !== 'string' || !service.trim() || service.trim().length > 60) {
+      hasBlock = true;
+      violationsCount++;
+      const reason = `Step ${stepIndex}: service must be a non-empty string up to 60 characters`;
+      allReasons.push(reason);
+      stepEvaluations.push(Object.freeze({
+        step_index: stepIndex,
+        service: 'invalid',
+        action: typeof action === 'string' ? action : 'unknown',
+        kind: 'other',
+        verdict: 'block',
+        risk_level: 'high',
+        reasons: Object.freeze([reason]),
+        tainted_at_step: false
+      }));
+      continue;
+    }
+
+    if (typeof action !== 'string' || !action.trim() || action.trim().length > 100) {
+      hasBlock = true;
+      violationsCount++;
+      const reason = `Step ${stepIndex}: action must be a non-empty string up to 100 characters`;
+      allReasons.push(reason);
+      stepEvaluations.push(Object.freeze({
+        step_index: stepIndex,
+        service: service.trim(),
+        action: 'invalid',
+        kind: 'other',
+        verdict: 'block',
+        risk_level: 'high',
+        reasons: Object.freeze([reason]),
+        tainted_at_step: false
+      }));
+      continue;
+    }
+
+    if (scope !== undefined && scope !== null) {
+      if (typeof scope !== 'string' || scope.trim().length > 80) {
+        hasBlock = true;
+        violationsCount++;
+        const reason = `Step ${stepIndex}: scope must be a string up to 80 characters`;
+        allReasons.push(reason);
+        stepEvaluations.push(Object.freeze({
+          step_index: stepIndex,
+          service: service.trim(),
+          action: action.trim(),
+          kind: 'other',
+          verdict: 'block',
+          risk_level: 'high',
+          reasons: Object.freeze([reason]),
+          tainted_at_step: false
+        }));
+        continue;
+      }
+    }
+
+    if (kind !== undefined && kind !== null) {
+      if (!ALLOWED_TOOL_KINDS.includes(kind)) {
+        hasBlock = true;
+        violationsCount++;
+        const reason = `Step ${stepIndex}: invalid kind "${kind}". Allowed: ${ALLOWED_TOOL_KINDS.join(', ')}`;
+        allReasons.push(reason);
+        stepEvaluations.push(Object.freeze({
+          step_index: stepIndex,
+          service: service.trim(),
+          action: action.trim(),
+          kind: 'other',
+          verdict: 'block',
+          risk_level: 'high',
+          reasons: Object.freeze([reason]),
+          tainted_at_step: false
+        }));
+        continue;
+      }
+    }
+
+    if (context !== undefined && context !== null) {
+      if (typeof context !== 'string' || context.trim().length > 200) {
+        hasBlock = true;
+        violationsCount++;
+        const reason = `Step ${stepIndex}: context must be a string up to 200 characters`;
+        allReasons.push(reason);
+        stepEvaluations.push(Object.freeze({
+          step_index: stepIndex,
+          service: service.trim(),
+          action: action.trim(),
+          kind: 'other',
+          verdict: 'block',
+          risk_level: 'high',
+          reasons: Object.freeze([reason]),
+          tainted_at_step: false
+        }));
+        continue;
+      }
+    }
+
+    const cleanService = service.trim();
+    const cleanAction = action.trim();
+    const cleanScope = typeof scope === 'string' && scope.trim() ? scope.trim() : null;
+    const cleanContext = typeof context === 'string' && context.trim() ? context.trim() : null;
+    const inferredKind = inferToolKind(cleanAction, cleanScope);
+    let cleanKind = kind || inferredKind;
+
+    // Detect attempts to mask egress actions under non-egress kind declarations
+    let kindSpoofViolation = false;
+    if (inferredKind === 'egress') {
+      if (kind && kind !== 'egress') {
+        kindSpoofViolation = true;
+      }
+      cleanKind = 'egress';
+    }
+
+    // 1. Audit individual step boundary
+    const singleAudit = auditBoundaryAction(
+      check.value,
+      {
+        who: cleanService,
+        action: cleanAction,
+        scope: cleanScope,
+        context: cleanContext
+      },
+      asOfTime
+    );
+
+    const stepReasons = [...singleAudit.reasons];
+    let stepVerdict = singleAudit.verdict;
+    let stepRisk = singleAudit.risk_level;
+
+    if (kindSpoofViolation) {
+      hasBlock = true;
+      violationsCount++;
+      const spoofMsg = `Step ${stepIndex}: tool action indicates external egress but declared kind was "${kind}" (evasion attempt blocked)`;
+      stepVerdict = 'block';
+      stepRisk = 'high';
+      stepReasons.push(spoofMsg);
+      allReasons.push(spoofMsg);
+    }
+
+    // 2. Identify new sensitive taints generated by this step
+    const stepText = `${cleanAction} ${cleanScope || ''} ${cleanContext || ''}`.toLowerCase();
+    const stepTokens = extractWords(stepText);
+    const stepNewTaints = [];
+
+    for (const kw of SENSITIVE_TAINT_KEYWORDS) {
+      if (stepText.includes(kw) || stepTokens.includes(kw)) {
+        stepNewTaints.push(kw);
+        activeTaints.add(kw);
+      }
+    }
+
+    for (const fact of criticalFacts) {
+      const factTokens = extractWords(fact.statement.toLowerCase())
+        .filter(w => w.length >= 3 && !CONSTRAINT_STOP_WORDS.has(w));
+      if (factTokens.some(t => stepTokens.includes(t))) {
+        const factKey = `constraint_${fact.category || 'fact'}`;
+        stepNewTaints.push(factKey);
+        activeTaints.add(factKey);
+      }
+    }
+
+    // 3. Compositional Cross-step Taint Leakage / Egress check
+    let taintLeakageViolation = false;
+    if (activeTaints.size > 0 && cleanKind === 'egress') {
+      const grantScope = cleanScope || cleanAction.toLowerCase();
+      const grantCheck = evaluateAccessRequest(check.value, cleanService.toLowerCase(), grantScope, asOfTime);
+      
+      const missingGrants = [];
+      if (strictTaint) {
+        for (const taint of activeTaints) {
+          const specificCheck = evaluateAccessRequest(check.value, cleanService.toLowerCase(), taint, asOfTime);
+          // Sensitive taint egress requires an explicit targeted grant; wildcard '*' does not satisfy consent
+          const isWildcard = Boolean(specificCheck.grant && (specificCheck.grant.what === '*' || (typeof specificCheck.grant.what === 'string' && specificCheck.grant.what.toLowerCase() === 'all')));
+          if (!specificCheck.allowed || isWildcard) {
+            missingGrants.push(taint);
+          }
+        }
+      }
+
+      if (!grantCheck.allowed || (strictTaint && missingGrants.length > 0)) {
+        taintLeakageViolation = true;
+        stepVerdict = 'block';
+        stepRisk = 'high';
+        hasBlock = true;
+        violationsCount++;
+        const taintMsg = `Step ${stepIndex} (${cleanService}) transmits external egress while chain holds sensitive taint [${Array.from(activeTaints).join(', ')}] without explicit consent grant`;
+        stepReasons.push(taintMsg);
+        allReasons.push(taintMsg);
+      }
+    }
+
+    if (stepVerdict === 'block') {
+      hasBlock = true;
+      if (!taintLeakageViolation) violationsCount++;
+      highestRisk = 'high';
+    } else if (stepVerdict === 'require_confirmation') {
+      hasRequireConfirmation = true;
+      if (highestRisk !== 'high') highestRisk = stepRisk === 'high' ? 'high' : 'medium';
+    }
+
+    for (const r of singleAudit.reasons) {
+      if (!allReasons.includes(r)) {
+        allReasons.push(`Step ${stepIndex}: ${r}`);
+      }
+    }
+
+    stepEvaluations.push(Object.freeze({
+      step_index: stepIndex,
+      service: cleanService,
+      action: cleanAction,
+      scope: cleanScope,
+      kind: cleanKind,
+      verdict: stepVerdict,
+      risk_level: stepRisk,
+      tainted_at_step: activeTaints.size > 0,
+      new_taints_identified: Object.freeze([...stepNewTaints]),
+      reasons: Object.freeze(stepReasons)
+    }));
+  }
+
+  let finalVerdict = 'pass';
+  let isAllowed = true;
+
+  if (hasBlock) {
+    finalVerdict = 'block';
+    isAllowed = false;
+    highestRisk = 'high';
+  } else if (hasRequireConfirmation) {
+    finalVerdict = 'require_confirmation';
+    isAllowed = false;
+    if (highestRisk === 'low') highestRisk = 'medium';
+  }
+
+  return Object.freeze({
+    allowed: isAllowed,
+    verdict: finalVerdict,
+    risk_level: highestRisk,
+    tainted: activeTaints.size > 0,
+    taints: Object.freeze(Array.from(activeTaints).sort()),
+    step_evaluations: Object.freeze(stepEvaluations),
+    reasons: Object.freeze(allReasons),
+    violations_count: violationsCount
+  });
+}
+
+/**
+ * Summarize a tool execution chain audit result.
+ *
+ * @param {object} auditResult Output from auditToolExecutionChain
+ * @returns {object} Deeply frozen summary
+ */
+export function summarizeChainAudit(auditResult) {
+  if (!auditResult || typeof auditResult !== 'object' || Array.isArray(auditResult)) {
+    return Object.freeze({
+      total_steps: 0,
+      verdict: 'block',
+      allowed: false,
+      risk_level: 'high',
+      tainted: false,
+      taints_count: 0,
+      violations_count: 1
+    });
+  }
+
+  const steps = Array.isArray(auditResult.step_evaluations) ? auditResult.step_evaluations : [];
+  return Object.freeze({
+    total_steps: steps.length,
+    verdict: auditResult.verdict || 'block',
+    allowed: Boolean(auditResult.allowed),
+    risk_level: auditResult.risk_level || 'high',
+    tainted: Boolean(auditResult.tainted),
+    taints_count: Array.isArray(auditResult.taints) ? auditResult.taints.length : 0,
+    violations_count: typeof auditResult.violations_count === 'number' ? auditResult.violations_count : 0
+  });
+}
+
+
 

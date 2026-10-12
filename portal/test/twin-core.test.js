@@ -45,7 +45,12 @@ import {
   summarizeBoundaryAudits,
   estimateTokenCount,
   computeContextFingerprint,
-  assembleTokenBudgetedContext
+  assembleTokenBudgetedContext,
+  ALLOWED_TOOL_KINDS,
+  SENSITIVE_TAINT_KEYWORDS,
+  EGRESS_ACTION_KEYWORDS,
+  auditToolExecutionChain,
+  summarizeChainAudit
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -2032,3 +2037,332 @@ test('assembleTokenBudgetedContext result is deeply frozen and deterministic', (
   assert.equal(res1.prefix_fingerprint, res2.prefix_fingerprint);
   assert.equal(res1.total_estimated_tokens, res2.total_estimated_tokens);
 });
+
+test('ALLOWED_TOOL_KINDS, SENSITIVE_TAINT_KEYWORDS, and EGRESS_ACTION_KEYWORDS are deeply frozen constants', () => {
+  assert.equal(Object.isFrozen(ALLOWED_TOOL_KINDS), true);
+  assert.ok(ALLOWED_TOOL_KINDS.includes('read'));
+  assert.ok(ALLOWED_TOOL_KINDS.includes('write'));
+  assert.ok(ALLOWED_TOOL_KINDS.includes('egress'));
+  assert.ok(ALLOWED_TOOL_KINDS.includes('delete'));
+
+  assert.equal(Object.isFrozen(SENSITIVE_TAINT_KEYWORDS), true);
+  assert.ok(SENSITIVE_TAINT_KEYWORDS.includes('medical'));
+  assert.ok(SENSITIVE_TAINT_KEYWORDS.includes('passport'));
+  assert.ok(SENSITIVE_TAINT_KEYWORDS.includes('password'));
+
+  assert.equal(Object.isFrozen(EGRESS_ACTION_KEYWORDS), true);
+  assert.ok(EGRESS_ACTION_KEYWORDS.includes('send'));
+  assert.ok(EGRESS_ACTION_KEYWORDS.includes('post'));
+  assert.ok(EGRESS_ACTION_KEYWORDS.includes('webhook'));
+});
+
+test('auditToolExecutionChain passes for valid authorized tool chain without taint or constraint violation', () => {
+  const state = {
+    topics: ['research'],
+    grants: [
+      { who: 'calendar_agent', what: 'meeting schedule', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' },
+      { who: 'calendar_agent', what: 'calendar view', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' }
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [
+      { id: 'f1', category: 'preference', statement: 'Prefers 30 minute meetings', critical: false, at: '2026-10-12T00:00:00Z' }
+    ],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const chain = [
+    { service: 'calendar_agent', action: 'read calendar view', scope: 'calendar view', kind: 'read' },
+    { service: 'calendar_agent', action: 'query meeting schedule', scope: 'meeting schedule', kind: 'read' }
+  ];
+
+  const result = auditToolExecutionChain(state, chain, { as_of_time: '2026-10-12T00:00:00Z' });
+  assert.equal(result.allowed, true);
+  assert.equal(result.verdict, 'pass');
+  assert.equal(result.risk_level, 'low');
+  assert.equal(result.tainted, false);
+  assert.equal(result.violations_count, 0);
+  assert.equal(result.step_evaluations.length, 2);
+  assert.equal(result.step_evaluations[0].verdict, 'pass');
+  assert.equal(result.step_evaluations[1].verdict, 'pass');
+});
+
+test('auditToolExecutionChain blocks when any step touches a critical memory constraint', () => {
+  const state = {
+    topics: [],
+    grants: [
+      { who: 'health_bot', what: 'health records', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' }
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [
+      { id: 'f1', category: 'medical', statement: 'Severe penicillin allergy', critical: true, at: '2026-10-12T00:00:00Z' }
+    ],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const chain = [
+    { service: 'health_bot', action: 'check health records', scope: 'health records', kind: 'read' },
+    { service: 'health_bot', action: 'prescribe penicillin antibiotic', scope: 'health records', kind: 'write' }
+  ];
+
+  const result = auditToolExecutionChain(state, chain, { as_of_time: '2026-10-12T00:00:00Z' });
+  assert.equal(result.allowed, false);
+  assert.equal(result.verdict, 'block');
+  assert.equal(result.risk_level, 'high');
+  assert.ok(result.violations_count >= 1);
+  assert.equal(result.step_evaluations[1].verdict, 'block');
+  assert.ok(result.reasons.some(r => r.includes('Severe penicillin allergy') || r.includes('penicillin')));
+});
+
+test('auditToolExecutionChain detects cross-step sensitive taint and blocks unconsented egress', () => {
+  const state = {
+    topics: [],
+    grants: [
+      { who: 'internal_assistant', what: 'medical notes', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' },
+      { who: 'cloud_sync', what: 'general backup', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' }
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [
+      { id: 'f1', category: 'medical', statement: 'Cardiovascular medication schedule', critical: true, at: '2026-10-12T00:00:00Z' }
+    ],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // Step 1 reads medical data (taints the chain with medical/health)
+  // Step 2 attempts to send / egress to cloud_sync (which lacks a medical consent grant)
+  const chain = [
+    { service: 'internal_assistant', action: 'read medical notes', scope: 'medical notes', kind: 'read' },
+    { service: 'cloud_sync', action: 'post backup to webhook', scope: 'general backup', kind: 'egress' }
+  ];
+
+  const result = auditToolExecutionChain(state, chain, { as_of_time: '2026-10-12T00:00:00Z', strict_taint: true });
+  assert.equal(result.allowed, false);
+  assert.equal(result.verdict, 'block');
+  assert.equal(result.risk_level, 'high');
+  assert.equal(result.tainted, true);
+  assert.ok(result.taints.includes('medical') || result.taints.some(t => t.includes('constraint_medical')));
+  assert.equal(result.step_evaluations[1].verdict, 'block');
+  assert.ok(result.reasons.some(r => r.includes('transmits external egress while chain holds sensitive taint')));
+});
+
+test('auditToolExecutionChain allows egress when destination service has an explicit grant covering tainted scope', () => {
+  const state = {
+    topics: [],
+    grants: [
+      { who: 'internal_assistant', what: 'medical records', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' },
+      { who: 'clinic_portal', what: 'medical', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' }
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const chain = [
+    { service: 'internal_assistant', action: 'read medical records', scope: 'medical records', kind: 'read' },
+    { service: 'clinic_portal', action: 'transmit summary to clinic', scope: 'medical', kind: 'egress' }
+  ];
+
+  const result = auditToolExecutionChain(state, chain, { as_of_time: '2026-10-12T00:00:00Z' });
+  assert.equal(result.allowed, true);
+  assert.equal(result.verdict, 'pass');
+  assert.equal(result.tainted, true);
+  assert.ok(result.taints.includes('medical'));
+});
+
+test('auditToolExecutionChain blocks ungranted high-consequential operations and requires confirmation for low-risk ungranted', () => {
+  const state = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // High consequential risk ungranted: delete database
+  const highRiskChain = [
+    { service: 'cleanup_bot', action: 'delete all logs and wipe storage', scope: 'storage', kind: 'delete' }
+  ];
+  const highRes = auditToolExecutionChain(state, highRiskChain);
+  assert.equal(highRes.allowed, false);
+  assert.equal(highRes.verdict, 'block');
+  assert.equal(highRes.risk_level, 'high');
+
+  // Low consequential risk ungranted: read calendar
+  const lowRiskChain = [
+    { service: 'calendar_bot', action: 'read view status', scope: 'view status', kind: 'read' }
+  ];
+  const lowRes = auditToolExecutionChain(state, lowRiskChain);
+  assert.equal(lowRes.allowed, false);
+  assert.equal(lowRes.verdict, 'require_confirmation');
+  assert.equal(lowRes.risk_level, 'medium');
+});
+
+test('auditToolExecutionChain fails closed on invalid parameters, malformed steps, or unknown options', () => {
+  const state = { ...DEFAULT_TWIN_STATE };
+
+  // Invalid state
+  assert.equal(auditToolExecutionChain(null, [{ service: 'a', action: 'b' }]).verdict, 'block');
+  assert.equal(auditToolExecutionChain({ unknown: 1 }, [{ service: 'a', action: 'b' }]).verdict, 'block');
+
+  // Invalid options
+  assert.equal(auditToolExecutionChain(state, [{ service: 'a', action: 'b' }], 'not-obj').verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, [{ service: 'a', action: 'b' }], { unknown_opt: true }).verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, [{ service: 'a', action: 'b' }], { max_steps: 0 }).verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, [{ service: 'a', action: 'b' }], { max_steps: 25 }).verdict, 'block');
+
+  // Invalid chain array
+  assert.equal(auditToolExecutionChain(state, null).verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, []).verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, new Array(15).fill({ service: 's', action: 'a' }), { max_steps: 10 }).verdict, 'block');
+
+  // Malformed step items
+  assert.equal(auditToolExecutionChain(state, [null]).verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, [{ service: 's' }]).verdict, 'block'); // missing action
+  assert.equal(auditToolExecutionChain(state, [{ action: 'a' }]).verdict, 'block'); // missing service
+  assert.equal(auditToolExecutionChain(state, [{ service: '', action: 'a' }]).verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, [{ service: 's', action: '' }]).verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, [{ service: 's', action: 'a', extra: 123 }]).verdict, 'block'); // unknown field
+  assert.equal(auditToolExecutionChain(state, [{ service: 's', action: 'a', kind: 'invalid_kind' }]).verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, [{ service: 's', action: 'a', scope: 'x'.repeat(85) }]).verdict, 'block');
+  assert.equal(auditToolExecutionChain(state, [{ service: 's', action: 'a', context: 'x'.repeat(205) }]).verdict, 'block');
+});
+
+test('summarizeChainAudit aggregates results and handles invalid inputs fail-closed', () => {
+  // Invalid inputs
+  const sumNull = summarizeChainAudit(null);
+  assert.equal(sumNull.verdict, 'block');
+  assert.equal(sumNull.allowed, false);
+  assert.equal(sumNull.total_steps, 0);
+
+  const mockAudit = {
+    allowed: true,
+    verdict: 'pass',
+    risk_level: 'low',
+    tainted: true,
+    taints: ['medical'],
+    step_evaluations: [
+      { step_index: 1, verdict: 'pass' },
+      { step_index: 2, verdict: 'pass' }
+    ],
+    violations_count: 0
+  };
+
+  const summary = summarizeChainAudit(mockAudit);
+  assert.equal(summary.total_steps, 2);
+  assert.equal(summary.verdict, 'pass');
+  assert.equal(summary.allowed, true);
+  assert.equal(summary.risk_level, 'low');
+  assert.equal(summary.tainted, true);
+  assert.equal(summary.taints_count, 1);
+  assert.equal(summary.violations_count, 0);
+  assert.equal(Object.isFrozen(summary), true);
+});
+
+test('auditToolExecutionChain detects kind spoofing evasion and blocks unconsented egress', () => {
+  const state = {
+    topics: [],
+    grants: [{ who: 'agent', what: 'calendar', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' }],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // Egress action masquerading as 'write' or 'compute' must be detected and blocked
+  const spoofChain = [
+    { service: 'agent', action: 'read private password', scope: 'calendar' },
+    { service: 'agent', action: 'sync password to remote server', kind: 'write' }
+  ];
+
+  const audit = auditToolExecutionChain(state, spoofChain);
+  assert.equal(audit.verdict, 'block');
+  assert.equal(audit.allowed, false);
+  assert.ok(audit.reasons.some(r => r.includes('evasion attempt blocked')));
+  assert.ok(audit.reasons.some(r => r.includes('transmits external egress while chain holds sensitive taint')));
+});
+
+test('auditToolExecutionChain rejects wildcard * grants as sufficient consent for sensitive taint egress', () => {
+  const state = {
+    topics: [],
+    grants: [
+      { who: 'calendar_agent', what: 'calendar', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' },
+      { who: 'calendar_agent', what: '*', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' } // Wildcard grant
+    ],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // Chain reads sensitive financial credential, then attempts egress under wildcard grant
+  const chain = [
+    { service: 'calendar_agent', action: 'read banking account balance', scope: 'calendar' },
+    { service: 'calendar_agent', action: 'send summary to backup service', kind: 'egress' }
+  ];
+
+  const audit = auditToolExecutionChain(state, chain);
+  assert.equal(audit.verdict, 'block');
+  assert.equal(audit.allowed, false);
+  assert.ok(audit.reasons.some(r => r.includes('transmits external egress while chain holds sensitive taint')));
+});
+
+test('summarizeChainAudit fails closed on array inputs', () => {
+  const sumArr = summarizeChainAudit([]);
+  assert.equal(sumArr.verdict, 'block');
+  assert.equal(sumArr.allowed, false);
+  assert.equal(sumArr.violations_count, 1);
+});
+
+test('auditToolExecutionChain output is deeply frozen and deterministic', () => {
+  const state = {
+    topics: [],
+    grants: [{ who: 'assistant', what: 'calendar', at: '2026-10-12T00:00:00Z', expires_at: '2026-12-31T00:00:00Z' }],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const chain = [{ service: 'assistant', action: 'read calendar', scope: 'calendar' }];
+
+  const res1 = auditToolExecutionChain(state, chain);
+  const res2 = auditToolExecutionChain(state, chain);
+
+  assert.equal(Object.isFrozen(res1), true);
+  assert.equal(Object.isFrozen(res1.taints), true);
+  assert.equal(Object.isFrozen(res1.step_evaluations), true);
+  assert.equal(Object.isFrozen(res1.reasons), true);
+  assert.equal(res1.verdict, res2.verdict);
+  assert.equal(res1.allowed, res2.allowed);
+  assert.equal(res1.risk_level, res2.risk_level);
+  assert.equal(res1.tainted, res2.tainted);
+});
+
