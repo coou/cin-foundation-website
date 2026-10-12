@@ -2670,18 +2670,29 @@ export const ALLOWED_RECEIPT_FIELDS = Object.freeze([
 ]);
 
 /**
- * Verify a portable ISO-27560 consent receipt against active twin state.
+ * Check a consent receipt against the grants held on this device.
  *
- * Deterministic and fail-closed: validates structure, checks expiration, and confirms
- * that a corresponding active grant exists in local storage covering all claimed scopes.
- * If the grant was revoked or expired, or if scopes do not match, returns invalid.
+ * Deterministic and fail-closed: validates structure, rejects receipts dated in the future
+ * or naming another subject, and matches only a grant with the same recipient, issue time
+ * and expiry that is still active and covers every claimed scope. Receipts carry no
+ * signature, so a match shows the receipt agrees with this browser's grants; it cannot
+ * prove who wrote the receipt.
  *
  * @param {object} state Current twin state
- * @param {object} receipt The consent receipt object to verify
+ * @param {object} receipt The consent receipt object to check
  * @param {string|Date|number|null} asOfTime Reference time for expiration checks
- * @returns {object} Deeply frozen verification result
+ * @param {string} subjectId The local subject receipts are issued for (as in createConsentReceipt)
+ * @returns {object} Deeply frozen result
  */
-export function verifyConsentReceipt(state, receipt, asOfTime = null) {
+export function verifyConsentReceipt(state, receipt, asOfTime = null, subjectId = 'local-user') {
+  if (typeof subjectId !== 'string' || !subjectId.trim() || subjectId.trim().length > 80) {
+    return Object.freeze({
+      valid: false,
+      status: 'invalid_parameter',
+      reason: 'subjectId must be a non-empty string up to 80 characters'
+    });
+  }
+  const cleanSubjectId = subjectId.trim();
   const check = validateTwinState(state);
   if (!check.ok) {
     return Object.freeze({
@@ -2807,6 +2818,24 @@ export function verifyConsentReceipt(state, receipt, asOfTime = null) {
     });
   }
 
+  if (Date.parse(receipt.timestamp) > nowMs) {
+    return Object.freeze({
+      valid: false,
+      status: 'future_timestamp',
+      reason: 'Receipt is dated after the evaluation time, so this device cannot have issued it',
+      recipient: receipt.recipient
+    });
+  }
+
+  if (receipt.subject.trim() !== cleanSubjectId) {
+    return Object.freeze({
+      valid: false,
+      status: 'subject_mismatch',
+      reason: 'Receipt names a different person than this device',
+      recipient: receipt.recipient
+    });
+  }
+
   if (receiptExpiresMs !== null && nowMs >= receiptExpiresMs) {
     return Object.freeze({
       valid: false,
@@ -2817,14 +2846,21 @@ export function verifyConsentReceipt(state, receipt, asOfTime = null) {
     });
   }
 
+  // A receipt is bound to the grant that issued it: same recipient, same issue time and
+  // same expiry. A receipt this device never issued matches no grant, whatever its scopes.
   const cleanRecipient = receipt.recipient.trim().toLowerCase();
-  const matchingGrants = check.value.grants.filter((g) => g.who.trim().toLowerCase() === cleanRecipient);
+  const receiptExpiry = receipt.expires_at === undefined ? null : receipt.expires_at;
+  const matchingGrants = check.value.grants.filter((g) =>
+    g.who.trim().toLowerCase() === cleanRecipient &&
+    g.at === receipt.timestamp &&
+    (g.expires_at === undefined ? null : g.expires_at) === receiptExpiry
+  );
 
   if (matchingGrants.length === 0) {
     return Object.freeze({
       valid: false,
       status: 'revoked_or_unregistered',
-      reason: 'No active grant found for recipient on this device (grant may have been revoked)',
+      reason: 'No grant on this device issued this receipt (it may have been revoked)',
       recipient: receipt.recipient
     });
   }
@@ -2842,8 +2878,8 @@ export function verifyConsentReceipt(state, receipt, asOfTime = null) {
       }
       return Object.freeze({
         valid: true,
-        status: 'verified',
-        reason: 'Receipt verified against active local grant',
+        status: 'matches_active_grant',
+        reason: 'Receipt matches an active grant on this device',
         recipient: receipt.recipient,
         scopes: Object.freeze([...receipt.purposes_and_scopes]),
         matching_grant: Object.freeze({ ...g })

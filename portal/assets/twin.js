@@ -606,14 +606,14 @@ function renderReceiptInspector() {
     const p = el('p');
     if (summary.valid) {
       p.className = 'status-ok';
-      const badge = el('strong', null, '[Receipt Verified] ');
+      const badge = el('strong', null, 'Matches an active grant on this device. ');
       badge.style.color = '#2e7d32';
       p.appendChild(badge);
-      p.appendChild(document.createTextNode(`Authorized: "${summary.recipient}" has active local consent covering ${summary.scopes_count} scope(s).`));
+      p.appendChild(document.createTextNode(`"${summary.recipient}" has a grant here, issued at the receipt's time, covering ${summary.scopes_count} scope(s).`));
       resultBox.appendChild(p);
     } else {
       p.className = 'muted';
-      const badge = el('strong', null, '[Verification Failed] ');
+      const badge = el('strong', null, 'No match. ');
       badge.style.color = '#d32f2f';
       p.appendChild(badge);
       p.appendChild(document.createTextNode(summary.reason || 'Receipt is not valid or grant was revoked.'));
