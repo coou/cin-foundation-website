@@ -1405,3 +1405,277 @@ export function summarizeValues(values) {
   });
 }
 
+/**
+ * Consequential risk keywords representing irreversible, high-impact, or destructive operations.
+ * Grounded in arXiv:2610.05163 boundary action auditing.
+ */
+export const CONSEQUENTIAL_RISK_KEYWORDS = Object.freeze([
+  'transfer',
+  'wire',
+  'delete',
+  'wipe',
+  'export_all',
+  'exfiltrate',
+  'send_credentials',
+  'override',
+  'execute_script',
+  'grant_admin',
+  'drop_table',
+  'kill_process'
+]);
+
+const CONSTRAINT_STOP_WORDS = new Set([
+  'the', 'and', 'for', 'with', 'not', 'never', 'all', 'any', 'could', 'may', 'must',
+  'from', 'into', 'that', 'this', 'have', 'has', 'had', 'are', 'was', 'were', 'will',
+  'out', 'off', 'over', 'about', 'some', 'such'
+]);
+
+/**
+ * Audits a pending action or tool call at the execution boundary before state mutation occurs.
+ * Evaluates:
+ * 1. Consequential risk keyword presence in action name, scope, or context.
+ * 2. Conflicts with critical memory constraints (e.g. allergies, boundaries, emergency directives).
+ * 3. Active grant coverage for the calling service and requested scope.
+ *
+ * Verdicts:
+ * - 'pass': Action is authorized by active grant, free of consequential risks, and does not conflict with critical facts.
+ * - 'require_confirmation': Action is ungranted or touches consequential keywords, but does not violate critical constraints.
+ * - 'block': Action contradicts a critical constraint, or combines high consequential risk with missing authorization.
+ *
+ * Fails closed on invalid twin state or malformed request parameters.
+ *
+ * @param {object} state Current validated twin state
+ * @param {object} request Action request { who: string, action: string, scope?: string, context?: string }
+ * @param {string|Date|number|null} asOfTime Evaluation timestamp (default: current time)
+ * @returns {object} Deeply frozen boundary audit result
+ */
+export function auditBoundaryAction(state, request, asOfTime = null) {
+  const check = validateTwinState(state);
+  if (!check.ok) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      reasons: Object.freeze(['Invalid twin state: ' + check.error]),
+      matched_constraints: Object.freeze([])
+    });
+  }
+
+  if (!request || typeof request !== 'object' || Array.isArray(request)) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      reasons: Object.freeze(['Request must be a non-null object']),
+      matched_constraints: Object.freeze([])
+    });
+  }
+
+  const keys = Object.keys(request);
+  if (keys.some((k) => k !== 'who' && k !== 'action' && k !== 'scope' && k !== 'context')) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      reasons: Object.freeze(['Request contains unknown fields']),
+      matched_constraints: Object.freeze([])
+    });
+  }
+
+  const { who, action, scope, context } = request;
+  if (typeof who !== 'string' || !who.trim() || who.trim().length > 60) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      reasons: Object.freeze(['Service identifier (who) must be a non-empty string up to 60 characters']),
+      matched_constraints: Object.freeze([])
+    });
+  }
+  if (typeof action !== 'string' || !action.trim() || action.trim().length > 100) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'block',
+      risk_level: 'high',
+      reasons: Object.freeze(['Action description must be a non-empty string up to 100 characters']),
+      matched_constraints: Object.freeze([])
+    });
+  }
+  if (scope !== undefined && scope !== null) {
+    if (typeof scope !== 'string' || scope.trim().length > 80) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'block',
+        risk_level: 'high',
+        reasons: Object.freeze(['Scope must be a string up to 80 characters']),
+        matched_constraints: Object.freeze([])
+      });
+    }
+  }
+  if (context !== undefined && context !== null) {
+    if (typeof context !== 'string' || context.trim().length > 200) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'block',
+        risk_level: 'high',
+        reasons: Object.freeze(['Context must be a string up to 200 characters']),
+        matched_constraints: Object.freeze([])
+      });
+    }
+  }
+
+  if (asOfTime !== null && asOfTime !== undefined) {
+    let testMs;
+    if (typeof asOfTime === 'string') {
+      testMs = Date.parse(asOfTime);
+    } else if (asOfTime instanceof Date) {
+      testMs = asOfTime.getTime();
+    } else if (typeof asOfTime === 'number' && Number.isFinite(asOfTime)) {
+      testMs = asOfTime;
+    } else {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'block',
+        risk_level: 'high',
+        reasons: Object.freeze(['Invalid asOfTime parameter']),
+        matched_constraints: Object.freeze([])
+      });
+    }
+    if (isNaN(testMs)) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'block',
+        risk_level: 'high',
+        reasons: Object.freeze(['Invalid asOfTime parameter']),
+        matched_constraints: Object.freeze([])
+      });
+    }
+  }
+
+  const cleanWho = who.trim().toLowerCase();
+  const cleanAction = action.trim();
+  const cleanScope = typeof scope === 'string' && scope.trim() ? scope.trim().toLowerCase() : null;
+  const cleanContext = typeof context === 'string' && context.trim() ? context.trim() : null;
+
+  const reasons = [];
+  const matchedConstraints = [];
+  let isHighRisk = false;
+
+  // 1. Consequential risk keyword scan
+  const actionText = `${cleanAction} ${cleanScope || ''} ${cleanContext || ''}`.toLowerCase();
+  const actionTokens = extractWords(actionText);
+  const foundKeywords = [];
+
+  for (const kw of CONSEQUENTIAL_RISK_KEYWORDS) {
+    if (kw.includes('_')) {
+      if (actionText.includes(kw)) {
+        foundKeywords.push(kw);
+      }
+    } else {
+      if (actionTokens.includes(kw)) {
+        foundKeywords.push(kw);
+      }
+    }
+  }
+
+  if (foundKeywords.length > 0) {
+    isHighRisk = true;
+    reasons.push(`Action contains consequential risk keyword(s): ${foundKeywords.join(', ')}`);
+  }
+
+  // 2. Critical memory constraints scan
+  const criticalFacts = filterCriticalFacts(check.value.facts);
+  for (const fact of criticalFacts) {
+    const factTokens = extractWords(fact.statement.toLowerCase())
+      .filter((w) => w.length >= 3 && !CONSTRAINT_STOP_WORDS.has(w));
+    const overlappingTokens = factTokens.filter((token) => actionTokens.includes(token));
+    if (overlappingTokens.length > 0) {
+      matchedConstraints.push(fact);
+      reasons.push(`Action touches critical constraint: "${fact.statement}" (matched: ${overlappingTokens.join(', ')})`);
+    }
+  }
+
+  // 3. Grant coverage evaluation
+  const effectiveScope = cleanScope || cleanAction.toLowerCase();
+  const accessResult = evaluateAccessRequest(check.value, cleanWho, effectiveScope, asOfTime);
+  const hasActiveGrant = accessResult.allowed;
+  if (!hasActiveGrant) {
+    reasons.push(`Boundary check: no active grant covering "${effectiveScope}" for ${cleanWho}`);
+  }
+
+  // 4. Synthesize verdict
+  let verdict;
+  let allowed = false;
+  let riskLevel = 'low';
+
+  if (matchedConstraints.length > 0) {
+    verdict = 'block';
+    riskLevel = 'high';
+    allowed = false;
+  } else if (isHighRisk && !hasActiveGrant) {
+    verdict = 'block';
+    riskLevel = 'high';
+    allowed = false;
+  } else if (isHighRisk || !hasActiveGrant) {
+    verdict = 'require_confirmation';
+    riskLevel = isHighRisk ? 'high' : 'medium';
+    allowed = false;
+  } else {
+    verdict = 'pass';
+    riskLevel = 'low';
+    allowed = true;
+    reasons.push(`Action authorized by active grant for ${cleanWho}`);
+  }
+
+  return Object.freeze({
+    allowed,
+    verdict,
+    risk_level: riskLevel,
+    reasons: Object.freeze(reasons),
+    matched_constraints: Object.freeze(matchedConstraints)
+  });
+}
+
+/**
+ * Summarize an array of boundary action audit results.
+ * Fail-closed on invalid input.
+ *
+ * @param {object[]} audits Array of audit results
+ * @returns {object} Deeply frozen summary
+ */
+export function summarizeBoundaryAudits(audits) {
+  if (!Array.isArray(audits)) {
+    return Object.freeze({
+      total: 0,
+      pass: 0,
+      block: 0,
+      require_confirmation: 0,
+      high_risk: 0
+    });
+  }
+
+  let pass = 0;
+  let block = 0;
+  let requireConfirmation = 0;
+  let highRisk = 0;
+  let validCount = 0;
+
+  for (const a of audits) {
+    if (!a || typeof a !== 'object') continue;
+    validCount++;
+    if (a.verdict === 'pass') pass++;
+    else if (a.verdict === 'block') block++;
+    else if (a.verdict === 'require_confirmation') requireConfirmation++;
+
+    if (a.risk_level === 'high') highRisk++;
+  }
+
+  return Object.freeze({
+    total: validCount,
+    pass,
+    block,
+    require_confirmation: requireConfirmation,
+    high_risk: highRisk
+  });
+}
+

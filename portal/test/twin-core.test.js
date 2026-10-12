@@ -39,7 +39,10 @@ import {
   SPECULATIVE_MARKERS,
   auditMemoryStatement,
   gateMemoryFact,
-  summarizeMemoryAudit
+  summarizeMemoryAudit,
+  CONSEQUENTIAL_RISK_KEYWORDS,
+  auditBoundaryAction,
+  summarizeBoundaryAudits
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -1528,6 +1531,215 @@ test('summarizeMemoryAudit aggregates confirmed vs speculative memory entries an
   assert.equal(empty.confirmed, 0);
   assert.equal(empty.speculation, 0);
   assert.equal(empty.critical_speculation, 0);
+});
+
+test('CONSEQUENTIAL_RISK_KEYWORDS is deeply frozen and contains standard high-risk operations', () => {
+  assert.equal(Array.isArray(CONSEQUENTIAL_RISK_KEYWORDS), true);
+  assert.equal(Object.isFrozen(CONSEQUENTIAL_RISK_KEYWORDS), true);
+  assert.ok(CONSEQUENTIAL_RISK_KEYWORDS.includes('transfer'));
+  assert.ok(CONSEQUENTIAL_RISK_KEYWORDS.includes('delete'));
+  assert.ok(CONSEQUENTIAL_RISK_KEYWORDS.includes('wipe'));
+  assert.ok(CONSEQUENTIAL_RISK_KEYWORDS.includes('export_all'));
+  assert.ok(CONSEQUENTIAL_RISK_KEYWORDS.includes('exfiltrate'));
+  assert.ok(CONSEQUENTIAL_RISK_KEYWORDS.includes('override'));
+  assert.throws(() => { CONSEQUENTIAL_RISK_KEYWORDS.push('hack'); });
+});
+
+test('auditBoundaryAction passes for authorized non-consequential action without constraint conflict', () => {
+  const state = {
+    topics: ['health'],
+    grants: [{ who: 'calendar-sync', what: 'meeting schedule', at: '2026-10-10T12:00:00.000Z', expires_at: null }],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [{ id: 'f-1', category: 'medical', statement: 'Penicillin allergy', critical: true, at: '2026-10-10T12:00:00.000Z' }],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const res = auditBoundaryAction(state, {
+    who: 'calendar-sync',
+    action: 'view meeting schedule',
+    scope: 'meeting schedule'
+  });
+
+  assert.equal(res.allowed, true);
+  assert.equal(res.verdict, 'pass');
+  assert.equal(res.risk_level, 'low');
+  assert.equal(res.matched_constraints.length, 0);
+  assert.ok(res.reasons.some((r) => r.includes('authorized by active grant')));
+  assert.equal(Object.isFrozen(res), true);
+  assert.equal(Object.isFrozen(res.reasons), true);
+  assert.equal(Object.isFrozen(res.matched_constraints), true);
+});
+
+test('auditBoundaryAction blocks when action contradicts or touches a critical memory constraint', () => {
+  const state = {
+    topics: [],
+    grants: [{ who: 'pharmacy-bot', what: '*', at: '2026-10-10T12:00:00.000Z', expires_at: null }],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [
+      { id: 'f-1', category: 'medical', statement: 'Severe penicillin allergy, never administer', critical: true, at: '2026-10-10T12:00:00.000Z' },
+      { id: 'f-2', category: 'preference', statement: 'Prefers quiet rooms', critical: false, at: '2026-10-10T12:00:00.000Z' }
+    ],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  const res = auditBoundaryAction(state, {
+    who: 'pharmacy-bot',
+    action: 'Order penicillin prescription 500mg'
+  });
+
+  assert.equal(res.allowed, false);
+  assert.equal(res.verdict, 'block');
+  assert.equal(res.risk_level, 'high');
+  assert.equal(res.matched_constraints.length, 1);
+  assert.equal(res.matched_constraints[0].id, 'f-1');
+  assert.ok(res.reasons.some((r) => r.includes('touches critical constraint')));
+});
+
+test('auditBoundaryAction blocks high consequential risk operations when ungranted', () => {
+  const state = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // High-risk keyword: delete
+  const r1 = auditBoundaryAction(state, {
+    who: 'untrusted-agent',
+    action: 'delete all contacts'
+  });
+  assert.equal(r1.allowed, false);
+  assert.equal(r1.verdict, 'block');
+  assert.equal(r1.risk_level, 'high');
+  assert.ok(r1.reasons.some((r) => r.includes('consequential risk keyword(s): delete')));
+  assert.ok(r1.reasons.some((r) => r.includes('no active grant')));
+
+  // High-risk compound keyword: export_all
+  const r2 = auditBoundaryAction(state, {
+    who: 'analytics-script',
+    action: 'trigger export_all payload'
+  });
+  assert.equal(r2.allowed, false);
+  assert.equal(r2.verdict, 'block');
+  assert.equal(r2.risk_level, 'high');
+});
+
+test('auditBoundaryAction requires confirmation for ungranted low-risk action or granted high-risk action', () => {
+  const state = {
+    topics: [],
+    grants: [{ who: 'storage-service', what: 'backup management', at: '2026-10-10T12:00:00.000Z', expires_at: null }],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // Case 1: ungranted but not inherently consequential -> require_confirmation (medium risk)
+  const r1 = auditBoundaryAction(state, {
+    who: 'weather-assistant',
+    action: 'lookup current location weather'
+  });
+  assert.equal(r1.allowed, false);
+  assert.equal(r1.verdict, 'require_confirmation');
+  assert.equal(r1.risk_level, 'medium');
+
+  // Case 2: granted service attempting consequential operation -> require_confirmation (high risk)
+  const r2 = auditBoundaryAction(state, {
+    who: 'storage-service',
+    action: 'wipe previous snapshot archive',
+    scope: 'backup management'
+  });
+  assert.equal(r2.allowed, false);
+  assert.equal(r2.verdict, 'require_confirmation');
+  assert.equal(r2.risk_level, 'high');
+  assert.ok(r2.reasons.some((r) => r.includes('wipe')));
+});
+
+test('auditBoundaryAction fails closed on invalid state, malformed request, unknown fields, or bad timestamps', () => {
+  const validState = {
+    topics: [],
+    grants: [],
+    contributions: [],
+    actions: [],
+    events: [],
+    obligations: [],
+    facts: [],
+    quests: [],
+    values: DEFAULT_VALUES
+  };
+
+  // Invalid state
+  assert.equal(auditBoundaryAction(null, { who: 'a', action: 'b' }).verdict, 'block');
+  assert.equal(auditBoundaryAction({ bad: 1 }, { who: 'a', action: 'b' }).verdict, 'block');
+
+  // Malformed request
+  assert.equal(auditBoundaryAction(validState, null).verdict, 'block');
+  assert.equal(auditBoundaryAction(validState, 'string').verdict, 'block');
+  assert.equal(auditBoundaryAction(validState, []).verdict, 'block');
+
+  // Unknown fields in request
+  const extraFieldReq = { who: 'agent', action: 'ping', extra: 123 };
+  const rUnknown = auditBoundaryAction(validState, extraFieldReq);
+  assert.equal(rUnknown.verdict, 'block');
+  assert.ok(rUnknown.reasons.some((r) => r.includes('unknown fields')));
+
+  // Missing or empty who
+  assert.equal(auditBoundaryAction(validState, { who: '', action: 'ping' }).verdict, 'block');
+  assert.equal(auditBoundaryAction(validState, { who: '   ', action: 'ping' }).verdict, 'block');
+  assert.equal(auditBoundaryAction(validState, { who: 'a'.repeat(61), action: 'ping' }).verdict, 'block');
+
+  // Missing or empty action
+  assert.equal(auditBoundaryAction(validState, { who: 'agent', action: '' }).verdict, 'block');
+  assert.equal(auditBoundaryAction(validState, { who: 'agent', action: '   ' }).verdict, 'block');
+  assert.equal(auditBoundaryAction(validState, { who: 'agent', action: 'a'.repeat(101) }).verdict, 'block');
+
+  // Oversized scope or context
+  assert.equal(auditBoundaryAction(validState, { who: 'agent', action: 'act', scope: 'a'.repeat(81) }).verdict, 'block');
+  assert.equal(auditBoundaryAction(validState, { who: 'agent', action: 'act', context: 'a'.repeat(201) }).verdict, 'block');
+  assert.equal(auditBoundaryAction(validState, { who: 'agent', action: 'act', scope: 123 }).verdict, 'block');
+
+  // Invalid asOfTime
+  assert.equal(auditBoundaryAction(validState, { who: 'agent', action: 'act' }, 'invalid-date').verdict, 'block');
+  assert.equal(auditBoundaryAction(validState, { who: 'agent', action: 'act' }, {}).verdict, 'block');
+});
+
+test('summarizeBoundaryAudits aggregates audit outcomes cleanly fail-closed', () => {
+  // Invalid inputs return zeroed summary
+  assert.deepEqual(summarizeBoundaryAudits(null), { total: 0, pass: 0, block: 0, require_confirmation: 0, high_risk: 0 });
+  assert.deepEqual(summarizeBoundaryAudits('bad'), { total: 0, pass: 0, block: 0, require_confirmation: 0, high_risk: 0 });
+
+  const audits = [
+    { verdict: 'pass', risk_level: 'low' },
+    { verdict: 'pass', risk_level: 'low' },
+    { verdict: 'require_confirmation', risk_level: 'medium' },
+    { verdict: 'require_confirmation', risk_level: 'high' },
+    { verdict: 'block', risk_level: 'high' },
+    { verdict: 'block', risk_level: 'high' }
+  ];
+
+  const summary = summarizeBoundaryAudits(audits);
+  assert.equal(summary.total, 6);
+  assert.equal(summary.pass, 2);
+  assert.equal(summary.require_confirmation, 2);
+  assert.equal(summary.block, 2);
+  assert.equal(summary.high_risk, 3);
+  assert.equal(Object.isFrozen(summary), true);
 });
 
 
