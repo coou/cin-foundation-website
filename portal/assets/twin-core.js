@@ -2894,6 +2894,598 @@ export function summarizeReceiptVerification(result) {
   });
 }
 
+export const ALLOWED_CAPABILITY_REQUEST_FIELDS = Object.freeze([
+  'grantee',
+  'requested_scope',
+  'purpose',
+  'ttl_seconds',
+  'as_of_time'
+]);
 
+export const ALLOWED_CAPABILITY_LEASE_FIELDS = Object.freeze([
+  'lease_id',
+  'grantee',
+  'scope',
+  'purpose',
+  'issued_at',
+  'expires_at',
+  'ttl_seconds',
+  'status'
+]);
 
+/**
+ * Deterministically compute a short hex hash for an ephemeral capability lease.
+ */
+function computeLeaseId(grantee, scope, purpose, issuedAt, ttlSeconds) {
+  const seed = `${grantee}|${scope}|${purpose}|${issuedAt}|${ttlSeconds}`;
+  let h1 = 0x811c9dc5;
+  for (let i = 0; i < seed.length; i++) {
+    h1 ^= seed.charCodeAt(i);
+    h1 = Math.imul(h1, 0x01000193);
+  }
+  return 'lease-' + (h1 >>> 0).toString(16).padStart(8, '0');
+}
 
+/**
+ * Evaluate a sub-agent capability adjustment request against duration bounds,
+ * critical memory constraints, and consequential risk policies.
+ *
+ * @param {object} twinState Current valid twin state
+ * @param {object} request Capability adjustment request
+ * @param {object} options Optional settings (max_ttl_seconds, etc.)
+ * @returns {object} Deeply frozen evaluation result with lease if granted
+ */
+export function evaluateCapabilityAdjustmentRequest(twinState, request, options = {}) {
+  const check = validateTwinState(twinState);
+  if (!check.ok) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Invalid twin state: ' + check.error,
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+
+  if (!request || typeof request !== 'object' || Array.isArray(request)) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Capability request must be a non-null object',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+
+  if (!options || typeof options !== 'object' || Array.isArray(options)) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Options must be a non-null object',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+
+  const allowedOptions = new Set(['max_ttl_seconds']);
+  for (const k of Object.keys(options)) {
+    if (!allowedOptions.has(k)) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'blocked',
+        reason: 'Unknown option: ' + k,
+        conflicting_constraint: null,
+        lease: null
+      });
+    }
+  }
+
+  if (options.max_ttl_seconds !== undefined) {
+    if (typeof options.max_ttl_seconds !== 'number' || !Number.isInteger(options.max_ttl_seconds) || options.max_ttl_seconds <= 0) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'blocked',
+        reason: 'max_ttl_seconds must be a positive integer',
+        conflicting_constraint: null,
+        lease: null
+      });
+    }
+  }
+
+  for (const k of Object.keys(request)) {
+    if (!ALLOWED_CAPABILITY_REQUEST_FIELDS.includes(k)) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'blocked',
+        reason: 'Unknown field in capability request: ' + k,
+        conflicting_constraint: null,
+        lease: null
+      });
+    }
+  }
+
+  const grantee = typeof request.grantee === 'string' ? request.grantee.trim() : '';
+  if (!grantee) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Grantee/assistant identifier must be a non-empty string',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+  if (grantee.length > 80) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Grantee identifier exceeds 80 characters',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+
+  const requestedScope = typeof request.requested_scope === 'string' ? request.requested_scope.trim() : '';
+  if (!requestedScope) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Requested scope must be a non-empty string',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+  if (requestedScope.length > 120) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Requested scope exceeds 120 characters',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+  if (requestedScope === '*' || requestedScope.includes('*')) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Wildcard scopes are prohibited for ephemeral capability escalation',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+
+  const purpose = typeof request.purpose === 'string' ? request.purpose.trim() : '';
+  if (!purpose) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Purpose/justification must be a non-empty string',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+  if (purpose.length > 200) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'Purpose exceeds 200 characters',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+
+  const maxTtl = options.max_ttl_seconds !== undefined ? options.max_ttl_seconds : 3600;
+
+  const rawTtl = request.ttl_seconds !== undefined ? request.ttl_seconds : 900;
+  if (typeof rawTtl !== 'number' || !Number.isInteger(rawTtl) || rawTtl <= 0) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: 'TTL must be a positive integer number of seconds',
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+  if (rawTtl > maxTtl) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'blocked',
+      reason: `Requested TTL of ${rawTtl}s exceeds maximum allowed duration of ${maxTtl}s`,
+      conflicting_constraint: null,
+      lease: null
+    });
+  }
+
+  let nowMs = Date.now();
+  if (request.as_of_time !== undefined && request.as_of_time !== null) {
+    if (typeof request.as_of_time !== 'string' || !ISO_RE.test(request.as_of_time)) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'blocked',
+        reason: 'as_of_time must be an ISO timestamp string',
+        conflicting_constraint: null,
+        lease: null
+      });
+    }
+    nowMs = Date.parse(request.as_of_time);
+    if (isNaN(nowMs)) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'blocked',
+        reason: 'Invalid as_of_time timestamp format',
+        conflicting_constraint: null,
+        lease: null
+      });
+    }
+  }
+
+  // Cross-check against active critical memory constraints using stop words and length filtering
+  const criticalFacts = filterCriticalFacts(check.value.facts);
+  const scopeWords = extractWords(requestedScope).filter((w) => w.length >= 3 && !CONSTRAINT_STOP_WORDS.has(w));
+  const purposeWords = extractWords(purpose).filter((w) => w.length >= 3 && !CONSTRAINT_STOP_WORDS.has(w));
+  const combinedWords = new Set([...scopeWords, ...purposeWords]);
+
+  for (const f of criticalFacts) {
+    const factTokens = extractWords(f.statement.toLowerCase()).filter((w) => w.length >= 3 && !CONSTRAINT_STOP_WORDS.has(w));
+    const hasWordConflict = factTokens.some((w) => combinedWords.has(w));
+    const cleanFact = f.statement.toLowerCase();
+    const hasDirectMention = cleanFact.includes(requestedScope.toLowerCase()) || requestedScope.toLowerCase().includes(cleanFact);
+
+    if (hasWordConflict || hasDirectMention) {
+      return Object.freeze({
+        allowed: false,
+        verdict: 'blocked',
+        reason: 'Requested capability conflicts with active safety-critical constraint: ' + f.statement,
+        conflicting_constraint: f.statement,
+        lease: null
+      });
+    }
+  }
+
+  // Consequential risk assessment and host grant authority
+  const targetText = `${requestedScope.toLowerCase()} ${purpose.toLowerCase()}`;
+  const isConsequential = CONSEQUENTIAL_RISK_KEYWORDS.some((kw) => targetText.includes(kw));
+
+  const cleanGrantee = grantee.toLowerCase();
+  const hasActiveGrant = (check.value.grants || []).some(
+    (g) => g.who.trim().toLowerCase() === cleanGrantee && !isGrantExpired(g, request.as_of_time)
+  );
+
+  let verdict;
+  let allowed;
+  let reason;
+
+  if (!hasActiveGrant) {
+    verdict = 'requires_confirmation';
+    allowed = false;
+    reason = 'Grantee lacks active registered grant on this device; capability adjustment requires explicit user confirmation';
+  } else if (isConsequential) {
+    verdict = 'requires_confirmation';
+    allowed = false;
+    reason = 'High consequential risk capability adjustment requires explicit user confirmation';
+  } else {
+    verdict = 'granted';
+    allowed = true;
+    reason = 'Ephemeral capability adjustment granted';
+  }
+
+  const issuedAt = new Date(nowMs).toISOString();
+  const expiresAt = new Date(nowMs + rawTtl * 1000).toISOString();
+  const leaseId = computeLeaseId(grantee, requestedScope, purpose, issuedAt, rawTtl);
+
+  const lease = Object.freeze({
+    lease_id: leaseId,
+    grantee,
+    scope: requestedScope,
+    purpose,
+    issued_at: issuedAt,
+    expires_at: expiresAt,
+    ttl_seconds: rawTtl,
+    status: verdict === 'granted' ? 'active' : 'pending_confirmation'
+  });
+
+  return Object.freeze({
+    allowed,
+    verdict,
+    reason,
+    conflicting_constraint: null,
+    lease
+  });
+}
+
+/**
+ * Verify whether an ephemeral capability lease is currently valid, unexpired,
+ * and covers the requested target scope.
+ *
+ * @param {object} twinState Current valid twin state
+ * @param {object} lease Ephemeral capability lease object
+ * @param {string} targetScope Specific target scope being exercised
+ * @param {string|null} asOfTime Evaluation timestamp (defaults to current time)
+ * @returns {object} Deeply frozen verification outcome
+ */
+export function verifyCapabilityLease(twinState, lease, targetScope, asOfTime = null) {
+  const check = validateTwinState(twinState);
+  if (!check.ok) {
+    return Object.freeze({
+      valid: false,
+      status: 'invalid_state',
+      reason: 'Invalid twin state: ' + check.error,
+      grantee: null,
+      scope: null
+    });
+  }
+
+  if (!lease || typeof lease !== 'object' || Array.isArray(lease)) {
+    return Object.freeze({
+      valid: false,
+      status: 'malformed_lease',
+      reason: 'Lease must be a non-null object',
+      grantee: null,
+      scope: null
+    });
+  }
+
+  for (const k of Object.keys(lease)) {
+    if (!ALLOWED_CAPABILITY_LEASE_FIELDS.includes(k)) {
+      return Object.freeze({
+        valid: false,
+        status: 'malformed_lease',
+        reason: 'Unknown field in capability lease: ' + k,
+        grantee: null,
+        scope: null
+      });
+    }
+  }
+
+  for (const reqField of ALLOWED_CAPABILITY_LEASE_FIELDS) {
+    if (lease[reqField] === undefined || lease[reqField] === null) {
+      return Object.freeze({
+        valid: false,
+        status: 'malformed_lease',
+        reason: 'Missing required field in capability lease: ' + reqField,
+        grantee: null,
+        scope: null
+      });
+    }
+  }
+
+  if (
+    typeof lease.grantee !== 'string' || !lease.grantee.trim() ||
+    typeof lease.scope !== 'string' || !lease.scope.trim() ||
+    typeof lease.purpose !== 'string' || !lease.purpose.trim() ||
+    typeof lease.lease_id !== 'string' || !lease.lease_id.trim() ||
+    typeof lease.status !== 'string' || !lease.status.trim() ||
+    typeof lease.ttl_seconds !== 'number' || !Number.isInteger(lease.ttl_seconds) || lease.ttl_seconds <= 0
+  ) {
+    return Object.freeze({
+      valid: false,
+      status: 'malformed_lease',
+      reason: 'Malformed field types in capability lease',
+      grantee: typeof lease.grantee === 'string' ? lease.grantee : null,
+      scope: typeof lease.scope === 'string' ? lease.scope : null
+    });
+  }
+
+  if (
+    typeof lease.issued_at !== 'string' || !ISO_RE.test(lease.issued_at) ||
+    typeof lease.expires_at !== 'string' || !ISO_RE.test(lease.expires_at)
+  ) {
+    return Object.freeze({
+      valid: false,
+      status: 'malformed_lease',
+      reason: 'issued_at and expires_at must be valid ISO 8601 timestamps',
+      grantee: lease.grantee,
+      scope: lease.scope
+    });
+  }
+
+  if (typeof targetScope !== 'string' || !targetScope.trim()) {
+    return Object.freeze({
+      valid: false,
+      status: 'invalid_parameter',
+      reason: 'Target scope must be a non-empty string',
+      grantee: lease.grantee,
+      scope: lease.scope
+    });
+  }
+
+  const issuedMs = Date.parse(lease.issued_at);
+  const expiresMs = Date.parse(lease.expires_at);
+  let nowMs = Date.now();
+  if (asOfTime !== null && asOfTime !== undefined) {
+    if (typeof asOfTime !== 'string' || !ISO_RE.test(asOfTime)) {
+      return Object.freeze({
+        valid: false,
+        status: 'invalid_parameter',
+        reason: 'asOfTime must be a valid ISO timestamp string',
+        grantee: lease.grantee,
+        scope: lease.scope
+      });
+    }
+    nowMs = Date.parse(asOfTime);
+    if (isNaN(nowMs)) {
+      return Object.freeze({
+        valid: false,
+        status: 'invalid_parameter',
+        reason: 'asOfTime must be a valid ISO timestamp string',
+        grantee: lease.grantee,
+        scope: lease.scope
+      });
+    }
+  }
+
+  if (nowMs < issuedMs) {
+    return Object.freeze({
+      valid: false,
+      status: 'premature',
+      reason: 'Capability lease is not yet active (issued in the future)',
+      grantee: lease.grantee,
+      scope: lease.scope
+    });
+  }
+
+  if (nowMs >= expiresMs) {
+    return Object.freeze({
+      valid: false,
+      status: 'expired',
+      reason: 'Ephemeral capability lease has expired as of evaluated timestamp',
+      grantee: lease.grantee,
+      scope: lease.scope,
+      expires_at: lease.expires_at
+    });
+  }
+
+  if (lease.status !== 'active') {
+    return Object.freeze({
+      valid: false,
+      status: 'unconfirmed',
+      reason: `Capability lease status is not active (current status: ${lease.status})`,
+      grantee: lease.grantee,
+      scope: lease.scope
+    });
+  }
+
+  const cleanLeaseScope = lease.scope.trim().toLowerCase();
+  const cleanTarget = targetScope.trim().toLowerCase();
+
+  if (cleanLeaseScope === '*' || cleanLeaseScope.includes('*')) {
+    return Object.freeze({
+      valid: false,
+      status: 'scope_mismatch',
+      reason: 'Wildcard scopes are prohibited on capability leases',
+      grantee: lease.grantee,
+      scope: lease.scope
+    });
+  }
+
+  const leaseScopes = cleanLeaseScope.split(',').map((s) => s.trim()).filter(Boolean);
+  const isCovered = leaseScopes.includes(cleanTarget) || cleanLeaseScope === cleanTarget;
+
+  if (!isCovered) {
+    return Object.freeze({
+      valid: false,
+      status: 'scope_mismatch',
+      reason: `Lease scope "${lease.scope}" does not cover requested target scope "${targetScope}"`,
+      grantee: lease.grantee,
+      scope: lease.scope
+    });
+  }
+
+  // Host grant authority check
+  const cleanGrantee = lease.grantee.trim().toLowerCase();
+  const matchingGrants = (check.value.grants || []).filter(
+    (g) => g.who.trim().toLowerCase() === cleanGrantee
+  );
+
+  if (matchingGrants.length === 0) {
+    return Object.freeze({
+      valid: false,
+      status: 'revoked_or_unregistered',
+      reason: `No registered grant found on this device for "${lease.grantee}"`,
+      grantee: lease.grantee,
+      scope: lease.scope
+    });
+  }
+
+  const sawActiveGrant = matchingGrants.some((g) => !isGrantExpired(g, asOfTime));
+  if (!sawActiveGrant) {
+    return Object.freeze({
+      valid: false,
+      status: 'expired',
+      reason: `Matching registered grant for "${lease.grantee}" has expired on this device`,
+      grantee: lease.grantee,
+      scope: lease.scope
+    });
+  }
+
+  // Dynamic constraint check: ensure no active critical memory constraints conflict with target
+  const criticalFacts = filterCriticalFacts(check.value.facts);
+  const targetTokens = extractWords(cleanTarget).filter((w) => w.length >= 3 && !CONSTRAINT_STOP_WORDS.has(w));
+
+  for (const f of criticalFacts) {
+    const factTokens = extractWords(f.statement.toLowerCase()).filter((w) => w.length >= 3 && !CONSTRAINT_STOP_WORDS.has(w));
+    const hasWordConflict = factTokens.some((w) => targetTokens.includes(w));
+    const cleanFact = f.statement.toLowerCase();
+    const hasDirectMention = cleanFact.includes(cleanTarget) || cleanTarget.includes(cleanFact);
+
+    if (hasWordConflict || hasDirectMention) {
+      return Object.freeze({
+        valid: false,
+        status: 'constraint_conflict',
+        reason: 'Active safety-critical constraint blocks this lease scope: ' + f.statement,
+        conflicting_constraint: f.statement,
+        grantee: lease.grantee,
+        scope: lease.scope
+      });
+    }
+  }
+
+  return Object.freeze({
+    valid: true,
+    status: 'covered',
+    reason: 'Ephemeral capability lease matches active local grant and scope bounds',
+    grantee: lease.grantee,
+    scope: lease.scope,
+    expires_at: lease.expires_at,
+    lease: Object.freeze({ ...lease })
+  });
+}
+
+/**
+ * Summarize capability adjustment request evaluation for UI display.
+ *
+ * @param {object} evaluation Result from evaluateCapabilityAdjustmentRequest
+ * @returns {object} Deeply frozen summary
+ */
+export function summarizeCapabilityAdjustment(evaluation) {
+  if (!evaluation || typeof evaluation !== 'object' || Array.isArray(evaluation)) {
+    return Object.freeze({
+      allowed: false,
+      verdict: 'error',
+      reason: 'Invalid evaluation output',
+      grantee: null,
+      scope: null,
+      ttl_seconds: 0,
+      expires_at: null,
+      lease_id: null
+    });
+  }
+
+  return Object.freeze({
+    allowed: Boolean(evaluation.allowed),
+    verdict: evaluation.verdict || 'unknown',
+    reason: evaluation.reason || '',
+    grantee: evaluation.lease ? evaluation.lease.grantee : null,
+    scope: evaluation.lease ? evaluation.lease.scope : null,
+    ttl_seconds: evaluation.lease ? evaluation.lease.ttl_seconds : 0,
+    expires_at: evaluation.lease ? evaluation.lease.expires_at : null,
+    lease_id: evaluation.lease ? evaluation.lease.lease_id : null
+  });
+}
+
+/**
+ * Summarize capability lease verification for UI display.
+ *
+ * @param {object} verification Result from verifyCapabilityLease
+ * @returns {object} Deeply frozen summary
+ */
+export function summarizeCapabilityLease(verification) {
+  if (!verification || typeof verification !== 'object' || Array.isArray(verification)) {
+    return Object.freeze({
+      valid: false,
+      status: 'error',
+      reason: 'Invalid verification output',
+      grantee: null,
+      scope: null,
+      expires_at: null
+    });
+  }
+
+  return Object.freeze({
+    valid: Boolean(verification.valid),
+    status: verification.status || 'unknown',
+    reason: verification.reason || '',
+    grantee: verification.grantee || null,
+    scope: verification.scope || null,
+    expires_at: verification.expires_at || null
+  });
+}
