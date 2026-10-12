@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -414,6 +414,7 @@ if (wipeBtn) wipeBtn.onclick = () => {
   const sumBox = document.getElementById('trajectory-summary'); if (sumBox) sumBox.textContent = '';
   const evalBox = document.getElementById('access-eval-result'); if (evalBox) evalBox.textContent = '';
   const auditBox = document.getElementById('boundary-audit-result'); if (auditBox) auditBox.textContent = '';
+  const ctxBox = document.getElementById('context-assembly-result'); if (ctxBox) ctxBox.textContent = '';
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
@@ -824,6 +825,61 @@ if (valueForm) {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts(); renderQuests(); renderValues();
+function renderContextAssembler() {
+  const form = document.getElementById('assemble-context');
+  const resultBox = document.getElementById('context-assembly-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+    const budgetRaw = parseInt(form.elements.budget ? form.elements.budget.value : '1024', 10);
+    const budget = Number.isInteger(budgetRaw) ? budgetRaw : 1024;
+    const systemPrompt = form.elements.system_prompt ? form.elements.system_prompt.value.trim().slice(0, 200) : '';
+
+    const res = assembleTokenBudgetedContext(state, {
+      budget_tokens: budget,
+      system_prompt: systemPrompt || undefined
+    });
+
+    if (!res.ok) {
+      const errP = el('p', null);
+      const errBadge = el('strong', null, '[Compilation Failed] ');
+      errBadge.style.color = '#d32f2f';
+      errP.appendChild(errBadge);
+      errP.appendChild(document.createTextNode(res.reason || res.error));
+      resultBox.appendChild(errP);
+      return;
+    }
+
+    const summaryP = el('p', 'muted');
+    summaryP.textContent = `Tokens used: ${res.total_estimated_tokens} / ${res.budget_tokens} (${res.remaining_tokens} remaining). Prefix cache fingerprint: ${res.prefix_fingerprint}`;
+    resultBox.appendChild(summaryP);
+
+    const itemsP = el('p', 'muted');
+    itemsP.textContent = `Packed: ${res.items_packed.critical_facts} critical constraint(s), ${res.items_packed.obligations} obligation(s), ${res.items_packed.quests} quest(s), ${res.items_packed.facts} fact(s), ${res.items_packed.events} event(s).`;
+    resultBox.appendChild(itemsP);
+
+    if (res.truncated_sections.length > 0) {
+      const truncP = el('p', 'muted');
+      truncP.textContent = `Truncated sections due to budget: ${res.truncated_sections.join(', ')}.`;
+      resultBox.appendChild(truncP);
+    }
+
+    const pre = el('pre', null);
+    pre.style.whiteSpace = 'pre-wrap';
+    pre.style.wordBreak = 'break-word';
+    pre.style.background = 'var(--line, #e2ded4)';
+    pre.style.padding = '0.75rem';
+    pre.style.borderRadius = '4px';
+    pre.style.fontSize = '0.85rem';
+    pre.style.maxHeight = '280px';
+    pre.style.overflowY = 'auto';
+    pre.textContent = res.context_text;
+    resultBox.appendChild(pre);
+  };
+}
+
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler();
 
 
