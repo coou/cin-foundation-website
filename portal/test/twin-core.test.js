@@ -2906,7 +2906,7 @@ test('a calendar-only grant never admits a medical-notes lease (audit counterexa
   const res = evaluateCapabilityAdjustmentRequest(state, req);
   assert.equal(res.allowed, false);
   assert.equal(res.verdict, 'requires_confirmation');
-  assert.ok(res.reason.includes('outside what the person allowed'));
+  assert.ok(res.reason.includes('outside what was allowed'));
   assert.equal(res.lease.status, 'pending_confirmation');
   // Even with its status edited to active, the lease does not verify.
   const edited = { ...res.lease, status: 'active' };

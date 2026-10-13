@@ -3096,7 +3096,7 @@ export function evaluateCapabilityAdjustmentRequest(twinState, request, options 
     reason = 'This assistant has no active permission on this device';
   } else if (!covering) {
     verdict = 'requires_confirmation';
-    reason = 'The request is outside what the person allowed this assistant';
+    reason = 'The request is outside what was allowed for this assistant';
   } else if (ttl < 1) {
     verdict = 'requires_confirmation';
     reason = 'The permission this request rests on has run out';
