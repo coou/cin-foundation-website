@@ -1,0 +1,70 @@
+{
+ "scenarios": [
+  {
+   "id": "SC-20261013-0001",
+   "added_at": "2026-10-13T17:12:12+00:00",
+   "title": "Personal agents people 'own' but that live on a few clouds' free tiers",
+   "horizon_years": 3,
+   "world": "It is 2029. Tens of millions of people keep a personal agent that remembers their health, money, work and family. Most of them set it up in an afternoon on the free tier of one of three cloud providers, because that is what the tutorials use. The agent feels like theirs: they chose it, configured it and can read its memory. But its memory sits in a database format only that provider's tools read well, its usage limits change twice a year, and its bill depends on a unit few people understand. Co-operatives and families who run agents on their own small machines exist, but they are a small minority.",
+   "premise": "Open-source personal agents now run, for free, inside a person's own account on a large cloud provider. The thread's top replies dispute whether that is ownership at all, since the provider controls the hardware, the limits and the bill, and one reader reports a charge they could not get explained.",
+   "goals": [
+    6,
+    1
+   ],
+   "how": "The CIN's twin is designed to be local first, with export and deletion. Making its memory ledger a documented, signed format that any host can import turns 'you can leave' into something people can actually do. Bounded compute budgets (mortal computation) let an agent show the cost of a task before it runs. Co-operative hosting charters give communities a way to hold agents together without a single company in the middle. None of this stops people choosing a cloud; it makes the choice reversible.",
+   "shift": 0.6,
+   "outcomes": [
+    {
+     "name": "Owned in name only",
+     "description": "Personal agents concentrate on a few providers. One change of terms or pricing strands millions of agents and the memories inside them.",
+     "example": "A provider ends its free tier for AI workloads with 30 days' notice. A nurse's agent, holding two years of her shift notes and medical appointments, stops; her export is a raw database dump no other agent can read.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Surprise bills and quiet limits",
+     "description": "Usage-based billing in units people do not understand means agents run up costs or hit limits without warning.",
+     "example": "A retired teacher asks her agent to research her pension options overnight; a long chain of model calls passes the free allowance, and she is billed 140 dollars she never saw coming.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Portable agents",
+     "description": "A common, documented export of an agent's memory lets people move it between a home device, a co-operative's server and any cloud.",
+     "example": "When a provider changes its terms, a tenants' co-operative moves its 300 members' agents to a small server in its office over one weekend, memories intact.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "The agent comes home",
+     "description": "Cheap home hardware runs the everyday agent locally; the cloud is used only for heavy tasks, with a price shown first.",
+     "example": "A family runs four agents on a 150-dollar box by the router; when one wants a large model for a tax question, it shows the cost and asks first.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "community",
+    "hardware",
+    "media",
+    "research",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://news.ycombinator.com/item?id=50031614",
+     "title": "Talorys - A self-hosted personal AI agent on Cloudflare's free tier",
+     "kind": "thread",
+     "published": "2026-10-10"
+    }
+   ],
+   "work": 0
+  }
+ ]
+}
