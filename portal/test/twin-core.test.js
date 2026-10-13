@@ -54,7 +54,13 @@ import {
   summarizeChainAudit,
   ALLOWED_RECEIPT_FIELDS,
   verifyConsentReceipt,
-  summarizeReceiptVerification
+  summarizeReceiptVerification,
+  ALLOWED_CAPABILITY_REQUEST_FIELDS,
+  ALLOWED_CAPABILITY_LEASE_FIELDS,
+  evaluateCapabilityAdjustmentRequest,
+  verifyCapabilityLease,
+  summarizeCapabilityAdjustment,
+  summarizeCapabilityLease
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -2674,6 +2680,403 @@ test('summarizeReceiptVerification handles valid, invalid, and malformed inputs 
   const sumArr = summarizeReceiptVerification([]);
   assert.equal(sumArr.valid, false);
   assert.equal(sumArr.status, 'error');
+});
+
+test('ALLOWED_CAPABILITY_REQUEST_FIELDS and ALLOWED_CAPABILITY_LEASE_FIELDS are deeply frozen', () => {
+  assert.equal(Object.isFrozen(ALLOWED_CAPABILITY_REQUEST_FIELDS), true);
+  assert.equal(Object.isFrozen(ALLOWED_CAPABILITY_LEASE_FIELDS), true);
+  assert.ok(ALLOWED_CAPABILITY_REQUEST_FIELDS.includes('grantee'));
+  assert.ok(ALLOWED_CAPABILITY_REQUEST_FIELDS.includes('ttl_seconds'));
+  assert.ok(ALLOWED_CAPABILITY_LEASE_FIELDS.includes('lease_id'));
+  assert.ok(ALLOWED_CAPABILITY_LEASE_FIELDS.includes('expires_at'));
+});
+
+test('evaluateCapabilityAdjustmentRequest succeeds for valid non-consequential request with active grant and generates frozen lease', () => {
+  const state = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [
+      {
+        who: 'calendar assistant',
+        what: 'meeting schedule',
+        at: '2026-10-01T00:00:00Z',
+        expires_at: '2026-11-01T00:00:00Z'
+      }
+    ],
+    facts: [
+      {
+        id: 'fact-1',
+        category: 'medical',
+        statement: 'Severe allergy to penicillin',
+        critical: true,
+        at: '2026-10-01T00:00:00Z'
+      }
+    ]
+  };
+
+  const req = {
+    grantee: 'calendar assistant',
+    requested_scope: 'meeting schedule',
+    purpose: 'Need to sync group calendar', // tests stop-word "to" does not collide with "allergy to"
+    ttl_seconds: 900,
+    as_of_time: '2026-10-12T12:00:00Z'
+  };
+
+  const res = evaluateCapabilityAdjustmentRequest(state, req);
+  assert.equal(res.allowed, true);
+  assert.equal(res.verdict, 'granted');
+  assert.equal(res.conflicting_constraint, null);
+  assert.ok(res.lease);
+  assert.equal(res.lease.grantee, 'calendar assistant');
+  assert.equal(res.lease.scope, 'meeting schedule');
+  assert.equal(res.lease.ttl_seconds, 900);
+  assert.equal(res.lease.status, 'active');
+  assert.equal(res.lease.issued_at, '2026-10-12T12:00:00.000Z');
+  assert.equal(res.lease.expires_at, '2026-10-12T12:15:00.000Z');
+  assert.ok(res.lease.lease_id.startsWith('lease-'));
+  assert.equal(Object.isFrozen(res), true);
+  assert.equal(Object.isFrozen(res.lease), true);
+});
+
+test('evaluateCapabilityAdjustmentRequest marks ungranted assistant as requires_confirmation', () => {
+  const state = { ...DEFAULT_TWIN_STATE, grants: [] };
+  const req = {
+    grantee: 'unregistered bot',
+    requested_scope: 'calendar events',
+    purpose: 'Inspect events',
+    ttl_seconds: 600
+  };
+
+  const res = evaluateCapabilityAdjustmentRequest(state, req);
+  assert.equal(res.allowed, false);
+  assert.equal(res.verdict, 'requires_confirmation');
+  assert.ok(res.reason.includes('lacks active registered grant'));
+  assert.equal(res.lease.status, 'pending_confirmation');
+});
+
+test('evaluateCapabilityAdjustmentRequest marks high consequential risk actions as requires_confirmation', () => {
+  const state = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [{ who: 'cleanup tool', what: 'scratch cache', at: '2026-10-01T00:00:00Z' }]
+  };
+  const req = {
+    grantee: 'cleanup tool',
+    requested_scope: 'delete scratch files',
+    purpose: 'Remove obsolete temporary cache',
+    ttl_seconds: 300,
+    as_of_time: '2026-10-12T12:00:00Z'
+  };
+
+  const res = evaluateCapabilityAdjustmentRequest(state, req);
+  assert.equal(res.allowed, false);
+  assert.equal(res.verdict, 'requires_confirmation');
+  assert.ok(res.lease);
+  assert.equal(res.lease.status, 'pending_confirmation');
+});
+
+test('evaluateCapabilityAdjustmentRequest blocks capability requests that conflict with safety-critical constraints', () => {
+  const state = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [{ who: 'health bot', what: 'medical data', at: '2026-10-01T00:00:00Z' }],
+    facts: [
+      {
+        id: 'fact-1',
+        category: 'medical',
+        statement: 'Severe allergy to penicillin',
+        critical: true,
+        at: '2026-10-01T00:00:00Z'
+      }
+    ]
+  };
+
+  const req = {
+    grantee: 'health bot',
+    requested_scope: 'prescribe penicillin antibiotic',
+    purpose: 'Treat bacterial infection',
+    ttl_seconds: 600,
+    as_of_time: '2026-10-12T12:00:00Z'
+  };
+
+  const res = evaluateCapabilityAdjustmentRequest(state, req);
+  assert.equal(res.allowed, false);
+  assert.equal(res.verdict, 'blocked');
+  assert.equal(res.lease, null);
+  assert.ok(res.reason.includes('Severe allergy to penicillin'));
+  assert.equal(res.conflicting_constraint, 'Severe allergy to penicillin');
+});
+
+test('evaluateCapabilityAdjustmentRequest prohibits wildcard * scopes fail-closed', () => {
+  const state = { ...DEFAULT_TWIN_STATE };
+  const reqWild = {
+    grantee: 'broad agent',
+    requested_scope: '*',
+    purpose: 'Full access to everything',
+    ttl_seconds: 600
+  };
+
+  const resWild = evaluateCapabilityAdjustmentRequest(state, reqWild);
+  assert.equal(resWild.allowed, false);
+  assert.equal(resWild.verdict, 'blocked');
+  assert.ok(resWild.reason.includes('Wildcard scopes are prohibited'));
+});
+
+test('evaluateCapabilityAdjustmentRequest rejects invalid options.max_ttl_seconds fail-closed', () => {
+  const state = { ...DEFAULT_TWIN_STATE };
+  const baseReq = {
+    grantee: 'agent-1',
+    requested_scope: 'read logs',
+    purpose: 'Inspect recent events'
+  };
+
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, baseReq, { max_ttl_seconds: 0 }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, baseReq, { max_ttl_seconds: -10 }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, baseReq, { max_ttl_seconds: '3600' }).verdict, 'blocked');
+});
+
+test('evaluateCapabilityAdjustmentRequest rejects non-integer, zero, negative, or excessive TTL fail-closed', () => {
+  const state = { ...DEFAULT_TWIN_STATE };
+  const baseReq = {
+    grantee: 'agent-1',
+    requested_scope: 'read logs',
+    purpose: 'Inspect recent events'
+  };
+
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { ...baseReq, ttl_seconds: -10 }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { ...baseReq, ttl_seconds: 0 }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { ...baseReq, ttl_seconds: 15.5 }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { ...baseReq, ttl_seconds: '900' }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { ...baseReq, ttl_seconds: 7200 }).verdict, 'blocked');
+});
+
+test('evaluateCapabilityAdjustmentRequest rejects unknown fields, non-objects, arrays, and malformed inputs fail-closed', () => {
+  const state = { ...DEFAULT_TWIN_STATE };
+  assert.equal(evaluateCapabilityAdjustmentRequest(null, {}).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, null).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, []).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { grantee: 'a', requested_scope: 'b', purpose: 'c', unknown_field: 123 }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { grantee: '', requested_scope: 'b', purpose: 'c' }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { grantee: 'a', requested_scope: '', purpose: 'c' }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { grantee: 'a', requested_scope: 'b', purpose: '' }).verdict, 'blocked');
+  assert.equal(evaluateCapabilityAdjustmentRequest(state, { grantee: 'a', requested_scope: 'b', purpose: 'c', as_of_time: 'not-date' }).verdict, 'blocked');
+});
+
+test('verifyCapabilityLease validates active unexpired capability lease covering requested scope with active grant', () => {
+  const state = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [
+      {
+        who: 'calendar assistant',
+        what: 'meeting schedule',
+        at: '2026-10-01T00:00:00Z',
+        expires_at: '2026-11-01T00:00:00Z'
+      }
+    ]
+  };
+  const lease = {
+    lease_id: 'lease-test-1',
+    grantee: 'calendar assistant',
+    scope: 'meeting schedule, calendar events',
+    purpose: 'Reschedule sync',
+    issued_at: '2026-10-12T12:00:00Z',
+    expires_at: '2026-10-12T12:15:00Z',
+    ttl_seconds: 900,
+    status: 'active'
+  };
+
+  const res = verifyCapabilityLease(state, lease, 'meeting schedule', '2026-10-12T12:05:00Z');
+  assert.equal(res.valid, true);
+  assert.equal(res.status, 'covered');
+  assert.equal(res.grantee, 'calendar assistant');
+  assert.equal(Object.isFrozen(res), true);
+  assert.equal(Object.isFrozen(res.lease), true);
+});
+
+test('verifyCapabilityLease fails closed when grantee has no active registered grant on device', () => {
+  const state = { ...DEFAULT_TWIN_STATE, grants: [] };
+  const lease = {
+    lease_id: 'lease-test-unregistered',
+    grantee: 'unregistered bot',
+    scope: 'calendar events',
+    purpose: 'Inspect events',
+    issued_at: '2026-10-12T12:00:00Z',
+    expires_at: '2026-10-12T12:15:00Z',
+    ttl_seconds: 900,
+    status: 'active'
+  };
+
+  const res = verifyCapabilityLease(state, lease, 'calendar events', '2026-10-12T12:05:00Z');
+  assert.equal(res.valid, false);
+  assert.equal(res.status, 'revoked_or_unregistered');
+});
+
+test('verifyCapabilityLease fails closed when lease is expired or premature', () => {
+  const state = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [{ who: 'calendar assistant', what: 'meeting schedule', at: '2026-10-01T00:00:00Z' }]
+  };
+  const lease = {
+    lease_id: 'lease-test-2',
+    grantee: 'calendar assistant',
+    scope: 'meeting schedule',
+    purpose: 'Reschedule sync',
+    issued_at: '2026-10-12T12:00:00Z',
+    expires_at: '2026-10-12T12:15:00Z',
+    ttl_seconds: 900,
+    status: 'active'
+  };
+
+  const expiredRes = verifyCapabilityLease(state, lease, 'meeting schedule', '2026-10-12T12:15:01Z');
+  assert.equal(expiredRes.valid, false);
+  assert.equal(expiredRes.status, 'expired');
+
+  const prematureRes = verifyCapabilityLease(state, lease, 'meeting schedule', '2026-10-12T11:59:59Z');
+  assert.equal(prematureRes.valid, false);
+  assert.equal(prematureRes.status, 'premature');
+});
+
+test('verifyCapabilityLease fails closed when lease status is unconfirmed or pending', () => {
+  const state = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [{ who: 'file agent', what: 'scratch files', at: '2026-10-01T00:00:00Z' }]
+  };
+  const lease = {
+    lease_id: 'lease-test-3',
+    grantee: 'file agent',
+    scope: 'delete cache',
+    purpose: 'Wipe cache',
+    issued_at: '2026-10-12T12:00:00Z',
+    expires_at: '2026-10-12T12:15:00Z',
+    ttl_seconds: 900,
+    status: 'pending_confirmation'
+  };
+
+  const res = verifyCapabilityLease(state, lease, 'delete cache', '2026-10-12T12:05:00Z');
+  assert.equal(res.valid, false);
+  assert.equal(res.status, 'unconfirmed');
+});
+
+test('verifyCapabilityLease fails closed on scope mismatch or wildcard scope', () => {
+  const state = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [{ who: 'calendar assistant', what: 'meeting schedule', at: '2026-10-01T00:00:00Z' }]
+  };
+  const lease = {
+    lease_id: 'lease-test-4',
+    grantee: 'calendar assistant',
+    scope: 'meeting schedule',
+    purpose: 'Reschedule sync',
+    issued_at: '2026-10-12T12:00:00Z',
+    expires_at: '2026-10-12T12:15:00Z',
+    ttl_seconds: 900,
+    status: 'active'
+  };
+
+  const mismatchRes = verifyCapabilityLease(state, lease, 'financial records', '2026-10-12T12:05:00Z');
+  assert.equal(mismatchRes.valid, false);
+  assert.equal(mismatchRes.status, 'scope_mismatch');
+
+  const wildLease = { ...lease, scope: '*' };
+  const wildRes = verifyCapabilityLease(state, wildLease, 'anything', '2026-10-12T12:05:00Z');
+  assert.equal(wildRes.valid, false);
+  assert.equal(wildRes.status, 'scope_mismatch');
+});
+
+test('verifyCapabilityLease fails closed when dynamic critical memory constraint conflicts with target scope', () => {
+  const stateWithConstraint = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [{ who: 'med assistant', what: 'prescriptions', at: '2026-10-01T00:00:00Z' }],
+    facts: [
+      {
+        id: 'fact-99',
+        category: 'medical',
+        statement: 'Severe allergy to penicillin',
+        critical: true,
+        at: '2026-10-12T12:02:00Z'
+      }
+    ]
+  };
+
+  const lease = {
+    lease_id: 'lease-test-5',
+    grantee: 'med assistant',
+    scope: 'prescribe penicillin antibiotic',
+    purpose: 'Treatment',
+    issued_at: '2026-10-12T12:00:00Z',
+    expires_at: '2026-10-12T12:15:00Z',
+    ttl_seconds: 900,
+    status: 'active'
+  };
+
+  const res = verifyCapabilityLease(stateWithConstraint, lease, 'prescribe penicillin antibiotic', '2026-10-12T12:05:00Z');
+  assert.equal(res.valid, false);
+  assert.equal(res.status, 'constraint_conflict');
+  assert.ok(res.reason.includes('Severe allergy to penicillin'));
+});
+
+test('verifyCapabilityLease rejects unknown fields, wrong types, and non-ISO timestamps fail-closed', () => {
+  const state = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [{ who: 'agent', what: 'logs', at: '2026-10-01T00:00:00Z' }]
+  };
+  const baseLease = {
+    lease_id: 'lease-test-6',
+    grantee: 'agent',
+    scope: 'read logs',
+    purpose: 'Diagnostic',
+    issued_at: '2026-10-12T12:00:00Z',
+    expires_at: '2026-10-12T12:15:00Z',
+    ttl_seconds: 900,
+    status: 'active'
+  };
+
+  assert.equal(verifyCapabilityLease(state, null, 'read logs').status, 'malformed_lease');
+  assert.equal(verifyCapabilityLease(state, [], 'read logs').status, 'malformed_lease');
+  assert.equal(verifyCapabilityLease(state, { ...baseLease, rogue_field: true }, 'read logs').status, 'malformed_lease');
+  assert.equal(verifyCapabilityLease(state, { ...baseLease, scope: 123 }, 'read logs').status, 'malformed_lease');
+  assert.equal(verifyCapabilityLease(state, { ...baseLease, issued_at: '2026' }, 'read logs').status, 'malformed_lease');
+  assert.equal(verifyCapabilityLease(state, { ...baseLease, expires_at: 'invalid' }, 'read logs').status, 'malformed_lease');
+  assert.equal(verifyCapabilityLease(state, baseLease, '').status, 'invalid_parameter');
+  assert.equal(verifyCapabilityLease(state, baseLease, 'read logs', 'invalid-time').status, 'invalid_parameter');
+});
+
+test('summarizeCapabilityAdjustment and summarizeCapabilityLease handle valid, invalid, and malformed inputs fail-closed', () => {
+  const evalOut = {
+    allowed: true,
+    verdict: 'granted',
+    reason: 'Approved',
+    lease: {
+      grantee: 'agent-1',
+      scope: 'scope-1',
+      ttl_seconds: 300,
+      expires_at: '2026-10-12T12:05:00Z',
+      lease_id: 'lease-123'
+    }
+  };
+  const sumEval = summarizeCapabilityAdjustment(evalOut);
+  assert.equal(sumEval.allowed, true);
+  assert.equal(sumEval.grantee, 'agent-1');
+  assert.equal(sumEval.ttl_seconds, 300);
+  assert.equal(Object.isFrozen(sumEval), true);
+
+  const sumEvalBad = summarizeCapabilityAdjustment(null);
+  assert.equal(sumEvalBad.allowed, false);
+  assert.equal(sumEvalBad.verdict, 'error');
+
+  const leaseOut = {
+    valid: true,
+    status: 'covered',
+    reason: 'Active',
+    grantee: 'agent-2',
+    scope: 'scope-2',
+    expires_at: '2026-10-12T12:05:00Z'
+  };
+  const sumLease = summarizeCapabilityLease(leaseOut);
+  assert.equal(sumLease.valid, true);
+  assert.equal(sumLease.grantee, 'agent-2');
+  assert.equal(Object.isFrozen(sumLease), true);
+
+  const sumLeaseBad = summarizeCapabilityLease(null);
+  assert.equal(sumLeaseBad.valid, false);
+  assert.equal(sumLeaseBad.status, 'error');
 });
 
 

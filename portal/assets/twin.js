@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=2';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -930,6 +930,56 @@ function renderContextAssembler() {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderReceiptInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler();
+function renderCapabilityInspector() {
+  const form = document.getElementById('capability-request');
+  const resultBox = document.getElementById('capability-eval-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+    const grantee = form.elements.grantee ? form.elements.grantee.value.trim().slice(0, 60) : '';
+    const scope = form.elements.scope ? form.elements.scope.value.trim().slice(0, 80) : '';
+    const purpose = form.elements.purpose ? form.elements.purpose.value.trim().slice(0, 120) : '';
+    const ttlRaw = parseInt(form.elements.ttl ? form.elements.ttl.value : '900', 10);
+    const ttl = Number.isInteger(ttlRaw) && ttlRaw > 0 ? ttlRaw : 900;
+
+    if (!grantee || !scope || !purpose) {
+      resultBox.appendChild(el('p', 'muted', 'Please fill in assistant, requested scope, and purpose.'));
+      return;
+    }
+
+    const evalRes = evaluateCapabilityAdjustmentRequest(state, {
+      grantee,
+      requested_scope: scope,
+      purpose,
+      ttl_seconds: ttl
+    });
+    const summary = summarizeCapabilityAdjustment(evalRes);
+
+    const p = el('p');
+    if (summary.allowed) {
+      p.className = 'status-ok';
+      const badge = el('strong', null, '[Lease Granted] ');
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(`Ephemeral capability granted for "${summary.grantee}" (${summary.scope}) for ${summary.ttl_seconds}s. Lease ID: ${summary.lease_id}.`));
+      resultBox.appendChild(p);
+    } else if (summary.verdict === 'requires_confirmation') {
+      p.className = 'muted';
+      const badge = el('strong', null, '[Confirmation Required] ');
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(`High-consequential request: ${summary.reason}. User confirmation required before lease issuance.`));
+      resultBox.appendChild(p);
+    } else {
+      p.className = 'muted';
+      const badge = el('strong', null, '[Request Blocked] ');
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(summary.reason || 'Capability adjustment blocked by policy.'));
+      resultBox.appendChild(p);
+    }
+  };
+}
+
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderReceiptInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler(); renderCapabilityInspector();
 
 
