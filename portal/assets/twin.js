@@ -960,19 +960,19 @@ function renderCapabilityInspector() {
     const p = el('p');
     if (summary.allowed) {
       p.className = 'status-ok';
-      const badge = el('strong', null, '[Lease Granted] ');
+      const badge = el('strong', null, 'Fits a permission you gave. ');
       p.appendChild(badge);
-      p.appendChild(document.createTextNode(`Ephemeral capability granted for "${summary.grantee}" (${summary.scope}) for ${summary.ttl_seconds}s. Lease ID: ${summary.lease_id}.`));
+      p.appendChild(document.createTextNode(`"${summary.grantee}" could have "${summary.scope}" for ${Math.round(summary.ttl_seconds / 60)} minutes, inside what you already allowed it. This is a preview on your device: nothing is granted and nothing runs.`));
       resultBox.appendChild(p);
     } else if (summary.verdict === 'requires_confirmation') {
       p.className = 'muted';
-      const badge = el('strong', null, '[Confirmation Required] ');
+      const badge = el('strong', null, 'You would have to confirm. ');
       p.appendChild(badge);
-      p.appendChild(document.createTextNode(`High-consequential request: ${summary.reason}. User confirmation required before lease issuance.`));
+      p.appendChild(document.createTextNode(`${summary.reason}.`));
       resultBox.appendChild(p);
     } else {
       p.className = 'muted';
-      const badge = el('strong', null, '[Request Blocked] ');
+      const badge = el('strong', null, 'Blocked. ');
       p.appendChild(badge);
       p.appendChild(document.createTextNode(summary.reason || 'Capability adjustment blocked by policy.'));
       resultBox.appendChild(p);
