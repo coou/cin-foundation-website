@@ -19,6 +19,27 @@
     }).catch(function () { /* keep the plain fallback text */ });
   }
 
+  var KIND = { research: 'Research', simulation: 'Simulation', software: 'Software', scenario: 'Scenario', note: 'New note', site: 'Website',
+    recognition: 'Recognition', policy: 'Policy', community: 'Community', news: 'News' };
+  function day(iso) { var d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString(undefined, { day: 'numeric', month: 'short' }); }
+  [['ls-updates', 5], ['upd-list', 60]].forEach(function (cfg) {
+    var host = document.getElementById(cfg[0]);
+    if (!host) return;
+    get('/data/updates.json').then(function (d) {
+      var list = (d && d.updates) || [];
+      host.textContent = '';
+      if (!list.length) { host.appendChild(el('li', 'muted', 'The first updates are being written.')); return; }
+      list.slice(0, cfg[1]).forEach(function (u) {
+        var li = el('li');
+        var meta = el('span', 'upd-meta', (KIND[u.kind] || 'Update') + ' · ' + day(u.at));
+        var title = u.link ? link(u.link, u.title) : el('b', null, u.title);
+        li.appendChild(meta); li.appendChild(title);
+        if (cfg[1] > 5) li.appendChild(el('p', null, u.summary));
+        host.appendChild(li);
+      });
+    }).catch(function () { /* keep the fallback text */ });
+  });
+
   var grid = document.getElementById('fut-grid');
   if (grid) {
     get('/data/scenarios.json').then(function (d) {
