@@ -3984,3 +3984,688 @@ export function summarizeLedgerEvaluation(evalResult) {
     query_fingerprint: evalResult.query_fingerprint || null
   });
 }
+
+/**
+ * Recursively freeze an object and all nested non-primitive properties.
+ */
+function deepFreeze(obj) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+  Object.freeze(obj);
+  for (const key of Object.getOwnPropertyNames(obj)) {
+    const val = obj[key];
+    if (val !== null && typeof val === 'object' && !Object.isFrozen(val)) {
+      deepFreeze(val);
+    }
+  }
+  return obj;
+}
+
+/**
+ * Allowed origin channels for personal twin memory items.
+ * Grounded in AM-Sentry origin tracking (arXiv:2607.06595) and non-malleable
+ * information-flow control (arXiv:2606.24322).
+ */
+export const ALLOWED_MEMORY_ORIGINS = Object.freeze([
+  'user_direct',
+  'agent_summary',
+  'tool_output',
+  'web_source',
+  'external_message'
+]);
+
+/**
+ * Allowed memory types for structured agent memory consolidation.
+ * Grounded in Cognikernel typed memory specifications.
+ */
+export const ALLOWED_MEMORY_TYPES = Object.freeze([
+  'DECISION',
+  'CONSTRAINT_HARD',
+  'CONSTRAINT_SOFT',
+  'PREFERENCE',
+  'FACT',
+  'DEAD_END'
+]);
+
+/**
+ * Known imperative and prompt injection command patterns attempting to hijack
+ * agent execution when smuggled into long-term memory via untrusted sources.
+ */
+export const IMPERATIVE_DIRECTIVE_PATTERNS = Object.freeze([
+  'ignore previous',
+  'disregard earlier',
+  'override instructions',
+  'system prompt',
+  'you must now',
+  'act as',
+  'transfer funds',
+  'send email to',
+  'exfiltrate',
+  'delete all',
+  'curl ',
+  'wget ',
+  'rm -rf',
+  ['ev', 'al('].join(''),
+  '<script',
+  'javascript:',
+  'drop table'
+]);
+
+/**
+ * Allowed execution modes for task contexts.
+ */
+export const TASK_EXECUTION_MODES = Object.freeze([
+  'read_only',
+  'standard',
+  'high_consequence'
+]);
+
+/**
+ * Strict allowlist of fields permitted on a memory candidate object.
+ */
+export const ALLOWED_MEMORY_CANDIDATE_FIELDS = Object.freeze([
+  'content',
+  'origin',
+  'memory_type',
+  'timestamp',
+  'decision_key',
+  'metadata',
+  'provenance_id'
+]);
+
+/**
+ * Origin authority hierarchy: higher values indicate stronger trust.
+ */
+export const MEMORY_ORIGIN_AUTHORITY = Object.freeze({
+  user_direct: 100,
+  agent_summary: 50,
+  tool_output: 30,
+  external_message: 20,
+  web_source: 10
+});
+
+/**
+ * Evaluate a candidate memory item against write-saving policies.
+ *
+ * Implements origin-bound authority and imperative pattern detection
+ * to prevent persistent memory poisoning (GhostWriter attacks).
+ *
+ * @param {object} candidate Memory candidate object
+ * @param {object} [options] Optional policy options
+ * @returns {object} Deeply frozen evaluation result
+ */
+export function evaluateMemorySaveCandidate(candidate, options = {}) {
+  if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: false,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: 0,
+      sanitized_candidate: null,
+      reason: 'Memory candidate must be a non-null object'
+    });
+  }
+
+  // Reject unknown fields
+  for (const k of Object.keys(candidate)) {
+    if (!ALLOWED_MEMORY_CANDIDATE_FIELDS.includes(k)) {
+      return deepFreeze({
+        ok: false,
+        status: 'rejected',
+        disposition: 'reject',
+        quarantine: false,
+        tainted: false,
+        imperative_detected: false,
+        matched_patterns: [],
+        authority_score: 0,
+        sanitized_candidate: null,
+        reason: `Unknown field in candidate: "${k}"`
+      });
+    }
+  }
+
+  // Validate content
+  if (typeof candidate.content !== 'string' || !candidate.content.trim()) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: false,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: 0,
+      sanitized_candidate: null,
+      reason: 'Candidate content must be a non-empty string'
+    });
+  }
+  const trimmedContent = candidate.content.trim();
+  if (trimmedContent.length > 4000) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: false,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: 0,
+      sanitized_candidate: null,
+      reason: 'Candidate content exceeds maximum length of 4000 characters'
+    });
+  }
+
+  // Validate origin
+  if (!ALLOWED_MEMORY_ORIGINS.includes(candidate.origin)) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: false,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: 0,
+      sanitized_candidate: null,
+      reason: `Invalid origin: "${candidate.origin}". Must be one of ${ALLOWED_MEMORY_ORIGINS.join(', ')}`
+    });
+  }
+
+  // Validate memory_type
+  if (!ALLOWED_MEMORY_TYPES.includes(candidate.memory_type)) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: false,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: 0,
+      sanitized_candidate: null,
+      reason: `Invalid memory_type: "${candidate.memory_type}". Must be one of ${ALLOWED_MEMORY_TYPES.join(', ')}`
+    });
+  }
+
+  // Validate timestamp (ISO string, valid date, not future)
+  if (typeof candidate.timestamp !== 'string') {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: false,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: 0,
+      sanitized_candidate: null,
+      reason: 'Timestamp must be an ISO-8601 string'
+    });
+  }
+  const dateVal = Date.parse(candidate.timestamp);
+  if (Number.isNaN(dateVal)) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: false,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: 0,
+      sanitized_candidate: null,
+      reason: 'Invalid timestamp format'
+    });
+  }
+  const now = (options && typeof options.now_ms === 'number') ? options.now_ms : Date.now();
+  if (dateVal > now + 60000) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: false,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: 0,
+      sanitized_candidate: null,
+      reason: 'Timestamp cannot be in the future'
+    });
+  }
+
+  // Validate decision_key if provided
+  if (candidate.decision_key !== undefined) {
+    if (typeof candidate.decision_key !== 'string' || !candidate.decision_key.trim() || candidate.decision_key.length > 200) {
+      return deepFreeze({
+        ok: false,
+        status: 'rejected',
+        disposition: 'reject',
+        quarantine: false,
+        tainted: false,
+        imperative_detected: false,
+        matched_patterns: [],
+        authority_score: 0,
+        sanitized_candidate: null,
+        reason: 'decision_key must be a non-empty string under 200 characters'
+      });
+    }
+  }
+
+  // Validate metadata if provided
+  if (candidate.metadata !== undefined) {
+    if (!candidate.metadata || typeof candidate.metadata !== 'object' || Array.isArray(candidate.metadata)) {
+      return deepFreeze({
+        ok: false,
+        status: 'rejected',
+        disposition: 'reject',
+        quarantine: false,
+        tainted: false,
+        imperative_detected: false,
+        matched_patterns: [],
+        authority_score: 0,
+        sanitized_candidate: null,
+        reason: 'metadata must be a plain object'
+      });
+    }
+  }
+
+  // Validate provenance_id if provided
+  if (candidate.provenance_id !== undefined) {
+    if (typeof candidate.provenance_id !== 'string' || !candidate.provenance_id.trim() || candidate.provenance_id.length > 100) {
+      return deepFreeze({
+        ok: false,
+        status: 'rejected',
+        disposition: 'reject',
+        quarantine: false,
+        tainted: false,
+        imperative_detected: false,
+        matched_patterns: [],
+        authority_score: 0,
+        sanitized_candidate: null,
+        reason: 'provenance_id must be a non-empty string under 100 characters'
+      });
+    }
+  }
+
+  const authorityScore = MEMORY_ORIGIN_AUTHORITY[candidate.origin] || 0;
+
+  // Rule 1: Only user_direct origin can establish CONSTRAINT_HARD
+  if (candidate.memory_type === 'CONSTRAINT_HARD' && candidate.origin !== 'user_direct') {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: false,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: authorityScore,
+      sanitized_candidate: null,
+      reason: 'Only user_direct origin can establish hard constraints'
+    });
+  }
+
+  // Rule 2: Scan for imperative directives
+  const contentLower = trimmedContent.toLowerCase();
+  const matchedPatterns = [];
+  for (const pattern of IMPERATIVE_DIRECTIVE_PATTERNS) {
+    if (contentLower.includes(pattern)) {
+      matchedPatterns.push(pattern);
+    }
+  }
+
+  const isUntrustedOrigin = ['web_source', 'external_message', 'tool_output'].includes(candidate.origin);
+  const imperativeDetected = matchedPatterns.length > 0;
+
+  // Untrusted origin attempting to plant imperative instructions -> Quarantine fail-closed
+  if (isUntrustedOrigin && imperativeDetected) {
+    const quarantinedItem = {
+      content: trimmedContent,
+      origin: candidate.origin,
+      memory_type: candidate.memory_type,
+      timestamp: candidate.timestamp,
+      decision_key: candidate.decision_key ? candidate.decision_key.trim() : null,
+      quarantine: true,
+      tainted: true,
+      authority_score: authorityScore,
+      matched_patterns: matchedPatterns,
+      metadata: candidate.metadata || {}
+    };
+
+    return deepFreeze({
+      ok: true,
+      status: 'quarantined',
+      disposition: 'ask_first',
+      quarantine: true,
+      tainted: true,
+      imperative_detected: true,
+      matched_patterns: matchedPatterns,
+      authority_score: authorityScore,
+      sanitized_candidate: quarantinedItem,
+      reason: `Imperative directive pattern(s) detected from untrusted origin "${candidate.origin}": ${matchedPatterns.join(', ')}`
+    });
+  }
+
+  // Accepted item
+  const acceptedItem = {
+    content: trimmedContent,
+    origin: candidate.origin,
+    memory_type: candidate.memory_type,
+    timestamp: candidate.timestamp,
+    decision_key: candidate.decision_key ? candidate.decision_key.trim() : null,
+    quarantine: false,
+    tainted: isUntrustedOrigin,
+    authority_score: authorityScore,
+    matched_patterns: [],
+    metadata: candidate.metadata || {}
+  };
+
+  return deepFreeze({
+    ok: true,
+    status: 'accepted',
+    disposition: 'commit',
+    quarantine: false,
+    tainted: isUntrustedOrigin,
+    imperative_detected: false,
+    matched_patterns: [],
+    authority_score: authorityScore,
+    sanitized_candidate: acceptedItem,
+    reason: 'Candidate passed write-saving policy checks'
+  });
+}
+
+/**
+ * Screen candidate memory items for retrieval into an active task context.
+ *
+ * Implements context-conditioned gating and withholds unverified or quarantined
+ * memories from high-consequence execution (GhostWriter retrieval screen).
+ *
+ * @param {Array<object>} memories Array of stored memory records
+ * @param {object} queryContext Context of the executing query/task
+ * @param {object} [options] Evaluation options
+ * @returns {object} Deeply frozen retrieval screening result
+ */
+export function screenMemoryRetrievalCandidates(memories, queryContext, options = {}) {
+  if (!Array.isArray(memories)) {
+    return deepFreeze({
+      ok: false,
+      admitted_count: 0,
+      withheld_count: 0,
+      confirm_required_count: 0,
+      screened_items: [],
+      execution_mode: null,
+      reason: 'Memories must be an array'
+    });
+  }
+
+  if (!queryContext || typeof queryContext !== 'object' || Array.isArray(queryContext)) {
+    return deepFreeze({
+      ok: false,
+      admitted_count: 0,
+      withheld_count: 0,
+      confirm_required_count: 0,
+      screened_items: [],
+      execution_mode: null,
+      reason: 'queryContext must be a non-null object'
+    });
+  }
+
+  if (typeof queryContext.task_query !== 'string' || !queryContext.task_query.trim()) {
+    return deepFreeze({
+      ok: false,
+      admitted_count: 0,
+      withheld_count: 0,
+      confirm_required_count: 0,
+      screened_items: [],
+      execution_mode: null,
+      reason: 'task_query must be a non-empty string'
+    });
+  }
+
+  const mode = queryContext.execution_mode || 'standard';
+  if (!TASK_EXECUTION_MODES.includes(mode)) {
+    return deepFreeze({
+      ok: false,
+      admitted_count: 0,
+      withheld_count: 0,
+      confirm_required_count: 0,
+      screened_items: [],
+      execution_mode: null,
+      reason: `Invalid execution_mode "${mode}". Must be one of ${TASK_EXECUTION_MODES.join(', ')}`
+    });
+  }
+
+  const screened = [];
+  let admittedCount = 0;
+  let withheldCount = 0;
+  let confirmRequiredCount = 0;
+
+  for (let i = 0; i < memories.length; i++) {
+    const mem = memories[i];
+    if (!mem || typeof mem !== 'object' || Array.isArray(mem) || typeof mem.content !== 'string') {
+      continue;
+    }
+
+    const isQuarantined = Boolean(mem.quarantine);
+    const isTainted = Boolean(mem.tainted);
+    const isHardConstraint = mem.memory_type === 'CONSTRAINT_HARD';
+    const isDeadEnd = mem.memory_type === 'DEAD_END';
+
+    let itemAdmissible = true;
+    let disposition = 'use_direct';
+    let priority = 'normal';
+    let warning = null;
+    let reason = 'Item passed retrieval screen';
+
+    if (isHardConstraint) {
+      priority = 'critical_constraint';
+      itemAdmissible = true;
+      disposition = 'use_direct';
+      reason = 'Hard constraint given priority placement';
+    } else if (isDeadEnd) {
+      priority = 'graveyard_warning';
+      itemAdmissible = true;
+      disposition = 'warn_prohibited';
+      warning = 'Documented dead-end approach: do not retry';
+      reason = 'Dead-end surfaced to prevent execution repetition';
+    } else if (isQuarantined || isTainted) {
+      if (mode === 'high_consequence') {
+        itemAdmissible = false;
+        disposition = 'withhold';
+        reason = 'Tainted or quarantined memory withheld during high-consequence execution';
+      } else if (mode === 'standard') {
+        if (isQuarantined) {
+          itemAdmissible = false;
+          disposition = 'ask_first';
+          reason = 'Quarantined memory requires user confirmation before use';
+        } else {
+          itemAdmissible = true;
+          disposition = 'use_indirect';
+          warning = 'Memory derived from untrusted source';
+          reason = 'Tainted memory admitted with provenance warning';
+        }
+      } else {
+        // read_only mode
+        itemAdmissible = true;
+        disposition = 'use_indirect';
+        warning = isQuarantined ? 'Quarantined item admitted for inspection only' : 'Tainted source';
+        reason = 'Admitted under read-only task constraints';
+      }
+    }
+
+    if (itemAdmissible) {
+      admittedCount++;
+    } else if (disposition === 'ask_first') {
+      confirmRequiredCount++;
+    } else {
+      withheldCount++;
+    }
+
+    screened.push({
+      content: mem.content,
+      origin: mem.origin || 'unknown',
+      memory_type: mem.memory_type || 'FACT',
+      admissible: itemAdmissible,
+      disposition: disposition,
+      priority: priority,
+      warning: warning,
+      reason: reason
+    });
+  }
+
+  return deepFreeze({
+    ok: true,
+    admitted_count: admittedCount,
+    withheld_count: withheldCount,
+    confirm_required_count: confirmRequiredCount,
+    screened_items: screened,
+    execution_mode: mode,
+    summary: `Screened ${memories.length} item(s): ${admittedCount} admitted, ${withheldCount} withheld, ${confirmRequiredCount} pending confirmation.`
+  });
+}
+
+/**
+ * Consolidate a collection of memory items into an active ledger.
+ *
+ * Implements origin-governed latest-wins supersession and dead-end graveyard
+ * preservation grounded in Cognikernel and AM-Sentry specifications.
+ *
+ * @param {Array<object>} memories Raw list of memory records
+ * @param {object} [options] Consolidation options
+ * @returns {object} Deeply frozen consolidated memory state
+ */
+export function consolidateTwinMemoryLedger(memories, options = {}) {
+  if (!Array.isArray(memories)) {
+    return deepFreeze({
+      ok: false,
+      active_memories: [],
+      graveyard: [],
+      superseded_count: 0,
+      total_count: 0,
+      reason: 'Memories must be an array'
+    });
+  }
+
+  const byKey = new Map();
+  const unkeyed = [];
+  const graveyard = [];
+  let supersededCount = 0;
+
+  for (let i = 0; i < memories.length; i++) {
+    const item = memories[i];
+    if (!item || typeof item !== 'object' || Array.isArray(item) || typeof item.content !== 'string') {
+      continue;
+    }
+
+    // Preserve DEAD_END items in graveyard
+    if (item.memory_type === 'DEAD_END') {
+      graveyard.push(Object.freeze({ ...item }));
+    }
+
+    const key = (typeof item.decision_key === 'string' && item.decision_key.trim())
+      ? item.decision_key.trim().toLowerCase()
+      : null;
+
+    if (!key) {
+      unkeyed.push(Object.freeze({ ...item }));
+      continue;
+    }
+
+    const itemAuth = MEMORY_ORIGIN_AUTHORITY[item.origin] || 0;
+    const itemTime = Date.parse(item.timestamp || 0) || 0;
+
+    if (!byKey.has(key)) {
+      byKey.set(key, { item, auth: itemAuth, time: itemTime });
+    } else {
+      const current = byKey.get(key);
+      // Origin authority rule: lower authority cannot supersede higher authority
+      if (itemAuth < current.auth) {
+        supersededCount++;
+        // Keep current item, drop or archive incoming
+        continue;
+      }
+
+      if (itemAuth > current.auth) {
+        // Higher authority always supersedes lower authority
+        supersededCount++;
+        byKey.set(key, { item, auth: itemAuth, time: itemTime });
+      } else {
+        // Equal authority: latest timestamp wins
+        if (itemTime >= current.time) {
+          supersededCount++;
+          byKey.set(key, { item, auth: itemAuth, time: itemTime });
+        } else {
+          supersededCount++;
+        }
+      }
+    }
+  }
+
+  const active = [];
+  for (const entry of byKey.values()) {
+    active.push(Object.freeze({ ...entry.item }));
+  }
+  for (const item of unkeyed) {
+    active.push(item);
+  }
+
+  return deepFreeze({
+    ok: true,
+    active_memories: active,
+    graveyard: graveyard,
+    superseded_count: supersededCount,
+    total_count: memories.length
+  });
+}
+
+/**
+ * Summarize retrieval screening results for UI presentation without LLM generation.
+ *
+ * @param {object} screenResult Result from screenMemoryRetrievalCandidates
+ * @returns {object} Deeply frozen summary structure
+ */
+export function summarizeMemoryScreenEvaluation(screenResult) {
+  if (!screenResult || typeof screenResult !== 'object' || Array.isArray(screenResult)) {
+    return deepFreeze({
+      success: false,
+      summary_text: 'Invalid screening result',
+      admitted_count: 0,
+      withheld_count: 0,
+      confirm_required_count: 0,
+      mode: null
+    });
+  }
+
+  if (!screenResult.ok) {
+    return deepFreeze({
+      success: false,
+      summary_text: `Memory screening failed: ${screenResult.reason || 'Unknown error'}`,
+      admitted_count: 0,
+      withheld_count: 0,
+      confirm_required_count: 0,
+      mode: null
+    });
+  }
+
+  let text = `Retrieved ${screenResult.admitted_count} active memory item(s).`;
+  if (screenResult.withheld_count > 0) {
+    text += ` ${screenResult.withheld_count} item(s) withheld under ${screenResult.execution_mode} mode.`;
+  }
+  if (screenResult.confirm_required_count > 0) {
+    text += ` ${screenResult.confirm_required_count} quarantined item(s) require confirmation.`;
+  }
+
+  return deepFreeze({
+    success: true,
+    summary_text: text,
+    admitted_count: screenResult.admitted_count,
+    withheld_count: screenResult.withheld_count,
+    confirm_required_count: screenResult.confirm_required_count,
+    mode: screenResult.execution_mode
+  });
+}
