@@ -4029,8 +4029,32 @@ export const ALLOWED_MEMORY_TYPES = Object.freeze([
 ]);
 
 /**
- * Known imperative and prompt injection command patterns attempting to hijack
- * agent execution when smuggled into long-term memory via untrusted sources.
+ * Normalise text before evaluating against heuristic pattern list.
+ * Applies Unicode NFKC normalization to unfold fullwidth/compatibility characters,
+ * removes zero-width and unprintable formatting characters, converts to lowercase,
+ * and collapses whitespace sequences.
+ *
+ * NOTE: Heuristic pattern scanning is advisory and serves as a defense-in-depth flag,
+ * not a primary security boundary. Host-mediated origin authority and structural
+ * type gates govern execution boundaries.
+ *
+ * @param {string} text Raw input string
+ * @returns {string} Normalized string
+ */
+export function normalizeTextForHeuristic(text) {
+  if (typeof text !== 'string') return '';
+  return text
+    .normalize('NFKC')
+    .replace(/[\u200B-\u200D\uFEFF\u00AD\u2060\u200E\u200F]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Advisory heuristic pattern list for detecting imperative directives and injection strings.
+ * This is an advisory heuristic flag to quarantine suspicious text, not a primary defense boundary.
+ * Structural origin authority and type limits enforce security boundaries.
  */
 export const IMPERATIVE_DIRECTIVE_PATTERNS = Object.freeze([
   'ignore previous',
@@ -4089,7 +4113,7 @@ export const MEMORY_ORIGIN_AUTHORITY = Object.freeze({
  * Evaluate a candidate memory item against write-saving policies.
  *
  * Implements origin-bound authority and imperative pattern detection
- * to prevent persistent memory poisoning (GhostWriter attacks).
+ * to reduce persistent memory poisoning (GhostWriter attacks).
  *
  * @param {object} candidate Memory candidate object
  * @param {object} [options] Optional policy options
@@ -4293,15 +4317,16 @@ export function evaluateMemorySaveCandidate(candidate, options = {}) {
   }
 
   const authorityScore = MEMORY_ORIGIN_AUTHORITY[candidate.origin] || 0;
+  const isUntrustedOrigin = ['web_source', 'external_message', 'tool_output'].includes(candidate.origin);
 
-  // Rule 1: Only user_direct origin can establish CONSTRAINT_HARD
+  // Structural Rule 1: Only user_direct origin can establish CONSTRAINT_HARD
   if (candidate.memory_type === 'CONSTRAINT_HARD' && candidate.origin !== 'user_direct') {
     return deepFreeze({
       ok: false,
       status: 'rejected',
       disposition: 'reject',
       quarantine: false,
-      tainted: false,
+      tainted: isUntrustedOrigin,
       imperative_detected: false,
       matched_patterns: [],
       authority_score: authorityScore,
@@ -4310,16 +4335,32 @@ export function evaluateMemorySaveCandidate(candidate, options = {}) {
     });
   }
 
-  // Rule 2: Scan for imperative directives
-  const contentLower = trimmedContent.toLowerCase();
+  // Structural Rule 2: Untrusted origins may strictly ONLY write FACT or DEAD_END
+  // They are barred from writing DECISION, PREFERENCE, CONSTRAINT_HARD, or CONSTRAINT_SOFT
+  if (isUntrustedOrigin && candidate.memory_type !== 'FACT' && candidate.memory_type !== 'DEAD_END') {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      disposition: 'reject',
+      quarantine: false,
+      tainted: true,
+      imperative_detected: false,
+      matched_patterns: [],
+      authority_score: authorityScore,
+      sanitized_candidate: null,
+      reason: `Untrusted origin "${candidate.origin}" may only write FACT or DEAD_END, cannot write ${candidate.memory_type}`
+    });
+  }
+
+  // Heuristic Rule 3: Scan normalized text for imperative directives (heuristic flag)
+  const contentNormalized = normalizeTextForHeuristic(trimmedContent);
   const matchedPatterns = [];
   for (const pattern of IMPERATIVE_DIRECTIVE_PATTERNS) {
-    if (contentLower.includes(pattern)) {
+    if (contentNormalized.includes(pattern)) {
       matchedPatterns.push(pattern);
     }
   }
 
-  const isUntrustedOrigin = ['web_source', 'external_message', 'tool_output'].includes(candidate.origin);
   const imperativeDetected = matchedPatterns.length > 0;
 
   // Untrusted origin attempting to plant imperative instructions -> Quarantine fail-closed
@@ -4330,6 +4371,7 @@ export function evaluateMemorySaveCandidate(candidate, options = {}) {
       memory_type: candidate.memory_type,
       timestamp: candidate.timestamp,
       decision_key: candidate.decision_key ? candidate.decision_key.trim() : null,
+      provenance_id: candidate.provenance_id ? candidate.provenance_id.trim() : null,
       quarantine: true,
       tainted: true,
       authority_score: authorityScore,
@@ -4351,6 +4393,35 @@ export function evaluateMemorySaveCandidate(candidate, options = {}) {
     });
   }
 
+  // Disposition and provenance rules for accepted items
+  let disposition = 'commit';
+  let statusReason = 'Candidate passed write-saving policy checks';
+
+  if (isUntrustedOrigin) {
+    // Untrusted origins always receive ask_first disposition and tainted flag
+    disposition = 'ask_first';
+    statusReason = `Untrusted origin "${candidate.origin}" admitted as tainted with ask_first disposition`;
+  } else if (candidate.origin === 'agent_summary' && candidate.memory_type === 'DECISION') {
+    // Agent summary creating a user DECISION requires provenance_id linking to a verified user_direct item;
+    // without verified provenance, it must receive ask_first disposition fail-closed.
+    if (!candidate.provenance_id || typeof candidate.provenance_id !== 'string' || !candidate.provenance_id.trim()) {
+      disposition = 'ask_first';
+      statusReason = 'Agent summary DECISION requires provenance_id linking to a user_direct item; set to ask_first';
+    } else if (options && Array.isArray(options.existing_memories)) {
+      const hasUserDirectLink = options.existing_memories.some(
+        m => m && (m.id === candidate.provenance_id || m.decision_key === candidate.provenance_id || m.provenance_id === candidate.provenance_id) && m.origin === 'user_direct'
+      );
+      if (!hasUserDirectLink) {
+        disposition = 'ask_first';
+        statusReason = 'Agent summary DECISION provenance does not link to a user_direct item; set to ask_first';
+      }
+    } else {
+      // Fail closed when existing_memories configuration is missing or unverified
+      disposition = 'ask_first';
+      statusReason = 'Agent summary DECISION requires existing_memories to verify user_direct provenance; set to ask_first';
+    }
+  }
+
   // Accepted item
   const acceptedItem = {
     content: trimmedContent,
@@ -4358,6 +4429,7 @@ export function evaluateMemorySaveCandidate(candidate, options = {}) {
     memory_type: candidate.memory_type,
     timestamp: candidate.timestamp,
     decision_key: candidate.decision_key ? candidate.decision_key.trim() : null,
+    provenance_id: candidate.provenance_id ? candidate.provenance_id.trim() : null,
     quarantine: false,
     tainted: isUntrustedOrigin,
     authority_score: authorityScore,
@@ -4368,14 +4440,14 @@ export function evaluateMemorySaveCandidate(candidate, options = {}) {
   return deepFreeze({
     ok: true,
     status: 'accepted',
-    disposition: 'commit',
+    disposition: disposition,
     quarantine: false,
     tainted: isUntrustedOrigin,
     imperative_detected: false,
     matched_patterns: [],
     authority_score: authorityScore,
     sanitized_candidate: acceptedItem,
-    reason: 'Candidate passed write-saving policy checks'
+    reason: statusReason
   });
 }
 
@@ -4462,18 +4534,9 @@ export function screenMemoryRetrievalCandidates(memories, queryContext, options 
     let warning = null;
     let reason = 'Item passed retrieval screen';
 
-    if (isHardConstraint) {
-      priority = 'critical_constraint';
-      itemAdmissible = true;
-      disposition = 'use_direct';
-      reason = 'Hard constraint given priority placement';
-    } else if (isDeadEnd) {
-      priority = 'graveyard_warning';
-      itemAdmissible = true;
-      disposition = 'warn_prohibited';
-      warning = 'Documented dead-end approach: do not retry';
-      reason = 'Dead-end surfaced to prevent execution repetition';
-    } else if (isQuarantined || isTainted) {
+    // Quarantine and taint screening take precedence across all memory types
+    if (isQuarantined || isTainted) {
+      priority = isHardConstraint ? 'critical_constraint' : (isDeadEnd ? 'graveyard_warning' : 'normal');
       if (mode === 'high_consequence') {
         itemAdmissible = false;
         disposition = 'withhold';
@@ -4496,6 +4559,17 @@ export function screenMemoryRetrievalCandidates(memories, queryContext, options 
         warning = isQuarantined ? 'Quarantined item admitted for inspection only' : 'Tainted source';
         reason = 'Admitted under read-only task constraints';
       }
+    } else if (isHardConstraint) {
+      priority = 'critical_constraint';
+      itemAdmissible = true;
+      disposition = 'use_direct';
+      reason = 'Hard constraint given priority placement';
+    } else if (isDeadEnd) {
+      priority = 'graveyard_warning';
+      itemAdmissible = true;
+      disposition = 'warn_prohibited';
+      warning = 'Documented dead-end approach: do not retry';
+      reason = 'Dead-end surfaced to reduce execution repetition';
     }
 
     if (itemAdmissible) {
