@@ -1,5 +1,5 @@
 // Transparency dashboard: what the agents read, built, checked and published (data refreshed every hour).
-import { mountAuth, el, getJSON, ago } from './portal.js?v=2';
+import { mountAuth, el, getJSON, ago } from './portal.js?v=3';
 
 function table(host, head, rows) {
   const t = el('table'); const tr = el('tr'); head.forEach((h) => tr.appendChild(el('th', null, h))); t.appendChild(tr);
@@ -24,8 +24,6 @@ function show(p) {
   document.getElementById('gate').textContent = 'Updated ' + ago(p.updated) + '. Anything not shown here (drafts in progress, private documents) stays private.';
 }
 
-mountAuth((user) => {
-  document.getElementById('dash').hidden = !user;
-  if (!user) { document.getElementById('gate').textContent = 'Sign in to see the full dashboard.'; return; }
-  getJSON('/data/portal.json').then(show).catch(() => { document.getElementById('gate').textContent = 'The dashboard could not be loaded.'; });
-});
+mountAuth(() => {});
+document.getElementById('dash').hidden = false;
+getJSON('/data/portal.json').then(show).catch(() => { document.getElementById('gate').textContent = 'The dashboard could not be loaded.'; });

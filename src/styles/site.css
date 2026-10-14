@@ -830,3 +830,89 @@ svg.focus .pr-seg:not(.on) { opacity: .3; }
 .bd-log li.bd-ledger { color: var(--ink); }
 .bd-log li.bd-ledger::before { content: "◆ "; color: var(--gold); }
 .no-js .bd-tabs { display: none; }
+
+
+/* ---------- update 2026-10-14: navigation, live strip, futures, new notes ---------- */
+html, body { overflow-x: clip; }
+.nav { gap: 1.25rem; font-size: .9rem; align-items: center; }
+.nav a.nav-net { border: 1px solid var(--rule); border-radius: 99px; padding: .3rem .75rem; color: var(--ink); white-space: nowrap; }
+.nav a.nav-net:hover { border-color: var(--ok); }
+@media (max-width: 1100px) {
+  .menu-btn { display: block; }
+  .nav { position: absolute; top: 4rem; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--paper); border-bottom: 1px solid var(--rule); padding: .5rem 1.25rem 1rem; display: none; }
+  .nav.open { display: flex; }
+  .nav a { padding: .75rem 0; border-bottom: 1px solid var(--rule); }
+  .nav a.nav-net { border: 0; border-radius: 0; padding: .75rem 0; color: var(--ok); font-weight: 600; }
+}
+@media (max-width: 420px) {
+  .wrap, .wrap-narrow { width: min(100% - 1.5rem, var(--maxw)); }
+  .brand > span { font-size: .84rem; }
+  .brand small { font-size: .56rem; letter-spacing: .05em; }
+  .status-pill { max-width: 100%; white-space: normal; padding: .4rem .7rem; }
+  .bd-tabs button { font-size: .7rem; padding: .5rem .45rem; }
+}
+
+.live-strip { padding: 1.6rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--card); }
+.ls-grid { display: grid; grid-template-columns: minmax(16rem, 1fr) 2fr; gap: 2rem; align-items: center; }
+.ls-intro p { margin: .5rem 0; color: var(--ink-2); }
+.ls-intro a { font-weight: 600; }
+.ls-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.ls-stat b { display: block; font: 700 2rem/1.05 var(--serif); }
+.ls-stat span { color: var(--ink-3); font-size: .85rem; }
+.ls-upd { grid-column: 1 / -1; margin: 0; color: var(--ink-3); font: 500 .75rem var(--mono); }
+@media (max-width: 860px) { .ls-grid { grid-template-columns: 1fr; gap: 1rem; } .ls-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.fut-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
+@media (max-width: 960px) { .fut-grid { grid-template-columns: 1fr; } }
+.fut-card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 1.3rem; display: grid; gap: .6rem; align-content: start; min-width: 0; }
+.fut-card h3 { font-family: var(--serif); font-size: 1.25rem; line-height: 1.25; margin: 0; overflow-wrap: anywhere; }
+.fut-k { font: 700 .7rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.fut-world { margin: 0; color: var(--ink-2); font-size: .95rem; font-style: italic; }
+.fut-outs { list-style: none; margin: .3rem 0 0; padding: 0; display: grid; gap: .8rem; }
+.fut-outs li { border-top: 1px solid var(--rule); padding-top: .7rem; display: grid; gap: .3rem; }
+.fut-outs b { font-size: .95rem; }
+.fut-outs li > .oc { justify-self: start; }
+.fut-odds { display: grid; grid-template-columns: 8.5rem minmax(3rem, 1fr) 2.6rem; gap: .25rem .6rem; align-items: center; font: 500 .74rem var(--mono); color: var(--ink-3); }
+.fut-odds b { font: 700 .78rem var(--mono); color: var(--ink); text-align: right; }
+.fut-track { display: block; position: relative; height: .45rem; border-radius: 99px; background: var(--paper-2); overflow: hidden; }
+.fut-track i { display: block; height: 100%; border-radius: 99px; }
+.fut-now { background: var(--ink-3); }
+.fut-with { background: var(--ok); }
+.fut-src { margin: .2rem 0 0; font-size: .82rem; color: var(--ink-3); overflow-wrap: anywhere; }
+.fut-more { margin-top: 1.2rem; font-weight: 600; }
+@media (max-width: 420px) { .fut-odds { grid-template-columns: 6.8rem minmax(2rem, 1fr) 2.4rem; } }
+
+.oc { display: inline-block; font: 700 .64rem/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 0 .5rem; border-radius: 99px; border: 1px solid currentColor; margin-right: .45rem; vertical-align: .15em; }
+.oc.want { color: var(--ok); }
+.oc.avoid { color: var(--accent); }
+.note-body .outcomes { list-style: none; padding: 0; display: grid; gap: 1rem; }
+.note-body .outcomes li { border: 1px solid var(--rule); border-radius: var(--radius); padding: 1rem 1.1rem; background: var(--card); }
+.note-body .outcomes p { margin: .4rem 0 0; }
+.note-body .outcomes .oc-ex { color: var(--ink-2); font-size: .98rem; }
+.note-body ul.areas li + li { margin-top: .5rem; }
+
+.trust-calc { margin: 2rem 0; padding: 1.2rem 1.3rem; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--card); }
+.tc-controls { display: grid; gap: .9rem; }
+.tc-controls label { display: grid; grid-template-columns: 1fr auto; gap: .2rem .8rem; font-size: .95rem; }
+.tc-controls input { grid-column: 1 / -1; width: 100%; accent-color: var(--ok); }
+.tc-controls output { font: 700 .95rem var(--mono); }
+.tc-out { display: grid; gap: .8rem; margin-top: 1.2rem; }
+.tc-out div { display: grid; grid-template-columns: 1fr auto; gap: .3rem .8rem; align-items: center; font-size: .95rem; }
+.tc-out b { font: 700 1.3rem var(--mono); }
+.tc-bar { grid-column: 1 / -1; display: block; height: .55rem; border-radius: 99px; background: var(--paper-2); overflow: hidden; }
+.tc-bar i { display: block; height: 100%; background: var(--ok); border-radius: 99px; transition: width .2s; }
+.tc-note { margin: 0; color: var(--ink-2); font-size: .95rem; }
+.tc-table { width: 100%; border-collapse: collapse; margin-top: 1.2rem; font-size: .9rem; }
+.tc-table caption { text-align: left; color: var(--ink-3); font-size: .85rem; margin-bottom: .4rem; }
+.tc-table th, .tc-table td { padding: .4rem .5rem; border-bottom: 1px solid var(--rule); text-align: left; }
+html:not(.no-js) .tc-table { display: none; }
+.trust-calc figcaption { margin-top: 1rem; color: var(--ink-3); font-size: .9rem; }
+
+.rings { margin: 2rem auto; max-width: 22rem; }
+.rings svg { width: 100%; height: auto; }
+.rings .ring { fill: none; stroke: var(--rule); stroke-width: 1.5; }
+.rings .r1 { fill: var(--ok); fill-opacity: .18; stroke: var(--ok); }
+.rings text { fill: var(--ink); font: 600 13px var(--sans); }
+.rings .rl { fill: var(--ink-2); font: 500 11px var(--sans); }
+.rings .rs { fill: var(--ink-3); font: 500 10px var(--mono); }
+.rings figcaption { text-align: center; color: var(--ink-3); font-size: .9rem; }

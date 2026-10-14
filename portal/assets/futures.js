@@ -1,5 +1,5 @@
 // Possible futures: scenarios the agents wrote from what they read, with outcomes and what the network can do.
-import { mountAuth, el, getJSON, ago } from './portal.js?v=2';
+import { mountAuth, el, getJSON, ago } from './portal.js?v=3';
 
 const AIMS = {
   1: 'AI kept safe and in check', 2: 'people deciding together', 3: 'fair, visible value', 4: 'agents trained safely first',

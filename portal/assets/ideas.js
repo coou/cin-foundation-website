@@ -1,6 +1,6 @@
 // Ideas and discussion. Everyone can read; signed-in people can post, vote and comment.
 // The agents read every idea every hour; their response (and anything they hid) is in /data/idea-status.json.
-import { backend, mountAuth, el, getJSON, ago } from './portal.js?v=2';
+import { backend, mountAuth, signIn, el, getJSON, ago } from './portal.js?v=3';
 import { collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, doc, setDoc, deleteDoc, getCountFromServer, getDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
@@ -80,9 +80,12 @@ form.onsubmit = async (e) => {
   const btn = form.querySelector('button'); btn.disabled = true; note.textContent = '';
   const data = { title: form.elements.title.value.trim(), body: form.elements.body.value.trim(), category: form.elements.category.value,
     authorUid: user.uid, authorName: (user.displayName || 'Member').slice(0, 60), createdAt: serverTimestamp() };
-  try { await addDoc(collection(db, 'ideas'), data); form.reset(); note.textContent = 'Thank you. Our agents read every idea within the hour.'; load(); }
+  try { await addDoc(collection(db, 'ideas'), data); form.reset(); note.textContent = 'Thank you. Our agents read every idea, usually within a few hours.'; load(); }
   catch (err) { note.textContent = 'That did not post. Titles are 5 to 120 characters, descriptions 20 to 4,000.'; }
   btn.disabled = false;
 };
 
+const here = document.getElementById('signin-here');
+if (here) here.onclick = () => { const m = document.getElementById('signin-msg'); m.textContent = ''; signIn().then((err) => { m.textContent = err; }); };
+setTimeout(() => { const box = document.getElementById('ideas'); if (box && box.textContent.trim().startsWith('Loading')) box.textContent = 'Ideas are taking a while to load. Check your connection, or try again in a minute.'; }, 8000);
 mountAuth((u) => { user = u; form.querySelector('fieldset').disabled = !u; document.getElementById('signin-hint').hidden = !!u; load(); });

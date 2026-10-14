@@ -1,5 +1,5 @@
 // Recognition: forecasts that came true, and work that serves the goals.
-import { mountAuth, el, getJSON, ago } from './portal.js?v=2';
+import { mountAuth, el, getJSON, ago } from './portal.js?v=3';
 
 const KIND = {
   prediction: 'a forecast that came true', research: 'research', product: 'a product', disclosure: 'honest disclosure',

@@ -1,5 +1,5 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
-import { mountAuth, el, getJSON } from './portal.js?v=2';
+import { mountAuth, el, getJSON } from './portal.js?v=3';
 import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment } from './twin-core.js';
 
 mountAuth(() => {});
@@ -407,6 +407,7 @@ if (clearEventsBtn) {
 
 const wipeBtn = document.getElementById('wipe');
 if (wipeBtn) wipeBtn.onclick = () => {
+  if (!window.confirm('Delete everything this twin stores in this browser? This cannot be undone. Download a backup first if you want one.')) return;
   try { localStorage.removeItem(KEY); } catch (e) { /* nothing */ }
   state = { topics: [], grants: [], contributions: [], actions: [], events: [], obligations: [], facts: [], quests: [], values: DEFAULT_VALUES };
   f.reset(); renderGrants(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderFacts(); renderQuests(); renderValues();

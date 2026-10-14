@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why trust multiplies · Collective Intelligence Network</title>
+  <meta name="description" content="Why trust does not just add to what a community can do but multiplies it, why checkable records change the arithmetic, and how communities could improve by copying and changing each other&rsquo;s rules.">
+  <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
+  <meta name="referrer" content="no-referrer">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Why trust multiplies">
+  <meta property="og:description" content="Why trust does not just add to what a community can do but multiplies it, why checkable records change the arithmetic, and how communities could improve by copying and changing each other&rsquo;s rules.">
+  <meta property="og:image" content="/assets/images/og-image.svg">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
+  <link rel="stylesheet" href="/styles/site.css?v=16">
+</head>
+<body class="page-note">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head scrolled" id="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Collective Intelligence Network, home">
+      <img src="/assets/images/logo-small.png" alt="" width="30" height="30">
+      <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Site">
+      <a href="/#goals">Goals</a>
+      <a href="/#fractured">How it works</a>
+      <a href="/#futures">Futures</a>
+      <a href="/trajectory">Trajectory</a>
+      <a href="/notes" aria-current="true">Notes</a>
+      <a href="/#involved">Get involved</a>
+      <a class="nav-net" href="https://cintnet.org">Network site &#8599;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Coordination</span>
+    <h1>Why trust multiplies</h1>
+    <p class="lede">Hard problems need many people working together, and the chance that a large group can all rely on each other falls steeply as it grows. Records anyone can check change that arithmetic.</p>
+    <p class="meta">14 October 2026 · 6 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>If every pair in a group must trust each other, a group of twenty almost never holds together. If everyone only needs to rely on one shared, checkable record, it often does. Transparency about actions and commitments, never about people&rsquo;s private lives, is what makes large cooperation possible. Add a share of computing for every person, and the problems a community can take on grow with the size of the group it can hold together.</p></aside>
+
+    <h2>The arithmetic of trust</h2>
+    <p>Take a simple model. A task needs a group of people, and each pair in the group must be able to rely on each other. If any two people trust each other with probability <em>t</em>, a group of <em>k</em> people has <em>k&times;(k&minus;1)/2</em> pairs, and the whole group holds together only if every pair does. That number of pairs grows with the square of the group&rsquo;s size, which is why large cooperation is rare.</p>
+    <p>Now suppose people do not need to trust each other one by one. Each only needs to rely on a shared record of signed commitments, verified deliveries and checkable observations. Then the group holds when each member can rely on the record, and the exponent grows only with the group&rsquo;s size.</p>
+
+    <figure class="trust-calc" id="trust-calc">
+      <div class="tc-controls">
+        <label>How much any two people trust each other <output id="tc-t-out">0.95</output><input id="tc-t" type="range" min="0.80" max="0.99" step="0.01" value="0.95"></label>
+        <label>How much people can rely on a shared record <output id="tc-r-out">0.97</output><input id="tc-r" type="range" min="0.80" max="0.995" step="0.005" value="0.97"></label>
+        <label>People in the group <output id="tc-k-out">10</output><input id="tc-k" type="range" min="2" max="50" step="1" value="10"></label>
+      </div>
+      <div class="tc-out" aria-live="polite">
+        <div><span>Chance the group holds, trusting pair by pair</span><b id="tc-pair">&ndash;</b><i class="tc-bar"><i id="tc-pair-bar"></i></i></div>
+        <div><span>Chance the group holds, relying on a shared record</span><b id="tc-rec">&ndash;</b><i class="tc-bar"><i id="tc-rec-bar"></i></i></div>
+        <p id="tc-note" class="tc-note"></p>
+      </div>
+      <table class="tc-table">
+        <caption>Without the calculator: chance a group holds together</caption>
+        <tr><th></th><th>5 people</th><th>10 people</th><th>20 people</th></tr>
+        <tr><td>Pair by pair, trust 0.90</td><td>35%</td><td>1%</td><td>almost 0</td></tr>
+        <tr><td>Pair by pair, trust 0.97</td><td>74%</td><td>25%</td><td>0.3%</td></tr>
+        <tr><td>Shared record, reliance 0.97</td><td>86%</td><td>74%</td><td>54%</td></tr>
+      </table>
+      <figcaption>Raising trust between pairs from 0.90 to 0.97 makes a ten-person task about 29 times more likely to hold together. A shared record people can rely on at 0.97 lets a group of twenty hold together more than half the time.</figcaption>
+    </figure>
+
+    <p>The model is deliberately crude. Real trust is not the same between every pair, groups do not simply hold or break, and records can themselves be forged. It is a hypothesis to test in simulation, not a law. But the direction fits the evidence: countries where people trust each other more have tended to grow faster, and studies of small groups have found a measurable collective intelligence that depends more on how evenly members take part than on how clever each one is.</p>
+
+    <h2>Transparency where power is, privacy where people are</h2>
+    <p>&ldquo;Transparency&rdquo; here has a strict meaning: what an agent agreed to, what an organisation holds, what a device reported. It does not mean that people&rsquo;s lives are visible. A community that tried to raise trust by watching its members would destroy the thing it is trying to build, because people would stop being honest with it.</p>
+
+    <h2>Every person brings computing</h2>
+    <p>We treat access to computing as part of what every person is owed: a personal agent needs somewhere to run. If every member brings their judgement and a share of computing, the problems a group can take on grow with the size of the group that can hold together, and trust sets that size. A community with checkable records can pool more people and more computing on one problem, solve harder problems, and prove its improvements sooner.</p>
+
+    <h2>Communities that copy and change each other</h2>
+    <p>Communities will disagree about how to run their records: how much to reveal, how fast recognition should fade, who may observe what. The answer is not one rule for everyone. Any community can copy the shared rules, change one, and run. Open-source software shows this working: LibreOffice split from OpenOffice in 2010 and MariaDB from MySQL in 2009 when their communities lost confidence, and both are still maintained. The economist Albert Hirschman argued in 1970 that the freedom to leave keeps institutions honest.</p>
+    <p>Each community&rsquo;s results would be recorded in a form others can compare: which rules hold larger groups together, which protect people with the least, which get the most done. Rules that work spread by being copied. Rules that fail are dropped. No one is forced onto a rule, and anyone can move to a community that suits them.</p>
+
+    <h2>What could happen</h2>
+    <ul class="outcomes">
+      <li><span class="oc want">We want this</span><b>Large groups work together</b><p>Communities with shared, checkable records routinely run projects with dozens of members.</p><p class="oc-ex"><b>For example:</b> forty households and their agents design, fund and install a neighbourhood heating network, each checking the others&rsquo; commitments on the shared record rather than vetting forty strangers.</p></li>
+      <li><span class="oc avoid">We want to avoid this</span><b>A forged record is trusted everywhere</b><p>High reliance on a record that can be falsified multiplies harm instead of output.</p><p class="oc-ex"><b>For example:</b> a batch of forged delivery records lets one supplier claim hundreds of rewards before independent observers notice.</p></li>
+      <li><span class="oc avoid">We want to avoid this</span><b>Transparency turns into surveillance</b><p>Communities try to raise trust by watching their members.</p><p class="oc-ex"><b>For example:</b> a housing co-operative asks members&rsquo; agents to share location history &ldquo;for trust&rdquo;, and half the members quietly stop using their agents.</p></li>
+      <li><span class="oc want">We want this</span><b>Better rules spread</b><p>Communities copy and change the rules, compare results openly, and what works spreads.</p><p class="oc-ex"><b>For example:</b> a community that slows how fast recognition for care work fades sees more people take part after a year, and nine others copy the change.</p></li>
+    </ul>
+
+    <h2>What comes next</h2>
+    <p>A simulation comparing trust pair by pair with a shared record, for groups of 5 to 100, with noise, forged records and members free to leave. If a shared record does not at least double the largest group that holds together, we will say so and drop the claim.</p>
+  </div>
+
+  <footer class="note-foot wrap-narrow">
+    <h2>Keep reading</h2>
+    <ul class="note-links">
+      <li><a href="/notes/collective-intelligence">Collective intelligence, by choice</a></li>
+      <li><a href="/notes/who-is-really-there">Who is really there?</a></li>
+      <li><a href="/notes/companies-on-the-ledger">Companies on a shared ledger</a></li>
+    </ul>
+    <p class="note-contact">Something wrong or missing? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
+  </footer>
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="spectrum" aria-hidden="true"></div>
+    <div class="foot-grid">
+      <div>
+        <h4>Collective Intelligence Network</h4>
+        <p>An independent research and design project preparing people for advanced AI.</p>
+        <p>This site was designed and written with AI agents.</p>
+      </div>
+      <div>
+        <h4>This site</h4>
+        <ul>
+          <li>No cookies, analytics or third-party requests</li>
+          <li>Works without JavaScript</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Read more</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/notes">All notes</a></li>
+          <li><a href="/#involved">Get involved</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/scripts/site.js?v=10" defer></script>
+<script src="/scripts/trust.js?v=1" defer></script>
+</body>
+</html>

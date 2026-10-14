@@ -16,6 +16,14 @@ const ready = getJSON('/__/firebase/init.json').then((cfg) => {
 
 export function backend() { return ready; }
 
+// Start Google sign-in from anywhere on a page (for example a form's own button). Resolves to an error message or ''.
+export function signIn() {
+  return ready.then((b) => {
+    if (!b) return 'Sign-in is unavailable right now.';
+    return signInWithPopup(b.auth, new GoogleAuthProvider()).then(() => '').catch((e) => signInProblem(e && e.code));
+  });
+}
+
 export function mountAuth(onUser) {
   const box = document.getElementById('auth');
   ready.then((b) => {

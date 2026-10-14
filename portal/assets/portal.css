@@ -81,3 +81,18 @@ footer.site { border-top: 1px solid var(--rule); padding: 1.5rem 0 3rem; color: 
 .lk-fill.down { background: var(--ok); } .lk-fill.up { background: var(--ok); } .lk-fill.now { background: var(--gold); }
 .top nav { flex-wrap: wrap; }
 @media (max-width: 600px) { .lk { grid-template-columns: 7.5rem 1fr 2.4rem; } }
+
+/* update 2026-10-14 */
+html, body { overflow-x: clip; }
+h1, h2, .scenario h2, .outcome b { overflow-wrap: anywhere; }
+.card, .bar, .lk, .bars > * { min-width: 0; }
+#signin-hint .btn { margin-top: .6rem; }
+input[type="date"] { background: var(--card); color: var(--ink); border: 1px solid var(--rule); border-radius: 8px; padding: .45rem .6rem; color-scheme: light dark; }
+label:has(> input[type="checkbox"]) { display: flex; align-items: center; gap: .5rem; }
+@media (max-width: 600px) {
+  .wrap { width: min(100% - 1.5rem, 70rem); }
+  .card { padding: 1rem .9rem; }
+  .bar { grid-template-columns: 1fr auto; gap: .2rem .6rem; }
+  .bar > :nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
+  .lk { grid-template-columns: 6.5rem minmax(2rem, 1fr) 2.4rem; gap: .4rem; }
+}
