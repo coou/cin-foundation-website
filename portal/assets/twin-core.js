@@ -3361,3 +3361,626 @@ export function summarizeCapabilityLease(verification) {
     expires_at: verification.expires_at || null
   });
 }
+
+/* =========================================================================
+   Deterministic Financial Ledger Query Evaluator and Disagreement Verifier
+   Grounded in Signal S-20261014-1745 (Pulse Local) and Rule 4 of AGENTS.md.
+   Enforces strict integer cents arithmetic, ISO currency match, and dual-reading
+   disagreement verification returning unsure rather than guessing.
+   ========================================================================= */
+
+export const ALLOWED_LEDGER_OPERATIONS = Object.freeze([
+  'sum',
+  'count',
+  'average',
+  'balance',
+  'breakdown',
+  'filter'
+]);
+
+export const ALLOWED_LEDGER_ENTRY_FIELDS = Object.freeze([
+  'id',
+  'date',
+  'amount_cents',
+  'currency',
+  'category',
+  'merchant',
+  'kind',
+  'description'
+]);
+
+export const ALLOWED_FINANCIAL_QUERY_FIELDS = Object.freeze([
+  'operation',
+  'currency',
+  'start_date',
+  'end_date',
+  'category',
+  'merchant',
+  'kind',
+  'expected_amount_cents'
+]);
+
+export const ALLOWED_READING_FIELDS = Object.freeze([
+  'operation',
+  'currency',
+  'start_date',
+  'end_date',
+  'category',
+  'merchant',
+  'kind',
+  'total_cents',
+  'matching_count',
+  'expected_amount_cents'
+]);
+
+export const ALLOWED_AGREEMENT_OPTIONS_FIELDS = Object.freeze([
+  'tolerance_cents'
+]);
+
+const CURRENCY_RE = /^[A-Z]{3}$/;
+
+/**
+ * Deterministically compute a short hex fingerprint for a financial ledger query.
+ */
+function computeFinancialQueryFingerprint(query) {
+  const seed = `${query.operation || ''}|${query.currency || ''}|${query.start_date || ''}|${query.end_date || ''}|${query.category || ''}|${query.merchant || ''}|${query.kind || ''}|${query.expected_amount_cents !== undefined ? query.expected_amount_cents : ''}`;
+  let h = 0x811c9dc5;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
+
+/**
+ * Validate a single ledger entry fail-closed.
+ * Returns null if valid, or an error string.
+ */
+function validateLedgerEntry(entry, index) {
+  if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+    return `Entry at index ${index} must be a non-null object`;
+  }
+  const keys = Object.keys(entry);
+  for (const k of keys) {
+    if (!ALLOWED_LEDGER_ENTRY_FIELDS.includes(k)) {
+      return `Entry at index ${index} contains forbidden field: ${k}`;
+    }
+  }
+  if (typeof entry.id !== 'string' || !entry.id.trim()) {
+    return `Entry at index ${index} must have a non-empty string id`;
+  }
+  if (typeof entry.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(entry.date) || isNaN(Date.parse(entry.date))) {
+    return `Entry at index ${index} has invalid date (must be YYYY-MM-DD)`;
+  }
+  if (!Number.isInteger(entry.amount_cents) || !Number.isFinite(entry.amount_cents)) {
+    return `Entry at index ${index} amount_cents must be an integer, not float, NaN, or Infinity`;
+  }
+  if (typeof entry.currency !== 'string' || !CURRENCY_RE.test(entry.currency)) {
+    return `Entry at index ${index} must have a 3-letter uppercase ISO currency code`;
+  }
+  if (entry.kind !== 'debit' && entry.kind !== 'credit') {
+    return `Entry at index ${index} kind must be 'debit' or 'credit'`;
+  }
+  if (entry.kind === 'debit' && entry.amount_cents > 0) {
+    return `Entry at index ${index} is marked debit but has positive amount_cents (debits must be negative or zero)`;
+  }
+  if (entry.kind === 'credit' && entry.amount_cents < 0) {
+    return `Entry at index ${index} is marked credit but has negative amount_cents (credits must be positive or zero)`;
+  }
+  if (entry.category !== undefined && typeof entry.category !== 'string') {
+    return `Entry at index ${index} category must be a string`;
+  }
+  if (entry.merchant !== undefined && typeof entry.merchant !== 'string') {
+    return `Entry at index ${index} merchant must be a string`;
+  }
+  if (entry.description !== undefined && typeof entry.description !== 'string') {
+    return `Entry at index ${index} description must be a string`;
+  }
+  return null;
+}
+
+/**
+ * Evaluate a financial query deterministically against an integer-cents ledger.
+ *
+ * @param {Array<object>} ledger Array of verified ledger entries
+ * @param {object} query Query specification
+ * @param {object} [options] Optional evaluation options
+ * @returns {object} Deeply frozen result
+ */
+export function evaluateFinancialLedgerQuery(ledger, query, options = {}) {
+  if (!Array.isArray(ledger)) {
+    return Object.freeze({
+      ok: false,
+      error: 'invalid_ledger',
+      reason: 'Ledger must be an array of entries',
+      matching_count: 0,
+      total_cents: 0
+    });
+  }
+
+  if (!query || typeof query !== 'object' || Array.isArray(query)) {
+    return Object.freeze({
+      ok: false,
+      error: 'invalid_query',
+      reason: 'Query must be a non-null object',
+      matching_count: 0,
+      total_cents: 0
+    });
+  }
+
+  const queryKeys = Object.keys(query);
+  for (const k of queryKeys) {
+    if (!ALLOWED_FINANCIAL_QUERY_FIELDS.includes(k)) {
+      return Object.freeze({
+        ok: false,
+        error: 'unknown_query_field',
+        reason: `Query contains forbidden field: ${k}`,
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
+  }
+
+  if (!ALLOWED_LEDGER_OPERATIONS.includes(query.operation)) {
+    return Object.freeze({
+      ok: false,
+      error: 'invalid_operation',
+      reason: `Operation must be one of: ${ALLOWED_LEDGER_OPERATIONS.join(', ')}`,
+      matching_count: 0,
+      total_cents: 0
+    });
+  }
+
+  if (typeof query.currency !== 'string' || !CURRENCY_RE.test(query.currency)) {
+    return Object.freeze({
+      ok: false,
+      error: 'missing_or_invalid_currency',
+      reason: 'Query must specify a 3-letter uppercase ISO currency',
+      matching_count: 0,
+      total_cents: 0
+    });
+  }
+
+  if (query.start_date !== undefined) {
+    if (typeof query.start_date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(query.start_date) || isNaN(Date.parse(query.start_date))) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_start_date',
+        reason: 'start_date must be a valid YYYY-MM-DD date string',
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
+  }
+
+  if (query.end_date !== undefined) {
+    if (typeof query.end_date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(query.end_date) || isNaN(Date.parse(query.end_date))) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_end_date',
+        reason: 'end_date must be a valid YYYY-MM-DD date string',
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
+  }
+
+  if (query.start_date && query.end_date && query.start_date > query.end_date) {
+    return Object.freeze({
+      ok: false,
+      error: 'invalid_date_range',
+      reason: 'start_date cannot be after end_date',
+      matching_count: 0,
+      total_cents: 0
+    });
+  }
+
+  if (query.kind !== undefined && query.kind !== 'debit' && query.kind !== 'credit') {
+    return Object.freeze({
+      ok: false,
+      error: 'invalid_kind_filter',
+      reason: "kind filter must be 'debit' or 'credit'",
+      matching_count: 0,
+      total_cents: 0
+    });
+  }
+
+  if (query.category !== undefined) {
+    if (typeof query.category !== 'string' || !query.category.trim() || query.category.length > 80) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_category',
+        reason: 'category must be a non-empty string up to 80 characters',
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
+  }
+
+  if (query.merchant !== undefined) {
+    if (typeof query.merchant !== 'string' || !query.merchant.trim() || query.merchant.length > 80) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_merchant',
+        reason: 'merchant must be a non-empty string up to 80 characters',
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
+  }
+
+  if (query.expected_amount_cents !== undefined) {
+    if (!Number.isInteger(query.expected_amount_cents) || !Number.isFinite(query.expected_amount_cents)) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_expected_amount',
+        reason: 'expected_amount_cents must be an integer',
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
+  }
+
+  // Validate all entries fail-closed
+  for (let i = 0; i < ledger.length; i++) {
+    const err = validateLedgerEntry(ledger[i], i);
+    if (err) {
+      return Object.freeze({
+        ok: false,
+        error: 'malformed_ledger_entry',
+        reason: err,
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
+  }
+
+  // Filter matching records
+  const matched = [];
+  const breakdownMap = Object.create(null);
+  let totalCents = 0;
+  let debitCents = 0;
+  let creditCents = 0;
+
+  for (const entry of ledger) {
+    if (entry.currency !== query.currency) {
+      continue;
+    }
+
+    if (query.start_date && entry.date < query.start_date) continue;
+    if (query.end_date && entry.date > query.end_date) continue;
+    if (query.kind && entry.kind !== query.kind) continue;
+
+    if (query.category) {
+      const qCat = query.category.trim().toLowerCase();
+      const eCat = (entry.category || '').trim().toLowerCase();
+      if (eCat !== qCat) continue;
+    }
+
+    if (query.merchant) {
+      const qWords = extractWords(query.merchant);
+      const eWords = extractWords(entry.merchant || '');
+      const matchesMerchant = qWords.length > 0 && qWords.every((w) => eWords.includes(w));
+      if (!matchesMerchant) continue;
+    }
+
+    matched.push(entry);
+    totalCents += entry.amount_cents;
+    if (entry.kind === 'debit') {
+      debitCents += entry.amount_cents;
+    } else {
+      creditCents += entry.amount_cents;
+    }
+
+    const catKey = (entry.category || 'uncategorized').trim().toLowerCase();
+    if (!breakdownMap[catKey]) {
+      breakdownMap[catKey] = { count: 0, total_cents: 0 };
+    }
+    breakdownMap[catKey].count += 1;
+    breakdownMap[catKey].total_cents += entry.amount_cents;
+  }
+
+  const frozenBreakdown = Object.create(null);
+  for (const [k, v] of Object.entries(breakdownMap)) {
+    frozenBreakdown[k] = Object.freeze({ count: v.count, total_cents: v.total_cents });
+  }
+
+  let avgQuotient = 0;
+  let avgRemainder = 0;
+  if (matched.length > 0) {
+    avgQuotient = Math.trunc(totalCents / matched.length) || 0;
+    avgRemainder = (totalCents % matched.length) || 0;
+  }
+
+  const matchesExpected = query.expected_amount_cents !== undefined
+    ? totalCents === query.expected_amount_cents
+    : null;
+
+  const result = {
+    ok: true,
+    operation: query.operation,
+    currency: query.currency,
+    matching_count: matched.length,
+    total_cents: totalCents,
+    balance_cents: debitCents + creditCents,
+    debit_cents: debitCents,
+    credit_cents: creditCents,
+    average: Object.freeze({
+      quotient_cents: avgQuotient,
+      remainder_cents: avgRemainder
+    }),
+    breakdown: Object.freeze(frozenBreakdown),
+    matched_ids: Object.freeze(matched.map((e) => e.id)),
+    expected_amount_cents: query.expected_amount_cents !== undefined ? query.expected_amount_cents : null,
+    matches_expected: matchesExpected,
+    query_fingerprint: computeFinancialQueryFingerprint(query),
+    evaluated_at: new Date().toISOString()
+  };
+
+  return Object.freeze(result);
+}
+
+/**
+ * Verify whether two structured readings (primary model reading vs checker reading)
+ * agree on query parameters and computed numbers, implementing the Pulse Local
+ * double-check verifier pattern.
+ *
+ * @param {object} primary Primary reading / evaluation
+ * @param {object} checker Independent checker reading / evaluation
+ * @param {object} [options] Optional verifier options
+ * @returns {object} Deeply frozen agreement report
+ */
+export function verifyLedgerQueryAgreement(primary, checker, options = {}) {
+  if (!primary || typeof primary !== 'object' || Array.isArray(primary) ||
+      !checker || typeof checker !== 'object' || Array.isArray(checker)) {
+    return Object.freeze({
+      ok: false,
+      status: 'error',
+      sure: false,
+      reason: 'Both primary and checker readings must be non-null objects'
+    });
+  }
+
+  if (options !== undefined && options !== null) {
+    if (typeof options !== 'object' || Array.isArray(options)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: 'Options must be a non-null object'
+      });
+    }
+    for (const k of Object.keys(options)) {
+      if (!ALLOWED_AGREEMENT_OPTIONS_FIELDS.includes(k)) {
+        return Object.freeze({
+          ok: false,
+          status: 'error',
+          sure: false,
+          reason: `Unknown option: ${k}`
+        });
+      }
+    }
+    if (options.tolerance_cents !== undefined) {
+      if (!Number.isInteger(options.tolerance_cents) || options.tolerance_cents < 0) {
+        return Object.freeze({
+          ok: false,
+          status: 'error',
+          sure: false,
+          reason: 'tolerance_cents must be a non-negative integer'
+        });
+      }
+    }
+  }
+
+  // Schema allowlist validation on readings
+  for (const k of Object.keys(primary)) {
+    if (!ALLOWED_READING_FIELDS.includes(k)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `Primary reading contains forbidden field: ${k}`
+      });
+    }
+  }
+  for (const k of Object.keys(checker)) {
+    if (!ALLOWED_READING_FIELDS.includes(k)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `Checker reading contains forbidden field: ${k}`
+      });
+    }
+  }
+
+  // Bind readings to core fields: readings cannot be empty
+  if (!primary.operation || !primary.currency || !checker.operation || !checker.currency) {
+    return Object.freeze({
+      ok: false,
+      status: 'error',
+      sure: false,
+      reason: 'Both readings must specify at least operation and currency'
+    });
+  }
+
+  // Compare semantic query boundaries
+  const compareFields = ['operation', 'currency', 'start_date', 'end_date', 'category', 'merchant', 'kind'];
+  for (const f of compareFields) {
+    if (primary[f] !== undefined || checker[f] !== undefined) {
+      if (String(primary[f] || '').trim().toLowerCase() !== String(checker[f] || '').trim().toLowerCase()) {
+        return Object.freeze({
+          ok: true,
+          status: 'disagreement',
+          sure: false,
+          field: f,
+          primary_value: primary[f] || null,
+          checker_value: checker[f] || null,
+          reason: `Readings disagree on ${f}: "${primary[f]}" vs "${checker[f]}"`
+        });
+      }
+    }
+  }
+
+  // Check calculation symmetry: if one supplies total_cents, both must supply it
+  const primaryHasTotal = primary.total_cents !== undefined;
+  const checkerHasTotal = checker.total_cents !== undefined;
+  if (primaryHasTotal !== checkerHasTotal) {
+    return Object.freeze({
+      ok: true,
+      status: 'disagreement',
+      sure: false,
+      field: 'total_cents',
+      reason: 'Asymmetric calculation: total_cents supplied by only one reading'
+    });
+  }
+
+  // Check calculation symmetry: matching_count
+  const primaryHasCount = primary.matching_count !== undefined;
+  const checkerHasCount = checker.matching_count !== undefined;
+  if (primaryHasCount !== checkerHasCount) {
+    return Object.freeze({
+      ok: true,
+      status: 'disagreement',
+      sure: false,
+      field: 'matching_count',
+      reason: 'Asymmetric calculation: matching_count supplied by only one reading'
+    });
+  }
+
+  // If calculation was supplied, assert integer validity and bounds
+  if (primaryHasTotal) {
+    if (!Number.isInteger(primary.total_cents) || !Number.isInteger(checker.total_cents)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: 'total_cents must be an integer in both readings'
+      });
+    }
+
+    const diff = Math.abs(primary.total_cents - checker.total_cents);
+    const tol = options && Number.isInteger(options.tolerance_cents) ? options.tolerance_cents : 0;
+    if (diff > tol) {
+      return Object.freeze({
+        ok: true,
+        status: 'disagreement',
+        sure: false,
+        field: 'total_cents',
+        primary_value: primary.total_cents,
+        checker_value: checker.total_cents,
+        reason: `Calculated total_cents differ: ${primary.total_cents} vs ${checker.total_cents}`
+      });
+    }
+  }
+
+  if (primaryHasCount) {
+    if (!Number.isInteger(primary.matching_count) || !Number.isInteger(checker.matching_count)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: 'matching_count must be an integer in both readings'
+      });
+    }
+    if (primary.matching_count !== checker.matching_count) {
+      return Object.freeze({
+        ok: true,
+        status: 'disagreement',
+        sure: false,
+        field: 'matching_count',
+        primary_value: primary.matching_count,
+        checker_value: checker.matching_count,
+        reason: `Matching entry counts differ: ${primary.matching_count} vs ${checker.matching_count}`
+      });
+    }
+  }
+
+  const verifiedCents = primaryHasTotal ? primary.total_cents : null;
+
+  return Object.freeze({
+    ok: true,
+    status: 'agreement',
+    sure: true,
+    verified_cents: verifiedCents,
+    currency: primary.currency,
+    matching_count: primaryHasCount ? primary.matching_count : null,
+    reason: 'Both readings agree on query parameters and calculations'
+  });
+}
+
+/**
+ * Format integer cents safely as currency text without floating-point math.
+ */
+function formatCents(cents, currency) {
+  const isNegative = cents < 0;
+  const abs = Math.abs(cents);
+  const units = Math.floor(abs / 100);
+  const remainder = abs % 100;
+  const formatted = `${isNegative ? '-' : ''}${units}.${String(remainder).padStart(2, '0')}`;
+  return `${formatted} ${currency}`;
+}
+
+/**
+ * Summarize financial ledger evaluation for UI display without LLM generation.
+ *
+ * @param {object} evalResult Result from evaluateFinancialLedgerQuery
+ * @returns {object} Deeply frozen summary
+ */
+export function summarizeLedgerEvaluation(evalResult) {
+  if (!evalResult || typeof evalResult !== 'object' || Array.isArray(evalResult)) {
+    return Object.freeze({
+      success: false,
+      summary_text: 'Invalid evaluation result',
+      matching_count: 0,
+      total_formatted: '0.00',
+      currency: null
+    });
+  }
+
+  if (!evalResult.ok) {
+    return Object.freeze({
+      success: false,
+      summary_text: `Evaluation failed: ${evalResult.reason || evalResult.error}`,
+      matching_count: 0,
+      total_formatted: '0.00',
+      currency: null
+    });
+  }
+
+  const formattedTotal = formatCents(evalResult.total_cents, evalResult.currency);
+  const formattedBalance = formatCents(evalResult.balance_cents, evalResult.currency);
+
+  let text = '';
+  if (evalResult.operation === 'count') {
+    text = `Found ${evalResult.matching_count} transaction(s) matching query.`;
+  } else if (evalResult.operation === 'balance') {
+    text = `Net balance: ${formattedBalance} across ${evalResult.matching_count} transaction(s).`;
+  } else if (evalResult.operation === 'average') {
+    if (!evalResult.average || typeof evalResult.average !== 'object' || typeof evalResult.average.quotient_cents !== 'number') {
+      return Object.freeze({
+        success: false,
+        summary_text: 'Invalid or missing average calculation in evaluation result',
+        matching_count: 0,
+        total_formatted: '0.00',
+        currency: null
+      });
+    }
+    const avgFormatted = formatCents(evalResult.average.quotient_cents, evalResult.currency);
+    text = `Average: ${avgFormatted} (total: ${formattedTotal} across ${evalResult.matching_count} transaction(s)).`;
+  } else {
+    text = `Total: ${formattedTotal} across ${evalResult.matching_count} transaction(s).`;
+  }
+
+  return Object.freeze({
+    success: true,
+    summary_text: text,
+    matching_count: evalResult.matching_count,
+    total_cents: evalResult.total_cents,
+    total_formatted: formattedTotal,
+    balance_cents: evalResult.balance_cents,
+    balance_formatted: formattedBalance,
+    currency: evalResult.currency,
+    query_fingerprint: evalResult.query_fingerprint || null
+  });
+}
