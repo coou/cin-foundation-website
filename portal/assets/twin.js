@@ -36,8 +36,7 @@ function renderGrants() {
       validityNote = ' (indefinite) ';
     }
     li.append(el('b', null, g.who), document.createTextNode(' may see ' + g.what + validityNote));
-    const rec = el('button', 'btn', 'Receipt');
-    rec.style.marginRight = '0.4rem';
+    const rec = el('button', 'btn twin-btn-gap-right', 'Receipt');
     rec.onclick = () => {
       const status = document.getElementById('data-status');
       try {
@@ -163,8 +162,7 @@ function renderContributions() {
     if (c.impact) {
       li.append(document.createTextNode(' — ' + c.impact));
     }
-    const delBtn = el('button', 'btn', 'Remove');
-    delBtn.style.marginLeft = '0.5rem';
+    const delBtn = el('button', 'btn twin-btn-gap-left', 'Remove');
     delBtn.onclick = () => {
       const next = { ...state, contributions: contribs.filter((_, idx) => idx !== i) };
       if (saveAndRender(next, 'contribution_removed', `Removed [${c.kind}] contribution`)) {
@@ -277,15 +275,13 @@ function renderActions() {
           }
         }
       };
-      const appBtn = el('button', 'btn', 'Approve');
-      appBtn.style.margin = '0 0.3rem 0 0.5rem';
+      const appBtn = el('button', 'btn twin-btn-approve', 'Approve');
       appBtn.onclick = () => decide('approved');
       const rejBtn = el('button', 'btn', 'Deny');
       rejBtn.onclick = () => decide('rejected');
       li.append(appBtn, rejBtn);
     } else {
-      const clearBtn = el('button', 'btn', 'Clear');
-      clearBtn.style.marginLeft = '0.5rem';
+      const clearBtn = el('button', 'btn twin-btn-gap-left', 'Clear');
       clearBtn.onclick = () => {
         const next = { ...state, actions: acts.filter((_, idx) => idx !== i) };
         if (saveAndRender(next, 'action_cleared', `Cleared action for ${a.who}`)) {
@@ -349,9 +345,8 @@ if (auditActionForm) {
         ? 'Require Confirmation: Elevated Risk'
         : 'Block: Boundary Violation';
 
-    const badgeColor = audit.verdict === 'pass' ? '#2e7d32' : audit.verdict === 'require_confirmation' ? '#ed6c02' : '#d32f2f';
-    const badge = el('strong', null, `[${badgeText}] `);
-    badge.style.color = badgeColor;
+    const badgeClass = audit.verdict === 'pass' ? 'status-pass' : audit.verdict === 'require_confirmation' ? 'status-warn' : 'status-err';
+    const badge = el('strong', badgeClass, `[${badgeText}] `);
     verdictP.appendChild(badge);
     verdictP.appendChild(document.createTextNode(`Risk level: ${audit.risk_level}`));
     resultBox.appendChild(verdictP);
@@ -455,8 +450,7 @@ function renderObligations() {
       li.append(document.createTextNode(' — ' + o.notes));
     }
     if (o.status === 'active') {
-      const compBtn = el('button', 'btn', 'Complete');
-      compBtn.style.margin = '0 0.3rem 0 0.5rem';
+      const compBtn = el('button', 'btn twin-btn-approve', 'Complete');
       compBtn.onclick = () => {
         const now = new Date();
         const updated = { ...o, status: 'completed', resolved_at: now.toISOString() };
@@ -468,8 +462,7 @@ function renderObligations() {
       };
       li.appendChild(compBtn);
     }
-    const delBtn = el('button', 'btn', 'Remove');
-    delBtn.style.marginLeft = '0.3rem';
+    const delBtn = el('button', 'btn twin-btn-gap-left', 'Remove');
     delBtn.onclick = () => {
       const next = { ...state, obligations: obs.filter((_, idx) => idx !== i) };
       if (saveAndRender(next, 'obligation_removed', `Removed obligation: ${o.title}`)) {
@@ -554,8 +547,7 @@ function renderAccessInspector() {
       p.className = 'muted';
       p.append(el('b', null, 'Denied: '), document.createTextNode(evalRes.reason || 'Not permitted.'));
       resultBox.appendChild(p);
-      const queueBtn = el('button', 'btn', 'Queue as pending action');
-      queueBtn.style.marginTop = '0.4rem';
+      const queueBtn = el('button', 'btn twin-btn-mt', 'Queue as pending action');
       queueBtn.onclick = () => {
         const queued = queueAccessAsPendingAction(state, service, scope);
         if (queued.ok) {
@@ -593,8 +585,7 @@ function renderReceiptInspector() {
       parsed = JSON.parse(rawJson);
     } catch (err) {
       const errP = el('p', 'muted');
-      const errBadge = el('strong', null, '[Invalid JSON] ');
-      errBadge.style.color = '#d32f2f';
+      const errBadge = el('strong', 'status-err', '[Invalid JSON] ');
       errP.appendChild(errBadge);
       errP.appendChild(document.createTextNode('Could not parse receipt: invalid JSON format.'));
       resultBox.appendChild(errP);
@@ -607,15 +598,13 @@ function renderReceiptInspector() {
     const p = el('p');
     if (summary.valid) {
       p.className = 'status-ok';
-      const badge = el('strong', null, 'Matches an active grant on this device. ');
-      badge.style.color = '#2e7d32';
+      const badge = el('strong', 'status-pass', 'Matches an active grant on this device. ');
       p.appendChild(badge);
       p.appendChild(document.createTextNode(`"${summary.recipient}" has a grant here, issued at the receipt's time, covering ${summary.scopes_count} scope(s).`));
       resultBox.appendChild(p);
     } else {
       p.className = 'muted';
-      const badge = el('strong', null, 'No match. ');
-      badge.style.color = '#d32f2f';
+      const badge = el('strong', 'status-err', 'No match. ');
       p.appendChild(badge);
       p.appendChild(document.createTextNode(summary.reason || 'Receipt is not valid or grant was revoked.'));
       resultBox.appendChild(p);
@@ -649,8 +638,7 @@ function renderFacts() {
     }
     const criticalBadge = f.critical ? el('small', 'muted', ' [critical constraint] ') : document.createTextNode(' ');
     li.append(catBadge, el('b', null, f.statement), auditBadge || document.createTextNode(' '), criticalBadge);
-    const delBtn = el('button', 'btn', 'Remove');
-    delBtn.style.marginLeft = '0.4rem';
+    const delBtn = el('button', 'btn twin-btn-gap-left', 'Remove');
     delBtn.onclick = () => {
       const next = { ...state, facts: facts.filter((_, idx) => idx !== i) };
       if (saveAndRender(next, 'fact_removed', `Removed fact: ${f.statement.slice(0, 40)}`)) {
@@ -716,9 +704,8 @@ if (factForm) {
       if (status) {
         status.textContent = '';
         const warnP = el('p', 'muted', (gate.reason || 'This statement contains speculative wording.') + ' ');
-        const confirmBtn = el('button', 'btn', 'Save anyway');
+        const confirmBtn = el('button', 'btn twin-btn-gap-left', 'Save anyway');
         confirmBtn.type = 'button';
-        confirmBtn.style.marginLeft = '0.5rem';
         confirmBtn.onclick = () => {
           saveFact();
         };
@@ -750,12 +737,11 @@ function renderQuests() {
     const statusText = q.completed ? ' (completed) ' : ' ';
     const titleEl = el('b', null, q.title);
     if (q.completed) {
-      titleEl.style.textDecoration = 'line-through';
+      titleEl.className = 'twin-strike';
     }
     li.append(catBadge, titleEl, priorityBadge, el('small', 'muted', statusText));
 
-    const toggleBtn = el('button', 'btn', q.completed ? 'Reopen' : 'Complete');
-    toggleBtn.style.marginLeft = '0.4rem';
+    const toggleBtn = el('button', 'btn twin-btn-gap-left', q.completed ? 'Reopen' : 'Complete');
     toggleBtn.onclick = () => {
       const toggled = toggleQuestCompletion(state, q.id);
       if (toggled.ok) {
@@ -769,8 +755,7 @@ function renderQuests() {
     };
     li.appendChild(toggleBtn);
 
-    const delBtn = el('button', 'btn', 'Remove');
-    delBtn.style.marginLeft = '0.4rem';
+    const delBtn = el('button', 'btn twin-btn-gap-left', 'Remove');
     delBtn.onclick = () => {
       const next = { ...state, quests: quests.filter((_, idx) => idx !== i) };
       if (saveAndRender(next, 'quest_removed', `Removed quest: ${q.title.slice(0, 40)}`)) {
@@ -838,8 +823,7 @@ function renderValues() {
     const scoreBadge = el('small', 'muted', ` [Priority ${score}/5] `);
     li.append(nameEl, scoreBadge);
 
-    const resetBtn = el('button', 'btn', 'Reset (3)');
-    resetBtn.style.marginLeft = '0.4rem';
+    const resetBtn = el('button', 'btn twin-btn-gap-left', 'Reset (3)');
     resetBtn.onclick = () => {
       const updated = updateValuePreference(state, dim, 3);
       if (updated.ok) {
@@ -895,8 +879,7 @@ function renderContextAssembler() {
 
     if (!res.ok) {
       const errP = el('p', null);
-      const errBadge = el('strong', null, '[Compilation Failed] ');
-      errBadge.style.color = '#d32f2f';
+      const errBadge = el('strong', 'status-err', '[Compilation Failed] ');
       errP.appendChild(errBadge);
       errP.appendChild(document.createTextNode(res.reason || res.error));
       resultBox.appendChild(errP);
@@ -917,15 +900,7 @@ function renderContextAssembler() {
       resultBox.appendChild(truncP);
     }
 
-    const pre = el('pre', null);
-    pre.style.whiteSpace = 'pre-wrap';
-    pre.style.wordBreak = 'break-word';
-    pre.style.background = 'var(--line, #e2ded4)';
-    pre.style.padding = '0.75rem';
-    pre.style.borderRadius = '4px';
-    pre.style.fontSize = '0.85rem';
-    pre.style.maxHeight = '280px';
-    pre.style.overflowY = 'auto';
+    const pre = el('pre', 'twin-context-pre');
     pre.textContent = res.context_text;
     resultBox.appendChild(pre);
   };
