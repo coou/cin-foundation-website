@@ -60,7 +60,15 @@ import {
   evaluateCapabilityAdjustmentRequest,
   verifyCapabilityLease,
   summarizeCapabilityAdjustment,
-  summarizeCapabilityLease
+  summarizeCapabilityLease,
+  ALLOWED_LEDGER_OPERATIONS,
+  ALLOWED_LEDGER_ENTRY_FIELDS,
+  ALLOWED_FINANCIAL_QUERY_FIELDS,
+  ALLOWED_READING_FIELDS,
+  ALLOWED_AGREEMENT_OPTIONS_FIELDS,
+  evaluateFinancialLedgerQuery,
+  verifyLedgerQueryAgreement,
+  summarizeLedgerEvaluation
 } from '../assets/twin-core.js';
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -3168,6 +3176,481 @@ test('summarizeCapabilityAdjustment and summarizeCapabilityLease handle valid, i
   const sumLeaseBad = summarizeCapabilityLease(null);
   assert.equal(sumLeaseBad.valid, false);
   assert.equal(sumLeaseBad.status, 'error');
+});
+
+test('financial ledger constants are deeply frozen and contain allowed operations and fields', () => {
+  assert.equal(Object.isFrozen(ALLOWED_LEDGER_OPERATIONS), true);
+  assert.equal(Object.isFrozen(ALLOWED_LEDGER_ENTRY_FIELDS), true);
+  assert.equal(Object.isFrozen(ALLOWED_FINANCIAL_QUERY_FIELDS), true);
+  assert.equal(Object.isFrozen(ALLOWED_READING_FIELDS), true);
+  assert.equal(Object.isFrozen(ALLOWED_AGREEMENT_OPTIONS_FIELDS), true);
+
+  assert.equal(ALLOWED_LEDGER_OPERATIONS.includes('sum'), true);
+  assert.equal(ALLOWED_LEDGER_OPERATIONS.includes('balance'), true);
+  assert.equal(ALLOWED_LEDGER_OPERATIONS.includes('average'), true);
+  assert.equal(ALLOWED_LEDGER_OPERATIONS.includes('breakdown'), true);
+});
+
+test('evaluateFinancialLedgerQuery evaluates sum, balance, count, and breakdown correctly on integer cents', () => {
+  const ledger = [
+    {
+      id: 'tx-1',
+      date: '2026-10-01',
+      amount_cents: -4500,
+      currency: 'USD',
+      kind: 'debit',
+      category: 'groceries',
+      merchant: 'Fresh Mart'
+    },
+    {
+      id: 'tx-2',
+      date: '2026-10-02',
+      amount_cents: -1550,
+      currency: 'USD',
+      kind: 'debit',
+      category: 'transit',
+      merchant: 'Metro Transit'
+    },
+    {
+      id: 'tx-3',
+      date: '2026-10-03',
+      amount_cents: 20000,
+      currency: 'USD',
+      kind: 'credit',
+      category: 'income',
+      merchant: 'Direct Deposit'
+    },
+    {
+      id: 'tx-4',
+      date: '2026-10-04',
+      amount_cents: -2500,
+      currency: 'EUR',
+      kind: 'debit',
+      category: 'groceries',
+      merchant: 'Euro Market'
+    }
+  ];
+
+  // Sum of USD debits
+  const sumQuery = {
+    operation: 'sum',
+    currency: 'USD',
+    kind: 'debit'
+  };
+  const sumRes = evaluateFinancialLedgerQuery(ledger, sumQuery);
+  assert.equal(sumRes.ok, true);
+  assert.equal(sumRes.matching_count, 2);
+  assert.equal(sumRes.total_cents, -6050);
+  assert.equal(sumRes.currency, 'USD');
+  assert.equal(Object.isFrozen(sumRes), true);
+  assert.equal(Object.isFrozen(sumRes.matched_ids), true);
+
+  // Net balance of all USD transactions
+  const balanceQuery = {
+    operation: 'balance',
+    currency: 'USD'
+  };
+  const balRes = evaluateFinancialLedgerQuery(ledger, balanceQuery);
+  assert.equal(balRes.ok, true);
+  assert.equal(balRes.matching_count, 3);
+  assert.equal(balRes.total_cents, 13950);
+  assert.equal(balRes.balance_cents, 13950);
+  assert.equal(balRes.debit_cents, -6050);
+  assert.equal(balRes.credit_cents, 20000);
+
+  // Average calculation in integer quotient and remainder (never float, 0 instead of -0)
+  const avgQuery = {
+    operation: 'average',
+    currency: 'USD',
+    kind: 'debit'
+  };
+  const avgRes = evaluateFinancialLedgerQuery(ledger, avgQuery);
+  assert.equal(avgRes.ok, true);
+  assert.equal(avgRes.matching_count, 2);
+  assert.equal(avgRes.average.quotient_cents, -3025);
+  assert.equal(avgRes.average.remainder_cents, 0);
+
+  // Category breakdown
+  const breakQuery = {
+    operation: 'breakdown',
+    currency: 'USD'
+  };
+  const breakRes = evaluateFinancialLedgerQuery(ledger, breakQuery);
+  assert.equal(breakRes.ok, true);
+  assert.equal(breakRes.breakdown.groceries.total_cents, -4500);
+  assert.equal(breakRes.breakdown.groceries.count, 1);
+  assert.equal(breakRes.breakdown.transit.total_cents, -1550);
+  assert.equal(breakRes.breakdown.income.total_cents, 20000);
+  assert.equal(Object.isFrozen(breakRes.breakdown.groceries), true);
+
+  // EUR isolation: EUR transaction excluded from USD queries
+  assert.equal(sumRes.matched_ids.includes('tx-4'), false);
+  assert.equal(balRes.matched_ids.includes('tx-4'), false);
+});
+
+test('evaluateFinancialLedgerQuery filters by date range, merchant tokens, and category fail-closed', () => {
+  const ledger = [
+    {
+      id: 'tx-1',
+      date: '2026-10-05',
+      amount_cents: -3000,
+      currency: 'USD',
+      kind: 'debit',
+      category: 'dining',
+      merchant: 'Cafe Blue'
+    },
+    {
+      id: 'tx-2',
+      date: '2026-10-10',
+      amount_cents: -4500,
+      currency: 'USD',
+      kind: 'debit',
+      category: 'dining',
+      merchant: 'Dairy Queen Central'
+    },
+    {
+      id: 'tx-3',
+      date: '2026-10-15',
+      amount_cents: -2000,
+      currency: 'USD',
+      kind: 'debit',
+      category: 'books',
+      merchant: 'City Books'
+    }
+  ];
+
+  // Date range filter
+  const dateQuery = {
+    operation: 'sum',
+    currency: 'USD',
+    start_date: '2026-10-06',
+    end_date: '2026-10-12'
+  };
+  const dateRes = evaluateFinancialLedgerQuery(ledger, dateQuery);
+  assert.equal(dateRes.ok, true);
+  assert.equal(dateRes.matching_count, 1);
+  assert.equal(dateRes.matched_ids[0], 'tx-2');
+  assert.equal(dateRes.total_cents, -4500);
+
+  // Merchant token boundary match: "air" must not match "Dairy Queen Central" (Lesson 64)
+  const airRes = evaluateFinancialLedgerQuery(ledger, {
+    operation: 'count',
+    currency: 'USD',
+    merchant: 'air'
+  });
+  assert.equal(airRes.ok, true);
+  assert.equal(airRes.matching_count, 0);
+
+  // Merchant exact word token match: "Dairy" matches "Dairy Queen Central"
+  const dairyRes = evaluateFinancialLedgerQuery(ledger, {
+    operation: 'count',
+    currency: 'USD',
+    merchant: 'Dairy'
+  });
+  assert.equal(dairyRes.ok, true);
+  assert.equal(dairyRes.matching_count, 1);
+  assert.equal(dairyRes.matched_ids[0], 'tx-2');
+
+  // Category filter
+  const catRes = evaluateFinancialLedgerQuery(ledger, {
+    operation: 'count',
+    currency: 'USD',
+    category: 'dining'
+  });
+  assert.equal(catRes.ok, true);
+  assert.equal(catRes.matching_count, 2);
+
+  // Inverted date range fails closed
+  const badRange = evaluateFinancialLedgerQuery(ledger, {
+    operation: 'sum',
+    currency: 'USD',
+    start_date: '2026-10-20',
+    end_date: '2026-10-01'
+  });
+  assert.equal(badRange.ok, false);
+  assert.equal(badRange.error, 'invalid_date_range');
+});
+
+test('evaluateFinancialLedgerQuery handles expected_amount_cents assertion and fingerprinting', () => {
+  const ledger = [
+    {
+      id: 'tx-1',
+      date: '2026-10-01',
+      amount_cents: -5000,
+      currency: 'USD',
+      kind: 'debit'
+    }
+  ];
+
+  // Matches expectation
+  const matchRes = evaluateFinancialLedgerQuery(ledger, {
+    operation: 'sum',
+    currency: 'USD',
+    expected_amount_cents: -5000
+  });
+  assert.equal(matchRes.ok, true);
+  assert.equal(matchRes.matches_expected, true);
+  assert.equal(matchRes.expected_amount_cents, -5000);
+
+  // Does not match expectation
+  const missRes = evaluateFinancialLedgerQuery(ledger, {
+    operation: 'sum',
+    currency: 'USD',
+    expected_amount_cents: -9999
+  });
+  assert.equal(missRes.ok, true);
+  assert.equal(missRes.matches_expected, false);
+  assert.equal(missRes.expected_amount_cents, -9999);
+
+  // Fingerprint changes when expected_amount_cents changes
+  assert.notEqual(matchRes.query_fingerprint, missRes.query_fingerprint);
+});
+
+test('evaluateFinancialLedgerQuery strictly rejects floats, NaN, Infinity, type attacks, and malformed entries', () => {
+  // Float amount injection
+  const floatLedger = [
+    {
+      id: 'tx-bad-1',
+      date: '2026-10-01',
+      amount_cents: 45.50,
+      currency: 'USD',
+      kind: 'credit'
+    }
+  ];
+  const floatRes = evaluateFinancialLedgerQuery(floatLedger, { operation: 'sum', currency: 'USD' });
+  assert.equal(floatRes.ok, false);
+  assert.equal(floatRes.error, 'malformed_ledger_entry');
+
+  // NaN amount injection
+  const nanLedger = [
+    {
+      id: 'tx-bad-2',
+      date: '2026-10-01',
+      amount_cents: NaN,
+      currency: 'USD',
+      kind: 'credit'
+    }
+  ];
+  const nanRes = evaluateFinancialLedgerQuery(nanLedger, { operation: 'sum', currency: 'USD' });
+  assert.equal(nanRes.ok, false);
+  assert.equal(nanRes.error, 'malformed_ledger_entry');
+
+  // Infinity amount injection
+  const infLedger = [
+    {
+      id: 'tx-bad-3',
+      date: '2026-10-01',
+      amount_cents: Infinity,
+      currency: 'USD',
+      kind: 'credit'
+    }
+  ];
+  const infRes = evaluateFinancialLedgerQuery(infLedger, { operation: 'sum', currency: 'USD' });
+  assert.equal(infRes.ok, false);
+  assert.equal(infRes.error, 'malformed_ledger_entry');
+
+  // Debit marked with positive amount
+  const badDebit = [
+    {
+      id: 'tx-bad-4',
+      date: '2026-10-01',
+      amount_cents: 1000,
+      currency: 'USD',
+      kind: 'debit'
+    }
+  ];
+  const debitRes = evaluateFinancialLedgerQuery(badDebit, { operation: 'sum', currency: 'USD' });
+  assert.equal(debitRes.ok, false);
+  assert.equal(debitRes.error, 'malformed_ledger_entry');
+
+  // Unknown entry field
+  const unknownFieldLedger = [
+    {
+      id: 'tx-bad-5',
+      date: '2026-10-01',
+      amount_cents: -1000,
+      currency: 'USD',
+      kind: 'debit',
+      extra_auth_token: 'injected'
+    }
+  ];
+  const unknownRes = evaluateFinancialLedgerQuery(unknownFieldLedger, { operation: 'sum', currency: 'USD' });
+  assert.equal(unknownRes.ok, false);
+  assert.equal(unknownRes.error, 'malformed_ledger_entry');
+
+  // Type attacks on query category and merchant: must fail closed, not crash
+  const badCat = evaluateFinancialLedgerQuery([], { operation: 'sum', currency: 'USD', category: 12345 });
+  assert.equal(badCat.ok, false);
+  assert.equal(badCat.error, 'invalid_category');
+
+  const badMerch = evaluateFinancialLedgerQuery([], { operation: 'sum', currency: 'USD', merchant: { malicious: true } });
+  assert.equal(badMerch.ok, false);
+  assert.equal(badMerch.error, 'invalid_merchant');
+
+  // Unknown query field
+  const unknownQuery = evaluateFinancialLedgerQuery([], {
+    operation: 'sum',
+    currency: 'USD',
+    bypass_filter: true
+  });
+  assert.equal(unknownQuery.ok, false);
+  assert.equal(unknownQuery.error, 'unknown_query_field');
+
+  // Missing currency in query
+  const missingCurr = evaluateFinancialLedgerQuery([], { operation: 'sum' });
+  assert.equal(missingCurr.ok, false);
+  assert.equal(missingCurr.error, 'missing_or_invalid_currency');
+});
+
+test('verifyLedgerQueryAgreement passes on matching readings and rejects empty, unknown, asymmetric or disagreeing inputs', () => {
+  const primaryReading = {
+    operation: 'sum',
+    currency: 'USD',
+    start_date: '2026-10-01',
+    end_date: '2026-10-15',
+    category: 'groceries',
+    total_cents: -8500,
+    matching_count: 3
+  };
+
+  const agreeingChecker = {
+    operation: 'sum',
+    currency: 'USD',
+    start_date: '2026-10-01',
+    end_date: '2026-10-15',
+    category: 'groceries',
+    total_cents: -8500,
+    matching_count: 3
+  };
+
+  const agreeRes = verifyLedgerQueryAgreement(primaryReading, agreeingChecker);
+  assert.equal(agreeRes.ok, true);
+  assert.equal(agreeRes.status, 'agreement');
+  assert.equal(agreeRes.sure, true);
+  assert.equal(agreeRes.verified_cents, -8500);
+  assert.equal(Object.isFrozen(agreeRes), true);
+
+  // Empty readings {} vs {} must fail closed (Reviewer Issue 1)
+  const emptyRes = verifyLedgerQueryAgreement({}, {});
+  assert.equal(emptyRes.ok, false);
+  assert.equal(emptyRes.status, 'error');
+  assert.equal(emptyRes.sure, false);
+
+  // Asymmetric total_cents: primary supplies total_cents, checker does not (Reviewer Issue 1)
+  const checkerNoTotal = { ...agreeingChecker };
+  delete checkerNoTotal.total_cents;
+  const asymTotal = verifyLedgerQueryAgreement(
+    primaryReading,
+    checkerNoTotal
+  );
+  assert.equal(asymTotal.ok, true);
+  assert.equal(asymTotal.status, 'disagreement');
+  assert.equal(asymTotal.sure, false);
+  assert.equal(asymTotal.field, 'total_cents');
+
+  // Asymmetric matching_count: primary supplies matching_count, checker does not
+  const asymCount = verifyLedgerQueryAgreement(
+    { operation: 'sum', currency: 'USD', total_cents: -8500, matching_count: 3 },
+    { operation: 'sum', currency: 'USD', total_cents: -8500 }
+  );
+  assert.equal(asymCount.ok, true);
+  assert.equal(asymCount.status, 'disagreement');
+  assert.equal(asymCount.sure, false);
+  assert.equal(asymCount.field, 'matching_count');
+
+  // Unknown field in reading fails closed (Reviewer Issue 5)
+  const unknownReading = verifyLedgerQueryAgreement(
+    { ...primaryReading, injected_token: 'secret' },
+    agreeingChecker
+  );
+  assert.equal(unknownReading.ok, false);
+  assert.equal(unknownReading.status, 'error');
+
+  // Negative tolerance_cents fails closed (Reviewer Issue 4)
+  const negTol = verifyLedgerQueryAgreement(primaryReading, agreeingChecker, { tolerance_cents: -5 });
+  assert.equal(negTol.ok, false);
+  assert.equal(negTol.status, 'error');
+
+  // Non-object options fails closed (Reviewer Issue 4)
+  const badOpt = verifyLedgerQueryAgreement(primaryReading, agreeingChecker, "strict");
+  assert.equal(badOpt.ok, false);
+  assert.equal(badOpt.status, 'error');
+
+  // Disagreement in date bounds
+  const disagreeDate = {
+    ...agreeingChecker,
+    end_date: '2026-10-20'
+  };
+  const dateDis = verifyLedgerQueryAgreement(primaryReading, disagreeDate);
+  assert.equal(dateDis.ok, true);
+  assert.equal(dateDis.status, 'disagreement');
+  assert.equal(dateDis.sure, false);
+  assert.equal(dateDis.field, 'end_date');
+
+  // Disagreement in calculated total cents (Pulse Local double-check pattern)
+  const disagreeTotal = {
+    ...agreeingChecker,
+    total_cents: -9200
+  };
+  const totalDis = verifyLedgerQueryAgreement(primaryReading, disagreeTotal);
+  assert.equal(totalDis.ok, true);
+  assert.equal(totalDis.status, 'disagreement');
+  assert.equal(totalDis.sure, false);
+  assert.equal(totalDis.field, 'total_cents');
+
+  // Malformed inputs fail closed
+  const badInput = verifyLedgerQueryAgreement(null, agreeingChecker);
+  assert.equal(badInput.ok, false);
+  assert.equal(badInput.status, 'error');
+  assert.equal(badInput.sure, false);
+});
+
+test('summarizeLedgerEvaluation produces deterministic string without float representation and handles missing average safely', () => {
+  const evalResult = {
+    ok: true,
+    operation: 'balance',
+    currency: 'USD',
+    matching_count: 4,
+    total_cents: 12550,
+    balance_cents: 12550,
+    query_fingerprint: 'a1b2c3d4'
+  };
+
+  const summary = summarizeLedgerEvaluation(evalResult);
+  assert.equal(summary.success, true);
+  assert.equal(summary.total_formatted, '125.50 USD');
+  assert.equal(summary.balance_formatted, '125.50 USD');
+  assert.equal(summary.summary_text.includes('125.50 USD'), true);
+  assert.equal(Object.isFrozen(summary), true);
+
+  // Negative balance formatting
+  const negResult = {
+    ok: true,
+    operation: 'sum',
+    currency: 'CAD',
+    matching_count: 2,
+    total_cents: -4505,
+    balance_cents: -4505,
+    query_fingerprint: '12345678'
+  };
+  const negSummary = summarizeLedgerEvaluation(negResult);
+  assert.equal(negSummary.total_formatted, '-45.05 CAD');
+
+  // Average operation with missing average object fails closed without uncaught TypeError (Reviewer Issue 6)
+  const missingAvg = summarizeLedgerEvaluation({
+    ok: true,
+    operation: 'average',
+    currency: 'USD',
+    matching_count: 2,
+    total_cents: -5000
+  });
+  assert.equal(missingAvg.success, false);
+  assert.equal(missingAvg.summary_text.includes('Invalid or missing average'), true);
+
+  // Bad evaluation input
+  const badSum = summarizeLedgerEvaluation(null);
+  assert.equal(badSum.success, false);
+  assert.equal(badSum.matching_count, 0);
 });
 
 
