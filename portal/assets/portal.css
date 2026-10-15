@@ -64,7 +64,13 @@ td, th { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(-
 th { font: 600 .72rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); }
 .scroll { overflow-x: auto; }
 footer.site { border-top: 1px solid var(--rule); padding: 1.5rem 0 3rem; color: var(--ink-3); font-size: .85rem; }
-@media (max-width: 600px) { .top .wrap { height: auto; padding: .6rem 0; flex-wrap: wrap; } .top nav { margin-left: 0; order: 3; width: 100%; } .bar { grid-template-columns: 1fr 2.2rem; } .bar .track { grid-column: 1 / -1; grid-row: 2; } }
+@media (max-width: 600px) {
+  .top .wrap { height: auto; padding: .6rem 0; flex-wrap: wrap; }
+  .top nav { margin-left: 0; order: 3; width: 100%; display: flex; flex-wrap: wrap; gap: .35rem .7rem; min-width: 0; }
+  .top nav a { font-size: .86rem; white-space: nowrap; }
+  .bar { grid-template-columns: 1fr 2.2rem; }
+  .bar .track { grid-column: 1 / -1; grid-row: 2; }
+}
 .bare { border: 0; padding: 0; margin: 0; display: grid; gap: .7rem; min-width: 0; }
 .grid.one { grid-template-columns: 1fr; }
 .flush { margin-top: 0; }

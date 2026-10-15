@@ -87,5 +87,22 @@ form.onsubmit = async (e) => {
 
 const here = document.getElementById('signin-here');
 if (here) here.onclick = () => { const m = document.getElementById('signin-msg'); m.textContent = ''; signIn().then((err) => { m.textContent = err; }); };
-setTimeout(() => { const box = document.getElementById('ideas'); if (box && box.textContent.trim().startsWith('Loading')) box.textContent = 'Ideas are taking a while to load. Check your connection, or try again in a minute.'; }, 8000);
-mountAuth((u) => { user = u; form.querySelector('fieldset').disabled = !u; document.getElementById('signin-hint').hidden = !!u; load(); });
+
+const loadTimeout = setTimeout(() => {
+  const box = document.getElementById('ideas');
+  if (box && box.textContent.trim().startsWith('Loading')) {
+    box.textContent = 'Ideas are taking a while to load. Check your connection, or check back shortly.';
+  }
+}, 3500);
+
+load().finally(() => clearTimeout(loadTimeout));
+
+mountAuth((u) => {
+  const prevUser = user;
+  user = u;
+  form.querySelector('fieldset').disabled = !u;
+  document.getElementById('signin-hint').hidden = !!u;
+  if (u || (prevUser && !u)) {
+    load();
+  }
+});
