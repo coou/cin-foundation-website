@@ -58,7 +58,7 @@
 
     <h2>The invisible background of common sense</h2>
     <p>Human language works only because people leave most of their requirements unsaid. When you ask a colleague to "pick up lunch for the meeting," you do not add: "do not spend five thousand dollars, do not buy food that spoiled three days ago, and do not steal the sandwiches from the neighboring office."</p>
-    <p>Those negative constraints are obvious to any person, but they form ninety-nine percent of what makes the action safe. If a person had to specify every forbidden side effect every time they spoke, communication would grind to a halt.</p>
+    <p>Those negative constraints are obvious to any person, but they are most of what makes the action safe. If a person had to specify every forbidden side effect every time they spoke, communication would grind to a halt.</p>
     <p>When AI systems transition from answering questions in a chat window to taking actions in the real world—moving money, sending messages, changing files, making reservations—the gap between what was said and what was meant becomes dangerous. An agent cannot assume that unmentioned constraints do not matter.</p>
 
     <aside class="callout spec"><b>Speculation</b><p>As autonomous assistants take over longer task chains, agents may negotiate directly with other agents on our behalf. In that environment, agents that treat instructions as rigid, literal goals could enter runaway escalation loops with counterparties, bidding away unstated conveniences to satisfy one narrow instruction. Developing robust intent inference is an urgent defensive requirement, not merely a convenience.</p></aside>
@@ -128,8 +128,11 @@
     </ul></aside>
 
     <h2>What exists and what comes next</h2>
-    <p>This design is part of our research and specification work. We are currently prototyping capability envelopes and reversible execution models within our private browser twin experiments. These prototypes test whether small, local models running on consumer hardware can reliably detect when a task requires asking for clarification rather than optimizing blindly.</p>
-    <p>The next research steps focus on measuring the trade-off between autonomous task completion and confirmation frequency. If testing shows that users experience excessive notification fatigue or that small models fail to identify critical irreversible boundaries, we will adjust the action taxonomy and threshold heuristics before proposing broader deployment.</p>
+    <p>This is a design direction, not a built feature. We are writing a small test harness that makes an agent ask for confirmation before irreversible actions; it uses fixed rules, not a model. Whether small local models can tell when to ask is an open research question we have not tested yet.</p>
+    <p>The next research steps focus on measuring the trade-off between autonomous task completion and confirmation frequency. If testing shows that users experience excessive notification fatigue or that fixed rules fail to identify critical irreversible boundaries, we will adjust the action taxonomy and threshold heuristics before proposing broader deployment.</p>
+
+    <h2>Further reading</h2>
+    <p>Dylan Hadfield-Menell, Stuart J. Russell, Pieter Abbeel and Anca Dragan, <a href="https://arxiv.org/abs/1606.03137" rel="noopener noreferrer">Cooperative Inverse Reinforcement Learning</a>, arXiv:1606.03137, 2016.</p>
   </div>
 
   <footer class="note-foot wrap-narrow">
