@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261015-0026",
+   "added_at": "2026-10-15T18:25:38+00:00",
+   "title": "Friends' personal AI assistants build dossiers on people who never signed up",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial AI assistants run on hundreds of millions of consumer smartphones and personal laptops. When an employee or student installs an assistant, the application continuously reads their inbox, contact books, and group chat histories to schedule appointments and draft replies. As a consequence, third parties who intentionally avoid using artificial intelligence find their personal addresses, phone numbers, family photos, and private conversations ingested and cross-referenced on corporate servers. Corporate marketing platforms use these aggregated social graphs to target advertisements and score consumer creditworthiness based on the spending habits and communication patterns of their friends.",
+   "premise": "Consumer AI assistants require broad access to personal contacts, emails, and chat messages to automate daily errands. In doing so, these tools build detailed relational dossiers on friends, family members, and colleagues who never agreed to share their information.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops personal agent software designed to run strictly on user hardware. Rather than uploading raw conversation threads to central clouds, the local assistant performs redaction on-device and provides answers without sharing raw data. By demonstrating that personal assistants can automate daily tasks without harvesting third-party contacts, the network helps open-source developers and user cooperatives deploy privacy-respecting alternatives.",
+   "shift": 0.43,
+   "outcomes": [
+    {
+     "name": "Unconsented relational surveillance becomes the default",
+     "description": "Commercial assistant platforms normalize third-party contact ingestion, severely eroding digital privacy for anyone who communicates with connected friends.",
+     "example": "A job applicant is rejected after a hiring firm's assistant references private health concerns mentioned in a friend's archived group chat.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Local personal twins filter and protect third-party data",
+     "description": "Open-source personal assistants running locally sanitize outgoing communications, redacting contact information and third-party messages before consulting external services.",
+     "example": "A local twin automatically strips phone numbers, surnames, and third-party quotations before summarizing a group chat on a home workstation.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Regulatory bans on commercial contact graph aggregation",
+     "description": "Consumer protection agencies fine companies that construct shadow profiles from third-party contact lists, though cloud providers find alternative ways to infer connections.",
+     "example": "Regulators issue civil investigative demands to tech platforms, forcing them to delete contact records uploaded without direct recipient consent.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.28
+    }
+   ],
+   "pipelines": [
+    "community",
+    "policy",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theverge.com/tech/1011938/muse-ai-data-friends-consent",
+     "title": "Friends don’t let friends feed their data to AI agents",
+     "kind": "news",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261015-0025",
    "added_at": "2026-10-15T18:01:21+00:00",
    "title": "Algorithmic Wire Feeds Synchronize Autonomous Newsrooms into Global Information Monocultures",
