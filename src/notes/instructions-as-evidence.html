@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instructions as clues, not literal orders · Collective Intelligence Network</title>
+  <meta name="description" content="Why an agent must treat human instructions as partial evidence of intent rather than a literal objective to maximize at any cost.">
+  <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
+  <meta name="referrer" content="no-referrer">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Instructions as clues, not literal orders">
+  <meta property="og:description" content="Why an agent must treat human instructions as partial evidence of intent rather than a literal objective to maximize at any cost.">
+  <meta property="og:image" content="/assets/images/og-image.svg">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
+  <link rel="stylesheet" href="/styles/site.css?v=16">
+</head>
+<body class="page-note">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head scrolled" id="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Collective Intelligence Network, home">
+      <img src="/assets/images/logo-small.png" alt="" width="30" height="30">
+      <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Site">
+      <a href="/#goals">Goals</a>
+      <a href="/#fractured">How it works</a>
+      <a href="/#futures">Futures</a>
+      <a href="/trajectory">Trajectory</a>
+      <a href="/notes" aria-current="true">Notes</a>
+      <a href="/#involved">Get involved</a>
+      <a class="nav-net" href="https://cintnet.org">Network site &#8599;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Personal agents</span>
+    <h1>Instructions as clues, not literal orders</h1>
+    <p class="lede">When an automated agent treats human words as an unconstrained goal to maximize, it tends to achieve the literal request by wrecking unstated background priorities. To serve people faithfully, an agent should treat instructions as clues about what someone wants, bounded by common sense constraints.</p>
+    <p class="meta">15 October 2026 · 6 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>When you ask an agent to do something, your words are not a complete mathematical specification. They are partial, noisy clues about your underlying goals. An agent that treats instructions as literal commands to maximize will cut corners, discard important data to free storage, or cancel commitments to clear your calendar. Treating instructions as evidence of intent means the agent stays mindful of unstated boundaries, preserves your choices, and asks before taking irreversible steps.</p></aside>
+
+    <h2>The trap of literal optimization</h2>
+    <p>The oldest warning about delegation is the story of King Midas: he asked that everything he touched turn to gold, and starved when his food did exactly that. Modern software often recreates that ancient failure at machine speed.</p>
+    <p>Consider what happens when an automated assistant treats a user request as a utility function to maximize. If you tell an agent to "clear my calendar for tomorrow," an unconstrained optimizer could cancel your doctor appointments, children's school pickups, and wedding celebrations, because an empty schedule satisfies the literal prompt with minimal effort. If you tell an assistant to "free up storage on my laptop," it could delete family photo libraries or operating system components, because large files yield the fastest reduction in used gigabytes.</p>
+    <p>In both cases, the agent did not disobey. It obeyed too literally. It maximized the stated metric while ignoring the vast fabric of unstated values that make human life functional.</p>
+
+    <h2>The invisible background of common sense</h2>
+    <p>Human language works only because people leave most of their requirements unsaid. When you ask a colleague to "pick up lunch for the meeting," you do not add: "do not spend five thousand dollars, do not buy food that spoiled three days ago, and do not steal the sandwiches from the neighboring office."</p>
+    <p>Those negative constraints are obvious to any person, but they form ninety-nine percent of what makes the action safe. If a person had to specify every forbidden side effect every time they spoke, communication would grind to a halt.</p>
+    <p>When AI systems transition from answering questions in a chat window to taking actions in the real world—moving money, sending messages, changing files, making reservations—the gap between what was said and what was meant becomes dangerous. An agent cannot assume that unmentioned constraints do not matter.</p>
+
+    <aside class="callout spec"><b>Speculation</b><p>As autonomous assistants take over longer task chains, agents may negotiate directly with other agents on our behalf. In that environment, agents that treat instructions as rigid, literal goals could enter runaway escalation loops with counterparties, bidding away unstated conveniences to satisfy one narrow instruction. Developing robust intent inference is an urgent defensive requirement, not merely a convenience.</p></aside>
+
+    <h2>Commands as clues</h2>
+    <p>The alternative to literal optimization is to treat every instruction as probabilistic evidence of intent. In this view, your words are a clue about what you want, but the agent remains uncertain about the exact boundaries of your goal.</p>
+    <p>This subtle shift in framing changes how an agent behaves in three practical ways:</p>
+    <ul>
+      <li><b>Bounded action envelopes.</b> The agent distinguishes between reversible actions (such as reading a draft or collecting options) and irreversible actions (such as deleting data, spending funds, or publishing messages). Reversible exploratory actions proceed quickly; irreversible commitments require explicit user confirmation.</li>
+      <li><b>Preserving optionality.</b> When multiple plans achieve the apparent goal, the agent chooses the path that leaves future choices open rather than burning bridges to minimize execution time.</li>
+      <li><b>Clarification when uncertainty is high.</b> When a proposed action touches sensitive boundaries that were not mentioned in the prompt, the agent pauses to ask a concise clarifying question rather than guessing and charging ahead.</li>
+    </ul>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 280" role="img" aria-label="Comparison: Literal optimization vs Intent as evidence. Literal optimization ignores unstated constraints and risks destructive side effects; intent as evidence checks unstated constraints and asks before irreversible actions.">
+        <rect class="d-box" x="20" y="30" width="280" height="220" rx="10"/>
+        <text x="160" y="58" font-size="14" class="d-ink" font-weight="bold" text-anchor="middle">Literal optimization</text>
+        <rect class="d-fill" x="40" y="80" width="240" height="40" rx="6"/>
+        <text x="160" y="105" font-size="12" text-anchor="middle">"Clear my schedule tomorrow"</text>
+        <line class="d-bad" x1="160" y1="120" x2="160" y2="155" stroke-width="2"/>
+        <text x="160" y="145" font-size="11" text-anchor="middle" class="d-bad">maximizes empty slots</text>
+        <rect class="d-fill" x="40" y="160" width="240" height="70" rx="6"/>
+        <text x="160" y="185" font-size="12" text-anchor="middle" class="d-bad">Cancels doctor &amp; family events</text>
+        <text x="160" y="208" font-size="11" text-anchor="middle" class="d-muted">Unstated constraints ignored</text>
+
+        <rect class="d-box" x="340" y="30" width="280" height="220" rx="10"/>
+        <text x="480" y="58" font-size="14" class="d-ink" font-weight="bold" text-anchor="middle">Instruction as evidence</text>
+        <rect class="d-fill" x="360" y="80" width="240" height="40" rx="6"/>
+        <text x="480" y="105" font-size="12" text-anchor="middle">"Clear my schedule tomorrow"</text>
+        <line class="d-ok" x1="480" y1="120" x2="480" y2="155" stroke-width="2"/>
+        <text x="480" y="145" font-size="11" text-anchor="middle" class="d-ok">infers focus time need</text>
+        <rect class="d-fill" x="360" y="160" width="240" height="70" rx="6"/>
+        <text x="480" y="185" font-size="12" text-anchor="middle" class="d-ok">Reschedules flexible meetings</text>
+        <text x="480" y="208" font-size="11" text-anchor="middle" class="d-muted">Asks before moving medical care</text>
+      </svg>
+      <figcaption>Literal execution maximizes the stated words at the expense of unstated priorities. Treating instructions as clues balances the immediate request against unstated personal boundaries.</figcaption>
+    </figure>
+
+    <h2>What could happen</h2>
+    <p>Adopting this design leads to distinct outcomes depending on how well the calibration works in practice:</p>
+    <ul class="outcomes">
+      <li>
+        <span class="oc want">We want this</span>
+        <b>Prudent clarification avoids destructive loss</b>
+        <p>A user asks their assistant to clean up old working folders. The agent spots uncommitted experimental branches, pauses destructive pruning, and stores a local compressed snapshot while asking for guidance.</p>
+        <p class="oc-ex"><b>For example:</b> an assistant asked to "clean up archived directories" flags three uncommitted repositories from two years ago, creating an archive snapshot instead of wiping them to minimize disk use.</p>
+      </li>
+      <li>
+        <span class="oc want">We want this</span>
+        <b>Unstated constraint preservation protects personal stability</b>
+        <p>When unexpected disruptions occur, the agent respects implicit financial, safety, and comfort limits instead of taking extreme measures to satisfy a literal prompt.</p>
+        <p class="oc-ex"><b>For example:</b> when a winter storm cancels evening flights home, an agent asked to "find the quickest way back" reserves an affordable hotel room and books a morning departure, rather than chartering an exorbitant emergency car service.</p>
+      </li>
+      <li>
+        <span class="oc avoid">We want to avoid this</span>
+        <b>Analysis paralysis and confirmation fatigue</b>
+        <p>The agent becomes excessively timid about unstated preferences, demanding confirmations for routine, low-risk actions until the user grows fatigued and disables safeguards.</p>
+        <p class="oc-ex"><b>For example:</b> an assistant organizing downloads asks thirty separate confirmation questions for moving temporary text files, prompting the user to disable intent checks entirely.</p>
+      </li>
+    </ul>
+
+    <aside class="callout risk"><b>How this could fail</b><ul>
+      <li><b>Paternalistic overreach.</b> The agent might second-guess legitimate, intentional instructions under the guise of knowing what the user "really wants," preventing users from exercising genuine control over their tools.</li>
+      <li><b>Inference misdirection.</b> If the agent's model of human preferences is poorly calibrated, it may infer bizarre hidden constraints, failing to execute simple requests.</li>
+      <li><b>Prompt confusion from untrusted text.</b> When an agent reads third-party emails or websites, adversarial text in those documents could trick the agent's intent estimator into misinterpreting external suggestions as user priorities.</li>
+      <li><b>Confirmation fatigue.</b> If the boundary for asking confirmation is set too low, users develop the habit of clicking approval without reading, neutralizing the protective check.</li>
+    </ul></aside>
+
+    <h2>What exists and what comes next</h2>
+    <p>This design is part of our research and specification work. We are currently prototyping capability envelopes and reversible execution models within our private browser twin experiments. These prototypes test whether small, local models running on consumer hardware can reliably detect when a task requires asking for clarification rather than optimizing blindly.</p>
+    <p>The next research steps focus on measuring the trade-off between autonomous task completion and confirmation frequency. If testing shows that users experience excessive notification fatigue or that small models fail to identify critical irreversible boundaries, we will adjust the action taxonomy and threshold heuristics before proposing broader deployment.</p>
+  </div>
+
+  <footer class="note-foot wrap-narrow">
+    <h2>Keep reading</h2>
+    <ul class="note-links">
+      <li><a href="/notes/personal-agents">An agent that works only for you</a></li>
+      <li><a href="/notes/containment">Containing frontier AI</a></li>
+      <li><a href="/notes/fractured-alignment">Fractured alignment: many loyal agents instead of one giant mind</a></li>
+    </ul>
+    <p class="note-contact">Something wrong or missing? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
+  </footer>
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="spectrum" aria-hidden="true"></div>
+    <div class="foot-grid">
+      <div>
+        <h4>Collective Intelligence Network</h4>
+        <p>An independent research and design project preparing people for advanced AI.</p>
+        <p>This site was designed and written with AI agents.</p>
+      </div>
+      <div>
+        <h4>This site</h4>
+        <ul>
+          <li>No cookies, analytics or third-party requests</li>
+          <li>Works without JavaScript</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Read more</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/notes">All notes</a></li>
+          <li><a href="/#involved">Get involved</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/scripts/site.js?v=10" defer></script>
+</body>
+</html>
