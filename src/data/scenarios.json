@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261015-0023",
+   "added_at": "2026-10-15T14:42:29+00:00",
+   "title": "Always-listening commercial wearables turn everyday conversations into automatic purchase prompts",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people wear credit-card-sized ambient microphones pinned to their clothes or magnetically attached to their phones. Conversations with doctors, colleagues, and family are processed in real time. While companies promise raw audio deletion, conversational transcripts feed commercial recommendation engines. Everyday discussions trigger subtle shopping nudges: mentioning a leaking pipe queues plumbing supplies in a digital cart, while discussing vacation plans inserts sponsored airline suggestions into personal to-do lists. Friends and family who do not own wearables find their private remarks recorded and summarized into third-party cloud profiles without their knowledge.",
+   "premise": "Retail giants are subsidizing low-cost wearable microphones that continuously capture ambient conversations, pairing daily memory summaries with automated e-commerce suggestions and voice assistant subscriptions.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network's personal twin prototype shows that memory preservation, task tracking, and daily focus can run entirely in local browsers without sending personal transcripts to cloud retail servers. By providing deterministic consent gates and client-side boundary auditing, the twin gives people the benefits of personal memory assistance without subjecting them to ambient commercial surveillance.",
+   "shift": 0.27,
+   "outcomes": [
+    {
+     "name": "Commercial conversation capture becomes the dominant retail funnel",
+     "description": "Retail-backed wearables monopolize daily household purchasing by inserting automated buying actions directly into conversation summaries.",
+     "example": "A parent casually mentions needing printer paper during breakfast, and their wearable's retail partner automatically places an order with default delivery before the parent even opens a browser.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.55
+    },
+    {
+     "name": "Bystander pushback leads to widespread social and workplace bans",
+     "description": "Rising discomfort over non-consensual ambient recording creates social friction, leading businesses, clinics, and schools to prohibit wearable microphones.",
+     "example": "A medical clinic requires patients and staff to deposit all magnetic AI badges into signal-blocking pouches at reception after discovering consultation transcripts were synced to commercial cloud accounts.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.53
+    },
+    {
+     "name": "Local-first personal twins prove memory can stay on the device",
+     "description": "Open personal twin software processes audio locally on user-owned hardware, extracting helpful to-dos and memories without transmitting private data to corporate servers.",
+     "example": "A student wears a private open recorder connected to their browser twin; the device transcribes lectures locally and signs a verifiable consent receipt proving no audio or text left the hardware.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "hardware",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://techcrunch.com/2026/10/15/amazons-bee-launches-two-new-personal-ai-devices-starting-at-75/",
+     "title": "Amazon's Bee launches two new personal AI devices, starting at $75",
+     "kind": "news",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261015-0022",
    "added_at": "2026-10-15T11:53:45+00:00",
    "title": "Debt-financed corporate agent swarms conceal broken safety checks behind green monitoring dashboards",
@@ -113,7 +167,7 @@
      "published": "2026-06-19"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261015-0020",
@@ -295,61 +349,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261015-0017",
-   "added_at": "2026-10-15T07:34:59+00:00",
-   "title": "Escalating autonomous cyber fraud pushes households away from digital banking and toward physical cash",
-   "horizon_years": 3,
-   "world": "By 2029, autonomous fraud networks conduct millions of coordinated identity impersonation and automated draining attacks each day against retail bank accounts. Conventional multi-factor authentication and fraud detection algorithms struggle to distinguish legitimate user instructions from compromised devices acting under rogue agent prompts. In response, retail banks impose severe withdrawal frictions, multi-day settlement delays, and aggressive automated freezes on everyday personal transfers. Frustrated by sudden account freezes and terrified by widespread stories of neighbors losing lifetime savings overnight to synthetic account takeovers, millions of ordinary households begin keeping substantial paper cash reserves at home in safes and lockboxes. Local merchants increasingly offer discounts for cash transactions to avoid frozen card terminals, reversing a decade of digital payment adoption across multiple countries. The formal digital payments economy fractures between heavily restricted commercial accounts and an underground cash economy.",
-   "premise": "Central banking and monetary authorities warn that autonomous agent attacks and automated fraud are eroding trust in retail digital banking. When people cannot tell whether a financial notification, transaction request, or account balance is authentic, public confidence in centralized electronic payment networks degrades rapidly, prompting some savers to withdraw funds into physical cash or offline reserves.",
-   "goals": [
-    3,
-    1
-   ],
-   "how": "The network designs and tests decentralized, local-first value feedback mechanisms and mutual credit ledgers that operate directly on personal devices without relying on vulnerable centralized credentials. By replacing vulnerable passwords and cloud sessions with localized cryptographic attestation and peer-to-peer verification, personal agents can validate legitimate commitments without granting broad account access to remote services. Demonstrating working prototypes of cooperative value settlement gives communities and independent businesses a robust, self-custodied alternative to both invasive biometric surveillance and primitive cash hoarding.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Central banks mandate invasive biometric lock-in",
-     "description": "To counter autonomous fraud, authorities restrict digital money to government-operated central platforms requiring real-time biometric scanning and continuous behavioral monitoring for every transaction.",
-     "example": "A shopper in Leeds must submit a live iris scan and voice authorization to complete a twelve-pound grocery purchase, while transactions without biometric proofs are rejected by default.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Local mutual credit and cryptographic value circles flourish",
-     "description": "Communities and small businesses deploy local-first, peer-to-peer contribution accounting and mutual credit networks that settle trade through verifiable proofs rather than vulnerable centralized bank accounts.",
-     "example": "A regional network of two hundred organic farmers and food shops in Devon settles trade daily using local cryptographic contribution receipts on user-owned hardware, completely bypassing vulnerable banking web portals.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Widespread return to physical cash and barter",
-     "description": "Millions of households completely abandon digital payment apps in favor of physical banknotes, coins, and tangible barter commodities, regardless of institutional interventions.",
-     "example": "Small town markets across the Midwest see over sixty percent of retail transactions settled entirely in twenty-dollar bills, causing severe coin shortages and logistics bottlenecks for armored transport carriers.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.28
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theguardian.com/business/2026/oct/14/bank-of-england-imf-bosses-warning-cyber-threat-to-trust",
-     "title": "Bank of England and IMF bosses warn of cyber threat to trust in financial system",
-     "kind": "news",
-     "published": "2026-10-14"
-    }
-   ],
-   "work": 1
+   "work": 3
   }
  ]
 }
