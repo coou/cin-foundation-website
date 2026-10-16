@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261016-0042",
+   "added_at": "2026-10-16T12:45:53+00:00",
+   "title": "Automated coding assistants patch security bugs without checking for new flaws",
+   "horizon_years": 3,
+   "world": "It is 2029. Thousands of software companies and open-source projects rely on automated maintenance agents to review code, patch reported vulnerabilities, and merge fixes without human review. In small engineering teams with limited staff, routine security maintenance is handled almost entirely by software bots. When an automated agent repairs a database flaw or memory leak, it satisfies basic unit tests but occasionally strips out safety bounds or introduces subtle logic flaws that go unnoticed until exploited in production.",
+   "premise": "Autonomous coding agents are increasingly trusted to find and patch software vulnerabilities across repositories. However, evaluations show that repair success varies widely across vulnerability types and retrying patches often introduces unexpected regressions.",
+   "goals": [
+    1,
+    5
+   ],
+   "how": "The project develops open-source verification tools, lightweight runtime sandboxes, and defensive benchmark criteria that allow developers to test and constrain coding agents deterministically. By demonstrating that open behavioral checks and fail-closed validation can catch flawed patches without centralized surveillance, the project helps engineering communities maintain reliable software independently. However, enterprise compliance mandates requiring certified commercial audit monopolies remain driven by corporate procurement lobbies that open-source verification tools barely move.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Automated repair agents silently introduce logic regressions into shared libraries",
+     "description": "Software projects allow coding agents to auto-merge security patches that fix targeted flaws while breaking edge-case defenses elsewhere.",
+     "example": "A municipal transit ticketing system suffers an outage after an automated maintenance bot fixes a data parsing error by removing an input validation check that had no dedicated unit test.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Repositories adopt programmatic verification and isolated sandbox checks for agent patches",
+     "description": "Development platforms require automated code patches to pass through deterministic test suites and isolated behavioral sandboxes before merging.",
+     "example": "An open-source encryption library uses a verification harness that tests every agent-submitted patch against hundreds of edge-case test vectors in an ephemeral sandbox, rejecting any fix that modifies existing invariants.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial platforms restrict code maintenance to costly proprietary review services",
+     "description": "Regulators and cloud providers mandate that all automated code repairs pass through expensive certified commercial audit platforms, squeezing out independent developers.",
+     "example": "An independent developer building a civic budgeting tool is barred from publishing updates until paying thousands of dollars for an audit by a certified cloud vendor.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.17020",
+     "title": "CWE-bench: Refocusing Agentic Security from Exploitation to Defense",
+     "kind": "paper",
+     "published": "2026-10-12"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261016-0041",
    "added_at": "2026-10-16T11:35:20+00:00",
    "title": "Autonomous fund managers trade across decentralized markets without human sign-off",
