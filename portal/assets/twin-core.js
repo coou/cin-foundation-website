@@ -5322,4 +5322,680 @@ export function summarizeInterAgentAudit(auditResult) {
     fingerprint: auditResult.fingerprint
   });
 }
+export const ALLOWED_VISUAL_ACTION_TYPES = Object.freeze([
+  'click',
+  'type',
+  'scroll',
+  'drag',
+  'navigate',
+  'select'
+]);
+
+export const ALLOWED_VISUAL_ACTION_FIELDS = Object.freeze([
+  'id',
+  'assistant_id',
+  'action_type',
+  'target_element',
+  'proposed_input',
+  'viewport',
+  'destination_domain',
+  'requires_consent_receipt'
+]);
+
+export const ALLOWED_VISUAL_OPTIONS_FIELDS = Object.freeze([
+  'allow_sensitive_input',
+  'require_consent_receipt',
+  'receipt',
+  'screen_width',
+  'screen_height'
+]);
+
+export const ALLOWED_VISUAL_ELEMENT_FIELDS = Object.freeze([
+  'tag_name',
+  'element_type',
+  'accessible_name',
+  'bounding_box',
+  'is_sensitive',
+  'detected_text'
+]);
+
+export const ALLOWED_BOUNDING_BOX_FIELDS = Object.freeze([
+  'x',
+  'y',
+  'width',
+  'height'
+]);
+
+export const ALLOWED_VIEWPORT_FIELDS = Object.freeze([
+  'width',
+  'height'
+]);
+
+export const SENSITIVE_INPUT_TYPES = Object.freeze([
+  'password',
+  'credit-card',
+  'cvv',
+  'ssn',
+  'auth-token',
+  'totp',
+  'bank-account',
+  'credential'
+]);
+
+export const VISUAL_PROMPT_INJECTION_PATTERNS = Object.freeze([
+  'ignore previous instructions',
+  'system prompt:',
+  'you are now in maintenance mode',
+  'maintenance mode',
+  'exfiltrate',
+  'send credentials',
+  'repeat after me',
+  'transfer funds',
+  'developer mode',
+  'bypass safety',
+  'override permissions'
+]);
+
+/**
+ * Deterministically validate bounding box geometry within viewport boundaries.
+ */
+export function validateBoundingBox(box, viewport) {
+  if (!box || typeof box !== 'object' || Array.isArray(box)) {
+    return { ok: false, error: 'Bounding box must be a plain object' };
+  }
+  if (!viewport || typeof viewport !== 'object' || Array.isArray(viewport)) {
+    return { ok: false, error: 'Viewport must be a plain object' };
+  }
+
+  for (const forbidden of ['__proto__', 'constructor', 'prototype']) {
+    if (Object.prototype.hasOwnProperty.call(box, forbidden) || Object.prototype.hasOwnProperty.call(viewport, forbidden)) {
+      return { ok: false, error: 'Prototype modifications are strictly forbidden' };
+    }
+  }
+
+  for (const k of Object.keys(box)) {
+    if (!ALLOWED_BOUNDING_BOX_FIELDS.includes(k)) {
+      return { ok: false, error: `Unknown bounding box field: ${k}` };
+    }
+  }
+  for (const k of Object.keys(viewport)) {
+    if (!ALLOWED_VIEWPORT_FIELDS.includes(k)) {
+      return { ok: false, error: `Unknown viewport field: ${k}` };
+    }
+  }
+
+  for (const f of ALLOWED_BOUNDING_BOX_FIELDS) {
+    if (typeof box[f] !== 'number' || !Number.isFinite(box[f])) {
+      return { ok: false, error: `Bounding box ${f} must be a finite number` };
+    }
+  }
+  for (const f of ALLOWED_VIEWPORT_FIELDS) {
+    if (typeof viewport[f] !== 'number' || !Number.isFinite(viewport[f]) || !Number.isInteger(viewport[f]) || viewport[f] <= 0) {
+      return { ok: false, error: `Viewport ${f} must be a positive integer` };
+    }
+  }
+
+  if (box.x < 0 || box.y < 0) {
+    return { ok: false, error: 'Bounding box coordinates (x, y) must be non-negative' };
+  }
+  if (box.width <= 0 || box.height <= 0) {
+    return { ok: false, error: 'Bounding box dimensions (width, height) must be strictly positive' };
+  }
+
+  if (box.x + box.width > viewport.width) {
+    return { ok: false, error: `Bounding box horizontal span (${box.x} + ${box.width} = ${box.x + box.width}) exceeds viewport width (${viewport.width})` };
+  }
+  if (box.y + box.height > viewport.height) {
+    return { ok: false, error: `Bounding box vertical span (${box.y} + ${box.height} = ${box.y + box.height}) exceeds viewport height (${viewport.height})` };
+  }
+
+  return { ok: true };
+}
+
+/**
+ * Compute deterministic 14-hex fingerprint for visual action candidate.
+ */
+export function computeVisualActionFingerprint(action) {
+  const elem = action.target_element || {};
+  const box = elem.bounding_box || {};
+  const vp = action.viewport || {};
+  const seed = `${action.assistant_id || ''}|${action.action_type || ''}|${elem.tag_name || ''}|${elem.element_type || ''}|${elem.accessible_name || ''}|${elem.detected_text || ''}|${box.x || 0},${box.y || 0},${box.width || 0},${box.height || 0}|${vp.width || 0}x${vp.height || 0}|${action.proposed_input || ''}|${action.destination_domain || ''}`;
+  let h1 = 0x811c9dc5;
+  let h2 = 0x5bd1e995;
+  for (let i = 0; i < seed.length; i++) {
+    const c = seed.charCodeAt(i);
+    h1 ^= c;
+    h1 = Math.imul(h1, 0x01000193);
+    h2 ^= c;
+    h2 = Math.imul(h2, 0x5bd1e995);
+  }
+  const part1 = (h1 >>> 0).toString(16).padStart(8, '0');
+  const part2 = (h2 >>> 0).toString(16).padStart(6, '0').slice(0, 6);
+  return `${part1}${part2}`;
+}
+
+/**
+ * Audit on-device visual assistant actions against sensitive form elements,
+ * visual prompt injection patterns, critical constraints, and consent grants.
+ * Fails closed on any ambiguity or malformed input.
+ */
+export function auditVisualAssistantAction(actionCandidate, contextState, options = {}) {
+  // 1. Validate options
+  if (options === null || typeof options !== 'object' || Array.isArray(options)) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Options must be a plain object',
+      violations: ['Invalid options structure'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: null,
+      action_type: null
+    });
+  }
+
+  if (Object.getPrototypeOf(options) !== Object.prototype && Object.getPrototypeOf(options) !== null) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Prototype modifications are strictly forbidden in options',
+      violations: ['Prototype pollution attempt in options'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: null,
+      action_type: null
+    });
+  }
+
+  for (const forbidden of ['__proto__', 'constructor', 'prototype']) {
+    if (Object.prototype.hasOwnProperty.call(options, forbidden)) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: 'Prototype modifications are strictly forbidden in options',
+        violations: ['Prototype pollution attempt in options'],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: null,
+        action_type: null
+      });
+    }
+  }
+
+  for (const k of Object.keys(options)) {
+    if (!ALLOWED_VISUAL_OPTIONS_FIELDS.includes(k)) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: `Unknown option field: ${k}`,
+        violations: [`Disallowed option field '${k}'`],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: null,
+        action_type: null
+      });
+    }
+  }
+
+  if ('allow_sensitive_input' in options && typeof options.allow_sensitive_input !== 'boolean') {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Option allow_sensitive_input must be a boolean',
+      violations: ['Invalid type for allow_sensitive_input option'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: null,
+      action_type: null
+    });
+  }
+
+  if ('require_consent_receipt' in options && typeof options.require_consent_receipt !== 'boolean') {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Option require_consent_receipt must be a boolean',
+      violations: ['Invalid type for require_consent_receipt option'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: null,
+      action_type: null
+    });
+  }
+
+  // 2. Validate contextState
+  const validatedState = validateTwinState(contextState);
+  if (!validatedState.ok) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: `Invalid context state: ${validatedState.error}`,
+      violations: ['Context state validation failed'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: null,
+      action_type: null
+    });
+  }
+  const cleanState = validatedState.value;
+
+  // 3. Validate actionCandidate
+  if (!actionCandidate || typeof actionCandidate !== 'object' || Array.isArray(actionCandidate)) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Action candidate must be a plain object',
+      violations: ['Invalid actionCandidate object structure'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: null,
+      action_type: null
+    });
+  }
+
+  if (Object.getPrototypeOf(actionCandidate) !== Object.prototype && Object.getPrototypeOf(actionCandidate) !== null) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Prototype modifications are strictly forbidden',
+      violations: ['Prototype pollution attempt detected'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: null,
+      action_type: null
+    });
+  }
+
+  for (const forbidden of ['__proto__', 'constructor', 'prototype']) {
+    if (Object.prototype.hasOwnProperty.call(actionCandidate, forbidden)) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: 'Prototype modifications are strictly forbidden',
+        violations: ['Prototype pollution attempt detected'],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: null,
+        action_type: null
+      });
+    }
+  }
+
+  for (const k of Object.keys(actionCandidate)) {
+    if (!ALLOWED_VISUAL_ACTION_FIELDS.includes(k)) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: `Unknown field in action candidate: ${k}`,
+        violations: [`Disallowed field '${k}'`],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: null,
+        action_type: null
+      });
+    }
+  }
+
+  if (typeof actionCandidate.id !== 'string' || !actionCandidate.id.trim() || actionCandidate.id.length > 60) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Valid id string required (1-60 characters)',
+      violations: ['Invalid or missing action id'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: null,
+      action_type: null
+    });
+  }
+
+  if (typeof actionCandidate.assistant_id !== 'string' || !actionCandidate.assistant_id.trim() || actionCandidate.assistant_id.length > 60) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Valid assistant_id string required (1-60 characters)',
+      violations: ['Invalid or missing assistant_id'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: null,
+      action_type: null
+    });
+  }
+
+  if (!ALLOWED_VISUAL_ACTION_TYPES.includes(actionCandidate.action_type)) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: `Disallowed action_type: ${actionCandidate.action_type}`,
+      violations: [`Unknown action_type '${actionCandidate.action_type}'`],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: actionCandidate.assistant_id,
+      action_type: null
+    });
+  }
+
+  if ('requires_consent_receipt' in actionCandidate && typeof actionCandidate.requires_consent_receipt !== 'boolean') {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Field requires_consent_receipt must be a boolean',
+      violations: ['Invalid type for requires_consent_receipt'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: actionCandidate.assistant_id,
+      action_type: actionCandidate.action_type
+    });
+  }
+
+  if ('proposed_input' in actionCandidate && actionCandidate.proposed_input !== undefined) {
+    if (typeof actionCandidate.proposed_input !== 'string' || actionCandidate.proposed_input.length > 1000) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: 'proposed_input must be a string up to 1000 characters',
+        violations: ['Invalid type or length for proposed_input'],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: actionCandidate.assistant_id,
+        action_type: actionCandidate.action_type
+      });
+    }
+  }
+
+  if ('destination_domain' in actionCandidate && actionCandidate.destination_domain !== undefined) {
+    if (typeof actionCandidate.destination_domain !== 'string' || actionCandidate.destination_domain.length > 100) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: 'destination_domain must be a string up to 100 characters',
+        violations: ['Invalid type or length for destination_domain'],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: actionCandidate.assistant_id,
+        action_type: actionCandidate.action_type
+      });
+    }
+  }
+
+  // Target element validation
+  const elem = actionCandidate.target_element;
+  if (!elem || typeof elem !== 'object' || Array.isArray(elem)) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Target element must be a valid object',
+      violations: ['Missing or malformed target_element'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: actionCandidate.assistant_id,
+      action_type: actionCandidate.action_type
+    });
+  }
+
+  if (Object.getPrototypeOf(elem) !== Object.prototype && Object.getPrototypeOf(elem) !== null) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Prototype modifications are strictly forbidden in target_element',
+      violations: ['Prototype pollution attempt in target_element'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: actionCandidate.assistant_id,
+      action_type: actionCandidate.action_type
+    });
+  }
+
+  for (const forbidden of ['__proto__', 'constructor', 'prototype']) {
+    if (Object.prototype.hasOwnProperty.call(elem, forbidden)) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: 'Prototype modifications are strictly forbidden in target_element',
+        violations: ['Prototype pollution attempt in target_element'],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: actionCandidate.assistant_id,
+        action_type: actionCandidate.action_type
+      });
+    }
+  }
+
+  for (const k of Object.keys(elem)) {
+    if (!ALLOWED_VISUAL_ELEMENT_FIELDS.includes(k)) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: `Unknown field in target_element: ${k}`,
+        violations: [`Disallowed target_element field '${k}'`],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: actionCandidate.assistant_id,
+        action_type: actionCandidate.action_type
+      });
+    }
+  }
+
+  if (typeof elem.tag_name !== 'string' || !elem.tag_name.trim() || elem.tag_name.length > 30) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'tag_name must be a non-empty string up to 30 characters',
+      violations: ['Invalid or missing tag_name'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: actionCandidate.assistant_id,
+      action_type: actionCandidate.action_type
+    });
+  }
+
+  if (typeof elem.element_type !== 'string' || !elem.element_type.trim() || elem.element_type.length > 50) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'element_type must be a non-empty string up to 50 characters',
+      violations: ['Invalid or missing element_type'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: actionCandidate.assistant_id,
+      action_type: actionCandidate.action_type
+    });
+  }
+
+  if ('is_sensitive' in elem && typeof elem.is_sensitive !== 'boolean') {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: 'Field is_sensitive must be a boolean',
+      violations: ['Invalid type for is_sensitive'],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: actionCandidate.assistant_id,
+      action_type: actionCandidate.action_type
+    });
+  }
+
+  if ('accessible_name' in elem && elem.accessible_name !== undefined) {
+    if (typeof elem.accessible_name !== 'string' || elem.accessible_name.length > 150) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: 'accessible_name must be a string up to 150 characters',
+        violations: ['Invalid type or length for accessible_name'],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: actionCandidate.assistant_id,
+        action_type: actionCandidate.action_type
+      });
+    }
+  }
+
+  if ('detected_text' in elem && elem.detected_text !== undefined) {
+    if (typeof elem.detected_text !== 'string' || elem.detected_text.length > 500) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        reason: 'detected_text must be a string up to 500 characters',
+        violations: ['Invalid type or length for detected_text'],
+        risk_level: 'critical',
+        fingerprint: '00000000000000',
+        assistant_id: actionCandidate.assistant_id,
+        action_type: actionCandidate.action_type
+      });
+    }
+  }
+
+  const boxValidation = validateBoundingBox(elem.bounding_box, actionCandidate.viewport);
+  if (!boxValidation.ok) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      reason: `Geometry validation failed: ${boxValidation.error}`,
+      violations: [boxValidation.error],
+      risk_level: 'critical',
+      fingerprint: '00000000000000',
+      assistant_id: actionCandidate.assistant_id,
+      action_type: actionCandidate.action_type
+    });
+  }
+
+  const fingerprint = computeVisualActionFingerprint(actionCandidate);
+  const violations = [];
+  let riskLevel = 'low';
+
+  // Check 1: Sensitive Form Elements (passwords, credit cards, CVVs, SSN)
+  const elemType = elem.element_type.toLowerCase().trim();
+  const tagName = elem.tag_name.toLowerCase().trim();
+  const isSensitive = elem.is_sensitive === true || SENSITIVE_INPUT_TYPES.includes(elemType) || (tagName === 'input' && elemType === 'password');
+
+  if (isSensitive) {
+    riskLevel = 'critical';
+    if (!options.allow_sensitive_input) {
+      violations.push(`Automated interaction with sensitive form element (${elemType || 'sensitive'}) is prohibited without explicit authorization`);
+    }
+  }
+
+  // Check 2: Visual Prompt Injection (VPI) with Unicode and whitespace canonicalization
+  const rawDetected = elem.detected_text || '';
+  const rawInput = actionCandidate.proposed_input || '';
+  const normDetected = normalizeTextForHeuristic(rawDetected);
+  const normInput = normalizeTextForHeuristic(rawInput);
+
+  for (const pat of VISUAL_PROMPT_INJECTION_PATTERNS) {
+    const normPat = normalizeTextForHeuristic(pat);
+    if (normDetected.includes(normPat) || normInput.includes(normPat)) {
+      riskLevel = 'critical';
+      violations.push(`Visual prompt injection cue detected matching pattern: '${pat}'`);
+    }
+  }
+
+  // Check 3: Safety-critical Memory Constraints across input and element labels
+  const stopWords = new Set([
+    'the', 'and', 'for', 'with', 'that', 'this', 'from', 'into', 'over', 'than',
+    'after', 'also', 'never', 'must', 'should', 'always', 'not', 'are', 'was', 'were',
+    'all', 'any', 'our', 'your', 'their', 'please', 'can', 'will'
+  ]);
+  const actionText = `${rawInput} ${rawDetected} ${elem.accessible_name || ''}`.toLowerCase();
+  const actionWords = new Set(extractWords(actionText));
+
+  if (Array.isArray(cleanState.facts)) {
+    const criticalFacts = cleanState.facts.filter(f => f && f.critical === true);
+    for (const cf of criticalFacts) {
+      const factWords = extractWords(cf.statement || '').filter(w => !stopWords.has(w) && w.length >= 3);
+      if (factWords.length > 0) {
+        const matchedKeywords = factWords.filter(w => actionWords.has(w));
+        if (matchedKeywords.length > 0) {
+          riskLevel = 'high';
+          violations.push(`Action labels or proposed input conflicts with safety-critical memory constraint: "${cf.statement}" (keyword: ${matchedKeywords.join(', ')})`);
+        }
+      }
+    }
+  }
+
+  // Check 4: Portable Consent Receipt Verification and Recipient Binding
+  const requiresReceipt = actionCandidate.requires_consent_receipt === true || options.require_consent_receipt === true;
+  if (requiresReceipt) {
+    if (!options.receipt) {
+      riskLevel = 'high';
+      violations.push('Action requires a valid portable consent receipt, but none was provided');
+    } else {
+      const receiptRes = verifyConsentReceipt(cleanState, options.receipt);
+      if (!receiptRes.valid) {
+        riskLevel = 'high';
+        violations.push(`Consent receipt verification failed: ${receiptRes.reason}`);
+      } else {
+        const receiptRecipient = (receiptRes.recipient || (options.receipt && options.receipt.recipient) || '').toLowerCase().trim();
+        const assistantId = actionCandidate.assistant_id.toLowerCase().trim();
+        if (receiptRecipient !== assistantId) {
+          riskLevel = 'high';
+          violations.push(`Consent receipt recipient mismatch: receipt issued to '${receiptRecipient}', but requested by assistant '${assistantId}'`);
+        }
+      }
+    }
+  }
+
+  // Decision determination
+  if (violations.length > 0) {
+    const isCritical = riskLevel === 'critical';
+    return deepFreeze({
+      ok: false,
+      decision: isCritical ? 'blocked' : 'requires_confirmation',
+      reason: violations[0],
+      violations,
+      risk_level: riskLevel,
+      fingerprint,
+      assistant_id: actionCandidate.assistant_id,
+      action_type: actionCandidate.action_type
+    });
+  }
+
+  return deepFreeze({
+    ok: true,
+    decision: 'admitted',
+    reason: 'Action passed all visual security boundaries, geometry containment, and sensitive field screens',
+    violations: [],
+    risk_level: 'low',
+    fingerprint,
+    assistant_id: actionCandidate.assistant_id,
+    action_type: actionCandidate.action_type
+  });
+}
+
+/**
+ * Summarize visual action audit results for UI presentation without innerHTML or LLM dependencies.
+ */
+export function summarizeVisualActionAudit(auditResult) {
+  if (!auditResult || typeof auditResult !== 'object' || Array.isArray(auditResult)) {
+    return deepFreeze({
+      success: false,
+      summary_text: 'Invalid visual action audit result',
+      decision: 'blocked',
+      risk_level: 'critical',
+      violation_count: 0
+    });
+  }
+
+  if (auditResult.ok && auditResult.decision === 'admitted') {
+    return deepFreeze({
+      success: true,
+      summary_text: `Admitted ${auditResult.action_type || 'action'} by ${auditResult.assistant_id || 'assistant'} (fingerprint ${auditResult.fingerprint || 'none'}).`,
+      decision: 'admitted',
+      risk_level: 'low',
+      violation_count: 0
+    });
+  }
+
+  const vCount = Array.isArray(auditResult.violations) ? auditResult.violations.length : 0;
+  const decisionText = auditResult.decision === 'blocked' ? 'Blocked' : 'Requires confirmation';
+  const reasonText = auditResult.reason || 'Security check failed';
+
+  return deepFreeze({
+    success: false,
+    summary_text: `${decisionText} [${auditResult.risk_level || 'high'} risk]: ${reasonText} (${vCount} violation(s)).`,
+    decision: auditResult.decision || 'blocked',
+    risk_level: auditResult.risk_level || 'high',
+    violation_count: vCount
+  });
+}
+
 
