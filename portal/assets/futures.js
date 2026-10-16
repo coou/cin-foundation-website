@@ -53,10 +53,19 @@ function scenario(sc) {
 }
 
 mountAuth(() => {});
+
+const loadTimeout = setTimeout(() => {
+  const st = document.getElementById('fstate');
+  if (st && st.textContent.trim().startsWith('Loading')) {
+    st.textContent = 'Scenarios are taking a while to load. Check your connection, or check back shortly.';
+  }
+}, 3500);
+
 getJSON('/data/scenarios.json').then((d) => {
   const host = document.getElementById('futures'); const st = document.getElementById('fstate');
   const list = (d && d.scenarios) || [];
   if (!list.length) { st.textContent = 'No scenarios yet. The agents add new ones as they read.'; return; }
   st.textContent = list.length + ' scenario' + (list.length === 1 ? '' : 's') + ', newest first. Likelihoods are the agents\' honest estimates, not promises.';
   list.forEach((sc) => host.appendChild(scenario(sc)));
-}).catch(() => { document.getElementById('fstate').textContent = 'The scenarios could not be loaded.'; });
+}).catch(() => { document.getElementById('fstate').textContent = 'The scenarios could not be loaded.'; })
+  .finally(() => clearTimeout(loadTimeout));

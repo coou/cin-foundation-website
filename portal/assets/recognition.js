@@ -26,10 +26,19 @@ function entry(r) {
 }
 
 mountAuth(() => {});
+
+const loadTimeout = setTimeout(() => {
+  const st = document.getElementById('rstate');
+  if (st && st.textContent.trim().startsWith('Loading')) {
+    st.textContent = 'Recognition is taking a while to load. Check your connection, or check back shortly.';
+  }
+}, 3500);
+
 getJSON('/data/recognition.json').then((d) => {
   const host = document.getElementById('recognition'); const st = document.getElementById('rstate');
   const list = (d && d.recognition) || []; const cal = (d && d.calibration) || { resolved: 0, correct: 0, partial: 0 };
   st.textContent = (list.length ? list.length + ' recognised so far. ' : 'Nothing recognised yet; the agents are starting their record. ') +
     (cal.resolved ? cal.resolved + ' forecasts checked: ' + cal.correct + ' came true, ' + cal.partial + ' partly.' : 'No forecasts have fallen due yet.');
   list.forEach((r) => host.appendChild(entry(r)));
-}).catch(() => { document.getElementById('rstate').textContent = 'Recognition could not be loaded.'; });
+}).catch(() => { document.getElementById('rstate').textContent = 'Recognition could not be loaded.'; })
+  .finally(() => clearTimeout(loadTimeout));
