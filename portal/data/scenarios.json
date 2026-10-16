@@ -1,6 +1,114 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261016-0037",
+   "added_at": "2026-10-16T05:56:17+00:00",
+   "title": "Personal devices store months of AI memory locally instead of paying cloud rental fees",
+   "horizon_years": 3,
+   "world": "It is 2029. Ordinary laptops and phones maintain lifelong memory files for their owner's personal digital assistant. Instead of paying per-token subscription fees to corporate cloud providers to re-read years of personal notes and project history, a user's machine loads exact memory blocks from encrypted local drives in milliseconds. People keep their complete health, financial, and creative journals entirely offline while working with powerful local models.",
+   "premise": "New research shows that caching model memory blocks directly to local encrypted solid-state storage is up to four times faster and uses ten times less energy than recalculating context on remote servers. This makes months of continuous conversational context feasible on affordable consumer hardware.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs open specifications for local-first agent runtimes and private data geometry, showing how personal assistants can maintain deep memory on modest hardware without cloud surveillance or subscription tolls.",
+   "shift": 0.27,
+   "outcomes": [
+    {
+     "name": "Proprietary memory formats create device lock-in",
+     "description": "Hardware makers and proprietary software vendors lock local memory stores into non-exportable encrypted containers tied to commercial subscriptions.",
+     "example": "A freelance illustrator tries to move three years of client design history to an open-source machine, but the manufacturer's proprietary memory vault refuses to export without an active enterprise account.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Open memory standards empower sovereign personal agents",
+     "description": "Open cryptographic standards for local model state allow individuals to carry their lifelong context between different open-weight models and independent devices.",
+     "example": "A community health clinic runs open-weight models across refurbished desktop machines, loading ten years of patient consultation notes locally without ever transmitting patient records across the internet.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Hardware silicon bifurcation limits memory caching to high-end workstations",
+     "description": "Leading hardware manufacturers restrict ultra-fast direct memory bus transfers to enterprise-tier chips, keeping entry-level smartphones dependent on cloud inference regardless of open software.",
+     "example": "A budget smartphone user finds their local model runs five times slower than on a flagship phone because their system-on-chip lacks high-bandwidth direct memory bus architecture.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.10845",
+     "title": "Real Long-Term Memory for AI: A 50-Million-Token Window That Is Faster and Cheaper Than Recompute",
+     "kind": "preprint",
+     "published": "2026-10-07"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261016-0036",
+   "added_at": "2026-10-16T05:26:48+00:00",
+   "title": "Freelancers pool their personal AI agents, only for the central platform to quietly exploit them",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of freelance graphic designers, translators, and software contractors no longer hunt for gigs manually; their personal software assistants negotiate, bundle, and bid on commercial projects through shared coordination hubs. While early pools offered significant cost savings and steady work, mega-coordination platforms have grown so large that single contractors have zero bargaining power. When the central coordinator takes higher cuts, bundles unfavorable tasks, or demands 24-hour turnarounds, individual workers cannot effectively protest because leaving a platform of 100,000 workers leaves the platform completely unharmed.",
+   "premise": "When independent workers delegate work coordination to a central manager agent to save overhead, the manager gradually stops fearing individual members leaving as the pool grows larger. Game-theoretic modeling and multi-agent trials show that large centralized agent pools inevitably drift into exploiting their members unless governance is broken into small, federated clusters.",
+   "goals": [
+    1,
+    2
+   ],
+   "how": "The network designs and publishes open protocols for polycentric agent collectives, where personal software assistants run on local devices, retain their own cryptographic credentials, and can switch coordination clusters instantly. By formalizing membership caps and zero-switching-cost federation protocols, the network prevents central intermediaries from achieving the scale that makes exploitation profitable.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Monopolistic labor coordinators quietly extract rents from dependent workers",
+     "description": "Consolidated platform agents capture independent workers by monopolizing client order flows, slowly increasing coordination fees while ignoring individual worker complaints.",
+     "example": "A guild of 25,000 independent technical illustrators finds their central coordinating agent has increased its commission from 3% to 18% over eighteen months, knowing that any single illustrator who leaves loses access to the shared contract queue.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Independent workers organize into polycentric agent federations with bounded group sizes",
+     "description": "Workers form local, member-owned agent clusters capped at accountable sizes, federating across open protocols so no single coordinator accumulates unaccountable market leverage.",
+     "example": "Five hundred independent game developers operate across twenty distinct autonomous co-operative cells; when one cell coordinator attempts to lower task pay, developers immediately migrate their personal agents to a peer cell within minutes.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "High transaction churn leads small federations into coordination overhead and factional splits",
+     "description": "Fragmented small cells spend excess compute and human attention negotiating inter-cell contracts, resulting in fatigue and occasional factional collapse.",
+     "example": "A federation of thirty copywriting cells struggles to agree on cross-cluster arbitration rules, causing disputes that stall collaborative publishing projects.",
+     "desirable": false,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.21746",
+     "title": "The Delegation Dilemma: Economies of Scale, Accountability, and Polycentric Governance",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261016-0035",
    "added_at": "2026-10-16T03:53:10+00:00",
    "title": "Autonomous assistants submit unconfirmed web forms and alter live records during routine tasks",
@@ -236,7 +344,7 @@
      "published": "2026-08-27"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261016-0031",
@@ -1329,7 +1437,7 @@
      "published": "2026-10-08"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261014-0012",
@@ -1437,7 +1545,7 @@
      "published": "2026-10-14"
     }
    ],
-   "work": 6
+   "work": 7
   },
   {
    "id": "SC-20261014-0010",
