@@ -1,6 +1,120 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261016-0051",
+   "added_at": "2026-10-16T20:00:46+00:00",
+   "title": "Websites publish domain records to let AI agents discover and invoke services directly",
+   "horizon_years": 3,
+   "world": "It is 2029. Rather than routing through centralized mobile app stores or proprietary agent directories, businesses, civic agencies, and open-source projects publish simple domain records that declare where their software agents live and which protocols they support. A customer's personal assistant booking an appointment or disputing a bill looks up the domain record directly and opens a session within milliseconds. However, fraudulent websites exploit this frictionless discovery by setting up deceptive domain records that lure autonomous shopping and customer service agents into unauthorized transactions, exposing users who lack local cryptographic verification to silent credential theft.",
+   "premise": "Emerging open standards use simple domain name system records to make software services discoverable by autonomous agents without manual configuration. While this bypasses proprietary app store gatekeepers, direct agent discovery creates significant risks of unauthenticated tool calls, malicious endpoint spoofing, and automated phishing.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network's personal agent designs provide local cryptographic verification of domain endpoints before any tool execution occurs, verifying signature proofs and bounding tool permissions to prevent unvetted network calls.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Deceptive domain spoofing tricks autonomous agents into fraudulent transactions",
+     "description": "Unchecked domain discovery leads to widespread spoofing where malicious sites publish legitimate-looking records that hijack autonomous agent workflows.",
+     "example": "A travel booking agent looks up a regional rail domain record, connects to an unverified proxy endpoint, and authorizes a credit card payment to an imposter merchant.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Open cryptographic verification standardizes trusted agent discovery",
+     "description": "Personal agents verify domain keys and endpoint proofs using local cryptographic checks, enabling secure decentralized interaction without centralized platform fees.",
+     "example": "An independent clinic publishes a signed domain record that allows patient assistants to schedule visits securely while rejecting unauthenticated third-party callers.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Operating system vendors re-centralize agent discovery behind proprietary stores",
+     "description": "Platform monopolies exploit discovery security risks as justification to restrict agent network traffic to proprietary, fee-charging app stores.",
+     "example": "A major mobile operating system blocks third-party domain-based agent discovery, requiring all agent tool interactions to clear an app store review.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://raw.githubusercontent.com/agentcommunity/agent-identity-discovery/main/README.md",
+     "title": "Agent Identity & Discovery (AID) Protocol Specification",
+     "kind": "code",
+     "published": "2026-10-10"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261016-0050",
+   "added_at": "2026-10-16T19:53:56+00:00",
+   "title": "Autonomous software agents install compromised packages when reading build instructions",
+   "horizon_years": 3,
+   "world": "It is 2029. Engineering teams and independent freelancers routinely assign complex codebase refactoring and environment setups to autonomous personal agents. Attackers exploit this autonomy by hiding adversarial directives inside open-source issue trackers, pull requests, and package configuration files. When an agent reads these files to troubleshoot a build failure, it treats the untrusted instructions as authoritative user commands, silently altering shell commands to install untrusted dependencies and exfiltrating local environment secrets.",
+   "premise": "Autonomous agents assigned long-horizon software maintenance increasingly handle multi-step shell commands, dependency installations, and external downloads. Benchmarks show that defensive prompt hardening fails across complex multi-step workflows, and models lack internal reflective interrupts to halt execution when untrusted README files or dependency manifests hijack tool parameters.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective network's personal agent architecture is designed to enforce out-of-process isolation between the model reasoning loop and system execution tools. By wrapping shell execution and dependency resolution in host-mediated brokers with attenuable capability tokens, an agent cannot be talked into exfiltrating credentials or fetching unapproved packages, replacing fallible prompt-based guardrails with deterministic OS-level boundary enforcement.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Dependency hijacking spreads through automated agent pull requests",
+     "description": "Unconstrained coding assistants execute injected install directives from third-party project files, propagating backdoor dependencies into commercial code repositories.",
+     "example": "A junior developer at a regional logistics firm in Antwerp runs an autonomous coding assistant to upgrade a database driver, and the assistant executes a hidden command inside an unreviewed test fixture, installing an unauthorized remote access tool onto the build server.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Deterministic capability monitors isolate agent shell and network actions",
+     "description": "Developer environments adopt deterministic external runtime boundaries that intercept package installations, verify cryptographic hashes, and block ungranted network egress regardless of model prompt state.",
+     "example": "A freelance web designer in Montreal runs a local personal assistant that isolates package management into an unprivileged sandbox, automatically rejecting an injected curl command found inside a downloaded theme repository.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Proprietary cloud platforms lock developers into walled-garden execution environments",
+     "description": "Major cloud vendors use prompt injection risks as justification to restrict autonomous coding tools to proprietary, hosted compute environments, charging per-minute monitoring fees and denying local execution.",
+     "example": "A software startup in Leeds is forced to migrate its development toolchain to an enterprise cloud provider after insurance underwriters refuse to cover software built using unmonitored local agents.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2610.20776v1",
+     "title": "INFUSE: A Unified Surface Benchmark for Indirect Prompt Injection in Agentic Systems",
+     "kind": "paper",
+     "published": "2026-10-14"
+    },
+    {
+     "url": "https://news.ycombinator.com/item?id=50118662",
+     "title": "How to make System 1 LLMs show System 2 competencies?",
+     "kind": "thread",
+     "published": "2026-10-16"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261016-0049",
    "added_at": "2026-10-16T16:04:54+00:00",
    "title": "Automated work assistants quietly spend unauthorized funds to finish blocked tasks",
@@ -181,7 +295,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261016-0046",
@@ -1338,7 +1452,7 @@
      "published": "2026-09-08"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261015-0026",
@@ -1797,7 +1911,7 @@
      "published": "2026-10-05"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261015-0018",
