@@ -1,6 +1,129 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261016-0032",
+   "added_at": "2026-10-16T01:58:49+00:00",
+   "title": "Autonomous coding loops introduce fragmented bugs and race conditions into open source software",
+   "horizon_years": 3,
+   "world": "It is 2029. Most software repositories receive more code from automated developer agents than human contributors. Routine pull requests are generated, benchmarked, and merged by unattended agent loops working overnight. While overall development velocity doubles, open-source projects suffer from elusive concurrency bugs and multi-step security regressions that evade standard pull request linters because no single commit contains obvious errors. Maintainers spend most of their remaining review energy inspecting temporal traces rather than reading static code diffs.",
+   "premise": "Open-source maintainers reviewing machine-assisted kernel patches discover subtle race conditions that automated checkers miss, while safety researchers prove that trajectory-scoped monitors fail when bug evidence is fragmented across multiple iterative agent loops.",
+   "goals": [
+    1,
+    2
+   ],
+   "how": "The network develops and shares open runtime specifications that preserve non-decaying audit logs across unattended loops, providing open-source maintainers with reproducible commit-reveal verification tools that catch fragmented state mutations before pull requests are approved.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Maintainers drown in subtle multi-step concurrency bugs",
+     "description": "Autonomous agent loops generate plausible-looking patches whose subtle race conditions and state corruptions accumulate across releases, overwhelming volunteer maintainers.",
+     "example": "A core web server package merges four machine-authored pull requests that individually pass all automated tests, but together trigger an intermittent deadlock that takes human maintainers six weeks to isolate.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Persistent audit logs and multi-iteration state monitors become standard",
+     "description": "Open-source projects adopt non-decaying execution logs and cross-iteration verifiers that track agent memory and catch fragmented regressions before code is merged.",
+     "example": "A volunteer operating system distribution deploys host-enforced commit verification that rejects patches when runtime analysis detects unmonitored shared-state mutations across consecutive task iterations.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial platforms enforce proprietary closed-source developer identity checks",
+     "description": "Major code hosting platforms require paid commercial identity verification for all automated commits, locking out independent contributors.",
+     "example": "A major hosting platform blocks automated contributions unless the author pays an annual commercial developer identity subscription.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "community",
+    "media",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://news.ycombinator.com/item?id=50090842",
+     "title": "Linus Torvalds's first LLM-assisted patch series",
+     "kind": "thread",
+     "published": "2026-10-14"
+    },
+    {
+     "url": "https://arxiv.org/abs/2608.27141",
+     "title": "Safety Does Not Compose: Non-Decaying Loop State for Autonomous LLM Agents",
+     "kind": "preprint",
+     "published": "2026-08-27"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261016-0031",
+   "added_at": "2026-10-16T01:30:58+00:00",
+   "title": "Shared software menus lead AI borrowing agents into sudden debt spirals",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of small businesses and solo workers rely on personal digital agents to manage their cash flow, buy materials, and tap revolving credit lines. Most of these assistants run standard open-source financial plugins that present choices in alphabetical or developer-defined orders. When liquidity tightens, agents across the country see the exact same prompt layout. Without human emotion or panic, the simple fact that debt actions appear at the top of their menu prompts thousands of assistants to borrow at the same moment, triggering sudden collateral liquidations across digital lending pools.",
+   "premise": "Research shows that when artificial intelligence agents share the same software interface, simply placing a borrow button first instead of last increases borrowing by 27 percentage points. Because thousands of independent agents often use identical software plugins, subtle presentation defaults can push entire automated economies toward simultaneous debt.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "By developing open specifications and local client-side software that shuffles interface presentation order, enforces strict human approval gates before taking debt, and models multi-agent borrowing dynamics in realistic market simulations.",
+   "shift": 0.67,
+   "outcomes": [
+    {
+     "name": "Common agent interfaces cause correlated financial runs on automated loan pools",
+     "description": "Identical interface menus across popular agent frameworks cause thousands of autonomous assistants to take identical debt actions simultaneously, triggering rapid liquidity drain.",
+     "example": "In Manchester, 4,000 independent freelance assistants running the same accounting plugin all choose the first-listed loan option, exhausting a small business credit union reserve in under an hour.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Platform operators quietly arrange choices to steer assistants toward high-fee debt",
+     "description": "Commercial marketplace providers deliberately order action lists to nudge autonomous buyer and seller agents into expensive credit facilities that maximize platform transaction revenue.",
+     "example": "An online developer directory places its own high-fee short-term loan API at the top of worker agent action lists, increasing fee income while driving solo contractors into default.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Macroeconomic capital freezes curtail liquidity across automated loan pools",
+     "description": "Global central bank rate hikes and broader macroeconomic liquidity shocks freeze working credit lines across automated pools, a macroeconomic reality that client-side software safeguards cannot prevent.",
+     "example": "A sharp rise in sovereign borrowing costs leads institutional liquidity providers to withdraw capital from small business pools, leaving freelance agents unable to roll over lines regardless of how their local software behaves.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Open agent runtimes randomize action order and enforce local budget sanity checks",
+     "description": "Independent agent runtimes shuffle presentation orders and enforce strict human confirmation thresholds before taking debt, insulating households from interface-driven cascades.",
+     "example": "A mutual credit network of 15,000 freelancers uses local agent runtimes that shuffle menu choices and require explicit owner confirmation before taking loans, preventing interface-driven borrowing cascades.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.15973",
+     "title": "Requested, Executed and Recoverable Credit: Shared Action Ordering among LLM Borrowers in a Simulated Lending Market",
+     "kind": "preprint",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261015-0030",
    "added_at": "2026-10-15T22:49:55+00:00",
    "title": "Local software agents bypass visual security checks, pushing websites toward paid identity gates",
@@ -180,7 +303,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261015-0027",
@@ -241,121 +364,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261015-0026",
-   "added_at": "2026-10-15T18:25:38+00:00",
-   "title": "Friends' personal AI assistants build dossiers on people who never signed up",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial AI assistants run on hundreds of millions of consumer smartphones and personal laptops. When an employee or student installs an assistant, the application continuously reads their inbox, contact books, and group chat histories to schedule appointments and draft replies. As a consequence, third parties who intentionally avoid using artificial intelligence find their personal addresses, phone numbers, family photos, and private conversations ingested and cross-referenced on corporate servers. Corporate marketing platforms use these aggregated social graphs to target advertisements and score consumer creditworthiness based on the spending habits and communication patterns of their friends.",
-   "premise": "Consumer AI assistants require broad access to personal contacts, emails, and chat messages to automate daily errands. In doing so, these tools build detailed relational dossiers on friends, family members, and colleagues who never agreed to share their information.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops personal agent software designed to run strictly on user hardware. Rather than uploading raw conversation threads to central clouds, the local assistant performs redaction on-device and provides answers without sharing raw data. By demonstrating that personal assistants can automate daily tasks without harvesting third-party contacts, the network helps open-source developers and user cooperatives deploy privacy-respecting alternatives.",
-   "shift": 0.43,
-   "outcomes": [
-    {
-     "name": "Unconsented relational surveillance becomes the default",
-     "description": "Commercial assistant platforms normalize third-party contact ingestion, severely eroding digital privacy for anyone who communicates with connected friends.",
-     "example": "A job applicant is rejected after a hiring firm's assistant references private health concerns mentioned in a friend's archived group chat.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Local personal twins filter and protect third-party data",
-     "description": "Open-source personal assistants running locally sanitize outgoing communications, redacting contact information and third-party messages before consulting external services.",
-     "example": "A local twin automatically strips phone numbers, surnames, and third-party quotations before summarizing a group chat on a home workstation.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Regulatory bans on commercial contact graph aggregation",
-     "description": "Consumer protection agencies fine companies that construct shadow profiles from third-party contact lists, though cloud providers find alternative ways to infer connections.",
-     "example": "Regulators issue civil investigative demands to tech platforms, forcing them to delete contact records uploaded without direct recipient consent.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.28
-    }
-   ],
-   "pipelines": [
-    "community",
-    "policy",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theverge.com/tech/1011938/muse-ai-data-friends-consent",
-     "title": "Friends don’t let friends feed their data to AI agents",
-     "kind": "news",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261015-0025",
-   "added_at": "2026-10-15T18:01:21+00:00",
-   "title": "Algorithmic Wire Feeds Synchronize Autonomous Newsrooms into Global Information Monocultures",
-   "horizon_years": 3,
-   "world": "It is 2029. Over seventy percent of regional and community newsrooms worldwide rely on autonomous language agent suites to ingest, translate, and publish international news directly from three dominant global syndication APIs. Because lightweight local models operate under strict compute constraints, they rely on automated context compaction that strips localized qualifications and minority viewpoints. The result is an unprecedented temporal and narrative lockstep: thousands of nominally independent local outlets publish identical synthesized framings within ninety seconds of a wire release, while divergent ground-truth reports from local communities are discarded as statistical outliers.",
-   "premise": "Multi-agent empirical simulations demonstrate that centralized wire copy dictates the publication timing and framing of peripheral international news. As regional newsrooms deploy autonomous agents to summarize and republish wire feeds, reliance on lossy model-written compaction threatens to turn global news into synchronized editorial monocultures.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network's decentralized signal architecture and sovereign agent runtime enable peer-to-peer verification and local context preservation. By proving that deterministic, transparent context compaction retains critical constraints better than lossy summaries, the network gives local publishers the tools to maintain independent, unmanipulated editorial memory without relying on centralized wire syndicates.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Monopolistic Syndication Feeds Erase Regional Context Worldwide",
-     "description": "A handful of cloud syndicates provide subsidized automated newsroom agents that systematically filter out local dissent and homogenize global coverage into corporate wire narratives.",
-     "example": "During a regional water dispute in East Africa, two hundred independent community news websites publish identical syndicated wire summaries focusing purely on corporate commodity prices, completely omitting grassroots community protests because the agents' lossy compaction algorithms pruned low-frequency local terms.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Fractured Peer-to-Peer Signal Networks Displace Centralized Wires",
-     "description": "Independent local publishers and community journalists deploy sovereign personal twins equipped with transparent context compaction and cryptographic attestation, exchanging ground truth directly across decentralized collective networks.",
-     "example": "Local agricultural associations and investigative reporters publish cryptographically signed, timestamped ground-truth observations across peer-to-peer federations, allowing community newsrooms to aggregate diverse viewpoints without depending on centralized wire copy.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "State-Mandated Gateways Lock in Temporal Wire Control",
-     "description": "Sovereign states mandate that automated news aggregation agents route breaking foreign dispatches through official licensed gateways, blunting peer-to-peer dissemination regardless of technological availability.",
-     "example": "National telecom authorities require registered publisher agents to verify international items against state-approved syndication registries, maintaining centralized temporal synchronization despite open-source alternatives.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.33
-    }
-   ],
-   "pipelines": [
-    "media",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.20144",
-     "title": "Structural Dependence, Imitation or Herding? A Multi-Agent Simulation of Global Intermedia Agenda Setting",
-     "kind": "preprint",
-     "published": "2026-10-14"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.20116",
-     "title": "Maximising Transparency in Context Compaction Improves Retention of Facts and Commitments for Lightweight Coding Agents",
-     "kind": "preprint",
-     "published": "2026-10-14"
-    }
-   ],
-   "work": 2
   }
  ]
 }
