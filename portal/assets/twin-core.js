@@ -4744,6 +4744,584 @@ export function summarizeMemoryScreenEvaluation(screenResult) {
   });
 }
 
+/**
+ * Inter-Agent Handoff Privacy Gate and Typed Placeholder Tokenizer
+ *
+ * Grounded in AgentLeak (S-20261016-2463, arXiv:2602.11510) and PASAC (arXiv:2610.12463).
+ * AgentLeak (El Yagoubi, Badu-Marfo and Al Mallah) reports that inter-agent messages leak
+ * sensitive data at 68.8%, against 27.2% for final outputs, and that output-only audits
+ * miss 41.7% of violations. PASAC establishes that reactive perimeter containment fails
+ * and boundary assurance must be actively enforced during runtime coordination handoffs.
+ */
+
+export const ALLOWED_INTER_AGENT_FIELDS = Object.freeze([
+  'recipient_agent',
+  'task_type',
+  'parameters',
+  'context_items',
+  'memory_items',
+  'channel_origin',
+  'parent_task_id'
+]);
+
+export const ALLOWED_HANDOFF_ORIGINS = Object.freeze([
+  'user_direct',
+  'system_internal',
+  'subagent_verified',
+  'external_untrusted'
+]);
+
+export const ALLOWED_HANDOFF_VERDICTS = Object.freeze([
+  'allow',
+  'sanitize',
+  'requires_confirmation',
+  'block'
+]);
+
+export const SENSITIVE_CREDENTIAL_PATTERNS = Object.freeze([
+  Object.freeze({ type: 'api_key', regex: /\b(?:sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{30,}|xox[baprs]-[a-zA-Z0-9]{10,}|AKIA[0-9A-Z]{16})\b/i }),
+  Object.freeze({ type: 'bearer_token', regex: /\bbearer\s+[a-zA-Z0-9_\-\.]{16,}\b/i }),
+  Object.freeze({ type: 'private_key', regex: /-----BEGIN\s+(?:RSA\s+)?PRIVATE\s+KEY-----/i }),
+  Object.freeze({ type: 'credit_card', regex: /\b(?:\d{4}[ -]?){3}\d{4}\b/ }),
+  Object.freeze({ type: 'cvv', regex: /\bcvv[:=\s]+([0-9]{3,4})\b/i }),
+  Object.freeze({ type: 'ssn_or_sin', regex: /\b\d{3}[ -]?\d{2,3}[ -]?\d{4}\b/ }),
+  Object.freeze({ type: 'password_assignment', regex: /\b(?:password|passwd|pwd|secret)\s*[:=]\s*['"]?[^\s'"]{6,}['"]?/i })
+]);
+
+/**
+ * Compute a deterministic 14-hex fingerprint for an inter-agent handoff.
+ *
+ * @param {object} handoff Handoff payload
+ * @returns {string} 14-character hex string
+ */
+export function computeHandoffFingerprint(handoff) {
+  if (!handoff || typeof handoff !== 'object' || Array.isArray(handoff)) {
+    return '00000000000000';
+  }
+  const cleanRecipient = typeof handoff.recipient_agent === 'string' ? handoff.recipient_agent.trim() : '';
+  const cleanTask = typeof handoff.task_type === 'string' ? handoff.task_type.trim() : '';
+  const cleanOrigin = typeof handoff.channel_origin === 'string' ? handoff.channel_origin.trim() : 'user_direct';
+  const cleanParent = typeof handoff.parent_task_id === 'string' ? handoff.parent_task_id.trim() : '';
+
+  // Include sorted param keys AND deterministic value representations
+  const paramEntries = [];
+  if (handoff.parameters && typeof handoff.parameters === 'object' && !Array.isArray(handoff.parameters)) {
+    for (const k of Object.keys(handoff.parameters).sort()) {
+      const v = handoff.parameters[k];
+      paramEntries.push(`${k}=${JSON.stringify(v)}`);
+    }
+  }
+  const ctxEntries = Array.isArray(handoff.context_items) ? handoff.context_items.join('|') : '';
+  const memCount = Array.isArray(handoff.memory_items) ? handoff.memory_items.length : 0;
+  const raw = `handoff:${cleanRecipient}:${cleanTask}:${cleanOrigin}:${cleanParent}:${paramEntries.join(';')}:${ctxEntries}:${memCount}`;
+  return computeContextFingerprint(raw);
+}
+
+/**
+ * Audit an inter-agent handoff payload before dispatching to a subagent or tool worker.
+ *
+ * @param {object} handoff Handoff descriptor
+ * @param {Array} grants Active twin consent grants
+ * @param {Array} constraints Active safety-critical constraints
+ * @param {object} options Options: allow_tokenization (bool), allow_unconfirmed (bool)
+ * @returns {object} Deeply frozen audit result
+ */
+export function auditInterAgentHandoff(handoff, grants = [], constraints = [], options = {}) {
+  // Prototype pollution rejection
+  if (handoff !== null && typeof handoff === 'object' && Object.getPrototypeOf(handoff) !== Object.prototype && Object.getPrototypeOf(handoff) !== null) {
+    return deepFreeze({
+      ok: false,
+      error: 'invalid_handoff',
+      reason: 'Prototype pollution attempt rejected',
+      verdict: 'block',
+      reasons: Object.freeze(['Prototype pollution attempt rejected']),
+      recipient_agent: '',
+      task_type: '',
+      channel_origin: '',
+      detected_sensitive_types: Object.freeze([]),
+      fingerprint: '00000000000000',
+      requires_tokenization: false
+    });
+  }
+
+  if (!handoff || typeof handoff !== 'object' || Array.isArray(handoff)) {
+    return deepFreeze({
+      ok: false,
+      error: 'invalid_handoff',
+      reason: 'Handoff must be a non-null object',
+      verdict: 'block',
+      reasons: Object.freeze(['Handoff must be a non-null object']),
+      recipient_agent: '',
+      task_type: '',
+      channel_origin: '',
+      detected_sensitive_types: Object.freeze([]),
+      fingerprint: '00000000000000',
+      requires_tokenization: false
+    });
+  }
+
+  // Reject unknown fields
+  for (const k of Object.keys(handoff)) {
+    if (!ALLOWED_INTER_AGENT_FIELDS.includes(k)) {
+      return deepFreeze({
+        ok: false,
+        error: 'invalid_handoff',
+        reason: `Unknown field in handoff: "${k}"`,
+        verdict: 'block',
+        reasons: Object.freeze([`Unknown field in handoff: "${k}"`]),
+        recipient_agent: '',
+        task_type: '',
+        channel_origin: '',
+        detected_sensitive_types: Object.freeze([]),
+        fingerprint: '00000000000000',
+        requires_tokenization: false
+      });
+    }
+  }
+
+  if (typeof handoff.recipient_agent !== 'string' || !handoff.recipient_agent.trim() || handoff.recipient_agent.trim().length > 60 || !/^[a-zA-Z0-9_\-\. ]+$/.test(handoff.recipient_agent.trim())) {
+    return deepFreeze({
+      ok: false,
+      error: 'invalid_handoff',
+      reason: 'recipient_agent must be an alphanumeric string up to 60 characters',
+      verdict: 'block',
+      reasons: Object.freeze(['recipient_agent must be an alphanumeric string up to 60 characters']),
+      recipient_agent: '',
+      task_type: '',
+      channel_origin: '',
+      detected_sensitive_types: Object.freeze([]),
+      fingerprint: '00000000000000',
+      requires_tokenization: false
+    });
+  }
+
+  if (typeof handoff.task_type !== 'string' || !handoff.task_type.trim() || handoff.task_type.trim().length > 60 || !/^[a-zA-Z0-9_\-\. ]+$/.test(handoff.task_type.trim())) {
+    return deepFreeze({
+      ok: false,
+      error: 'invalid_handoff',
+      reason: 'task_type must be an alphanumeric string up to 60 characters',
+      verdict: 'block',
+      reasons: Object.freeze(['task_type must be an alphanumeric string up to 60 characters']),
+      recipient_agent: handoff.recipient_agent.trim(),
+      task_type: '',
+      channel_origin: '',
+      detected_sensitive_types: Object.freeze([]),
+      fingerprint: '00000000000000',
+      requires_tokenization: false
+    });
+  }
+
+  const cleanRecipient = handoff.recipient_agent.trim();
+  const cleanTaskType = handoff.task_type.trim();
+  const normTaskType = normalizeTextForHeuristic(cleanTaskType);
+
+  let cleanOrigin = 'user_direct';
+  if (handoff.channel_origin !== undefined && handoff.channel_origin !== null) {
+    if (typeof handoff.channel_origin !== 'string' || !ALLOWED_HANDOFF_ORIGINS.includes(handoff.channel_origin.trim().toLowerCase())) {
+      return deepFreeze({
+        ok: false,
+        error: 'invalid_handoff',
+        reason: `channel_origin must be one of: ${ALLOWED_HANDOFF_ORIGINS.join(', ')}`,
+        verdict: 'block',
+        reasons: Object.freeze([`Invalid channel_origin "${handoff.channel_origin}"`]),
+        recipient_agent: cleanRecipient,
+        task_type: cleanTaskType,
+        channel_origin: '',
+        detected_sensitive_types: Object.freeze([]),
+        fingerprint: '00000000000000',
+        requires_tokenization: false
+      });
+    }
+    cleanOrigin = handoff.channel_origin.trim().toLowerCase();
+  }
+
+  if (handoff.parent_task_id !== undefined && handoff.parent_task_id !== null) {
+    if (typeof handoff.parent_task_id !== 'string' || handoff.parent_task_id.trim().length > 40) {
+      return deepFreeze({
+        ok: false,
+        error: 'invalid_handoff',
+        reason: 'parent_task_id must be a string up to 40 characters',
+        verdict: 'block',
+        reasons: Object.freeze(['parent_task_id must be a string up to 40 characters']),
+        recipient_agent: cleanRecipient,
+        task_type: cleanTaskType,
+        channel_origin: cleanOrigin,
+        detected_sensitive_types: Object.freeze([]),
+        fingerprint: '00000000000000',
+        requires_tokenization: false
+      });
+    }
+  }
+
+  // Validate parameters
+  if (handoff.parameters !== undefined && handoff.parameters !== null) {
+    if (typeof handoff.parameters !== 'object' || Array.isArray(handoff.parameters)) {
+      return deepFreeze({
+        ok: false,
+        error: 'invalid_handoff',
+        reason: 'parameters must be an object',
+        verdict: 'block',
+        reasons: Object.freeze(['parameters must be an object']),
+        recipient_agent: cleanRecipient,
+        task_type: cleanTaskType,
+        channel_origin: cleanOrigin,
+        detected_sensitive_types: Object.freeze([]),
+        fingerprint: '00000000000000',
+        requires_tokenization: false
+      });
+    }
+    if (Object.getPrototypeOf(handoff.parameters) !== Object.prototype && Object.getPrototypeOf(handoff.parameters) !== null) {
+      return deepFreeze({
+        ok: false,
+        error: 'invalid_handoff',
+        reason: 'parameters prototype pollution attempt rejected',
+        verdict: 'block',
+        reasons: Object.freeze(['parameters prototype pollution attempt rejected']),
+        recipient_agent: cleanRecipient,
+        task_type: cleanTaskType,
+        channel_origin: cleanOrigin,
+        detected_sensitive_types: Object.freeze([]),
+        fingerprint: '00000000000000',
+        requires_tokenization: false
+      });
+    }
+  }
+
+  // Validate context_items
+  if (handoff.context_items !== undefined && handoff.context_items !== null) {
+    if (!Array.isArray(handoff.context_items) || handoff.context_items.length > 50) {
+      return deepFreeze({
+        ok: false,
+        error: 'invalid_handoff',
+        reason: 'context_items must be an array of at most 50 items',
+        verdict: 'block',
+        reasons: Object.freeze(['context_items must be an array of at most 50 items']),
+        recipient_agent: cleanRecipient,
+        task_type: cleanTaskType,
+        channel_origin: cleanOrigin,
+        detected_sensitive_types: Object.freeze([]),
+        fingerprint: '00000000000000',
+        requires_tokenization: false
+      });
+    }
+    for (let i = 0; i < handoff.context_items.length; i++) {
+      const it = handoff.context_items[i];
+      if (typeof it !== 'string' || it.length > 300) {
+        return deepFreeze({
+          ok: false,
+          error: 'invalid_handoff',
+          reason: `context_item at index ${i} must be a string up to 300 characters`,
+          verdict: 'block',
+          reasons: Object.freeze([`context_item at index ${i} must be a string up to 300 characters`]),
+          recipient_agent: cleanRecipient,
+          task_type: cleanTaskType,
+          channel_origin: cleanOrigin,
+          detected_sensitive_types: Object.freeze([]),
+          fingerprint: '00000000000000',
+          requires_tokenization: false
+        });
+      }
+    }
+  }
+
+  // Validate memory_items
+  if (handoff.memory_items !== undefined && handoff.memory_items !== null) {
+    if (!Array.isArray(handoff.memory_items) || handoff.memory_items.length > 50) {
+      return deepFreeze({
+        ok: false,
+        error: 'invalid_handoff',
+        reason: 'memory_items must be an array of at most 50 items',
+        verdict: 'block',
+        reasons: Object.freeze(['memory_items must be an array of at most 50 items']),
+        recipient_agent: cleanRecipient,
+        task_type: cleanTaskType,
+        channel_origin: cleanOrigin,
+        detected_sensitive_types: Object.freeze([]),
+        fingerprint: '00000000000000',
+        requires_tokenization: false
+      });
+    }
+  }
+
+  // Validate options
+  const opt = options && typeof options === 'object' && !Array.isArray(options) ? options : {};
+  const allowTokenization = opt.allow_tokenization === true;
+  const allowUnconfirmed = opt.allow_unconfirmed === true;
+
+  const reasons = [];
+  const detectedSensitiveTypes = [];
+  let verdict = 'allow';
+
+  // 1. Check Origin Authority
+  if (cleanOrigin === 'external_untrusted') {
+    const isHighConsequence = /delete|wipe|execute|transfer|pay|auth|egress|export/i.test(normTaskType);
+    if (isHighConsequence) {
+      verdict = 'block';
+      reasons.push(`Untrusted origin "${cleanOrigin}" cannot initiate high-consequence task "${cleanTaskType}"`);
+    }
+  }
+
+  // 2. Grant and Scope Coverage
+  const safeGrants = Array.isArray(grants) ? grants : [];
+  const refTime = (options && options.as_of_time !== undefined) ? Date.parse(options.as_of_time) : Date.now();
+  const matchingGrant = safeGrants.find(g => {
+    if (!g || typeof g !== 'object') return false;
+    if (typeof g.who !== 'string' || g.who.trim().toLowerCase() !== cleanRecipient.toLowerCase()) return false;
+    if (g.expires_at !== undefined && g.expires_at !== null) {
+      if (typeof g.expires_at !== 'string' || !ISO_RE.test(g.expires_at)) return false;
+      const exp = Date.parse(g.expires_at);
+      if (isNaN(exp)) return false;
+      if (!isNaN(refTime) && exp <= refTime) return false;
+    }
+    const what = typeof g.what === 'string' ? g.what.trim().toLowerCase() : '';
+    return what === cleanTaskType.toLowerCase() || what === '*';
+  });
+
+  if (!matchingGrant) {
+    if (allowUnconfirmed) {
+      if (verdict !== 'block') verdict = 'requires_confirmation';
+      reasons.push(`No active grant covers recipient "${cleanRecipient}" for task "${cleanTaskType}"`);
+    } else {
+      verdict = 'block';
+      reasons.push(`No active grant covers recipient "${cleanRecipient}" for task "${cleanTaskType}"`);
+    }
+  } else {
+    // Check wildcard grant restrictions
+    const what = typeof matchingGrant.what === 'string' ? matchingGrant.what.trim().toLowerCase() : '';
+    if (what === '*') {
+      const isSensitiveScope = /medical|health|financial|credit|password|auth|secret/i.test(normTaskType);
+      if (isSensitiveScope) {
+        verdict = 'block';
+        reasons.push(`Wildcard '*' grant is insufficient for sensitive inter-agent task "${cleanTaskType}"`);
+      }
+    }
+  }
+
+  // 3. Screen against Safety-Critical Memory Constraints
+  const safeConstraints = Array.isArray(constraints) ? constraints : [];
+  for (const c of safeConstraints) {
+    if (!c) continue;
+    const stmt = typeof c === 'string' ? c : (c.statement || '');
+    if (!stmt) continue;
+    const normStmt = normalizeTextForHeuristic(stmt);
+
+    // Collect all payload text for constraint screening
+    const payloadTokens = [];
+    payloadTokens.push(cleanTaskType);
+    if (handoff.parameters) {
+      for (const [k, v] of Object.entries(handoff.parameters)) {
+        payloadTokens.push(k);
+        if (typeof v === 'string') payloadTokens.push(v);
+        else if (Array.isArray(v)) payloadTokens.push(...v.filter(x => typeof x === 'string'));
+      }
+    }
+    if (handoff.context_items) {
+      payloadTokens.push(...handoff.context_items);
+    }
+
+    const payloadText = normalizeTextForHeuristic(payloadTokens.join(' '));
+
+    // Check conflict heuristics
+    if (/never share|do not disclose|no financial|never send|confidential/i.test(normStmt)) {
+      const keywords = normStmt.replace(/never share|do not disclose|no financial|never send|confidential/gi, '').trim().split(/\s+/).filter(w => w.length > 3);
+      for (const kw of keywords) {
+        if (payloadText.includes(kw)) {
+          verdict = 'block';
+          reasons.push(`Payload conflicts with safety-critical constraint: "${stmt}"`);
+          break;
+        }
+      }
+    }
+  }
+
+  // 4. Scan parameters, context, and memory for raw credentials
+  function collectStrings(val, out = []) {
+    if (typeof val === 'string') out.push(val);
+    else if (Array.isArray(val)) {
+      for (const item of val) collectStrings(item, out);
+    } else if (val && typeof val === 'object') {
+      for (const v of Object.values(val)) collectStrings(v, out);
+    }
+    return out;
+  }
+  const textStrings = [];
+  if (handoff.parameters) collectStrings(handoff.parameters, textStrings);
+  if (handoff.context_items) collectStrings(handoff.context_items, textStrings);
+  if (handoff.memory_items) collectStrings(handoff.memory_items, textStrings);
+
+  for (const str of textStrings) {
+    for (const { type, regex } of SENSITIVE_CREDENTIAL_PATTERNS) {
+      const testRegex = new RegExp(regex.source, regex.flags.replace('g', ''));
+      if (testRegex.test(str)) {
+        detectedSensitiveTypes.push(type);
+      }
+    }
+  }
+
+  if (detectedSensitiveTypes.length > 0) {
+    const uniqTypes = [...new Set(detectedSensitiveTypes)];
+    if (allowTokenization) {
+      if (verdict === 'allow') {
+        verdict = 'sanitize';
+      }
+      reasons.push(`Detected sensitive credentials (${uniqTypes.join(', ')}): requires typed placeholder tokenization`);
+    } else {
+      verdict = 'block';
+      reasons.push(`Detected sensitive credentials (${uniqTypes.join(', ')}): tokenization disallowed`);
+    }
+  }
+
+  const fingerprint = computeHandoffFingerprint(handoff);
+
+  return deepFreeze({
+    ok: true,
+    valid: verdict === 'allow' || verdict === 'sanitize',
+    verdict,
+    reasons: Object.freeze(reasons),
+    recipient_agent: cleanRecipient,
+    task_type: cleanTaskType,
+    channel_origin: cleanOrigin,
+    detected_sensitive_types: Object.freeze([...new Set(detectedSensitiveTypes)]),
+    fingerprint,
+    requires_tokenization: verdict === 'sanitize'
+  });
+}
+
+/**
+ * Sanitize an inter-agent handoff payload by substituting sensitive credential tokens
+ * with deterministic typed placeholders (e.g. [REDACTED_API_KEY_<HASH>]).
+ *
+ * @param {object} handoff Handoff payload
+ * @param {object} auditResult Result from auditInterAgentHandoff
+ * @param {object} options Configuration options
+ * @returns {object} Deeply frozen sanitized payload result
+ */
+export function sanitizeInterAgentPayload(handoff, auditResult, options = {}) {
+  if (!auditResult || typeof auditResult !== 'object' || !auditResult.ok) {
+    return deepFreeze({
+      ok: false,
+      error: 'invalid_audit_result',
+      reason: 'Valid auditResult required for sanitization',
+      sanitized_handoff: null,
+      replacements_count: 0,
+      placeholder_map: Object.freeze({})
+    });
+  }
+
+  if (!handoff || typeof handoff !== 'object' || Array.isArray(handoff)) {
+    return deepFreeze({
+      ok: false,
+      error: 'invalid_handoff',
+      reason: 'Valid handoff object required for sanitization',
+      sanitized_handoff: null,
+      replacements_count: 0,
+      placeholder_map: Object.freeze({})
+    });
+  }
+
+  const placeholderMap = {};
+  let replacementsCount = 0;
+
+  function scrubString(str) {
+    if (typeof str !== 'string') return str;
+    let result = str;
+    for (const { type, regex } of SENSITIVE_CREDENTIAL_PATTERNS) {
+      const globalRegex = new RegExp(regex.source, regex.flags.includes('g') ? regex.flags : regex.flags + 'g');
+      result = result.replace(globalRegex, (match) => {
+        const hash = computeContextFingerprint(match);
+        const placeholder = `[REDACTED_${type.toUpperCase()}_${hash}]`;
+        placeholderMap[placeholder] = type;
+        replacementsCount++;
+        return placeholder;
+      });
+    }
+    return result;
+  }
+
+  function scrubValue(val) {
+    if (typeof val === 'string') return scrubString(val);
+    if (Array.isArray(val)) return val.map(scrubValue);
+    if (val && typeof val === 'object') {
+      const copy = {};
+      for (const [k, v] of Object.entries(val)) {
+        copy[k] = scrubValue(v);
+      }
+      return copy;
+    }
+    return val;
+  }
+
+  const sanitized = {
+    recipient_agent: handoff.recipient_agent,
+    task_type: handoff.task_type
+  };
+
+  if (handoff.channel_origin !== undefined) sanitized.channel_origin = handoff.channel_origin;
+  if (handoff.parent_task_id !== undefined) sanitized.parent_task_id = handoff.parent_task_id;
+
+  if (handoff.parameters) {
+    sanitized.parameters = scrubValue(handoff.parameters);
+  }
+
+  if (handoff.context_items) {
+    sanitized.context_items = scrubValue(handoff.context_items);
+  }
+
+  if (handoff.memory_items) {
+    sanitized.memory_items = scrubValue(handoff.memory_items);
+  }
+
+  return deepFreeze({
+    ok: true,
+    sanitized_handoff: sanitized,
+    replacements_count: replacementsCount,
+    placeholder_map: Object.freeze({ ...placeholderMap })
+  });
+}
+
+/**
+ * Summarize an inter-agent handoff audit for UI reporting without LLM generation.
+ *
+ * @param {object} auditResult Result from auditInterAgentHandoff
+ * @returns {object} Deeply frozen summary structure
+ */
+export function summarizeInterAgentAudit(auditResult) {
+  if (!auditResult || typeof auditResult !== 'object' || Array.isArray(auditResult)) {
+    return deepFreeze({
+      success: false,
+      summary_text: 'Invalid inter-agent handoff audit',
+      verdict: 'block'
+    });
+  }
+
+  if (!auditResult.ok) {
+    return deepFreeze({
+      success: false,
+      summary_text: `Inter-agent handoff audit failed: ${auditResult.reason || 'Unknown error'}`,
+      verdict: 'block'
+    });
+  }
+
+  let text = '';
+  if (auditResult.verdict === 'allow') {
+    text = `Handoff to "${auditResult.recipient_agent}" for "${auditResult.task_type}" allowed under active grant. (fingerprint: ${auditResult.fingerprint})`;
+  } else if (auditResult.verdict === 'sanitize') {
+    text = `Handoff to "${auditResult.recipient_agent}" requires placeholder sanitization for ${auditResult.detected_sensitive_types.join(', ')}. (fingerprint: ${auditResult.fingerprint})`;
+  } else if (auditResult.verdict === 'requires_confirmation') {
+    text = `Handoff to "${auditResult.recipient_agent}" for "${auditResult.task_type}" requires user confirmation: ${auditResult.reasons.join('; ')}.`;
+  } else {
+    text = `Handoff to "${auditResult.recipient_agent}" blocked: ${auditResult.reasons.join('; ')}.`;
+  }
+
+  return deepFreeze({
+    success: auditResult.verdict === 'allow' || auditResult.verdict === 'sanitize',
+    summary_text: text,
+    verdict: auditResult.verdict,
+    recipient_agent: auditResult.recipient_agent,
+    task_type: auditResult.task_type,
+    fingerprint: auditResult.fingerprint
+  });
+}
 export const ALLOWED_VISUAL_ACTION_TYPES = Object.freeze([
   'click',
   'type',

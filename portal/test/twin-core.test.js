@@ -80,6 +80,14 @@ import {
   screenMemoryRetrievalCandidates,
   consolidateTwinMemoryLedger,
   summarizeMemoryScreenEvaluation,
+  ALLOWED_INTER_AGENT_FIELDS,
+  ALLOWED_HANDOFF_ORIGINS,
+  ALLOWED_HANDOFF_VERDICTS,
+  SENSITIVE_CREDENTIAL_PATTERNS,
+  computeHandoffFingerprint,
+  auditInterAgentHandoff,
+  sanitizeInterAgentPayload,
+  summarizeInterAgentAudit,
   ALLOWED_VISUAL_ACTION_TYPES,
   ALLOWED_VISUAL_ACTION_FIELDS,
   ALLOWED_VISUAL_ELEMENT_FIELDS,
@@ -93,7 +101,6 @@ import {
   auditVisualAssistantAction,
   summarizeVisualActionAudit
 } from '../assets/twin-core.js';
-
 
 
 test('DEFAULT_TWIN_STATE is deeply frozen and valid', () => {
@@ -4208,6 +4215,269 @@ test('screenMemoryRetrievalCandidates enforces quarantine and taint precedence o
   assert.equal(standardRes.confirm_required_count, 2);
   assert.equal(standardRes.screened_items[0].disposition, 'ask_first');
   assert.equal(standardRes.screened_items[1].disposition, 'ask_first');
+});
+
+test('inter-agent handoff constants are deeply frozen and valid', () => {
+  assert.ok(Object.isFrozen(ALLOWED_INTER_AGENT_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_HANDOFF_ORIGINS));
+  assert.ok(Object.isFrozen(ALLOWED_HANDOFF_VERDICTS));
+  assert.ok(Object.isFrozen(SENSITIVE_CREDENTIAL_PATTERNS));
+  assert.throws(() => { ALLOWED_INTER_AGENT_FIELDS.push('hack'); });
+  assert.throws(() => { ALLOWED_HANDOFF_ORIGINS.push('hack'); });
+  assert.throws(() => { ALLOWED_HANDOFF_VERDICTS.push('hack'); });
+});
+
+test('computeHandoffFingerprint produces deterministic 14-hex fingerprint and fails closed', () => {
+  const handoff = {
+    recipient_agent: 'booking-assistant',
+    task_type: 'reserve_flight',
+    parameters: { origin: 'YVR', destination: 'LHR' },
+    context_items: ['Passenger prefers aisle seat'],
+    channel_origin: 'user_direct'
+  };
+  const fp1 = computeHandoffFingerprint(handoff);
+  const fp2 = computeHandoffFingerprint(handoff);
+  assert.equal(fp1, fp2);
+  assert.match(fp1, /^[0-9a-f]{14}$/);
+
+  // Fails closed on invalid inputs
+  assert.equal(computeHandoffFingerprint(null), '00000000000000');
+  assert.equal(computeHandoffFingerprint([]), '00000000000000');
+  assert.equal(computeHandoffFingerprint('invalid'), '00000000000000');
+});
+
+test('auditInterAgentHandoff passes for valid authorized handoff under active grant', () => {
+  const handoff = {
+    recipient_agent: 'travel-bot',
+    task_type: 'search_hotels',
+    parameters: { city: 'Toronto', nights: 3 },
+    context_items: ['User prefers quiet room'],
+    channel_origin: 'user_direct'
+  };
+  const grants = [
+    { who: 'travel-bot', what: 'search_hotels', at: '2026-10-01T00:00:00Z' }
+  ];
+  const constraints = [
+    { statement: 'Never share medical details', critical: true }
+  ];
+
+  const res = auditInterAgentHandoff(handoff, grants, constraints);
+  assert.equal(res.ok, true);
+  assert.equal(res.valid, true);
+  assert.equal(res.verdict, 'allow');
+  assert.equal(res.recipient_agent, 'travel-bot');
+  assert.equal(res.task_type, 'search_hotels');
+  assert.equal(res.detected_sensitive_types.length, 0);
+  assert.match(res.fingerprint, /^[0-9a-f]{14}$/);
+});
+
+test('auditInterAgentHandoff handles missing grant with confirmation or block', () => {
+  const handoff = {
+    recipient_agent: 'unknown-bot',
+    task_type: 'search_flights',
+    parameters: { destination: 'Montreal' }
+  };
+
+  // With allow_unconfirmed: false (default), should block
+  const blockRes = auditInterAgentHandoff(handoff, []);
+  assert.equal(blockRes.ok, true);
+  assert.equal(blockRes.verdict, 'block');
+  assert.equal(blockRes.valid, false);
+  assert.ok(blockRes.reasons[0].includes('No active grant'));
+
+  // With allow_unconfirmed: true, should require confirmation
+  const confRes = auditInterAgentHandoff(handoff, [], [], { allow_unconfirmed: true });
+  assert.equal(confRes.ok, true);
+  assert.equal(confRes.verdict, 'requires_confirmation');
+  assert.equal(confRes.valid, false);
+});
+
+test('auditInterAgentHandoff prohibits wildcard * grants for sensitive tasks fail-closed', () => {
+  const sensitiveHandoff = {
+    recipient_agent: 'helper-bot',
+    task_type: 'manage_financial_accounts',
+    parameters: { bank: 'credit union' }
+  };
+  const grants = [
+    { who: 'helper-bot', what: '*', at: '2026-10-01T00:00:00Z' }
+  ];
+
+  const res = auditInterAgentHandoff(sensitiveHandoff, grants);
+  assert.equal(res.ok, true);
+  assert.equal(res.verdict, 'block');
+  assert.ok(res.reasons.some(r => r.includes("Wildcard '*' grant is insufficient")));
+});
+
+test('auditInterAgentHandoff blocks when payload conflicts with safety-critical constraints', () => {
+  const handoff = {
+    recipient_agent: 'meal-bot',
+    task_type: 'order_lunch',
+    parameters: { special_request: 'peanut sauce noodles' },
+    context_items: ['Client is ordering for colleagues']
+  };
+  const grants = [
+    { who: 'meal-bot', what: 'order_lunch', at: '2026-10-01T00:00:00Z' }
+  ];
+  const constraints = [
+    { statement: 'Never share or consume peanut ingredients due to severe allergy', critical: true }
+  ];
+
+  const res = auditInterAgentHandoff(handoff, grants, constraints);
+  assert.equal(res.ok, true);
+  assert.equal(res.verdict, 'block');
+  assert.ok(res.reasons.some(r => r.includes('conflicts with safety-critical constraint')));
+});
+
+test('auditInterAgentHandoff detects sensitive credentials and sanitizes or blocks', () => {
+  const handoff = {
+    recipient_agent: 'cloud-bot',
+    task_type: 'deploy_service',
+    parameters: {
+      auth_header: 'bearer abcdef1234567890_secret_token',
+      api_key: 'sk-12345678901234567890abcdef',
+      credit_card: '4532-1234-5678-9012'
+    }
+  };
+  const grants = [
+    { who: 'cloud-bot', what: 'deploy_service', at: '2026-10-01T00:00:00Z' }
+  ];
+
+  // Tokenization disallowed: block
+  const blockRes = auditInterAgentHandoff(handoff, grants, [], { allow_tokenization: false });
+  assert.equal(blockRes.ok, true);
+  assert.equal(blockRes.verdict, 'block');
+  assert.ok(blockRes.detected_sensitive_types.includes('api_key'));
+  assert.ok(blockRes.detected_sensitive_types.includes('bearer_token'));
+  assert.ok(blockRes.detected_sensitive_types.includes('credit_card'));
+
+  // Tokenization allowed: sanitize
+  const sanitizeRes = auditInterAgentHandoff(handoff, grants, [], { allow_tokenization: true });
+  assert.equal(sanitizeRes.ok, true);
+  assert.equal(sanitizeRes.verdict, 'sanitize');
+  assert.equal(sanitizeRes.valid, true);
+  assert.equal(sanitizeRes.requires_tokenization, true);
+});
+
+test('auditInterAgentHandoff blocks high-consequence tasks from external untrusted origins', () => {
+  const handoff = {
+    recipient_agent: 'exec-bot',
+    task_type: 'delete_backup_files',
+    channel_origin: 'external_untrusted'
+  };
+  const grants = [
+    { who: 'exec-bot', what: 'delete_backup_files', at: '2026-10-01T00:00:00Z' }
+  ];
+
+  const res = auditInterAgentHandoff(handoff, grants);
+  assert.equal(res.ok, true);
+  assert.equal(res.verdict, 'block');
+  assert.ok(res.reasons.some(r => r.includes('Untrusted origin "external_untrusted" cannot initiate high-consequence task')));
+});
+
+test('auditInterAgentHandoff rejects prototype pollution and malformed inputs fail-closed', () => {
+  // Prototype pollution attempt
+  const polluted = Object.create({ evil: true });
+  polluted.recipient_agent = 'hacker';
+  polluted.task_type = 'exploit';
+  const protoRes = auditInterAgentHandoff(polluted);
+  assert.equal(protoRes.ok, false);
+  assert.equal(protoRes.verdict, 'block');
+
+  // Unknown fields
+  const unkRes = auditInterAgentHandoff({
+    recipient_agent: 'bot',
+    task_type: 'task',
+    unknown_injection: 'attack'
+  });
+  assert.equal(unkRes.ok, false);
+  assert.equal(unkRes.verdict, 'block');
+
+  // Non-objects and arrays
+  assert.equal(auditInterAgentHandoff(null).ok, false);
+  assert.equal(auditInterAgentHandoff([]).ok, false);
+  assert.equal(auditInterAgentHandoff('string').ok, false);
+
+  // Missing required recipient_agent or task_type
+  assert.equal(auditInterAgentHandoff({ recipient_agent: '' }).ok, false);
+  assert.equal(auditInterAgentHandoff({ recipient_agent: 'bot', task_type: '' }).ok, false);
+});
+
+test('sanitizeInterAgentPayload replaces sensitive tokens with deterministic typed placeholders', () => {
+  const handoff = {
+    recipient_agent: 'cloud-bot',
+    task_type: 'deploy_service',
+    parameters: {
+      api_key: 'sk-12345678901234567890abcdef',
+      duplicate_key: 'sk-12345678901234567890abcdef',
+      credit_card: '4532 1234 5678 9012'
+    },
+    context_items: [
+      'Bearer token is bearer mysecrettoken123456789'
+    ]
+  };
+  const grants = [
+    { who: 'cloud-bot', what: 'deploy_service', at: '2026-10-01T00:00:00Z' }
+  ];
+
+  const audit = auditInterAgentHandoff(handoff, grants, [], { allow_tokenization: true });
+  assert.equal(audit.verdict, 'sanitize');
+
+  const sanitizeResult = sanitizeInterAgentPayload(handoff, audit);
+  assert.equal(sanitizeResult.ok, true);
+  assert.ok(sanitizeResult.replacements_count >= 3);
+
+  const cleanParams = sanitizeResult.sanitized_handoff.parameters;
+  assert.match(cleanParams.api_key, /^\[REDACTED_API_KEY_[0-9a-f]{14}\]$/);
+  // Identical secrets MUST map to identical placeholder hashes (PAAC property)
+  assert.equal(cleanParams.api_key, cleanParams.duplicate_key);
+  assert.match(cleanParams.credit_card, /^\[REDACTED_CREDIT_CARD_[0-9a-f]{14}\]$/);
+  assert.match(sanitizeResult.sanitized_handoff.context_items[0], /\[REDACTED_BEARER_TOKEN_[0-9a-f]{14}\]/);
+
+  // Fails closed on invalid audit or handoff
+  assert.equal(sanitizeInterAgentPayload(null, audit).ok, false);
+  assert.equal(sanitizeInterAgentPayload(handoff, null).ok, false);
+  assert.equal(sanitizeInterAgentPayload(handoff, { ok: false }).ok, false);
+});
+
+test('summarizeInterAgentAudit produces clean deterministic reporting and fails closed', () => {
+  const allowSummary = summarizeInterAgentAudit({
+    ok: true,
+    verdict: 'allow',
+    recipient_agent: 'calendar-bot',
+    task_type: 'sync_events',
+    fingerprint: '1234567890abcd'
+  });
+  assert.equal(allowSummary.success, true);
+  assert.equal(allowSummary.verdict, 'allow');
+  assert.ok(allowSummary.summary_text.includes('allowed under active grant'));
+
+  const sanitizeSummary = summarizeInterAgentAudit({
+    ok: true,
+    verdict: 'sanitize',
+    recipient_agent: 'cloud-bot',
+    task_type: 'backup',
+    detected_sensitive_types: ['api_key'],
+    fingerprint: '1234567890abcd'
+  });
+  assert.equal(sanitizeSummary.success, true);
+  assert.equal(sanitizeSummary.verdict, 'sanitize');
+  assert.ok(sanitizeSummary.summary_text.includes('requires placeholder sanitization'));
+
+  const blockSummary = summarizeInterAgentAudit({
+    ok: true,
+    verdict: 'block',
+    recipient_agent: 'bad-bot',
+    task_type: 'wipe',
+    reasons: ['No grant found'],
+    fingerprint: '1234567890abcd'
+  });
+  assert.equal(blockSummary.success, false);
+  assert.equal(blockSummary.verdict, 'block');
+  assert.ok(blockSummary.summary_text.includes('blocked: No grant found'));
+
+  // Fails closed on malformed
+  assert.equal(summarizeInterAgentAudit(null).success, false);
+  assert.equal(summarizeInterAgentAudit({ ok: false, reason: 'Test error' }).success, false);
 });
 
 test('ALLOWED_VISUAL_ACTION_TYPES and related visual auditor constants are deeply frozen', () => {
