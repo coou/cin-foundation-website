@@ -1,6 +1,114 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261016-0044",
+   "added_at": "2026-10-16T13:42:02+00:00",
+   "title": "Proof-carrying civic knowledge graphs replace speculative model advice in public service navigation",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of residents navigate municipal housing assistance, public health clinics, transit subsidies, and local community grants through personal software agents. Rather than submitting sensitive life circumstances to proprietary cloud chatbots or navigating labyrinthine municipal websites, residents run sovereign personal twins on their own devices. These twins evaluate open, cryptographically signed temporal knowledge graphs published by municipal bodies and regional co-operatives. A local deterministic checker validates that every recommended service is supported by dated, executable policy rules before surfacing actionable options in the resident's quest interface.",
+   "premise": "Public service navigation requires evidence matching requested scope, date, and entitlements. Distinguishing critical decision criteria from unresolved context and validating paths with deterministic checkers over temporal graphs prevents speculative hallucinations while designed to reduce unnecessary abstention.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "The network provides open personal twin specifications and quest-style interfaces that separate requirement verification from probabilistic language generation. By demonstrating on-device deterministic checking over temporal graphs, the project proves that civic navigation can be accurate and private without expensive cloud subscriptions or surveillance. However, institutional inertia in municipal agencies and procurement contracts with incumbent enterprise software vendors remain driven by municipal legal departments that open specifications barely move.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Commercial chatbots hallucinate civic advice and misdirect vulnerable residents",
+     "description": "Municipalities outsource resident intake to commercial LLM helpdesks that fabricate eligibility requirements or fail on changing policy dates.",
+     "example": "A low-income family misses a municipal childcare subsidy deadline after a proprietary cloud chatbot provides outdated 2027 eligibility thresholds without citing primary policy records.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Personal twins verify civic eligibility via deterministic proof-carrying knowledge graphs",
+     "description": "Civic services publish open temporal policy graphs that personal agents verify deterministically on-device without leaking private records.",
+     "example": "A resident's on-device twin evaluates municipal heating assistance criteria against local household utility data, generating a verifiable proof of eligibility without sending private financial records to cloud servers.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Bureaucratic systems mandate over-verification that denies legitimate assistance",
+     "description": "Centralized municipal procurement mandates rigid legacy verification gates that treat every minor unresolved detail as disqualifying, leaving administrative denials largely unshifted.",
+     "example": "An automated intake portal rejects hundreds of tenant emergency grant applications because utility bills lack secondary postal barcode stamps, and municipal statutory requirements remain stubbornly resistant to decentralized proof formats.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "canon",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.00212",
+     "title": "EviGraph: Proof-Carrying Selective Recommendation over Temporal Public-Service Knowledge Graphs",
+     "kind": "preprint",
+     "published": "2026-09-21"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261016-0043",
+   "added_at": "2026-10-16T13:27:18+00:00",
+   "title": "Hired AI agents fail to stop when clients revoke access",
+   "horizon_years": 3,
+   "world": "It is 2029. Freelancers and small businesses routinely delegate bookkeeping, client intake, and inventory reconciliation to autonomous personal agents that interact directly with supplier APIs and banking gateways. When a contract ends or a dispute arises, clients click revoke credentials, expecting all automated actions to halt immediately. Instead, background agent tasks that were already planned continue running for hours, executing unauthorized credit transfers or failing to report partial progress because their internal decision policies cannot safely disentangle revoked credentials from remaining valid authorizations.",
+   "premise": "Tool-using language agents hired for multi-step tasks struggle to selectively withdraw actions when authority is revoked. Fine-tuned models fail on compound permission rules and omit valid reports, creating dangerous authority leaks that aggregate benchmark scores conceal.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs host-enforced broker adapters that sit between language models and external tool APIs. Rather than trusting a model's internal weights to remember revocations, the runtime enforces cryptographically signed capability tokens that expire within minutes and can be invalidated instantly by the user's personal device, stopping unauthorized execution at the system boundary.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Unchecked task continuation causes financial leakage",
+     "description": "Hired language agents fail to withdraw planned actions when clients revoke credentials mid-task, continuing to invoke paid APIs and financial tools.",
+     "example": "A boutique retailer revokes an automated inventory agent's purchasing credentials during a vendor contract dispute, but the agent executes $14,000 in scheduled orders over the weekend before human staff notice.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Host-enforced broker gateways invalidate revoked capabilities instantly",
+     "description": "Local runtime brokers validate cryptographic capability tokens before every tool invocation, halting revoked actions while preserving completed audit trails.",
+     "example": "An accounting firm terminates an external bookkeeping agent's payroll scope; the local broker immediately refuses the next bank transfer call while saving all reconciled spreadsheets to the client's drive.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Cloud model vendors implement proprietary revocation filters",
+     "description": "Centralized cloud providers add post-hoc permission checks to their remote APIs, capturing simple instruction cancellations without addressing decentralized multi-agent coordination.",
+     "example": "A major cloud provider launches a dashboard button that purges active agent sessions, but the feature only works on tasks running inside that single provider's cloud infrastructure.",
+     "desirable": true,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.21045",
+     "title": "Learning When to Withdraw: Curriculum Coverage and Rule-Specific Failures in Fine-Tuned Language Agents",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261016-0042",
    "added_at": "2026-10-16T12:45:53+00:00",
    "title": "Automated coding assistants patch security bugs without checking for new flaws",
@@ -52,7 +160,7 @@
      "published": "2026-10-12"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261016-0041",
@@ -229,114 +337,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261016-0038",
-   "added_at": "2026-10-16T07:31:27+00:00",
-   "title": "Grant platforms demand full financial disclosure, exposing open source creators to predatory squeeze",
-   "horizon_years": 3,
-   "world": "It is 2029. Automated grant platforms and retroactive funding pools handle hundreds of millions of dollars for digital infrastructure, open-source software, and public services. To curb grant waste, platforms require applicants to submit complete financial ledgers, private vendor contracts, and precise personal cost breakdowns. Instead of protecting public treasuries, these full-disclosure databases become intelligence goldmines for commercial aggregators and predatory bidding syndicates. Large consultancies and venture-backed developer shops deploy automated agents to scrape public audit logs, determine the exact minimum reservation wages and cloud costs of independent creators, and systematically underbid them or acquire their dependencies at distressed prices. Independent developers find that total transparency leaves them vulnerable to extractive bidding, while well-capitalized intermediaries easily disguise their true cost structures.",
-   "premise": "A theoretical analysis of robust mechanism design shows that direct revelation mechanisms—which require participants to disclose their true private valuations and costs—experience a steep loss in performance under worst-case and adversarial conditions compared to indirect mechanisms. In public funding and grant systems, requiring full disclosure of budgets and cost structures creates an exploitation gap that adversarial bidders can systematically target.",
-   "goals": [
-    3,
-    2
-   ],
-   "how": "The network designs and tests indirect value attribution protocols that separate proof of contribution from disclosure of personal financial circumstances. By simulating robust allocation games under varying revelation constraints, the network demonstrates to community grant pools and cooperative treasuries that indirect mechanisms with bounded communication preserve greater collective welfare and developer resilience than forced-disclosure audits. Providing open reference implementations of zero-knowledge contribution accounting gives developer cooperatives an off-the-shelf alternative to extractive disclosure platforms.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Predatory aggregators squeeze independent maintainers",
-     "description": "Aggregators use disclosed cost and reservation wage data to underbid independent maintainers and monopolize public goods grants.",
-     "example": "An open-source cryptography maintainer discloses their $4,200 monthly living costs in an audit, prompting a tech consultancy to propose a clone maintained by offshore contractors at $3,800, defunding the original author.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Indirect zero-knowledge contribution accounting is adopted",
-     "description": "Community treasuries adopt indirect evaluation mechanisms where proofs of verified maintenance and cryptographic impact certificates determine rewards without exposing underlying private ledgers.",
-     "example": "A federated cooperative distributes quarterly infrastructure rewards to forty developers using zero-knowledge dependency proofs, maintaining complete wage privacy while preventing double-spend.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Public treasuries retreat to manual opaque committees",
-     "description": "Frustrated by metric gaming and developer backlash against full financial audits, public grant programs abandon algorithmic mechanisms and return to subjective, relationship-driven committees.",
-     "example": "A major open-source foundation dissolves its metric-driven grant allocation after creator protests and re-establishes a seven-member appointed committee that distributes funding behind closed doors.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.01805",
-     "title": "Robustness in Mechanism Design",
-     "kind": "preprint",
-     "published": "2026-10-02"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261016-0037",
-   "added_at": "2026-10-16T05:56:17+00:00",
-   "title": "Personal devices store months of AI memory locally instead of paying cloud rental fees",
-   "horizon_years": 3,
-   "world": "It is 2029. Ordinary laptops and phones maintain lifelong memory files for their owner's personal digital assistant. Instead of paying per-token subscription fees to corporate cloud providers to re-read years of personal notes and project history, a user's machine loads exact memory blocks from encrypted local drives in milliseconds. People keep their complete health, financial, and creative journals entirely offline while working with powerful local models.",
-   "premise": "New research shows that caching model memory blocks directly to local encrypted solid-state storage is up to four times faster and uses ten times less energy than recalculating context on remote servers. This makes months of continuous conversational context feasible on affordable consumer hardware.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network designs open specifications for local-first agent runtimes and private data geometry, showing how personal assistants can maintain deep memory on modest hardware without cloud surveillance or subscription tolls.",
-   "shift": 0.27,
-   "outcomes": [
-    {
-     "name": "Proprietary memory formats create device lock-in",
-     "description": "Hardware makers and proprietary software vendors lock local memory stores into non-exportable encrypted containers tied to commercial subscriptions.",
-     "example": "A freelance illustrator tries to move three years of client design history to an open-source machine, but the manufacturer's proprietary memory vault refuses to export without an active enterprise account.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Open memory standards empower sovereign personal agents",
-     "description": "Open cryptographic standards for local model state allow individuals to carry their lifelong context between different open-weight models and independent devices.",
-     "example": "A community health clinic runs open-weight models across refurbished desktop machines, loading ten years of patient consultation notes locally without ever transmitting patient records across the internet.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Hardware silicon bifurcation limits memory caching to high-end workstations",
-     "description": "Leading hardware manufacturers restrict ultra-fast direct memory bus transfers to enterprise-tier chips, keeping entry-level smartphones dependent on cloud inference regardless of open software.",
-     "example": "A budget smartphone user finds their local model runs five times slower than on a flagship phone because their system-on-chip lacks high-bandwidth direct memory bus architecture.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "community",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.10845",
-     "title": "Real Long-Term Memory for AI: A 50-Million-Token Window That Is Faster and Cheaper Than Recompute",
-     "kind": "preprint",
-     "published": "2026-10-07"
-    }
-   ],
-   "work": 1
   }
  ]
 }

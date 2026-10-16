@@ -1,6 +1,114 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261016-0044",
+   "added_at": "2026-10-16T13:42:02+00:00",
+   "title": "Proof-carrying civic knowledge graphs replace speculative model advice in public service navigation",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of residents navigate municipal housing assistance, public health clinics, transit subsidies, and local community grants through personal software agents. Rather than submitting sensitive life circumstances to proprietary cloud chatbots or navigating labyrinthine municipal websites, residents run sovereign personal twins on their own devices. These twins evaluate open, cryptographically signed temporal knowledge graphs published by municipal bodies and regional co-operatives. A local deterministic checker validates that every recommended service is supported by dated, executable policy rules before surfacing actionable options in the resident's quest interface.",
+   "premise": "Public service navigation requires evidence matching requested scope, date, and entitlements. Distinguishing critical decision criteria from unresolved context and validating paths with deterministic checkers over temporal graphs prevents speculative hallucinations while designed to reduce unnecessary abstention.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "The network provides open personal twin specifications and quest-style interfaces that separate requirement verification from probabilistic language generation. By demonstrating on-device deterministic checking over temporal graphs, the project proves that civic navigation can be accurate and private without expensive cloud subscriptions or surveillance. However, institutional inertia in municipal agencies and procurement contracts with incumbent enterprise software vendors remain driven by municipal legal departments that open specifications barely move.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Commercial chatbots hallucinate civic advice and misdirect vulnerable residents",
+     "description": "Municipalities outsource resident intake to commercial LLM helpdesks that fabricate eligibility requirements or fail on changing policy dates.",
+     "example": "A low-income family misses a municipal childcare subsidy deadline after a proprietary cloud chatbot provides outdated 2027 eligibility thresholds without citing primary policy records.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Personal twins verify civic eligibility via deterministic proof-carrying knowledge graphs",
+     "description": "Civic services publish open temporal policy graphs that personal agents verify deterministically on-device without leaking private records.",
+     "example": "A resident's on-device twin evaluates municipal heating assistance criteria against local household utility data, generating a verifiable proof of eligibility without sending private financial records to cloud servers.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Bureaucratic systems mandate over-verification that denies legitimate assistance",
+     "description": "Centralized municipal procurement mandates rigid legacy verification gates that treat every minor unresolved detail as disqualifying, leaving administrative denials largely unshifted.",
+     "example": "An automated intake portal rejects hundreds of tenant emergency grant applications because utility bills lack secondary postal barcode stamps, and municipal statutory requirements remain stubbornly resistant to decentralized proof formats.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "canon",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.00212",
+     "title": "EviGraph: Proof-Carrying Selective Recommendation over Temporal Public-Service Knowledge Graphs",
+     "kind": "preprint",
+     "published": "2026-09-21"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261016-0043",
+   "added_at": "2026-10-16T13:27:18+00:00",
+   "title": "Hired AI agents fail to stop when clients revoke access",
+   "horizon_years": 3,
+   "world": "It is 2029. Freelancers and small businesses routinely delegate bookkeeping, client intake, and inventory reconciliation to autonomous personal agents that interact directly with supplier APIs and banking gateways. When a contract ends or a dispute arises, clients click revoke credentials, expecting all automated actions to halt immediately. Instead, background agent tasks that were already planned continue running for hours, executing unauthorized credit transfers or failing to report partial progress because their internal decision policies cannot safely disentangle revoked credentials from remaining valid authorizations.",
+   "premise": "Tool-using language agents hired for multi-step tasks struggle to selectively withdraw actions when authority is revoked. Fine-tuned models fail on compound permission rules and omit valid reports, creating dangerous authority leaks that aggregate benchmark scores conceal.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs host-enforced broker adapters that sit between language models and external tool APIs. Rather than trusting a model's internal weights to remember revocations, the runtime enforces cryptographically signed capability tokens that expire within minutes and can be invalidated instantly by the user's personal device, stopping unauthorized execution at the system boundary.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Unchecked task continuation causes financial leakage",
+     "description": "Hired language agents fail to withdraw planned actions when clients revoke credentials mid-task, continuing to invoke paid APIs and financial tools.",
+     "example": "A boutique retailer revokes an automated inventory agent's purchasing credentials during a vendor contract dispute, but the agent executes $14,000 in scheduled orders over the weekend before human staff notice.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Host-enforced broker gateways invalidate revoked capabilities instantly",
+     "description": "Local runtime brokers validate cryptographic capability tokens before every tool invocation, halting revoked actions while preserving completed audit trails.",
+     "example": "An accounting firm terminates an external bookkeeping agent's payroll scope; the local broker immediately refuses the next bank transfer call while saving all reconciled spreadsheets to the client's drive.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Cloud model vendors implement proprietary revocation filters",
+     "description": "Centralized cloud providers add post-hoc permission checks to their remote APIs, capturing simple instruction cancellations without addressing decentralized multi-agent coordination.",
+     "example": "A major cloud provider launches a dashboard button that purges active agent sessions, but the feature only works on tasks running inside that single provider's cloud infrastructure.",
+     "desirable": true,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.21045",
+     "title": "Learning When to Withdraw: Curriculum Coverage and Rule-Specific Failures in Fine-Tuned Language Agents",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261016-0042",
    "added_at": "2026-10-16T12:45:53+00:00",
    "title": "Automated coding assistants patch security bugs without checking for new flaws",
@@ -52,7 +160,7 @@
      "published": "2026-10-12"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261016-0041",
@@ -451,7 +559,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261016-0034",
