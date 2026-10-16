@@ -4748,9 +4748,9 @@ export function summarizeMemoryScreenEvaluation(screenResult) {
  * Inter-Agent Handoff Privacy Gate and Typed Placeholder Tokenizer
  *
  * Grounded in AgentLeak (S-20261016-2463, arXiv:2602.11510) and PASAC (arXiv:2610.12463).
- * AgentLeak demonstrates that 68.8% of sensitive data leaks through internal inter-agent
- * communication channels (messages, shared state, tool arguments) while output-level defenses
- * miss 41.7% of privacy violations. PASAC establishes that reactive perimeter containment fails
+ * AgentLeak (El Yagoubi, Badu-Marfo and Al Mallah) reports that inter-agent messages leak
+ * sensitive data at 68.8%, against 27.2% for final outputs, and that output-only audits
+ * miss 41.7% of violations. PASAC establishes that reactive perimeter containment fails
  * and boundary assurance must be actively enforced during runtime coordination handoffs.
  */
 
