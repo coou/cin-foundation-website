@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=3';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -411,6 +411,8 @@ if (wipeBtn) wipeBtn.onclick = () => {
   const evalBox = document.getElementById('access-eval-result'); if (evalBox) evalBox.textContent = '';
   const auditBox = document.getElementById('boundary-audit-result'); if (auditBox) auditBox.textContent = '';
   const ctxBox = document.getElementById('context-assembly-result'); if (ctxBox) ctxBox.textContent = '';
+  const visBox = document.getElementById('visual-audit-result'); if (visBox) visBox.textContent = '';
+  const visForm = document.getElementById('audit-visual-action'); if (visForm) visForm.reset();
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
@@ -956,6 +958,62 @@ function renderCapabilityInspector() {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderReceiptInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler(); renderCapabilityInspector();
+function renderVisualAuditorInspector() {
+  const form = document.getElementById('audit-visual-action');
+  const resultBox = document.getElementById('visual-audit-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+    const assistantId = form.elements.assistant_id ? form.elements.assistant_id.value.trim().slice(0, 60) : '';
+    const actionType = form.elements.action_type ? form.elements.action_type.value.trim() : 'click';
+    const tagName = form.elements.tag_name ? form.elements.tag_name.value.trim().slice(0, 20) : 'input';
+    const elementType = form.elements.element_type ? form.elements.element_type.value.trim().slice(0, 30) : 'text';
+    const proposedInput = form.elements.proposed_input ? form.elements.proposed_input.value.trim().slice(0, 140) : '';
+    const detectedText = form.elements.detected_text ? form.elements.detected_text.value.trim().slice(0, 140) : '';
+
+    if (!assistantId || !actionType) {
+      resultBox.appendChild(el('p', 'muted', 'Please provide an assistant identifier and action type.'));
+      return;
+    }
+
+    const actionCandidate = {
+      id: `act-gui-${Date.now()}`,
+      assistant_id: assistantId,
+      action_type: actionType,
+      target_element: {
+        tag_name: tagName,
+        element_type: elementType,
+        accessible_name: `${actionType} on ${tagName}`,
+        bounding_box: { x: 100, y: 100, width: 200, height: 40 },
+        is_sensitive: elementType === 'password' || elementType === 'credit-card' || elementType === 'cvv',
+        detected_text: detectedText
+      },
+      proposed_input: proposedInput,
+      viewport: { width: 1920, height: 1080 }
+    };
+
+    const auditRes = auditVisualAssistantAction(actionCandidate, state);
+    const summary = summarizeVisualActionAudit(auditRes);
+
+    const p = el('p');
+    if (summary.success) {
+      p.className = 'status-ok';
+      const badge = el('strong', 'status-pass', 'Passed visual audit. ');
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(summary.summary_text));
+      resultBox.appendChild(p);
+    } else {
+      p.className = 'muted';
+      const badge = el('strong', 'status-err', `[${summary.decision.toUpperCase()}] `);
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(summary.summary_text));
+      resultBox.appendChild(p);
+    }
+  };
+}
+
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderReceiptInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler(); renderCapabilityInspector(); renderVisualAuditorInspector();
 
 
