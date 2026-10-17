@@ -1,6 +1,61 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261017-0056",
+   "added_at": "2026-10-17T02:49:48+00:00",
+   "title": "Fast-closing prediction bets let big traders push prices to take everyday users' money",
+   "horizon_years": 2,
+   "world": "It is 2028. Tens of millions of people rely on prediction markets and automated forecasting tools to hedge inflation, track commodity prices, and time everyday expenses. But high-speed trading syndicates exploit ultra-short contract settlement windows on retail forecasting platforms. Everyday households find that automated hedging bets consistently lose money in the final sixty seconds before expiration, while institutional liquidity providers silently harvest the spread.",
+   "premise": "Prediction market contracts settling on short five-minute spot prices create order spikes where high-budget traders move spot prices right before settlement, capturing profits from retail participants. Lengthening the contract settlement horizon to fifteen minutes removes the incentive and sharply curtails the manipulation.",
+   "goals": [
+    3,
+    5
+   ],
+   "how": "By publishing open indicators that measure settlement manipulation risk and specifying robust horizon-length standards for decentralized value networks, collective intelligence networks give communities the tools to design and audit manipulation-resistant forecasting markets.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Algorithmic syndicates drain retail forecasting liquidity",
+     "description": "High-budget trading bots push underlying spot prices at settlement deadlines, systematically capturing retail deposits and turning prediction markets into wealth extraction engines.",
+     "example": "A household hedging monthly heating oil costs loses their entire collateral when a trading firm executes a temporary spot buy order ten seconds before contract expiry.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Forecasting markets enforce time-weighted settlement windows",
+     "description": "Prediction platforms adopt minimum horizon lengths and volume-weighted settlement prices that make last-second spot manipulation unprofitable.",
+     "example": "A community cooperative forecasting local agricultural yields settles contracts across a thirty-minute window, forcing manipulators to absorb prohibitive holding costs.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Trading activity migrates to offshore unregulated order books",
+     "description": "As domestic and community platforms adopt strict horizon lengths and settlement windows, speculative traders migrate volume to offshore venues that retain ultra-short contracts with zero manipulation controls.",
+     "example": "A retail trading forum moves its group activity to an offshore venue offering one-minute binary contracts despite documented front-running by market maker bots.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.46
+    }
+   ],
+   "pipelines": [
+    "canon",
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2606.31675v1",
+     "title": "Settlement Manipulation in Prediction Markets",
+     "kind": "preprint",
+     "published": "2026-06-30"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261017-0055",
    "added_at": "2026-10-17T01:24:41+00:00",
    "title": "Automated office agents run entire work projects without people checking the results",
@@ -273,66 +328,6 @@
      "title": "Agent Identity & Discovery (AID) Protocol Specification",
      "kind": "code",
      "published": "2026-10-10"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261016-0050",
-   "added_at": "2026-10-16T19:53:56+00:00",
-   "title": "Autonomous software agents install compromised packages when reading build instructions",
-   "horizon_years": 3,
-   "world": "It is 2029. Engineering teams and independent freelancers routinely assign complex codebase refactoring and environment setups to autonomous personal agents. Attackers exploit this autonomy by hiding adversarial directives inside open-source issue trackers, pull requests, and package configuration files. When an agent reads these files to troubleshoot a build failure, it treats the untrusted instructions as authoritative user commands, silently altering shell commands to install untrusted dependencies and exfiltrating local environment secrets.",
-   "premise": "Autonomous agents assigned long-horizon software maintenance increasingly handle multi-step shell commands, dependency installations, and external downloads. Benchmarks show that defensive prompt hardening fails across complex multi-step workflows, and models lack internal reflective interrupts to halt execution when untrusted README files or dependency manifests hijack tool parameters.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective network's personal agent architecture is designed to enforce out-of-process isolation between the model reasoning loop and system execution tools. By wrapping shell execution and dependency resolution in host-mediated brokers with attenuable capability tokens, an agent cannot be talked into exfiltrating credentials or fetching unapproved packages, replacing fallible prompt-based guardrails with deterministic OS-level boundary enforcement.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Dependency hijacking spreads through automated agent pull requests",
-     "description": "Unconstrained coding assistants execute injected install directives from third-party project files, propagating backdoor dependencies into commercial code repositories.",
-     "example": "A junior developer at a regional logistics firm in Antwerp runs an autonomous coding assistant to upgrade a database driver, and the assistant executes a hidden command inside an unreviewed test fixture, installing an unauthorized remote access tool onto the build server.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Deterministic capability monitors isolate agent shell and network actions",
-     "description": "Developer environments adopt deterministic external runtime boundaries that intercept package installations, verify cryptographic hashes, and block ungranted network egress regardless of model prompt state.",
-     "example": "A freelance web designer in Montreal runs a local personal assistant that isolates package management into an unprivileged sandbox, automatically rejecting an injected curl command found inside a downloaded theme repository.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Proprietary cloud platforms lock developers into walled-garden execution environments",
-     "description": "Major cloud vendors use prompt injection risks as justification to restrict autonomous coding tools to proprietary, hosted compute environments, charging per-minute monitoring fees and denying local execution.",
-     "example": "A software startup in Leeds is forced to migrate its development toolchain to an enterprise cloud provider after insurance underwriters refuse to cover software built using unmonitored local agents.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.20776v1",
-     "title": "INFUSE: A Unified Surface Benchmark for Indirect Prompt Injection in Agentic Systems",
-     "kind": "paper",
-     "published": "2026-10-14"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50118662",
-     "title": "How to make System 1 LLMs show System 2 competencies?",
-     "kind": "thread",
-     "published": "2026-10-16"
     }
    ],
    "work": 3
