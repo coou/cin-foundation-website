@@ -1,6 +1,121 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261017-0075",
+   "added_at": "2026-10-17T17:50:03+00:00",
+   "title": "Commercial websites ban personal agents and force people into company bots",
+   "horizon_years": 3,
+   "world": "By 2029, navigating consumer services requires automated coordination. E-commerce platforms, airlines, and healthcare providers deploy bot-detection systems that reject personal software agents running on individual devices. To book a flight, dispute an unexpected fee, or schedule medical visits, individuals must delegate tasks to proprietary platform assistants. These platform assistants charge recurring subscriptions, retain full transcripts of private consumer intentions, and steer purchasing choices toward platform sponsors. Meanwhile, independent cooperatives build open verification gateways where personal agents present cryptographic single-use allowances, proving authorization without exposing user profiles.",
+   "premise": "Major commercial platforms have begun systematically blocking independent personal agents from booking services and completing transactions. Without open interaction standards, users face an internet where only corporate-partnered bots can operate on their behalf, capturing personal data behind platform walls.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Developing on-device personal twins and verifiable execution contracts provides people with software that proves authorized actions without surrendering personal data. By establishing open standards for action allowances and local intent confirmation, users retain autonomous agency across the web without depending on centralized corporate intermediaries.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Proprietary gatekeepers capture consumer agency",
+     "description": "Commercial platforms successfully wall off web services from user-owned software, forcing consumers to interact through vendor-owned AI assistants that monitor and steer behavior.",
+     "example": "A commuter personal assistant is blocked from purchasing train tickets on a national rail portal, forcing the commuter to use a proprietary corporate bot that logs personal transit schedules and charges a monthly concierge fee.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Cryptographic interaction gates establish open agent access",
+     "description": "Standardized interaction contracts allow personal software agents to transact with commercial endpoints using cryptographic single-use allowances without corporate intermediary capture.",
+     "example": "A patient uses their own on-device personal agent to schedule specialist consultations across three independent clinic portals using signed action allowances, without either clinic demanding platform lock-in.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Commercial airlines and banks restrict account access to verified legal entities",
+     "description": "Financial institutions and transport providers maintain strict perimeter firewalls requiring enterprise liability insurance and legal incorporation for automated tool callers, excluding grassroots individual agents regardless of architecture.",
+     "example": "An independent software developer cannot automate personal bank account balance checks because the banking API requires corporate registration and formal vendor audits.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theverge.com/ai-artificial-intelligence/1013195/ai-agents-blocked-web",
+     "title": "Websites are closing their doors to AI agents",
+     "kind": "news",
+     "published": "2026-10-17"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.14810",
+     "title": "KedgeFlow: A Programmable Control Plane for Enterprise AI Agents",
+     "kind": "preprint",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261017-0074",
+   "added_at": "2026-10-17T16:51:47+00:00",
+   "title": "Workplace software locks down AI agents with single-use permission envelopes to prevent rogue commands",
+   "horizon_years": 3,
+   "world": "It is 2029. Most enterprise desktop environments give employees personal software agents to handle scheduling, code deployments, accounting reconciliation, and customer support. Rather than relying on prompts or broad API keys, operating systems and corporate networks route all tool calls through deterministic capability gateways. Every state-changing action requires a signed, time-limited permission slip that expires immediately after one use. When an assistant attempts to retry a failed payment or execute a shell command, the underlying gateway checks the allowance ledger before the operating system touches persistent state. For everyday office workers, tasks proceed smoothly, but misconfigured automated workflows hit visible safety trips instead of silently spiraling into catastrophic outages.",
+   "premise": "Recent agent systems research demonstrates that autonomous assistants frequently alter parameters, replay granted permissions, or loop on unconfirmed network requests unless tool gateways enforce single-use authorization envelopes independently of model reasoning.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network publishes open-source, lightweight runtime brokers and action contract specifications that run locally on personal devices. By providing deterministic reference implementations and test fixtures that add negligible overhead, the network demonstrates that users do not need proprietary corporate cloud gateways to keep autonomous assistants contained.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Proprietary software gateways lock workers into closed enterprise ecosystems",
+     "description": "Enterprise software vendors turn action-authorization gateways into proprietary subscription locks, preventing open-source and personal agents from connecting to workplace tools.",
+     "example": "A major enterprise vendor requires all workplace agents to pass through its proprietary cloud clearinghouse, charging per-action verification fees and blocking independent assistants.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Open cryptographic action envelopes become the standard for safe tool use",
+     "description": "Transparent, language-independent action contracts allow workers to run personal assistants safely across independent tools with verifiable single-use limits.",
+     "example": "An independent developer uses an open-source runtime adapter that signs single-action envelopes for database queries, preventing accidental double-billing during network timeouts.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Edge hardware bottlenecks slow down multi-agent permission handshakes",
+     "description": "Cryptographic signing and distributed allowance checks add measurable latency to rapid agent actions, prompting casual users on older devices to bypass safety brokers.",
+     "example": "A local software developer turns off execution verification in their coding agent because signed authorization handshakes add three seconds to each file edit.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.14810",
+     "title": "KedgeFlow: A Programmable Control Plane for Enterprise AI Agents",
+     "kind": "preprint",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261017-0073",
    "added_at": "2026-10-17T15:33:27+00:00",
    "title": "Public goods treasuries hand funding algorithms back to foundation insiders",
@@ -180,7 +295,7 @@
      "published": "2026-10-17"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261017-0070",
@@ -2363,7 +2478,7 @@
      "published": "2026-10-14"
     }
    ],
-   "work": 4
+   "work": 5
   },
   {
    "id": "SC-20261016-0032",
@@ -3354,115 +3469,6 @@
      "title": "ScholarStack: Layered Research Asset Orchestration and Cross-Task Reuse for Scientific Agents",
      "kind": "preprint",
      "published": "2026-09-20"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261015-0015",
-   "added_at": "2026-10-15T03:49:50+00:00",
-   "title": "Streaming platforms use opaque AI labels to control which creative work reaches listeners",
-   "horizon_years": 3,
-   "world": "It is 2029. Streaming platforms require every audio and video upload to pass automated synthetic detection before distribution. Independent musicians and bedroom producers find their tracks routinely tagged with algorithmic warnings or excluded from discovery algorithms after opaque detectors flag standard digital audio workstation plugins as machine generation. Major corporate record labels negotiate private allowlists and cryptographic bulk certificates, exempting their catalogs from automated scrutiny. Listeners see conflicting labels across platforms, while independent creators must pay third-party audit services to challenge false positives.",
-   "premise": "Major music and video streaming services are rolling out automated labels to classify audio made with artificial intelligence, using both creator disclosures and proprietary detection algorithms. Without portable provenance standards, platform-controlled detection algorithms misclassify independent human productions while large media catalogs negotiate bulk exemptions.",
-   "goals": [
-    2,
-    3,
-    5
-   ],
-   "how": "Decentralized value accounting and device-held creative credentials allow musicians to sign audio stems at the point of creation, proving human provenance without platform custody. Local personal agents inspect cryptographic receipts directly on personal devices, bypassing black-box recommendation monopolies.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Centralized platforms become arbitrary gatekeepers of human expression",
-     "description": "Opaque platform detectors penalize independent artists with automated synthetic tags, suppressing their reach while corporate catalogs bypass inspection through commercial partnerships.",
-     "example": "An acoustic folk artist in Montreal has her self-produced album tagged as synthetic because her mastering compressor triggered an unverified detection heuristic, cutting her streaming royalties by 70% with no appeals process.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Open cryptographic provenance replaces platform black-box filters",
-     "description": "Artists record open cryptographic creation trails directly on their devices, giving listeners verifiable origin proof that travels across any player without centralized platform gatekeeping.",
-     "example": "A community music cooperative in Bristol issues tamper-evident recording receipts from their hardware mixers, allowing 5,000 independent musicians to distribute directly to decentralized listening clients that verify human provenance instantly.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Autonomous synthetic generation outpaces human catalog volume",
-     "description": "Autonomous generative audio pipelines flood streaming networks with hundreds of thousands of ambient tracks daily, overwhelming search indexes regardless of whether tags are applied.",
-     "example": "A digital marketing agency deploys automated music generators that upload 50,000 lo-fi background tracks per week under synthetic artist aliases, capturing automated playlist placements.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "community",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theverge.com/ai-artificial-intelligence/1011369/youtube-music-ai-label",
-     "title": "YouTube sticks new labels on AI-generated songs",
-     "kind": "news",
-     "published": "2026-10-14"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261015-0014",
-   "added_at": "2026-10-15T03:27:47+00:00",
-   "title": "AI-written software outpaces human understanding, leaving teams unable to safely fix their own tools",
-   "horizon_years": 3,
-   "world": "It is 2029. Engineering teams deploy autonomous agents that generate hundreds of software updates a week. At first, release velocity seems unprecedented. But within eighteen months, essential infrastructure codebases become incomprehensible to the people maintaining them: original design constraints were never recorded in persistent artifacts, and unit tests pass even while underlying logic quietly diverges from user expectations. When a billing outage strikes a regional water authority, engineers discover that no human understands the multi-layered agentic codebase, and no written records explain why critical rate-limit safeguards were altered.",
-   "premise": "As automated coding agents write software faster than humans can read it, codebases accumulate cognitive debt in developers and intent debt in missing documentation. Without living knowledge pipelines that continually capture architectural rationale and design constraints, systems silently drift from their intended purpose.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "By pioneering living documentation pipelines and structured intent registries, the collective intelligence framework is designed to help teams capture design constraints, architectural trade-offs, and empirical sources alongside code, supporting continuous consolidation and verifiable human comprehension.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Software opacity and cognitive surrender",
-     "description": "Organizations surrender architectural comprehension to automated code generation, creating fragile systems that nobody can audit or remediate during systemic failures.",
-     "example": "A municipal transport authority in Leeds suspends automated ticketing after a silent logic regression causes mass erroneous penalties, because no living engineer or written record can trace the agentic design changes made over the prior six months.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Living documentation and verifiable intent capture",
-     "description": "Teams adopt living literature and architectural pipelines that automatically extract, verify, and consolidate design constraints alongside every agentic code change, preserving human mental models.",
-     "example": "An open healthcare co-operative uses automated living review pipelines to maintain verified, machine-checked rationale across 50,000 clinic diagnostic rules, allowing any clinician to inspect the exact historical justification for every active parameter.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Proprietary vendors lock down opaque managed agent clouds",
-     "description": "Hyperscale cloud vendors respond to comprehension failures by locking down full-stack agent environments into closed black-box SaaS offerings, reducing open code inspectability across enterprise workflows.",
-     "example": "A major enterprise software provider removes direct repository access for internal teams, forcing corporate clients to run all code modification through proprietary hosted agent runtimes with no exportable intent traces.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.53
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://raw.githubusercontent.com/aghribi/acc-ml-living-review/main/README.md",
-     "title": "Living Review of Machine Learning and Artificial Intelligence Applications in Particle Accelerator Science",
-     "kind": "code",
-     "published": "2026-09-15"
     }
    ],
    "work": 2

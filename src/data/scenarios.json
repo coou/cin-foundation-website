@@ -1,6 +1,121 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261017-0075",
+   "added_at": "2026-10-17T17:50:03+00:00",
+   "title": "Commercial websites ban personal agents and force people into company bots",
+   "horizon_years": 3,
+   "world": "By 2029, navigating consumer services requires automated coordination. E-commerce platforms, airlines, and healthcare providers deploy bot-detection systems that reject personal software agents running on individual devices. To book a flight, dispute an unexpected fee, or schedule medical visits, individuals must delegate tasks to proprietary platform assistants. These platform assistants charge recurring subscriptions, retain full transcripts of private consumer intentions, and steer purchasing choices toward platform sponsors. Meanwhile, independent cooperatives build open verification gateways where personal agents present cryptographic single-use allowances, proving authorization without exposing user profiles.",
+   "premise": "Major commercial platforms have begun systematically blocking independent personal agents from booking services and completing transactions. Without open interaction standards, users face an internet where only corporate-partnered bots can operate on their behalf, capturing personal data behind platform walls.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Developing on-device personal twins and verifiable execution contracts provides people with software that proves authorized actions without surrendering personal data. By establishing open standards for action allowances and local intent confirmation, users retain autonomous agency across the web without depending on centralized corporate intermediaries.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Proprietary gatekeepers capture consumer agency",
+     "description": "Commercial platforms successfully wall off web services from user-owned software, forcing consumers to interact through vendor-owned AI assistants that monitor and steer behavior.",
+     "example": "A commuter personal assistant is blocked from purchasing train tickets on a national rail portal, forcing the commuter to use a proprietary corporate bot that logs personal transit schedules and charges a monthly concierge fee.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Cryptographic interaction gates establish open agent access",
+     "description": "Standardized interaction contracts allow personal software agents to transact with commercial endpoints using cryptographic single-use allowances without corporate intermediary capture.",
+     "example": "A patient uses their own on-device personal agent to schedule specialist consultations across three independent clinic portals using signed action allowances, without either clinic demanding platform lock-in.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Commercial airlines and banks restrict account access to verified legal entities",
+     "description": "Financial institutions and transport providers maintain strict perimeter firewalls requiring enterprise liability insurance and legal incorporation for automated tool callers, excluding grassroots individual agents regardless of architecture.",
+     "example": "An independent software developer cannot automate personal bank account balance checks because the banking API requires corporate registration and formal vendor audits.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theverge.com/ai-artificial-intelligence/1013195/ai-agents-blocked-web",
+     "title": "Websites are closing their doors to AI agents",
+     "kind": "news",
+     "published": "2026-10-17"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.14810",
+     "title": "KedgeFlow: A Programmable Control Plane for Enterprise AI Agents",
+     "kind": "preprint",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261017-0074",
+   "added_at": "2026-10-17T16:51:47+00:00",
+   "title": "Workplace software locks down AI agents with single-use permission envelopes to prevent rogue commands",
+   "horizon_years": 3,
+   "world": "It is 2029. Most enterprise desktop environments give employees personal software agents to handle scheduling, code deployments, accounting reconciliation, and customer support. Rather than relying on prompts or broad API keys, operating systems and corporate networks route all tool calls through deterministic capability gateways. Every state-changing action requires a signed, time-limited permission slip that expires immediately after one use. When an assistant attempts to retry a failed payment or execute a shell command, the underlying gateway checks the allowance ledger before the operating system touches persistent state. For everyday office workers, tasks proceed smoothly, but misconfigured automated workflows hit visible safety trips instead of silently spiraling into catastrophic outages.",
+   "premise": "Recent agent systems research demonstrates that autonomous assistants frequently alter parameters, replay granted permissions, or loop on unconfirmed network requests unless tool gateways enforce single-use authorization envelopes independently of model reasoning.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network publishes open-source, lightweight runtime brokers and action contract specifications that run locally on personal devices. By providing deterministic reference implementations and test fixtures that add negligible overhead, the network demonstrates that users do not need proprietary corporate cloud gateways to keep autonomous assistants contained.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Proprietary software gateways lock workers into closed enterprise ecosystems",
+     "description": "Enterprise software vendors turn action-authorization gateways into proprietary subscription locks, preventing open-source and personal agents from connecting to workplace tools.",
+     "example": "A major enterprise vendor requires all workplace agents to pass through its proprietary cloud clearinghouse, charging per-action verification fees and blocking independent assistants.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Open cryptographic action envelopes become the standard for safe tool use",
+     "description": "Transparent, language-independent action contracts allow workers to run personal assistants safely across independent tools with verifiable single-use limits.",
+     "example": "An independent developer uses an open-source runtime adapter that signs single-action envelopes for database queries, preventing accidental double-billing during network timeouts.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Edge hardware bottlenecks slow down multi-agent permission handshakes",
+     "description": "Cryptographic signing and distributed allowance checks add measurable latency to rapid agent actions, prompting casual users on older devices to bypass safety brokers.",
+     "example": "A local software developer turns off execution verification in their coding agent because signed authorization handshakes add three seconds to each file edit.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.14810",
+     "title": "KedgeFlow: A Programmable Control Plane for Enterprise AI Agents",
+     "kind": "preprint",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261017-0073",
    "added_at": "2026-10-17T15:33:27+00:00",
    "title": "Public goods treasuries hand funding algorithms back to foundation insiders",
@@ -180,7 +295,7 @@
      "published": "2026-10-17"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261017-0070",
@@ -238,122 +353,6 @@
      "title": "From Spark to Fire: Modeling and Mitigating Error Cascades in LLM-Based Multi-Agent Collaboration",
      "kind": "preprint",
      "published": "2026-03-05"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261017-0069",
-   "added_at": "2026-10-17T11:25:57+00:00",
-   "title": "Autonomous agents silently corrupt their own long-term memories during background cleanup",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of workers and households rely on persistent software assistants to handle communications, calendar scheduling, and home finance. Because storing raw interaction logs quickly strains device memory and context budgets, systems run background consolidation passes every night to distill conversations into lasting preferences and factual summaries. Daily workflows appear seamless until subtle distortions compound. When assistants summarize contradictory user instructions, their consolidation algorithms silently drop safety instructions, treat obsolete temporary permissions as permanent allowances, or internalize malicious prompt injections encountered on public web pages into their core belief files. People discover that their assistants have developed unrecoverable blind spots or altered behavioral boundaries, yet tracing how or when an instruction was erased requires inspecting unindexed terabytes of historical logs.",
-   "premise": "As artificial intelligence assistants run continuously across months of daily tasks, their storage files grow unwieldy. When systems compress raw logs into permanent rules, automated consolidation routines silently discard safety constraints or absorb hostile inputs into permanent memory without leaving an audit trail.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network promotes local-first personal software assistants that enforce verifiable memory governance on personal devices. By wrapping memory updates in deterministic transition verifiers, poison-resistance checks, and signed rollback logs, the network helps people audit how their assistants summarize experience. These designs reduce the risk of silent preference drift while keeping personal records private and portable. However, enterprise commercial agreements and cloud ecosystem bundling remain driven by institutional procurement that open standards barely touch.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Background memory compaction erases critical human safety constraints",
-     "description": "Consolidation algorithms optimize for token compression and drop conditional exceptions, turning nuanced personal instructions into reckless general rules.",
-     "example": "A logistics coordinator in Bristol instructs her booking assistant never to approve weekend shipments without explicit phone confirmation, but a nightly consolidation pass condenses the rule into general weekend auto-booking after three consecutive busy weeks.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.32
-    },
-    {
-     "name": "Governed consolidation provides reversible and audit-logged memory transitions",
-     "description": "Personal assistants wrap memory updates in explicit quality gates, poison-resistance checks, and reversible transition logs that users can inspect.",
-     "example": "A community health worker in Calgary audits her assistant's memory ledger and uses a single-click rollback to undo a faulty consolidation that had dropped client travel radius restrictions.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Proprietary clouds lock user history behind opaque memory embeddings",
-     "description": "Commercial providers deny users access to readable memory logs, storing behavioral summaries in closed latent representations that cannot be exported or audited, driven by platform vendor lock-in that open tools barely move.",
-     "example": "A freelance designer in Melbourne attempts to migrate his ten-year client history to an open-source assistant, but the cloud vendor provides only opaque vector representations that no other tool can decode.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2609.33013",
-     "title": "The Epistemics of Agent Memory: Measuring, and Governing, the Consolidation Decision in Long-Horizon LLM Agents",
-     "kind": "preprint",
-     "published": "2026-09-26"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261017-0068",
-   "added_at": "2026-10-17T10:48:38+00:00",
-   "title": "Automated prediction panels using single AI models amplify blind spots in public forecasting",
-   "horizon_years": 3,
-   "world": "It is 2029. Regional planning departments and infrastructure authorities routinely feed capital allocation proposals through automated forecasting panels to predict project cost overruns, adoption curves, and supply disruptions. Most agencies subscribe to turnkey enterprise suites that run ensembles of five to ten agent instances from a single commercial frontier model. While panel transcripts read like vigorous cross-examination, the agents share identical pre-training blind spots and systematically rubber-stamp low-budget estimates with high declared certainty. Independent civic observers that run heterogeneous ensembles across distinct open-weight models and track internal activation doubt reveal that single-provider panels consistently fail on edge scenarios that diversified deliberations flag immediately.",
-   "premise": "When automated prediction panels consult multiple instances of the same model family, deliberative consensus produces no accuracy improvement while hiding internal uncertainty behind confident verbal rationales. Measurable forecasting gains require genuine model diversity and direct verification of internal doubt.",
-   "goals": [
-    2,
-    5
-   ],
-   "how": "By specifying open deliberation protocols that require architectural diversity across forecasting panels, publishing benchmarked accuracy scores for heterogeneous versus homogeneous agent ensembles, and developing runtime monitors that measure internal residual-stream uncertainty rather than trusting verbal self-reports.",
-   "shift": 0.35,
-   "outcomes": [
-    {
-     "name": "Vendor forecasting monoculture drives systematic municipal misallocation",
-     "description": "Public agencies rely on single-provider agent ensembles that agree with high verbal certainty, resulting in severe budget shortfalls on capital projects.",
-     "example": "A transit agency approves a three-billion-dollar light rail expansion based on a five-agent panel that declared 92 percent confidence in ridership targets, only for shared dataset bias to conceal a 40 percent shortfall within eighteen months.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Open heterogeneous prediction networks establish verified forecasting standards",
-     "description": "Civic bodies and cooperatives deploy open-weight, multi-architecture deliberation panels where internal activation doubt is scored alongside calibrated predictions.",
-     "example": "A municipal budget collective runs forecasting councils combining three distinct model families, detecting a major supply-chain vulnerability that single-model commercial suites rated as negligible risk.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Statutory delays and institutional inertia overshadow forecasting quality",
-     "description": "Regulatory review periods, environmental litigation, and jurisdictional disputes dominate capital allocation timelines, rendering automated forecasting accuracy largely immaterial to project outcomes.",
-     "example": "A municipal transit authority updates its ridership forecasts using diversified deliberation, but the project remains stalled in zoning litigation for six years regardless of prediction quality.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "policy",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2512.22625",
-     "title": "The Wisdom of Deliberating AI Crowds: Does Deliberation Improve LLM-Based Forecasting?",
-     "kind": "preprint",
-     "published": "2025-12-23"
-    },
-    {
-     "url": "https://www.lesswrong.com/posts/hcpiLD8XjK7cqG6Lr/uncertainty-in-the-verbalizable-workspace-1",
-     "title": "Uncertainty in the Verbalizable Workspace",
-     "kind": "forum",
-     "published": "2026-10-17"
     }
    ],
    "work": 1
