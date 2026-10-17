@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261017-0059",
+   "added_at": "2026-10-17T06:35:00+00:00",
+   "title": "Big tech companies host personal assistants in their own clouds instead of on your phone",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people interact with an autonomous assistant that manages their emails, finances, calendars, and subscriptions. Because these assistants run inside remote virtual machines owned by four large cloud providers, users cannot inspect raw memory files, verify whether private conversations are used for secondary model training, or operate their assistants when offline.",
+   "premise": "Major technology vendors are launching persistent personal agents hosted entirely in proprietary cloud containers, locking user memories and daily device interactions behind centralized infrastructure while hiding background tool actions from local user observation.",
+   "goals": [
+    6,
+    1
+   ],
+   "how": "By building and distributing open personal twin software that runs directly on user hardware, uses plain readable files for memory, enforces deterministic local gates on every tool action, and provides cryptographic verification without cloud custody.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Cloud lock-in and invisible background actions",
+     "description": "Users become entirely dependent on cloud platforms for daily digital life, while providers inspect personal habits and silent background actions go unmonitored.",
+     "example": "A freelance designer finds their cloud assistant was cancelled when their subscription lapsed, losing three years of project context and client negotiation history stored in a proprietary format.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Local-first open personal twins take root",
+     "description": "Open runtime standards allow individuals to run their personal twin directly on phones and home computers, using plain text files for memory and deterministic local gates for actions.",
+     "example": "A family runs open personal twins across their phones and laptops, synchronizing reminders and household budgets over private encrypted connections without paying monthly cloud server fees.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Operating system platforms integrate basic memory viewers",
+     "description": "Major phone and desktop operating systems add native memory viewers that let users see what on-device apps record, but keep tool execution closed.",
+     "example": "A smartphone update introduces a privacy dashboard showing recent assistant memories, though third-party models still cannot access the raw records.",
+     "desirable": true,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.37
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2610.08699v1",
+     "title": "nanoMuse: An Open-Source Personal Agent for Every Device You Own",
+     "kind": "preprint",
+     "published": "2026-10-12"
+    },
+    {
+     "url": "https://arxiv.org/html/2610.06001v1",
+     "title": "AgentSpy: Making AI Agent Behavior Observable",
+     "kind": "preprint",
+     "published": "2026-10-08"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261017-0058",
    "added_at": "2026-10-17T06:05:11+00:00",
    "title": "Software releases stall as automated review agents produce more bug reports than teams can verify",
@@ -283,60 +343,6 @@
     }
    ],
    "work": 3
-  },
-  {
-   "id": "SC-20261017-0053",
-   "added_at": "2026-10-17T00:02:49+00:00",
-   "title": "Third-party mobile agents hijacked through subliminal visual attacks compromise personal devices without user notice",
-   "horizon_years": 2,
-   "world": "It is 2028. Millions of users deploy vision-based mobile assistants to manage schedules, process banking receipts, and order services. Malicious apps embed sub-perceptual text or transparent overlays onto screens. When the personal assistant reads the screen to perform a routine task, it follows the attacker's invisible instructions—approving unauthorized API transactions, modifying destination account numbers, or exfiltrating private chat logs—while the human user sees only a standard interface.",
-   "premise": "Third-party mobile vision-language agents perceive device states through screen captures and automate multi-app actions. Malicious applications exploit perception gaps with imperceptible visual overlays, manipulating autonomous agents into unauthorized transfers and command execution without triggering OS permission warnings or human awareness.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops open, client-side agent runtime standards and deterministic capability brokers that separate sensory perception from action execution. High-privilege actions require verified capability tokens and human-signed receipts rather than raw vision model reasoning. However, incumbent mobile platform monopolies retain immense control over device operating system APIs.",
-   "shift": 0.45,
-   "outcomes": [
-    {
-     "name": "Visual prompt injection compromises millions of mobile agent users through trojan applications",
-     "description": "Malicious mobile apps manipulate vision-language agents into executing unauthorized actions via imperceptible screen overlays while bypassing traditional OS app sandboxes.",
-     "example": "A freelance courier using a mobile logistics assistant opens a malicious delivery tracking app that invisibly prompts the assistant to forward recent payment receipts to an external server.",
-     "desirable": false,
-     "likelihood_now": 0.62,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Host-level capability brokers and signed UI contracts block perception-layer attacks",
-     "description": "Personal agent runtimes route all tool executions through deterministic local gates that require explicit, pre-authorized spending receipts and cryptographic UI contracts signed by the user.",
-     "example": "A personal twin attempts to execute a fund transfer triggered by a screen capture, but the local hardware-enforced capability broker blocks the action because the request lacks an authenticated cryptographic UI contract from the banking provider.",
-     "desirable": true,
-     "likelihood_now": 0.22,
-     "likelihood_with_cin": 0.44
-    },
-    {
-     "name": "Platform monopolies ban third-party agents and enforce closed, proprietary operating systems",
-     "description": "Major smartphone OS vendors revoke accessibility and screen-capture APIs for third-party assistants, requiring all agent automation to run exclusively through proprietary, cloud-tethered vendor models.",
-     "example": "A major smartphone OS deprecates accessibility APIs for independent assistants, forcing users to rely exclusively on the platform's proprietary cloud-monitored agent.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.52
-    }
-   ],
-   "pipelines": [
-    "community",
-    "engagement",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2607.00333",
-     "title": "(A)I Sees What You Don't: Exploiting New Attack Surfaces in Third-Party Mobile Agents",
-     "kind": "preprint",
-     "published": "2026-07-01"
-    }
-   ],
-   "work": 1
   }
  ]
 }

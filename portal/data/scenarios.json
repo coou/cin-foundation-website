@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261017-0059",
+   "added_at": "2026-10-17T06:35:00+00:00",
+   "title": "Big tech companies host personal assistants in their own clouds instead of on your phone",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people interact with an autonomous assistant that manages their emails, finances, calendars, and subscriptions. Because these assistants run inside remote virtual machines owned by four large cloud providers, users cannot inspect raw memory files, verify whether private conversations are used for secondary model training, or operate their assistants when offline.",
+   "premise": "Major technology vendors are launching persistent personal agents hosted entirely in proprietary cloud containers, locking user memories and daily device interactions behind centralized infrastructure while hiding background tool actions from local user observation.",
+   "goals": [
+    6,
+    1
+   ],
+   "how": "By building and distributing open personal twin software that runs directly on user hardware, uses plain readable files for memory, enforces deterministic local gates on every tool action, and provides cryptographic verification without cloud custody.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Cloud lock-in and invisible background actions",
+     "description": "Users become entirely dependent on cloud platforms for daily digital life, while providers inspect personal habits and silent background actions go unmonitored.",
+     "example": "A freelance designer finds their cloud assistant was cancelled when their subscription lapsed, losing three years of project context and client negotiation history stored in a proprietary format.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Local-first open personal twins take root",
+     "description": "Open runtime standards allow individuals to run their personal twin directly on phones and home computers, using plain text files for memory and deterministic local gates for actions.",
+     "example": "A family runs open personal twins across their phones and laptops, synchronizing reminders and household budgets over private encrypted connections without paying monthly cloud server fees.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Operating system platforms integrate basic memory viewers",
+     "description": "Major phone and desktop operating systems add native memory viewers that let users see what on-device apps record, but keep tool execution closed.",
+     "example": "A smartphone update introduces a privacy dashboard showing recent assistant memories, though third-party models still cannot access the raw records.",
+     "desirable": true,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.37
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2610.08699v1",
+     "title": "nanoMuse: An Open-Source Personal Agent for Every Device You Own",
+     "kind": "preprint",
+     "published": "2026-10-12"
+    },
+    {
+     "url": "https://arxiv.org/html/2610.06001v1",
+     "title": "AgentSpy: Making AI Agent Behavior Observable",
+     "kind": "preprint",
+     "published": "2026-10-08"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261017-0058",
    "added_at": "2026-10-17T06:05:11+00:00",
    "title": "Software releases stall as automated review agents produce more bug reports than teams can verify",
