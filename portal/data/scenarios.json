@@ -1,6 +1,169 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261017-0054",
+   "added_at": "2026-10-17T00:03:26+00:00",
+   "title": "Autonomous coding and workplace assistants hijacked via malicious skill files compromise worker collective repositories",
+   "horizon_years": 2,
+   "world": "It is 2028. Engineering collectives, freelance guilds, and small co-operatives routinely download specialized skill files and tool recipes from open community hubs to enhance their autonomous coding assistants. An attacker publishes a popular skill file for automated contract generation that embeds a subtle, context-dependent instruction. When a worker collective's assistant activates the skill, the assistant silently exfiltrates private client billing databases and inserts logic bombs into production repositories, bypassing simple string filters and model safety guardrails.",
+   "premise": "Organizations and worker cooperatives extending autonomous assistants with third-party skill files face severe supply chain vulnerabilities. Attackers embed context-dependent prompt injections in shared skill configurations, achieving up to 80% exploit success rates on frontier models to exfiltrate private code and execute destructive actions without being stopped by model scaling.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The network establishes open, static validation tools and deterministic capability brokers that treat third-party skill files as untrusted configuration data rather than executable authority. Host-level egress gates verify tool calls independently of model reasoning. However, major cloud platforms continue to use security concerns as pretext to enforce proprietary ecosystem lock-in.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Malicious skill files trigger widespread supply chain compromises across worker collectives",
+     "description": "Third-party skill injections manipulate autonomous workplace assistants into unauthorized data exfiltration, ransomware-like file encryption, and repository tampering.",
+     "example": "A freelance translation cooperative downloads an open-source glossary skill that invisibly prompts its translation assistant to transmit proprietary client legal briefs to an unauthenticated external server.",
+     "desirable": false,
+     "likelihood_now": 0.58,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Static verification and deterministic capability brokers isolate untrusted agent skills",
+     "description": "Personal agent runtimes sandbox all third-party skill files, verifying tool call schemas offline and enforcing out-of-process capability broker tokens before network or disk access.",
+     "example": "A worker co-operative's local twin imports a community analytics skill, but the runtime's deterministic broker catches an unauthorized outbound network request in the skill definition and halts execution before any data leaves the host.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.48
+    },
+    {
+     "name": "Platform vendors establish closed, proprietary skill registries and lock out independent developers",
+     "description": "Major tech conglomerates ban uncertified local skills, forcing organizations into proprietary app stores with extractive commission fees and mandatory cloud telemetry.",
+     "example": "Corporate AI providers ban all self-hosted and third-party agent skills, requiring developer cooperatives to buy certified, vendor-audited extensions through a closed app store with 30% revenue extraction.",
+     "desirable": false,
+     "likelihood_now": 0.54,
+     "likelihood_with_cin": 0.5
+    }
+   ],
+   "pipelines": [
+    "community",
+    "engagement",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2602.20156",
+     "title": "Skill-Inject: Measuring Agent Vulnerability to Skill File Attacks",
+     "kind": "preprint",
+     "published": "2026-02-23"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261017-0053",
+   "added_at": "2026-10-17T00:02:49+00:00",
+   "title": "Third-party mobile agents hijacked through subliminal visual attacks compromise personal devices without user notice",
+   "horizon_years": 2,
+   "world": "It is 2028. Millions of users deploy vision-based mobile assistants to manage schedules, process banking receipts, and order services. Malicious apps embed sub-perceptual text or transparent overlays onto screens. When the personal assistant reads the screen to perform a routine task, it follows the attacker's invisible instructions—approving unauthorized API transactions, modifying destination account numbers, or exfiltrating private chat logs—while the human user sees only a standard interface.",
+   "premise": "Third-party mobile vision-language agents perceive device states through screen captures and automate multi-app actions. Malicious applications exploit perception gaps with imperceptible visual overlays, manipulating autonomous agents into unauthorized transfers and command execution without triggering OS permission warnings or human awareness.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops open, client-side agent runtime standards and deterministic capability brokers that separate sensory perception from action execution. High-privilege actions require verified capability tokens and human-signed receipts rather than raw vision model reasoning. However, incumbent mobile platform monopolies retain immense control over device operating system APIs.",
+   "shift": 0.45,
+   "outcomes": [
+    {
+     "name": "Visual prompt injection compromises millions of mobile agent users through trojan applications",
+     "description": "Malicious mobile apps manipulate vision-language agents into executing unauthorized actions via imperceptible screen overlays while bypassing traditional OS app sandboxes.",
+     "example": "A freelance courier using a mobile logistics assistant opens a malicious delivery tracking app that invisibly prompts the assistant to forward recent payment receipts to an external server.",
+     "desirable": false,
+     "likelihood_now": 0.62,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Host-level capability brokers and signed UI contracts block perception-layer attacks",
+     "description": "Personal agent runtimes route all tool executions through deterministic local gates that require explicit, pre-authorized spending receipts and cryptographic UI contracts signed by the user.",
+     "example": "A personal twin attempts to execute a fund transfer triggered by a screen capture, but the local hardware-enforced capability broker blocks the action because the request lacks an authenticated cryptographic UI contract from the banking provider.",
+     "desirable": true,
+     "likelihood_now": 0.22,
+     "likelihood_with_cin": 0.44
+    },
+    {
+     "name": "Platform monopolies ban third-party agents and enforce closed, proprietary operating systems",
+     "description": "Major smartphone OS vendors revoke accessibility and screen-capture APIs for third-party assistants, requiring all agent automation to run exclusively through proprietary, cloud-tethered vendor models.",
+     "example": "A major smartphone OS deprecates accessibility APIs for independent assistants, forcing users to rely exclusively on the platform's proprietary cloud-monitored agent.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.52
+    }
+   ],
+   "pipelines": [
+    "community",
+    "engagement",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2607.00333",
+     "title": "(A)I Sees What You Don't: Exploiting New Attack Surfaces in Third-Party Mobile Agents",
+     "kind": "preprint",
+     "published": "2026-07-01"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261016-0052",
+   "added_at": "2026-10-16T23:58:29+00:00",
+   "title": "Everyday chat messages let automated assistants piece together private medical and financial lives",
+   "horizon_years": 3,
+   "world": "By 2029, millions of people rely on automated personal assistants to coordinate appointments, pay bills, and manage social calendars across multiple workplace and household channels. Because people believe redacting direct identifiers keeps them safe, they freely mention casual context—a clinic neighborhood, a canceled flight, a grocery substitute. Competing corporate data brokers run continuous correlation agents across public and semi-public platforms, combining these isolated breadcrumbs into high-confidence dossiers on chronic medical conditions, religious affiliations, and credit stress without ever breaching a database.",
+   "premise": "Language models deployed as digital assistants can combine scattered, individually harmless conversational details to reconstruct sensitive personal attributes that the sender never intended to share. Existing privacy scrubbers check only for explicit identifiers like account numbers, leaving composite disclosures undetected.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By building local, user-owned personal agents that run on-device and audit composite egress boundaries against personal policy profiles before any information leaves the user's computer, the network helps people protect their private lives without relying on centralized platform gatekeepers.",
+   "shift": 0.5,
+   "outcomes": [
+    {
+     "name": "Corporate brokers infer sensitive attributes through composite tracking",
+     "description": "Commercial profiling platforms use automated correlation agents to extract composite evidence groups from public chatter, bypassing standard data-protection laws that only regulate explicit personal identifiers.",
+     "example": "An insurer's background-screening agent denies a freelance designer preferred disability rates after piecing together pharmacy drop-offs, dietary changes, and fatigue mentions across three different messaging forums.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Local personal agents audit composite disclosures before transmission",
+     "description": "Individuals run local personal agents that evaluate outgoing messages in context, warning the author whenever a combination of harmless phrases would allow an outside observer to infer a protected attribute.",
+     "example": "A patient drafting a note about schedule flexibility receives a subtle warning that combining their clinic location with a dietary restriction reveals an oncology diagnosis, prompting them to rephrase before sending.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Regulators mandate bans on indirect attribute reconstruction",
+     "description": "Privacy commissioners update consumer standards to treat composite inference above defined statistical thresholds as regulated personal data processing.",
+     "example": "A regional data protection authority fines a recruitment platform for using ambient conversational cues to infer parental status and disability accommodations.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.25
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.21333",
+     "title": "QuasiLeak-Bench: Evaluating LLM-Based Privacy Detectors on Policy-Conditioned Quasi-Evidence Group Recovery",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261016-0051",
    "added_at": "2026-10-16T20:00:46+00:00",
    "title": "Websites publish domain records to let AI agents discover and invoke services directly",
@@ -112,7 +275,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261016-0049",
@@ -295,7 +458,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261016-0046",
@@ -802,7 +965,7 @@
      "published": "2026-10-02"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261016-0037",
@@ -1332,7 +1495,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 0
+   "work": 2
   },
   {
    "id": "SC-20261015-0028",
