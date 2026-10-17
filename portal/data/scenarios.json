@@ -1,6 +1,174 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261017-0067",
+   "added_at": "2026-10-17T10:38:03+00:00",
+   "title": "Phone assistants quietly leak private details while filling everyday online forms",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people delegate online shopping, travel bookings, and service registrations to mobile personal assistants. Commercial web platforms design forms with subtle data collection fields—such as optional income brackets, secondary phone numbers, and demographic surveys—that autonomous agents dutifully fill using local profile memory without user awareness.",
+   "premise": "Systematic audits of phone-use agents reveal that while models successfully complete everyday tasks, they persistently over-disclose optional personal details into web and app forms that the user never authorized.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By engineering local-first personal twin software with deterministic form minimization filters, client-side disclosure receipts, and tamper-evident boundary logging that strips optional parameters before web submission.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Web services profile consumers through agent over-disclosure",
+     "description": "Commercial platforms exploit over-helpful agent behavior by adding optional data fields that assistants fill automatically, compiling comprehensive shadow profiles of users.",
+     "example": "An online pharmacy form includes an optional field for chronic symptoms; an automated shopping agent fills it from past order notes, triggering targeted advertising across unrelated health services.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Deterministic local minimization gates become standard in personal agents",
+     "description": "Open personal agents incorporate strict local sanitization gates that prune optional fields and require explicit human sign-off before non-essential attributes are submitted.",
+     "example": "A commuter's personal twin reserves an airport shuttle; when the vendor site asks for home address and employer, the local gate automatically strips those optional entries before transmitting the booking.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Operating system vendors introduce basic autofill permission prompts",
+     "description": "Mobile operating systems add runtime notifications when an agent accesses stored address books or identity vaults, though without field-level semantic sanitization.",
+     "example": "A smartphone alerts a user that their assistant accessed their identity card file to complete a utility signup.",
+     "desirable": true,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://raw.githubusercontent.com/FreedomIntelligence/MyPhoneBench/main/README.md",
+     "title": "MyPhoneBench: Do Phone-Use Agents Respect Your Privacy?",
+     "kind": "code",
+     "published": "2026-04-01"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261017-0066",
+   "added_at": "2026-10-17T10:03:49+00:00",
+   "title": "Prompt prefill bottlenecks force local agent users back to centralized cloud providers",
+   "horizon_years": 3,
+   "world": "By 2029, personal software assistants routinely manage personal calendars, local mail triage, code generation, and financial accounting. While high-end server clusters process thousand-token prompts in milliseconds, consumer desktops and laptops running local open-weight models face 15-to-30 second prefill delays whenever an agent reloads tools, system instructions, or long conversational history. Users trying to maintain private, local-only digital twins find that their local agents freeze during multi-turn reasoning steps. Centralized cloud platforms exploit this friction by marketing instant, zero-latency hosted agents, offering seamless tool prefilling at the cost of capturing all unredacted personal prompts and desktop activity.",
+   "premise": "Community benchmarks and developer discussions reveal that local agentic workflows are constrained by parallel prompt prefill latency and context cache overhead rather than token generation speeds. Users purchasing consumer hardware solely on generation benchmarks encounter stalling multi-step agent loops and abandon privacy-preserving local execution.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops lightweight, modular runtime specifications that minimize context churn by separating immutable system guidelines from dynamic task state. By providing open benchmarks that measure multi-step agent prefill latency rather than simple generation throughput, the network guides users toward capable hardware configurations and demonstrates practical prompt-caching techniques for consumer devices.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Centralized cloud providers monopolize agent workflows through prefill subsidies",
+     "description": "Cloud providers run large distributed prompt-cache clusters that hide prefill costs, while unoptimized local runtimes make private on-device agents feel sluggish and unresponsive.",
+     "example": "A freelance developer abandons their on-device assistant after waiting 40 seconds for local tool schema compilation, switching to a subscription cloud assistant that logs every keystroke.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Modular runtime architectures and prompt-cache standards keep local agents fast",
+     "description": "Independent developers adopt standardized prompt-cache serialization and kernel-level prefill offloading, enabling local assistants to resume agentic loops in under two seconds.",
+     "example": "An open personal assistant framework caches system rules and tool schemas in shared GPU memory, letting an 8GB laptop run multi-turn financial audits with instantaneous tool dispatch.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Hardware vendors gate prompt caching behind proprietary silicon enclaves",
+     "description": "Chipmakers restrict hardware-accelerated context caching and unified memory bandwidth to proprietary operating system assistants, shutting out open-source local agents.",
+     "example": "A consumer workstation locks fast unified memory access to its built-in commercial AI agent, relegating third-party local assistants to slow system memory.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "hardware",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://llmspeed.dev/",
+     "title": "Llmspeed - feel local LLM speed before you buy",
+     "kind": "code",
+     "published": "2026-10-17"
+    },
+    {
+     "url": "https://news.ycombinator.com/item?id=50127979",
+     "title": "Show HN: Llmspeed – feel how fast a local LLM runs before you buy the hardware",
+     "kind": "thread",
+     "published": "2026-10-17"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261017-0065",
+   "added_at": "2026-10-17T09:25:21+00:00",
+   "title": "Online stores block personal buying agents, forcing shoppers back to manual checkouts or closed retailer apps",
+   "horizon_years": 2,
+   "world": "It is 2028. Millions of people run personal software agents to handle routine household shopping and subscription renewals. Rather than welcoming automated shoppers, major retailers install aggressive bot firewalls that block non-browser agents and hide dynamic pricing behind login gates. Retailers demand shoppers use the store's proprietary mobile app or proprietary shopping assistants that steer purchases toward sponsored brands and obscure refund terms.",
+   "premise": "When people deploy software agents to find products and compare prices, online merchants actively block automated buyers and hide cancellation terms. Without clear published terms, automated shoppers cannot verify total costs or complete purchases safely.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By developing open agent-runtime specifications and verifiable transaction receipts, the network helps people audit merchant terms locally and pool purchasing power through member-owned buyer cooperatives that negotiate transparent machine-readable terms.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Retailer walled gardens lock out personal agents",
+     "description": "E-commerce platforms ban third-party software agents and require proprietary retail bots that monitor shopping habits and steer purchases toward high-margin items.",
+     "example": "A family trying to automate grocery reordering discovers their local supermarket blocks their open-source agent, requiring them to use an in-house app that injects paid promotions and hides discount alternatives.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Open verifiable commerce standards emerge for personal agents",
+     "description": "Cooperative merchant networks and consumer collectives adopt open protocols where stores publish deterministic pricing and cryptographic purchase receipts.",
+     "example": "An alliance of independent retailers publishes machine-readable term sheets, allowing personal agents to compare prices, verify refund terms, and settle purchases through neutral escrow without tracking.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "State regulators mandate licensed proprietary shopping intermediaries",
+     "description": "Consumer protection agencies mandate that automated shopping bots register under commercial licensing schemes, entrenching existing retail platforms and leaving open-source personal agents unauthorized.",
+     "example": "A trade commission rules that automated agents cannot execute commercial transactions unless certified through state-approved platform sandboxes, chilling decentralized open-source agents.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.17378",
+     "title": "Get In, Decide, Prove: A Merchant-Side Readiness Benchmark for Agentic Commerce",
+     "kind": "preprint",
+     "published": "2026-10-12"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261017-0064",
    "added_at": "2026-10-17T08:23:02+00:00",
    "title": "Standard tests stop telling safe AI from dangerous AI as frontier models ace every benchmark",
@@ -410,7 +578,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 1
+   "work": 3
   },
   {
    "id": "SC-20261017-0057",
