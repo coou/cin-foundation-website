@@ -5998,4 +5998,370 @@ export function summarizeVisualActionAudit(auditResult) {
   });
 }
 
+export const ALLOWED_FORM_SCHEMA_FIELDS = Object.freeze([
+  'service',
+  'fields'
+]);
+
+export const ALLOWED_FIELD_SPEC_FIELDS = Object.freeze([
+  'type',
+  'required',
+  'sensitive',
+  'purpose'
+]);
+
+export const ALLOWED_FIELD_TYPES = Object.freeze([
+  'string',
+  'number',
+  'integer',
+  'boolean',
+  'email',
+  'phone',
+  'date'
+]);
+
+export const ALLOWED_MINIMIZATION_OPTIONS_FIELDS = Object.freeze([
+  'disclose_optional',
+  'now'
+]);
+
+export const MINIMIZATION_RECEIPT_FIELDS = Object.freeze([
+  'id',
+  'target_service',
+  'timestamp',
+  'retained_fields',
+  'pruned_fields',
+  'minimized_payload',
+  'payload_digest',
+  'status'
+]);
+
+/**
+ * Validate and minimize an outgoing form submission against a declared form schema.
+ * Automatically filters unrequested or optional sensitive fields by default unless
+ * explicitly included in options.disclose_optional. Emits a deterministic disclosure receipt.
+ *
+ * @param {object} formSchema Target form schema with declared fields and types
+ * @param {object} rawPayload Raw form data to be submitted
+ * @param {object} options Configuration options (disclose_optional, now)
+ * @returns {object} Deeply frozen minimization result and receipt
+ */
+export function minimizeFormSubmission(formSchema, rawPayload, options = {}) {
+  // Reject prototype pollution
+  const isPoisoned = (obj) => obj !== null && typeof obj === 'object' && Object.getPrototypeOf(obj) !== Object.prototype && Object.getPrototypeOf(obj) !== null;
+  if (isPoisoned(formSchema) || isPoisoned(rawPayload) || isPoisoned(options)) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      reason: 'Prototype pollution attempt rejected',
+      violations: Object.freeze(['Prototype pollution attempt rejected']),
+      retained_fields: Object.freeze([]),
+      pruned_fields: Object.freeze([]),
+      minimized_payload: deepFreeze({}),
+      receipt: null
+    });
+  }
+
+  const violations = [];
+
+  // Validate formSchema
+  if (!formSchema || typeof formSchema !== 'object' || Array.isArray(formSchema)) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      reason: 'formSchema must be a non-null object',
+      violations: Object.freeze(['formSchema must be a non-null object']),
+      retained_fields: Object.freeze([]),
+      pruned_fields: Object.freeze([]),
+      minimized_payload: deepFreeze({}),
+      receipt: null
+    });
+  }
+
+  for (const k of Object.keys(formSchema)) {
+    if (!ALLOWED_FORM_SCHEMA_FIELDS.includes(k)) {
+      violations.push(`Unknown field in formSchema: "${k}"`);
+    }
+  }
+
+  if (typeof formSchema.service !== 'string' || formSchema.service.trim().length === 0 || formSchema.service.trim().length > 100) {
+    violations.push('formSchema.service must be a non-empty string up to 100 characters');
+  }
+
+  if (!formSchema.fields || typeof formSchema.fields !== 'object' || Array.isArray(formSchema.fields) || isPoisoned(formSchema.fields)) {
+    violations.push('formSchema.fields must be a non-null object');
+  } else {
+    const fieldKeys = Object.keys(formSchema.fields);
+    if (fieldKeys.length === 0) {
+      violations.push('formSchema.fields must contain at least one declared field');
+    }
+    for (const fieldName of fieldKeys) {
+      if (typeof fieldName !== 'string' || !/^[a-zA-Z0-9_-]{1,60}$/.test(fieldName)) {
+        violations.push(`Field name "${fieldName}" is invalid: must be 1-60 alphanumeric, underscore, or dash characters`);
+        continue;
+      }
+      const spec = formSchema.fields[fieldName];
+      if (!spec || typeof spec !== 'object' || Array.isArray(spec) || isPoisoned(spec)) {
+        violations.push(`Field spec for "${fieldName}" must be a non-null object`);
+        continue;
+      }
+      for (const sk of Object.keys(spec)) {
+        if (!ALLOWED_FIELD_SPEC_FIELDS.includes(sk)) {
+          violations.push(`Unknown property "${sk}" in field spec for "${fieldName}"`);
+        }
+      }
+      if (typeof spec.type !== 'string' || !ALLOWED_FIELD_TYPES.includes(spec.type)) {
+        violations.push(`Field "${fieldName}" has invalid type "${spec.type}". Allowed: ${ALLOWED_FIELD_TYPES.join(', ')}`);
+      }
+      if (spec.required !== undefined && typeof spec.required !== 'boolean') {
+        violations.push(`Field "${fieldName}" required attribute must be boolean`);
+      }
+      if (spec.sensitive !== undefined && typeof spec.sensitive !== 'boolean') {
+        violations.push(`Field "${fieldName}" sensitive attribute must be boolean`);
+      }
+      if (spec.purpose !== undefined && (typeof spec.purpose !== 'string' || spec.purpose.length > 200)) {
+        violations.push(`Field "${fieldName}" purpose must be a string up to 200 characters`);
+      }
+    }
+  }
+
+  // Validate options
+  if (!options || typeof options !== 'object' || Array.isArray(options)) {
+    violations.push('options must be a plain object');
+  } else {
+    for (const ok of Object.keys(options)) {
+      if (!ALLOWED_MINIMIZATION_OPTIONS_FIELDS.includes(ok)) {
+        violations.push(`Unknown option "${ok}". Allowed: ${ALLOWED_MINIMIZATION_OPTIONS_FIELDS.join(', ')}`);
+      }
+    }
+    if (options.disclose_optional !== undefined) {
+      if (!Array.isArray(options.disclose_optional)) {
+        violations.push('options.disclose_optional must be an array of field names');
+      } else {
+        for (const it of options.disclose_optional) {
+          if (typeof it !== 'string' || it.trim().length === 0) {
+            violations.push('options.disclose_optional elements must be non-empty strings');
+            break;
+          }
+          if (formSchema && formSchema.fields && typeof formSchema.fields === 'object') {
+            if (!Object.prototype.hasOwnProperty.call(formSchema.fields, it)) {
+              violations.push(`Undeclared field "${it}" in options.disclose_optional`);
+            } else if (formSchema.fields[it]?.required === true) {
+              violations.push(`Field "${it}" in options.disclose_optional is already required`);
+            }
+          }
+        }
+      }
+    }
+    if (options.now !== undefined && (typeof options.now !== 'string' || !ISO_RE.test(options.now) || isNaN(Date.parse(options.now)))) {
+      violations.push('options.now must be a valid ISO timestamp string');
+    }
+  }
+
+  // Validate rawPayload
+  if (!rawPayload || typeof rawPayload !== 'object' || Array.isArray(rawPayload)) {
+    violations.push('rawPayload must be a non-null object');
+  }
+
+  if (violations.length > 0) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      reason: violations[0],
+      violations: Object.freeze([...violations]),
+      retained_fields: Object.freeze([]),
+      pruned_fields: Object.freeze([]),
+      minimized_payload: deepFreeze({}),
+      receipt: null
+    });
+  }
+
+  const fieldsDict = formSchema.fields;
+  const payloadKeys = Object.keys(rawPayload);
+
+  // Unknown fields in payload fail closed
+  for (const pk of payloadKeys) {
+    if (!Object.prototype.hasOwnProperty.call(fieldsDict, pk)) {
+      violations.push(`Unknown field "${pk}" not declared in form schema`);
+    }
+  }
+
+  if (violations.length > 0) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      reason: violations[0],
+      violations: Object.freeze([...violations]),
+      retained_fields: Object.freeze([]),
+      pruned_fields: Object.freeze([]),
+      minimized_payload: deepFreeze({}),
+      receipt: null
+    });
+  }
+
+  const allowedDisclosures = Array.isArray(options.disclose_optional) ? options.disclose_optional : [];
+  const retainedFields = [];
+  const prunedFields = [];
+  const minimizedPayload = {};
+
+  // Check all declared schema fields
+  for (const fieldName of Object.keys(fieldsDict).sort()) {
+    const spec = fieldsDict[fieldName];
+    const isRequired = spec.required === true;
+    const isPresent = Object.prototype.hasOwnProperty.call(rawPayload, fieldName);
+    const value = rawPayload[fieldName];
+
+    if (isRequired) {
+      if (!isPresent || value === undefined || value === null || (typeof value === 'string' && value.trim() === '')) {
+        violations.push(`Missing required field "${fieldName}"`);
+        continue;
+      }
+      if (!validateFieldType(value, spec.type)) {
+        violations.push(`Required field "${fieldName}" value does not match declared type "${spec.type}"`);
+        continue;
+      }
+      retainedFields.push(fieldName);
+      minimizedPayload[fieldName] = value;
+    } else if (isPresent && value !== undefined && value !== null) {
+      // Optional field is provided: check if blank string
+      const isBlank = typeof value === 'string' && value.trim() === '';
+      if (!isBlank) {
+        if (!validateFieldType(value, spec.type)) {
+          violations.push(`Optional field "${fieldName}" value does not match declared type "${spec.type}"`);
+          continue;
+        }
+        if (allowedDisclosures.includes(fieldName)) {
+          retainedFields.push(fieldName);
+          minimizedPayload[fieldName] = value;
+        } else {
+          prunedFields.push(fieldName);
+        }
+      } else {
+        prunedFields.push(fieldName);
+      }
+    }
+  }
+
+  if (violations.length > 0) {
+    return deepFreeze({
+      ok: false,
+      status: 'rejected',
+      reason: violations[0],
+      violations: Object.freeze([...violations]),
+      retained_fields: Object.freeze([]),
+      pruned_fields: Object.freeze([]),
+      minimized_payload: deepFreeze({}),
+      receipt: null
+    });
+  }
+
+  retainedFields.sort();
+  prunedFields.sort();
+
+  // Deterministic serialization of minimized payload
+  const sortedKeys = Object.keys(minimizedPayload).sort();
+  const sortedPayloadObj = {};
+  for (const k of sortedKeys) {
+    sortedPayloadObj[k] = minimizedPayload[k];
+  }
+  const serialized = JSON.stringify(sortedPayloadObj);
+  const payloadDigest = computeContextFingerprint(serialized);
+  const timestamp = options.now ? new Date(options.now).toISOString() : new Date().toISOString();
+  const cleanService = formSchema.service.trim();
+  const rawSeed = `minrec:${cleanService}:${retainedFields.join(',')}:${prunedFields.join(',')}:${payloadDigest}:${timestamp}`;
+  const receiptId = `minrec-${computeContextFingerprint(rawSeed)}`;
+
+  const receipt = deepFreeze({
+    id: receiptId,
+    target_service: cleanService,
+    timestamp,
+    retained_fields: Object.freeze([...retainedFields]),
+    pruned_fields: Object.freeze([...prunedFields]),
+    minimized_payload: deepFreeze(sortedPayloadObj),
+    payload_digest: payloadDigest,
+    status: 'minimized'
+  });
+
+  return deepFreeze({
+    ok: true,
+    status: 'minimized',
+    reason: `Minimized payload for ${cleanService}: retained ${retainedFields.length} field(s), pruned ${prunedFields.length} optional field(s)`,
+    violations: Object.freeze([]),
+    retained_fields: Object.freeze([...retainedFields]),
+    pruned_fields: Object.freeze([...prunedFields]),
+    minimized_payload: deepFreeze(sortedPayloadObj),
+    receipt
+  });
+}
+
+/**
+ * Validate a field's value against its declared type.
+ */
+function validateFieldType(val, type) {
+  switch (type) {
+    case 'string':
+      return typeof val === 'string';
+    case 'number':
+      return typeof val === 'number' && Number.isFinite(val);
+    case 'integer':
+      return Number.isSafeInteger(val);
+    case 'boolean':
+      return typeof val === 'boolean';
+    case 'email':
+      return typeof val === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+    case 'phone':
+      return typeof val === 'string' && /^\+?[0-9\s\-()]{7,25}$/.test(val.trim()) && (val.match(/\d/g) || []).length >= 7;
+    case 'date':
+      return typeof val === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(val) && !isNaN(Date.parse(val + 'T00:00:00.000Z'));
+    default:
+      return false;
+  }
+}
+
+/**
+ * Summarize form minimization results for UI display without innerHTML or LLM dependencies.
+ *
+ * @param {object} result Result object from minimizeFormSubmission
+ * @returns {object} Deeply frozen summary descriptor
+ */
+export function summarizeFormMinimization(result) {
+  if (!result || typeof result !== 'object' || Array.isArray(result)) {
+    return deepFreeze({
+      success: false,
+      summary_text: 'Invalid minimization result',
+      status: 'rejected',
+      retained_count: 0,
+      pruned_count: 0,
+      violations: Object.freeze(['Invalid minimization result'])
+    });
+  }
+
+  if (result.ok && result.status === 'minimized') {
+    const sName = result.receipt?.target_service || 'service';
+    const rCount = Array.isArray(result.retained_fields) ? result.retained_fields.length : 0;
+    const pCount = Array.isArray(result.pruned_fields) ? result.pruned_fields.length : 0;
+    const digest = result.receipt?.payload_digest || 'none';
+    return deepFreeze({
+      success: true,
+      summary_text: `Minimized form for ${sName}: retained ${rCount} required/permitted field(s), pruned ${pCount} optional field(s) [digest: ${digest}].`,
+      status: 'minimized',
+      retained_count: rCount,
+      pruned_count: pCount,
+      violations: Object.freeze([])
+    });
+  }
+
+  const vList = Array.isArray(result.violations) ? result.violations : [];
+  const reasonText = result.reason || 'Form minimization validation failed';
+  return deepFreeze({
+    success: false,
+    summary_text: `Submission rejected: ${reasonText} (${vList.length} violation(s)).`,
+    status: 'rejected',
+    retained_count: 0,
+    pruned_count: 0,
+    violations: Object.freeze([...vList])
+  });
+}
+
+
 
