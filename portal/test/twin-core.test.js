@@ -5258,13 +5258,33 @@ test('minimizeFormSubmission enforces adversarial boundary conditions identified
     patient_name: 'Bob'
   });
 
-  // 2. Date validation rejects full timestamps with time components
+  // 2. Date validation rejects full timestamps with time components and invalid calendar dates
   const resBadDate = minimizeFormSubmission(schema, {
     patient_name: 'Bob',
     appointment_date: '2026-11-01T15:30:00.000Z'
   });
   assert.equal(resBadDate.ok, false);
   assert.ok(resBadDate.violations.some((v) => v.includes('does not match declared type "date"')));
+
+  const resImpossibleDate = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-02-31'
+  });
+  assert.equal(resImpossibleDate.ok, false);
+  assert.ok(resImpossibleDate.violations.some((v) => v.includes('does not match declared type "date"')));
+
+  const resLeapYearFail = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-02-29'
+  });
+  assert.equal(resLeapYearFail.ok, false);
+  assert.ok(resLeapYearFail.violations.some((v) => v.includes('does not match declared type "date"')));
+
+  const resLeapYearPass = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2024-02-29'
+  });
+  assert.equal(resLeapYearPass.ok, true);
 
   // 3. options.disclose_optional fails closed on undeclared or required fields
   const resUndeclaredOpt = minimizeFormSubmission(schema, {

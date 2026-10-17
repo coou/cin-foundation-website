@@ -6311,8 +6311,11 @@ function validateFieldType(val, type) {
       return typeof val === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
     case 'phone':
       return typeof val === 'string' && /^\+?[0-9\s\-()]{7,25}$/.test(val.trim()) && (val.match(/\d/g) || []).length >= 7;
-    case 'date':
-      return typeof val === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(val) && !isNaN(Date.parse(val + 'T00:00:00.000Z'));
+    case 'date': {
+      if (typeof val !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(val)) return false;
+      const d = new Date(val + 'T00:00:00.000Z');
+      return !isNaN(d.getTime()) && d.toISOString().startsWith(val);
+    }
     default:
       return false;
   }
