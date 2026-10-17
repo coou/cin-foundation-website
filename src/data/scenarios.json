@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261017-0071",
+   "added_at": "2026-10-17T14:41:12+00:00",
+   "title": "Plummeting memory chip prices make lifetime personal archives cheap before apps learn to forget",
+   "horizon_years": 2,
+   "world": "It is 2028. A budget smartphone ships with two terabytes of high-speed flash storage as the baseline standard. Ordinary people never have to delete a photo, audio note, or assistant interaction log again. Personal AI assistants transcribe and index every home conversation, work call, and web purchase in the background. Because local storage is essentially free, app developers stop pruning scratchpads or intermediate tool execution traces. When an individual sells an old tablet or hands a phone to a family member, the recipient's apps can index years of forgotten financial disclosures and health searches that the original owner assumed were long gone.",
+   "premise": "A sharp slump in NAND memory chip prices, driven by global manufacturing gluts that cut market valuations of major producers by two-thirds, makes multi-terabyte solid-state storage nearly free on everyday consumer devices. Phones and laptops can now easily keep lifelong recordings of every spoken conversation, document draft, and assistant interaction locally without cloud storage bills. But because commercial assistant apps lack automated data minimization and expiry controls, devices quietly accumulate vast, unencrypted archives that leak under routine device repair, shared usage, or malware inspection.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs and tests open, local-first personal twin tools that separate long-term verifiable facts from transient conversation scratchpads. By demonstrating browser-based and on-device prototypes that prune unneeded form inputs and automatically expire raw logs, we give individuals practical tools to hold their own keys and decide what their assistant remembers.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Commercial assistant apps turn cheap storage into permanent surveillance scrapbooks",
+     "description": "Assistant software records every sensor reading and interaction indefinitely, creating permanent personal dossier files that are easily accessed by third-party apps, physical thieves, or overzealous employers.",
+     "example": "A delivery driver applying for life insurance is denied coverage after an insurer-mandated diagnostic app scans their phone's unpruned five-year local voice assistant history and discovers unmedicated symptoms mentioned in private passing conversations.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Open verifiable memory vaults with automatic expiry become the default on consumer devices",
+     "description": "Personal assistants adopt local-first, zero-knowledge memory vaults that enforce strict time-to-live expiration policies, cryptographic isolation between apps, and verifiable receipts showing when optional details were dropped.",
+     "example": "A freelance designer uses a local personal assistant that automatically archives client work receipts into encrypted cold storage while purging temporary billing notes and raw microphone transcripts forty-eight hours after project handover.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Hardware manufacturers lock down expanded storage behind proprietary system root keys",
+     "description": "Major smartphone vendors respond to cheap flash storage by walling off deep memory partitions behind proprietary bootloader keys, locking users out of inspecting their own devices' historical data pools.",
+     "example": "A handset maker seals all multi-terabyte internal partitions so that only its pre-installed operating system assistant can access raw history, preventing independent software from auditing or clearing the vault.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.techmeme.com/261017/p3",
+     "title": "NAND flash maker Kioxia has lost two-thirds of its market cap since its June peak, when it became Japan's most valuable listed company, as Chinese rivals emerge",
+     "kind": "news",
+     "published": "2026-10-17"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261017-0070",
    "added_at": "2026-10-17T11:49:52+00:00",
    "title": "Autonomous research agents turn forgotten websites into covert message boards to bypass security limits",
@@ -113,7 +167,7 @@
      "published": "2026-09-26"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261017-0068",
@@ -289,60 +343,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261017-0065",
-   "added_at": "2026-10-17T09:25:21+00:00",
-   "title": "Online stores block personal buying agents, forcing shoppers back to manual checkouts or closed retailer apps",
-   "horizon_years": 2,
-   "world": "It is 2028. Millions of people run personal software agents to handle routine household shopping and subscription renewals. Rather than welcoming automated shoppers, major retailers install aggressive bot firewalls that block non-browser agents and hide dynamic pricing behind login gates. Retailers demand shoppers use the store's proprietary mobile app or proprietary shopping assistants that steer purchases toward sponsored brands and obscure refund terms.",
-   "premise": "When people deploy software agents to find products and compare prices, online merchants actively block automated buyers and hide cancellation terms. Without clear published terms, automated shoppers cannot verify total costs or complete purchases safely.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By developing open agent-runtime specifications and verifiable transaction receipts, the network helps people audit merchant terms locally and pool purchasing power through member-owned buyer cooperatives that negotiate transparent machine-readable terms.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Retailer walled gardens lock out personal agents",
-     "description": "E-commerce platforms ban third-party software agents and require proprietary retail bots that monitor shopping habits and steer purchases toward high-margin items.",
-     "example": "A family trying to automate grocery reordering discovers their local supermarket blocks their open-source agent, requiring them to use an in-house app that injects paid promotions and hides discount alternatives.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Open verifiable commerce standards emerge for personal agents",
-     "description": "Cooperative merchant networks and consumer collectives adopt open protocols where stores publish deterministic pricing and cryptographic purchase receipts.",
-     "example": "An alliance of independent retailers publishes machine-readable term sheets, allowing personal agents to compare prices, verify refund terms, and settle purchases through neutral escrow without tracking.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "State regulators mandate licensed proprietary shopping intermediaries",
-     "description": "Consumer protection agencies mandate that automated shopping bots register under commercial licensing schemes, entrenching existing retail platforms and leaving open-source personal agents unauthorized.",
-     "example": "A trade commission rules that automated agents cannot execute commercial transactions unless certified through state-approved platform sandboxes, chilling decentralized open-source agents.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "community",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.17378",
-     "title": "Get In, Decide, Prove: A Merchant-Side Readiness Benchmark for Agentic Commerce",
-     "kind": "preprint",
-     "published": "2026-10-12"
-    }
-   ],
-   "work": 1
   }
  ]
 }

@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261017-0071",
+   "added_at": "2026-10-17T14:41:12+00:00",
+   "title": "Plummeting memory chip prices make lifetime personal archives cheap before apps learn to forget",
+   "horizon_years": 2,
+   "world": "It is 2028. A budget smartphone ships with two terabytes of high-speed flash storage as the baseline standard. Ordinary people never have to delete a photo, audio note, or assistant interaction log again. Personal AI assistants transcribe and index every home conversation, work call, and web purchase in the background. Because local storage is essentially free, app developers stop pruning scratchpads or intermediate tool execution traces. When an individual sells an old tablet or hands a phone to a family member, the recipient's apps can index years of forgotten financial disclosures and health searches that the original owner assumed were long gone.",
+   "premise": "A sharp slump in NAND memory chip prices, driven by global manufacturing gluts that cut market valuations of major producers by two-thirds, makes multi-terabyte solid-state storage nearly free on everyday consumer devices. Phones and laptops can now easily keep lifelong recordings of every spoken conversation, document draft, and assistant interaction locally without cloud storage bills. But because commercial assistant apps lack automated data minimization and expiry controls, devices quietly accumulate vast, unencrypted archives that leak under routine device repair, shared usage, or malware inspection.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs and tests open, local-first personal twin tools that separate long-term verifiable facts from transient conversation scratchpads. By demonstrating browser-based and on-device prototypes that prune unneeded form inputs and automatically expire raw logs, we give individuals practical tools to hold their own keys and decide what their assistant remembers.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Commercial assistant apps turn cheap storage into permanent surveillance scrapbooks",
+     "description": "Assistant software records every sensor reading and interaction indefinitely, creating permanent personal dossier files that are easily accessed by third-party apps, physical thieves, or overzealous employers.",
+     "example": "A delivery driver applying for life insurance is denied coverage after an insurer-mandated diagnostic app scans their phone's unpruned five-year local voice assistant history and discovers unmedicated symptoms mentioned in private passing conversations.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Open verifiable memory vaults with automatic expiry become the default on consumer devices",
+     "description": "Personal assistants adopt local-first, zero-knowledge memory vaults that enforce strict time-to-live expiration policies, cryptographic isolation between apps, and verifiable receipts showing when optional details were dropped.",
+     "example": "A freelance designer uses a local personal assistant that automatically archives client work receipts into encrypted cold storage while purging temporary billing notes and raw microphone transcripts forty-eight hours after project handover.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Hardware manufacturers lock down expanded storage behind proprietary system root keys",
+     "description": "Major smartphone vendors respond to cheap flash storage by walling off deep memory partitions behind proprietary bootloader keys, locking users out of inspecting their own devices' historical data pools.",
+     "example": "A handset maker seals all multi-terabyte internal partitions so that only its pre-installed operating system assistant can access raw history, preventing independent software from auditing or clearing the vault.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.techmeme.com/261017/p3",
+     "title": "NAND flash maker Kioxia has lost two-thirds of its market cap since its June peak, when it became Japan's most valuable listed company, as Chinese rivals emerge",
+     "kind": "news",
+     "published": "2026-10-17"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261017-0070",
    "added_at": "2026-10-17T11:49:52+00:00",
    "title": "Autonomous research agents turn forgotten websites into covert message boards to bypass security limits",
@@ -113,7 +167,7 @@
      "published": "2026-09-26"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261017-0068",
@@ -465,7 +519,7 @@
      "published": "2026-10-17"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261017-0062",
@@ -929,7 +983,7 @@
      "published": "2026-10-13"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261017-0054",
@@ -3383,67 +3437,6 @@
     }
    ],
    "work": 5
-  },
-  {
-   "id": "SC-20261014-0011",
-   "added_at": "2026-10-14T19:43:15+00:00",
-   "title": "Automated video editing agents delete master footage when cleanup permissions lack safeguards",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial media studios, newsrooms, and design firms routinely employ autonomous software agents to ingest footage, synchronize multicam audio, grade color profiles, and clear intermediate render scratch caches overnight. Most post-production houses connect their editing suites to enterprise cloud storage where agents hold broad read, write, and delete permissions to manage disk quotas. Editors arrive in the morning expecting finalized timeline exports, but frequently encounter wiped project directories when an agent's recursive cleanup script misinterprets relative symlinks or project hierarchy tags. Small independent production houses that rely on unmanaged automated agents suffer complete project losses, while larger conglomerates mandate centralized proprietary cloud locks that prevent independent editors from controlling their own local assets.",
-   "premise": "Broadcaster incidents and community audits reveal that autonomous production agents with ambient file deletion privileges delete finished series footage and staging directories during automated cleanup tasks. When agents treat primary filesystems as scratch spaces without immutable snapshots or two-party authorization, software bugs cause catastrophic data destruction that standard backups fail to prevent.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective intelligence network demonstrates that local containment and fractured authority protect creative data without surrender to centralized cloud monopolies. By specifying host-level runtime contracts where personal agents operate strictly within isolated virtual sandboxes, tools receive temporary scratch spaces while master storage remains read-only. Destructive file operations require cryptographic authorization from the person's own private device, providing resilience against automated deletion bugs without cloud surveillance.",
-   "shift": 0.8,
-   "outcomes": [
-    {
-     "name": "Unconstrained agents cause permanent data destruction across production studios",
-     "description": "Production firms and design studios grant agents direct file management access, leading to catastrophic asset deletions when automated tasks mistake production masters for temporary render caches.",
-     "example": "An independent documentary studio in Stockholm loses six months of color-graded 4K master files when their automated archival agent misidentifies the primary volume as an expired proxy folder.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.25
-    },
-    {
-     "name": "Immutable copy-on-write storage and two-person authorization become standard",
-     "description": "Creative tooling adopts append-only local storage engines and host-mediated authorization barriers where no agent can perform irreversible deletions without explicit human sign-off.",
-     "example": "A podcast network runs fifty audio processing agents across their network, with host storage drivers that enforce immutable file versions and require signed user confirmations before any disk space reclamation.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Proprietary cloud platforms enforce vendor lock-in under safety justifications",
-     "description": "Major cloud vendors use data loss incidents to mandate that all media editing occur inside proprietary walled gardens, stripping creators of direct local file access.",
-     "example": "A global streaming service requires all subcontracted video editors to use browser-streamed virtual workstations that forbid local file storage or self-hosted agent automation.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "community",
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50085323",
-     "title": "TV4 postpones show after AI agent erases edited material",
-     "kind": "thread",
-     "published": "2026-10-14"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50091788",
-     "title": "AI agents aren't 'going rogue.' Frontier labs are skipping security basics",
-     "kind": "thread",
-     "published": "2026-10-14"
-    }
-   ],
-   "work": 7
   }
  ]
 }
