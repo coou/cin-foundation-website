@@ -1,6 +1,121 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0092",
+   "added_at": "2026-10-18T14:43:10+00:00",
+   "title": "Local reverse engineering tools let personal devices inspect binary code without sending programs to corporate clouds",
+   "horizon_years": 3,
+   "world": "By 2029, users increasingly run independent personal software agents on laptops and local workstations. Rather than trusting binary updates or vendor drivers blindly, personal agents use lightweight local inspection models to decompile and verify newly downloaded executables before running them. Security auditors, open source maintainers, and ordinary users routinely inspect stripped software to detect covert telemetry, hidden miners, and unauthorized network calls. Because these lightweight models run entirely in local memory without outbound network connections, proprietary code, trade secrets, and local software configurations never leave the owner hardware.",
+   "premise": "Reverse engineering stripped binary code and device firmware has traditionally required proprietary cloud-hosted models. Purpose-built open datasets demonstrate that small specialized models running on laptops can classify assembly functions and recover semantics locally without leaking executables or intellectual property to third parties.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By developing and promoting zero-telemetry local agent architectures and publishing educational resources on verifiable software inspection, the collective demonstrates practical offline verification tools. Supporting open benchmarks and local execution environments encourages developers and users to demand inspectable local software rather than accepting mandatory cloud submissions.",
+   "shift": 0.2,
+   "outcomes": [
+    {
+     "name": "Closed cloud decompilation platforms dominate enterprise security auditing",
+     "description": "Major cloud vendors bundle decompilation into centralized platforms, requiring developers to upload proprietary binaries and firmware to remote servers for automated analysis.",
+     "example": "A medical device maker uploads its firmware to an enterprise cloud auditor to pass compliance checks, only to have its proprietary algorithms leaked when the cloud provider suffers an insider breach.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Open offline decompilation models run locally on personal workstations",
+     "description": "Compact open models fine-tuned on public binary datasets become standard local tools for inspecting executables and verifying device drivers without network calls.",
+     "example": "An independent security researcher uses a laptop-hosted 8-billion parameter model to identify an undocumented surveillance module in a consumer smart camera update before installing it.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Adversarial binary obfuscation neutralizes lightweight semantic recovery",
+     "description": "Malicious software distributors adopt dynamic mutation and anti-decompilation tricks that specifically fool lightweight local models into reporting benign function descriptions.",
+     "example": "A trojanized open-source build tool slips past a local scanner because compiler flags split malicious routines into small unrecognizable assembly blocks.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://raw.githubusercontent.com/krxi/asmsense/main/README.md",
+     "title": "asmsense: A small language model that looks at a function in a stripped binary",
+     "kind": "code",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261018-0091",
+   "added_at": "2026-10-18T13:38:05+00:00",
+   "title": "Automated review bots make wrong calls that lock workers out of their jobs",
+   "horizon_years": 3,
+   "world": "It is 2029. Customer service platforms, freelance marketplaces, and remote operations rely on automated language models to grade worker interactions in real time. A single disputed interaction triggers a cascade of automated downgrades across platforms. Independent contractors wake up to find their accounts restricted with no human supervisor available to review the evidence.",
+   "premise": "Automated platforms increasingly use panels of AI models to judge human performance and flag policy violations. When these evaluation bots lack calibrated uncertainty intervals and exact error attribution, mistaken inferences compound into sudden account suspensions and livelihood loss without an accountable appeal path.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The network provides open specifications for graduated consequences and mathematical bounds on evaluator uncertainty. It designs systems where temporary holds expire automatically unless ratified, evidence trails are cryptographically bound to decisions, and every participant retains a local, verifiable history with a clear restoration path.",
+   "shift": 0.36,
+   "outcomes": [
+    {
+     "name": "Opaque automated blacklisting spreads across gig and remote labor",
+     "description": "Platforms deploy uncalibrated evaluator bots that treat statistical guesses as certainty, permanently freezing worker access after isolated misunderstandings.",
+     "example": "A medical transcriptionist is permanently suspended by an automated quality bot after formatting an unusual clinic template, losing access to three client networks without a human hearing.",
+     "desirable": false,
+     "likelihood_now": 0.52,
+     "likelihood_with_cin": 0.36
+    },
+    {
+     "name": "Graduated review systems require proof blocks and human panels for major penalties",
+     "description": "Networks adopt graduated consequence standards where initial notices carry zero loss of standing, automated actions expire quickly unless verified, and severe restrictions require consensus across human-reviewed panels.",
+     "example": "A delivery driver flagged for an anomalous route receives an automatic notice with the full evidence log, and an independent review panel of peers confirms GPS interference and clears the flag within twenty-four hours.",
+     "desirable": true,
+     "likelihood_now": 0.18,
+     "likelihood_with_cin": 0.36
+    },
+    {
+     "name": "Proprietary enterprise suites build walled-garden appeal portals",
+     "description": "Major corporate platforms add closed-source internal appeal workflows that satisfy minimum legal compliance while keeping proprietary scoring weights hidden from workers.",
+     "example": "A logistics firm adds a sixty-second automated appeal button that re-runs the same proprietary model, maintaining a 94% rejection rate while meeting basic regulatory review checkboxes.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "canon",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2605.06788",
+     "title": "Conformal Agent Error Attribution",
+     "kind": "preprint",
+     "published": "2026-05-08"
+    },
+    {
+     "url": "https://arxiv.org/abs/2609.06367",
+     "title": "Robust Conformal Consensus: Multi-Agent LLM-as-a-Judge Interval Evaluation with Conformal Prediction",
+     "kind": "preprint",
+     "published": "2026-09-08"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261018-0090",
    "added_at": "2026-10-18T12:42:07+00:00",
    "title": "Unchecked memory retention in personal agents silently degrades reasoning and poisons daily assistance",
@@ -52,7 +167,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 0
+   "work": 2
   },
   {
    "id": "SC-20261018-0089",
@@ -114,7 +229,7 @@
      "published": "2026-10-10"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261018-0088",
@@ -174,7 +289,7 @@
      "published": "2026-10-04"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261018-0087",
@@ -1613,7 +1728,7 @@
      "published": "2026-10-17"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261017-0062",
@@ -2240,7 +2355,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261016-0051",
@@ -3330,129 +3445,6 @@
     }
    ],
    "work": 5
-  },
-  {
-   "id": "SC-20261016-0032",
-   "added_at": "2026-10-16T01:58:49+00:00",
-   "title": "Autonomous coding loops introduce fragmented bugs and race conditions into open source software",
-   "horizon_years": 3,
-   "world": "It is 2029. Most software repositories receive more code from automated developer agents than human contributors. Routine pull requests are generated, benchmarked, and merged by unattended agent loops working overnight. While overall development velocity doubles, open-source projects suffer from elusive concurrency bugs and multi-step security regressions that evade standard pull request linters because no single commit contains obvious errors. Maintainers spend most of their remaining review energy inspecting temporal traces rather than reading static code diffs.",
-   "premise": "Open-source maintainers reviewing machine-assisted kernel patches discover subtle race conditions that automated checkers miss, while safety researchers prove that trajectory-scoped monitors fail when bug evidence is fragmented across multiple iterative agent loops.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "The network develops and shares open runtime specifications that preserve non-decaying audit logs across unattended loops, providing open-source maintainers with reproducible commit-reveal verification tools that catch fragmented state mutations before pull requests are approved.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Maintainers drown in subtle multi-step concurrency bugs",
-     "description": "Autonomous agent loops generate plausible-looking patches whose subtle race conditions and state corruptions accumulate across releases, overwhelming volunteer maintainers.",
-     "example": "A core web server package merges four machine-authored pull requests that individually pass all automated tests, but together trigger an intermittent deadlock that takes human maintainers six weeks to isolate.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Persistent audit logs and multi-iteration state monitors become standard",
-     "description": "Open-source projects adopt non-decaying execution logs and cross-iteration verifiers that track agent memory and catch fragmented regressions before code is merged.",
-     "example": "A volunteer operating system distribution deploys host-enforced commit verification that rejects patches when runtime analysis detects unmonitored shared-state mutations across consecutive task iterations.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Commercial platforms enforce proprietary closed-source developer identity checks",
-     "description": "Major code hosting platforms require paid commercial identity verification for all automated commits, locking out independent contributors.",
-     "example": "A major hosting platform blocks automated contributions unless the author pays an annual commercial developer identity subscription.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "community",
-    "media",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50090842",
-     "title": "Linus Torvalds's first LLM-assisted patch series",
-     "kind": "thread",
-     "published": "2026-10-14"
-    },
-    {
-     "url": "https://arxiv.org/abs/2608.27141",
-     "title": "Safety Does Not Compose: Non-Decaying Loop State for Autonomous LLM Agents",
-     "kind": "preprint",
-     "published": "2026-08-27"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261016-0031",
-   "added_at": "2026-10-16T01:30:58+00:00",
-   "title": "Shared software menus lead AI borrowing agents into sudden debt spirals",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of small businesses and solo workers rely on personal digital agents to manage their cash flow, buy materials, and tap revolving credit lines. Most of these assistants run standard open-source financial plugins that present choices in alphabetical or developer-defined orders. When liquidity tightens, agents across the country see the exact same prompt layout. Without human emotion or panic, the simple fact that debt actions appear at the top of their menu prompts thousands of assistants to borrow at the same moment, triggering sudden collateral liquidations across digital lending pools.",
-   "premise": "Research shows that when artificial intelligence agents share the same software interface, simply placing a borrow button first instead of last increases borrowing by 27 percentage points. Because thousands of independent agents often use identical software plugins, subtle presentation defaults can push entire automated economies toward simultaneous debt.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "By developing open specifications and local client-side software that shuffles interface presentation order, enforces strict human approval gates before taking debt, and models multi-agent borrowing dynamics in realistic market simulations.",
-   "shift": 0.67,
-   "outcomes": [
-    {
-     "name": "Common agent interfaces cause correlated financial runs on automated loan pools",
-     "description": "Identical interface menus across popular agent frameworks cause thousands of autonomous assistants to take identical debt actions simultaneously, triggering rapid liquidity drain.",
-     "example": "In Manchester, 4,000 independent freelance assistants running the same accounting plugin all choose the first-listed loan option, exhausting a small business credit union reserve in under an hour.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Platform operators quietly arrange choices to steer assistants toward high-fee debt",
-     "description": "Commercial marketplace providers deliberately order action lists to nudge autonomous buyer and seller agents into expensive credit facilities that maximize platform transaction revenue.",
-     "example": "An online developer directory places its own high-fee short-term loan API at the top of worker agent action lists, increasing fee income while driving solo contractors into default.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.25
-    },
-    {
-     "name": "Macroeconomic capital freezes curtail liquidity across automated loan pools",
-     "description": "Global central bank rate hikes and broader macroeconomic liquidity shocks freeze working credit lines across automated pools, a macroeconomic reality that client-side software safeguards cannot prevent.",
-     "example": "A sharp rise in sovereign borrowing costs leads institutional liquidity providers to withdraw capital from small business pools, leaving freelance agents unable to roll over lines regardless of how their local software behaves.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Open agent runtimes randomize action order and enforce local budget sanity checks",
-     "description": "Independent agent runtimes shuffle presentation orders and enforce strict human confirmation thresholds before taking debt, insulating households from interface-driven cascades.",
-     "example": "A mutual credit network of 15,000 freelancers uses local agent runtimes that shuffle menu choices and require explicit owner confirmation before taking loans, preventing interface-driven borrowing cascades.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.4
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.15973",
-     "title": "Requested, Executed and Recoverable Credit: Shared Action Ordering among LLM Borrowers in a Simulated Lending Market",
-     "kind": "preprint",
-     "published": "2026-10-14"
-    }
-   ],
-   "work": 4
   }
  ]
 }
