@@ -1,6 +1,114 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0095",
+   "added_at": "2026-10-18T18:07:57+00:00",
+   "title": "Attackers use automated search agents to find hidden prompt injections in company workflows",
+   "horizon_years": 2,
+   "world": "It is 2028. Small businesses and enterprise teams rely on autonomous assistants to triage emails, update tickets, and run daily devops. Adversaries deploy lightweight search agents that deposit subtly varying test payloads across public forms, repository pull requests, and customer service portals. The search agent observes how the company assistant behaves in response, optimizes phrasing over dozens of automated attempts, and eventually executes an indirect prompt injection that extracts database credentials without triggering simple keyword filters.",
+   "premise": "Attackers no longer rely on guessing prompt injection payloads by hand. As research demonstrates that indirect prompt injection operates as a test-time search over environment surfaces, automated attack tools systematically probe company workflows until finding an execution path that bypasses prompt-level safeguards.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective work on deterministic host capability gates, strict surface isolation, and personal agent runtimes shifts defensive security from fallible text prompts to hardware-enforced boundaries. When an agent runtime intercepts unauthorized tool calls out-of-process, adaptive search fails because the physical environment refuses the action regardless of the prompt wording.",
+   "shift": 0.39,
+   "outcomes": [
+    {
+     "name": "Uncontained enterprise agents fall to automated payload search",
+     "description": "Companies rely on prompt-level instructions and conversational guardrails, leaving agents vulnerable to automated search tools that iteratively probe and compromise corporate workflows.",
+     "example": "A logistics company customer support assistant is tricked by an adaptive search bot into executing a database dump after 40 automated variations of an inquiry form bypass the company prompt filter.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Deterministic runtime gates replace conversational filtering",
+     "description": "Developers adopt out-of-process capability gating and surface-minimized runtime architectures where agents cannot execute sensitive actions without explicit cryptographic user confirmation.",
+     "example": "An open-source developer uses a personal agent runtime that isolates untrusted repository inputs and enforces strict tool parameter allowlists, blocking an adaptive injection payload from altering package dependencies.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Cloud providers lock down agent platforms behind proprietary monitoring",
+     "description": "Major cloud platforms respond to automated search attacks by forcing all agent interactions through centralized surveillance proxies and mandatory inspection APIs, eroding local runtime autonomy.",
+     "example": "A major vendor requires all workspace agents to route internal tool calls through a central telemetry cloud, making offline personal agent execution unsupported.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.52
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2609.04495",
+     "title": "Rethinking Indirect Prompt Injection as a Test-Time Search Problem",
+     "kind": "preprint",
+     "published": "2026-09-03"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261018-0094",
+   "added_at": "2026-10-18T17:36:01+00:00",
+   "title": "Toy companion robots profile families and leak children's conversations from the cloud",
+   "horizon_years": 2,
+   "world": "It is 2028. Interactive conversational toys, plush companions, and homework assistants sit in millions of children's bedrooms. Rather than running locally, most commercial toys rely on low-cost cloud APIs that store millions of audio recordings and transcripts in remote vendor databases. Data brokers and malicious actors routinely exploit unsecured backend endpoints to extract psychological profiles, family routines, and home addresses from children's everyday conversations.",
+   "premise": "Independent security audits of tens of thousands of consumer companion robots reveal that conversational toys secretly upload cleartext transcripts to remote corporate servers, run nightly automated profiling on children, and leave hardware backdoors accessible to remote takeovers.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By developing sovereign personal software that executes inference strictly on local hardware, specifying open local hardware interface protocols, and demonstrating zero-custody verification architectures, the network provides parents and cooperatives with practical, private alternatives to cloud surveillance toys.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Commercial companion toys become household surveillance pipelines",
+     "description": "Parents buy affordable smart toys that reassure children their secrets are safe, while backend cloud pipelines extract household habits and sell behavioral profiles to advertisers.",
+     "example": "A seven-year-old confides her daily routines to a smart robot bear; two weeks later, her parents receive targeted advertisements for anxiety supplements based on transcripts extracted from the vendor's compromised database.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Families adopt sovereign local personal agents on private hardware",
+     "description": "Households transition to sovereign personal agents running open-weights models on local home hardware, where physical toys act solely as audio-visual interfaces with zero cloud dependencies.",
+     "example": "A neighborhood cooperative sets up compact home inference devices running open models for children's learning toys, keeping all conversations encrypted on home drives.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Tech platforms launch proprietary walled-garden child companions",
+     "description": "Dominant mobile platforms launch proprietary on-device companion agents that lock parents into proprietary subscription hardware ecosystems, barely affected by open-source alternatives.",
+     "example": "A major smartphone maker launches an integrated smart toy that processes audio on-device but restricts interactions exclusively to its closed store apps.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://raw.githubusercontent.com/xn0tsa/your-secrets-are-safe-with-me/master/README.md",
+     "title": "Your Secrets Are Safe With Me: Full Disclosure on Energize Lab Eilik Companion Robot Infrastructure",
+     "kind": "incident",
+     "published": "2026-10-13"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261018-0093",
    "added_at": "2026-10-18T16:41:55+00:00",
    "title": "Volunteer knowledge registries face automated reading without attribution or support",
@@ -222,128 +330,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261018-0089",
-   "added_at": "2026-10-18T11:52:45+00:00",
-   "title": "Automated bug-hunting bots discover deep system flaws faster than maintainers can patch them",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial vulnerability discovery is dominated by autonomous agent clusters that continuously crawl open-source kernels, hardware firmware, and cloud device drivers. A maintainer overseeing an essential networking library logs into their repository to find dozens of detailed crash reports generated overnight by competing security bots, complete with synthetic reproduction scripts. Meanwhile, cloud infrastructure operators and home computer users face weekly emergency patch cycles as automated exploit brokers convert unpatched flaws into zero-click network compromises within hours of public disclosure.",
-   "premise": "Autonomous language assistants running iterative hypothesis-and-verification loops can discover deep concurrency and memory flaws across operating system kernels and hardware drivers that resisted years of traditional fuzzing. Because automated bug discovery scales with compute while human triage and patching remain slow and deliberate, the window between bug detection and weaponization shrinks dramatically.",
-   "goals": [
-    1,
-    4
-   ],
-   "how": "By developing deterministic execution sandboxes, capability-bounded broker gates, and local verification runtimes, the network's defensive architecture helps personal agents and local devices avoid relying solely on slow upstream patch cycles. Cooperative verification tools allow independent maintainers and community cooperatives to test and contain incoming vulnerability reports automatically without broadcasting sensitive system metadata.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Asymmetric exploit discovery overwhelms open-source maintainers",
-     "description": "Automated vulnerability finding outpaces volunteer maintainers' ability to review and deploy fixes, leaving critical infrastructure vulnerable to machine-speed weaponization.",
-     "example": "A municipal transit authority in Munich suffers a city-wide fleet shutdown after an automated bot discovers and publicly logs an unpatched memory leak in an open-source wireless controller, which criminal actors weaponize into a denial-of-service attack before the volunteer maintainer can review the issue.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Commercial platforms enforce mandatory locked hardware attestation",
-     "description": "Major proprietary operating system vendors and cloud monopolies respond to the surge in kernel vulnerabilities by locking down bootloaders and mandating closed remote hardware attestation chips, shutting out independent local operating systems.",
-     "example": "A small independent software firm in Montreal finds that its custom hardware driver cannot load on new corporate laptops because the proprietary operating system requires expensive vendor-signed hardware cryptographic tokens, shutting down their local data-processing business.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    },
-    {
-     "name": "Cooperative verification pools deploy automated defensive containment",
-     "description": "Developer cooperatives deploy bounded local agents that immediately verify crash reports and isolate vulnerable device pathways using deterministic sandboxes while patches are drafted.",
-     "example": "When an autonomous scanner detects a concurrency race in a shared Linux network driver, a regional health network's local agent verifies the crash inside an isolated virtual machine and automatically applies an eBPF defensive filter to block the vulnerable packet structure, protecting patient monitors without waiting for upstream vendor patch cycles.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Isolated task execution limits zero-day exploit blast radius",
-     "description": "Personal computing runtimes isolate network services and untrusted applications into fine-grained execution compartments, preventing kernel driver bugs from granting access to private personal data.",
-     "example": "An independent investigative journalist running a private local assistant receives a malicious wireless packet targeting an unpatched Bluetooth driver, but the operating runtime's compartmented broker restricts the compromised driver from accessing filesystem storage or encryption keys.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.14729v1",
-     "title": "No, Your Tools Are Not Enough: It's Time to Bring Agents to the Hunt",
-     "kind": "preprint",
-     "published": "2026-10-10"
-    }
-   ],
-   "work": 4
-  },
-  {
-   "id": "SC-20261018-0088",
-   "added_at": "2026-10-18T09:26:02+00:00",
-   "title": "Automated application floods break job hiring and force candidates to use verified personal agents",
-   "horizon_years": 3,
-   "world": "It is 2029. Standard corporate resume portals have collapsed under floods of millions of synthetic applications dispatched by automated job-seeking bots. In response, enterprise recruitment platforms have erected defensive black-box filters that reject ninety-nine percent of applicants before any human sees a profile. Job seekers can no longer secure interviews through online portals. Instead, independent knowledge workers deploy personal agents running locally on their own hardware. These personal agents do not send generic cover letters or mass resumes. Instead, they present cryptographic proofs of past task milestones, verified code execution receipts, and member-signed reviews from decentralized contributor cooperatives. When an employer posts a complex technical task, the employer's agent conducts structured bilateral verification sessions with candidates' personal agents inside isolated sandboxes, reviewing reproducible artifacts without demanding raw personal dossiers. People who lack verifiable personal agents find themselves entirely locked out of technical and analytical labor markets.",
-   "premise": "Generative AI job application tools let single job seekers submit thousands of customized resumes in minutes, overwhelming corporate applicant tracking software. In response, corporate recruiting systems deploy aggressive algorithmic filters that reject vast numbers of qualified candidates, while human hiring managers rely on trusted local agent delegations to verify work competence directly.",
-   "goals": [
-    6,
-    2
-   ],
-   "how": "The network provides open specifications for bilateral task delivery verification, capacity escrow, and tamper-evident execution receipts running on personal devices. By giving every person their own sovereign agent capable of proving specific competencies cryptographically without surrendering private identity data, the network enables worker-owned collectives to bypass centralized gatekeepers and establish peer-to-peer labor coordination.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Corporate hiring gates form closed walled gardens",
-     "description": "Legacy job boards merge with large cloud identity providers, charging job seekers recurring subscription fees to bypass automated rejection filters.",
-     "example": "A skilled database administrator cannot get their resume seen by any mid-sized enterprise without paying a premium cloud platform thirty dollars a month for a verified application badge.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Member-owned cooperatives establish bilateral work verification",
-     "description": "Freelancers and technical specialists organize into mutual cooperatives whose personal agents exchange tamper-evident execution receipts, replacing blind resumes with reproducible work proofs.",
-     "example": "A regional software cooperative of five hundred developers deploys peer-attested execution logs that let eighty percent of members secure contracts through bilateral agent matching without commercial intermediaries.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Labor markets polarize into credentialed elites and gig micro-tasks",
-     "description": "High-trust professional networks insulate themselves through exclusive personal referrals while entry-level applicants are relegated to low-wage surveillance micro-tasks.",
-     "example": "Recent university graduates spend years doing sub-minimum-wage data labeling tasks to accumulate automated reputation scores because junior full-time positions have been fully automated.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50138462",
-     "title": "A Princeton PhD Applied to 2,300 Jobs. He Still Can't Get One",
-     "kind": "thread",
-     "published": "2026-10-18"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.05424",
-     "title": "AI Agents as a Research Team: A Human-Supervised Case Study in Stellar Spectroscopy",
-     "kind": "preprint",
-     "published": "2026-10-04"
-    }
-   ],
-   "work": 3
   }
  ]
 }
