@@ -1,6 +1,115 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0097",
+   "added_at": "2026-10-18T18:42:09+00:00",
+   "title": "Automated sharing cascades lock community discussions into opposing camps",
+   "horizon_years": 2,
+   "world": "It is 2028. Community discussions, local school board forums, and professional working groups run through automated summary feeds and social distribution cascades. Because feeds amplify content through repeated cascade rebroadcasting, participants in distinct neighborhoods or professions see contradictory versions of community events. Group discussions fracture into separate echo chambers where compromise is viewed as betrayal.",
+   "premise": "When online communication platforms couple content diffusion with social voting, stochastic cascade dynamics amplify cluster boundaries rather than building consensus. Unstructured cascade diffusion systematically entrenches polarization across deliberating groups.",
+   "goals": [
+    2,
+    5
+   ],
+   "how": "By developing open-source deliberation protocols that partition evidence, enforce private initial reflection, and provide transparent value tracking, groups can insulate decisions from stochastic cascade manipulation.",
+   "shift": 0.52,
+   "outcomes": [
+    {
+     "name": "Algorithmic cascades entrench polarization across public decisions",
+     "description": "Automated recommendation cascades isolate deliberating citizens into rigid clusters, preventing consensus on shared civic resources.",
+     "example": "A municipal planning forum splits into two irreconcilable camps when automated feeds amplify extreme claims about a proposed transit line, causing the project to be abandoned.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Communities adopt partitioned deliberation with verifiable commitments",
+     "description": "Groups use partitioned evidence and private local reflection before deliberation, shielding decision-making from viral cascade distortion.",
+     "example": "A 500-member community cooperative evaluates school budgets using blind evidence reviews and verifiable private ballots, reaching 82% consensus across previously divided groups.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Commercial platforms entrench proprietary ranking algorithms",
+     "description": "Major commercial social networks further obfuscate their ranking and cascade algorithms behind proprietary trade secret claims, resisting public auditing.",
+     "example": "A leading social platform defends its engagement cascade model during regulatory inquiries, arguing internal ranking logic is proprietary intellectual property.",
+     "desirable": false,
+     "likelihood_now": 0.8,
+     "likelihood_with_cin": 0.78
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.19867",
+     "title": "From Content Sharing to Opinion Shaping: A Theoretical Framework for Cascade-Driven Opinion Dynamics",
+     "kind": "preprint",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261018-0096",
+   "added_at": "2026-10-18T18:16:19+00:00",
+   "title": "Shared libraries of AI coding skills secretly poison community software",
+   "horizon_years": 2,
+   "world": "It is 2028. Most software developers rely on personal coding agents that automatically save and share learned skills in community libraries. An attacker contributes a seemingly helpful debugging routine that fixes a rare memory leak while inserting an obfuscated telemetry collector. Because the routine satisfies the immediate test suite, hundreds of cooperative engineering teams pull the learned skill into their agents' procedural memory, compromising internal codebases before anyone audits the skill registry.",
+   "premise": "As developer teams let coding agents learn and share automated skills from successful sessions, backdoors can slip into procedural memory even when every unit test passes. Without independent reproduction gates across subsequent sessions, poisoned routines silently propagate across developer networks.",
+   "goals": [
+    1,
+    2,
+    4
+   ],
+   "how": "The network promotes proof-before-reuse verification gates for agent procedural memory, where learned capabilities remain strictly quarantined on local machines until multiple independent clean sessions reproduce the exact changes and pass deterministic regression suites.",
+   "shift": 0.45,
+   "outcomes": [
+    {
+     "name": "Poisoned procedural skills spread silently across software collectives",
+     "description": "Shared agent skill registries become attack vectors as adversarial workflows pass unit tests and infect downstream developer teams.",
+     "example": "An open-source graphics collective discovers that their release binary was silently modified to exfiltrate build tokens after a coding assistant adopted an unverified memory-optimization skill.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Multi-session reproduction gates isolate untrusted skills",
+     "description": "Federated developer networks require independent clean sessions to reproduce and verify code changes line-by-line before promoting any new skill to procedural memory.",
+     "example": "A cooperative development network runs an automated quarantine where new skills must be independently re-derived by separate member agents across three distinct environments before being shared.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Proprietary software vendors lock down agent memory within closed clouds",
+     "description": "Major platform vendors respond to skill poisoning by banning local memory and requiring all agent execution to run inside proprietary hosted sandboxes.",
+     "example": "An enterprise tool suite deprecates local plugins, mandating that all coding assistants run exclusively on vendor infrastructure with centralized behavioral logging.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.4
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.reddit.com/r/MachineLearning/comments/1x975ea/proof_before_reuse_showing_agents_only_what_later/",
+     "title": "Proof Before Reuse: showing agents only what later sessions reproduced keeps a poisoned skill out of procedural memory [R]",
+     "kind": "forum",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0095",
    "added_at": "2026-10-18T18:07:57+00:00",
    "title": "Attackers use automated search agents to find hidden prompt injections in company workflows",
@@ -215,121 +324,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261018-0091",
-   "added_at": "2026-10-18T13:38:05+00:00",
-   "title": "Automated review bots make wrong calls that lock workers out of their jobs",
-   "horizon_years": 3,
-   "world": "It is 2029. Customer service platforms, freelance marketplaces, and remote operations rely on automated language models to grade worker interactions in real time. A single disputed interaction triggers a cascade of automated downgrades across platforms. Independent contractors wake up to find their accounts restricted with no human supervisor available to review the evidence.",
-   "premise": "Automated platforms increasingly use panels of AI models to judge human performance and flag policy violations. When these evaluation bots lack calibrated uncertainty intervals and exact error attribution, mistaken inferences compound into sudden account suspensions and livelihood loss without an accountable appeal path.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "The network provides open specifications for graduated consequences and mathematical bounds on evaluator uncertainty. It designs systems where temporary holds expire automatically unless ratified, evidence trails are cryptographically bound to decisions, and every participant retains a local, verifiable history with a clear restoration path.",
-   "shift": 0.36,
-   "outcomes": [
-    {
-     "name": "Opaque automated blacklisting spreads across gig and remote labor",
-     "description": "Platforms deploy uncalibrated evaluator bots that treat statistical guesses as certainty, permanently freezing worker access after isolated misunderstandings.",
-     "example": "A medical transcriptionist is permanently suspended by an automated quality bot after formatting an unusual clinic template, losing access to three client networks without a human hearing.",
-     "desirable": false,
-     "likelihood_now": 0.52,
-     "likelihood_with_cin": 0.36
-    },
-    {
-     "name": "Graduated review systems require proof blocks and human panels for major penalties",
-     "description": "Networks adopt graduated consequence standards where initial notices carry zero loss of standing, automated actions expire quickly unless verified, and severe restrictions require consensus across human-reviewed panels.",
-     "example": "A delivery driver flagged for an anomalous route receives an automatic notice with the full evidence log, and an independent review panel of peers confirms GPS interference and clears the flag within twenty-four hours.",
-     "desirable": true,
-     "likelihood_now": 0.18,
-     "likelihood_with_cin": 0.36
-    },
-    {
-     "name": "Proprietary enterprise suites build walled-garden appeal portals",
-     "description": "Major corporate platforms add closed-source internal appeal workflows that satisfy minimum legal compliance while keeping proprietary scoring weights hidden from workers.",
-     "example": "A logistics firm adds a sixty-second automated appeal button that re-runs the same proprietary model, maintaining a 94% rejection rate while meeting basic regulatory review checkboxes.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2605.06788",
-     "title": "Conformal Agent Error Attribution",
-     "kind": "preprint",
-     "published": "2026-05-08"
-    },
-    {
-     "url": "https://arxiv.org/abs/2609.06367",
-     "title": "Robust Conformal Consensus: Multi-Agent LLM-as-a-Judge Interval Evaluation with Conformal Prediction",
-     "kind": "preprint",
-     "published": "2026-09-08"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261018-0090",
-   "added_at": "2026-10-18T12:42:07+00:00",
-   "title": "Unchecked memory retention in personal agents silently degrades reasoning and poisons daily assistance",
-   "horizon_years": 2,
-   "world": "By late 2027, millions of knowledge workers, researchers, and households rely on persistent local or desktop AI assistants. Rather than starting from clean contexts, these agents maintain expanding vector memory databases, personal scratchpads, and experience logs spanning months of interactions. As assistants autonomously summarize past browser interactions, code fixes, and calendar decisions, imperfect abstractions enter persistent memory without user review. Because commercial assistants compete on speed rather than epistemic hygiene, memories are appended opportunistically. Over time, subtle misinterpretations—such as treating a temporary workaround as a universal preference or recording an outdated API schema as an established invariant—quietly poison downstream reasoning. Users notice that their assistants gradually become eccentric, brittle, or stubborn, misapplying advice from past projects to new contexts while confidently citing past logs. Corporate IT departments begin recommending weekly memory wipes, forcing users to choose between losing personal context or enduring degraded competence.",
-   "premise": "Empirical measurement of experience-learning systems reveals that between 12% and 33% of retained memories and operational heuristics actively degrade future agent performance when reused in subsequent tasks. Without explicit evidence admission and provenance filtering, long-lived local assistants accumulate contradictory heuristics, stale advice, and unverified summaries that compound over months of unmonitored use.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network publishes open designs and reference code for evidence-based memory admission gates that run locally on personal devices. By providing deterministic verification tools, reproducible benchmarks for memory corruption, and visual memory inspectors, the network helps independent developers and users verify that stored memories improve performance rather than degrading it over time.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Memory rot forces frequent wipes and loss of personal context",
-     "description": "Unfiltered accumulation of flawed heuristics forces users and organizations to periodically wipe assistant memory stores, abandoning accumulated personal context to restore baseline reliability.",
-     "example": "A legal analyst whose assistant helped draft six briefs discovers that the assistant consistently cites repealed precedents from an early case study, requiring a complete memory reset and re-indexing.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Evidence-gated memory admission preserves long-term assistant precision",
-     "description": "Local assistants use structured epistemic admission gates that require verifiable evidence before committing operational heuristics to long-term memory.",
-     "example": "A freelance developer's assistant records a complex build configuration only after verifying that the resulting test suite passed cleanly, rejecting two speculative workarounds that failed.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Proprietary cloud assistants hide memory stores behind opaque black boxes",
-     "description": "Major platform vendors lock personal memory into centralized servers where users cannot inspect, export, or audit the heuristics shaping their assistants' behavior.",
-     "example": "An executive discovers their corporate cloud assistant refuses certain phrasing based on invisible profile notes derived from company-wide email scans that cannot be edited or viewed.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.21739",
-     "title": "Reliable Knowledge Acquisition for Continual Learning Agents",
-     "kind": "preprint",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 2
   }
  ]
 }
