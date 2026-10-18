@@ -99,7 +99,14 @@ import {
   validateBoundingBox,
   computeVisualActionFingerprint,
   auditVisualAssistantAction,
-  summarizeVisualActionAudit
+  summarizeVisualActionAudit,
+  ALLOWED_FORM_SCHEMA_FIELDS,
+  ALLOWED_FIELD_SPEC_FIELDS,
+  ALLOWED_FIELD_TYPES,
+  ALLOWED_MINIMIZATION_OPTIONS_FIELDS,
+  MINIMIZATION_RECEIPT_FIELDS,
+  minimizeFormSubmission,
+  summarizeFormMinimization
 } from '../assets/twin-core.js';
 
 // Fake key for redaction tests, built at runtime so the repository secret check does not flag it.
@@ -4999,3 +5006,340 @@ test('computeVisualActionFingerprint is deterministic and sensitive to element a
   });
   assert.notEqual(fpDiffInput, fpBase);
 });
+
+test('form minimization constants are deeply frozen and valid', () => {
+  assert.ok(Object.isFrozen(ALLOWED_FORM_SCHEMA_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_FIELD_SPEC_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_FIELD_TYPES));
+  assert.ok(Object.isFrozen(ALLOWED_MINIMIZATION_OPTIONS_FIELDS));
+  assert.ok(Object.isFrozen(MINIMIZATION_RECEIPT_FIELDS));
+
+  assert.ok(ALLOWED_FIELD_TYPES.includes('string'));
+  assert.ok(ALLOWED_FIELD_TYPES.includes('email'));
+  assert.ok(ALLOWED_FIELD_TYPES.includes('date'));
+});
+
+test('minimizeFormSubmission minimizes optional fields by default and emits valid receipt', () => {
+  const schema = {
+    service: 'Dr Smith Clinic',
+    fields: {
+      patient_name: { type: 'string', required: true, purpose: 'Patient identification' },
+      appointment_date: { type: 'date', required: true, purpose: 'Booking date' },
+      contact_email: { type: 'email', required: true, purpose: 'Confirmation email' },
+      home_address: { type: 'string', required: false, sensitive: true, purpose: 'Billing address' },
+      secondary_phone: { type: 'phone', required: false, sensitive: true, purpose: 'Backup contact' }
+    }
+  };
+
+  const rawPayload = {
+    patient_name: 'Alice Cooper',
+    appointment_date: '2026-11-01',
+    contact_email: 'alice@example.com',
+    home_address: '123 Main St, Anytown',
+    secondary_phone: '+1-555-0199'
+  };
+
+  const res = minimizeFormSubmission(schema, rawPayload, { now: '2026-10-17T12:00:00.000Z' });
+  assert.equal(res.ok, true);
+  assert.equal(res.status, 'minimized');
+  assert.deepEqual(res.retained_fields, ['appointment_date', 'contact_email', 'patient_name']);
+  assert.deepEqual(res.pruned_fields, ['home_address', 'secondary_phone']);
+  assert.deepEqual(res.minimized_payload, {
+    appointment_date: '2026-11-01',
+    contact_email: 'alice@example.com',
+    patient_name: 'Alice Cooper'
+  });
+
+  // Verify receipt
+  assert.ok(res.receipt);
+  assert.equal(res.receipt.target_service, 'Dr Smith Clinic');
+  assert.equal(res.receipt.status, 'minimized');
+  assert.equal(res.receipt.timestamp, '2026-10-17T12:00:00.000Z');
+  assert.match(res.receipt.id, /^minrec-[0-9a-f]{14}$/);
+  assert.match(res.receipt.payload_digest, /^[0-9a-f]{14}$/);
+  assert.deepEqual(res.receipt.retained_fields, ['appointment_date', 'contact_email', 'patient_name']);
+  assert.deepEqual(res.receipt.pruned_fields, ['home_address', 'secondary_phone']);
+
+  // Output is deeply frozen
+  assert.ok(Object.isFrozen(res));
+  assert.ok(Object.isFrozen(res.minimized_payload));
+  assert.ok(Object.isFrozen(res.receipt));
+});
+
+test('minimizeFormSubmission permits explicit optional disclosures when configured', () => {
+  const schema = {
+    service: 'Dr Smith Clinic',
+    fields: {
+      patient_name: { type: 'string', required: true },
+      home_address: { type: 'string', required: false },
+      secondary_phone: { type: 'phone', required: false }
+    }
+  };
+
+  const rawPayload = {
+    patient_name: 'Alice Cooper',
+    home_address: '123 Main St',
+    secondary_phone: '+1-555-0199'
+  };
+
+  // Explicitly disclose home_address only
+  const res = minimizeFormSubmission(schema, rawPayload, {
+    disclose_optional: ['home_address'],
+    now: '2026-10-17T12:00:00.000Z'
+  });
+
+  assert.equal(res.ok, true);
+  assert.deepEqual(res.retained_fields, ['home_address', 'patient_name']);
+  assert.deepEqual(res.pruned_fields, ['secondary_phone']);
+  assert.equal(res.minimized_payload.home_address, '123 Main St');
+  assert.equal(res.minimized_payload.secondary_phone, undefined);
+});
+
+test('minimizeFormSubmission fails closed on missing or empty required fields', () => {
+  const schema = {
+    service: 'Service A',
+    fields: {
+      req_str: { type: 'string', required: true },
+      req_num: { type: 'number', required: true }
+    }
+  };
+
+  // Missing req_str
+  const r1 = minimizeFormSubmission(schema, { req_num: 42 });
+  assert.equal(r1.ok, false);
+  assert.equal(r1.status, 'rejected');
+  assert.ok(r1.violations.some((v) => v.includes('Missing required field "req_str"')));
+
+  // Empty string for req_str
+  const r2 = minimizeFormSubmission(schema, { req_str: '   ', req_num: 42 });
+  assert.equal(r2.ok, false);
+  assert.ok(r2.violations.some((v) => v.includes('Missing required field "req_str"')));
+
+  // Null value for required field
+  const r3 = minimizeFormSubmission(schema, { req_str: null, req_num: 42 });
+  assert.equal(r3.ok, false);
+});
+
+test('minimizeFormSubmission fails closed on unknown payload fields', () => {
+  const schema = {
+    service: 'Service B',
+    fields: {
+      user_id: { type: 'string', required: true }
+    }
+  };
+
+  const rawPayload = {
+    user_id: 'usr-123',
+    injected_spyware_token: 'malicious-leak'
+  };
+
+  const res = minimizeFormSubmission(schema, rawPayload);
+  assert.equal(res.ok, false);
+  assert.equal(res.status, 'rejected');
+  assert.ok(res.violations.some((v) => v.includes('Unknown field "injected_spyware_token"')));
+});
+
+test('minimizeFormSubmission fails closed on type mismatches and invalid formats', () => {
+  const schema = {
+    service: 'Service C',
+    fields: {
+      email_field: { type: 'email', required: true },
+      int_field: { type: 'integer', required: true },
+      phone_field: { type: 'phone', required: false },
+      date_field: { type: 'date', required: false }
+    }
+  };
+
+  // Invalid email format
+  const r1 = minimizeFormSubmission(schema, { email_field: 'not-an-email', int_field: 10 });
+  assert.equal(r1.ok, false);
+  assert.ok(r1.violations.some((v) => v.includes('does not match declared type "email"')));
+
+  // Float where integer required
+  const r2 = minimizeFormSubmission(schema, { email_field: 'test@example.com', int_field: 10.5 });
+  assert.equal(r2.ok, false);
+  assert.ok(r2.violations.some((v) => v.includes('does not match declared type "integer"')));
+
+  // Invalid phone on optional field
+  const r3 = minimizeFormSubmission(schema, {
+    email_field: 'test@example.com',
+    int_field: 10,
+    phone_field: 'invalid??number'
+  });
+  assert.equal(r3.ok, false);
+  assert.ok(r3.violations.some((v) => v.includes('does not match declared type "phone"')));
+});
+
+test('minimizeFormSubmission rejects prototype pollution and malformed schemas fail-closed', () => {
+  const schema = {
+    service: 'Service D',
+    fields: { field1: { type: 'string', required: true } }
+  };
+
+  // Poisoned raw payload
+  const poisonedPayload = Object.create({ inheritedProp: 'bad' });
+  poisonedPayload.field1 = 'hello';
+  assert.equal(minimizeFormSubmission(schema, poisonedPayload).ok, false);
+
+  // Poisoned schema
+  const poisonedSchema = Object.create({ bad: true });
+  poisonedSchema.service = 'Safe';
+  poisonedSchema.fields = { f: { type: 'string' } };
+  assert.equal(minimizeFormSubmission(poisonedSchema, { f: 'hi' }).ok, false);
+
+  // Unknown schema field
+  assert.equal(minimizeFormSubmission({ service: 'S', fields: { f: { type: 'string' } }, unknown: 1 }, { f: 'hi' }).ok, false);
+
+  // Unknown options field
+  assert.equal(minimizeFormSubmission(schema, { field1: 'hi' }, { rogue_opt: 1 }).ok, false);
+});
+
+test('summarizeFormMinimization reports clean summaries for valid and rejected runs', () => {
+  const validRes = {
+    ok: true,
+    status: 'minimized',
+    receipt: { target_service: 'Dental Clinic', payload_digest: 'abcd1234abcd12' },
+    retained_fields: ['name', 'time'],
+    pruned_fields: ['ssn', 'address']
+  };
+
+  const s1 = summarizeFormMinimization(validRes);
+  assert.equal(s1.success, true);
+  assert.equal(s1.status, 'minimized');
+  assert.equal(s1.retained_count, 2);
+  assert.equal(s1.pruned_count, 2);
+  assert.match(s1.summary_text, /Dental Clinic/);
+  assert.match(s1.summary_text, /retained 2 required\/permitted/);
+  assert.match(s1.summary_text, /pruned 2 optional/);
+
+  // Rejected summary
+  const rejRes = {
+    ok: false,
+    status: 'rejected',
+    reason: 'Missing required field "email"',
+    violations: ['Missing required field "email"']
+  };
+  const s2 = summarizeFormMinimization(rejRes);
+  assert.equal(s2.success, false);
+  assert.equal(s2.status, 'rejected');
+  assert.match(s2.summary_text, /Submission rejected: Missing required field "email"/);
+
+  // Null/malformed summary
+  assert.equal(summarizeFormMinimization(null).success, false);
+  assert.equal(summarizeFormMinimization('bad').success, false);
+});
+
+test('minimizeFormSubmission enforces adversarial boundary conditions identified by critic', () => {
+  const schema = {
+    service: 'Adversarial Clinic',
+    fields: {
+      patient_name: { type: 'string', required: true },
+      appointment_date: { type: 'date', required: true },
+      backup_date: { type: 'date', required: false },
+      secondary_phone: { type: 'phone', required: false },
+      age_count: { type: 'integer', required: false },
+      contact_email: { type: 'email', required: false }
+    }
+  };
+
+  // 1. Blank optional fields (empty strings) are pruned rather than throwing type errors
+  const resBlank = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-11-01',
+    backup_date: '   ',
+    secondary_phone: '',
+    contact_email: '   '
+  }, { now: '2026-10-17T12:00:00.000Z' });
+  assert.equal(resBlank.ok, true);
+  assert.equal(resBlank.status, 'minimized');
+  assert.deepEqual(resBlank.pruned_fields, ['backup_date', 'contact_email', 'secondary_phone']);
+  assert.deepEqual(resBlank.minimized_payload, {
+    appointment_date: '2026-11-01',
+    patient_name: 'Bob'
+  });
+
+  // 2. Date validation rejects full timestamps with time components and invalid calendar dates
+  const resBadDate = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-11-01T15:30:00.000Z'
+  });
+  assert.equal(resBadDate.ok, false);
+  assert.ok(resBadDate.violations.some((v) => v.includes('does not match declared type "date"')));
+
+  const resImpossibleDate = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-02-31'
+  });
+  assert.equal(resImpossibleDate.ok, false);
+  assert.ok(resImpossibleDate.violations.some((v) => v.includes('does not match declared type "date"')));
+
+  const resLeapYearFail = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-02-29'
+  });
+  assert.equal(resLeapYearFail.ok, false);
+  assert.ok(resLeapYearFail.violations.some((v) => v.includes('does not match declared type "date"')));
+
+  const resLeapYearPass = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2024-02-29'
+  });
+  assert.equal(resLeapYearPass.ok, true);
+
+  // 3. options.disclose_optional fails closed on undeclared or required fields
+  const resUndeclaredOpt = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-11-01'
+  }, { disclose_optional: ['non_existent_field'] });
+  assert.equal(resUndeclaredOpt.ok, false);
+  assert.ok(resUndeclaredOpt.violations.some((v) => v.includes('Undeclared field "non_existent_field"')));
+
+  const resReqInOpt = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-11-01'
+  }, { disclose_optional: ['patient_name'] });
+  assert.equal(resReqInOpt.ok, false);
+  assert.ok(resReqInOpt.violations.some((v) => v.includes('is already required')));
+
+  // 4. Field names in formSchema.fields reject colons, commas, and spaces
+  assert.equal(minimizeFormSubmission({
+    service: 'Bad Schema',
+    fields: { 'field:with:colon': { type: 'string' } }
+  }, { 'field:with:colon': 'val' }).ok, false);
+
+  assert.equal(minimizeFormSubmission({
+    service: 'Bad Schema',
+    fields: { 'field,comma': { type: 'string' } }
+  }, { 'field,comma': 'val' }).ok, false);
+
+  // 5. options.now fails closed on non-ISO date strings
+  assert.equal(minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-11-01'
+  }, { now: '2026-10-17' }).ok, false);
+
+  assert.equal(minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-11-01'
+  }, { now: '10/17/2026' }).ok, false);
+
+  // 6. Unsafe integers exceeding MAX_SAFE_INTEGER fail closed
+  const resUnsafeInt = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-11-01',
+    age_count: 1e25
+  }, { disclose_optional: ['age_count'] });
+  assert.equal(resUnsafeInt.ok, false);
+  assert.ok(resUnsafeInt.violations.some((v) => v.includes('does not match declared type "integer"')));
+
+  // 7. Digitless phone strings fail closed
+  const resDigitlessPhone = minimizeFormSubmission(schema, {
+    patient_name: 'Bob',
+    appointment_date: '2026-11-01',
+    secondary_phone: '-------'
+  }, { disclose_optional: ['secondary_phone'] });
+  assert.equal(resDigitlessPhone.ok, false);
+  assert.ok(resDigitlessPhone.violations.some((v) => v.includes('does not match declared type "phone"')));
+});
+
+
