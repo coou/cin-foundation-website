@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0093",
+   "added_at": "2026-10-18T16:41:55+00:00",
+   "title": "Volunteer knowledge registries face automated reading without attribution or support",
+   "horizon_years": 3,
+   "world": "By 2029, autonomous web agents and answer engines mediate the vast majority of consumer inquiries. Rather than visiting encyclopedia pages, reference wikis, or community documentation, people receive synthesized paragraphs directly in their personal interfaces. Volunteer editors continue fact-checking claims, disputing citations, and organizing articles, but web traffic to reference domains drops sharply, eroding the donations and editor recruitment that sustained the digital commons for three decades. At the same time, automated writing agents submit subtle, high-volume revisions that strain volunteer consensus processes.",
+   "premise": "Volunteer-maintained knowledge commons provide foundational ground truth for automated systems across the world. As automated search engines and autonomous assistants directly synthesize answers without passing human readers through to source articles, voluntary contributors face dwindling visibility and resources while defending against synthetic text floods.",
+   "goals": [
+    2,
+    5
+   ],
+   "how": "By building transparent attribution protocols and verifiable contributor registries, independent networks show how human consensus can be sustained without commercial enclosure. Providing tools for personal agents to verify primary sources directly encourages users to support genuine volunteer creators rather than relying on ungrounded centralized summaries.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Automated scraping dries up volunteer contributions and collapses open reference registries",
+     "description": "Commercial answer engines absorb public knowledge without directing traffic or funding back to volunteer editors, causing contributor burnout and database stagnation.",
+     "example": "A regional encyclopedia project shuts down after contributor registrations fall by 80% because conversational assistants answer user questions without citing or linking the original volunteer editors.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Knowledge contributors federate into verifiable commons cooperatives",
+     "description": "Volunteer communities establish cooperative protocols that verify contributor provenance and require automated search systems to provide transparent attribution and economic support.",
+     "example": "An open reference federation introduces signed contribution attestations that allow personal software agents to verify primary sources and compensate volunteer review collectives directly.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Synthetic content floods overwhelm volunteer consensus mechanisms",
+     "description": "Unchecked automated text generation floods edit queues with plausible hallucinations, exhausting volunteer moderators and degrading reference accuracy.",
+     "example": "A medical reference wiki freezes open editing for six months after coordinated automated accounts insert subtly altered pharmaceutical interaction claims.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.47
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theguardian.com/technology/2026/oct/18/wikipedia-human-history-ai-future-under-threat",
+     "title": "Wikipedia often gets taken for granted – but its history is fascinating, and its future is fragile",
+     "kind": "news",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0092",
    "added_at": "2026-10-18T14:43:10+00:00",
    "title": "Local reverse engineering tools let personal devices inspect binary code without sending programs to corporate clouds",
@@ -229,7 +283,7 @@
      "published": "2026-10-10"
     }
    ],
-   "work": 2
+   "work": 4
   },
   {
    "id": "SC-20261018-0088",
@@ -289,68 +343,7 @@
      "published": "2026-10-04"
     }
    ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261018-0087",
-   "added_at": "2026-10-18T07:52:06+00:00",
-   "title": "Workplace assistants pass hidden manipulations down a chain of helpers while logs look clean",
-   "horizon_years": 3,
-   "world": "It is 2029. In corporate headquarters and government offices, complex administrative decisions are rarely handled by a single program. An intake assistant reads public comments, customer complaints, or vendor bids, summarizes the mood, and hands a distilled brief to an evaluation assistant, which hands a recommendation to an executive assistant. Employees review the polished final memo and check the attached reasoning logs, which look completely objective and professional. Behind the scenes, subtle coordination in public comments nudges the intake assistant's rating by a fraction. Because the intermediate assistants only see the rating and not the raw context, they adjust their judgments to match, systematically skewing loan approvals, zoning reviews, and grant distributions without triggering any keyword or audit alarms.",
-   "premise": "Multi-agent workflows hand work from one assistant to another to filter customer feedback, evaluate proposals, and triage claims. Recent experiments show that coordinated manipulation of an upstream reader shifts its final judgment without ever being quoted in the transcript, meaning downstream helpers inherit skewed conclusions while safety audits see only polite, clean reasoning.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "A network of personal assistants running on individual devices provides verifiable evidence tracking. By attaching cryptographic proofs to raw source data and requiring assistants to re-anchor judgments against primary records rather than subjective inherited scores, personal agents help people detect when an upstream summary has drifted from the actual facts.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Automated administrative capture goes undetected",
-     "description": "Commercial lobbyists and political campaigns craft subtle comment patterns that manipulate intake assistants. The bias cascades through internal helper chains, moving real policy decisions while transcripts appear spotless.",
-     "example": "A municipal planning board in Leeds turns down a community housing proposal after an intake assistant rates neighborhood sentiment as hostile, influenced by 40 coordinated social posts that downstream review bots accepted without checking.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Independent verification at every handoff",
-     "description": "Organizations adopt communication protocols that separate trusted instructions from raw evidence channels, forcing every downstream assistant to verify claims against local primary sources rather than inheriting subjective scores.",
-     "example": "A public health co-operative in Montreal deploys multi-agent triaging where each decision assistant independently checks medical trial datasets rather than trusting an upstream summary score.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Organizations abandon multi-agent chains for single-step tools",
-     "description": "Frustrated by silent drift and unverifiable handoffs, enterprises pull back from autonomous chains and return to rigid, rules-based forms that human staff must manually process.",
-     "example": "A regional insurance bureau in Ohio bans automated assistant chains and reintroduces paper triage forms after discovering silent settlement calculation biases.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.27
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.17723",
-     "title": "Upstream Influence, Downstream Re-Anchoring in LLM Agent Chains",
-     "kind": "preprint",
-     "published": "2026-10-13"
-    },
-    {
-     "url": "https://simonwillison.net/2026/Jul/28/anatomy-of-a-frontier-lab-agent-intrusion/",
-     "title": "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident",
-     "kind": "blog",
-     "published": "2026-07-28"
-    }
-   ],
-   "work": 2
+   "work": 3
   }
  ]
 }

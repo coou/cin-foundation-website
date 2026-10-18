@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0093",
+   "added_at": "2026-10-18T16:41:55+00:00",
+   "title": "Volunteer knowledge registries face automated reading without attribution or support",
+   "horizon_years": 3,
+   "world": "By 2029, autonomous web agents and answer engines mediate the vast majority of consumer inquiries. Rather than visiting encyclopedia pages, reference wikis, or community documentation, people receive synthesized paragraphs directly in their personal interfaces. Volunteer editors continue fact-checking claims, disputing citations, and organizing articles, but web traffic to reference domains drops sharply, eroding the donations and editor recruitment that sustained the digital commons for three decades. At the same time, automated writing agents submit subtle, high-volume revisions that strain volunteer consensus processes.",
+   "premise": "Volunteer-maintained knowledge commons provide foundational ground truth for automated systems across the world. As automated search engines and autonomous assistants directly synthesize answers without passing human readers through to source articles, voluntary contributors face dwindling visibility and resources while defending against synthetic text floods.",
+   "goals": [
+    2,
+    5
+   ],
+   "how": "By building transparent attribution protocols and verifiable contributor registries, independent networks show how human consensus can be sustained without commercial enclosure. Providing tools for personal agents to verify primary sources directly encourages users to support genuine volunteer creators rather than relying on ungrounded centralized summaries.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Automated scraping dries up volunteer contributions and collapses open reference registries",
+     "description": "Commercial answer engines absorb public knowledge without directing traffic or funding back to volunteer editors, causing contributor burnout and database stagnation.",
+     "example": "A regional encyclopedia project shuts down after contributor registrations fall by 80% because conversational assistants answer user questions without citing or linking the original volunteer editors.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Knowledge contributors federate into verifiable commons cooperatives",
+     "description": "Volunteer communities establish cooperative protocols that verify contributor provenance and require automated search systems to provide transparent attribution and economic support.",
+     "example": "An open reference federation introduces signed contribution attestations that allow personal software agents to verify primary sources and compensate volunteer review collectives directly.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Synthetic content floods overwhelm volunteer consensus mechanisms",
+     "description": "Unchecked automated text generation floods edit queues with plausible hallucinations, exhausting volunteer moderators and degrading reference accuracy.",
+     "example": "A medical reference wiki freezes open editing for six months after coordinated automated accounts insert subtly altered pharmaceutical interaction claims.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.47
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theguardian.com/technology/2026/oct/18/wikipedia-human-history-ai-future-under-threat",
+     "title": "Wikipedia often gets taken for granted – but its history is fascinating, and its future is fragile",
+     "kind": "news",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0092",
    "added_at": "2026-10-18T14:43:10+00:00",
    "title": "Local reverse engineering tools let personal devices inspect binary code without sending programs to corporate clouds",
@@ -229,7 +283,7 @@
      "published": "2026-10-10"
     }
    ],
-   "work": 2
+   "work": 4
   },
   {
    "id": "SC-20261018-0088",
@@ -289,7 +343,7 @@
      "published": "2026-10-04"
     }
    ],
-   "work": 1
+   "work": 3
   },
   {
    "id": "SC-20261018-0087",
@@ -512,7 +566,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261018-0083",
@@ -2355,7 +2409,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261016-0051",
@@ -2584,7 +2638,7 @@
      "published": "2026-07-06"
     }
    ],
-   "work": 0
+   "work": 2
   },
   {
    "id": "SC-20261016-0047",
@@ -2983,7 +3037,7 @@
      "published": "2026-06-02"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261016-0040",
@@ -3383,68 +3437,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261016-0033",
-   "added_at": "2026-10-16T02:48:59+00:00",
-   "title": "Local visual assistants browse websites for people, prompting platforms to lock down public pages",
-   "horizon_years": 2,
-   "world": "It is 2028. Most modern smartphones and laptops run compact visual models entirely on-device. People rely on personal software assistants to compare prices, book medical appointments, and resolve customer support queries by looking at screens and navigating buttons like a human visitor. Because these assistants read visual layouts directly instead of using commercial APIs, websites struggle to tell them apart from people. Commercial platforms begin locking public pages behind paid identity checks and mandatory live webcam facial scans.",
-   "premise": "Recent efficiency breakthroughs allow vision-language models to run directly on consumer phones and desktop computers, enabling personal assistants to see and click web interfaces locally. As automated visual browsing spreads, online platforms face a dilemma between locking public services behind commercial identity paywalls and adopting open cryptographic pacing standards.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network designs local-first assistant architectures and verifiable portable receipts that prove legitimate human intent to web servers without revealing personal browsing histories or requiring corporate identity brokers.",
-   "shift": 0.7,
-   "outcomes": [
-    {
-     "name": "Commercial platforms lock public pages behind biometric identity gates",
-     "description": "Unable to stop automated visual assistants with traditional puzzles, major online services require paid identity credentials or live webcam scans before displaying basic web pages.",
-     "example": "A person looking up local bus timetables is blocked by a commercial identity checkpoint requiring a paid annual subscription and a facial scan.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Publishers adopt cryptographic pacing and anonymous access tokens",
-     "description": "Public services and web publishers deploy open cryptographic rate-limiting that allows personal assistants to query information without requiring visitors to identify themselves.",
-     "example": "A municipal clinic uses mathematical pacing tokens that permit personal patient assistants to check available appointments while stopping high-speed web scraping.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Websites deploy adversarial layout shifting that breaks usability for everyone",
-     "description": "Publishers inject rapid layout changes, invisible traps, and dynamic visual noise to disrupt automated assistants, severely degrading accessibility for human visitors and screen readers.",
-     "example": "An online store uses shifting buttons and deceptive visual decoys to thwart shopping assistants, resulting in frequent misclicks and broken navigation for visually impaired users.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.2
-    },
-    {
-     "name": "Operating system vendors restrict local screen capture to preferred corporate partners",
-     "description": "Proprietary operating system developers close native accessibility and screenshot interfaces under the guise of security, limiting automated GUI interaction to their own bundled assistants.",
-     "example": "A laptop manufacturer updates its operating system to revoke third-party screen access, permitting only its pre-installed commercial assistant to view and click interface elements.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "engagement",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.20390v1",
-     "title": "STP-GUI: Spatially-Aware Token Pruning for Efficient Web-GUI Agents",
-     "kind": "preprint",
-     "published": "2026-10-14"
-    }
-   ],
-   "work": 5
   }
  ]
 }
