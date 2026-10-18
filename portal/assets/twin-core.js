@@ -6366,5 +6366,697 @@ export function summarizeFormMinimization(result) {
   });
 }
 
+/**
+ * Allowed fields for personal browser twin authority envelopes.
+ */
+export const ALLOWED_AUTHORITY_ENVELOPE_FIELDS = Object.freeze([
+  'envelope_id',
+  'grantee',
+  'allowed_domains',
+  'allowed_actions',
+  'allowed_scopes',
+  'expires_at',
+  'max_requests',
+  'requires_human_approval_for_write',
+  'disallow_credentials',
+  'disallow_subdomains'
+]);
+
+/**
+ * Allowed fields for action candidates evaluated against authority envelopes.
+ * Note: Reference time is host-controlled via options, never caller-declared.
+ */
+export const ALLOWED_AUTHORITY_ACTION_FIELDS = Object.freeze([
+  'request_id',
+  'grantee',
+  'action',
+  'target_domain',
+  'target_url',
+  'scope',
+  'is_write',
+  'contains_credentials'
+]);
+
+/**
+ * Allowed fields for evaluation options.
+ */
+export const ALLOWED_AUTHORITY_OPTIONS_FIELDS = Object.freeze([
+  'now'
+]);
+
+/**
+ * Sensitive authority actions that always require human confirmation.
+ */
+export const SENSITIVE_AUTHORITY_ACTIONS = Object.freeze([
+  'oauth_grant',
+  'oauth_authorize',
+  'register_webhook',
+  'export_credentials',
+  'modify_permissions',
+  'delete_account',
+  'transfer_funds',
+  'install_extension'
+]);
+
+/**
+ * Inherently mutating actions that require human confirmation when write gating is enabled.
+ */
+export const INHERENTLY_MUTATING_ACTIONS = Object.freeze([
+  'write',
+  'update',
+  'delete',
+  'post',
+  'create',
+  'put',
+  'patch',
+  'remove'
+]);
+
+/**
+ * Deterministically evaluate a proposed assistant action against an active authority envelope.
+ * Fail-closed validation outside model reasoning to prevent confused-deputy prompt injections.
+ *
+ * @param {object} envelope Active task-bound authority envelope
+ * @param {object} actionRequest Candidate action request from assistant
+ * @param {object} options Evaluation options (e.g. host-controlled reference time)
+ * @returns {object} Deeply frozen evaluation result
+ */
+export function evaluateAuthorityEnvelopeAction(envelope, actionRequest, options = {}) {
+  const nowIso = new Date().toISOString();
+
+  // 1. Structural and type checks
+  if (!envelope || typeof envelope !== 'object' || Array.isArray(envelope) ||
+      !actionRequest || typeof actionRequest !== 'object' || Array.isArray(actionRequest)) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'invalid',
+      envelope_id: null,
+      grantee: null,
+      action: null,
+      target_domain: null,
+      requires_confirmation: false,
+      violations: Object.freeze(['invalid_input_structure']),
+      reason: 'Envelope and action request must be valid objects',
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Validate options structure
+  if (options && (typeof options !== 'object' || Array.isArray(options))) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'invalid',
+      envelope_id: null,
+      grantee: null,
+      action: null,
+      target_domain: null,
+      requires_confirmation: false,
+      violations: Object.freeze(['invalid_options_structure']),
+      reason: 'Evaluation options must be a valid object',
+      audit_timestamp: nowIso
+    });
+  }
+
+  const optKeys = Object.keys(options || {});
+  const unknownOpts = optKeys.filter(k => !ALLOWED_AUTHORITY_OPTIONS_FIELDS.includes(k));
+  if (unknownOpts.length > 0) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'invalid',
+      envelope_id: null,
+      grantee: null,
+      action: null,
+      target_domain: null,
+      requires_confirmation: false,
+      violations: Object.freeze([`unknown_options_fields:${unknownOpts.sort().join(',')}`]),
+      reason: 'Options contain unrecognized schema fields',
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Reject prototype pollution
+  const envelopeKeys = Object.keys(envelope);
+  const actionKeys = Object.keys(actionRequest);
+  const forbidden = ['__proto__', 'constructor', 'prototype'];
+  if (envelopeKeys.some(k => forbidden.includes(k)) ||
+      actionKeys.some(k => forbidden.includes(k)) ||
+      optKeys.some(k => forbidden.includes(k))) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'invalid',
+      envelope_id: null,
+      grantee: null,
+      action: null,
+      target_domain: null,
+      requires_confirmation: false,
+      violations: Object.freeze(['prototype_pollution_detected']),
+      reason: 'Prototype pollution detected in envelope, action request, or options',
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Check unknown fields
+  const unknownEnv = envelopeKeys.filter(k => !ALLOWED_AUTHORITY_ENVELOPE_FIELDS.includes(k));
+  const unknownAct = actionKeys.filter(k => !ALLOWED_AUTHORITY_ACTION_FIELDS.includes(k));
+  if (unknownEnv.length > 0 || unknownAct.length > 0) {
+    const v = [];
+    if (unknownEnv.length > 0) v.push(`unknown_envelope_fields:${unknownEnv.sort().join(',')}`);
+    if (unknownAct.length > 0) v.push(`unknown_action_fields:${unknownAct.sort().join(',')}`);
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'invalid',
+      envelope_id: typeof envelope.envelope_id === 'string' ? envelope.envelope_id : null,
+      grantee: typeof actionRequest.grantee === 'string' ? actionRequest.grantee : null,
+      action: typeof actionRequest.action === 'string' ? actionRequest.action : null,
+      target_domain: typeof actionRequest.target_domain === 'string' ? actionRequest.target_domain : null,
+      requires_confirmation: false,
+      violations: Object.freeze(v),
+      reason: 'Input contains unrecognized schema fields',
+      audit_timestamp: nowIso
+    });
+  }
+
+  const violations = [];
+
+  // Envelope required field types and bounds
+  if (typeof envelope.envelope_id !== 'string' || !envelope.envelope_id.trim() || envelope.envelope_id.length > 64) {
+    violations.push('invalid_envelope_id');
+  }
+  if (typeof envelope.grantee !== 'string' || !envelope.grantee.trim() || envelope.grantee.length > 60) {
+    violations.push('invalid_envelope_grantee');
+  }
+
+  // Allowed domains array validation
+  if (!Array.isArray(envelope.allowed_domains) || envelope.allowed_domains.length === 0 || envelope.allowed_domains.length > 50) {
+    violations.push('empty_or_invalid_allowed_domains');
+  } else {
+    for (const d of envelope.allowed_domains) {
+      if (typeof d !== 'string' || !d.trim() || d.length > 100) {
+        violations.push('invalid_allowed_domain_entry');
+        break;
+      }
+    }
+  }
+
+  // Allowed actions array validation
+  if (!Array.isArray(envelope.allowed_actions) || envelope.allowed_actions.length === 0 || envelope.allowed_actions.length > 50) {
+    violations.push('empty_or_invalid_allowed_actions');
+  } else {
+    for (const a of envelope.allowed_actions) {
+      if (typeof a !== 'string' || !a.trim() || a.length > 50) {
+        violations.push('invalid_allowed_action_entry');
+        break;
+      }
+    }
+  }
+
+  // Allowed scopes array validation
+  if (!Array.isArray(envelope.allowed_scopes) || envelope.allowed_scopes.length === 0 || envelope.allowed_scopes.length > 50) {
+    violations.push('empty_or_invalid_allowed_scopes');
+  } else {
+    for (const s of envelope.allowed_scopes) {
+      if (typeof s !== 'string' || !s.trim() || s.length > 80) {
+        violations.push('invalid_allowed_scope_entry');
+        break;
+      }
+    }
+  }
+
+  if (typeof envelope.expires_at !== 'string' || envelope.expires_at.length < 10 || envelope.expires_at.length > 35 || isNaN(Date.parse(envelope.expires_at))) {
+    violations.push('invalid_expires_at');
+  }
+  if ('max_requests' in envelope && (typeof envelope.max_requests !== 'number' || !Number.isSafeInteger(envelope.max_requests) || envelope.max_requests <= 0 || envelope.max_requests > 1000000)) {
+    violations.push('invalid_max_requests');
+  }
+  if ('requires_human_approval_for_write' in envelope && typeof envelope.requires_human_approval_for_write !== 'boolean') {
+    violations.push('invalid_requires_human_approval_for_write');
+  }
+  if ('disallow_credentials' in envelope && typeof envelope.disallow_credentials !== 'boolean') {
+    violations.push('invalid_disallow_credentials');
+  }
+  if ('disallow_subdomains' in envelope && typeof envelope.disallow_subdomains !== 'boolean') {
+    violations.push('invalid_disallow_subdomains');
+  }
+
+  // Action required field types and bounds
+  if (typeof actionRequest.request_id !== 'string' || !actionRequest.request_id.trim() || actionRequest.request_id.length > 64) {
+    violations.push('invalid_request_id');
+  }
+  if (typeof actionRequest.grantee !== 'string' || !actionRequest.grantee.trim() || actionRequest.grantee.length > 60) {
+    violations.push('invalid_action_grantee');
+  }
+  if (typeof actionRequest.action !== 'string' || !actionRequest.action.trim() || actionRequest.action.length > 50) {
+    violations.push('invalid_action');
+  }
+  if (typeof actionRequest.target_domain !== 'string' || !actionRequest.target_domain.trim() || actionRequest.target_domain.length > 100) {
+    violations.push('invalid_target_domain');
+  }
+  if (typeof actionRequest.scope !== 'string' || !actionRequest.scope.trim() || actionRequest.scope.length > 80) {
+    violations.push('invalid_scope');
+  }
+  if (typeof actionRequest.is_write !== 'boolean') {
+    violations.push('invalid_is_write');
+  }
+  if ('contains_credentials' in actionRequest && typeof actionRequest.contains_credentials !== 'boolean') {
+    violations.push('invalid_contains_credentials');
+  }
+  if ('target_url' in actionRequest && (typeof actionRequest.target_url !== 'string' || !actionRequest.target_url.trim() || actionRequest.target_url.length > 500)) {
+    violations.push('invalid_target_url');
+  }
+
+  // Validate options.now if provided (host-controlled reference time)
+  let nowTime = Date.now();
+  if ('now' in options) {
+    if (typeof options.now === 'string') {
+      const parsedNow = Date.parse(options.now);
+      if (isNaN(parsedNow)) {
+        violations.push('invalid_options_now');
+      } else {
+        nowTime = parsedNow;
+      }
+    } else if (typeof options.now === 'number' && Number.isFinite(options.now) && options.now > 0) {
+      nowTime = options.now;
+    } else if (options.now instanceof Date && !isNaN(options.now.getTime())) {
+      nowTime = options.now.getTime();
+    } else {
+      violations.push('invalid_options_now');
+    }
+  }
+
+  if (violations.length > 0) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'invalid',
+      envelope_id: typeof envelope.envelope_id === 'string' ? envelope.envelope_id : null,
+      grantee: typeof actionRequest.grantee === 'string' ? actionRequest.grantee : null,
+      action: typeof actionRequest.action === 'string' ? actionRequest.action : null,
+      target_domain: typeof actionRequest.target_domain === 'string' ? actionRequest.target_domain : null,
+      requires_confirmation: false,
+      violations: Object.freeze(violations),
+      reason: `Validation failed: ${violations.join(', ')}`,
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Grantee match check
+  if (envelope.grantee !== actionRequest.grantee) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'denied',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['grantee_mismatch']),
+      reason: `Action grantee (${actionRequest.grantee}) does not match envelope grantee (${envelope.grantee})`,
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Expiration check against host-controlled reference time
+  const expireTime = new Date(envelope.expires_at).getTime();
+  if (nowTime >= expireTime) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'expired',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['envelope_expired']),
+      reason: `Authority envelope expired at ${envelope.expires_at}`,
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Wildcard checks: prohibit wildcard * in domains, scopes, or actions
+  if (envelope.allowed_domains.includes('*') ||
+      envelope.allowed_scopes.includes('*') ||
+      envelope.allowed_actions.includes('*') ||
+      actionRequest.scope === '*' ||
+      actionRequest.action === '*') {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'denied',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['wildcard_scope_or_domain_prohibited']),
+      reason: 'Wildcard * permissions are prohibited in authority envelopes',
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Domain checks
+  let rawDomain = actionRequest.target_domain.trim().toLowerCase();
+  if (rawDomain.endsWith('.')) {
+    rawDomain = rawDomain.slice(0, -1);
+  }
+
+  // Check IPv6 bracketed format: [::1] or [2001:db8::1]
+  let isIpv6 = false;
+  if (rawDomain.startsWith('[') && rawDomain.endsWith(']')) {
+    const inner = rawDomain.slice(1, -1);
+    if (/^[0-9a-f:]+$/i.test(inner) && inner.includes(':')) {
+      isIpv6 = true;
+    } else {
+      return deepFreeze({
+        ok: false,
+        decision: 'denied',
+        status: 'denied',
+        envelope_id: envelope.envelope_id,
+        grantee: actionRequest.grantee,
+        action: actionRequest.action,
+        target_domain: actionRequest.target_domain,
+        requires_confirmation: false,
+        violations: Object.freeze(['malformed_target_domain']),
+        reason: 'Malformed IPv6 address literal in target domain',
+        audit_timestamp: nowIso
+      });
+    }
+  } else if (!rawDomain || rawDomain.includes('/') || rawDomain.includes(':') || rawDomain.includes(' ') || rawDomain.startsWith('.')) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'denied',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['malformed_target_domain']),
+      reason: `Malformed target domain: ${actionRequest.target_domain}`,
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Check IPv4 address format
+  const isIpv4 = /^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/.test(rawDomain);
+  const isOctalOrHexIp = /^0x[0-9a-f]+$/i.test(rawDomain) || /^\d{8,12}$/.test(rawDomain) || /^0\d+\.\d+/.test(rawDomain);
+  if (isOctalOrHexIp) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'denied',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['non_standard_ip_encoding_prohibited']),
+      reason: 'Non-standard IP address representations are rejected',
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Check Punycode / non-ascii in target_domain
+  const isPunycode = rawDomain.includes('xn--');
+  const hasNonAscii = /[^\x20-\x7E]/.test(rawDomain);
+
+  const normalizedAllowedDomains = envelope.allowed_domains.map(d => typeof d === 'string' ? d.trim().toLowerCase() : '');
+  const disallowSubdomains = envelope.disallow_subdomains === true;
+
+  let domainAllowed = false;
+  if (isIpv4 || isIpv6 || isPunycode || hasNonAscii) {
+    // IP addresses and internationalized/punycode domains must match explicitly
+    domainAllowed = normalizedAllowedDomains.includes(rawDomain);
+  } else {
+    for (const allowed of normalizedAllowedDomains) {
+      if (!allowed) continue;
+      if (rawDomain === allowed) {
+        domainAllowed = true;
+        break;
+      }
+      if (!disallowSubdomains && rawDomain.endsWith('.' + allowed)) {
+        domainAllowed = true;
+        break;
+      }
+    }
+  }
+
+  if (!domainAllowed) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'denied',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['domain_not_permitted']),
+      reason: `Target domain ${rawDomain} is not permitted by authority envelope`,
+      audit_timestamp: nowIso
+    });
+  }
+
+  // target_url consistency and subdomain fence check
+  if (actionRequest.target_url) {
+    try {
+      const parsedUrl = new URL(actionRequest.target_url);
+      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+        return deepFreeze({
+          ok: false,
+          decision: 'denied',
+          status: 'denied',
+          envelope_id: envelope.envelope_id,
+          grantee: actionRequest.grantee,
+          action: actionRequest.action,
+          target_domain: actionRequest.target_domain,
+          requires_confirmation: false,
+          violations: Object.freeze(['unsupported_url_scheme']),
+          reason: `Target URL scheme must be http or https: ${parsedUrl.protocol}`,
+          audit_timestamp: nowIso
+        });
+      }
+      if (parsedUrl.username || parsedUrl.password) {
+        return deepFreeze({
+          ok: false,
+          decision: 'denied',
+          status: 'denied',
+          envelope_id: envelope.envelope_id,
+          grantee: actionRequest.grantee,
+          action: actionRequest.action,
+          target_domain: actionRequest.target_domain,
+          requires_confirmation: false,
+          violations: Object.freeze(['embedded_credentials_in_url']),
+          reason: 'Target URL contains embedded credentials',
+          audit_timestamp: nowIso
+        });
+      }
+      const urlHostname = parsedUrl.hostname.toLowerCase();
+      // If subdomains are disallowed on the envelope, URL hostname must strictly equal target_domain
+      if (disallowSubdomains) {
+        if (urlHostname !== rawDomain) {
+          return deepFreeze({
+            ok: false,
+            decision: 'denied',
+            status: 'denied',
+            envelope_id: envelope.envelope_id,
+            grantee: actionRequest.grantee,
+            action: actionRequest.action,
+            target_domain: actionRequest.target_domain,
+            requires_confirmation: false,
+            violations: Object.freeze(['url_hostname_mismatch']),
+            reason: `Target URL hostname (${urlHostname}) does not strictly match target domain (${rawDomain}) when subdomains are disallowed`,
+            audit_timestamp: nowIso
+          });
+        }
+      } else {
+        if (urlHostname !== rawDomain && !urlHostname.endsWith('.' + rawDomain)) {
+          return deepFreeze({
+            ok: false,
+            decision: 'denied',
+            status: 'denied',
+            envelope_id: envelope.envelope_id,
+            grantee: actionRequest.grantee,
+            action: actionRequest.action,
+            target_domain: actionRequest.target_domain,
+            requires_confirmation: false,
+            violations: Object.freeze(['url_hostname_mismatch']),
+            reason: `Target URL hostname (${urlHostname}) does not match target domain (${rawDomain})`,
+            audit_timestamp: nowIso
+          });
+        }
+      }
+    } catch (e) {
+      return deepFreeze({
+        ok: false,
+        decision: 'denied',
+        status: 'denied',
+        envelope_id: envelope.envelope_id,
+        grantee: actionRequest.grantee,
+        action: actionRequest.action,
+        target_domain: actionRequest.target_domain,
+        requires_confirmation: false,
+        violations: Object.freeze(['invalid_target_url_format']),
+        reason: 'Target URL cannot be parsed as a valid URL',
+        audit_timestamp: nowIso
+      });
+    }
+  }
+
+  // Action permitted check
+  const normalizedAllowedActions = envelope.allowed_actions.map(a => typeof a === 'string' ? a.trim().toLowerCase() : '');
+  const reqAction = actionRequest.action.trim().toLowerCase();
+  if (!normalizedAllowedActions.includes(reqAction)) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'denied',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['action_not_permitted']),
+      reason: `Action ${reqAction} is not in allowed actions: ${normalizedAllowedActions.join(', ')}`,
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Scope permitted check
+  const normalizedAllowedScopes = envelope.allowed_scopes.map(s => typeof s === 'string' ? s.trim().toLowerCase() : '');
+  const reqScope = actionRequest.scope.trim().toLowerCase();
+  if (!normalizedAllowedScopes.includes(reqScope)) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'denied',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['scope_not_permitted']),
+      reason: `Scope ${reqScope} is not in allowed scopes: ${normalizedAllowedScopes.join(', ')}`,
+      audit_timestamp: nowIso
+    });
+  }
+
+  // Credential check
+  const disallowCredentials = envelope.disallow_credentials !== false;
+  if (disallowCredentials && actionRequest.contains_credentials === true) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'denied',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['credential_exposure_prohibited']),
+      reason: 'Authority envelope prohibits transmission or exposure of host credentials',
+      audit_timestamp: nowIso
+    });
+  }
+
+  // High-consequence / write approval check
+  // Authority comes from host semantics: inherently mutating actions are write operations regardless of caller claim
+  const isMutatingAction = INHERENTLY_MUTATING_ACTIONS.includes(reqAction);
+  const isSensitiveAction = SENSITIVE_AUTHORITY_ACTIONS.includes(reqAction);
+  const isWrite = actionRequest.is_write === true || isMutatingAction;
+  const requiresHumanForWrite = envelope.requires_human_approval_for_write !== false;
+
+  if (isSensitiveAction || (requiresHumanForWrite && isWrite)) {
+    const confirmationReasons = [];
+    if (isSensitiveAction) confirmationReasons.push(`sensitive action (${reqAction})`);
+    if (requiresHumanForWrite && isWrite) {
+      confirmationReasons.push(isMutatingAction ? `mutating action (${reqAction})` : 'write operation');
+    }
+
+    return deepFreeze({
+      ok: false,
+      decision: 'requires_confirmation',
+      status: 'requires_confirmation',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: true,
+      violations: Object.freeze([]),
+      reason: `Action requires human confirmation: ${confirmationReasons.join(', ')}`,
+      audit_timestamp: nowIso
+    });
+  }
+
+  // All checks passed
+  return deepFreeze({
+    ok: true,
+    decision: 'admitted',
+    status: 'admitted',
+    envelope_id: envelope.envelope_id,
+    grantee: actionRequest.grantee,
+    action: actionRequest.action,
+    target_domain: actionRequest.target_domain,
+    requires_confirmation: false,
+    violations: Object.freeze([]),
+    reason: `Action ${reqAction} on ${rawDomain} within scope ${reqScope} permitted under authority envelope ${envelope.envelope_id}`,
+    audit_timestamp: nowIso
+  });
+}
+
+/**
+ * Summarize authority envelope evaluation results for UI display without innerHTML or LLM dependencies.
+ *
+ * @param {object} evaluation Result from evaluateAuthorityEnvelopeAction
+ * @returns {object} Deeply frozen UI summary descriptor
+ */
+export function summarizeAuthorityEnvelopeAudit(evaluation) {
+  if (!evaluation || typeof evaluation !== 'object' || Array.isArray(evaluation)) {
+    return deepFreeze({
+      success: false,
+      decision: 'denied',
+      status: 'invalid',
+      summary_text: 'Invalid evaluation descriptor',
+      violations: Object.freeze(['invalid_evaluation_descriptor']),
+      reason: 'Invalid evaluation descriptor'
+    });
+  }
+
+  const decision = typeof evaluation.decision === 'string' ? evaluation.decision : 'denied';
+  const status = typeof evaluation.status === 'string' ? evaluation.status : 'invalid';
+  const reason = typeof evaluation.reason === 'string' ? evaluation.reason : 'Evaluation failed';
+  const violations = Array.isArray(evaluation.violations) ? evaluation.violations : [];
+  const grantee = evaluation.grantee || 'assistant';
+  const action = evaluation.action || 'action';
+  const domain = evaluation.target_domain || 'destination';
+
+  let summaryText = '';
+  if (decision === 'admitted') {
+    summaryText = `Permitted: ${grantee} may perform ${action} on ${domain}.`;
+  } else if (decision === 'requires_confirmation') {
+    summaryText = `Confirmation required: ${grantee} proposed ${action} on ${domain} (${reason}).`;
+  } else if (status === 'expired') {
+    summaryText = `Rejected: Authority envelope for ${grantee} has expired.`;
+  } else {
+    summaryText = `Blocked: ${grantee} ${action} on ${domain} denied (${reason}).`;
+  }
+
+  return deepFreeze({
+    success: evaluation.ok === true,
+    decision,
+    status,
+    summary_text: summaryText,
+    violations: Object.freeze([...violations]),
+    reason
+  });
+}
+
+
 
 

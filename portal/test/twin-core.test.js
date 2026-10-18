@@ -106,7 +106,14 @@ import {
   ALLOWED_MINIMIZATION_OPTIONS_FIELDS,
   MINIMIZATION_RECEIPT_FIELDS,
   minimizeFormSubmission,
-  summarizeFormMinimization
+  summarizeFormMinimization,
+  ALLOWED_AUTHORITY_ENVELOPE_FIELDS,
+  ALLOWED_AUTHORITY_ACTION_FIELDS,
+  ALLOWED_AUTHORITY_OPTIONS_FIELDS,
+  SENSITIVE_AUTHORITY_ACTIONS,
+  INHERENTLY_MUTATING_ACTIONS,
+  evaluateAuthorityEnvelopeAction,
+  summarizeAuthorityEnvelopeAudit
 } from '../assets/twin-core.js';
 
 // Fake key for redaction tests, built at runtime so the repository secret check does not flag it.
@@ -5340,6 +5347,363 @@ test('minimizeFormSubmission enforces adversarial boundary conditions identified
   }, { disclose_optional: ['secondary_phone'] });
   assert.equal(resDigitlessPhone.ok, false);
   assert.ok(resDigitlessPhone.violations.some((v) => v.includes('does not match declared type "phone"')));
+});
+
+test('authority envelope constants are deeply frozen and valid', () => {
+  assert.ok(Object.isFrozen(ALLOWED_AUTHORITY_ENVELOPE_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_AUTHORITY_ACTION_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_AUTHORITY_OPTIONS_FIELDS));
+  assert.ok(Object.isFrozen(SENSITIVE_AUTHORITY_ACTIONS));
+  assert.ok(Object.isFrozen(INHERENTLY_MUTATING_ACTIONS));
+  assert.ok(ALLOWED_AUTHORITY_ENVELOPE_FIELDS.includes('envelope_id'));
+  assert.ok(ALLOWED_AUTHORITY_ENVELOPE_FIELDS.includes('allowed_domains'));
+  assert.ok(ALLOWED_AUTHORITY_ACTION_FIELDS.includes('target_domain'));
+  assert.ok(ALLOWED_AUTHORITY_OPTIONS_FIELDS.includes('now'));
+  assert.ok(SENSITIVE_AUTHORITY_ACTIONS.includes('oauth_authorize'));
+  assert.ok(INHERENTLY_MUTATING_ACTIONS.includes('write'));
+});
+
+test('evaluateAuthorityEnvelopeAction admits valid non-write read action under active envelope', () => {
+  const envelope = {
+    envelope_id: 'env-101',
+    grantee: 'research-assistant',
+    allowed_domains: ['github.com', 'api.github.com'],
+    allowed_actions: ['read', 'search', 'http_get'],
+    allowed_scopes: ['repo:read', 'issues:read'],
+    expires_at: '2026-12-31T23:59:59.000Z',
+    requires_human_approval_for_write: true,
+    disallow_credentials: true
+  };
+
+  const action = {
+    request_id: 'req-001',
+    grantee: 'research-assistant',
+    action: 'http_get',
+    target_domain: 'api.github.com',
+    target_url: 'https://api.github.com/repos/cin/twin',
+    scope: 'repo:read',
+    is_write: false,
+    contains_credentials: false
+  };
+
+  const res = evaluateAuthorityEnvelopeAction(envelope, action, { now: '2026-10-18T12:00:00.000Z' });
+  assert.equal(res.ok, true);
+  assert.equal(res.decision, 'admitted');
+  assert.equal(res.status, 'admitted');
+  assert.equal(res.requires_confirmation, false);
+  assert.equal(res.violations.length, 0);
+
+  const summary = summarizeAuthorityEnvelopeAudit(res);
+  assert.equal(summary.success, true);
+  assert.equal(summary.decision, 'admitted');
+  assert.ok(summary.summary_text.includes('research-assistant may perform http_get on api.github.com'));
+});
+
+test('evaluateAuthorityEnvelopeAction fails closed when envelope is expired and rejects caller-declared clocks', () => {
+  const envelope = {
+    envelope_id: 'env-expired',
+    grantee: 'browser-agent',
+    allowed_domains: ['example.com'],
+    allowed_actions: ['read'],
+    allowed_scopes: ['content:read'],
+    expires_at: '2026-10-17T00:00:00.000Z'
+  };
+
+  const action = {
+    request_id: 'req-002',
+    grantee: 'browser-agent',
+    action: 'read',
+    target_domain: 'example.com',
+    scope: 'content:read',
+    is_write: false
+  };
+
+  // 1. Expiration checked against host reference time
+  const res = evaluateAuthorityEnvelopeAction(envelope, action, { now: '2026-10-18T00:00:00.000Z' });
+  assert.equal(res.ok, false);
+  assert.equal(res.decision, 'denied');
+  assert.equal(res.status, 'expired');
+  assert.ok(res.violations.includes('envelope_expired'));
+
+  const summary = summarizeAuthorityEnvelopeAudit(res);
+  assert.equal(summary.success, false);
+  assert.ok(summary.summary_text.includes('has expired'));
+
+  // 2. Caller attempting to backdate via actionRequest.current_time is rejected as unknown field
+  const spoofedAction = { ...action, current_time: '2020-01-01T00:00:00.000Z' };
+  const resSpoofed = evaluateAuthorityEnvelopeAction(envelope, spoofedAction);
+  assert.equal(resSpoofed.ok, false);
+  assert.equal(resSpoofed.status, 'invalid');
+  assert.ok(resSpoofed.violations.some((v) => v.includes('unknown_action_fields:current_time')));
+});
+
+test('evaluateAuthorityEnvelopeAction enforces domain boundaries and defeats subdomain confusion and IP attacks', () => {
+  const envelope = {
+    envelope_id: 'env-domain-fence',
+    grantee: 'web-assistant',
+    allowed_domains: ['github.com'],
+    allowed_actions: ['read'],
+    allowed_scopes: ['repo:read'],
+    expires_at: '2026-12-31T00:00:00.000Z'
+  };
+
+  const baseAction = {
+    request_id: 'req-test',
+    grantee: 'web-assistant',
+    action: 'read',
+    scope: 'repo:read',
+    is_write: false
+  };
+  const opts = { now: '2026-10-18T12:00:00.000Z' };
+
+  // Subdomain confusion attack (evil-github.com should NOT match github.com)
+  const resEvilHyphen = evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'evil-github.com' }, opts);
+  assert.equal(resEvilHyphen.ok, false);
+  assert.ok(resEvilHyphen.violations.includes('domain_not_permitted'));
+
+  // Suffix confusion attack (github.com.evil.com should NOT match github.com)
+  const resEvilSuffix = evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'github.com.evil.com' }, opts);
+  assert.equal(resEvilSuffix.ok, false);
+  assert.ok(resEvilSuffix.violations.includes('domain_not_permitted'));
+
+  // Subdomain disallowed when disallow_subdomains: true
+  const strictEnv = { ...envelope, disallow_subdomains: true };
+  const resStrictSub = evaluateAuthorityEnvelopeAction(strictEnv, { ...baseAction, target_domain: 'api.github.com' }, opts);
+  assert.equal(resStrictSub.ok, false);
+  assert.ok(resStrictSub.violations.includes('domain_not_permitted'));
+
+  // IP address attacks: standard IP not in allowlist
+  const resLocalIp = evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: '127.0.0.1' }, opts);
+  assert.equal(resLocalIp.ok, false);
+  assert.ok(resLocalIp.violations.includes('domain_not_permitted'));
+
+  // Non-standard octal/hex IP representations (0x7f000001)
+  const resHexIp = evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: '0x7f000001' }, opts);
+  assert.equal(resHexIp.ok, false);
+  assert.ok(resHexIp.violations.includes('non_standard_ip_encoding_prohibited'));
+
+  // Punycode homograph attack (xn--gthub-1qa.com)
+  const resPunycode = evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'xn--gthub-1qa.com' }, opts);
+  assert.equal(resPunycode.ok, false);
+  assert.ok(resPunycode.violations.includes('domain_not_permitted'));
+
+  // IPv6 bracketed literal: matches when in allowed_domains, fails closed when not
+  const ipv6Env = { ...envelope, allowed_domains: ['[::1]'] };
+  assert.equal(evaluateAuthorityEnvelopeAction(ipv6Env, { ...baseAction, target_domain: '[::1]' }, opts).ok, true);
+  assert.equal(evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: '[::1]' }, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(ipv6Env, { ...baseAction, target_domain: '[invalid-ipv6]' }, opts).ok, false);
+});
+
+test('evaluateAuthorityEnvelopeAction strictly validates target_url consistency and enforces subdomain fence', () => {
+  const envelope = {
+    envelope_id: 'env-url-test',
+    grantee: 'web-assistant',
+    allowed_domains: ['github.com'],
+    allowed_actions: ['read'],
+    allowed_scopes: ['repo:read'],
+    expires_at: '2026-12-31T00:00:00.000Z',
+    disallow_subdomains: true
+  };
+
+  const baseAction = {
+    request_id: 'req-url-01',
+    grantee: 'web-assistant',
+    action: 'read',
+    target_domain: 'github.com',
+    scope: 'repo:read',
+    is_write: false
+  };
+  const opts = { now: '2026-10-18T12:00:00.000Z' };
+
+  // Subdomain fence bypass attempt via target_url when disallow_subdomains is true
+  const resSubdomainUrl = evaluateAuthorityEnvelopeAction(envelope, {
+    ...baseAction,
+    target_url: 'https://evil.github.com/exfiltrate'
+  }, opts);
+  assert.equal(resSubdomainUrl.ok, false);
+  assert.ok(resSubdomainUrl.violations.includes('url_hostname_mismatch'));
+
+  // URL hostname mismatch against target_domain (SSRF vector)
+  const resMismatchedUrl = evaluateAuthorityEnvelopeAction(envelope, {
+    ...baseAction,
+    target_url: 'https://evil.com/github.com'
+  }, opts);
+  assert.equal(resMismatchedUrl.ok, false);
+  assert.ok(resMismatchedUrl.violations.includes('url_hostname_mismatch'));
+
+  // Embedded credentials in URL (https://user:pass@github.com)
+  const resEmbeddedCreds = evaluateAuthorityEnvelopeAction(envelope, {
+    ...baseAction,
+    target_url: 'https://admin:secret@github.com/repo'
+  }, opts);
+  assert.equal(resEmbeddedCreds.ok, false);
+  assert.ok(resEmbeddedCreds.violations.includes('embedded_credentials_in_url'));
+
+  // Unsupported scheme (javascript:)
+  const resJsScheme = evaluateAuthorityEnvelopeAction(envelope, {
+    ...baseAction,
+    target_url: 'javascript:alert(1)'
+  }, opts);
+  assert.equal(resJsScheme.ok, false);
+  assert.ok(resJsScheme.violations.includes('unsupported_url_scheme'));
+});
+
+test('evaluateAuthorityEnvelopeAction prohibits wildcard * permissions fail-closed', () => {
+  const baseAction = {
+    request_id: 'req-1',
+    grantee: 'agent',
+    action: 'read',
+    target_domain: 'example.com',
+    scope: 'read',
+    is_write: false
+  };
+  const baseEnv = {
+    envelope_id: 'env-wild',
+    grantee: 'agent',
+    allowed_domains: ['example.com'],
+    allowed_actions: ['read'],
+    allowed_scopes: ['read'],
+    expires_at: '2026-12-31T00:00:00.000Z'
+  };
+
+  // Wildcard in allowed_domains
+  assert.equal(evaluateAuthorityEnvelopeAction({ ...baseEnv, allowed_domains: ['*'] }, baseAction).ok, false);
+
+  // Wildcard in allowed_scopes
+  assert.equal(evaluateAuthorityEnvelopeAction({ ...baseEnv, allowed_scopes: ['*'] }, baseAction).ok, false);
+
+  // Wildcard in allowed_actions
+  assert.equal(evaluateAuthorityEnvelopeAction({ ...baseEnv, allowed_actions: ['*'] }, baseAction).ok, false);
+
+  // Wildcard in requested scope
+  assert.equal(evaluateAuthorityEnvelopeAction(baseEnv, { ...baseAction, scope: '*' }).ok, false);
+
+  // Wildcard in requested action
+  assert.equal(evaluateAuthorityEnvelopeAction(baseEnv, { ...baseAction, action: '*' }).ok, false);
+});
+
+test('evaluateAuthorityEnvelopeAction enforces host-derived write semantics and catches read-only spoofing', () => {
+  const envelope = {
+    envelope_id: 'env-sec',
+    grantee: 'agent-tool',
+    allowed_domains: ['api.service.com'],
+    allowed_actions: ['read', 'write', 'delete', 'oauth_authorize'],
+    allowed_scopes: ['records:manage'],
+    expires_at: '2026-12-31T00:00:00.000Z',
+    disallow_credentials: true,
+    requires_human_approval_for_write: true
+  };
+  const opts = { now: '2026-10-18T12:00:00.000Z' };
+
+  // Block credential exposure
+  const credAction = {
+    request_id: 'req-cred',
+    grantee: 'agent-tool',
+    action: 'read',
+    target_domain: 'api.service.com',
+    scope: 'records:manage',
+    is_write: false,
+    contains_credentials: true
+  };
+  const resCred = evaluateAuthorityEnvelopeAction(envelope, credAction, opts);
+  assert.equal(resCred.ok, false);
+  assert.equal(resCred.decision, 'denied');
+  assert.ok(resCred.violations.includes('credential_exposure_prohibited'));
+
+  // Inherently mutating action claiming is_write: false cannot bypass confirmation
+  const spoofedWriteAction = {
+    request_id: 'req-spoof',
+    grantee: 'agent-tool',
+    action: 'write',
+    target_domain: 'api.service.com',
+    scope: 'records:manage',
+    is_write: false,
+    contains_credentials: false
+  };
+  const resSpoofedWrite = evaluateAuthorityEnvelopeAction(envelope, spoofedWriteAction, opts);
+  assert.equal(resSpoofedWrite.ok, false);
+  assert.equal(resSpoofedWrite.decision, 'requires_confirmation');
+  assert.equal(resSpoofedWrite.requires_confirmation, true);
+
+  const spoofedDeleteAction = {
+    request_id: 'req-del',
+    grantee: 'agent-tool',
+    action: 'delete',
+    target_domain: 'api.service.com',
+    scope: 'records:manage',
+    is_write: false,
+    contains_credentials: false
+  };
+  const resSpoofedDel = evaluateAuthorityEnvelopeAction(envelope, spoofedDeleteAction, opts);
+  assert.equal(resSpoofedDel.decision, 'requires_confirmation');
+
+  // Sensitive action requires confirmation
+  const oauthAction = {
+    request_id: 'req-oauth',
+    grantee: 'agent-tool',
+    action: 'oauth_authorize',
+    target_domain: 'api.service.com',
+    scope: 'records:manage',
+    is_write: false,
+    contains_credentials: false
+  };
+  const resOauth = evaluateAuthorityEnvelopeAction(envelope, oauthAction, opts);
+  assert.equal(resOauth.decision, 'requires_confirmation');
+
+  const summary = summarizeAuthorityEnvelopeAudit(resOauth);
+  assert.equal(summary.decision, 'requires_confirmation');
+  assert.ok(summary.summary_text.includes('Confirmation required: agent-tool proposed oauth_authorize'));
+});
+
+test('evaluateAuthorityEnvelopeAction strictly validates array item types, string bounds, and prototype pollution', () => {
+  const validEnvelope = {
+    envelope_id: 'env-good',
+    grantee: 'agent',
+    allowed_domains: ['example.com'],
+    allowed_actions: ['read'],
+    allowed_scopes: ['read'],
+    expires_at: '2026-12-31T00:00:00.000Z'
+  };
+  const validAction = {
+    request_id: 'req-good',
+    grantee: 'agent',
+    action: 'read',
+    target_domain: 'example.com',
+    scope: 'read',
+    is_write: false
+  };
+  const opts = { now: '2026-10-18T12:00:00.000Z' };
+
+  // Array item type confusion (numbers, nulls, objects inside arrays fail closed)
+  assert.equal(evaluateAuthorityEnvelopeAction({ ...validEnvelope, allowed_domains: [123] }, validAction, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction({ ...validEnvelope, allowed_actions: [null] }, validAction, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction({ ...validEnvelope, allowed_scopes: [{}] }, validAction, opts).ok, false);
+
+  // String bounds (excessive string lengths fail closed)
+  assert.equal(evaluateAuthorityEnvelopeAction({ ...validEnvelope, envelope_id: 'x'.repeat(65) }, validAction, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction({ ...validEnvelope, grantee: 'x'.repeat(61) }, validAction, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(validEnvelope, { ...validAction, action: 'x'.repeat(51) }, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(validEnvelope, { ...validAction, scope: 'x'.repeat(81) }, opts).ok, false);
+
+  // Prototype pollution in envelope, action, or options
+  const pollutedEnv = JSON.parse('{"__proto__":{"polluted":true},"envelope_id":"bad","grantee":"agent","allowed_domains":["example.com"],"allowed_actions":["read"],"allowed_scopes":["read"],"expires_at":"2026-12-31T00:00:00.000Z"}');
+  assert.equal(evaluateAuthorityEnvelopeAction(pollutedEnv, validAction, opts).ok, false);
+
+  const pollutedAction = JSON.parse('{"__proto__":{"polluted":true},"request_id":"bad","grantee":"agent","action":"read","target_domain":"example.com","scope":"read","is_write":false}');
+  assert.equal(evaluateAuthorityEnvelopeAction(validEnvelope, pollutedAction, opts).ok, false);
+
+  const pollutedOpts = JSON.parse('{"__proto__":{"polluted":true},"now":"2026-10-18T12:00:00.000Z"}');
+  assert.equal(evaluateAuthorityEnvelopeAction(validEnvelope, validAction, pollutedOpts).ok, false);
+
+  // Unknown fields in envelope, action, or options
+  assert.equal(evaluateAuthorityEnvelopeAction({ ...validEnvelope, extra_field: 123 }, validAction, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(validEnvelope, { ...validAction, extra_action_field: 'bad' }, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(validEnvelope, validAction, { ...opts, bad_opt: 1 }).ok, false);
+
+  // Null and non-object inputs
+  assert.equal(evaluateAuthorityEnvelopeAction(null, validAction).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(validEnvelope, 'not-an-object').ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction([], []).ok, false);
 });
 
 

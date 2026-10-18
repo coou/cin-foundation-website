@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=3';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit, evaluateAuthorityEnvelopeAction, summarizeAuthorityEnvelopeAudit } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -413,6 +413,8 @@ if (wipeBtn) wipeBtn.onclick = () => {
   const ctxBox = document.getElementById('context-assembly-result'); if (ctxBox) ctxBox.textContent = '';
   const visBox = document.getElementById('visual-audit-result'); if (visBox) visBox.textContent = '';
   const visForm = document.getElementById('audit-visual-action'); if (visForm) visForm.reset();
+  const authEnvBox = document.getElementById('authority-envelope-result'); if (authEnvBox) authEnvBox.textContent = '';
+  const authEnvForm = document.getElementById('audit-authority-envelope'); if (authEnvForm) authEnvForm.reset();
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
@@ -1014,6 +1016,73 @@ function renderVisualAuditorInspector() {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderReceiptInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler(); renderCapabilityInspector(); renderVisualAuditorInspector();
+function renderAuthorityEnvelopeInspector() {
+  const form = document.getElementById('audit-authority-envelope');
+  const resultBox = document.getElementById('authority-envelope-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+    const grantee = form.elements.grantee ? form.elements.grantee.value.trim().slice(0, 60) : '';
+    const targetDomain = form.elements.target_domain ? form.elements.target_domain.value.trim().slice(0, 100) : '';
+    const action = form.elements.action ? form.elements.action.value.trim() : 'read';
+    const scope = form.elements.scope ? form.elements.scope.value.trim().slice(0, 80) : '';
+    const isWrite = form.elements.is_write ? form.elements.is_write.checked : false;
+    const containsCredentials = form.elements.contains_credentials ? form.elements.contains_credentials.checked : false;
+
+    if (!grantee || !targetDomain || !scope) {
+      resultBox.appendChild(el('p', 'muted', 'Please provide an assistant identifier, target domain, and scope.'));
+      return;
+    }
+
+    const envelope = {
+      envelope_id: `env-${Date.now()}`,
+      grantee,
+      allowed_domains: ['github.com', 'api.github.com', 'docs.github.com'],
+      allowed_actions: ['read', 'write', 'search', 'http_get', 'oauth_authorize', 'register_webhook'],
+      allowed_scopes: ['repo:read', 'issues:read', 'docs:read'],
+      expires_at: new Date(Date.now() + 3600000).toISOString(),
+      requires_human_approval_for_write: true,
+      disallow_credentials: true
+    };
+
+    const actionRequest = {
+      request_id: `req-${Date.now()}`,
+      grantee,
+      action,
+      target_domain: targetDomain,
+      scope,
+      is_write: isWrite,
+      contains_credentials: containsCredentials
+    };
+
+    const evalRes = evaluateAuthorityEnvelopeAction(envelope, actionRequest);
+    const summary = summarizeAuthorityEnvelopeAudit(evalRes);
+
+    const p = el('p');
+    if (summary.success) {
+      p.className = 'status-ok';
+      const badge = el('strong', 'status-pass', 'Permitted by envelope. ');
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(summary.summary_text));
+      resultBox.appendChild(p);
+    } else if (summary.decision === 'requires_confirmation') {
+      p.className = 'muted';
+      const badge = el('strong', 'status-warn', '[CONFIRMATION REQUIRED] ');
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(summary.summary_text));
+      resultBox.appendChild(p);
+    } else {
+      p.className = 'muted';
+      const badge = el('strong', 'status-err', `[${summary.decision.toUpperCase()}] `);
+      p.appendChild(badge);
+      p.appendChild(document.createTextNode(summary.summary_text));
+      resultBox.appendChild(p);
+    }
+  };
+}
+
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderReceiptInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler(); renderCapabilityInspector(); renderVisualAuditorInspector(); renderAuthorityEnvelopeInspector();
 
 
