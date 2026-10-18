@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0086",
+   "added_at": "2026-10-18T06:37:25+00:00",
+   "title": "Generative tools flood software with boilerplate, driving programmers back to handcrafted local tools",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial coding assistants generate thousands of lines of code per minute, but the resulting applications are brittle and difficult to audit. In response, a growing community of developers, small businesses, and community organizers deliberately chooses compact, local-first tools running on their own laptops and phones, valuing software they can inspect, maintain, and truly understand over massive automated codebases.",
+   "premise": "When automated assistants make generating code effortless, developers notice a loss of agency and understanding. Community discussions show a growing appetite for handcrafted, local software that prioritizes human craftsmanship over delegated volume.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By demonstrating working personal twin prototypes and local runtime architectures that keep all data, configuration, and execution on the user's device, proving that personal agency does not require reliance on closed vendor infrastructure.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Autonomous code sprawl makes everyday computing unmaintainable",
+     "description": "Commercial assistants generate massive, brittle software layers that ordinary users cannot inspect, audit, or repair without paid vendor subscriptions.",
+     "example": "An independent accountant attempts to adjust a local invoice tool, but finds the assistant-generated codebase relies on dozens of undocumented cloud endpoints that fail when offline.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Personal modular tools restore transparent computing craft",
+     "description": "People use compact personal agents that run bounded, transparent utilities, preserving human-readable code and direct local ownership of daily digital tools.",
+     "example": "A community food co-operative runs its scheduling and inventory on compact, locally hosted personal tools that operate entirely offline without subscription fees.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Enterprise procurement remains locked into centralized vendor suites",
+     "description": "Large corporate and public sector procurement cycles remain dominated by multi-year cloud contracts, regardless of local software alternatives.",
+     "example": "A municipal procurement board renews a five-year vendor license for cloud-hosted office software because procurement guidelines mandate corporate indemnification that local community tools cannot provide.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://lobste.rs/s/hounpx/what_are_you_doing_this_weekend",
+     "title": "What are you doing this weekend?",
+     "kind": "forum",
+     "published": "2026-10-16"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0085",
    "added_at": "2026-10-18T04:18:22+00:00",
    "title": "Corporate continuous retraining quietly destabilizes workplace assistant alignment",
@@ -269,72 +323,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261017-0080",
-   "added_at": "2026-10-17T23:49:02+00:00",
-   "title": "Communities map automated surveillance cameras to protect freedom of movement",
-   "horizon_years": 3,
-   "world": "It is 2029. Across suburban corridors and town gateways, dense rings of private automated cameras continuously log vehicle positions, timestamps, and travel directions into centralized vendor clouds. In response, commuter rings, neighborhood associations, and courier collectives maintain verified, open geospatial layers that catalog every roadside optical sensor. When residents commute or travel between medical appointments, their personal navigation tools compute routes that minimize exposure to warrantless behavioral heatmaps. In towns like Oshkosh, municipal councils routinely require public audits of sensor networks against crowdsourced verification maps before renewing vendor contracts.",
-   "premise": "Public mapping contributors and civil liberties advocates are cataloging automated license plate readers in open geographic databases. Commercial map applications have begun incorporating crowdsourced surveillance layers, allowing drivers to view roadside tracking devices that municipal leaders were misled into purchasing.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network provides local on-device software agents with privacy-preserving geographic verification, allowing commuters to cross-check camera reports against cryptographic observations without sharing their routes. Collective simulation models quantify community exposure to tracking dragnets, helping neighborhood groups make factual presentations to municipal oversight bodies.",
-   "shift": 0.28,
-   "outcomes": [
-    {
-     "name": "Corporate surveillance networks deploy spoofed decoy sensors",
-     "description": "Commercial surveillance vendors install dummy camera housings and rotate serial numbers to flood open mapping platforms with conflicting coordinates, exhausting human volunteer validators.",
-     "example": "In northern Ohio, a logistics corridor company installs 400 fake camera shells alongside 50 live tracking lenses, triggering disputes among local mappers that degrade navigation accuracy.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Personal navigation tools route around pervasive tracking dragnets",
-     "description": "Local on-device agents combine crowdsourced sensor coordinates with private trip planning, offering privacy-preserving journeys without centralizing vehicle itineraries.",
-     "example": "A rideshare driver in Atlanta uses an on-device route planner that avoids unmonitored vendor heatmaps, keeping trip patterns private from commercial aggregators.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "State legislatures outlaw crowdsourced mapping of public sensors",
-     "description": "Lobbying coalitions push state and federal legislation to penalize the distribution of sensor location registries under the guise of public safety officer protection.",
-     "example": "A state assembly passes a statute defining the digital publication of public camera coordinates as actionable interference with automated traffic enforcement.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50129947",
-     "title": "MapQuest will now show you where Flock cameras are in your neighborhood",
-     "kind": "thread",
-     "published": "2026-10-17"
-    },
-    {
-     "url": "https://raw.githubusercontent.com/FoggedLens/deflock/master/README.md",
-     "title": "DeFlock: Crowdsourced tool for locating and reporting ALPRs",
-     "kind": "code",
-     "published": "2026-10-17"
-    },
-    {
-     "url": "https://www.aclu.org/news/privacy-technology/flock-safety-credibility-lost-as-it-repeatedly-lies-to-city-councils-police-departments-and-public-across-the-country",
-     "title": "Flock Safety Credibility Lost as it Repeatedly Lies to City Councils, Police Departments, and Public Across the Country",
-     "kind": "incident",
-     "published": "2026-07-02"
-    }
-   ],
-   "work": 0
   }
  ]
 }

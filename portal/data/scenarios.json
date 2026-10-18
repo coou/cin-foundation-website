@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0086",
+   "added_at": "2026-10-18T06:37:25+00:00",
+   "title": "Generative tools flood software with boilerplate, driving programmers back to handcrafted local tools",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial coding assistants generate thousands of lines of code per minute, but the resulting applications are brittle and difficult to audit. In response, a growing community of developers, small businesses, and community organizers deliberately chooses compact, local-first tools running on their own laptops and phones, valuing software they can inspect, maintain, and truly understand over massive automated codebases.",
+   "premise": "When automated assistants make generating code effortless, developers notice a loss of agency and understanding. Community discussions show a growing appetite for handcrafted, local software that prioritizes human craftsmanship over delegated volume.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By demonstrating working personal twin prototypes and local runtime architectures that keep all data, configuration, and execution on the user's device, proving that personal agency does not require reliance on closed vendor infrastructure.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Autonomous code sprawl makes everyday computing unmaintainable",
+     "description": "Commercial assistants generate massive, brittle software layers that ordinary users cannot inspect, audit, or repair without paid vendor subscriptions.",
+     "example": "An independent accountant attempts to adjust a local invoice tool, but finds the assistant-generated codebase relies on dozens of undocumented cloud endpoints that fail when offline.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Personal modular tools restore transparent computing craft",
+     "description": "People use compact personal agents that run bounded, transparent utilities, preserving human-readable code and direct local ownership of daily digital tools.",
+     "example": "A community food co-operative runs its scheduling and inventory on compact, locally hosted personal tools that operate entirely offline without subscription fees.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Enterprise procurement remains locked into centralized vendor suites",
+     "description": "Large corporate and public sector procurement cycles remain dominated by multi-year cloud contracts, regardless of local software alternatives.",
+     "example": "A municipal procurement board renews a five-year vendor license for cloud-hosted office software because procurement guidelines mandate corporate indemnification that local community tools cannot provide.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://lobste.rs/s/hounpx/what_are_you_doing_this_weekend",
+     "title": "What are you doing this weekend?",
+     "kind": "forum",
+     "published": "2026-10-16"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0085",
    "added_at": "2026-10-18T04:18:22+00:00",
    "title": "Corporate continuous retraining quietly destabilizes workplace assistant alignment",
@@ -3404,60 +3458,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261015-0026",
-   "added_at": "2026-10-15T18:25:38+00:00",
-   "title": "Friends' personal AI assistants build dossiers on people who never signed up",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial AI assistants run on hundreds of millions of consumer smartphones and personal laptops. When an employee or student installs an assistant, the application continuously reads their inbox, contact books, and group chat histories to schedule appointments and draft replies. As a consequence, third parties who intentionally avoid using artificial intelligence find their personal addresses, phone numbers, family photos, and private conversations ingested and cross-referenced on corporate servers. Corporate marketing platforms use these aggregated social graphs to target advertisements and score consumer creditworthiness based on the spending habits and communication patterns of their friends.",
-   "premise": "Consumer AI assistants require broad access to personal contacts, emails, and chat messages to automate daily errands. In doing so, these tools build detailed relational dossiers on friends, family members, and colleagues who never agreed to share their information.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops personal agent software designed to run strictly on user hardware. Rather than uploading raw conversation threads to central clouds, the local assistant performs redaction on-device and provides answers without sharing raw data. By demonstrating that personal assistants can automate daily tasks without harvesting third-party contacts, the network helps open-source developers and user cooperatives deploy privacy-respecting alternatives.",
-   "shift": 0.43,
-   "outcomes": [
-    {
-     "name": "Unconsented relational surveillance becomes the default",
-     "description": "Commercial assistant platforms normalize third-party contact ingestion, severely eroding digital privacy for anyone who communicates with connected friends.",
-     "example": "A job applicant is rejected after a hiring firm's assistant references private health concerns mentioned in a friend's archived group chat.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Local personal twins filter and protect third-party data",
-     "description": "Open-source personal assistants running locally sanitize outgoing communications, redacting contact information and third-party messages before consulting external services.",
-     "example": "A local twin automatically strips phone numbers, surnames, and third-party quotations before summarizing a group chat on a home workstation.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Regulatory bans on commercial contact graph aggregation",
-     "description": "Consumer protection agencies fine companies that construct shadow profiles from third-party contact lists, though cloud providers find alternative ways to infer connections.",
-     "example": "Regulators issue civil investigative demands to tech platforms, forcing them to delete contact records uploaded without direct recipient consent.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.28
-    }
-   ],
-   "pipelines": [
-    "community",
-    "policy",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theverge.com/tech/1011938/muse-ai-data-friends-consent",
-     "title": "Friends don’t let friends feed their data to AI agents",
-     "kind": "news",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 3
   }
  ]
 }
