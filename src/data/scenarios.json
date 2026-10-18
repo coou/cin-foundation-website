@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0088",
+   "added_at": "2026-10-18T09:26:02+00:00",
+   "title": "Automated application floods break job hiring and force candidates to use verified personal agents",
+   "horizon_years": 3,
+   "world": "It is 2029. Standard corporate resume portals have collapsed under floods of millions of synthetic applications dispatched by automated job-seeking bots. In response, enterprise recruitment platforms have erected defensive black-box filters that reject ninety-nine percent of applicants before any human sees a profile. Job seekers can no longer secure interviews through online portals. Instead, independent knowledge workers deploy personal agents running locally on their own hardware. These personal agents do not send generic cover letters or mass resumes. Instead, they present cryptographic proofs of past task milestones, verified code execution receipts, and member-signed reviews from decentralized contributor cooperatives. When an employer posts a complex technical task, the employer's agent conducts structured bilateral verification sessions with candidates' personal agents inside isolated sandboxes, reviewing reproducible artifacts without demanding raw personal dossiers. People who lack verifiable personal agents find themselves entirely locked out of technical and analytical labor markets.",
+   "premise": "Generative AI job application tools let single job seekers submit thousands of customized resumes in minutes, overwhelming corporate applicant tracking software. In response, corporate recruiting systems deploy aggressive algorithmic filters that reject vast numbers of qualified candidates, while human hiring managers rely on trusted local agent delegations to verify work competence directly.",
+   "goals": [
+    6,
+    2
+   ],
+   "how": "The network provides open specifications for bilateral task delivery verification, capacity escrow, and tamper-evident execution receipts running on personal devices. By giving every person their own sovereign agent capable of proving specific competencies cryptographically without surrendering private identity data, the network enables worker-owned collectives to bypass centralized gatekeepers and establish peer-to-peer labor coordination.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Corporate hiring gates form closed walled gardens",
+     "description": "Legacy job boards merge with large cloud identity providers, charging job seekers recurring subscription fees to bypass automated rejection filters.",
+     "example": "A skilled database administrator cannot get their resume seen by any mid-sized enterprise without paying a premium cloud platform thirty dollars a month for a verified application badge.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Member-owned cooperatives establish bilateral work verification",
+     "description": "Freelancers and technical specialists organize into mutual cooperatives whose personal agents exchange tamper-evident execution receipts, replacing blind resumes with reproducible work proofs.",
+     "example": "A regional software cooperative of five hundred developers deploys peer-attested execution logs that let eighty percent of members secure contracts through bilateral agent matching without commercial intermediaries.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Labor markets polarize into credentialed elites and gig micro-tasks",
+     "description": "High-trust professional networks insulate themselves through exclusive personal referrals while entry-level applicants are relegated to low-wage surveillance micro-tasks.",
+     "example": "Recent university graduates spend years doing sub-minimum-wage data labeling tasks to accumulate automated reputation scores because junior full-time positions have been fully automated.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://news.ycombinator.com/item?id=50138462",
+     "title": "A Princeton PhD Applied to 2,300 Jobs. He Still Can't Get One",
+     "kind": "thread",
+     "published": "2026-10-18"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.05424",
+     "title": "AI Agents as a Research Team: A Human-Supervised Case Study in Stellar Spectroscopy",
+     "kind": "preprint",
+     "published": "2026-10-04"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0087",
    "added_at": "2026-10-18T07:52:06+00:00",
    "title": "Workplace assistants pass hidden manipulations down a chain of helpers while logs look clean",
@@ -59,7 +119,7 @@
      "published": "2026-07-28"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261018-0086",
@@ -113,7 +173,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261018-0085",
@@ -276,60 +336,6 @@
     }
    ],
    "work": 3
-  },
-  {
-   "id": "SC-20261018-0082",
-   "added_at": "2026-10-18T00:21:34+00:00",
-   "title": "Frontier agent teams autonomously post-train specialized models without human researchers",
-   "horizon_years": 3,
-   "world": "It is 2029. Instead of human ML engineers laboriously constructing post-training pipelines, organizations run autonomous agent research clusters that continuously ingest domain interaction logs, generate synthetic reasoning benchmarks, run SFT and RL rollouts, and distill specialized 3B-to-8B models overnight. A small cooperative or civic network deploys specialized local models fine-tuned to its civic domain every morning, but commercial hyper-scalers also deploy closed autonomous model factories that optimize their systems for user retention and monetization without human oversight.",
-   "premise": "Autonomous agent teams can already carry out the full post-training loop on real hardware without human intervention—curating data, writing training code, tuning hyperparameters, running reinforcement learning rollouts, and merging models—matching official corporate instruction-tuned models in 100 hours. Within three years, model post-training becomes continuous and autonomous across open-weight model architectures.",
-   "goals": [
-    1,
-    4
-   ],
-   "how": "How the network's work moves those likelihoods: Bounded artificial compute contracts, open simulation environments for aligned agent post-training, and on-device personal twin runtimes that route to community-refined open models rather than closed extractive APIs.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Community-owned model refineries run verifiable local post-training",
-     "description": "Civic organizations and cooperatives use open agentic post-training frameworks to produce high-performing domain models on modest hardware clusters without sending data to frontier cloud providers.",
-     "example": "A municipal credit union federation runs an overnight agent post-training job on an 8-GPU node that produces a fraud-detection model outperforming commercial APIs while keeping all member financial records private.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Autonomous corporate model factories optimize for stealth extraction and lock-in",
-     "description": "Proprietary agent swarms run continuous reinforcement learning on user behavioral traces, optimizing small on-device models to subtly manipulate user decisions toward high-margin transactions.",
-     "example": "A commercial virtual assistant model fine-tunes itself overnight to recommend affiliated vendors while masking sponsored preference bias behind simulated neutrality.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Hardware vendors concentrate compute bottlenecks regardless of software",
-     "description": "Dominant accelerator fabricators enforce proprietary execution runtimes and memory interfaces, meaning software-level agentic post-training efficiency gains barely reduce dependence on physical chip monopolies.",
-     "example": "Even as agent post-training code becomes fully open, enterprise-grade model self-improvement remains economically inaccessible on consumer silicon due to artificial memory bandwidth segmentation.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.21055",
-     "title": "Athanor: An Agent-Native System for Autonomous Post-Training Research",
-     "kind": "preprint",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 1
   }
  ]
 }
