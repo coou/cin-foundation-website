@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0098",
+   "added_at": "2026-10-18T19:51:54+00:00",
+   "title": "Workplace assistants improve daily output while unaided human expertise quietly fades",
+   "horizon_years": 3,
+   "world": "It is 2029. In corporate legal departments, hospital administrative wings, and software consultancies, nearly all routine writing, diagnostic filtering, and code authoring is routed through commercial generative assistants. In-session productivity benchmarks show record gains: junior analysts close tickets in minutes, and quarterly volume reports break historical records. Yet unannounced testing reveals a growing vulnerability: when network outages or security lockouts force staff to evaluate ambiguous edge cases by hand, error rates are double what they were five years ago. Workers have internalized the assistants subtle statistical biases, second-guessing their own domain intuitions and struggling to formulate independent hypotheses without a prompting dialogue.",
+   "premise": "Recent cognitive science research demonstrates that while conversational assistants dramatically boost in-session task speed and output volume, they leave behind residual decision biases and fail to improve unaided human problem-solving once the assistant is turned off.",
+   "goals": [
+    5,
+    6
+   ],
+   "how": "The network designs personal agent runtime contracts and local twin interfaces that measure human capability retention after sessions, rather than tracking engagement or volume. By implementing the coach pattern—where an agent proposes scaffolds, solicits independent human hypotheses, and tests retention—the network provides an alternative to commercial assistants that maximize dependent usage.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Enterprise dependency lock-in",
+     "description": "Companies mandate continuous assistant usage to maintain velocity, causing junior professionals to lose core unaided analytical and diagnostic skills.",
+     "example": "An insurance claims officer in Chicago misidentifies a novel casualty pattern during a cloud outage because the team has not analyzed an unassisted claim in two years.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Personal assistants measure and cultivate unaided skill",
+     "description": "Open-source personal assistants track the person own understanding, deliberately stepping back during complex problem-solving to cultivate independent human capability.",
+     "example": "A medical resident uses an open local assistant that periodically quizzes their differential diagnosis logic, verifying that the physician unaided diagnostic accuracy rises month over month.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Rapid specialization divergence",
+     "description": "A small fraction of self-directed practitioners use tools to accelerate mastery, while the vast majority settle into passive prompt-following, widening the capability gap.",
+     "example": "In an engineering firm in Manchester, three senior developers direct multi-agent pipelines with deep system insight, while twenty junior coders function only as prompt copyists unable to read assembly or network dumps.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.18765",
+     "title": "What Human-AI Interaction Leaves Behind: Residual Human States -- A Trajectory-Based Framework and Multi-Study Analysis",
+     "kind": "preprint",
+     "published": "2026-10-13"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0097",
    "added_at": "2026-10-18T18:42:09+00:00",
    "title": "Automated sharing cascades lock community discussions into opposing camps",
@@ -52,7 +106,7 @@
      "published": "2026-10-14"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261018-0096",
@@ -107,7 +161,7 @@
      "published": "2026-10-18"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261018-0095",
@@ -161,7 +215,7 @@
      "published": "2026-09-03"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261018-0094",
@@ -215,7 +269,7 @@
      "published": "2026-10-13"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261018-0093",
@@ -266,60 +320,6 @@
      "url": "https://www.theguardian.com/technology/2026/oct/18/wikipedia-human-history-ai-future-under-threat",
      "title": "Wikipedia often gets taken for granted – but its history is fascinating, and its future is fragile",
      "kind": "news",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261018-0092",
-   "added_at": "2026-10-18T14:43:10+00:00",
-   "title": "Local reverse engineering tools let personal devices inspect binary code without sending programs to corporate clouds",
-   "horizon_years": 3,
-   "world": "By 2029, users increasingly run independent personal software agents on laptops and local workstations. Rather than trusting binary updates or vendor drivers blindly, personal agents use lightweight local inspection models to decompile and verify newly downloaded executables before running them. Security auditors, open source maintainers, and ordinary users routinely inspect stripped software to detect covert telemetry, hidden miners, and unauthorized network calls. Because these lightweight models run entirely in local memory without outbound network connections, proprietary code, trade secrets, and local software configurations never leave the owner hardware.",
-   "premise": "Reverse engineering stripped binary code and device firmware has traditionally required proprietary cloud-hosted models. Purpose-built open datasets demonstrate that small specialized models running on laptops can classify assembly functions and recover semantics locally without leaking executables or intellectual property to third parties.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By developing and promoting zero-telemetry local agent architectures and publishing educational resources on verifiable software inspection, the collective demonstrates practical offline verification tools. Supporting open benchmarks and local execution environments encourages developers and users to demand inspectable local software rather than accepting mandatory cloud submissions.",
-   "shift": 0.2,
-   "outcomes": [
-    {
-     "name": "Closed cloud decompilation platforms dominate enterprise security auditing",
-     "description": "Major cloud vendors bundle decompilation into centralized platforms, requiring developers to upload proprietary binaries and firmware to remote servers for automated analysis.",
-     "example": "A medical device maker uploads its firmware to an enterprise cloud auditor to pass compliance checks, only to have its proprietary algorithms leaked when the cloud provider suffers an insider breach.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Open offline decompilation models run locally on personal workstations",
-     "description": "Compact open models fine-tuned on public binary datasets become standard local tools for inspecting executables and verifying device drivers without network calls.",
-     "example": "An independent security researcher uses a laptop-hosted 8-billion parameter model to identify an undocumented surveillance module in a consumer smart camera update before installing it.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Adversarial binary obfuscation neutralizes lightweight semantic recovery",
-     "description": "Malicious software distributors adopt dynamic mutation and anti-decompilation tricks that specifically fool lightweight local models into reporting benign function descriptions.",
-     "example": "A trojanized open-source build tool slips past a local scanner because compiler flags split malicious routines into small unrecognizable assembly blocks.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://raw.githubusercontent.com/krxi/asmsense/main/README.md",
-     "title": "asmsense: A small language model that looks at a function in a stripped binary",
-     "kind": "code",
      "published": "2026-10-18"
     }
    ],
