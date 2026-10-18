@@ -31,7 +31,7 @@
       if (!list.length) { host.appendChild(el('li', 'muted', 'The first updates are being written.')); return; }
       list.slice(0, cfg[1]).forEach(function (u) {
         var li = el('li');
-        var meta = el('span', 'upd-meta', (KIND[u.kind] || 'Update') + ' · ' + day(u.at));
+        var meta = el('span', 'upd-meta', (KIND[u.kind] || 'Update') + ' · ' + day(u.at) + (u.checked && cfg[1] > 5 ? ' · ' + u.checked : ''));
         var title = u.link ? link(u.link, u.title) : el('b', null, u.title);
         li.appendChild(meta); li.appendChild(title);
         if (cfg[1] > 5) li.appendChild(el('p', null, u.summary));
