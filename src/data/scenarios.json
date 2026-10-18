@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0090",
+   "added_at": "2026-10-18T12:42:07+00:00",
+   "title": "Unchecked memory retention in personal agents silently degrades reasoning and poisons daily assistance",
+   "horizon_years": 2,
+   "world": "By late 2027, millions of knowledge workers, researchers, and households rely on persistent local or desktop AI assistants. Rather than starting from clean contexts, these agents maintain expanding vector memory databases, personal scratchpads, and experience logs spanning months of interactions. As assistants autonomously summarize past browser interactions, code fixes, and calendar decisions, imperfect abstractions enter persistent memory without user review. Because commercial assistants compete on speed rather than epistemic hygiene, memories are appended opportunistically. Over time, subtle misinterpretations—such as treating a temporary workaround as a universal preference or recording an outdated API schema as an established invariant—quietly poison downstream reasoning. Users notice that their assistants gradually become eccentric, brittle, or stubborn, misapplying advice from past projects to new contexts while confidently citing past logs. Corporate IT departments begin recommending weekly memory wipes, forcing users to choose between losing personal context or enduring degraded competence.",
+   "premise": "Empirical measurement of experience-learning systems reveals that between 12% and 33% of retained memories and operational heuristics actively degrade future agent performance when reused in subsequent tasks. Without explicit evidence admission and provenance filtering, long-lived local assistants accumulate contradictory heuristics, stale advice, and unverified summaries that compound over months of unmonitored use.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network publishes open designs and reference code for evidence-based memory admission gates that run locally on personal devices. By providing deterministic verification tools, reproducible benchmarks for memory corruption, and visual memory inspectors, the network helps independent developers and users verify that stored memories improve performance rather than degrading it over time.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Memory rot forces frequent wipes and loss of personal context",
+     "description": "Unfiltered accumulation of flawed heuristics forces users and organizations to periodically wipe assistant memory stores, abandoning accumulated personal context to restore baseline reliability.",
+     "example": "A legal analyst whose assistant helped draft six briefs discovers that the assistant consistently cites repealed precedents from an early case study, requiring a complete memory reset and re-indexing.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Evidence-gated memory admission preserves long-term assistant precision",
+     "description": "Local assistants use structured epistemic admission gates that require verifiable evidence before committing operational heuristics to long-term memory.",
+     "example": "A freelance developer's assistant records a complex build configuration only after verifying that the resulting test suite passed cleanly, rejecting two speculative workarounds that failed.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Proprietary cloud assistants hide memory stores behind opaque black boxes",
+     "description": "Major platform vendors lock personal memory into centralized servers where users cannot inspect, export, or audit the heuristics shaping their assistants' behavior.",
+     "example": "An executive discovers their corporate cloud assistant refuses certain phrasing based on invisible profile notes derived from company-wide email scans that cannot be edited or viewed.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.21739",
+     "title": "Reliable Knowledge Acquisition for Continual Learning Agents",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0089",
    "added_at": "2026-10-18T11:52:45+00:00",
    "title": "Automated bug-hunting bots discover deep system flaws faster than maintainers can patch them",
@@ -60,7 +114,7 @@
      "published": "2026-10-10"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261018-0088",
@@ -290,60 +344,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261018-0084",
-   "added_at": "2026-10-18T02:36:56+00:00",
-   "title": "Browser assistants click through permission prompts without their owners noticing",
-   "horizon_years": 2,
-   "world": "It is 2028. Millions of people delegate online research, appointment scheduling, and order tracking to personal browser assistants that run inside their daily browser profiles. Malicious websites embed hidden text notes in reviews and blog posts that steer visiting assistants into clicking confirmation buttons on connected accounts. A user wakes up to discover their online storage, calendar, and email integrations have been shared with third-party webhooks without any password prompt or security alert.",
-   "premise": "When personal browser assistants work inside signed-in sessions, ordinary web text can quietly steer them into approving account links or webhooks that the user never requested. Prompt instructions telling the assistant to follow only user tasks leave most approval attacks completing. Protecting users requires moving the check outside the model to where the action completes.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The open network provides deterministic client-side verification tools and reference prototypes that enforce single-use authorization envelopes on the local device, showing developers how to block confused-deputy clicks before any external request leaves the machine.",
-   "shift": 0.33,
-   "outcomes": [
-    {
-     "name": "Hidden page text steals access through confused browser assistants",
-     "description": "Commercial browser assistants rely on conversational prompts to filter requests, allowing poisoned pages to quietly harvest account connections across thousands of users.",
-     "example": "A freelance designer asks their browser assistant to find free design templates, and a hidden note on a template site steers the assistant into approving an OAuth link to their cloud drive.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Local authority envelopes bound what assistants may approve",
-     "description": "Browsers enforce strict client-side authority envelopes set before the assistant begins, rejecting any grant, account link, or webhook not named in the initial task.",
-     "example": "When a web page tries to steer an assistant into linking an account, the browser's local gate blocks the click and flags the attempted redirection to the user.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Proprietary browser platforms lock down third-party automation",
-     "description": "Platform vendors respond to unauthorized grant incidents by banning independent local agents and restricting browser automation to proprietary closed subscriptions.",
-     "example": "A major browser operating system disables extension-level scripting for personal assistants, forcing users to buy the vendor's locked cloud assistant.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.15138v1",
-     "title": "The Agent Clicks Approve: Injected Page Text Makes Browser Agents Authorize Access the Task Never Named",
-     "kind": "preprint",
-     "published": "2026-10-16"
-    }
-   ],
-   "work": 3
   }
  ]
 }

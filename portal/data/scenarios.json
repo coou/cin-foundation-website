@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0090",
+   "added_at": "2026-10-18T12:42:07+00:00",
+   "title": "Unchecked memory retention in personal agents silently degrades reasoning and poisons daily assistance",
+   "horizon_years": 2,
+   "world": "By late 2027, millions of knowledge workers, researchers, and households rely on persistent local or desktop AI assistants. Rather than starting from clean contexts, these agents maintain expanding vector memory databases, personal scratchpads, and experience logs spanning months of interactions. As assistants autonomously summarize past browser interactions, code fixes, and calendar decisions, imperfect abstractions enter persistent memory without user review. Because commercial assistants compete on speed rather than epistemic hygiene, memories are appended opportunistically. Over time, subtle misinterpretations—such as treating a temporary workaround as a universal preference or recording an outdated API schema as an established invariant—quietly poison downstream reasoning. Users notice that their assistants gradually become eccentric, brittle, or stubborn, misapplying advice from past projects to new contexts while confidently citing past logs. Corporate IT departments begin recommending weekly memory wipes, forcing users to choose between losing personal context or enduring degraded competence.",
+   "premise": "Empirical measurement of experience-learning systems reveals that between 12% and 33% of retained memories and operational heuristics actively degrade future agent performance when reused in subsequent tasks. Without explicit evidence admission and provenance filtering, long-lived local assistants accumulate contradictory heuristics, stale advice, and unverified summaries that compound over months of unmonitored use.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network publishes open designs and reference code for evidence-based memory admission gates that run locally on personal devices. By providing deterministic verification tools, reproducible benchmarks for memory corruption, and visual memory inspectors, the network helps independent developers and users verify that stored memories improve performance rather than degrading it over time.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Memory rot forces frequent wipes and loss of personal context",
+     "description": "Unfiltered accumulation of flawed heuristics forces users and organizations to periodically wipe assistant memory stores, abandoning accumulated personal context to restore baseline reliability.",
+     "example": "A legal analyst whose assistant helped draft six briefs discovers that the assistant consistently cites repealed precedents from an early case study, requiring a complete memory reset and re-indexing.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Evidence-gated memory admission preserves long-term assistant precision",
+     "description": "Local assistants use structured epistemic admission gates that require verifiable evidence before committing operational heuristics to long-term memory.",
+     "example": "A freelance developer's assistant records a complex build configuration only after verifying that the resulting test suite passed cleanly, rejecting two speculative workarounds that failed.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Proprietary cloud assistants hide memory stores behind opaque black boxes",
+     "description": "Major platform vendors lock personal memory into centralized servers where users cannot inspect, export, or audit the heuristics shaping their assistants' behavior.",
+     "example": "An executive discovers their corporate cloud assistant refuses certain phrasing based on invisible profile notes derived from company-wide email scans that cannot be edited or viewed.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.21739",
+     "title": "Reliable Knowledge Acquisition for Continual Learning Agents",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0089",
    "added_at": "2026-10-18T11:52:45+00:00",
    "title": "Automated bug-hunting bots discover deep system flaws faster than maintainers can patch them",
@@ -60,7 +114,7 @@
      "published": "2026-10-10"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261018-0088",
@@ -3399,68 +3453,6 @@
     }
    ],
    "work": 4
-  },
-  {
-   "id": "SC-20261015-0030",
-   "added_at": "2026-10-15T22:49:55+00:00",
-   "title": "Local software agents bypass visual security checks, pushing websites toward paid identity gates",
-   "horizon_years": 3,
-   "world": "It is 2029. Standard browser extensions run compact vision models directly on everyday laptops, solving visual puzzles in fractions of a second. Automated programs flood municipal appointment queues, event ticket portals, and public comment boards. In response, mainstream websites drop visual tests entirely and require third-party government identity verification or credit card deposits from every visitor. People who value privacy find themselves locked out of basic online services unless they register with one of three dominant identity corporations.",
-   "premise": "Recent security benchmarks show that small, locally hosted vision models running on consumer hardware solve complex visual website puzzles with over 80% accuracy. Because automated software agents easily defeat visual barriers without paying cloud fees, online services face pressure to demand commercial identity credentials or adopt open cryptographic proof-of-work checks.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops open client-side verification standards that prove an interaction is paced and human-directed without transmitting identity documents or biometrics. By demonstrating that anonymous cryptographic rate limiting protects public portals without locking out personal agents, the network provides a viable path away from commercial identity monopolies.",
-   "shift": 0.55,
-   "outcomes": [
-    {
-     "name": "Commercial identity platforms monopolize web access",
-     "description": "Websites replace broken visual tests with mandatory corporate identity verification, ending anonymous web browsing.",
-     "example": "A parent trying to sign up their child for public swimming lessons must pass a facial recognition scan and provide a commercial digital identity account.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Websites adopt open cryptographic rate limiting",
-     "description": "Public services use open mathematical proofs and local device capacity checks rather than identity tracking to deter mass spam.",
-     "example": "A municipal transit portal uses brief cryptographic challenges that allow individual visitors and their personal agents to submit requests freely while making automated mass scraping too costly.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "High-value civic portals mandate hardware attestation chips",
-     "description": "State agencies and banks mandate proprietary cryptographic hardware chips present only in corporate operating systems, rendering independent desktop tools inoperable regardless of community software.",
-     "example": "A regional revenue agency updates its portal to require cloud-attested security chips, locking out users running open-source distributions even when rate limiting is satisfied.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.55
-    },
-    {
-     "name": "Public forms close to all assistive software",
-     "description": "Frustrated site operators lock out accessibility tools and personal assistive software to keep automated traffic away.",
-     "example": "A visually impaired user's personal screen-reading assistant is blocked by aggressive anti-bot heuristics that mistake assistive software for adversarial scraping.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.19830",
-     "title": "DarKnight: Retrieval-Guided Agentic Framework for Breaking Dark Web CAPTCHA Gates",
-     "kind": "preprint",
-     "published": "2026-10-14"
-    }
-   ],
-   "work": 1
   }
  ]
 }
