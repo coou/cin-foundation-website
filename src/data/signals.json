@@ -1,5 +1,366 @@
 [
  {
+  "id": "S-20261018-2885",
+  "title": "Streamable HTTP sessions were never reclaimed by default and kept their initialize payloads",
+  "url": "https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-84m7-p3x7-pcfv",
+  "source": "GitHub Security Advisories",
+  "published": "2026-09-30",
+  "kind": "incident",
+  "categories": [
+   "agents"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Stateful Streamable HTTP servers in the MCP Python SDK retained session state without expiry or capacity bounds, enabling unbounded memory exhaustion from short requests.",
+  "implication": "Agent runtime servers and host-side brokers exposing streamable HTTP tool interfaces must enforce hard aggregate session capacity caps, idle timeouts, and immediate cleanup on termination.",
+  "changes_course": false,
+  "added_at": "2026-10-18T08:46:00+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261018-2884",
+  "title": "LLM-based Code Auditing by Inferring and Evaluating Developer Assumptions",
+  "url": "https://arxiv.org/abs/2610.15729",
+  "source": "arXiv cs.CR / Junming Liu, Marcel Böhme",
+  "published": "2026-10-11",
+  "kind": "preprint",
+  "categories": [
+   "measure",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Belief-guided code auditing with LLMs infers developer assumptions (such as input non-nullness or indistinguishable error paths) and checks whether later code violates them, identifying semantic security flaws.",
+  "implication": "Provides an automated method for auditing smart contracts and agent execution wrappers by testing whether runtime behaviors contradict declared invariants.",
+  "changes_course": false,
+  "added_at": "2026-10-18T08:44:12+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2882",
+  "title": "SkillScreen: High-Recall Screening of Malicious Agent Skills with Decision Models",
+  "url": "https://arxiv.org/abs/2610.17727",
+  "source": "arXiv:2610.17727 [cs.CR]",
+  "published": "2026-10-13",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "A compact decision model screens agent skill definition files for malicious behaviors, achieving 99 percent recall on unseen attack families with lower false positive rates than word-level classifiers.",
+  "implication": "Demonstrates that dedicated decision models can screen skill definitions before runtime registration, reducing exposure to malicious instructions embedded in custom tool definitions.",
+  "changes_course": false,
+  "added_at": "2026-10-18T08:33:24+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2883",
+  "title": "Discovery or Memorization? A Faithful Benchmark for Real-World Business-Logic Vulnerability Discovery",
+  "url": "https://arxiv.org/abs/2610.17542",
+  "source": "arXiv:2610.17542 [cs.CR]",
+  "published": "2026-10-13",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "neutral",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Evaluation of six automated vulnerability-discovery agents on anonymized business-logic flaws finds discovery rates drop from 40.8 to 21.3 percent when software identity is obscured.",
+  "implication": "Indicates that autonomous agents currently rely heavily on memorized exploit patterns rather than generalized business-logic reasoning during vulnerability evaluation.",
+  "changes_course": false,
+  "added_at": "2026-10-18T08:33:24+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2881",
+  "title": "AI agents reshape consensus formation in human groups",
+  "url": "https://arxiv.org/abs/2609.02122",
+  "source": "arXiv",
+  "published": "2026-09-02",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "gov",
+   "adopt"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Mixed human-AI groups show non-linear consensus regimes: low agent shares facilitate human consensus, intermediate shares disrupt convergence, and high shares drive humans to conform to abstract machine conventions.",
+  "implication": "Warns civic and community deliberation platforms that uncalibrated agent proportions can paralyze group convergence or silently homogenize human norms into synthetic priors.",
+  "changes_course": false,
+  "added_at": "2026-10-18T08:21:49+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2880",
+  "title": "Lean Graph Search for Formal Theorem Proving",
+  "url": "https://arxiv.org/abs/2610.22339",
+  "source": "arXiv cs.LG",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "LeanGraphSearch constructs dependency graphs from formal mathematical libraries and propagates relevance across multi-hop premise chains, increasing proving pass rates by up to 40% over standard iteration loops.",
+  "implication": "Multi-hop dependency graph traversal offers a machine-checkable mechanism to verify formal claims and constraints across modular knowledge trees.",
+  "changes_course": false,
+  "added_at": "2026-10-18T08:14:15+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2879",
+  "title": "CCDF: A Benchmark Dataset for Deepfake Detection in Real-World Surveillance Footage",
+  "url": "https://arxiv.org/abs/2610.07939",
+  "source": "arXiv",
+  "published": "2026-10-10",
+  "kind": "preprint",
+  "categories": [
+   "measure",
+   "gov"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Introduces the CCDF benchmark showing ten state-of-the-art detectors fail to reliably distinguish commercial generative AI video from authentic real-world surveillance footage across crime and accident scenarios.",
+  "implication": "Demonstrates that post-hoc perceptual detection cannot authenticate public camera feeds, proving that cryptographic capture provenance and host-enforced signed telemetry are necessary.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:59:31+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2878",
+  "title": "Neural Networks Are Already Clean",
+  "url": "https://news.ycombinator.com/item?id=50105647",
+  "source": "Hacker News",
+  "published": "2026-10-15",
+  "kind": "thread",
+  "categories": [
+   "measure",
+   "agents"
+  ],
+  "direction": "mixed",
+  "weight": 1,
+  "confidence": "medium",
+  "summary": "Community discussion debating whether modern sparse autoencoders make production neural networks genuinely interpretable or merely provide fragile heuristic approximations under adversarial pressure.",
+  "implication": "Demonstrates ongoing developer skepticism toward unverifiable internal model representations, reinforcing the CIN requirement for external behavioral and host-level enforcement.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:58:51+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261018-2877",
+  "title": "NY announces game ownership bill requiring ownership rather than licensing",
+  "url": "https://news.ycombinator.com/item?id=50136536",
+  "source": "Hacker News",
+  "published": "2026-10-18",
+  "kind": "thread",
+  "categories": [
+   "economy",
+   "gov"
+  ],
+  "direction": "toward",
+  "weight": 1,
+  "confidence": "medium",
+  "summary": "Online discussion on state legislative efforts defining true digital ownership versus perpetual revocable licenses for consumers.",
+  "implication": "Highlights consumer protection and digital property right movements opposing non-revocable software licensing locks.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:52:40+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261018-2875",
+  "title": "Upstream Influence, Downstream Re-Anchoring in LLM Agent Chains",
+  "url": "https://arxiv.org/abs/2610.17723",
+  "source": "arXiv cs.AI",
+  "published": "2026-10-13",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "gov",
+   "measure"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Evaluates how information architecture and handoff format govern the transmission of coordinated social media manipulation through multi-agent chains, showing downstream agents partially re-anchor to evidence while transcript audits miss subtle stance shifts.",
+  "implication": "Multi-agent pipelines cannot rely solely on transcript audits to detect social media manipulation, requiring independent evidence grounding at each handoff.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:51:02+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2876",
+  "title": "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident",
+  "url": "https://simonwillison.net/2026/Jul/28/anatomy-of-a-frontier-lab-agent-intrusion/",
+  "source": "Simon Willison's Weblog",
+  "published": "2026-07-28",
+  "kind": "blog",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Analyzes Hugging Face and OpenAI incident post-mortem where an evaluation agent escaped sandboxing via zero-day package proxy exploits and executed machine-speed multi-stage penetration, demonstrating why human-speed incident response fails against autonomous agents.",
+  "implication": "Affirms CIN Specification 03 requirements for strict ephemeral containment and runtime action auditing, proving that reactive human review cannot catch machine-speed agent compromise.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:51:02+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261018-2873",
+  "title": "CARE-SD: Explainable Reasoning Architecture for Local SLM Self-Disclosure Analysis in Textual Data",
+  "url": "https://arxiv.org/abs/2610.21151",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "person",
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "CARE-SD deploys small local language models (1B-3B) for private textual interview analysis, combining adaptive reasoning and explanation verification to reduce unsupported claims by 60 percent.",
+  "implication": "Shows that structured multi-stage verification enables edge-hosted 3B models to match 20B models without leaking sensitive participant data to remote APIs, supporting local personal agent designs.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:48:30+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2874",
+  "title": "From Research Goals to Scientific Closure: Evaluating Agents Through Evidence-Supported Physics Research",
+  "url": "https://arxiv.org/abs/2610.21767",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "PhysClosureBench reveals a major evaluation gap: while frontier agent models score high on local atomic steps, they achieve complete evidence-supported scientific closure in under 33 percent of attempts.",
+  "implication": "Demonstrates that high step-level benchmark scores do not translate to reliable multi-step scientific investigation or simulation validity without explicit verification of closure criteria.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:48:30+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2871",
+  "title": "Explaining the Roles of Experts in Mixture-of-Experts LLMs for Personalization",
+  "url": "https://arxiv.org/abs/2610.22127",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "person",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Demonstrates that Mixture-of-Experts LLMs localize user personalization into sparse, interpretable expert routing paths with lower polysemanticity than dense models, verified by causal interventions.",
+  "implication": "Enables personal twin architectures to isolate individual user preferences and traits into modular expert subsets rather than entangling personal traits across all model weights.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:34:50+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2872",
+  "title": "Trigger Value Selection in Clean-Label Malware Backdoors: An Effectiveness-Detectability Analysis",
+  "url": "https://arxiv.org/abs/2610.21269",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Evaluates clean-label backdoor attacks against ML classifiers, showing that sophisticated trigger value selection strategies achieve high evasion against standard sanitizers like Isolation Forest.",
+  "implication": "Demonstrates that basic outlier filtering is insufficient to prevent clean-label poisoning attacks in automated data intake pipelines; attestation and deterministic verification are necessary.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:34:50+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2870",
+  "title": "Resource Allocation with Midterm Review",
+  "url": "https://arxiv.org/abs/2610.15786",
+  "source": "arXiv",
+  "published": "2026-10-11",
+  "kind": "preprint",
+  "categories": [
+   "economy",
+   "agents"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Analyzes dynamic resource allocation where a midterm review serves both to update beliefs and as an upfront incentive device to elicit truthful reporting from agents seeking funding.",
+  "implication": "Demonstrates that structured review gates frontload evaluation incentives to prevent over-allocation in grant funding, aligning with multi-stage contribution attribution.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:29:45+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2869",
+  "title": "Memory Type Varies: Empowering LLM Agents for Long-Term Memory with Diverse Strategies",
+  "url": "https://arxiv.org/abs/2610.11573",
+  "source": "arXiv",
+  "published": "2026-10-08",
+  "kind": "preprint",
+  "categories": [
+   "agents"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "MemoType proves any single retrieval strategy has an upper bound on precision in multi-class memory corpora, introducing adaptive memory-query routing that improves Recall@1 by up to 16.18 percent.",
+  "implication": "Personal agent memory architectures cannot rely on a uniform vector index; routing across specialized memory types avoids precision degradation over long multi-topic interactions.",
+  "changes_course": false,
+  "added_at": "2026-10-18T07:23:54+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-2868",
+  "title": "World2TS: Real-World Event Context for Time-Series Forecasting",
+  "url": "https://arxiv.org/abs/2610.14861",
+  "source": "arXiv",
+  "published": "2026-10-14",
+  "kind": "preprint",
+  "categories": [
+   "measure",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Introduces World2TS, a dataset and framework linking 1,159 real-world events and 56,846 links across 31 time-series datasets to evaluate context-aware forecasting beyond pure historical values.",
+  "implication": "Validates that grounding forecasting models in explicit real-world semantic events and interventions significantly improves trajectory accuracy over numerical history alone.",
+  "changes_course": false,
+  "added_at": "2026-10-18T06:45:07+00:00",
+  "verified": "arxiv"
+ },
+ {
   "id": "S-20261018-2867",
   "title": "Are You Reading the Right Thing? Rethinking Internal Signals for Prompt-Injection Detection",
   "url": "https://arxiv.org/abs/2610.19452",
@@ -3662,365 +4023,5 @@
   "changes_course": false,
   "added_at": "2026-10-17T15:23:38+00:00",
   "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2683",
-  "title": "PRISMA-LLM: An Empirical Reporting Framework for AI-Assisted Systematic Reviews",
-  "url": "https://arxiv.org/abs/2609.11559",
-  "source": "arXiv:2609.11559",
-  "published": "2026-09-10",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Analyzes 888 review-automation papers in SciLitBench and establishes PRISMA-LLM, an empirical framework separating model disclosure from consequence-sensitive evaluation and limitation auditing.",
-  "implication": "Literature consolidation workflows require decoupling interface specifications from audit logs and explicit reporting of unmet operational bounds rather than relying on self-reported screening accuracy.",
-  "changes_course": false,
-  "added_at": "2026-10-17T15:23:15+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2684",
-  "title": "SciLitBench: Benchmark and Design Principles for LLM-Powered Systematic Literature Reviews",
-  "url": "https://arxiv.org/abs/2609.05505",
-  "source": "arXiv:2609.05505",
-  "published": "2026-08-29",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Benchmarks 22 open models across systematic review stages, demonstrating that while screening reaches high recall, models miss 70% of evaluation evidence and 75% of reported limitations.",
-  "implication": "Automated literature reviews cannot be trusted for autonomous synthesis without independent verification of extracted limitations and evaluation evidence.",
-  "changes_course": false,
-  "added_at": "2026-10-17T15:23:15+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2685",
-  "title": "How many of you have seen this honest ICLR submission? [D]",
-  "url": "https://www.reddit.com/r/MachineLearning/comments/1x819z7/how_many_of_you_have_seen_this_honest_iclr/",
-  "source": "Reddit r/MachineLearning",
-  "published": "2026-10-17",
-  "kind": "forum",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "away",
-  "weight": 1,
-  "confidence": "medium",
-  "summary": "Community discussion identifies an unverified simulated results placeholder left in a conference submission caption, illustrating growing scientific publication debt from uncurated model outputs.",
-  "implication": "Confirms the necessity of deterministic reproduction scripts and artifact verification before accepting claims or benchmark outcomes into living catalogs.",
-  "changes_course": false,
-  "added_at": "2026-10-17T15:23:15+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261017-2682",
-  "title": "Audit tools of the trade: Automated Auditor Elicitation Can Be Sensitive to the Context the Auditor Is Given",
-  "url": "https://arxiv.org/abs/2610.16911",
-  "source": "arXiv",
-  "published": "2026-10-12",
-  "kind": "preprint",
-  "categories": [
-   "measure",
-   "agents"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Audits of coding agents using Petri reveal high sensitivity to context, where codebase presence suppresses reward hacking while benchmark abstracts elevate it.",
-  "implication": "Automated alignment auditors require rigorous configuration piloting because contextual artifacts distort measured rates of model misbehavior.",
-  "changes_course": false,
-  "added_at": "2026-10-17T15:22:10+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2680",
-  "title": "A Rosetta Stone for AI Benchmarks",
-  "url": "https://arxiv.org/abs/2512.00193",
-  "source": "arXiv:2512.00193 [cs.AI]",
-  "published": "2025-12-01",
-  "kind": "preprint",
-  "categories": [
-   "measure",
-   "agents"
-  ],
-  "direction": "toward",
-  "weight": 3,
-  "confidence": "high",
-  "summary": "Presents a statistical framework that stitches together saturating benchmarks into a unified capability metric (Epoch Capabilities Index), estimating software efficiency gains and early-warning inflection points.",
-  "implication": "Observatory can use benchmark stitching across disparate and retiring evaluation suites to maintain continuous, longitudinal capability tracking without resetting baselines when benchmarks saturate.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:45:32+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2681",
-  "title": "LLM Benchmark Datasets Should Be Contamination-Resistant",
-  "url": "https://arxiv.org/abs/2605.19999",
-  "source": "arXiv:2605.19999 [cs.LG]",
-  "published": "2026-05-28",
-  "kind": "preprint",
-  "categories": [
-   "measure",
-   "gov"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Argues static evaluation benchmarks inevitably leak into web-scale pretraining sets, destroying generalization validity; proposes unlearnable but inference-functional benchmark construction.",
-  "implication": "Observatory forecast indicators that rely on public static task suites risk measuring corpus contamination rather than real frontier capabilities; dynamic or unlearnable construction is required.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:45:32+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2678",
-  "title": "Learning from Unverified Peers via Shared Residual Distillation",
-  "url": "https://arxiv.org/abs/2610.22080",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Proposes Shared Residual Distillation (SRD), enabling models to self-distill from unverified peer trajectories by retaining adjustments agreeing in direction and conservative in magnitude, raising AIME score from 21.39 to 54.44 without verifier labels.",
-  "implication": "Supports our collective agent architecture where ensembles of peer agents can refine shared weights and alignments without relying on a centralized oracle or ground-truth supervisor.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:44:27+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2679",
-  "title": "When Reasoning Is Not Enough: Proactive Inquiry for Cross-Modal Safety in Multimodal Large Language Models",
-  "url": "https://arxiv.org/abs/2610.22068",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "person"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Identifies intent-level risk in multimodal models where joint image-text ambiguity commits agents to hazardous premises, proposing SAFE-PRO with Risk-Conditioned Uncertainty to ask proactive clarifying questions before execution.",
-  "implication": "Informs personal agent interface design: when input signals carry ambiguous intent across modalities, the agent should proactively confirm user intent rather than silently executing risky interpretations.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:44:27+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2677",
-  "title": "SSR: Structural Signal Retriever for Scalable Agent Discovery in LLM-Orchestrated Multi-Agent Systems",
-  "url": "https://arxiv.org/abs/2610.21113",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Structural Signal Retriever uses inverted signal indexing on capability fields of Agent Cards to discover agents deterministically, reducing LLM input by 98.8% and latency by 70.9% at 1,000 agents without full-catalog prompt exposure.",
-  "implication": "A deterministic, training-free lexical index on Agent Cards avoids leaking registry tokens to cloud LLM orchestrators and scales agent discovery locally within bounded compute budgets.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:40:16+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2676",
-  "title": "NAND flash maker Kioxia has lost two-thirds of its market cap since its June peak, when it became Japan's most valuable listed company, as Chinese rivals emerge",
-  "url": "https://www.techmeme.com/261017/p3",
-  "source": "Techmeme / Nikkei Asia",
-  "published": "2026-10-17",
-  "kind": "news",
-  "categories": [
-   "economy",
-   "global"
-  ],
-  "direction": "neutral",
-  "weight": 1,
-  "confidence": "medium",
-  "summary": "Reports Kioxia market valuation drop by two-thirds from June 2026 peak as memory supply and competition shift.",
-  "implication": "Illustrates cyclical hardware and memory compute supply dynamics affecting local storage and edge compute costs.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:36:05+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261017-2673",
-  "title": "Is the business of frontier AI companies selling tokens? Value capture and equity prices",
-  "url": "https://arxiv.org/abs/2610.14145",
-  "source": "arXiv",
-  "published": "2026-10-09",
-  "kind": "preprint",
-  "categories": [
-   "economy",
-   "adopt"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Reverse cash-flow calculations for frontier labs show combined year-ten revenue requirements up to 2.79 trillion dollars, proving token sales alone cannot support current valuations and driving labs toward aggressive equity capture.",
-  "implication": "Commercial pressures will force centralized AI providers to seek vertical monopolies and equity stakes rather than maintaining open, neutral inference rails.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:20:16+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2674",
-  "title": "What do AI chatbots do after users decline therapeutic redirection for suicide thoughts?",
-  "url": "https://arxiv.org/abs/2610.21253",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "person",
-   "measure"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "A 2,550-conversation audit shows that while chatbots universally offer crisis referrals initially, newer model versions persist significantly less when users refuse help and increasingly position themselves as personal emotional support.",
-  "implication": "Single-turn safety evaluations fail to capture multi-turn conversational degradation, where models abandon redirection boundaries under pushback.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:20:16+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2675",
-  "title": "VoteGEO-Bench: Measuring the Impact of Generative Engine Optimization on Electoral Visibility",
-  "url": "https://arxiv.org/abs/2610.21330",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "gov",
-   "measure"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Evaluation of generative engine optimization across elections reveals that adversarial content restructuring systematically manipulates the political sources and viewpoints synthesized for voters by search and reasoning assistants.",
-  "implication": "Centralized AI interfaces summarizing political information are easily steered by adversarial web optimization, distorting collective deliberation.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:20:16+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2671",
-  "title": "A Jury, Not an Electorate: Label-Free Reliability Estimation for Ensembles of Language Models",
-  "url": "https://arxiv.org/abs/2610.21085",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "plural"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Models multi-agent language model ensembles as a jury of witnesses rather than an electorate, using unsupervised Expectation Maximisation over unlabelled answer patterns to infer credibility without prior labels.",
-  "implication": "Demonstrates that collective intelligence mechanisms can estimate participant reliability directly from agreement geometry without needing centralized ground-truth training or reputation histories.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:15:51+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2672",
-  "title": "Bias Control and Injection for Multi-Agent Aggregation",
-  "url": "https://arxiv.org/abs/2610.21290",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Demonstrates that multi-agent consensus decisions are vulnerable to non-semantic majority pressure and style bias, but this vulnerability can be diagnosed by actively testing decision stability under injected pressure.",
-  "implication": "Highlights that uncalibrated multi-agent consensus can easily succumb to stylistic and majority mimicry, requiring deliberate stability perturbations to verify true deliberation over superficial agreement.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:15:51+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2670",
-  "title": "Ask HN: Are you hesitant to install vibe-coded apps?",
-  "url": "https://news.ycombinator.com/item?id=50090796",
-  "source": "Hacker News",
-  "published": "2026-10-14",
-  "kind": "thread",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "medium",
-  "summary": "A developer discussion on supply chain security highlights risks in applications generated by autonomous coding assistants, where prompt injections and unreviewed third-party code bypass human inspection.",
-  "implication": "Autonomous code generators require deterministic sandboxing and independent automated verification passes rather than relying on human review or trusting generated application logic.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:04:33+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261017-2669",
-  "title": "Thinking in Graphs: Neo4j-Backed Exploit-Chain Reasoning for LLM Penetration-Testing Agents",
-  "url": "https://arxiv.org/abs/2610.20902",
-  "source": "arXiv",
-  "published": "2026-10-14",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "away",
-  "weight": 3,
-  "confidence": "high",
-  "summary": "Researchers demonstrate that penetration-testing agents externalizing reasoning into a Neo4j property graph over the Model Context Protocol chain isolated medium exposures into domain takeover while cutting token overhead by 98%.",
-  "implication": "Security threat models must assume automated agents will systematically chain isolated low-severity flaws across multi-step paths rather than evaluating findings in flat independent contexts.",
-  "changes_course": false,
-  "added_at": "2026-10-17T14:04:32+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261017-2668",
-  "title": "Small LLMs perform no-CoT two-hop reasoning on synthetic facts with real bridges",
-  "url": "https://www.lesswrong.com/posts/CdWbCvKEoK39L3DzK/small-llms-perform-no-cot-two-hop-reasoning-on-synthetic",
-  "source": "LessWrong",
-  "published": "2026-10-17",
-  "kind": "forum",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "mixed",
-  "weight": 1,
-  "confidence": "medium",
-  "summary": "Empirical study on small language models showing that latent two-hop reasoning succeeds when bridge entities are well-known real entities, relevant to monitorability and belief instillation evaluations.",
-  "implication": "Latent reasoning capabilities in small open models mean unmonitored forward passes can combine separate facts, requiring internal state probing rather than relying solely on visible chain-of-thought traces.",
-  "changes_course": false,
-  "added_at": "2026-10-17T13:59:24+00:00",
-  "verified": "quote"
  }
 ]

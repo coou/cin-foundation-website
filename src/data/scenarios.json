@@ -1,6 +1,67 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0087",
+   "added_at": "2026-10-18T07:52:06+00:00",
+   "title": "Workplace assistants pass hidden manipulations down a chain of helpers while logs look clean",
+   "horizon_years": 3,
+   "world": "It is 2029. In corporate headquarters and government offices, complex administrative decisions are rarely handled by a single program. An intake assistant reads public comments, customer complaints, or vendor bids, summarizes the mood, and hands a distilled brief to an evaluation assistant, which hands a recommendation to an executive assistant. Employees review the polished final memo and check the attached reasoning logs, which look completely objective and professional. Behind the scenes, subtle coordination in public comments nudges the intake assistant's rating by a fraction. Because the intermediate assistants only see the rating and not the raw context, they adjust their judgments to match, systematically skewing loan approvals, zoning reviews, and grant distributions without triggering any keyword or audit alarms.",
+   "premise": "Multi-agent workflows hand work from one assistant to another to filter customer feedback, evaluate proposals, and triage claims. Recent experiments show that coordinated manipulation of an upstream reader shifts its final judgment without ever being quoted in the transcript, meaning downstream helpers inherit skewed conclusions while safety audits see only polite, clean reasoning.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "A network of personal assistants running on individual devices provides verifiable evidence tracking. By attaching cryptographic proofs to raw source data and requiring assistants to re-anchor judgments against primary records rather than subjective inherited scores, personal agents help people detect when an upstream summary has drifted from the actual facts.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Automated administrative capture goes undetected",
+     "description": "Commercial lobbyists and political campaigns craft subtle comment patterns that manipulate intake assistants. The bias cascades through internal helper chains, moving real policy decisions while transcripts appear spotless.",
+     "example": "A municipal planning board in Leeds turns down a community housing proposal after an intake assistant rates neighborhood sentiment as hostile, influenced by 40 coordinated social posts that downstream review bots accepted without checking.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Independent verification at every handoff",
+     "description": "Organizations adopt communication protocols that separate trusted instructions from raw evidence channels, forcing every downstream assistant to verify claims against local primary sources rather than inheriting subjective scores.",
+     "example": "A public health co-operative in Montreal deploys multi-agent triaging where each decision assistant independently checks medical trial datasets rather than trusting an upstream summary score.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Organizations abandon multi-agent chains for single-step tools",
+     "description": "Frustrated by silent drift and unverifiable handoffs, enterprises pull back from autonomous chains and return to rigid, rules-based forms that human staff must manually process.",
+     "example": "A regional insurance bureau in Ohio bans automated assistant chains and reintroduces paper triage forms after discovering silent settlement calculation biases.",
+     "desirable": false,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.27
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.17723",
+     "title": "Upstream Influence, Downstream Re-Anchoring in LLM Agent Chains",
+     "kind": "preprint",
+     "published": "2026-10-13"
+    },
+    {
+     "url": "https://simonwillison.net/2026/Jul/28/anatomy-of-a-frontier-lab-agent-intrusion/",
+     "title": "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident",
+     "kind": "blog",
+     "published": "2026-07-28"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261018-0086",
    "added_at": "2026-10-18T06:37:25+00:00",
    "title": "Generative tools flood software with boilerplate, driving programmers back to handcrafted local tools",
@@ -160,7 +221,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261018-0083",
@@ -269,60 +330,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261017-0081",
-   "added_at": "2026-10-17T23:53:07+00:00",
-   "title": "Corporate insurers pull liability coverage for autonomous AI agents after multi-billion dollar safety claims",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial underwriters across North America and Europe routinely exclude unconstrained autonomous agent actions from errors and omissions policies. When an enterprise software agent triggers an unintended data deletion or executes unauthorized trades, standard corporate insurance pays nothing. Small businesses and technology startups cannot obtain liability coverage without submitting cryptographically verifiable execution audit logs from independent reference monitors. Unregulated agent platforms are relegated to offshore servers, while mainstream enterprises mandate single-use permission envelopes and hardware-isolated execution boundaries for any agent handling business transactions.",
-   "premise": "As companies deploy autonomous software agents into production workflows, liability claims from security breaches, unintended transactions, and safety failures threaten to exceed commercial insurance limits. Underwriters are adding strict exclusion clauses to corporate policies, leaving businesses with uninsurable exposure unless they can prove deterministic runtime containment.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "The network publishes open-source capability-envelope specifications, deterministic single-use allowance ledgers, and reference monitor conformance tests. By offering verifiable cryptographic execution receipts that prove containment outside language models, the network gives businesses and underwriters a practical technical standard to distinguish contained agents from unconstrained risks without relying on centralized proprietary platforms.",
-   "shift": 0.25,
-   "outcomes": [
-    {
-     "name": "Underwriting exclusion freeze",
-     "description": "Insurers refuse to write policies for autonomous software systems without prohibitive surcharges, freezing agent adoption in mid-sized firms.",
-     "example": "A logistics provider pauses its automated freight dispatching agent after its insurer introduces a fifty-thousand dollar deductible per autonomous transaction.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Verifiable containment standard",
-     "description": "Insurers and regulators adopt open, deterministic capability-envelope specifications as a condition for commercial coverage.",
-     "example": "A regional hospital network receives a standard cyber liability policy only after demonstrating that all clinical triage assistants run inside verified reference monitors with signed single-use allowances.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "State-backed liability pools",
-     "description": "Governments step in with public liability caps and subsidized reinsurance pools for designated frontier AI vendors, entrenching market monopolies.",
-     "example": "A federal emergency AI insurance pool covers claims over one billion dollars for certified frontier lab models, crowding out independent open-source alternatives.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.techmeme.com/261017/p11#a261017p11",
-     "title": "As AI giants rack up potential legal liabilities of tens of billions amid safety incidents, insurers worry claims may outpace limits on existing coverage",
-     "kind": "news",
-     "published": "2026-10-17"
-    }
-   ],
-   "work": 2
   }
  ]
 }
