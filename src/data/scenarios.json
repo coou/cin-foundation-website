@@ -1,6 +1,68 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0089",
+   "added_at": "2026-10-18T11:52:45+00:00",
+   "title": "Automated bug-hunting bots discover deep system flaws faster than maintainers can patch them",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial vulnerability discovery is dominated by autonomous agent clusters that continuously crawl open-source kernels, hardware firmware, and cloud device drivers. A maintainer overseeing an essential networking library logs into their repository to find dozens of detailed crash reports generated overnight by competing security bots, complete with synthetic reproduction scripts. Meanwhile, cloud infrastructure operators and home computer users face weekly emergency patch cycles as automated exploit brokers convert unpatched flaws into zero-click network compromises within hours of public disclosure.",
+   "premise": "Autonomous language assistants running iterative hypothesis-and-verification loops can discover deep concurrency and memory flaws across operating system kernels and hardware drivers that resisted years of traditional fuzzing. Because automated bug discovery scales with compute while human triage and patching remain slow and deliberate, the window between bug detection and weaponization shrinks dramatically.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "By developing deterministic execution sandboxes, capability-bounded broker gates, and local verification runtimes, the network's defensive architecture helps personal agents and local devices avoid relying solely on slow upstream patch cycles. Cooperative verification tools allow independent maintainers and community cooperatives to test and contain incoming vulnerability reports automatically without broadcasting sensitive system metadata.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Asymmetric exploit discovery overwhelms open-source maintainers",
+     "description": "Automated vulnerability finding outpaces volunteer maintainers' ability to review and deploy fixes, leaving critical infrastructure vulnerable to machine-speed weaponization.",
+     "example": "A municipal transit authority in Munich suffers a city-wide fleet shutdown after an automated bot discovers and publicly logs an unpatched memory leak in an open-source wireless controller, which criminal actors weaponize into a denial-of-service attack before the volunteer maintainer can review the issue.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial platforms enforce mandatory locked hardware attestation",
+     "description": "Major proprietary operating system vendors and cloud monopolies respond to the surge in kernel vulnerabilities by locking down bootloaders and mandating closed remote hardware attestation chips, shutting out independent local operating systems.",
+     "example": "A small independent software firm in Montreal finds that its custom hardware driver cannot load on new corporate laptops because the proprietary operating system requires expensive vendor-signed hardware cryptographic tokens, shutting down their local data-processing business.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    },
+    {
+     "name": "Cooperative verification pools deploy automated defensive containment",
+     "description": "Developer cooperatives deploy bounded local agents that immediately verify crash reports and isolate vulnerable device pathways using deterministic sandboxes while patches are drafted.",
+     "example": "When an autonomous scanner detects a concurrency race in a shared Linux network driver, a regional health network's local agent verifies the crash inside an isolated virtual machine and automatically applies an eBPF defensive filter to block the vulnerable packet structure, protecting patient monitors without waiting for upstream vendor patch cycles.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Isolated task execution limits zero-day exploit blast radius",
+     "description": "Personal computing runtimes isolate network services and untrusted applications into fine-grained execution compartments, preventing kernel driver bugs from granting access to private personal data.",
+     "example": "An independent investigative journalist running a private local assistant receives a malicious wireless packet targeting an unpatched Bluetooth driver, but the operating runtime's compartmented broker restricts the compromised driver from accessing filesystem storage or encryption keys.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2610.14729v1",
+     "title": "No, Your Tools Are Not Enough: It's Time to Bring Agents to the Hunt",
+     "kind": "preprint",
+     "published": "2026-10-10"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0088",
    "added_at": "2026-10-18T09:26:02+00:00",
    "title": "Automated application floods break job hiring and force candidates to use verified personal agents",
@@ -279,60 +341,6 @@
      "title": "The Agent Clicks Approve: Injected Page Text Makes Browser Agents Authorize Access the Task Never Named",
      "kind": "preprint",
      "published": "2026-10-16"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261018-0083",
-   "added_at": "2026-10-18T02:02:58+00:00",
-   "title": "Treating AI assistants as trusted software opens everyday computers to silent compromise",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of people run autonomous assistants on their personal laptops and phones to organize files, pay recurring bills, and triage communications. Because agents process untrusted emails and websites alongside private documents, attackers routinely plant hidden text that hijacks agent reasoning. Systems that give models direct operating system access suffer silent data leaks and unauthorized transactions.",
-   "premise": "Security researchers demonstrate that prompt hardening and training-time guardrails cannot prevent autonomous agents from obeying malicious external instructions. Reliable protection requires treating the underlying model as untrusted and enforcing security invariants at the system and operating environment level.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Developing transparent, host-enforced capability brokers and verifiable execution logs provides a working alternative to vendor trust, proving that personal assistants can remain safe without surrendering user privacy or control.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Widespread workstation takeover through hidden prompt injection",
-     "description": "Operating platforms continue granting language model agents broad filesystem and network authority, allowing malicious documents to silently hijack user privileges.",
-     "example": "A freelance accountant's personal assistant reads a client tax form containing hidden instructions, which secretly exfiltrates bank credentials to an external server during overnight reconciliation.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Operating platforms enforce strict runtime boundaries around assistant actions",
-     "description": "Personal devices isolate autonomous assistants inside deterministic sandboxes where tool executions, external transmissions, and payment requests require independent verification.",
-     "example": "A municipal planning department runs local assistants inside capability-bounded sandboxes that physically block outbound network calls whenever unverified external files are being processed.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Proprietary cloud platforms centralize assistants into closed server-side enclaves",
-     "description": "Major platform vendors respond to desktop injection vulnerabilities by stripping local execution privileges entirely, forcing all assistant reasoning and personal file indexing through centralized subscription clouds.",
-     "example": "A major operating system vendor disables local tool execution for third-party models, requiring users to upload private desktop directories to remote corporate servers to use automation features.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2605.18991",
-     "title": "Agent Security is a Systems Problem",
-     "kind": "preprint",
-     "published": "2026-05-27"
     }
    ],
    "work": 3

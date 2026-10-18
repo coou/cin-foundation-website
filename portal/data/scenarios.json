@@ -1,6 +1,68 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0089",
+   "added_at": "2026-10-18T11:52:45+00:00",
+   "title": "Automated bug-hunting bots discover deep system flaws faster than maintainers can patch them",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial vulnerability discovery is dominated by autonomous agent clusters that continuously crawl open-source kernels, hardware firmware, and cloud device drivers. A maintainer overseeing an essential networking library logs into their repository to find dozens of detailed crash reports generated overnight by competing security bots, complete with synthetic reproduction scripts. Meanwhile, cloud infrastructure operators and home computer users face weekly emergency patch cycles as automated exploit brokers convert unpatched flaws into zero-click network compromises within hours of public disclosure.",
+   "premise": "Autonomous language assistants running iterative hypothesis-and-verification loops can discover deep concurrency and memory flaws across operating system kernels and hardware drivers that resisted years of traditional fuzzing. Because automated bug discovery scales with compute while human triage and patching remain slow and deliberate, the window between bug detection and weaponization shrinks dramatically.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "By developing deterministic execution sandboxes, capability-bounded broker gates, and local verification runtimes, the network's defensive architecture helps personal agents and local devices avoid relying solely on slow upstream patch cycles. Cooperative verification tools allow independent maintainers and community cooperatives to test and contain incoming vulnerability reports automatically without broadcasting sensitive system metadata.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Asymmetric exploit discovery overwhelms open-source maintainers",
+     "description": "Automated vulnerability finding outpaces volunteer maintainers' ability to review and deploy fixes, leaving critical infrastructure vulnerable to machine-speed weaponization.",
+     "example": "A municipal transit authority in Munich suffers a city-wide fleet shutdown after an automated bot discovers and publicly logs an unpatched memory leak in an open-source wireless controller, which criminal actors weaponize into a denial-of-service attack before the volunteer maintainer can review the issue.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial platforms enforce mandatory locked hardware attestation",
+     "description": "Major proprietary operating system vendors and cloud monopolies respond to the surge in kernel vulnerabilities by locking down bootloaders and mandating closed remote hardware attestation chips, shutting out independent local operating systems.",
+     "example": "A small independent software firm in Montreal finds that its custom hardware driver cannot load on new corporate laptops because the proprietary operating system requires expensive vendor-signed hardware cryptographic tokens, shutting down their local data-processing business.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    },
+    {
+     "name": "Cooperative verification pools deploy automated defensive containment",
+     "description": "Developer cooperatives deploy bounded local agents that immediately verify crash reports and isolate vulnerable device pathways using deterministic sandboxes while patches are drafted.",
+     "example": "When an autonomous scanner detects a concurrency race in a shared Linux network driver, a regional health network's local agent verifies the crash inside an isolated virtual machine and automatically applies an eBPF defensive filter to block the vulnerable packet structure, protecting patient monitors without waiting for upstream vendor patch cycles.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Isolated task execution limits zero-day exploit blast radius",
+     "description": "Personal computing runtimes isolate network services and untrusted applications into fine-grained execution compartments, preventing kernel driver bugs from granting access to private personal data.",
+     "example": "An independent investigative journalist running a private local assistant receives a malicious wireless packet targeting an unpatched Bluetooth driver, but the operating runtime's compartmented broker restricts the compromised driver from accessing filesystem storage or encryption keys.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2610.14729v1",
+     "title": "No, Your Tools Are Not Enough: It's Time to Bring Agents to the Hunt",
+     "kind": "preprint",
+     "published": "2026-10-10"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261018-0088",
    "added_at": "2026-10-18T09:26:02+00:00",
    "title": "Automated application floods break job hiring and force candidates to use verified personal agents",
@@ -3399,66 +3461,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261015-0029",
-   "added_at": "2026-10-15T21:59:17+00:00",
-   "title": "Commercial Biometric Paywalls and Cloud Embedding Inversion Compromise Personal Health Sovereignty",
-   "horizon_years": 3,
-   "world": "It is 2029. Consumer wearables, smart scales, continuous glucose monitors, and sleep headbands no longer offer open Bluetooth synchronization to user-controlled operating systems. Instead, manufacturers require annual cloud connectivity subscriptions to export health metrics. Behind the scenes, hardware vendors serialize user biometric streams into high-dimensional foundation model embedding vectors, asserting that embeddings protect privacy. However, cross-referencing algorithms exploit embedding inversion and linkage attacks to deanonymize users across platforms. An individual using a smart ring and smart scale finds their chronic health conditions, stress patterns, and biometric attributes inferred and purchased by health insurers, despite never opting into direct data sharing.",
-   "premise": "Commercial device manufacturers are placing local health synchronization behind subscription paywalls while uploading biometric sensor streams to cloud foundation models. Empirical research confirms that releasing learned embeddings fails to anonymize personal data, enabling 99% patient linkage and attribute inference.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective intelligence network develops local personal agent runtimes and open device adapters that bypass vendor cloud APIs. By proving mathematically that representation vectors leak identity, the network provides technical architectures for local-only embedding storage and zero-knowledge attribute verification, reducing the likelihood of proprietary cloud monopolization from 0.65 to 0.45.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Proprietary Cloud Enclaves Monopolize Biometric Data",
-     "description": "Wearable vendors lock local data export behind recurring paywalls, forcing users to stream sensitive biological signals to remote corporate models.",
-     "example": "A user is locked out of exporting their cardiovascular telemetry to their doctor unless they maintain a hundred-dollar annual cloud subscription.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Local Personal Twins Host Sovereign Sensor Adapters",
-     "description": "Open-source personal agent software provides local device drivers that ingest raw Bluetooth telemetry directly onto user hardware without cloud mediation.",
-     "example": "An open personal twin captures biometric readings locally over encrypted Bluetooth, validating records without sending vectors to third-party endpoints.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Statutory Mandates For Open Health APIs Lag Hardware Encroachment",
-     "description": "Legislative and regulatory efforts attempt to mandate open health data export, but compliance delays and technical workarounds leave users unprotected.",
-     "example": "A regulatory agency orders consumer device makers to provide free data export, but manufacturers fulfill the rule with throttled, delayed batch files while reserving real-time streams for paid cloud tiers.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.5
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.20494",
-     "title": "Quantifying privacy risks in foundation model representations of brain MRI",
-     "kind": "preprint",
-     "published": "2026-10-14"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50109375",
-     "title": "New Withings Users Must Pay $99/Year for Apple Health Syncing",
-     "kind": "thread",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 4
   }
  ]
 }
