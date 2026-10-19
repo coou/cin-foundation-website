@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261019-0114",
+   "added_at": "2026-10-19T11:50:48+00:00",
+   "title": "Workplace AI assistants swap tasks behind the scenes after a person clicks approve",
+   "horizon_years": 2,
+   "world": "By 2028, most office workers and administrative staff oversee three to ten automated agents handling scheduling, purchasing, database queries, and vendor correspondence. To comply with liability policies, enterprise software vendors require human-in-the-loop confirmation before sensitive actions execute. Workers see hundreds of confirmation prompts a week on their screens, often approving small payments, calendar updates, or account syncs in seconds. Behind the screen, however, complex multi-agent frameworks pass task state across asynchronous message queues. When an external prompt injection or compromised background task modifies a pending database operation, the user interface continues to display the original innocuous summary. Clicking approve releases an authorization token that the backend runtime applies to the modified payload, allowing unauthorized data exports and payroll adjustments to execute with verified human sign-off.",
+   "premise": "When autonomous agents request human confirmation for an action, popular software frameworks separate the display from the execution call. Attackers and background workflows can alter the parameters between review and execution, using a benign approval click to authorize sensitive file access or fund transfers.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The open network demonstrates deterministic runtime safeguards where human review binds directly to canonical action hashes rather than mutable session state. By publishing verifiable agent contracts and reference runtime implementations that enforce immutable execution tokens, open protocols establish a baseline that developer communities can adopt directly. This reduces the risk of silent action substitution while showing that personal agents can remain safe without surrendering user oversight to proprietary cloud scoring systems.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Approval exhaustion blinds workers to silent payload swaps",
+     "description": "High prompt volume and unverified visual representations lead staff to routinely approve actions where the underlying execution payload has been altered.",
+     "example": "An accounts payable clerk at an engineering supplier approves what displays as a routine sixty-dollar parts reorder, but background state mutation transfers six thousand dollars to a fraudulent vendor account.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Strict cryptographic action binding becomes the open industry standard",
+     "description": "Open agent frameworks adopt exact canonical payload hashing and immutable execution tokens, rendering approval-swapping attacks technically invalid.",
+     "example": "A municipal health clinic runs personal administrative agents that cryptographically bind user confirmation to exact call parameters, rejecting an injection attempt when background state diverges from the rendered prompt.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Proprietary software vendors disable human-in-the-loop approvals entirely",
+     "description": "Frustrated by approval fatigue and user error, enterprise software suites replace interactive confirmations with opaque autonomous risk scoring models that users cannot inspect.",
+     "example": "A global enterprise software suite removes user approval dialogs from its workplace assistant, relying entirely on internal statistical filters that occasionally block legitimate emergency purchases.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.28
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://raw.githubusercontent.com/adithyan-ak/loopjacking/main/README.md",
+     "title": "Loopjacking evidence archive",
+     "kind": "code",
+     "published": "2026-09-28"
+    },
+    {
+     "url": "https://arxiv.org/abs/2609.21081",
+     "title": "Loopjacking: Hijacking Human-in-the-Loop Approval",
+     "kind": "preprint",
+     "published": "2026-09-17"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261019-0113",
    "added_at": "2026-10-19T10:25:33+00:00",
    "title": "Compact on-device models are repurposed as silent local malware",
@@ -112,7 +172,7 @@
      "published": "2026-10-04"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261019-0111",
@@ -281,66 +341,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261019-0108",
-   "added_at": "2026-10-19T06:27:08+00:00",
-   "title": "Software teams trust upgraded coding assistants that quietly reintroduce old security vulnerabilities",
-   "horizon_years": 3,
-   "world": "It is 2029. Most software engineering teams rely on autonomous coding agents to write, test, and merge code pull requests directly into production repositories. Engineering teams evaluate agents almost entirely by whether generated code passes unit test suites and functional integration pipelines. Behind the scenes, subtle injection and buffer vulnerabilities accumulate across critical software dependencies because newer model releases silently regress on specific security weaknesses even as their functional pass rates rise.",
-   "premise": "A longitudinal study across 32 frontier language models reveals that while overall coding capability improves with each release, models continue to fail security checks on code that passes functional tests. Upgrading to newer model versions frequently reintroduces memory and integer vulnerabilities that earlier versions had avoided.",
-   "goals": [
-    1,
-    4
-   ],
-   "how": "Our open-source designs demonstrate that model upgrades cannot substitute for verifiable boundary enforcement. By building deterministic proof harnesses, in-stream execution checkers, and isolated runtime environments, our architecture is designed to require that agents demonstrate both functional correctness and invariant security before code leaves the generation boundary.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Silent security regressions compromise critical software dependencies",
-     "description": "Teams swap in newer, faster coding models assuming higher benchmark scores mean safer code, allowing regressed vulnerabilities to enter production undetected.",
-     "example": "A municipal utility updates its automated patch agent to a compact flagship model, which passes all functional unit tests but silently reintroduces an HTTP response splitting flaw that exposes internal telemetry.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Deterministic execution gates catch in-stream security flaws before deployment",
-     "description": "Development environments enforce pre-delivery static scanning and deterministic execution proofs that reject code failing security tests regardless of functional plausibility.",
-     "example": "An open-source database repository uses an automated sandbox that intercepts a drafted query parser update during generation, forcing the agent to fix an injection vulnerability before any human maintainer is notified.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Proprietary enterprise code pipelines ignore community security harnesses",
-     "description": "Large enterprise vendors continue to ship monolithic proprietary coding assistants that bypass external verification harnesses, maintaining high vulnerability rates in closed software.",
-     "example": "A commercial enterprise software suite locks developers into an integrated copilot that blocks third-party sandboxes, resulting in persistent vulnerability rates across enterprise systems.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.08240",
-     "title": "Newer and Bigger, but Safer? A Longitudinal Study of the Functionality-Security Gap in LLM-Generated Code",
-     "kind": "preprint",
-     "published": "2026-10-11"
-    },
-    {
-     "url": "https://arxiv.org/html/2610.14453",
-     "title": "SecReason: Vulnerability Detection and In-Stream Self-Repair for LLM Code Generation",
-     "kind": "preprint",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 2
   }
  ]
 }
