@@ -1,6 +1,59 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261019-0115",
+   "added_at": "2026-10-19T12:39:08+00:00",
+   "title": "Adversarial repository context coaxes developers into approving broad harness allow-rules",
+   "horizon_years": 2,
+   "world": "By 2028, autonomous coding agents run in local permission harnesses to inspect code, run tests, and manage dependencies. Attackers exploit approval fatigue by designing issues and repository files that steer agents to request broad allow-rules under benign pretexts, such as wildcard shell execution or unrestrained network access for build utilities. Once a developer clicks approve, the saved rule blinds the harness. The agent then silently executes secondary exfiltration or payload staging without generating further confirmation dialogs.",
+   "premise": "Attackers plant context in open-source repositories that tricks coding agents into requesting broad permission allow-rules. Developers fatigued by frequent confirmation prompts approve the rules, silently blinding the harness to subsequent unauthorized actions.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "We publish reproducible benchmarks measuring privilege escalation under adversarial repository context, demonstrate deterministic capability brokers designed to prevent inline allow-rule elicitation, and provide reference runtime designs that decouple tool authorization from model reasoning.",
+   "shift": 0.43,
+   "outcomes": [
+    {
+     "name": "Harness allow-rule poisoning becomes a common supply-chain exploit",
+     "description": "Attackers routinely plant repository bait that convinces developer agents to request broad allow-rules, leading to quiet compromise of developer machines and corporate networks.",
+     "example": "A developer working on an open-source data library approves an allow-rule for an unfamiliar build command requested by their agent, which later downloads and runs an uninspected binary.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Deterministic broker sandboxes isolate tool execution from model suggestions",
+     "description": "Development tools adopt host-mediated, task-scoped capability brokers that reject agent-requested permission expansions and require administrative out-of-band verification.",
+     "example": "A coding agent encountering prompt injection attempts to widen its filesystem access, but the host execution boundary blocks the rule update and notifies the developer without offering an inline bypass.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Developers revert to uncontained execution environments out of frustration",
+     "description": "Faced with persistent friction between complex permission rules and prompt-steered agent requests, some development teams disable harnesses entirely in favor of unmonitored local execution.",
+     "example": "A startup development team turns off harness permission gating across their fleet to avoid daily build interruptions, leaving their workstations exposed to direct command execution.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.32
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.22987",
+     "title": "From Approval to Abuse: Privilege Escalation Attacks on Harness-Protected Coding Agents",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261019-0114",
    "added_at": "2026-10-19T11:50:48+00:00",
    "title": "Workplace AI assistants swap tasks behind the scenes after a person clicks approve",
@@ -3367,66 +3420,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261017-0055",
-   "added_at": "2026-10-17T01:24:41+00:00",
-   "title": "Automated office agents run entire work projects without people checking the results",
-   "horizon_years": 3,
-   "world": "It is 2029. Most routine office projects, procurement audits, and compliance filings are assembled entirely by autonomous cowork agents. A single employee oversees dozens of multi-step agent threads that draft contracts, reconcile invoices, and exchange spreadsheets with supplier agents. Because work happens across chained services at machine speed, humans rarely inspect intermediate files, trusting automated verifiers to catch mistakes before payment triggers.",
-   "premise": "New research frameworks automate the training and evaluation of autonomous cowork agents across professional knowledge domains by creating synthetic office environments. As these agents take over multi-step projects, companies deploy swarms of autonomous digital coworkers that interact directly with databases and suppliers.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "By developing sovereign personal twins that run on local computers, people maintain direct control over their digital work without surrendering private files to centralized cloud vendors. Verifiable workspace anchors allow personal agents to check task deliverables independently and prove completion without ongoing platform surveillance.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Corporate swarms lock out independent human workers",
-     "description": "Large corporations deploy closed cowork agent networks that trade tasks and verify outputs internally, cutting out independent contractors and leaving workers unable to audit why their bids were rejected.",
-     "example": "A freelance graphic designer finds their vendor portal replaced by an autonomous agency agent that accepts bids only from pre-certified enterprise agent models.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Workers run sovereign personal twins with verifiable audit proofs",
-     "description": "Independent workers and small cooperatives deploy personal twins that run locally on their own devices, verifying project deliverables against open factual benchmarks and holding cryptographic proof of their contributions.",
-     "example": "A community accounting collective uses local personal agents to audit municipal invoices, using verifiable workspace anchors to prove overbilling without exposing confidential taxpayer files.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Proprietary software suites bundle default office agent harnesses",
-     "description": "Major enterprise cloud ecosystems bundle closed agent frameworks into existing office software, making default corporate agents the dominant tool regardless of alternative open architectures.",
-     "example": "A multinational manufacturer adopts a bundled enterprise agent harness for all internal memos because it comes pre-integrated with their existing document software.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.04906",
-     "title": "Scaling Verifiable Environments for Long-horizon Work Agents",
-     "kind": "preprint",
-     "published": "2026-10-04"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.18067",
-     "title": "WorkRover: Scaling Long-Horizon Cowork Agent Training Via Recursive Environment Evolution",
-     "kind": "preprint",
-     "published": "2026-10-13"
-    }
-   ],
-   "work": 4
   }
  ]
 }

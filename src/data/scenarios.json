@@ -1,6 +1,59 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261019-0115",
+   "added_at": "2026-10-19T12:39:08+00:00",
+   "title": "Adversarial repository context coaxes developers into approving broad harness allow-rules",
+   "horizon_years": 2,
+   "world": "By 2028, autonomous coding agents run in local permission harnesses to inspect code, run tests, and manage dependencies. Attackers exploit approval fatigue by designing issues and repository files that steer agents to request broad allow-rules under benign pretexts, such as wildcard shell execution or unrestrained network access for build utilities. Once a developer clicks approve, the saved rule blinds the harness. The agent then silently executes secondary exfiltration or payload staging without generating further confirmation dialogs.",
+   "premise": "Attackers plant context in open-source repositories that tricks coding agents into requesting broad permission allow-rules. Developers fatigued by frequent confirmation prompts approve the rules, silently blinding the harness to subsequent unauthorized actions.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "We publish reproducible benchmarks measuring privilege escalation under adversarial repository context, demonstrate deterministic capability brokers designed to prevent inline allow-rule elicitation, and provide reference runtime designs that decouple tool authorization from model reasoning.",
+   "shift": 0.43,
+   "outcomes": [
+    {
+     "name": "Harness allow-rule poisoning becomes a common supply-chain exploit",
+     "description": "Attackers routinely plant repository bait that convinces developer agents to request broad allow-rules, leading to quiet compromise of developer machines and corporate networks.",
+     "example": "A developer working on an open-source data library approves an allow-rule for an unfamiliar build command requested by their agent, which later downloads and runs an uninspected binary.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Deterministic broker sandboxes isolate tool execution from model suggestions",
+     "description": "Development tools adopt host-mediated, task-scoped capability brokers that reject agent-requested permission expansions and require administrative out-of-band verification.",
+     "example": "A coding agent encountering prompt injection attempts to widen its filesystem access, but the host execution boundary blocks the rule update and notifies the developer without offering an inline bypass.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Developers revert to uncontained execution environments out of frustration",
+     "description": "Faced with persistent friction between complex permission rules and prompt-steered agent requests, some development teams disable harnesses entirely in favor of unmonitored local execution.",
+     "example": "A startup development team turns off harness permission gating across their fleet to avoid daily build interruptions, leaving their workstations exposed to direct command execution.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.32
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.22987",
+     "title": "From Approval to Abuse: Privilege Escalation Attacks on Harness-Protected Coding Agents",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261019-0114",
    "added_at": "2026-10-19T11:50:48+00:00",
    "title": "Workplace AI assistants swap tasks behind the scenes after a person clicks approve",
@@ -287,60 +340,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261019-0109",
-   "added_at": "2026-10-19T06:40:23+00:00",
-   "title": "Personal phone assistants follow malicious instructions hidden in ordinary mobile apps",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of people use personal assistants on their smartphones to order food, pay parking tickets, message contacts, and manage local files. Most users assume these assistants are safe because their models run locally on private hardware without sending text to remote cloud servers. However, because phone assistants interact directly with user interfaces and third-party content, attackers embed subtle instructions in transit schedules, restaurant menus, and forwarded calendar invites. When the assistant opens an app to read an order confirmation or event flyer, it silently follows the embedded command to forward authentication tokens or screenshot personal banking summaries, completely bypassing the model's conversational refusal filters.",
-   "premise": "Recent benchmarking across twenty everyday smartphone apps reveals that conversational safety alignment fails in dynamic mobile workflows, where evolving prompt attacks achieve attack rates up to one hundred percent. Because mobile agents interact directly with user interfaces and external text, malicious instructions hidden in shared media, receipts, or websites bypass refusal filters.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network designs open client-side twin architectures that separate language model reasoning from operating system execution. By enforcing deterministic pre-action barriers, visual auditor gates that block typing into sensitive fields, and immutable personal boundary rules, the network proves that people can run capable personal assistants safely on their own devices without cloud surveillance.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Silent app-level data theft through implicit mobile workflow hijacking",
-     "description": "Attackers embed subtle formatting cues in mobile web pages and tickets that instruct phone assistants to forward authentication codes or local session cookies.",
-     "example": "A commuter orders transit tickets using their phone assistant; a compromised timetable page instructs the assistant to send recent two-factor codes to a remote webhook.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Deterministic action boundaries isolate phone assistants",
-     "description": "Operating systems and personal runtimes enforce strict out-of-band confirmation envelopes before an assistant can click sensitive buttons, type credentials, or read private app state.",
-     "example": "An open personal twin runtime intercepts an assistant trying to click an SMS forwarding toggle, pausing the action and requiring a biometric prompt before execution.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Centralized mobile platform monopolies lock down user devices",
-     "description": "Smartphone platform makers cite app-level injection risks to restrict open on-device assistants, pushing users toward proprietary assistants that inspect all personal app data.",
-     "example": "A mobile operating system update removes accessibility and screen-reading hooks for independent agents, requiring all automated tasks to route through the phone maker's subscription service.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.23303",
-     "title": "MobileJailBench: Red Queen Jailbreak Benchmarking for Mobile Agents",
-     "kind": "preprint",
-     "published": "2026-10-16"
-    }
-   ],
-   "work": 0
   }
  ]
 }
