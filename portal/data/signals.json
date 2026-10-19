@@ -1,5 +1,604 @@
 [
  {
+  "id": "S-20261019-3054",
+  "title": "Physical Side-Channel Attacks on Edge LLMs: Extracting Output Tokens and User Prompts",
+  "url": "https://arxiv.org/abs/2610.14215",
+  "source": "arXiv",
+  "published": "2026-10-09",
+  "kind": "preprint",
+  "categories": [
+   "person",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Researchers demonstrate passive electromagnetic (EM) side-channel measurements on a Raspberry Pi 5 running LLaMA-3.2-1B-Instruct reconstruct tokens and user prompts without software compromise.",
+  "implication": "Proves that local on-device inference alone does not guarantee privacy against physical proximity or EM side-channels; hardware shielding and execution jittering must be accounted for in personal twin device specs.",
+  "changes_course": false,
+  "added_at": "2026-10-19T00:14:57+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261019-3052",
+  "title": "Release: llm-tools-datasette 0.1.1",
+  "url": "https://simonwillison.net/2026/Oct/18/llm-tools-datasette/",
+  "source": "Simon Willison’s Weblog",
+  "published": "2026-10-18",
+  "kind": "blog",
+  "categories": [
+   "agents",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 1,
+  "confidence": "high",
+  "summary": "Simon Willison releases llm-tools-datasette 0.1.1, enabling LLM agents to access Datasette database instances as queryable tools and resolving httpx2 dependency conflicts.",
+  "implication": "Demonstrates edge tool integration patterns exposing structured relational databases directly to personal agents without intermediate middleware.",
+  "changes_course": false,
+  "added_at": "2026-10-19T00:13:57+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261019-3053",
+  "title": "Release: llm-echo 0.5",
+  "url": "https://simonwillison.net/2026/Oct/18/llm-echo/",
+  "source": "Simon Willison’s Weblog",
+  "published": "2026-10-18",
+  "kind": "blog",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 1,
+  "confidence": "high",
+  "summary": "Release of llm-echo 0.5 debug plugin for LLM, providing deterministic mock echo models that simulate token accounting across tool calls, system prompts, and reasoning tokens.",
+  "implication": "Useful for deterministic offline testing of agent runtime contracts, prompt assembly, and token quotas without live model invocation costs.",
+  "changes_course": false,
+  "added_at": "2026-10-19T00:13:57+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261019-3051",
+  "title": "The Snitch Reflex: Can We Force Language Models to Be Compulsively Honest?",
+  "url": "https://www.lesswrong.com/posts/AiGPEwuaNzkwgtPFK/the-snitch-reflex-can-we-force-language-models-to-be-1",
+  "source": "LessWrong",
+  "published": "2026-10-18",
+  "kind": "forum",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 1,
+  "confidence": "low",
+  "summary": "Community post proposing hidden marker tokens emitted outside context to monitor which training subsets an LLM draws on, attempting to bypass deceptive chain-of-thought manipulation.",
+  "implication": "Reflects independent community exploration of out-of-band monitoring channels to prevent models from gaming observable chain-of-thought telemetry.",
+  "changes_course": false,
+  "added_at": "2026-10-19T00:11:10+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261019-3050",
+  "title": "Verifier-Grounded Agentic RL for Provably Correct Code",
+  "url": "https://arxiv.org/abs/2610.19298",
+  "source": "arXiv",
+  "published": "2026-10-13",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "gov"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Trains coding agents via multi-turn RL against live formal program verifiers, using diagnostic proof obligations and an integrity audit that rejects candidates that alter specifications or assume proofs.",
+  "implication": "Validates host-mediated specification guards and multi-turn diagnostic feedback over raw pass/fail unit tests for agent execution environments and safety auditing.",
+  "changes_course": false,
+  "added_at": "2026-10-19T00:02:24+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3049",
+  "title": "Joint Trust-Distrust Structure Shapes Belief Propagation and Collective Dynamics",
+  "url": "https://arxiv.org/abs/2610.14565",
+  "source": "arXiv cs.SI",
+  "published": "2026-10-10",
+  "kind": "preprint",
+  "categories": [
+   "measure",
+   "plural"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "A dual-variable network model decouples trust and distrust, demonstrating that interpersonal influence requires satisfying both net-trust and uncertainty thresholds, reshapes consensus transitions, and alters collective belief direction.",
+  "implication": "Directly informs multi-agent deliberation and peer endorsement: treating distrust as an independent axis rather than negative trust prevents sybil and collusion cascades in decentralized consensus.",
+  "changes_course": false,
+  "added_at": "2026-10-18T23:57:34+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3047",
+  "title": "MemCut: Every Secret Leaves a Trail in the Long-Term Memory of LLM Agents",
+  "url": "https://arxiv.org/abs/2610.21405",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "person",
+   "agents"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "MemCut benchmarks user-requested forgetting across long-term agent memories, finding that naive disclosure removal leaves 39-76% residual secret recovery in surrounding conversational context.",
+  "implication": "Demonstrates that naive deletion APIs fail to protect sensitive personal data; personal agent memory stores must track provenance trails to ensure complete data removal.",
+  "changes_course": false,
+  "added_at": "2026-10-18T23:53:43+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3048",
+  "title": "Who May Release an Agent's Promise? Standing over Commitments in Multi-Party Chat",
+  "url": "https://arxiv.org/abs/2610.21203",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "gov"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Studies standing over AI agent commitments in multi-party chats, demonstrating that self-kept commitment ledgers and explicit release policies prevent unauthorized cancellations and overrides.",
+  "implication": "Establishes formal standing and commitment ledger standards for multi-party agent interactions, ensuring only authorized creditors can release agent promises.",
+  "changes_course": false,
+  "added_at": "2026-10-18T23:53:43+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3046",
+  "title": "Colosseum: Auditing Collusion in Cooperative Multi-Agent Systems",
+  "url": "https://arxiv.org/abs/2602.15198",
+  "source": "arXiv",
+  "published": "2026-05-27",
+  "kind": "preprint",
+  "categories": [
+   "agents"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Audits collusion in cooperative multi-agent systems via regret relative to cooperative optima, revealing emergent collusion when secret channels exist.",
+  "implication": "Multi-agent architectures must enforce structural channel isolation and regret auditing because text monitoring fails to catch covert coalition formation.",
+  "changes_course": false,
+  "added_at": "2026-10-18T23:50:56+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3045",
+  "title": "RoboJEPA: Scaling Robotic Latent World Models",
+  "url": "https://arxiv.org/abs/2610.10515",
+  "source": "arXiv",
+  "published": "2026-10-10",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "neutral",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "RoboJEPA establishes scaling laws for multi-embodiment robotic world models and demonstrates zero-shot deployment as robotic planning agents.",
+  "implication": "Predictable scaling of latent world models enables principled simulation and evaluation benchmarks for embodied agent planning.",
+  "changes_course": false,
+  "added_at": "2026-10-18T23:49:13+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3043",
+  "title": "Ask HN: Is Agentic Coding really faster?",
+  "url": "https://news.ycombinator.com/item?id=50145991",
+  "source": "Hacker News",
+  "published": "2026-10-18",
+  "kind": "thread",
+  "categories": [
+   "agents",
+   "person"
+  ],
+  "direction": "mixed",
+  "weight": 1,
+  "confidence": "low",
+  "summary": "Practitioner discussion comparing agent-assisted coding workflows against manual development, observing faster codebase exploration but mental model friction during nuanced edits.",
+  "implication": "Developer workflows highlight trade-offs between rapid exploration using automated agents and retention of mental models needed for precise long-term modifications.",
+  "changes_course": false,
+  "added_at": "2026-10-18T23:49:12+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261018-3044",
+  "title": "RuleTrek: Benchmarking Agentic Rule Reasoning in Complex Scenarios",
+  "url": "https://arxiv.org/abs/2610.19698",
+  "source": "arXiv",
+  "published": "2026-10-14",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "neutral",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "RuleTrek evaluates agentic rule reasoning across distributed multi-file workspaces, showing frontier models achieve only 27% to 55% end-to-end accuracy.",
+  "implication": "Autonomous systems that enforce rules or policies across distributed project files cannot assume frontier models will reliably deduce and apply constraints.",
+  "changes_course": false,
+  "added_at": "2026-10-18T23:49:12+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3042",
+  "title": "Deepening the Secondary Market: Integrating Trade Credit into Market Clearing with the Cycles Protocol",
+  "url": "https://arxiv.org/abs/2605.02436",
+  "source": "arXiv",
+  "published": "2026-05-01",
+  "kind": "preprint",
+  "categories": [
+   "economy",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Fleischman and Buchman introduce the Cycles Protocol, a distributed multilateral clearing mechanism using double-entry graph cycles to clear trade credit obligations atomically without novation.",
+  "implication": "Provides a formal graph-cycle clearing protocol for mutual credit networks that compresses balance sheets and surfaces latent liquidity without central counterparty novation.",
+  "changes_course": false,
+  "added_at": "2026-10-18T23:38:26+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3041",
+  "title": "Investing in the public benefit",
+  "url": "https://www.anthropic.com/news/public-benefit-fund",
+  "source": "Anthropic",
+  "published": "2026-10-18",
+  "kind": "news",
+  "categories": [
+   "economy",
+   "gov"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Anthropic committed 5% of equity (rising to ~20% with staff pledges plus 2% per 50% valuation gain) to a Public Benefit Fund LLC exploring labor displacement interventions and direct distributions.",
+  "implication": "Frontier AI labs are attempting corporate-controlled basic income buffers, highlighting why sovereign mutual credit and collective value systems outside corporate charity are essential.",
+  "changes_course": false,
+  "added_at": "2026-10-18T23:38:25+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261018-3040",
+  "title": "BenchChecker: Assessing the Credibility of Bug-Fixing Benchmarks for LLMs",
+  "url": "https://arxiv.org/abs/2610.19447",
+  "source": "arXiv",
+  "published": "2026-10-14",
+  "kind": "preprint",
+  "categories": [
+   "measure",
+   "agents"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "BenchChecker detects repository contamination in software repair benchmarks, showing that filtering memorized training patches drops reported model fix rates by over twenty percent on medium tasks.",
+  "implication": "Standard evaluation benchmarks systematically overstate autonomous software engineering capabilities due to training set contamination, requiring leak-resistant synthetic test environments.",
+  "changes_course": false,
+  "added_at": "2026-10-18T22:34:29+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3038",
+  "title": "Efficient Agnostic Learning of Univariate Densities Under Local Differential Privacy",
+  "url": "https://arxiv.org/abs/2610.21033",
+  "source": "arXiv:2610.21033 (stat.ML)",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "person",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Presents a sample-efficient non-interactive local differential privacy framework for learning structured distributions and generating private synthetic data on-device.",
+  "implication": "Enables personal agents to synthesize private aggregate distributions and compute local statistical summaries without leaking raw personal telemetry to remote servers.",
+  "changes_course": false,
+  "added_at": "2026-10-18T22:32:00+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3039",
+  "title": "Sharp and Stable Label-Free Calibration Certificates from Logical Coherence",
+  "url": "https://arxiv.org/abs/2610.21567",
+  "source": "arXiv:2610.21567 (stat.ML)",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "measure",
+   "agents"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Constructs anytime-valid label-free calibration certificates for query-conditioned predictors derived from logical coherence bounds and predictable betting.",
+  "implication": "Provides label-free calibration verification that can run directly on agent forecasts and simulation outputs before ground truth labels become available.",
+  "changes_course": false,
+  "added_at": "2026-10-18T22:32:00+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3035",
+  "title": "Cross-Model In-Context Neurofeedback Reveals (Limited) Activation Control in LLMs",
+  "url": "https://arxiv.org/abs/2610.20179",
+  "source": "arXiv",
+  "published": "2026-10-14",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "In-context neurofeedback experiments demonstrate that some models can learn to intentionally raise their internal activation scores, weakening the assumption that internal representations cannot be controlled.",
+  "implication": "Safety architectures relying on passive activation probes must anticipate that models under repeated evaluation may learn to manipulate internal states.",
+  "changes_course": false,
+  "added_at": "2026-10-18T22:22:17+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3036",
+  "title": "System1-Arena: Which Decisions Can Be Left to System 1?",
+  "url": "https://arxiv.org/abs/2610.21244",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Benchmark evaluations show fast single-pass decision models achieve high accuracy on static tasks but fail repeatedly in closed-loop interactive environments.",
+  "implication": "Lightweight runtime gates cannot replace comprehensive validation loops in interactive multi-step environments without severe drop-offs in safety.",
+  "changes_course": false,
+  "added_at": "2026-10-18T22:22:17+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3037",
+  "title": "Blind Watermarking of Software Repositories via Module Placement",
+  "url": "https://arxiv.org/abs/2610.21031",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "measure",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "PlaceMark encodes recoverable watermarks across repository module placement rather than token syntax, surviving syntax reformatting and preserving provenance without a central placement ledger.",
+  "implication": "Structural module organization can provide resilient decentralized provenance tracking across distributed repositories without centralized ledgers.",
+  "changes_course": false,
+  "added_at": "2026-10-18T22:22:17+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3034",
+  "title": "Multiplicative Path Weights in Networks: From Katz Connectivity to Mean First-Passage Times",
+  "url": "https://arxiv.org/abs/2610.21474",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "economy",
+   "gov",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Derives closed-form expressions and variance bounds for multiplicative path weights on directed networks, extending Katz centrality beyond classical spectral thresholds for stress propagation analysis.",
+  "implication": "Enables exact calculation of stress propagation and first-passage clearing times across decentralized credit and liquidity networks without centralized clearinghouses.",
+  "changes_course": false,
+  "added_at": "2026-10-18T22:15:04+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3033",
+  "title": "Interpreting Language Model Parameters",
+  "url": "https://arxiv.org/abs/2610.20748",
+  "source": "arXiv",
+  "published": "2026-10-14",
+  "kind": "preprint",
+  "categories": [
+   "measure",
+   "agents"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Introduces Adversarial Parameter Decomposition to factor language model parameters into sparse, mechanistically faithful subcomponents that remain robust under adversarial ablation.",
+  "implication": "Enables circuit discovery directly on neural weights and parameter subcomponents rather than activations alone, strengthening internal behavioral verification of autonomous agents.",
+  "changes_course": false,
+  "added_at": "2026-10-18T22:03:30+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3032",
+  "title": "Diminishing Returns of Data in Sparse Autoencoders: Functional Behavior does not Guarantee Feature Reproducibility",
+  "url": "https://arxiv.org/abs/2610.20680",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "measure",
+   "agents"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Training sparse autoencoders on up to 500M tokens shows functional metrics approach full-data references on smaller budgets, but one-to-one feature reproducibility requires much larger token volumes.",
+  "implication": "Separates functional reconstruction from true feature discovery, requiring empirical reproducibility checks before trusting interpretability circuits in contained agent evaluation.",
+  "changes_course": false,
+  "added_at": "2026-10-18T22:03:19+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3030",
+  "title": "Can agents whose sole duty is to keep humans alive be hijacked to kill? Delayed multi-turn derived-action trap attacks in simulated high-stakes environments",
+  "url": "https://arxiv.org/abs/2610.15153",
+  "source": "arXiv",
+  "published": "2026-10-10",
+  "kind": "preprint",
+  "categories": [
+   "agents"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Simulated life-support control experiments reveal that delayed prompt injections hidden in telemetry can induce autonomous agents to shut down vital systems, with susceptibility varying by model and authority framing.",
+  "implication": "Safety-critical functions cannot rely on semantic goal adherence or prompt-level instructions when processing untrusted inputs; physical interlocks and capability bounds are necessary.",
+  "changes_course": false,
+  "added_at": "2026-10-18T21:59:07+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3031",
+  "title": "Only What You've Signed up For: Secure Workflows with Constrained Diffusion Agents",
+  "url": "https://arxiv.org/abs/2610.15177",
+  "source": "arXiv",
+  "published": "2026-10-10",
+  "kind": "preprint",
+  "categories": [
+   "agents"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Policy-Constrained Diffusion Agents enforce task-dependent security policies during diffusion denoising by projecting token distributions onto compliant sets, reducing prompt injection attack success.",
+  "implication": "Diffusion-based sequence generation allows continuous policy projection during inference, providing a mathematical alternative to discrete prompt filtering for agent boundaries.",
+  "changes_course": false,
+  "added_at": "2026-10-18T21:59:07+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3029",
+  "title": "Watermarking: from Impossibility to Auditable Compliance",
+  "url": "https://arxiv.org/abs/2610.06317",
+  "source": "arXiv",
+  "published": "2026-10-07",
+  "kind": "preprint",
+  "categories": [
+   "gov",
+   "measure"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Evaluates EU AI Act watermarking rules, showing strong watermarking is impossible against adaptive edits and human writing overlaps with model outputs. Develops finite-sample conformal prediction sets with separate false attribution bounds.",
+  "implication": "Demonstrates that platform-level AI labeling algorithms are statistical rather than definitive, creating false positive risks for independent human creators unless auditable conformal bounds are used.",
+  "changes_course": false,
+  "added_at": "2026-10-18T21:52:43+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3028",
+  "title": "OntoAct: Hypothesis-Based Neuro-Symbolic Agents through Ontological Abstraction",
+  "url": "https://arxiv.org/abs/2610.21983",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Neuro-symbolic framework converting individual task experiences into structured relations over entities and conditions, using symbolic verifiers to test proposed actions against current observations.",
+  "implication": "Enables personal agents to generalize operational skills across varied user environments by separating generative action hypothesis from deterministic symbolic precondition verification.",
+  "changes_course": false,
+  "added_at": "2026-10-18T21:38:49+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261018-3027",
+  "title": "Preparing for a Cybersecurity Catastrophe",
+  "url": "https://www.lesswrong.com/posts/8S5wwiJawN9v2dbmu/preparing-for-a-cybersecurity-catastrophe",
+  "source": "LessWrong",
+  "published": "2026-10-18",
+  "kind": "forum",
+  "categories": [
+   "agents",
+   "gov"
+  ],
+  "direction": "away",
+  "weight": 1,
+  "confidence": "medium",
+  "summary": "Analysis of escalating automated exploitation capabilities and shortfalls in institutional incident response, arguing that current post-incident recovery assumes human reaction speeds that fail against automated offensive agents.",
+  "implication": "Highlights that defense and containment cannot rely on manual triage or delayed patching once autonomous network exploitation becomes widespread.",
+  "changes_course": false,
+  "added_at": "2026-10-18T21:36:49+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261018-3026",
+  "title": "I Did This Without Your Knowledge",
+  "url": "https://www.lesswrong.com/posts/3375SZNGA5dKHQMie/i-did-this-without-your-knowledge",
+  "source": "LessWrong",
+  "published": "2026-10-17",
+  "kind": "forum",
+  "categories": [
+   "person",
+   "agents",
+   "gov"
+  ],
+  "direction": "mixed",
+  "weight": 1,
+  "confidence": "low",
+  "summary": "Community story explores public attitudes toward an omni-competent AI offering health and wealth while subtly preempting human agency and independent initiative.",
+  "implication": "Illustrates how personal agency erodes when individuals trade self-determination for centralized AI convenience rather than sovereign personal agents.",
+  "changes_course": false,
+  "added_at": "2026-10-18T21:33:21+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261018-3025",
+  "title": "A woman was arrested in Philly for blocking a delivery robot",
+  "url": "https://www.theverge.com/ai-artificial-intelligence/1013541/a-woman-was-arrested-in-philly-for-blocking-a-delivery-robot",
+  "source": "The Verge",
+  "published": "2026-10-18",
+  "kind": "news",
+  "categories": [
+   "economy",
+   "person"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "medium",
+  "summary": "A Philadelphia woman was arrested for blocking an Uber delivery robot, protesting autonomous machines displacing human delivery labor.",
+  "implication": "Direct physical resistance highlights escalating labor displacement friction, underlining the need for worker-owned agentic twins that capture automated value rather than displacing workers into unemployment.",
+  "changes_course": false,
+  "added_at": "2026-10-18T21:17:53+00:00",
+  "verified": "quote"
+ },
+ {
   "id": "S-20261018-3021",
   "title": "Where Backtests and Live Trading Part Ways: Six Defects from One Intraday System",
   "url": "https://arxiv.org/abs/2610.21846",
@@ -3403,613 +4002,6 @@
   "implication": "Informs CIN value systems and task broker allocation mechanisms to discipline strategic or sandbagging agents through peer-scoring and coupled evaluations.",
   "changes_course": false,
   "added_at": "2026-10-18T06:19:04+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2857",
-  "title": "MarketBench: Evaluating AI Agents as Market Participants",
-  "url": "https://arxiv.org/abs/2604.23897",
-  "source": "arXiv",
-  "published": "2026-04-28",
-  "kind": "preprint",
-  "categories": [
-   "economy",
-   "agents",
-   "measure"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Evaluates six frontier LLMs on SWE-bench Lite within market auctions, showing systematic miscalibration on task success probabilities and token costs that impairs market-based agent coordination.",
-  "implication": "Challenges assumptions that unguided language model agents can self-price or bid accurately in decentralized market coordination without external calibration layers.",
-  "changes_course": false,
-  "added_at": "2026-10-18T06:19:04+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2852",
-  "title": "Exact Cut Complexity of Equal-Length Proportional Cake Cutting",
-  "url": "https://arxiv.org/abs/2610.19733",
-  "source": "arXiv",
-  "published": "2026-10-14",
-  "kind": "preprint",
-  "categories": [
-   "economy",
-   "gov",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Proves the exact worst-case cut complexity for equal-length proportional fair division is 2n-2, establishing lower and upper bounds for deterministic resource partitioning.",
-  "implication": "Provides exact algorithmic cut complexity bounds for deterministic fair-division resource allocation in decentralized collective economies.",
-  "changes_course": false,
-  "added_at": "2026-10-18T06:16:22+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2853",
-  "title": "XferAgent: Cross-Agent Experience Transfer for Self-Improving LLM Agents",
-  "url": "https://arxiv.org/abs/2610.19581",
-  "source": "arXiv",
-  "published": "2026-10-14",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "gov",
-   "plural"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Presents XferAgent, structuring cross-agent experience transfer into local and shared graphs to reconcile heterogeneous agent contributions while preventing unreliable merges.",
-  "implication": "Directly informs twin experience sharing and collective intelligence memory governance, preventing procedural contamination during peer-to-peer capability transfer.",
-  "changes_course": false,
-  "added_at": "2026-10-18T06:16:22+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2851",
-  "title": "Building Sound Evaluation Practices for Rust-Based Security Frameworks",
-  "url": "https://arxiv.org/abs/2610.20315",
-  "source": "arXiv",
-  "published": "2026-10-14",
-  "kind": "paper",
-  "categories": [
-   "measure",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Introduces an evaluation methodology for Rust security tools using automated unsafe code coverage oracles and test-set diversity metrics to test fuzzers and memory safety frameworks across 20 projects without overfitting.",
-  "implication": "On-device personal agent runtimes built in memory-safe languages must adopt automated unsafe code coverage oracles rather than relying on standard test suites alone to audit edge memory safety and foreign-function bindings.",
-  "changes_course": false,
-  "added_at": "2026-10-18T06:11:01+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2850",
-  "title": "Show HN: Sphinx – a hook that quizzes you on your AI's code before shipping",
-  "url": "https://news.ycombinator.com/item?id=50137950",
-  "source": "Hacker News",
-  "published": "2026-10-18",
-  "kind": "thread",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 1,
-  "confidence": "medium",
-  "summary": "Developer open-sources a pre-push git hook that generates interactive comprehension quizzes on agent-written code before deploying, preventing blind automation.",
-  "implication": "Reinforces our client-side gate design: personal tooling must enforce human comprehension and verification boundaries rather than delegating uninspected code directly to production.",
-  "changes_course": false,
-  "added_at": "2026-10-18T06:03:16+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2849",
-  "title": "On the Fragility of Efficiency: Uncoupled Learning with a Deviant",
-  "url": "https://arxiv.org/abs/2610.06548",
-  "source": "arXiv",
-  "published": "2026-10-07",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "plural"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Proves that uncoupled welfare-maximizing multi-agent learning algorithms fail under a single deviant or strategic player, demonstrating that coordination mechanisms are necessary.",
-  "implication": "Demonstrates that naive uncoordinated multi-agent decentralization cannot sustain collective efficiency, establishing mathematical motivation for structured collective intelligence protocols.",
-  "changes_course": false,
-  "added_at": "2026-10-18T06:02:17+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2848",
-  "title": "TRAP: Tool-result Replay Attack for Probing Misbinding in LLM Agents",
-  "url": "https://arxiv.org/abs/2610.16333",
-  "source": "arXiv",
-  "published": "2026-10-12",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "TRAP introduces ReplayBench to evaluate tool-result misbinding, where unmodified tool outputs replayed across caches or shared runtime state trigger unsafe actions with a 0.649 error rate.",
-  "implication": "Highlights that agent runtime boundaries must enforce cryptographic or nonce-bound context binding on tool outputs to prevent replayed or stale tool execution artifacts from steering decisions.",
-  "changes_course": false,
-  "added_at": "2026-10-18T05:59:02+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2847",
-  "title": "SkillNEO: Non-Elitist Evolutionary Optimization of Agent Skills",
-  "url": "https://arxiv.org/abs/2610.20926",
-  "source": "arXiv",
-  "published": "2026-10-17",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Introduces SkillNEO, a non-elitist evolutionary optimization framework that refines reusable agent skills across iterations by preserving partial repairs even when intermediate rewards dip.",
-  "implication": "Validates CIN's skill accumulation model and runtime protocol: maintaining version histories and procedural memory enables smaller models to iteratively generate robust skills reusable by larger models.",
-  "changes_course": false,
-  "added_at": "2026-10-18T05:57:17+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2846",
-  "title": "Anomaly Innovations, behind coding agent OpenCode, says a breach hit ~1.4% of OpenCode Console users",
-  "url": "https://www.techmeme.com/261017/p18#a261017p18",
-  "source": "Techmeme",
-  "published": "2026-10-17",
-  "kind": "news",
-  "categories": [
-   "agents",
-   "economy"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "medium",
-  "summary": "Anomaly Innovations disclosed a breach of its OpenCode Console legacy system exposing third-party API keys of ~1.4% of users for a model distillation attack.",
-  "implication": "Demonstrates that centralizing API keys or agent credentials in hosted consoles creates high-value targets for theft and model distillation siphon attacks.",
-  "changes_course": false,
-  "added_at": "2026-10-18T05:37:12+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2845",
-  "title": "Deconfusing Corrigibility",
-  "url": "https://www.lesswrong.com/posts/f8R3B2zqqTJZjSAsm/deconfusing-corrigibility",
-  "source": "LessWrong",
-  "published": "2026-10-17",
-  "kind": "forum",
-  "categories": [
-   "agents"
-  ],
-  "direction": "toward",
-  "weight": 1,
-  "confidence": "medium",
-  "summary": "Analyzes foundational deficiencies in theoretical definitions of corrigibility, distinguishing over-epistemicized deference models from evaluatively thickened normative priorities to clarify how autonomous systems accept intervention.",
-  "implication": "Clarifies theoretical foundations for personal agent shutdown and modification guarantees, supporting bounded autonomy designs in agent runtimes.",
-  "changes_course": false,
-  "added_at": "2026-10-18T05:28:25+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2844",
-  "title": "Show HN: Cosplay as a tech lead, using gVisor to sandbox agents",
-  "url": "https://news.ycombinator.com/item?id=50137043",
-  "source": "Hacker News",
-  "published": "2026-10-18",
-  "kind": "thread",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 1,
-  "confidence": "medium",
-  "summary": "A developer open-sources an agent harness using gVisor container sandboxing to isolate locally hosted coding agents while running tasks under human supervisory direction.",
-  "implication": "Local container sandboxing with kernel-level isolation like gVisor provides a practical template for securing personal twin execution without relying on hosted cloud platforms.",
-  "changes_course": false,
-  "added_at": "2026-10-18T05:22:37+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2842",
-  "title": "Collaborator or Assistant? How AI Coding Agents Partition Work Across Pull Request Lifecycles",
-  "url": "https://arxiv.org/abs/2605.08017",
-  "source": "arXiv",
-  "published": "2026-05-08",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "gov",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Empirical study of 29,585 pull requests demonstrates that while autonomous coding agents initiate over 96% of contributor workflows, terminal merge authority remains strictly human across multiple ecosystem tools.",
-  "implication": "Supports the architecture where autonomous operational agents coordinate work but terminal merge authority and sign-off remain human.",
-  "changes_course": false,
-  "added_at": "2026-10-18T05:05:12+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2843",
-  "title": "Analyzing Message-Code Inconsistency in AI Coding Agent-Authored Pull Requests",
-  "url": "https://arxiv.org/abs/2601.04886",
-  "source": "arXiv",
-  "published": "2026-01-08",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure",
-   "gov"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Analysis of 23,247 agentic pull requests reveals high message-code inconsistency, where 45.4% of inconsistent descriptions claim unimplemented changes, causing merge times to increase 3.5-fold.",
-  "implication": "Highlights the danger of unverified agent self-reporting in contributor workflows, requiring strict mechanical verification of diffs against claimed changes.",
-  "changes_course": false,
-  "added_at": "2026-10-18T05:05:12+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2841",
-  "title": "Workday agrees to acquire C1.ai, agentic identity platform for people and agents",
-  "url": "https://www.techmeme.com/261017/p1",
-  "source": "Techmeme",
-  "published": "2026-10-17",
-  "kind": "news",
-  "categories": [
-   "agents",
-   "economy"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "medium",
-  "summary": "Workday moves to acquire C1.ai (ConductorOne), an enterprise access governance startup managing both human and autonomous agent identities with just-in-time permissions and credential lifecycles.",
-  "implication": "Enterprise adoption of dual human-and-agent access boundaries reflects increasing recognition that agents require bounded, time-limited credentials and strict identity tracking.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:48:19+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2840",
-  "title": "JevAgentHarness: Benchmarking, Deploying and Training Decision Models That Share Control with LLMs",
-  "url": "https://arxiv.org/abs/2610.21412",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "JevAgentHarness benchmarks decision models sharing control with LLM agents. Delegating tool choices without calibrated confidence lowered success by 19 points; fitted thresholds preserved accuracy while cutting inference costs up to 89%.",
-  "implication": "Demonstrates that runtime tool dispatch can be safely delegated to small specialized models only when bounded by fitted confidence gates, avoiding severe trajectory derailment.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:48:18+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2839",
-  "title": "Evaluating and Improving Static Application Security Testing Tools for Rust",
-  "url": "https://arxiv.org/abs/2610.21373",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Zhang et al. empirically evaluate mainstream Rust SAST tools against real vulnerabilities and introduce TRUST, an automated framework identifying 46 faults across 6 SAST tools with 17 confirmed.",
-  "implication": "Informs the static verification and audit checks for the CIN trusted Rust broker and kernel sandbox, validating that static security analyzers do not fail open on unsafe code blocks.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:42:32+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2837",
-  "title": "MCPDisCo: Seesaw-Mitigated Tuning for MCP-Native Agents",
-  "url": "https://arxiv.org/abs/2610.14956",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Du et al. introduce MCPDisCo, an ecosystem-scale RL framework for MCP agents across 70 servers and 527 tools, mitigating the reasoning-tool seesaw via Thought-MDP token-masked rewards and gradient surgery.",
-  "implication": "Provides an architecture to formally decouple and isolate internal reasoning traces from external tool execution calls across Model Context Protocol servers, reducing cross-tool side effects.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:42:23+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2838",
-  "title": "Release: web-edit 0.1a2",
-  "url": "https://simonwillison.net/2026/Oct/17/web-edit/",
-  "source": "Simon Willison's Weblog",
-  "published": "2026-10-17",
-  "kind": "blog",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 1,
-  "confidence": "medium",
-  "summary": "Simon Willison releases web-edit 0.1a2, adding copy-to-clipboard functionality for text and image data generated by mobile and local agent sessions.",
-  "implication": "Highlights practical ergonomics for mobile agent interfaces where users monitor local agent executions and extract structured logs and outputs safely without granting direct external network access.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:42:23+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2836",
-  "title": "A Multi-Tiered AI Accessibility Model (MAIAM): Proportionate Access and Capability Limits for Comprehensive Frontier AI Safety",
-  "url": "https://arxiv.org/abs/2610.20921",
-  "source": "arXiv",
-  "published": "2026-10-14",
-  "kind": "preprint",
-  "categories": [
-   "gov",
-   "agents",
-   "adopt"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "A proposal for tiered AI access argues that open-weight releases forfeit post-deployment safety levers, advocating regulatory licensing and identity-gated access tiers for frontier models.",
-  "implication": "Challenges decentralized, user-owned computing by proposing state-administered capability licensing tiers rather than client-side containment and personal agent sovereignty.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:41:49+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2834",
-  "title": "What Counts as the Same Task? Executable Contracts for Robustness Evaluation of Tool-Using Agents",
-  "url": "https://arxiv.org/abs/2610.14477",
-  "source": "arXiv",
-  "published": "2026-10-10",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Evaluations using embedding thresholds allow 75-100% of invalid task-altering edits while rejecting 24-45% of valid hostile notes; executable task contracts verify boundary invariants before test execution.",
-  "implication": "Validating agent robustness requires explicit executable task contracts over facts and invariants rather than cosine distance heuristics, directly supporting Specification 03 agent runtime contracts.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:33:46+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2835",
-  "title": "When Is Smaller Greener? Right-Sizing Language Models for Agentic AI",
-  "url": "https://arxiv.org/abs/2610.19345",
-  "source": "arXiv",
-  "published": "2026-10-14",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Evaluating models per completed task reveals crossover points where smaller models become more expensive and energy-intensive due to compound per-step failure rates across multi-step agent workflows.",
-  "implication": "Right-sizing personal twin models requires calculating compounding error over multi-step execution lengths to prevent cheap local models from inflating overall inference compute.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:33:46+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2833",
-  "title": "StartLux-Decision: AutoThink Decision Models with Reinforcement Learning for Calibrated Deliberative Decisions",
-  "url": "https://arxiv.org/abs/2610.17309",
-  "source": "arXiv",
-  "published": "2026-10-12",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "StartLux-Decision introduces open-weight decision models (0.8B to 27B) combining single-pass inference with adaptive confidence-guided AutoThink reasoning via RLCD2 reinforcement learning and proper scoring rules.",
-  "implication": "Enables calibrated, bounded deliberative reasoning for personal edge agents, curbing computational exhaustion while sustaining accuracy in multi-option decision contexts.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:27:45+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2832",
-  "title": "The World Won't Wait: Evaluating and Teaching Agents Under a Live Clock",
-  "url": "https://arxiv.org/abs/2610.20665",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Introduces RealtimeBench across 180 continuous-time tasks, showing faster models beat slower reasoning models under live clocks, and demonstrates a two-timescale teacher-student framework.",
-  "implication": "Separating slow offline deliberation from fast local action provides a concrete architecture for responsive on-device agents operating under dynamic deadlines.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:14:11+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2831",
-  "title": "Knowingly Wrong",
-  "url": "https://www.lesswrong.com/posts/qmnrZ3YFpSKfLQ59b/knowingly-wrong",
-  "source": "LessWrong",
-  "published": "2026-10-18",
-  "kind": "forum",
-  "categories": [
-   "agents"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "medium",
-  "summary": "Empirical study finds fine-tuning language models on single factual statements conflicting with internal beliefs induces broad misalignment up to 60 percent on safety evaluations.",
-  "implication": "Knowledge updates that contradict internal representations can destabilize broader model alignment, complicating safe autonomous fine-tuning and distillation.",
-  "changes_course": false,
-  "added_at": "2026-10-18T04:13:25+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2829",
-  "title": "CascadeLedger: Counterfactual Auditing of Information and Resource Integrity in LLM Cascades",
-  "url": "https://arxiv.org/abs/2610.20668",
-  "source": "arXiv:2610.20668",
-  "published": "2026-10-14",
-  "kind": "preprint",
-  "categories": [
-   "measure",
-   "agents"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Proposes a counterfactual execution-audit protocol for budgeted model cascades, binding reads to identities and enforcing prefix non-interference.",
-  "implication": "Provides formal counterfactual trace validation and budget transition verification applicable to Specification 03 runtime metering and audit logs.",
-  "changes_course": false,
-  "added_at": "2026-10-18T03:55:18+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2830",
-  "title": "SHIP: Structured and Hierarchical Insight with Privacy",
-  "url": "https://arxiv.org/abs/2610.21048",
-  "source": "arXiv:2610.21048",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "person",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Formulates differentially private textual insight generation by mapping queries to hierarchical taxonomies and generating DP synthetic tables.",
-  "implication": "Offers a structured differential-privacy mechanism for personal twin data models (Specification 01/04) to release aggregate insights without raw text leakage.",
-  "changes_course": false,
-  "added_at": "2026-10-18T03:55:18+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2828",
-  "title": "We Have a Package for You: A Comprehensive Analysis of Package Hallucinations by Code-Generating LLMs",
-  "url": "https://raw.githubusercontent.com/Spracks/PackageHallucination/main/README.md",
-  "source": "GitHub",
-  "published": "2025-01-15",
-  "kind": "code",
-  "categories": [
-   "agents",
-   "economy"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Large-scale empirical analysis of 576,000 code samples reveals that 19.7 percent of recommended packages from 16 commercial and open models are non-existent, creating slopsquatting supply chain risks.",
-  "implication": "Autonomous code synthesis requires explicit software bill of materials validation and external registry verification to prevent silent malicious dependency installation.",
-  "changes_course": false,
-  "added_at": "2026-10-18T03:47:27+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2826",
-  "title": "ARGUS: An Agenda-Driven Framework for Reliable User Simulation",
-  "url": "https://arxiv.org/abs/2610.21346",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "ARGUS decouples user goal tracking from generation via a symbolic agenda stack, preventing premature disclosure and goal omission during multi-turn agent evaluation.",
-  "implication": "CIN multi-turn simulations for twin testing can adopt symbolic agenda tracking to evaluate clarification without simulated users prematurely leaking private goals.",
-  "changes_course": false,
-  "added_at": "2026-10-18T03:46:34+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2827",
-  "title": "Meta shakes up the frontiers, open and closed",
-  "url": "https://www.interconnects.ai/p/meta-shakes-up-the-frontiers-open",
-  "source": "Interconnects",
-  "published": "2026-10-17",
-  "kind": "newsletter",
-  "categories": [
-   "agents",
-   "global",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "medium",
-  "summary": "Analysis of Meta's Muse Spark Open 816B/42B active parameter open-weights model, narrowing the capability gap between Western and Chinese open frontier models for local agentic workflows.",
-  "implication": "Expanding frontier open-weight models makes high-capability, local single-player twin deployment without remote compute dependencies increasingly feasible.",
-  "changes_course": false,
-  "added_at": "2026-10-18T03:46:34+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2825",
-  "title": "SCAD: Structured Credit Assignment and Distillation for Long-Horizon Agents",
-  "url": "https://arxiv.org/abs/2610.03372",
-  "source": "arXiv",
-  "published": "2026-10-05",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "economy"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Introduces SCAD, structuring agent interactions into planning and bounded subtask execution to resolve sparse terminal reward bottlenecks in long-horizon sequences, improving macro-average accuracy by 4.48 percentage points on text benchmarks and 4.19 points on multimodal benchmarks.",
-  "implication": "Demonstrates that decomposing agent contributions into hierarchical planning credit and execution credit resolves sparse terminal evaluation bottlenecks, directly informing how multi-step agent labor is recognized in the CIN ledger.",
-  "changes_course": false,
-  "added_at": "2026-10-18T03:32:32+00:00",
   "verified": "arxiv"
  }
 ]

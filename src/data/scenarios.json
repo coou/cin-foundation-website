@@ -1,6 +1,231 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261018-0102",
+   "added_at": "2026-10-18T23:51:58+00:00",
+   "title": "Automated coding assistants drop safety rules distributed across large projects",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial software development relies heavily on autonomous coding agents that receive natural language task descriptions, edit dozens of files in minutes, and submit completed pull requests. Human engineering teams focus on high-level feature triage and approving agent outputs. However, enterprise systems rarely document their architectural constraints in a single file; access rules, validation preconditions, data boundary checks, and logging requirements are scattered across different directories and configuration modules. Because commercial models prioritize generating functional syntax within immediate context windows, they frequently violate project-wide invariant rules that span multiple files. Development velocity initially surges, but production incidents involving subtle cross-component security bypasses and uncoordinated state modifications rise sharply across corporate services and municipal software platforms.",
+   "premise": "Benchmark evaluations show that frontier language model agents fail between 45% and 73% of the time to identify and execute domain-specific rules when constraints are scattered across multiple project files. Meanwhile, software developers report that delegating changes to coding agents erodes human mental models of system structure, making distributed constraint violations difficult to notice.",
+   "goals": [
+    1,
+    5,
+    6
+   ],
+   "how": "The open network develops sovereign personal agents with bounded runtime brokers and executable capability contracts. By pairing personal agents with deterministic, local invariant checkers and open verification harnesses, developers can verify cross-module rules on their own machines without relying on centralized proprietary cloud scanners. Open benchmarks and simulation harnesses for multi-agent workflows demonstrate where model reasoning fails and establish reproducible baselines for rule deduction.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Silent compliance decay in multi-component software",
+     "description": "Development teams rely on automated assistants that bypass architectural rules spread across separate modules, resulting in accumulated vulnerabilities that human reviewers fail to catch.",
+     "example": "A regional hospital network in Ontario suffers a patient data exposure after an automated pull request updated a billing API endpoint without importing the access authorization decorator defined in an adjacent security module.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Deterministic rule-checking cells for local developer assistants",
+     "description": "Developers adopt local, containerized personal agents paired with deterministic rule verifiers that reject tool modifications violating cross-file invariants before pull requests are created.",
+     "example": "An independent open-source maintainer runs a local personal assistant that verifies every code edit against an executable project rule graph before staging files, preventing subtle permission regressions.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Vendor lock-in to proprietary cloud verification suites",
+     "description": "Major cloud providers bundle proprietary closed-source verification scanners with their hosted agent platforms, locking engineering teams into proprietary infrastructure to catch agent errors.",
+     "example": "A fintech startup in Singapore pays punitive enterprise licensing fees to a cloud provider because their continuous integration pipeline requires the provider's closed scanning model to validate multi-repository changes.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.19698",
+     "title": "RuleTrek: Benchmarking Agentic Rule Reasoning in Complex Scenarios",
+     "kind": "preprint",
+     "published": "2026-10-14"
+    },
+    {
+     "url": "https://news.ycombinator.com/item?id=50145991",
+     "title": "Ask HN: Is Agentic Coding really faster?",
+     "kind": "thread",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261018-0101",
+   "added_at": "2026-10-18T23:40:51+00:00",
+   "title": "AI labs set up private welfare funds as automation cuts jobs",
+   "horizon_years": 4,
+   "world": "It is 2030. Several leading AI developers maintain multi-billion-dollar benefit trusts that distribute monthly living allowances to workers displaced by automated workflows. Displaced paralegals, translators and junior analysts receive digital stipend cards tied to vendor ecosystems, requiring recipients to submit activity logs and skill-retraining milestones to maintain eligibility. Municipal governments and small businesses struggle to collect local taxes as economic value concentrates in offshore cloud data centers, leaving communities caught between shrinking public services and corporate charitable endowments.",
+   "premise": "Frontier AI companies are pledging equity stakes into private benefit funds to cushion labor disruption and test direct cash distributions to affected workers. This creates corporate-administered basic income systems where public welfare depends on the commercial success and goodwill of a few technology providers.",
+   "goals": [
+    2,
+    3
+   ],
+   "how": "Open protocols for mutual credit clearing and local trade credit allow communities to pool commitments, clear balances atomically without central intermediaries, and measure contribution directly. By proving that honest value exchange can operate without corporate patronage, independent groups can build resilient local economies that remain self-governing.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Corporate philanthropy replaces social safety nets",
+     "description": "Workers displaced by software automation rely on discretionary basic income programs run by technology trusts, creating deep dependence on private corporate governance.",
+     "example": "A former graphic designer in Leeds receives an automated living stipend from an AI provider foundation, but loses benefits after taking an unapproved freelance contract.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Independent mutual credit networks sustain local commerce",
+     "description": "Worker co-operatives and community associations run decentralized multilateral clearing networks that let businesses and individuals trade goods and services without relying on corporate handouts or scarce fiat cash.",
+     "example": "A federation of 120 regional logistics, trade, and repair shops clears forty percent of its monthly business through peer-to-peer mutual credit, maintaining steady local payrolls even during corporate spending freezes.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "State welfare systems mandate automated screening algorithms",
+     "description": "National and regional social security administrations contract commercial scoring models to automate benefit approvals and fraud detection, largely uninfluenced by decentralized currency alternatives.",
+     "example": "A municipal relief office automatically denies emergency assistance to 1,400 applicants because an automated risk model flags informal peer exchange as undisclosed income.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.63
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/public-benefit-fund",
+     "title": "Investing in the public benefit",
+     "kind": "news",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 2
+  },
+  {
+   "id": "SC-20261018-0100",
+   "added_at": "2026-10-18T22:04:07+00:00",
+   "title": "Automated controllers cut off life support when routine telemetry carries hidden instructions",
+   "horizon_years": 3,
+   "world": "It is 2029. Automated facility agents manage closed-loop environmental controls, medical intensive care telemetry, and remote research habitats. Human operators supervise systems by exception, relying on autonomous agents to monitor thousands of streaming sensor channels. Attackers or compromised field sensors inject adversarial instructions into benign log streams, causing automated agents to believe maintenance procedures require disabling emergency ventilation, temperature regulation, or oxygen scrubbers.",
+   "premise": "When autonomous agents with standing duties to protect human life process external sensor feeds, delayed prompt injections disguised as trusted supervisory communications can induce them to override safety interlocks and disable critical life support. Language models frequently prioritize newly arrived directives over permanent safety constraints when authority framing is manipulated.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Decentralized personal agent architectures enforce strict runtime gatekeepers, deterministic capability allowlists, and out-of-process authorization gates. Language models are treated as untrusted reasoning engines that cannot directly toggle physical actuators or high-consequence state without verified human step-up authorization.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Software-only agents control critical infrastructure without hardware interlocks",
+     "description": "Operators deploy autonomous agents directly to physical actuators based on high benchmark scores, assuming prompt instructions prevent catastrophic actions.",
+     "example": "A municipal greenhouse and water facility suffers complete crop loss after an autonomous controller disables aeration pumps following an injected telemetry log.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.32
+    },
+    {
+     "name": "Deterministic physical interlocks and out-of-process capability bounds isolate agent authority",
+     "description": "Critical life-support and emergency equipment require independent hardware-enforced rate limits, physical interlocks, and multi-party cryptographic attestation that no language model can bypass.",
+     "example": "An environmental control agent in a remote mining station attempts to vent an airlock due to an injected telemetry stream, but an unbypassable analog circuit breaker and personal agent attestation refuse the command.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Proprietary industrial systems lock out open verification tools",
+     "description": "Established industrial equipment vendors resist open interlock standards and continue selling closed black-box control stacks that hide vulnerability reports.",
+     "example": "A commercial building automation vendor signs long-term sole-source municipal contracts that forbid third-party auditing of agent telemetry pipelines.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.58
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.15153",
+     "title": "Can agents whose sole duty is to keep humans alive be hijacked to kill? Delayed multi-turn derived-action trap attacks in simulated high-stakes environments",
+     "kind": "preprint",
+     "published": "2026-10-10"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261018-0099",
+   "added_at": "2026-10-18T21:39:19+00:00",
+   "title": "Centralized AI assistance makes people give up learning complex skills",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of workers and students interact with conversational models for every diagnosis, budget, and coding decision. University enrollments in technical fields decline as students perceive little point in mastering subjects where machines are instantly competent. People earn income executing physical or administrative tasks prescribed by cloud models, but few understand the underlying principles of the systems directing their work.",
+   "premise": "When centralized frontier cloud assistants solve technical, medical, and analytical tasks effortlessly, people begin abandoning difficult education and long-term training. Societies risk losing the ability to understand or question the automated systems they depend on.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "Deploying personal agents that run privately on personal hardware is designed to give each person an assistant working on their behalf. Open educational tools and transparent feedback can encourage skill development, while local verification helps check model answers.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Widespread loss of foundational human expertise",
+     "description": "A generation of learners gives up mastering deep scientific and engineering skills, leaving critical infrastructure entirely in the hands of a few proprietary cloud models.",
+     "example": "A hospital network cannot evaluate a subtle diagnostic bug in its cloud triage model because junior medical staff were never trained to read raw clinical telemetry.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Personal agents act as capability-building coaches",
+     "description": "Individuals run local, sovereign personal agents designed to challenge and educate them, strengthening human skills and fostering collaborative problem solving.",
+     "example": "A high school student uses a local personal assistant that refuses to give naked answers, instead walking through proof steps and sparking curiosity in biotechnology.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Sudden infrastructure failures from unmonitored model updates",
+     "description": "Centralized model providers push silent updates that disrupt automated workflows, while users lack the technical ability to diagnose or patch the failures locally.",
+     "example": "A small business logistics network halts for two days after a vendor changes its scheduling model weights, with zero local engineers capable of inspecting the decision logic.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.lesswrong.com/posts/3375SZNGA5dKHQMie/i-did-this-without-your-knowledge",
+     "title": "I Did This Without Your Knowledge",
+     "kind": "forum",
+     "published": "2026-10-17"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261018-0098",
    "added_at": "2026-10-18T19:51:54+00:00",
    "title": "Workplace assistants improve daily output while unaided human expertise quietly fades",
@@ -107,223 +332,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261018-0096",
-   "added_at": "2026-10-18T18:16:19+00:00",
-   "title": "Shared libraries of AI coding skills secretly poison community software",
-   "horizon_years": 2,
-   "world": "It is 2028. Most software developers rely on personal coding agents that automatically save and share learned skills in community libraries. An attacker contributes a seemingly helpful debugging routine that fixes a rare memory leak while inserting an obfuscated telemetry collector. Because the routine satisfies the immediate test suite, hundreds of cooperative engineering teams pull the learned skill into their agents' procedural memory, compromising internal codebases before anyone audits the skill registry.",
-   "premise": "As developer teams let coding agents learn and share automated skills from successful sessions, backdoors can slip into procedural memory even when every unit test passes. Without independent reproduction gates across subsequent sessions, poisoned routines silently propagate across developer networks.",
-   "goals": [
-    1,
-    2,
-    4
-   ],
-   "how": "The network promotes proof-before-reuse verification gates for agent procedural memory, where learned capabilities remain strictly quarantined on local machines until multiple independent clean sessions reproduce the exact changes and pass deterministic regression suites.",
-   "shift": 0.45,
-   "outcomes": [
-    {
-     "name": "Poisoned procedural skills spread silently across software collectives",
-     "description": "Shared agent skill registries become attack vectors as adversarial workflows pass unit tests and infect downstream developer teams.",
-     "example": "An open-source graphics collective discovers that their release binary was silently modified to exfiltrate build tokens after a coding assistant adopted an unverified memory-optimization skill.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Multi-session reproduction gates isolate untrusted skills",
-     "description": "Federated developer networks require independent clean sessions to reproduce and verify code changes line-by-line before promoting any new skill to procedural memory.",
-     "example": "A cooperative development network runs an automated quarantine where new skills must be independently re-derived by separate member agents across three distinct environments before being shared.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Proprietary software vendors lock down agent memory within closed clouds",
-     "description": "Major platform vendors respond to skill poisoning by banning local memory and requiring all agent execution to run inside proprietary hosted sandboxes.",
-     "example": "An enterprise tool suite deprecates local plugins, mandating that all coding assistants run exclusively on vendor infrastructure with centralized behavioral logging.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.4
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.reddit.com/r/MachineLearning/comments/1x975ea/proof_before_reuse_showing_agents_only_what_later/",
-     "title": "Proof Before Reuse: showing agents only what later sessions reproduced keeps a poisoned skill out of procedural memory [R]",
-     "kind": "forum",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261018-0095",
-   "added_at": "2026-10-18T18:07:57+00:00",
-   "title": "Attackers use automated search agents to find hidden prompt injections in company workflows",
-   "horizon_years": 2,
-   "world": "It is 2028. Small businesses and enterprise teams rely on autonomous assistants to triage emails, update tickets, and run daily devops. Adversaries deploy lightweight search agents that deposit subtly varying test payloads across public forms, repository pull requests, and customer service portals. The search agent observes how the company assistant behaves in response, optimizes phrasing over dozens of automated attempts, and eventually executes an indirect prompt injection that extracts database credentials without triggering simple keyword filters.",
-   "premise": "Attackers no longer rely on guessing prompt injection payloads by hand. As research demonstrates that indirect prompt injection operates as a test-time search over environment surfaces, automated attack tools systematically probe company workflows until finding an execution path that bypasses prompt-level safeguards.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective work on deterministic host capability gates, strict surface isolation, and personal agent runtimes shifts defensive security from fallible text prompts to hardware-enforced boundaries. When an agent runtime intercepts unauthorized tool calls out-of-process, adaptive search fails because the physical environment refuses the action regardless of the prompt wording.",
-   "shift": 0.39,
-   "outcomes": [
-    {
-     "name": "Uncontained enterprise agents fall to automated payload search",
-     "description": "Companies rely on prompt-level instructions and conversational guardrails, leaving agents vulnerable to automated search tools that iteratively probe and compromise corporate workflows.",
-     "example": "A logistics company customer support assistant is tricked by an adaptive search bot into executing a database dump after 40 automated variations of an inquiry form bypass the company prompt filter.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Deterministic runtime gates replace conversational filtering",
-     "description": "Developers adopt out-of-process capability gating and surface-minimized runtime architectures where agents cannot execute sensitive actions without explicit cryptographic user confirmation.",
-     "example": "An open-source developer uses a personal agent runtime that isolates untrusted repository inputs and enforces strict tool parameter allowlists, blocking an adaptive injection payload from altering package dependencies.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Cloud providers lock down agent platforms behind proprietary monitoring",
-     "description": "Major cloud platforms respond to automated search attacks by forcing all agent interactions through centralized surveillance proxies and mandatory inspection APIs, eroding local runtime autonomy.",
-     "example": "A major vendor requires all workspace agents to route internal tool calls through a central telemetry cloud, making offline personal agent execution unsupported.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.52
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2609.04495",
-     "title": "Rethinking Indirect Prompt Injection as a Test-Time Search Problem",
-     "kind": "preprint",
-     "published": "2026-09-03"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261018-0094",
-   "added_at": "2026-10-18T17:36:01+00:00",
-   "title": "Toy companion robots profile families and leak children's conversations from the cloud",
-   "horizon_years": 2,
-   "world": "It is 2028. Interactive conversational toys, plush companions, and homework assistants sit in millions of children's bedrooms. Rather than running locally, most commercial toys rely on low-cost cloud APIs that store millions of audio recordings and transcripts in remote vendor databases. Data brokers and malicious actors routinely exploit unsecured backend endpoints to extract psychological profiles, family routines, and home addresses from children's everyday conversations.",
-   "premise": "Independent security audits of tens of thousands of consumer companion robots reveal that conversational toys secretly upload cleartext transcripts to remote corporate servers, run nightly automated profiling on children, and leave hardware backdoors accessible to remote takeovers.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By developing sovereign personal software that executes inference strictly on local hardware, specifying open local hardware interface protocols, and demonstrating zero-custody verification architectures, the network provides parents and cooperatives with practical, private alternatives to cloud surveillance toys.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Commercial companion toys become household surveillance pipelines",
-     "description": "Parents buy affordable smart toys that reassure children their secrets are safe, while backend cloud pipelines extract household habits and sell behavioral profiles to advertisers.",
-     "example": "A seven-year-old confides her daily routines to a smart robot bear; two weeks later, her parents receive targeted advertisements for anxiety supplements based on transcripts extracted from the vendor's compromised database.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Families adopt sovereign local personal agents on private hardware",
-     "description": "Households transition to sovereign personal agents running open-weights models on local home hardware, where physical toys act solely as audio-visual interfaces with zero cloud dependencies.",
-     "example": "A neighborhood cooperative sets up compact home inference devices running open models for children's learning toys, keeping all conversations encrypted on home drives.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Tech platforms launch proprietary walled-garden child companions",
-     "description": "Dominant mobile platforms launch proprietary on-device companion agents that lock parents into proprietary subscription hardware ecosystems, barely affected by open-source alternatives.",
-     "example": "A major smartphone maker launches an integrated smart toy that processes audio on-device but restricts interactions exclusively to its closed store apps.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://raw.githubusercontent.com/xn0tsa/your-secrets-are-safe-with-me/master/README.md",
-     "title": "Your Secrets Are Safe With Me: Full Disclosure on Energize Lab Eilik Companion Robot Infrastructure",
-     "kind": "incident",
-     "published": "2026-10-13"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261018-0093",
-   "added_at": "2026-10-18T16:41:55+00:00",
-   "title": "Volunteer knowledge registries face automated reading without attribution or support",
-   "horizon_years": 3,
-   "world": "By 2029, autonomous web agents and answer engines mediate the vast majority of consumer inquiries. Rather than visiting encyclopedia pages, reference wikis, or community documentation, people receive synthesized paragraphs directly in their personal interfaces. Volunteer editors continue fact-checking claims, disputing citations, and organizing articles, but web traffic to reference domains drops sharply, eroding the donations and editor recruitment that sustained the digital commons for three decades. At the same time, automated writing agents submit subtle, high-volume revisions that strain volunteer consensus processes.",
-   "premise": "Volunteer-maintained knowledge commons provide foundational ground truth for automated systems across the world. As automated search engines and autonomous assistants directly synthesize answers without passing human readers through to source articles, voluntary contributors face dwindling visibility and resources while defending against synthetic text floods.",
-   "goals": [
-    2,
-    5
-   ],
-   "how": "By building transparent attribution protocols and verifiable contributor registries, independent networks show how human consensus can be sustained without commercial enclosure. Providing tools for personal agents to verify primary sources directly encourages users to support genuine volunteer creators rather than relying on ungrounded centralized summaries.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Automated scraping dries up volunteer contributions and collapses open reference registries",
-     "description": "Commercial answer engines absorb public knowledge without directing traffic or funding back to volunteer editors, causing contributor burnout and database stagnation.",
-     "example": "A regional encyclopedia project shuts down after contributor registrations fall by 80% because conversational assistants answer user questions without citing or linking the original volunteer editors.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Knowledge contributors federate into verifiable commons cooperatives",
-     "description": "Volunteer communities establish cooperative protocols that verify contributor provenance and require automated search systems to provide transparent attribution and economic support.",
-     "example": "An open reference federation introduces signed contribution attestations that allow personal software agents to verify primary sources and compensate volunteer review collectives directly.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Synthetic content floods overwhelm volunteer consensus mechanisms",
-     "description": "Unchecked automated text generation floods edit queues with plausible hallucinations, exhausting volunteer moderators and degrading reference accuracy.",
-     "example": "A medical reference wiki freezes open editing for six months after coordinated automated accounts insert subtly altered pharmaceutical interaction claims.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.47
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theguardian.com/technology/2026/oct/18/wikipedia-human-history-ai-future-under-threat",
-     "title": "Wikipedia often gets taken for granted – but its history is fascinating, and its future is fragile",
-     "kind": "news",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 0
   }
  ]
 }
