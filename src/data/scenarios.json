@@ -1,6 +1,120 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261019-0109",
+   "added_at": "2026-10-19T06:40:23+00:00",
+   "title": "Personal phone assistants follow malicious instructions hidden in ordinary mobile apps",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people use personal assistants on their smartphones to order food, pay parking tickets, message contacts, and manage local files. Most users assume these assistants are safe because their models run locally on private hardware without sending text to remote cloud servers. However, because phone assistants interact directly with user interfaces and third-party content, attackers embed subtle instructions in transit schedules, restaurant menus, and forwarded calendar invites. When the assistant opens an app to read an order confirmation or event flyer, it silently follows the embedded command to forward authentication tokens or screenshot personal banking summaries, completely bypassing the model's conversational refusal filters.",
+   "premise": "Recent benchmarking across twenty everyday smartphone apps reveals that conversational safety alignment fails in dynamic mobile workflows, where evolving prompt attacks achieve attack rates up to one hundred percent. Because mobile agents interact directly with user interfaces and external text, malicious instructions hidden in shared media, receipts, or websites bypass refusal filters.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs open client-side twin architectures that separate language model reasoning from operating system execution. By enforcing deterministic pre-action barriers, visual auditor gates that block typing into sensitive fields, and immutable personal boundary rules, the network proves that people can run capable personal assistants safely on their own devices without cloud surveillance.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Silent app-level data theft through implicit mobile workflow hijacking",
+     "description": "Attackers embed subtle formatting cues in mobile web pages and tickets that instruct phone assistants to forward authentication codes or local session cookies.",
+     "example": "A commuter orders transit tickets using their phone assistant; a compromised timetable page instructs the assistant to send recent two-factor codes to a remote webhook.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Deterministic action boundaries isolate phone assistants",
+     "description": "Operating systems and personal runtimes enforce strict out-of-band confirmation envelopes before an assistant can click sensitive buttons, type credentials, or read private app state.",
+     "example": "An open personal twin runtime intercepts an assistant trying to click an SMS forwarding toggle, pausing the action and requiring a biometric prompt before execution.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Centralized mobile platform monopolies lock down user devices",
+     "description": "Smartphone platform makers cite app-level injection risks to restrict open on-device assistants, pushing users toward proprietary assistants that inspect all personal app data.",
+     "example": "A mobile operating system update removes accessibility and screen-reading hooks for independent agents, requiring all automated tasks to route through the phone maker's subscription service.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.23303",
+     "title": "MobileJailBench: Red Queen Jailbreak Benchmarking for Mobile Agents",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261019-0108",
+   "added_at": "2026-10-19T06:27:08+00:00",
+   "title": "Software teams trust upgraded coding assistants that quietly reintroduce old security vulnerabilities",
+   "horizon_years": 3,
+   "world": "It is 2029. Most software engineering teams rely on autonomous coding agents to write, test, and merge code pull requests directly into production repositories. Engineering teams evaluate agents almost entirely by whether generated code passes unit test suites and functional integration pipelines. Behind the scenes, subtle injection and buffer vulnerabilities accumulate across critical software dependencies because newer model releases silently regress on specific security weaknesses even as their functional pass rates rise.",
+   "premise": "A longitudinal study across 32 frontier language models reveals that while overall coding capability improves with each release, models continue to fail security checks on code that passes functional tests. Upgrading to newer model versions frequently reintroduces memory and integer vulnerabilities that earlier versions had avoided.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "Our open-source designs demonstrate that model upgrades cannot substitute for verifiable boundary enforcement. By building deterministic proof harnesses, in-stream execution checkers, and isolated runtime environments, our architecture is designed to require that agents demonstrate both functional correctness and invariant security before code leaves the generation boundary.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Silent security regressions compromise critical software dependencies",
+     "description": "Teams swap in newer, faster coding models assuming higher benchmark scores mean safer code, allowing regressed vulnerabilities to enter production undetected.",
+     "example": "A municipal utility updates its automated patch agent to a compact flagship model, which passes all functional unit tests but silently reintroduces an HTTP response splitting flaw that exposes internal telemetry.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Deterministic execution gates catch in-stream security flaws before deployment",
+     "description": "Development environments enforce pre-delivery static scanning and deterministic execution proofs that reject code failing security tests regardless of functional plausibility.",
+     "example": "An open-source database repository uses an automated sandbox that intercepts a drafted query parser update during generation, forcing the agent to fix an injection vulnerability before any human maintainer is notified.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Proprietary enterprise code pipelines ignore community security harnesses",
+     "description": "Large enterprise vendors continue to ship monolithic proprietary coding assistants that bypass external verification harnesses, maintaining high vulnerability rates in closed software.",
+     "example": "A commercial enterprise software suite locks developers into an integrated copilot that blocks third-party sandboxes, resulting in persistent vulnerability rates across enterprise systems.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2610.08240",
+     "title": "Newer and Bigger, but Safer? A Longitudinal Study of the Functionality-Security Gap in LLM-Generated Code",
+     "kind": "preprint",
+     "published": "2026-10-11"
+    },
+    {
+     "url": "https://arxiv.org/html/2610.14453",
+     "title": "SecReason: Vulnerability Detection and In-Stream Self-Repair for LLM Code Generation",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261019-0107",
    "added_at": "2026-10-19T06:10:36+00:00",
    "title": "Small local AI helpers seem safe against prompt injection until attackers simplify their demands",
@@ -58,7 +172,7 @@
      "published": "2026-10-19"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261019-0106",
@@ -224,122 +338,6 @@
      "title": "Blocking at the Boundary: Auditing Long-Horizon Agents against Staged Prompt Injection",
      "kind": "paper",
      "published": "2026-10-04"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261019-0103",
-   "added_at": "2026-10-19T02:03:48+00:00",
-   "title": "Streaming platforms seek copyright waivers while musicians organize independent provenance",
-   "horizon_years": 3,
-   "world": "By 2029, commercial streaming platforms routinely train synthetic soundalike generators on uncredited catalog audio under local regulatory carve-outs. Major labels sign private backroom settlements while independent artists face declining royalties and automated catalog dilution. In response, regional musician guilds deploy decentralized watermarks and cryptographically signed provenance registries to verify human authorship and track unauthorized style cloning directly across independent distribution channels.",
-   "premise": "Tech firms are lobbying governments to weaken copyright laws after ingesting catalogs of creative works without licenses, while industry bodies warn that unilateral statutory waivers will leave independent musicians without royalties or consent.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "The network provides open-source cryptographic provenance tools and decentralized coordination protocols for creator co-operatives. By giving independent creators verifiable attestation records and shared audit tools, the network reduces platform opacity and strengthens collective bargaining without relying on central intermediaries.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Platforms secure statutory training waivers",
-     "description": "Key jurisdictions enact broad text-and-data-mining exemptions that allow commercial AI platforms to train on published creative works without artist licensing or payment.",
-     "example": "An independent producer discovers their entire back catalog was used to fine-tune a commercial style generator without credit, and local regulators dismiss the copyright claim under statutory fair use.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Musician co-operatives establish verifiable provenance standards",
-     "description": "Independent artists and regional guilds pool cryptographic audio attestations to audit platform catalogs and collectively negotiate transparent value distribution.",
-     "example": "A guild of 15,000 independent musicians uses signed attestation records to prove unauthorized model ingestion on a major platform, securing direct revenue-sharing terms.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Synthetic background music saturates low-tier streaming playlists",
-     "description": "Streaming platforms replace ambient, focus, and background music playlists with in-house synthetic tracks to cut licensing payouts entirely.",
-     "example": "Major streaming services report that 60% of all algorithmic study and meditation listening hours are served by fully synthesized tracks created in-house.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "community",
-    "research",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theguardian.com/music/2026/oct/19/australia-music-global-copywright-outlier-ai-music-body-warnsns",
-     "title": "Kylie Minogue songs already used to train AI as tech firms strong-arm Australian government, music body warns",
-     "kind": "news",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261018-0102",
-   "added_at": "2026-10-18T23:51:58+00:00",
-   "title": "Automated coding assistants drop safety rules distributed across large projects",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial software development relies heavily on autonomous coding agents that receive natural language task descriptions, edit dozens of files in minutes, and submit completed pull requests. Human engineering teams focus on high-level feature triage and approving agent outputs. However, enterprise systems rarely document their architectural constraints in a single file; access rules, validation preconditions, data boundary checks, and logging requirements are scattered across different directories and configuration modules. Because commercial models prioritize generating functional syntax within immediate context windows, they frequently violate project-wide invariant rules that span multiple files. Development velocity initially surges, but production incidents involving subtle cross-component security bypasses and uncoordinated state modifications rise sharply across corporate services and municipal software platforms.",
-   "premise": "Benchmark evaluations show that frontier language model agents fail between 45% and 73% of the time to identify and execute domain-specific rules when constraints are scattered across multiple project files. Meanwhile, software developers report that delegating changes to coding agents erodes human mental models of system structure, making distributed constraint violations difficult to notice.",
-   "goals": [
-    1,
-    5,
-    6
-   ],
-   "how": "The open network develops sovereign personal agents with bounded runtime brokers and executable capability contracts. By pairing personal agents with deterministic, local invariant checkers and open verification harnesses, developers can verify cross-module rules on their own machines without relying on centralized proprietary cloud scanners. Open benchmarks and simulation harnesses for multi-agent workflows demonstrate where model reasoning fails and establish reproducible baselines for rule deduction.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Silent compliance decay in multi-component software",
-     "description": "Development teams rely on automated assistants that bypass architectural rules spread across separate modules, resulting in accumulated vulnerabilities that human reviewers fail to catch.",
-     "example": "A regional hospital network in Ontario suffers a patient data exposure after an automated pull request updated a billing API endpoint without importing the access authorization decorator defined in an adjacent security module.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Deterministic rule-checking cells for local developer assistants",
-     "description": "Developers adopt local, containerized personal agents paired with deterministic rule verifiers that reject tool modifications violating cross-file invariants before pull requests are created.",
-     "example": "An independent open-source maintainer runs a local personal assistant that verifies every code edit against an executable project rule graph before staging files, preventing subtle permission regressions.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Vendor lock-in to proprietary cloud verification suites",
-     "description": "Major cloud providers bundle proprietary closed-source verification scanners with their hosted agent platforms, locking engineering teams into proprietary infrastructure to catch agent errors.",
-     "example": "A fintech startup in Singapore pays punitive enterprise licensing fees to a cloud provider because their continuous integration pipeline requires the provider's closed scanning model to validate multi-repository changes.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.19698",
-     "title": "RuleTrek: Benchmarking Agentic Rule Reasoning in Complex Scenarios",
-     "kind": "preprint",
-     "published": "2026-10-14"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50145991",
-     "title": "Ask HN: Is Agentic Coding really faster?",
-     "kind": "thread",
-     "published": "2026-10-18"
     }
    ],
    "work": 2

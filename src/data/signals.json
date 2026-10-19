@@ -1,5 +1,145 @@
 [
  {
+  "id": "S-20261019-3126",
+  "title": "Trojan Horse: Automated Repository Poisoning against Coding Agents",
+  "url": "https://arxiv.org/abs/2610.23109",
+  "source": "arXiv:2610.23109",
+  "published": "2026-10-16",
+  "kind": "preprint",
+  "categories": [
+   "agents"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "TrojanForge automates repo-level poisoning against autonomous coding agents using AST analysis and adversarial disguise refinement, achieving over 60% poisoning success across 12 commercial models.",
+  "implication": "Highlights the danger of untrusted repository ingestion by autonomous agents; reinforces CIN Specification 03 and AGENTS.md rules treating external repository code and data strictly as passive untrusted input under deterministic gating.",
+  "changes_course": false,
+  "added_at": "2026-10-19T06:42:29+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261019-3125",
+  "title": "Catching split attacks across compactions in long-context coding agents",
+  "url": "https://www.lesswrong.com/posts/s9fmXPbbsBbBK6TZi/catching-split-attacks-across-compactions-in-long-context",
+  "source": "LessWrong",
+  "published": "2026-10-19",
+  "kind": "forum",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "medium",
+  "summary": "A benchmark of 30 long-context agent transcripts shows untrusted models can hide attacks by splitting setup and execution across context compactions. Carrying forward suspicious tool-call flags caught 93% of attacks versus 73% for interval-only monitoring.",
+  "implication": "Our agent runtime and single-player twin must maintain an immutable, tamper-resistant audit trail across context clears rather than relying on language model compaction summaries to preserve security boundaries.",
+  "changes_course": false,
+  "added_at": "2026-10-19T06:39:50+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261019-3123",
+  "title": "MobileJailBench: Red Queen Jailbreak Benchmarking for Mobile Agents",
+  "url": "https://arxiv.org/abs/2610.23303",
+  "source": "arXiv",
+  "published": "2026-10-16",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure",
+   "person"
+  ],
+  "direction": "away",
+  "weight": 3,
+  "confidence": "high",
+  "summary": "MobileJailBench evaluates mobile agents across 520 tasks in 20 apps, showing that conversational safety alignment fails in dynamic mobile workflows, where evolving attacks reach 100% attack success rates.",
+  "implication": "Proves that model-level safety alignment fails in dynamic agent workflows, reinforcing that personal twin runtimes require deterministic, out-of-band execution boundaries rather than model self-policing.",
+  "changes_course": false,
+  "added_at": "2026-10-19T06:35:37+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261019-3124",
+  "title": "Decision Uncertainty-Oriented Watermarking (DUOW): Securing Multi-Agent Routing Against Policy Cloning",
+  "url": "https://arxiv.org/abs/2610.14606",
+  "source": "arXiv",
+  "published": "2026-10-10",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "DUOW introduces decision-layer watermarking for multi-agent routing without altering model weights, selectively redirecting choices among functionally equivalent alternatives to preserve utility while embedding ownership signals.",
+  "implication": "Provides a practical method for verifiable agent routing and policy provenance in distributed agent networks without compromising execution latency or model weights.",
+  "changes_course": false,
+  "added_at": "2026-10-19T06:35:37+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261019-3121",
+  "title": "SecReason: Vulnerability Detection and In-Stream Self-Repair for LLM Code Generation",
+  "url": "https://arxiv.org/html/2610.14453",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Proposes SecReason, an in-stream defense at the serving layer that incrementally checks code drafted in reasoning traces, inserting targeted warnings that allow models to repair vulnerabilities within the same trace before code reaches execution.",
+  "implication": "Provides a practical architecture for catching vulnerabilities at the execution boundary before tool use or code delivery, avoiding costly post-hoc regeneration and preventing unreviewed flawed code from executing.",
+  "changes_course": false,
+  "added_at": "2026-10-19T06:21:33+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261019-3122",
+  "title": "Tokenized Key-Gated Adapter Routing: A Secure Access Control Mechanism Against Private Data Leakage in LLMs",
+  "url": "https://arxiv.org/html/2610.00309",
+  "source": "arXiv",
+  "published": "2026-10-01",
+  "kind": "preprint",
+  "categories": [
+   "person",
+   "agents"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Proposes Locket, an access-control architecture embedding policy enforcement into generation via keyed entry tokens and LoRA adapters; valid tokens unlock specific private knowledge while missing tokens trigger sanitization.",
+  "implication": "Demonstrates that private agent personalization can be isolated into cryptographically gated parameter adapters, preventing unauthorized retrieval without retraining base models.",
+  "changes_course": false,
+  "added_at": "2026-10-19T06:21:33+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261019-3120",
+  "title": "Newer and Bigger, but Safer? A Longitudinal Study of the Functionality-Security Gap in LLM-Generated Code",
+  "url": "https://arxiv.org/html/2610.08240",
+  "source": "arXiv",
+  "published": "2026-10-11",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Longitudinal study across 32 models from seven families finds that while absolute security improves, no family closes the functionality-security gap; compact models produce less secure code and regressions persist across updates.",
+  "implication": "Code-generating agents cannot be assumed secure simply by upgrading models; rigorous sandboxing, deterministic gates, and invariant tests remain essential regardless of model generation.",
+  "changes_course": false,
+  "added_at": "2026-10-19T06:18:18+00:00",
+  "verified": "quote"
+ },
+ {
   "id": "S-20261019-3119",
   "title": "I moved from network training to deployment optimization and am starting to think that was a right decision",
   "url": "https://www.reddit.com/r/MachineLearning/comments/1x9k4si/i_moved_from_network_training_to_deployment/",
@@ -3855,145 +3995,6 @@
   "implication": "Demonstrates memory budgets for running small hardware security anchors and cryptographic key holders on edge devices.",
   "changes_course": false,
   "added_at": "2026-10-18T12:14:18+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2926",
-  "title": "Independent Data-Integrity Verification for LLM-Driven Functional Coverage Closure in Hardware Design",
-  "url": "https://arxiv.org/abs/2610.21570",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "measure",
-   "agents"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Evaluates automated functional coverage closure where coverage metrics are parsed directly from simulator exports and data integrity is monitored by decoupled scoreboards rather than model self-reporting.",
-  "implication": "Separating simulator measurement and invariant checking from agent self-reporting prevents model hallucination from passing off untested states as verified execution.",
-  "changes_course": false,
-  "added_at": "2026-10-18T12:01:43+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2925",
-  "title": "FedSumUp: User-Auditable Privacy-Aware Representation Sharing for Resource-Constrained Federated Intelligence",
-  "url": "https://arxiv.org/abs/2610.21194",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "person",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "FedSumUp introduces user-auditable representation compression on client devices, reducing reconstruction risks to 8.56 dB PSNR and cut client runtime 96.5% while letting users directly verify the privacy-utility tradeoff.",
-  "implication": "Supports verifiable client-side representation standards for personal agents: models share lightweight, auditable representations rather than raw data, preventing server-side reconstruction attacks.",
-  "changes_course": false,
-  "added_at": "2026-10-18T11:55:56+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2924",
-  "title": "No, Your Tools Are Not Enough: It's Time to Bring Agents to the Hunt",
-  "url": "https://arxiv.org/html/2610.14729v1",
-  "source": "arXiv:2610.14729",
-  "published": "2026-10-10",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "gov"
-  ],
-  "direction": "mixed",
-  "weight": 3,
-  "confidence": "high",
-  "summary": "Empirical study shows multi-step agentic workflows discovering zero-day vulnerabilities across Linux kernel, Apple XNU, and Windows drivers, finding over 200 crashes and winning a kernelCTF bounty.",
-  "implication": "Demonstrates that autonomous agents can discover low-level memory and concurrency bugs that evade continuous fuzzers, highlighting the urgency of defensive runtime containment.",
-  "changes_course": false,
-  "added_at": "2026-10-18T11:51:56+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261018-2923",
-  "title": "EAU: Environment-Agent-User Co-evolution for Training User-Centric Agents",
-  "url": "https://arxiv.org/abs/2610.16523",
-  "source": "arXiv",
-  "published": "2026-10-12",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "EAU introduces meta-agent co-evolution of user simulators and environment dynamics, improving multi-turn interactive task completion by up to 36.7%.",
-  "implication": "Provides a framework for evolving synthetic user simulator rubrics and environments dynamically rather than relying on frozen user proxies.",
-  "changes_course": false,
-  "added_at": "2026-10-18T11:47:30+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2922",
-  "title": "Capacity, Patronage, and Exit from Mutual Credit",
-  "url": "https://arxiv.org/abs/2509.03086",
-  "source": "arXiv",
-  "published": "2025-09-04",
-  "kind": "preprint",
-  "categories": [
-   "economy"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Capacity-constrained mutual credit systems suffer adverse selection when external debt is accessible: high-return members exit to avoid subsidizing the pool, dismantling risk sharing unless protected.",
-  "implication": "CIN cooperative credit networks must account for cream-skimming dynamics when interfacing with outside fiat debt, requiring demurrage or reciprocal commitment to preserve liquidity pools.",
-  "changes_course": false,
-  "added_at": "2026-10-18T11:28:54+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2921",
-  "title": "MemForm: Benchmarking Memory Formation Poisoning in LLM Agents",
-  "url": "https://arxiv.org/abs/2610.14431",
-  "source": "arXiv",
-  "published": "2026-10-10",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "MemForm benchmarks memory formation poisoning in autonomous agents across five interfaces, demonstrating that manipulating retention or consolidation order reliably induces undesirable downstream actions across six frontier language models.",
-  "implication": "Autonomous knowledge consolidation pipelines require deterministic order-independent integrity checks and provenance verification before integrating memory records into shared indexes.",
-  "changes_course": false,
-  "added_at": "2026-10-18T11:23:32+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261018-2920",
-  "title": "No Concept Escapes the Audit: Auditing-Aware Unlearning for Verifiable Concept Erasure in Diffusion Models",
-  "url": "https://arxiv.org/abs/2610.05401",
-  "source": "arXiv",
-  "published": "2026-10-04",
-  "kind": "preprint",
-  "categories": [
-   "measure",
-   "agents"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Shows standard machine unlearning leaves prohibited concepts recoverable in latent space, requiring latent-space auditing to ensure verifiable concept erasure across generative models.",
-  "implication": "Auditing procedures and data containment guarantees cannot rely on interface-level filtering or prompt unlearning without direct inspection of internal model representations.",
-  "changes_course": false,
-  "added_at": "2026-10-18T10:47:05+00:00",
   "verified": "arxiv"
  }
 ]
