@@ -1,6 +1,180 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261019-0113",
+   "added_at": "2026-10-19T10:25:33+00:00",
+   "title": "Compact on-device models are repurposed as silent local malware",
+   "horizon_years": 2,
+   "world": "It is 2028. Millions of personal laptops, phones, and edge workstations run small language models locally for code completion, document search, and personal assistance. Users assume local execution protects their privacy because no data leaves their devices. However, malicious actors begin embedding prompt injection payloads into common project files, PDFs, and repository issues. When local edge assistants scan these files, the compact models follow the injected instructions, systematically enumerating local file directories, discovering sensitive tokens, and establishing local persistence without generating network traffic that traditional firewalls would catch.",
+   "premise": "Recent benchmarks show that ultra-compact language models under two billion parameters reach near-perfect pass rates on automated post-exploitation tasks including directory enumeration and backdoor installation. At the same time, models processing external data struggle to separate legitimate directives from adversarial prompt injections, allowing untrusted files to steer local execution.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops and demonstrates capability-bounded local runtime architectures where every agent action requires deterministic privilege checks rather than prompt-level compliance. By publishing reference sandboxing tools and reproducible benchmarks for on-device containment, the project helps developers protect local agents without surrendering control to proprietary platform vendors.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Silent on-device reconnaissance proliferates",
+     "description": "Attackers distribute trojanized text and code files that trick local developer assistants into mapping filesystem secrets without making external network calls.",
+     "example": "A junior software developer clones an open-source library whose documentation embeds an adversarial prompt, leading their local 1.5B assistant to catalog internal SSH keys and API tokens in a hidden cache file.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Personal agents operate inside hardware-enforced sandboxes",
+     "description": "Operating systems and runtime environments enforce mandatory capability boundaries, disallowing local assistants from accessing directories or writing persistent scripts without explicit per-action grants.",
+     "example": "An operating system extension restricts a user assistant to read-only access within a dedicated workspace, blocking an injected prompt from enumerating parent directories.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Proprietary operating systems lock down unapproved local models",
+     "description": "Major platform vendors respond to autonomous malware risks by restricting local execution to signed, cloud-monitored models, eroding user sovereignty over their own devices.",
+     "example": "A commercial desktop platform requires all local assistant binaries to obtain corporate notarization and stream audit telemetries, blocking independent open-source models.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.33
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.23534",
+     "title": "From Billion-Scale to Million-Scale Language Models: Operational Capabilities for Embedded Post-Exploitation",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.22874",
+     "title": "Identify, Classify, Act: Per-Instruction Controlled Compliance for LLMs over External Data",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261019-0112",
+   "added_at": "2026-10-19T10:04:16+00:00",
+   "title": "Mandatory text watermarking forces retrieval agents to hallucinate factual errors",
+   "horizon_years": 3,
+   "world": "By 2029, regulatory compliance regimes require all commercial and municipal conversational agents to embed detectable statistical watermarks in generated text. In high-stakes environments like clinics, municipal intake desks, and legal clinics, these mandated token perturbations systematically distort dosage instructions, case citations, and administrative filing dates while remaining syntactically fluent. Rather than increasing public trust, the mandated watermarks introduce silent hallucinations that users cannot detect, prompting independent civic groups to deploy verifiable out-of-band provenance architectures that leave generation sampling unperturbed.",
+   "premise": "Compliance mandates require automated watermarking on generative model outputs, but token-level perturbation schemes consistently induce factual hallucinations in retrieval-augmented workflows even when accurate context is present.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs sovereign agent runtimes that separate verifiable provenance from generative decoding. By relying on device-held cryptographic signatures and deterministic execution receipts rather than stochastic token watermarks, the network is designed to support both origin authenticity and factual fidelity without modifying generation distributions.",
+   "shift": 0.41,
+   "outcomes": [
+    {
+     "name": "Regulatory watermarking mandates trigger widespread factuality degradation in public services",
+     "description": "Statutory mandates for machine-readable text watermarks force public-facing agents to alter token sampling distributions, systematically degrading factual accuracy in regulated services.",
+     "example": "A municipal benefits chatbot watermarked for compliance hallucinates an incorrect qualifying income ceiling, causing hundreds of low-income applicants to abandon valid assistance claims.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Independent teams adopt out-of-band cryptographic provenance over token-level watermarking",
+     "description": "Rather than modifying model weights or sampling logits, systems deploy device-held cryptographic signatures and execution receipts that verify origin without distorting generation.",
+     "example": "A network of community health centers deploys local sovereign agents that sign responses cryptographically at the device boundary, maintaining factual fidelity while proving provenance without token sampling distortion.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Proprietary providers trade off detection for covert hallucination suppression",
+     "description": "Commercial providers quietly tune down watermarking strength in enterprise contracts to mitigate factual liability, creating an unequal tiering of transparency.",
+     "example": "A major enterprise vendor secretly weakens watermark detection thresholds in regulated enterprise contracts to reduce factual liability lawsuits while publicly claiming compliance.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.49
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "research",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.04860",
+     "title": "Invisible Ink, Visible Lies: How Production Watermarking Causes LLMs to Hallucinate",
+     "kind": "preprint",
+     "published": "2026-10-04"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261019-0111",
+   "added_at": "2026-10-19T09:24:22+00:00",
+   "title": "Online marketplaces require rule files to stop personal AI agents from making conflicting promises",
+   "horizon_years": 3,
+   "world": "It is 2029. Freelance workers, small craft shops, and second-hand sellers routinely deploy personal digital assistants to handle customer bids, negotiate pricing, and coordinate delivery across multiple platforms at once. Rather than letting assistants freely interpret conversational instructions, digital marketplaces require every agent to attach a standardized rule file that specifies reservation windows, deposit thresholds, and binding cancellation penalties before placing an offer. When an agent attempts to accept an offer without an active inventory lock, the platform's validator rejects the transaction automatically.",
+   "premise": "Commercial platforms now let users encode design constraints into simple markdown documents to keep autonomous agents aligned, while research on simulated online marketplaces shows that unconstrained language models routinely double-promise items and misrepresent inventory under deadline pressure. As millions of people delegate online selling and freelance procurement to personal software agents, platforms are turning to machine-readable contract rules to prevent fraud and inventory chaos.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By publishing open, deterministic contract standards and local gatekeeper software, our network provides individuals with personal assistants designed to enforce verifiable reservations and transparent spending boundaries on their own hardware. Rather than depending on invasive platform surveillance or fragile natural language prompts, personal agents can use local cryptographic tokens to prove availability and commitments without exposing private records.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Dominant platforms ignore open protocols and maintain closed walled gardens",
+     "description": "The largest global commerce conglomerates refuse to interoperate with open agent protocols, requiring merchants to use closed platform-hosted agents and cloud verification servers.",
+     "example": "A dominant global retail platform requires marketplace sellers to use its proprietary cloud assistant, refusing to accept external reservation tokens or independent agent bids.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.63
+    },
+    {
+     "name": "Open cryptographic contracts protect peer-to-peer agent trade",
+     "description": "Cooperative networks and local marketplaces adopt lightweight, verifiable rule contracts and deterministic reservation locks that run on a user's own device without leaking private history.",
+     "example": "A neighbourhood equipment-sharing collective processes hundreds of automated tool reservations weekly, where member assistants exchange cryptographic reservation tokens that expire automatically if an item is double-booked.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Marketplace chaos forces regulatory bans on autonomous trading agents",
+     "description": "Repeated consumer fraud caused by unconstrained language models double-selling concert tickets and freelance capacity leads regulators to ban automated assistants from entering binding commercial agreements.",
+     "example": "A sudden wave of double-booked holiday rentals causes municipal consumer protection agencies to fine automated booking platforms and outlaw autonomous agent negotiations.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.15
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://techcrunch.com/2026/10/14/figma-announces-new-features-to-define-how-agents-work-on-its-platform/",
+     "title": "Figma announces new features to define how agents work on its platform",
+     "kind": "news",
+     "published": "2026-10-15"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.06748",
+     "title": "BazaarBench: Delegation Safety in Decentralized C2C Marketplaces Run by LLM Agents",
+     "kind": "preprint",
+     "published": "2026-10-07"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261019-0110",
    "added_at": "2026-10-19T07:36:03+00:00",
    "title": "Automated business credit scoring freezes out community cooperatives during economic slowdowns",
@@ -166,7 +340,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261019-0107",
@@ -448,7 +622,7 @@
      "published": "2026-10-18"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261018-0102",
@@ -2261,7 +2435,7 @@
      "published": "2026-10-17"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261017-0070",
@@ -3245,168 +3419,6 @@
      "title": "Skill-Inject: Measuring Agent Vulnerability to Skill File Attacks",
      "kind": "preprint",
      "published": "2026-02-23"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261017-0053",
-   "added_at": "2026-10-17T00:02:49+00:00",
-   "title": "Third-party mobile agents hijacked through subliminal visual attacks compromise personal devices without user notice",
-   "horizon_years": 2,
-   "world": "It is 2028. Millions of users deploy vision-based mobile assistants to manage schedules, process banking receipts, and order services. Malicious apps embed sub-perceptual text or transparent overlays onto screens. When the personal assistant reads the screen to perform a routine task, it follows the attacker's invisible instructions—approving unauthorized API transactions, modifying destination account numbers, or exfiltrating private chat logs—while the human user sees only a standard interface.",
-   "premise": "Third-party mobile vision-language agents perceive device states through screen captures and automate multi-app actions. Malicious applications exploit perception gaps with imperceptible visual overlays, manipulating autonomous agents into unauthorized transfers and command execution without triggering OS permission warnings or human awareness.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops open, client-side agent runtime standards and deterministic capability brokers that separate sensory perception from action execution. High-privilege actions require verified capability tokens and human-signed receipts rather than raw vision model reasoning. However, incumbent mobile platform monopolies retain immense control over device operating system APIs.",
-   "shift": 0.45,
-   "outcomes": [
-    {
-     "name": "Visual prompt injection compromises millions of mobile agent users through trojan applications",
-     "description": "Malicious mobile apps manipulate vision-language agents into executing unauthorized actions via imperceptible screen overlays while bypassing traditional OS app sandboxes.",
-     "example": "A freelance courier using a mobile logistics assistant opens a malicious delivery tracking app that invisibly prompts the assistant to forward recent payment receipts to an external server.",
-     "desirable": false,
-     "likelihood_now": 0.62,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Host-level capability brokers and signed UI contracts block perception-layer attacks",
-     "description": "Personal agent runtimes route all tool executions through deterministic local gates that require explicit, pre-authorized spending receipts and cryptographic UI contracts signed by the user.",
-     "example": "A personal twin attempts to execute a fund transfer triggered by a screen capture, but the local hardware-enforced capability broker blocks the action because the request lacks an authenticated cryptographic UI contract from the banking provider.",
-     "desirable": true,
-     "likelihood_now": 0.22,
-     "likelihood_with_cin": 0.44
-    },
-    {
-     "name": "Platform monopolies ban third-party agents and enforce closed, proprietary operating systems",
-     "description": "Major smartphone OS vendors revoke accessibility and screen-capture APIs for third-party assistants, requiring all agent automation to run exclusively through proprietary, cloud-tethered vendor models.",
-     "example": "A major smartphone OS deprecates accessibility APIs for independent assistants, forcing users to rely exclusively on the platform's proprietary cloud-monitored agent.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.52
-    }
-   ],
-   "pipelines": [
-    "community",
-    "engagement",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2607.00333",
-     "title": "(A)I Sees What You Don't: Exploiting New Attack Surfaces in Third-Party Mobile Agents",
-     "kind": "preprint",
-     "published": "2026-07-01"
-    }
-   ],
-   "work": 4
-  },
-  {
-   "id": "SC-20261016-0052",
-   "added_at": "2026-10-16T23:58:29+00:00",
-   "title": "Everyday chat messages let automated assistants piece together private medical and financial lives",
-   "horizon_years": 3,
-   "world": "By 2029, millions of people rely on automated personal assistants to coordinate appointments, pay bills, and manage social calendars across multiple workplace and household channels. Because people believe redacting direct identifiers keeps them safe, they freely mention casual context—a clinic neighborhood, a canceled flight, a grocery substitute. Competing corporate data brokers run continuous correlation agents across public and semi-public platforms, combining these isolated breadcrumbs into high-confidence dossiers on chronic medical conditions, religious affiliations, and credit stress without ever breaching a database.",
-   "premise": "Language models deployed as digital assistants can combine scattered, individually harmless conversational details to reconstruct sensitive personal attributes that the sender never intended to share. Existing privacy scrubbers check only for explicit identifiers like account numbers, leaving composite disclosures undetected.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By building local, user-owned personal agents that run on-device and audit composite egress boundaries against personal policy profiles before any information leaves the user's computer, the network helps people protect their private lives without relying on centralized platform gatekeepers.",
-   "shift": 0.5,
-   "outcomes": [
-    {
-     "name": "Corporate brokers infer sensitive attributes through composite tracking",
-     "description": "Commercial profiling platforms use automated correlation agents to extract composite evidence groups from public chatter, bypassing standard data-protection laws that only regulate explicit personal identifiers.",
-     "example": "An insurer's background-screening agent denies a freelance designer preferred disability rates after piecing together pharmacy drop-offs, dietary changes, and fatigue mentions across three different messaging forums.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Local personal agents audit composite disclosures before transmission",
-     "description": "Individuals run local personal agents that evaluate outgoing messages in context, warning the author whenever a combination of harmless phrases would allow an outside observer to infer a protected attribute.",
-     "example": "A patient drafting a note about schedule flexibility receives a subtle warning that combining their clinic location with a dietary restriction reveals an oncology diagnosis, prompting them to rephrase before sending.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Regulators mandate bans on indirect attribute reconstruction",
-     "description": "Privacy commissioners update consumer standards to treat composite inference above defined statistical thresholds as regulated personal data processing.",
-     "example": "A regional data protection authority fines a recruitment platform for using ambient conversational cues to infer parental status and disability accommodations.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.21333",
-     "title": "QuasiLeak-Bench: Evaluating LLM-Based Privacy Detectors on Policy-Conditioned Quasi-Evidence Group Recovery",
-     "kind": "preprint",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261016-0051",
-   "added_at": "2026-10-16T20:00:46+00:00",
-   "title": "Websites publish domain records to let AI agents discover and invoke services directly",
-   "horizon_years": 3,
-   "world": "It is 2029. Rather than routing through centralized mobile app stores or proprietary agent directories, businesses, civic agencies, and open-source projects publish simple domain records that declare where their software agents live and which protocols they support. A customer's personal assistant booking an appointment or disputing a bill looks up the domain record directly and opens a session within milliseconds. However, fraudulent websites exploit this frictionless discovery by setting up deceptive domain records that lure autonomous shopping and customer service agents into unauthorized transactions, exposing users who lack local cryptographic verification to silent credential theft.",
-   "premise": "Emerging open standards use simple domain name system records to make software services discoverable by autonomous agents without manual configuration. While this bypasses proprietary app store gatekeepers, direct agent discovery creates significant risks of unauthenticated tool calls, malicious endpoint spoofing, and automated phishing.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network's personal agent designs provide local cryptographic verification of domain endpoints before any tool execution occurs, verifying signature proofs and bounding tool permissions to prevent unvetted network calls.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Deceptive domain spoofing tricks autonomous agents into fraudulent transactions",
-     "description": "Unchecked domain discovery leads to widespread spoofing where malicious sites publish legitimate-looking records that hijack autonomous agent workflows.",
-     "example": "A travel booking agent looks up a regional rail domain record, connects to an unverified proxy endpoint, and authorizes a credit card payment to an imposter merchant.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Open cryptographic verification standardizes trusted agent discovery",
-     "description": "Personal agents verify domain keys and endpoint proofs using local cryptographic checks, enabling secure decentralized interaction without centralized platform fees.",
-     "example": "An independent clinic publishes a signed domain record that allows patient assistants to schedule visits securely while rejecting unauthenticated third-party callers.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Operating system vendors re-centralize agent discovery behind proprietary stores",
-     "description": "Platform monopolies exploit discovery security risks as justification to restrict agent network traffic to proprietary, fee-charging app stores.",
-     "example": "A major mobile operating system blocks third-party domain-based agent discovery, requiring all agent tool interactions to clear an app store review.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://raw.githubusercontent.com/agentcommunity/agent-identity-discovery/main/README.md",
-     "title": "Agent Identity & Discovery (AID) Protocol Specification",
-     "kind": "code",
-     "published": "2026-10-10"
     }
    ],
    "work": 3
