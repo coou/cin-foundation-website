@@ -6613,7 +6613,7 @@ export function evaluateAuthorityEnvelopeAction(envelope, actionRequest, options
   if (typeof actionRequest.action !== 'string' || !actionRequest.action.trim() || actionRequest.action.length > 50) {
     violations.push('invalid_action');
   }
-  if (typeof actionRequest.target_domain !== 'string' || !actionRequest.target_domain.trim() || actionRequest.target_domain.length > 100) {
+  if (typeof actionRequest.target_domain !== 'string' || !actionRequest.target_domain || actionRequest.target_domain.length > 100 || /[\s\r\n]/.test(actionRequest.target_domain)) {
     violations.push('invalid_target_domain');
   }
   if (typeof actionRequest.scope !== 'string' || !actionRequest.scope.trim() || actionRequest.scope.length > 80) {
@@ -6625,7 +6625,7 @@ export function evaluateAuthorityEnvelopeAction(envelope, actionRequest, options
   if ('contains_credentials' in actionRequest && typeof actionRequest.contains_credentials !== 'boolean') {
     violations.push('invalid_contains_credentials');
   }
-  if ('target_url' in actionRequest && (typeof actionRequest.target_url !== 'string' || !actionRequest.target_url.trim() || actionRequest.target_url.length > 500)) {
+  if ('target_url' in actionRequest && (typeof actionRequest.target_url !== 'string' || !actionRequest.target_url || actionRequest.target_url.length > 500 || /[\s\r\n]/.test(actionRequest.target_url) || actionRequest.target_url.includes('\\'))) {
     violations.push('invalid_target_url');
   }
 
@@ -6704,7 +6704,9 @@ export function evaluateAuthorityEnvelopeAction(envelope, actionRequest, options
       envelope.allowed_scopes.includes('*') ||
       envelope.allowed_actions.includes('*') ||
       actionRequest.scope === '*' ||
-      actionRequest.action === '*') {
+      actionRequest.action === '*' ||
+      actionRequest.target_domain === '*' ||
+      actionRequest.target_domain.includes('*')) {
     return deepFreeze({
       ok: false,
       decision: 'denied',
@@ -6721,7 +6723,22 @@ export function evaluateAuthorityEnvelopeAction(envelope, actionRequest, options
   }
 
   // Domain checks
-  let rawDomain = actionRequest.target_domain.trim().toLowerCase();
+  if (/[\s\r\n]/.test(actionRequest.target_domain)) {
+    return deepFreeze({
+      ok: false,
+      decision: 'denied',
+      status: 'denied',
+      envelope_id: envelope.envelope_id,
+      grantee: actionRequest.grantee,
+      action: actionRequest.action,
+      target_domain: actionRequest.target_domain,
+      requires_confirmation: false,
+      violations: Object.freeze(['malformed_target_domain']),
+      reason: 'Target domain must not contain whitespace, newline, or carriage return characters',
+      audit_timestamp: nowIso
+    });
+  }
+  let rawDomain = actionRequest.target_domain.toLowerCase();
   if (rawDomain.endsWith('.')) {
     rawDomain = rawDomain.slice(0, -1);
   }
@@ -6747,20 +6764,6 @@ export function evaluateAuthorityEnvelopeAction(envelope, actionRequest, options
         audit_timestamp: nowIso
       });
     }
-  } else if (!rawDomain || rawDomain.includes('/') || rawDomain.includes(':') || rawDomain.includes(' ') || rawDomain.startsWith('.')) {
-    return deepFreeze({
-      ok: false,
-      decision: 'denied',
-      status: 'denied',
-      envelope_id: envelope.envelope_id,
-      grantee: actionRequest.grantee,
-      action: actionRequest.action,
-      target_domain: actionRequest.target_domain,
-      requires_confirmation: false,
-      violations: Object.freeze(['malformed_target_domain']),
-      reason: `Malformed target domain: ${actionRequest.target_domain}`,
-      audit_timestamp: nowIso
-    });
   }
 
   // Check IPv4 address format
@@ -6780,6 +6783,28 @@ export function evaluateAuthorityEnvelopeAction(envelope, actionRequest, options
       reason: 'Non-standard IP address representations are rejected',
       audit_timestamp: nowIso
     });
+  }
+
+  // Strict DNS hostname validation for non-IPv6 domains
+  // Hostnames must be dot-separated labels consisting of alphanumeric characters and hyphens,
+  // cannot start or end with a hyphen or dot, cannot have empty labels (..), cannot contain ?, #, @, \, *, etc.
+  if (!isIpv6) {
+    const isValidHostname = isIpv4 || (/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i.test(rawDomain) && !rawDomain.includes('..'));
+    if (!isValidHostname) {
+      return deepFreeze({
+        ok: false,
+        decision: 'denied',
+        status: 'denied',
+        envelope_id: envelope.envelope_id,
+        grantee: actionRequest.grantee,
+        action: actionRequest.action,
+        target_domain: actionRequest.target_domain,
+        requires_confirmation: false,
+        violations: Object.freeze(['malformed_target_domain']),
+        reason: `Malformed target domain: ${actionRequest.target_domain}`,
+        audit_timestamp: nowIso
+      });
+    }
   }
 
   // Check Punycode / non-ascii in target_domain
@@ -6825,6 +6850,21 @@ export function evaluateAuthorityEnvelopeAction(envelope, actionRequest, options
 
   // target_url consistency and subdomain fence check
   if (actionRequest.target_url) {
+    if (actionRequest.target_url.includes('\\')) {
+      return deepFreeze({
+        ok: false,
+        decision: 'denied',
+        status: 'denied',
+        envelope_id: envelope.envelope_id,
+        grantee: actionRequest.grantee,
+        action: actionRequest.action,
+        target_domain: actionRequest.target_domain,
+        requires_confirmation: false,
+        violations: Object.freeze(['invalid_target_url_format']),
+        reason: 'Target URL must not contain backslash characters',
+        audit_timestamp: nowIso
+      });
+    }
     try {
       const parsedUrl = new URL(actionRequest.target_url);
       if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {

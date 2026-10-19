@@ -5492,6 +5492,27 @@ test('evaluateAuthorityEnvelopeAction enforces domain boundaries and defeats sub
   assert.equal(evaluateAuthorityEnvelopeAction(ipv6Env, { ...baseAction, target_domain: '[::1]' }, opts).ok, true);
   assert.equal(evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: '[::1]' }, opts).ok, false);
   assert.equal(evaluateAuthorityEnvelopeAction(ipv6Env, { ...baseAction, target_domain: '[invalid-ipv6]' }, opts).ok, false);
+
+  // Target domain CRLF / whitespace injection attack (github.com\r\n or github.com\n)
+  const resCrlfDomain = evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'github.com\r\n' }, opts);
+  assert.equal(resCrlfDomain.ok, false);
+  assert.ok(resCrlfDomain.violations.includes('invalid_target_domain') || resCrlfDomain.violations.includes('malformed_target_domain'));
+
+  const resNewlineDomain = evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'github.com\n' }, opts);
+  assert.equal(resNewlineDomain.ok, false);
+  assert.ok(resNewlineDomain.violations.includes('invalid_target_domain') || resNewlineDomain.violations.includes('malformed_target_domain'));
+
+  const resSpaceDomain = evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: ' github.com ' }, opts);
+  assert.equal(resSpaceDomain.ok, false);
+  assert.ok(resSpaceDomain.violations.includes('invalid_target_domain') || resSpaceDomain.violations.includes('malformed_target_domain'));
+
+  // Fragment, query, userinfo, backslash, empty DNS labels, and wildcards in target_domain
+  assert.equal(evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'attacker.com#sub.github.com' }, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'attacker.com?sub.github.com' }, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'attacker.com@sub.github.com' }, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'attacker.com\\sub.github.com' }, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: 'sub..github.com' }, opts).ok, false);
+  assert.equal(evaluateAuthorityEnvelopeAction(envelope, { ...baseAction, target_domain: '*.github.com' }, opts).ok, false);
 });
 
 test('evaluateAuthorityEnvelopeAction strictly validates target_url consistency and enforces subdomain fence', () => {
@@ -5546,6 +5567,22 @@ test('evaluateAuthorityEnvelopeAction strictly validates target_url consistency 
   }, opts);
   assert.equal(resJsScheme.ok, false);
   assert.ok(resJsScheme.violations.includes('unsupported_url_scheme'));
+
+  // Prohibited backslash in target_url (parser differential across HTTP clients)
+  const resBackslashUrl = evaluateAuthorityEnvelopeAction(envelope, {
+    ...baseAction,
+    target_url: 'https://github.com\\@evil.com/path'
+  }, opts);
+  assert.equal(resBackslashUrl.ok, false);
+  assert.ok(resBackslashUrl.violations.includes('invalid_target_url') || resBackslashUrl.violations.includes('invalid_target_url_format'));
+
+  // Trailing CRLF in target_url must fail closed
+  const resCrlfUrl = evaluateAuthorityEnvelopeAction(envelope, {
+    ...baseAction,
+    target_url: 'https://github.com/repos/cin/twin\r\n'
+  }, opts);
+  assert.equal(resCrlfUrl.ok, false);
+  assert.ok(resCrlfUrl.violations.includes('invalid_target_url') || resCrlfUrl.violations.includes('invalid_target_url_format'));
 });
 
 test('evaluateAuthorityEnvelopeAction prohibits wildcard * permissions fail-closed', () => {
