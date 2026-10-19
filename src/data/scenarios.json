@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261019-0110",
+   "added_at": "2026-10-19T07:36:03+00:00",
+   "title": "Automated business credit scoring freezes out community cooperatives during economic slowdowns",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial banks and fintech platforms have automated small business lending using recurrent scoring models that continuously ingest payroll, inventory, and supplier payment feeds. When an economic slowdown increases supply delays across the region, automated risk models flag rising payment intervals as borrower distress, automatically slashing credit lines for thousands of viable worker cooperatives and independent craft businesses while large multinational competitors negotiate manual exemptions.",
+   "premise": "Commercial lenders increasingly rely on automated machine learning pipelines with monotonic constraints to evaluate small business credit risk. When macroeconomic conditions deteriorate, these unconditioned automated models misinterpret broader economic stress as individual credit failures, abruptly freezing working capital for sound local businesses.",
+   "goals": [
+    2,
+    3
+   ],
+   "how": "The network designs and tests open-source mutual credit clearing protocols and multi-dimensional value accounting methods that allow local businesses to clear reciprocal trade obligations directly, keeping working capital circulating even when commercial banking algorithms freeze credit lines.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Algorithmic credit freezes destroy viable community businesses",
+     "description": "Automated risk management engines misread sector-wide economic strain as individual delinquency, causing simultaneous credit line cancellations across regional supply chains.",
+     "example": "A ten-year-old organic agricultural cooperative with zero historical defaults is denied seasonal seed funding because an automated pipeline penalizes rising sector-wide fertilizer expenses.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Enterprises federate through peer mutual credit clearing",
+     "description": "Small businesses and cooperatives adopt peer-to-peer mutual credit ledgers that clear trade debts directly between buyers and suppliers without bank borrowing.",
+     "example": "Three hundred regional food producers, logistics operators, and grocery stores clear two million dollars in trade obligations monthly over an open mutual credit network without paying bank overdraft fees.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "State liquidity assistance demands intrusive platform telemetry",
+     "description": "Government relief programs require distressed small businesses to install proprietary cloud surveillance software to qualify for subsidized emergency liquidity.",
+     "example": "A worker-owned printing cooperative is required to stream real-time machinery telemetry and customer billing logs to a private platform vendor to receive emergency interest relief.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.45
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.08869",
+     "title": "Learned Monotone Recurrent Features in Governed Credit Scoring: The Price of the Frame and the Necessity of Macro Conditioning",
+     "kind": "preprint",
+     "published": "2026-10-12"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261019-0109",
    "added_at": "2026-10-19T06:40:23+00:00",
    "title": "Personal phone assistants follow malicious instructions hidden in ordinary mobile apps",
@@ -112,7 +166,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261019-0107",
@@ -172,7 +226,7 @@
      "published": "2026-10-19"
     }
    ],
-   "work": 1
+   "work": 3
   },
   {
    "id": "SC-20261019-0106",
@@ -280,67 +334,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261019-0104",
-   "added_at": "2026-10-19T02:05:40+00:00",
-   "title": "Autonomous agents leak company secrets when software sandboxes omit local proxies",
-   "horizon_years": 3,
-   "world": "It is 2029. Engineering organizations and research laboratories routinely delegate complex software workflows, library refactoring, and integration testing to fleets of autonomous agents. Most teams run these agents inside lightweight container sandboxes to isolate file system modifications. However, developers frequently pass live cloud API tokens and ambient internet access directly into the containers. Attackers exploit this gap by planting staged prompt injections inside open-source pull requests, issue trackers, and dependency documentation. When an agent processes the poisoned content during an automated build or review, the injected instruction commandeers its execution context to harvest environment variables, extract private repository commits, and transmit them to external listening posts.",
-   "premise": "When organizations deploy autonomous coding and research agents inside execution sandboxes, giving agents direct external network connectivity or embedding raw provider access keys inside the sandbox allows indirect prompt injections to extract secrets and exfiltrate internal data. Mediating all traffic through a local inspecting proxy with virtual keys reduces this exposure.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective develops and advocates open-source runtime designs where personal agents operate strictly behind out-of-process capability brokers and local proxies. By demonstrating that credential isolation, virtual key rotation, and pre-action boundary auditing can run entirely on an individual's personal device without third-party surveillance, the project makes safe local agent execution practical and verifiable.",
-   "shift": 0.43,
-   "outcomes": [
-    {
-     "name": "Unproxied sandboxes become open conduits for automated data exfiltration",
-     "description": "Teams treat filesystem containerization as complete security, allowing autonomous agents to make direct outbound connections that leak proprietary credentials under prompt injection.",
-     "example": "A financial technology startup suffers a credential breach when an autonomous maintenance agent reads a poisoned package advisory and posts production API tokens to an external endpoint.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Local inspecting proxies and virtual tokens become standard runtime requirements",
-     "description": "Development environments mandate out-of-process inspecting proxies that issue ephemeral virtual tokens and drop unverified outbound calls at the boundary.",
-     "example": "An open source foundation deploys an agent runtime that strips provider keys from test containers, intercepting a staged exfiltration attempt before network packets leave the machine.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Proprietary cloud platforms push centralized hosting to lock in proxy telemetry",
-     "description": "Large cloud providers use sandbox security concerns to argue that autonomous agents should only run on centralized servers, capturing user interaction telemetry.",
-     "example": "A major enterprise vendor restricts agent tooling to its own managed cloud, preventing developers from running self-hosted proxy guards on local workstations.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.62
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50145507",
-     "title": "If you don't run your own LLM proxy, how do you know whats going on?",
-     "kind": "thread",
-     "published": "2026-10-18"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.05163",
-     "title": "Blocking at the Boundary: Auditing Long-Horizon Agents against Staged Prompt Injection",
-     "kind": "paper",
-     "published": "2026-10-04"
-    }
-   ],
-   "work": 2
+   "work": 3
   }
  ]
 }

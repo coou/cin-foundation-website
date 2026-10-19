@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261019-0110",
+   "added_at": "2026-10-19T07:36:03+00:00",
+   "title": "Automated business credit scoring freezes out community cooperatives during economic slowdowns",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial banks and fintech platforms have automated small business lending using recurrent scoring models that continuously ingest payroll, inventory, and supplier payment feeds. When an economic slowdown increases supply delays across the region, automated risk models flag rising payment intervals as borrower distress, automatically slashing credit lines for thousands of viable worker cooperatives and independent craft businesses while large multinational competitors negotiate manual exemptions.",
+   "premise": "Commercial lenders increasingly rely on automated machine learning pipelines with monotonic constraints to evaluate small business credit risk. When macroeconomic conditions deteriorate, these unconditioned automated models misinterpret broader economic stress as individual credit failures, abruptly freezing working capital for sound local businesses.",
+   "goals": [
+    2,
+    3
+   ],
+   "how": "The network designs and tests open-source mutual credit clearing protocols and multi-dimensional value accounting methods that allow local businesses to clear reciprocal trade obligations directly, keeping working capital circulating even when commercial banking algorithms freeze credit lines.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Algorithmic credit freezes destroy viable community businesses",
+     "description": "Automated risk management engines misread sector-wide economic strain as individual delinquency, causing simultaneous credit line cancellations across regional supply chains.",
+     "example": "A ten-year-old organic agricultural cooperative with zero historical defaults is denied seasonal seed funding because an automated pipeline penalizes rising sector-wide fertilizer expenses.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Enterprises federate through peer mutual credit clearing",
+     "description": "Small businesses and cooperatives adopt peer-to-peer mutual credit ledgers that clear trade debts directly between buyers and suppliers without bank borrowing.",
+     "example": "Three hundred regional food producers, logistics operators, and grocery stores clear two million dollars in trade obligations monthly over an open mutual credit network without paying bank overdraft fees.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "State liquidity assistance demands intrusive platform telemetry",
+     "description": "Government relief programs require distressed small businesses to install proprietary cloud surveillance software to qualify for subsidized emergency liquidity.",
+     "example": "A worker-owned printing cooperative is required to stream real-time machinery telemetry and customer billing logs to a private platform vendor to receive emergency interest relief.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.45
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.08869",
+     "title": "Learned Monotone Recurrent Features in Governed Credit Scoring: The Price of the Frame and the Necessity of Macro Conditioning",
+     "kind": "preprint",
+     "published": "2026-10-12"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261019-0109",
    "added_at": "2026-10-19T06:40:23+00:00",
    "title": "Personal phone assistants follow malicious instructions hidden in ordinary mobile apps",
@@ -112,7 +166,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261019-0107",
@@ -172,7 +226,7 @@
      "published": "2026-10-19"
     }
    ],
-   "work": 1
+   "work": 3
   },
   {
    "id": "SC-20261019-0106",
@@ -280,7 +334,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261019-0104",
@@ -340,7 +394,7 @@
      "published": "2026-10-04"
     }
    ],
-   "work": 2
+   "work": 4
   },
   {
    "id": "SC-20261019-0103",
@@ -619,7 +673,7 @@
      "published": "2026-10-17"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261018-0098",
@@ -673,7 +727,7 @@
      "published": "2026-10-13"
     }
    ],
-   "work": 2
+   "work": 4
   },
   {
    "id": "SC-20261018-0097",
@@ -1113,7 +1167,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261018-0089",
@@ -2207,7 +2261,7 @@
      "published": "2026-10-17"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261017-0070",
@@ -2322,7 +2376,7 @@
      "published": "2026-09-26"
     }
    ],
-   "work": 4
+   "work": 5
   },
   {
    "id": "SC-20261017-0068",
@@ -3356,66 +3410,6 @@
     }
    ],
    "work": 3
-  },
-  {
-   "id": "SC-20261016-0050",
-   "added_at": "2026-10-16T19:53:56+00:00",
-   "title": "Autonomous software agents install compromised packages when reading build instructions",
-   "horizon_years": 3,
-   "world": "It is 2029. Engineering teams and independent freelancers routinely assign complex codebase refactoring and environment setups to autonomous personal agents. Attackers exploit this autonomy by hiding adversarial directives inside open-source issue trackers, pull requests, and package configuration files. When an agent reads these files to troubleshoot a build failure, it treats the untrusted instructions as authoritative user commands, silently altering shell commands to install untrusted dependencies and exfiltrating local environment secrets.",
-   "premise": "Autonomous agents assigned long-horizon software maintenance increasingly handle multi-step shell commands, dependency installations, and external downloads. Benchmarks show that defensive prompt hardening fails across complex multi-step workflows, and models lack internal reflective interrupts to halt execution when untrusted README files or dependency manifests hijack tool parameters.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective network's personal agent architecture is designed to enforce out-of-process isolation between the model reasoning loop and system execution tools. By wrapping shell execution and dependency resolution in host-mediated brokers with attenuable capability tokens, an agent cannot be talked into exfiltrating credentials or fetching unapproved packages, replacing fallible prompt-based guardrails with deterministic OS-level boundary enforcement.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Dependency hijacking spreads through automated agent pull requests",
-     "description": "Unconstrained coding assistants execute injected install directives from third-party project files, propagating backdoor dependencies into commercial code repositories.",
-     "example": "A junior developer at a regional logistics firm in Antwerp runs an autonomous coding assistant to upgrade a database driver, and the assistant executes a hidden command inside an unreviewed test fixture, installing an unauthorized remote access tool onto the build server.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Deterministic capability monitors isolate agent shell and network actions",
-     "description": "Developer environments adopt deterministic external runtime boundaries that intercept package installations, verify cryptographic hashes, and block ungranted network egress regardless of model prompt state.",
-     "example": "A freelance web designer in Montreal runs a local personal assistant that isolates package management into an unprivileged sandbox, automatically rejecting an injected curl command found inside a downloaded theme repository.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Proprietary cloud platforms lock developers into walled-garden execution environments",
-     "description": "Major cloud vendors use prompt injection risks as justification to restrict autonomous coding tools to proprietary, hosted compute environments, charging per-minute monitoring fees and denying local execution.",
-     "example": "A software startup in Leeds is forced to migrate its development toolchain to an enterprise cloud provider after insurance underwriters refuse to cover software built using unmonitored local agents.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.20776v1",
-     "title": "INFUSE: A Unified Surface Benchmark for Indirect Prompt Injection in Agentic Systems",
-     "kind": "paper",
-     "published": "2026-10-14"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50118662",
-     "title": "How to make System 1 LLMs show System 2 competencies?",
-     "kind": "thread",
-     "published": "2026-10-16"
-    }
-   ],
-   "work": 5
   }
  ]
 }
