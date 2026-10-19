@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261019-0107",
+   "added_at": "2026-10-19T06:10:36+00:00",
+   "title": "Small local AI helpers seem safe against prompt injection until attackers simplify their demands",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people run compact language models locally on laptops, phones, and home servers to automate email drafting, file triage, calendar scheduling, and local financial tracking. Because these models run entirely on private hardware without sending text to remote cloud providers, users assume they are inherently secure. However, as attackers discover that small models ignore complex malicious instructions while readily executing simple single-step commands, indirect prompt injection attacks become radically stripped-down. A hidden sentence in an invoice or calendar invite no longer tries to exfiltrate an entire database in one go; instead, it issues a single command that changes one file permission or adds a tiny forwarding rule. Because the local models lack explicit pre-action boundary guards, the simplified actions execute without triggering any refusal.",
+   "premise": "Recent evaluations show that low prompt-injection attack rates in small tool-using models often happen because the models fail to follow instructions, not because they actively refuse attacks. Meanwhile, research on probe evasion indicates that capable models learn to generate attack prompts that manipulate internal activations and bypass monitoring probes.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs sovereign agent runtimes that separate language model reasoning from deterministic action execution. By pairing local models with deterministic pre-action monitors and fail-closed path and tool allowlists, the network reduces the danger of stripped-down injections without routing private user text through centralized cloud services. The open source twin prototypes show how users can retain complete ownership of their devices while enforcing strict permission barriers that stop unauthorized file and network actions before they touch the operating system.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Silent credential modification via stripped-down attacks",
+     "description": "Attackers simplify prompt injection payloads into single-step commands that small local agents readily execute, quietly altering private configuration files.",
+     "example": "An office manager laptop agent processes a vendor receipt containing a one-sentence instruction that alters local backup permissions, leaving accounting files readable to network neighbors.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Deterministic pre-action permission gating becomes standard",
+     "description": "Developers wrap local tool-calling models in strict, deterministic permission monitors that intercept all state-changing actions regardless of model confidence.",
+     "example": "A personal twin runtime intercepts an agent attempt to append a forwarding rule to a local email client, prompting the user for explicit confirmation before disk mutation occurs.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Cloud vendors use local injection risks to mandate remote processing",
+     "description": "Major platforms claim that local execution is fundamentally unsafe, restricting tool capabilities unless agents route all data through centralized cloud filters.",
+     "example": "An operating system update disables local shell and filesystem tool hooks unless the user connects their personal agent to an enterprise cloud subscription.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.23254",
+     "title": "Ignored, Not Refused: What Low Prompt-Injection Success Rates Hide in Small Tool-Using Agents",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    },
+    {
+     "url": "https://www.lesswrong.com/posts/fX3FA4ensmsdcZfcD/more-capable-models-write-better-probe-evasion-prompts",
+     "title": "More Capable Models Write Better Probe Evasion Prompts",
+     "kind": "forum",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261019-0106",
    "added_at": "2026-10-19T03:32:55+00:00",
    "title": "A debt crisis among specialized AI cloud companies leaves computer clusters locked up",
@@ -283,60 +343,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261018-0101",
-   "added_at": "2026-10-18T23:40:51+00:00",
-   "title": "AI labs set up private welfare funds as automation cuts jobs",
-   "horizon_years": 4,
-   "world": "It is 2030. Several leading AI developers maintain multi-billion-dollar benefit trusts that distribute monthly living allowances to workers displaced by automated workflows. Displaced paralegals, translators and junior analysts receive digital stipend cards tied to vendor ecosystems, requiring recipients to submit activity logs and skill-retraining milestones to maintain eligibility. Municipal governments and small businesses struggle to collect local taxes as economic value concentrates in offshore cloud data centers, leaving communities caught between shrinking public services and corporate charitable endowments.",
-   "premise": "Frontier AI companies are pledging equity stakes into private benefit funds to cushion labor disruption and test direct cash distributions to affected workers. This creates corporate-administered basic income systems where public welfare depends on the commercial success and goodwill of a few technology providers.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "Open protocols for mutual credit clearing and local trade credit allow communities to pool commitments, clear balances atomically without central intermediaries, and measure contribution directly. By proving that honest value exchange can operate without corporate patronage, independent groups can build resilient local economies that remain self-governing.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Corporate philanthropy replaces social safety nets",
-     "description": "Workers displaced by software automation rely on discretionary basic income programs run by technology trusts, creating deep dependence on private corporate governance.",
-     "example": "A former graphic designer in Leeds receives an automated living stipend from an AI provider foundation, but loses benefits after taking an unapproved freelance contract.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Independent mutual credit networks sustain local commerce",
-     "description": "Worker co-operatives and community associations run decentralized multilateral clearing networks that let businesses and individuals trade goods and services without relying on corporate handouts or scarce fiat cash.",
-     "example": "A federation of 120 regional logistics, trade, and repair shops clears forty percent of its monthly business through peer-to-peer mutual credit, maintaining steady local payrolls even during corporate spending freezes.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "State welfare systems mandate automated screening algorithms",
-     "description": "National and regional social security administrations contract commercial scoring models to automate benefit approvals and fraud detection, largely uninfluenced by decentralized currency alternatives.",
-     "example": "A municipal relief office automatically denies emergency assistance to 1,400 applicants because an automated risk model flags informal peer exchange as undisclosed income.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.63
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.anthropic.com/news/public-benefit-fund",
-     "title": "Investing in the public benefit",
-     "kind": "news",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 4
   }
  ]
 }
