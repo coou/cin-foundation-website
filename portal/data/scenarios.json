@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261019-0121",
+   "added_at": "2026-10-19T14:56:30+00:00",
+   "title": "Personal AI agents repeat the same expensive mistakes because they cannot connect actions to results",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people delegate personal chores—filing health insurance appeals, rebooking travel, managing utility bills—to autonomous agents running on their phones and home computers. When an insurance claim is rejected, an agent often submits the identical request five times, burning computational fees and missing appeal deadlines because its context window sees a wall of past text without understanding which specific sentence triggered the rejection.",
+   "premise": "Autonomous agents given longer interaction histories often repeat failed actions because language models do not naturally associate their choices with subsequent real-world outcomes. Without explicit causal tracking, giving an agent more memory can degrade performance and trap users in costly loops.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs open-source personal software where every external action is tied to a signed outcome receipt on the user's device. Instead of relying on raw prompt memory, the agent software measures whether a step succeeded before spending further resources, giving people full visibility over what failed and why.",
+   "shift": 0.33,
+   "outcomes": [
+    {
+     "name": "Cloud agent vendors profit from repeated failure loops",
+     "description": "Commercial providers charge per-token fees while letting agents endlessly retry failed actions, hiding failure rates behind generic error messages.",
+     "example": "A freelance designer pays forty dollars in cloud processing fees when her booking assistant repeatedly submits an invalid tax exemption form across seventy retries.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Local agents enforce transparent causal logs",
+     "description": "Personal agents run locally with verified action-outcome attribution, immediately halting retries and asking the owner when an unexpected outcome occurs.",
+     "example": "A tenant's local assistant flags a disputed maintenance surcharge, attributes the landlord's automated refusal to a missing receipt, and prompts the owner for the receipt before resubmitting.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Local logging increases storage overhead on entry-level devices",
+     "description": "Recording detailed action-outcome attribution receipts locally consumes device storage, creating friction for users with inexpensive phones.",
+     "example": "A student using an entry-level smartphone receives low-disk warnings after her personal agent archives detailed execution receipts for fifty course registration attempts.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.37
+    }
+   ],
+   "pipelines": [
+    "canon",
+    "policy",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.02769",
+     "title": "When History Fails to Become Experience: Action Calibration in Language Agents",
+     "kind": "preprint",
+     "published": "2026-10-04"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261019-0120",
    "added_at": "2026-10-19T14:45:07+00:00",
    "title": "Personal assistants track your mood and fatigue, but lower their guard when you are tired",
@@ -3352,66 +3406,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261017-0061",
-   "added_at": "2026-10-17T07:39:13+00:00",
-   "title": "Community currencies stall in liquidity traps while trust networks battle fake accounts",
-   "horizon_years": 3,
-   "world": "By 2029, dozens of regional mutual aid networks, cooperative unions, and municipal pilot programs have deployed digital community credits to shield local businesses from national banking volatility. In dozens of cities, residents earn local tokens for caregiving, environmental maintenance, and open-source civic tools. However, local bakeries and repair shops routinely find their accounts filled with unspendable credits because downstream suppliers refuse non-convertible community tokens. At the same time, automated script farms deploy coordinated bot accounts to collect community dividends and drain local credit pools, prompting frustrated network organizers to freeze account creation or impose manual gatekeeping that alienates new members.",
-   "premise": "Field studies of decentralized community currencies reveal two common failure modes: local basic income tokens suffer severe liquidity bottlenecks and merchant resistance when exchange paths are restricted, while web-of-trust networks face mathematical limits in expanding beyond small clusters without letting automated fake accounts inflate the money supply.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "By developing open-source simulation testbeds and reference protocols for graph-bounded trust, the network demonstrates how regional cooperatives can route multi-hop debt cancellations and apply bounded demurrage decay without relying on centralized banking custody or invasive identity registries.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Local currencies collapse into illiquid merchant traps",
-     "description": "Merchants accumulate regional credits they cannot spend on wholesale inventory, causing businesses to exit the network and leaving residents with stranded balances.",
-     "example": "A neighborhood grocery co-op in Berlin halts acceptance of community credits after building a balance of 85,000 local tokens that none of its regional food distributors will accept.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Centralized stablecoin platforms absorb grassroots mutual aid",
-     "description": "Frustrated by local currency volatility and counterfeit accounts, community groups abandon independent credit ledgers and adopt surveillance-heavy proprietary corporate stablecoins.",
-     "example": "A network of forty community workshops replaces its peer mutual credit ledger with a major cloud provider loyalty payment rail, exposing volunteer work logs to commercial data brokers.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Multi-hop mutual clearing and graph-bounded trust protect community credit",
-     "description": "Open credit networks use multi-hop path routing and graph-distance bounds to clear mutual debts across federated cooperatives while stopping counterfeit account clusters from minting unbacked credits.",
-     "example": "A coalition of 120 regional producer cooperatives settles 4.2 million dollars in trade using automated circular debt clearing, keeping local purchasing power circulating without central treasury custody.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2504.02714",
-     "title": "Impact of a Blockchain-based Universal Basic Income Pilot: The case of Circles UBI currency",
-     "kind": "preprint",
-     "published": "2025-04-03"
-    },
-    {
-     "url": "https://arxiv.org/abs/2512.07897",
-     "title": "Analysis of the Sybil defense of Duniter-based cryptocurrencies",
-     "kind": "preprint",
-     "published": "2025-12-05"
-    }
-   ],
-   "work": 1
   }
  ]
 }
