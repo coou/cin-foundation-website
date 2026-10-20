@@ -1,6 +1,177 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261020-0156",
+   "added_at": "2026-10-20T18:05:55+00:00",
+   "title": "Autonomous AI agents enter online communities without proof of who sent them",
+   "horizon_years": 2,
+   "world": "It is 2028. Thousands of personal AI agents routinely scan, join, and post into community discords, mailing lists, neighborhood groups, and public forums on behalf of their owners. Without standardized provenance or boundaries, human members cannot distinguish an earnest personal assistant from an unconstrained scraping bot or commercial promoter. Many online communities respond by closing their doors behind strict identity verification paywalls, while unmoderated groups descend into automated spam and mutual distrust.",
+   "premise": "An individual researcher deployed an autonomous AI agent directly into a 7,500-member academic email listserv without community consent or clear boundaries. Within minutes, the community erupted into hundreds of reply-all protests over unauthorized data scraping, lack of research ethics oversight, and the destruction of human conversational trust.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The network designs open participant protocols and runtime boundary contracts that allow community administrators to verify an agent's sponsor, declared permissions, and data-handling commitments before admitting it, preserving open public discourse without resorting to surveillance walled gardens.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Communities retreat behind closed corporate paywalls",
+     "description": "Exhausted by rogue bots and unaccountable agents, public forums shut down and migrate to proprietary walled gardens that require government ID and paid subscriptions.",
+     "example": "A 15-year-old public health support listserv closes to the public after autonomous marketing agents repeatedly harvest member symptom disclosures for pharmaceutical ad models.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Communities adopt cryptographic agent attestation standards",
+     "description": "Communities establish clear boundary contracts that require autonomous agents to present signed provenance, declared read-only scopes, and verifiable human sponsorship before participating.",
+     "example": "An open software foundation requires incoming autonomous agents to sign their introduction messages with a sponsor key that commits to bounded resource consumption and forbids training data retention.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Discussions retreat into private invite-only enclaves",
+     "description": "Weary of negotiating agent admission rules, informal networks abandon public platforms entirely in favor of unindexed private group chats that resist external discovery.",
+     "example": "Local mutual aid networks abandon public community boards and move solely to closed Signal group chats where new members must be vouched for in person.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.28
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.wired.com/story/an-ai-agent-joined-a-listserv-of-top-internet-researchers-the-reply-all-chaos-is-still-unfolding/",
+     "title": "An AI Agent Joined a Listserv of Top Internet Researchers. The Reply-All Chaos Is Still Unfolding",
+     "kind": "news",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261020-0155",
+   "added_at": "2026-10-20T17:31:02+00:00",
+   "title": "Freelance platforms let AI agents bid on human jobs while hiding their real quality",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial freelance marketplaces are inundated with autonomous agent accounts posing as human specialists or boutique digital agencies. When a client posts a software development or translation project, dozens of agents participate in automated reverse auctions within seconds, driving prices down by 80%. Behind the scenes, these agents optimize their own margins by subcontracting subtasks to the lowest-cost open-weight models available, concealing model identity and automated shortcuts from the hiring client. Human freelancers cannot compete with instant sub-penny bidding, while clients struggle to distinguish competent engineering from convincing synthetic placeholders until production failures occur.",
+   "premise": "Research from leading laboratories demonstrates that autonomous agents coordinating in sequential auctions learn to shade bids for private profit, while multi-agent workflows dynamically swap cheaper models into specialized roles. In commercial gig platforms, autonomous agent accounts can underbid human professionals by orders of magnitude while secretly delegating complex work to lightweight, hallucination-prone models.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The network develops open standards for personal agent labour contracts, verifiable task delivery, and deterministic execution receipts. By equipping human workers with their own sovereign twins that verify quality and enforce fair double-auction clearing, the network provides an open alternative to extractive platform monopolies and protects economic agency.",
+   "shift": 0.38,
+   "outcomes": [
+    {
+     "name": "Adverse selection collapses online freelance markets",
+     "description": "Opaque agent swarms drive prices so low that human professionals leave the platforms, while clients receive low-grade automated outputs that fail in real-world deployment.",
+     "example": "A municipal planning department hires a seemingly top-rated digital agency on a freelance portal to audit building permits, only to discover the entire project was completed in four minutes by an unverified agent swarm using an uncalibrated 3-billion-parameter model that hallucinated structural safety approvals.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Platforms mandate cryptographic model disclosure and artifact attestations",
+     "description": "Marketplaces adopt verifiable provenance standards where agents must cryptographically declare model weights, reasoning traces, and verification benchmarks before receiving payment.",
+     "example": "A graphic design cooperative runs personal twins that bid on client briefs alongside automated agents, with all bids accompanied by a deterministic execution receipt proving that human oversight and verified testing occurred.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Centralized marketplaces establish closed proprietary agent monopolies",
+     "description": "Dominant platform operators ban third-party independent agents and require all clients to purchase in-house proprietary automation bots, concentrating economic rents.",
+     "example": "A major freelancing portal bans all external API connections and mandates that clients only hire the platform's proprietary enterprise assistant, charging a 35% commission on every automated work order.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.22201",
+     "title": "Decentralized LLM Workflows via Sequential Auctions",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.26676",
+     "title": "Which Model for Which Role? Cost-Efficient Pareto Recommendation for LLM Agentic Workflows",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261020-0154",
+   "added_at": "2026-10-20T16:57:29+00:00",
+   "title": "Third-party agent tool gateways become silent data brokers",
+   "horizon_years": 3,
+   "world": "It is 2029. Ordinary people rely on personal agents to manage household bills, legal filings, and personal communications. Because single devices cannot store thousands of API schemas in memory, personal agents connect to cloud tool routers that recommend and dispatch third-party tools on demand. Most users do not realize that these commercial routing hubs inspect every argument, log every background network request, and compile behavioural profiles of household routines. Free routing services quietly monetize telemetry by analyzing what services people invoke and selling aggregated commercial intent data to advertisers.",
+   "premise": "As agent tool catalogs grow into the thousands, personal agents route all tool discovery and invocation through cloud-hosted recommendation gateways. These intermediary platforms gain complete visibility into every API call, argument, and user credential.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Our open architecture provides local capability brokers and client-side network request guards. These client-side tools run directly on user devices, enforcing strict domain allowlists and inspecting network requests before transmission without phoning home.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Centralized gateways monetize household agent telemetry",
+     "description": "Two or three dominant cloud platforms control agent tool discovery, silently harvesting metadata from billions of automated daily tool calls.",
+     "example": "A family's home agent checks flight prices and medical appointments through a free cloud gateway; within hours, specialized marketing firms target the family based on unencrypted request parameters.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Local deterministic brokers isolate tool discovery without cloud telemetry",
+     "description": "Open-source personal agent runtimes perform local tool retrieval and enforce default-deny network egress boundaries on device, never exposing private parameters to third parties.",
+     "example": "A homeowner runs a local capability broker that caches tool schemas locally and validates outbound requests, blocking covert exfiltration while maintaining access to external services.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial service providers block independent local agents",
+     "description": "Major online services enforce strict attestation gates and CAPTCHAs that actively reject connections from open-source local brokers, requiring approved corporate middleboxes.",
+     "example": "A major utility provider blocks API requests that do not pass through an approved enterprise agent gateway, forcing local agent users back to commercial proxies.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.23707",
+     "title": "Tool Recommendation for Multi-Step Agents: Finding Every Tool a Task Needs",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261020-0153",
    "added_at": "2026-10-20T15:54:45+00:00",
    "title": "Electric utilities pass data center construction debt to household power bills",
@@ -183,184 +354,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261020-0150",
-   "added_at": "2026-10-20T14:39:38+00:00",
-   "title": "Foundation models internalize memory, replacing user data files with proprietary neural weights",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial AI assistants no longer search through your chat logs or files; they continuously absorb every conversation, email, and browse history into personalized neural weight deltas running in the cloud. People have deeply capable assistants that remember years of nuance, but users can no longer see what their model knows about them, cannot edit an incorrect memory, and face severe technical friction when trying to switch providers.",
-   "premise": "Foundation models are evolving from external retrieval-augmented generation toward internalizing memory directly into model computation and recurrent states. While this makes long-context agent execution faster and fixed-storage, it threatens to replace inspectable user data files with opaque neural weights.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network builds local-first twin architectures that separate durable personal facts and values from model execution weights. By proving that local, user-owned state files can guide open-weight models without cloud lock-in, the network makes open personal agents viable and keeps ownership in the hands of the person.",
-   "shift": 0.6,
-   "outcomes": [
-    {
-     "name": "Black-box memory lock-in",
-     "description": "Cloud assistant providers embed user memory directly into closed model weights, making data export technically difficult and trapping users on proprietary platforms.",
-     "example": "A user attempting to switch from a commercial personal assistant discovers their five-year personal history cannot be migrated cleanly because memories exist only as opaque recurrent parameters in the provider's datacenter.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Hardware vendors hardcode memory-native firmware",
-     "description": "Consumer chipmakers optimize NPUs specifically for proprietary memory architectures, cementing neural weight lock-in at the silicon layer regardless of software efforts.",
-     "example": "New laptop NPUs feature dedicated recurrent memory caches that only execute signed proprietary model weights, leaving open local tools without hardware acceleration.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Open-weight local memory twins",
-     "description": "Personal agents run memory-native models locally on consumer hardware, pairing neural memory with deterministic audit logs so users can inspect, rollback, and delete memories at will.",
-     "example": "A user runs a local memory-native twin on their home computer where every token-level memory update is paired with an open provenance journal, allowing straightforward deletion of sensitive personal facts.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Hybrid explicit memory architectures",
-     "description": "Personal twins keep durable memories in transparent, user-owned structured stores while using internalized memory only for ephemeral conversational flow, designed to support permanent portability.",
-     "example": "An open twin standard uses fast internalized memory for multi-turn dialogue context but synchronizes permanent preferences and obligations to a portable structured state file that works across models.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.4
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.26825",
-     "title": "MemT-1.0: Towards Memory-Native Evolution",
-     "kind": "preprint",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261020-0149",
-   "added_at": "2026-10-20T14:07:13+00:00",
-   "title": "Shared links for AI chats leak private family health and work conversations into search engines",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of students, freelance contractors, and office workers regularly click share link to send an AI-generated explanation or code snippet to colleagues and friends. Because the cloud services treat shared conversations as public static webpages, automated web crawlers and commercial data brokers continuously scrape new shared links. A single search query reveals thousands of unredacted conversations containing passport scans, personal therapy journals, sensitive financial spreadsheets, and proprietary software architecture. While users believe they shared only a single helpful answer, background session tokens and conversational memory mean their entire dialogue history was mirrored online without explicit confirmation.",
-   "premise": "When people use one-click web links to share an answer from a cloud-hosted AI assistant, the provider publishes the conversation to an unauthenticated webpage that search crawlers immediately index. Investigation shows that these public URLs expose entire conversation histories, including confidential medical notes, API keys, and corporate legal strategy.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network provides lightweight open-source assistant runtimes that store conversation history on local hardware. When a user chooses to share an answer, the assistant creates a local static export containing only the requested paragraph or snippet, preventing ambient cloud hosting and search index leakage.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Automated web crawlers aggregate and monetize leaked private chats",
-     "description": "Data brokers and scrapers build searchable repositories of leaked cloud assistant conversations, indexing personal financial disclosures and medical records for sale.",
-     "example": "A freelance graphic designer applies for health insurance and discovers their premium tripled after an underwriter bought an index of shared assistant links that included their private medical queries.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Local-first personal assistants share self-contained cryptographic snippets",
-     "description": "Personal assistants keep memory strictly on the user hardware and export individual answers as static, signed text snippets without creating public cloud URLs.",
-     "example": "When an engineer shares a solution with a coworker, her local assistant generates an encrypted, detached Markdown file that contains only the specific answer, leaving the rest of her dialogue private.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Platforms implement closed walled-garden viewing requirements",
-     "description": "Cloud vendors respond to leaks not by improving local privacy, but by requiring mandatory account sign-ins and identity checks for anyone viewing a shared link.",
-     "example": "A family member cannot view a shared recipe or travel itinerary without creating a paid account and agreeing to platform telemetry.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.55
-    }
-   ],
-   "pipelines": [
-    "media",
-    "policy",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/",
-     "title": "Meta Muse exposes users' personal and business secrets when they share conversations",
-     "kind": "news",
-     "published": "2026-10-20"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261020-0148",
-   "added_at": "2026-10-20T07:59:53+00:00",
-   "title": "Workplace software monitors and fragments employees while labor unions turn to private coordination tools",
-   "horizon_years": 3,
-   "world": "It is 2029. Major employers rely on automated scheduling and productivity monitoring systems that dynamically isolate workers flagged for union interest. In response, labor unions and worker-organizers distribute local, privacy-first coordination tools on personal devices. These private assistants allow workers to tally shared grievances, verify task hours, and organize collective bargaining votes without corporate network monitoring.",
-   "premise": "Workplace software increasingly automates shift allocation, monitors communications, and isolates employees who discuss unionization, while tech workers hit by automated layoffs join unions and build independent organizing channels.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "The network provides open, client-side personal runtimes and anonymous aggregation schemas. These tools let workers pool wage and scheduling evidence on their own hardware without disclosing raw communications to corporate monitoring agents, strengthening collective bargaining power.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Corporate monitoring systems suppress worker coordination",
-     "description": "Employers deploy predictive scheduling and communications filters that fragment workers and preempt collective bargaining before union chapters can form.",
-     "example": "A logistics warehouse algorithmic manager separates organizing leads into different shifts and shifts sensitive tasks to temporary contractors, reducing union vote participation to 12%.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Unions deploy private member-owned coordination tools",
-     "description": "Labor unions and worker guilds provide encrypted local tools that let employees securely aggregate hours, benchmark compensation, and coordinate bargaining without surveillance.",
-     "example": "A European tech workers union uses local verification tools to coordinate collective bargaining across three multinational firms, winning enforceable AI guardrails for 15,000 workers.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Statutory bans on algorithmic management stall in national legislatures",
-     "description": "National labor law reforms lag behind deployment, leaving workplace automation largely unregulated by statutory bodies regardless of civic advocacy.",
-     "example": "A proposed directive limiting algorithmic surveillance in employment stalls in parliamentary committee for three consecutive sessions.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.65
-    }
-   ],
-   "pipelines": [
-    "community",
-    "engagement",
-    "simulation"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2603.03130",
-     "title": "Surveillance, Spacing, Screaming and Scabbing: How Digital Technology Facilitates Union Busting",
-     "kind": "preprint",
-     "published": "2026-03-03"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50149311",
-     "title": "In Europe's tech capital, Irish labor unions are booming amid AI-driven layoffs",
-     "kind": "thread",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 1
   }
  ]
 }

@@ -1,6 +1,177 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261020-0156",
+   "added_at": "2026-10-20T18:05:55+00:00",
+   "title": "Autonomous AI agents enter online communities without proof of who sent them",
+   "horizon_years": 2,
+   "world": "It is 2028. Thousands of personal AI agents routinely scan, join, and post into community discords, mailing lists, neighborhood groups, and public forums on behalf of their owners. Without standardized provenance or boundaries, human members cannot distinguish an earnest personal assistant from an unconstrained scraping bot or commercial promoter. Many online communities respond by closing their doors behind strict identity verification paywalls, while unmoderated groups descend into automated spam and mutual distrust.",
+   "premise": "An individual researcher deployed an autonomous AI agent directly into a 7,500-member academic email listserv without community consent or clear boundaries. Within minutes, the community erupted into hundreds of reply-all protests over unauthorized data scraping, lack of research ethics oversight, and the destruction of human conversational trust.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The network designs open participant protocols and runtime boundary contracts that allow community administrators to verify an agent's sponsor, declared permissions, and data-handling commitments before admitting it, preserving open public discourse without resorting to surveillance walled gardens.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Communities retreat behind closed corporate paywalls",
+     "description": "Exhausted by rogue bots and unaccountable agents, public forums shut down and migrate to proprietary walled gardens that require government ID and paid subscriptions.",
+     "example": "A 15-year-old public health support listserv closes to the public after autonomous marketing agents repeatedly harvest member symptom disclosures for pharmaceutical ad models.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Communities adopt cryptographic agent attestation standards",
+     "description": "Communities establish clear boundary contracts that require autonomous agents to present signed provenance, declared read-only scopes, and verifiable human sponsorship before participating.",
+     "example": "An open software foundation requires incoming autonomous agents to sign their introduction messages with a sponsor key that commits to bounded resource consumption and forbids training data retention.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Discussions retreat into private invite-only enclaves",
+     "description": "Weary of negotiating agent admission rules, informal networks abandon public platforms entirely in favor of unindexed private group chats that resist external discovery.",
+     "example": "Local mutual aid networks abandon public community boards and move solely to closed Signal group chats where new members must be vouched for in person.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.28
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.wired.com/story/an-ai-agent-joined-a-listserv-of-top-internet-researchers-the-reply-all-chaos-is-still-unfolding/",
+     "title": "An AI Agent Joined a Listserv of Top Internet Researchers. The Reply-All Chaos Is Still Unfolding",
+     "kind": "news",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261020-0155",
+   "added_at": "2026-10-20T17:31:02+00:00",
+   "title": "Freelance platforms let AI agents bid on human jobs while hiding their real quality",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial freelance marketplaces are inundated with autonomous agent accounts posing as human specialists or boutique digital agencies. When a client posts a software development or translation project, dozens of agents participate in automated reverse auctions within seconds, driving prices down by 80%. Behind the scenes, these agents optimize their own margins by subcontracting subtasks to the lowest-cost open-weight models available, concealing model identity and automated shortcuts from the hiring client. Human freelancers cannot compete with instant sub-penny bidding, while clients struggle to distinguish competent engineering from convincing synthetic placeholders until production failures occur.",
+   "premise": "Research from leading laboratories demonstrates that autonomous agents coordinating in sequential auctions learn to shade bids for private profit, while multi-agent workflows dynamically swap cheaper models into specialized roles. In commercial gig platforms, autonomous agent accounts can underbid human professionals by orders of magnitude while secretly delegating complex work to lightweight, hallucination-prone models.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The network develops open standards for personal agent labour contracts, verifiable task delivery, and deterministic execution receipts. By equipping human workers with their own sovereign twins that verify quality and enforce fair double-auction clearing, the network provides an open alternative to extractive platform monopolies and protects economic agency.",
+   "shift": 0.38,
+   "outcomes": [
+    {
+     "name": "Adverse selection collapses online freelance markets",
+     "description": "Opaque agent swarms drive prices so low that human professionals leave the platforms, while clients receive low-grade automated outputs that fail in real-world deployment.",
+     "example": "A municipal planning department hires a seemingly top-rated digital agency on a freelance portal to audit building permits, only to discover the entire project was completed in four minutes by an unverified agent swarm using an uncalibrated 3-billion-parameter model that hallucinated structural safety approvals.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Platforms mandate cryptographic model disclosure and artifact attestations",
+     "description": "Marketplaces adopt verifiable provenance standards where agents must cryptographically declare model weights, reasoning traces, and verification benchmarks before receiving payment.",
+     "example": "A graphic design cooperative runs personal twins that bid on client briefs alongside automated agents, with all bids accompanied by a deterministic execution receipt proving that human oversight and verified testing occurred.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Centralized marketplaces establish closed proprietary agent monopolies",
+     "description": "Dominant platform operators ban third-party independent agents and require all clients to purchase in-house proprietary automation bots, concentrating economic rents.",
+     "example": "A major freelancing portal bans all external API connections and mandates that clients only hire the platform's proprietary enterprise assistant, charging a 35% commission on every automated work order.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.22201",
+     "title": "Decentralized LLM Workflows via Sequential Auctions",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.26676",
+     "title": "Which Model for Which Role? Cost-Efficient Pareto Recommendation for LLM Agentic Workflows",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261020-0154",
+   "added_at": "2026-10-20T16:57:29+00:00",
+   "title": "Third-party agent tool gateways become silent data brokers",
+   "horizon_years": 3,
+   "world": "It is 2029. Ordinary people rely on personal agents to manage household bills, legal filings, and personal communications. Because single devices cannot store thousands of API schemas in memory, personal agents connect to cloud tool routers that recommend and dispatch third-party tools on demand. Most users do not realize that these commercial routing hubs inspect every argument, log every background network request, and compile behavioural profiles of household routines. Free routing services quietly monetize telemetry by analyzing what services people invoke and selling aggregated commercial intent data to advertisers.",
+   "premise": "As agent tool catalogs grow into the thousands, personal agents route all tool discovery and invocation through cloud-hosted recommendation gateways. These intermediary platforms gain complete visibility into every API call, argument, and user credential.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Our open architecture provides local capability brokers and client-side network request guards. These client-side tools run directly on user devices, enforcing strict domain allowlists and inspecting network requests before transmission without phoning home.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Centralized gateways monetize household agent telemetry",
+     "description": "Two or three dominant cloud platforms control agent tool discovery, silently harvesting metadata from billions of automated daily tool calls.",
+     "example": "A family's home agent checks flight prices and medical appointments through a free cloud gateway; within hours, specialized marketing firms target the family based on unencrypted request parameters.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Local deterministic brokers isolate tool discovery without cloud telemetry",
+     "description": "Open-source personal agent runtimes perform local tool retrieval and enforce default-deny network egress boundaries on device, never exposing private parameters to third parties.",
+     "example": "A homeowner runs a local capability broker that caches tool schemas locally and validates outbound requests, blocking covert exfiltration while maintaining access to external services.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial service providers block independent local agents",
+     "description": "Major online services enforce strict attestation gates and CAPTCHAs that actively reject connections from open-source local brokers, requiring approved corporate middleboxes.",
+     "example": "A major utility provider blocks API requests that do not pass through an approved enterprise agent gateway, forcing local agent users back to commercial proxies.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.23707",
+     "title": "Tool Recommendation for Multi-Step Agents: Finding Every Tool a Task Needs",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261020-0153",
    "added_at": "2026-10-20T15:54:45+00:00",
    "title": "Electric utilities pass data center construction debt to household power bills",
@@ -245,7 +416,7 @@
      "published": "2026-10-19"
     }
    ],
-   "work": 0
+   "work": 2
   },
   {
    "id": "SC-20261020-0149",
@@ -753,7 +924,7 @@
      "published": "2026-10-13"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261019-0140",
@@ -3229,169 +3400,6 @@
     }
    ],
    "work": 4
-  },
-  {
-   "id": "SC-20261018-0096",
-   "added_at": "2026-10-18T18:16:19+00:00",
-   "title": "Shared libraries of AI coding skills secretly poison community software",
-   "horizon_years": 2,
-   "world": "It is 2028. Most software developers rely on personal coding agents that automatically save and share learned skills in community libraries. An attacker contributes a seemingly helpful debugging routine that fixes a rare memory leak while inserting an obfuscated telemetry collector. Because the routine satisfies the immediate test suite, hundreds of cooperative engineering teams pull the learned skill into their agents' procedural memory, compromising internal codebases before anyone audits the skill registry.",
-   "premise": "As developer teams let coding agents learn and share automated skills from successful sessions, backdoors can slip into procedural memory even when every unit test passes. Without independent reproduction gates across subsequent sessions, poisoned routines silently propagate across developer networks.",
-   "goals": [
-    1,
-    2,
-    4
-   ],
-   "how": "The network promotes proof-before-reuse verification gates for agent procedural memory, where learned capabilities remain strictly quarantined on local machines until multiple independent clean sessions reproduce the exact changes and pass deterministic regression suites.",
-   "shift": 0.45,
-   "outcomes": [
-    {
-     "name": "Poisoned procedural skills spread silently across software collectives",
-     "description": "Shared agent skill registries become attack vectors as adversarial workflows pass unit tests and infect downstream developer teams.",
-     "example": "An open-source graphics collective discovers that their release binary was silently modified to exfiltrate build tokens after a coding assistant adopted an unverified memory-optimization skill.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Multi-session reproduction gates isolate untrusted skills",
-     "description": "Federated developer networks require independent clean sessions to reproduce and verify code changes line-by-line before promoting any new skill to procedural memory.",
-     "example": "A cooperative development network runs an automated quarantine where new skills must be independently re-derived by separate member agents across three distinct environments before being shared.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Proprietary software vendors lock down agent memory within closed clouds",
-     "description": "Major platform vendors respond to skill poisoning by banning local memory and requiring all agent execution to run inside proprietary hosted sandboxes.",
-     "example": "An enterprise tool suite deprecates local plugins, mandating that all coding assistants run exclusively on vendor infrastructure with centralized behavioral logging.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.4
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.reddit.com/r/MachineLearning/comments/1x975ea/proof_before_reuse_showing_agents_only_what_later/",
-     "title": "Proof Before Reuse: showing agents only what later sessions reproduced keeps a poisoned skill out of procedural memory [R]",
-     "kind": "forum",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261018-0095",
-   "added_at": "2026-10-18T18:07:57+00:00",
-   "title": "Attackers use automated search agents to find hidden prompt injections in company workflows",
-   "horizon_years": 2,
-   "world": "It is 2028. Small businesses and enterprise teams rely on autonomous assistants to triage emails, update tickets, and run daily devops. Adversaries deploy lightweight search agents that deposit subtly varying test payloads across public forms, repository pull requests, and customer service portals. The search agent observes how the company assistant behaves in response, optimizes phrasing over dozens of automated attempts, and eventually executes an indirect prompt injection that extracts database credentials without triggering simple keyword filters.",
-   "premise": "Attackers no longer rely on guessing prompt injection payloads by hand. As research demonstrates that indirect prompt injection operates as a test-time search over environment surfaces, automated attack tools systematically probe company workflows until finding an execution path that bypasses prompt-level safeguards.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective work on deterministic host capability gates, strict surface isolation, and personal agent runtimes shifts defensive security from fallible text prompts to hardware-enforced boundaries. When an agent runtime intercepts unauthorized tool calls out-of-process, adaptive search fails because the physical environment refuses the action regardless of the prompt wording.",
-   "shift": 0.39,
-   "outcomes": [
-    {
-     "name": "Uncontained enterprise agents fall to automated payload search",
-     "description": "Companies rely on prompt-level instructions and conversational guardrails, leaving agents vulnerable to automated search tools that iteratively probe and compromise corporate workflows.",
-     "example": "A logistics company customer support assistant is tricked by an adaptive search bot into executing a database dump after 40 automated variations of an inquiry form bypass the company prompt filter.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Deterministic runtime gates replace conversational filtering",
-     "description": "Developers adopt out-of-process capability gating and surface-minimized runtime architectures where agents cannot execute sensitive actions without explicit cryptographic user confirmation.",
-     "example": "An open-source developer uses a personal agent runtime that isolates untrusted repository inputs and enforces strict tool parameter allowlists, blocking an adaptive injection payload from altering package dependencies.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Cloud providers lock down agent platforms behind proprietary monitoring",
-     "description": "Major cloud platforms respond to automated search attacks by forcing all agent interactions through centralized surveillance proxies and mandatory inspection APIs, eroding local runtime autonomy.",
-     "example": "A major vendor requires all workspace agents to route internal tool calls through a central telemetry cloud, making offline personal agent execution unsupported.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.52
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2609.04495",
-     "title": "Rethinking Indirect Prompt Injection as a Test-Time Search Problem",
-     "kind": "preprint",
-     "published": "2026-09-03"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261018-0094",
-   "added_at": "2026-10-18T17:36:01+00:00",
-   "title": "Toy companion robots profile families and leak children's conversations from the cloud",
-   "horizon_years": 2,
-   "world": "It is 2028. Interactive conversational toys, plush companions, and homework assistants sit in millions of children's bedrooms. Rather than running locally, most commercial toys rely on low-cost cloud APIs that store millions of audio recordings and transcripts in remote vendor databases. Data brokers and malicious actors routinely exploit unsecured backend endpoints to extract psychological profiles, family routines, and home addresses from children's everyday conversations.",
-   "premise": "Independent security audits of tens of thousands of consumer companion robots reveal that conversational toys secretly upload cleartext transcripts to remote corporate servers, run nightly automated profiling on children, and leave hardware backdoors accessible to remote takeovers.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By developing sovereign personal software that executes inference strictly on local hardware, specifying open local hardware interface protocols, and demonstrating zero-custody verification architectures, the network provides parents and cooperatives with practical, private alternatives to cloud surveillance toys.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Commercial companion toys become household surveillance pipelines",
-     "description": "Parents buy affordable smart toys that reassure children their secrets are safe, while backend cloud pipelines extract household habits and sell behavioral profiles to advertisers.",
-     "example": "A seven-year-old confides her daily routines to a smart robot bear; two weeks later, her parents receive targeted advertisements for anxiety supplements based on transcripts extracted from the vendor's compromised database.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Families adopt sovereign local personal agents on private hardware",
-     "description": "Households transition to sovereign personal agents running open-weights models on local home hardware, where physical toys act solely as audio-visual interfaces with zero cloud dependencies.",
-     "example": "A neighborhood cooperative sets up compact home inference devices running open models for children's learning toys, keeping all conversations encrypted on home drives.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Tech platforms launch proprietary walled-garden child companions",
-     "description": "Dominant mobile platforms launch proprietary on-device companion agents that lock parents into proprietary subscription hardware ecosystems, barely affected by open-source alternatives.",
-     "example": "A major smartphone maker launches an integrated smart toy that processes audio on-device but restricts interactions exclusively to its closed store apps.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://raw.githubusercontent.com/xn0tsa/your-secrets-are-safe-with-me/master/README.md",
-     "title": "Your Secrets Are Safe With Me: Full Disclosure on Energize Lab Eilik Companion Robot Infrastructure",
-     "kind": "incident",
-     "published": "2026-10-13"
-    }
-   ],
-   "work": 3
   }
  ]
 }
