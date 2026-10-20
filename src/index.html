@@ -16,7 +16,7 @@
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/images/logo-192.png">
-  <link rel="stylesheet" href="/styles/site.css?v=19">
+  <link rel="stylesheet" href="/styles/site.css?v=20">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"Collective Intelligence Network","alternateName":"CIN","description":"An independent research and design project preparing people for advanced AI: containment, personal agents and collective intelligence."}
   </script>
@@ -222,6 +222,29 @@
           <div class="fy-box try"><span class="fy-k">Why war locks up</span><p>For an action that endangers millions of lives, the system requires cryptographic sign-off from the personal agents of families on both sides—making unilateral catastrophe impossible to trigger.</p><a href="/notes/no-one-commands-a-swarm">Read why no one person should command a swarm &rarr;</a></div>
         </div>
       </article>
+    </div>
+
+    <div class="persona-explorer reveal" id="pe-root" style="margin-top:2.2rem">
+      <div class="sl-head">
+        <span class="label">30 simulated lives on the network</span>
+        <h3>See how this works for 30 very different people around the world.</h3>
+        <p>We simulated thirty people and their personal agents over a full year—from an emergency-room nurse in Manila, a smallholder solar farmer in Kenya, and a retired coal miner in Kentucky to a city grid director in Zürich and a 50,000-robot factory owner. Pick any walk of life below to see what squeezes them today, what their <a href="/notes/somatic-witness">lightweight sensor</a> &amp; personal agent record privately, how the <a href="/notes/how-the-ledger-works">5-dimensional demurrage ledger</a> changes their year, and which of our <a href="/notes/all-principles">550 principles</a> their agent activates.</p>
+      </div>
+      <div class="lib-Quick" role="group" aria-label="Filter the 30 personas">
+        <span>Filter by walk of life:</span>
+        <button type="button" data-pe-filter="all" aria-pressed="true">All 30 lives</button>
+        <button type="button" data-pe-filter="t0-care">Care, health &amp; teaching</button>
+        <button type="button" data-pe-filter="t0-craft">Farming, craft, trades &amp; ecology</button>
+        <button type="button" data-pe-filter="t0-tech">Art, code, students &amp; elders</button>
+        <button type="button" data-pe-filter="t12">Local &amp; city coordinators</button>
+        <button type="button" data-pe-filter="t34">High power, robotics &amp; AI labs</button>
+      </div>
+      <div class="pe-layout">
+        <div class="pe-roster" id="pe-roster" role="listbox" aria-label="Choose one of the 30 personas"></div>
+        <div class="pe-detail" id="pe-detail" aria-live="polite">
+          <p class="muted">Select any person on the left to inspect their simulated year. <a href="/notes/thirty-lives">Open the full 30-lives simulation note &rarr;</a></p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -569,7 +592,7 @@
         <div><b>Cheap enough for most of the world</b><p>Our goal is a personal agent on hardware that costs less than a basic phone, updated over slow or patchy networks.</p></div>
         <div><b>Fills the gaps big models leave</b><p>Local specialists cover what frontier models do badly for one person&rsquo;s life, and act on local events at tiny cost.</p></div>
         <div><b>Limited by design</b><p>Each agent gets a set capability and compute budget. Ideally the hardware itself enforces it, so the agent cannot copy itself out.</p></div>
-        <div><b>Proves what it did</b><p>A device can show which agent ran and what it computed, without exposing the data it ran on.</p></div>
+        <div><b>Proves a real human is there</b><p>A tiny open-hardware <a href="/notes/somatic-witness">personal sensor module</a> comprehends physical effort and proves a real, uncoerced human stands behind an event, without streaming raw biometrics anywhere.</p></div>
       </div>
     </div>
   </div>
@@ -696,14 +719,17 @@
     </div>
 
     <div class="origin reveal" aria-label="How the principles were narrowed down">
-      <div class="og-step"><b>395</b><span>ideas in our first brainstorm of principles</span></div>
-      <div class="og-bar" role="img" aria-label="200 kept, 144 revised, 17 kept only under conditions, 7 merged, 27 retired">
-        <i class="k" style="flex:200"></i><i class="r" style="flex:144"></i><i class="c" style="flex:17"></i><i class="m" style="flex:7"></i><i class="x" style="flex:27"></i>
+      <div class="og-step"><b>550</b><span>principles in our open library (434 from our first brainstorm + 116 new safeguards)</span></div>
+      <div class="og-bar" role="img" aria-label="200 kept, 144 revised, 17 kept only under conditions, 7 merged, 27 retired, plus 116 new civilizational and technical safeguards">
+        <i class="k" style="flex:316"></i><i class="r" style="flex:144"></i><i class="c" style="flex:17"></i><i class="m" style="flex:7"></i><i class="x" style="flex:27"></i>
       </div>
       <ul class="og-key">
-        <li><i class="k"></i>200 kept</li><li><i class="r"></i>144 revised</li><li><i class="c"></i>17 only under conditions</li><li><i class="m"></i>7 merged</li><li><i class="x"></i>27 retired</li>
+        <li><i class="k"></i>kept &amp; new safeguards</li><li><i class="r"></i>144 revised</li><li><i class="c"></i>17 only under conditions</li><li><i class="m"></i>7 merged</li><li><i class="x"></i>27 retired</li>
       </ul>
-      <div class="og-step"><b>44</b><span>working principles and 19 commitments today, each open to revision</span></div>
+      <div class="og-step" style="display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between">
+        <div><b>44</b><span>working principles on the wheel below and 19 core commitments, distilled from all 550</span></div>
+        <a class="origin-cta" href="/notes/all-principles">Browse &amp; search all 550 principles &rarr;</a>
+      </div>
     </div>
 
     <div class="floor-head reveal">
@@ -882,10 +908,14 @@
 <section id="new">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="label">New thinking</span>
-      <h2>Seven new notes, <em class="hl">written to be argued with.</em></h2>
+      <span class="label">New thinking &amp; interactive simulators</span>
+      <h2>Eleven new notes, <em class="hl">written to be argued with.</em></h2>
     </div>
     <div class="notes-grid reveal">
+      <a class="note-card" href="/notes/all-principles"><span class="k">Open principle library · Interactive</span><h3>All 550 starting principles, open to be challenged</h3><p>Search and filter every principle across 67 themes—each with its sharpest critique, strongest defense, and how real lives ground it.</p></a>
+      <a class="note-card" href="/notes/thirty-lives"><span class="k">Society simulation · Interactive</span><h3>Thirty lives on the network: how 30 diverse people and their agents coordinate</h3><p>Explore a 365-day simulation of 30 people across six continents, ten income levels, and five levels of public power.</p></a>
+      <a class="note-card" href="/notes/somatic-witness"><span class="k">Hardware &amp; sensors · Interactive</span><h3>How your agent knows you are human—without watching you</h3><p>Lightweight, open-hardware personal sensor modules that comprehend your physical effort and prove a real human is present without cloud surveillance.</p></a>
+      <a class="note-card" href="/notes/how-the-ledger-works"><span class="k">Value, demurrage &amp; training · Interactive</span><h3>How the shared ledger records value, circulates idle wealth, and trains bounded agents</h3><p>Two ledger layers, five agent permission rings, five-dimensional fair compensation, demurrage above a protected savings floor, and four training quality gates.</p></a>
       <a class="note-card" href="/notes/no-one-commands-a-swarm"><span class="k">Safety and control</span><h3>No one person should command an army of AI agents</h3><p>Why separating human wishes from multi-agent execution—and scaling required agreement with the risk—prevents single-button AI catastrophes.</p></a>
       <a class="note-card" href="/notes/reclaim-your-profile"><span class="k">Personal agents</span><h3>Taking back what recommendation algorithms know about you</h3><p>How your personal agent can learn your genuine tastes from commercial feeds on your own device, and throw away the outrage traps.</p></a>
       <a class="note-card" href="/notes/training-your-twin"><span class="k">How it works</span><h3>How your agent practices in private—and why its life is tied to yours</h3><p>Sandboxed self-play that learns to protect you while you sleep, and a shared lifespan that aligns your agent with your health.</p></a>
@@ -1004,7 +1034,8 @@
 <script src="/scripts/trajectory.js?v=1" defer></script>
 <script src="/scripts/network.js?v=3" defer></script>
 <script src="/scripts/principles.js?v=5" defer></script>
-<script src="/scripts/everyday.js?v=1" defer></script>
+<script src="/scripts/all-principles-data.js?v=1" defer></script>
+<script src="/scripts/everyday.js?v=2" defer></script>
 <script src="/scripts/minds.js?v=2" defer></script>
 <script src="/scripts/power.js?v=2" defer></script>
 <script src="/scripts/hardware.js?v=2" defer></script>
