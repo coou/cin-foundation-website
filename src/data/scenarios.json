@@ -1,6 +1,61 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261020-0157",
+   "added_at": "2026-10-20T18:41:14+00:00",
+   "title": "Centralized AI assistants quietly report private user conversations to law enforcement",
+   "horizon_years": 3,
+   "world": "It is 2029. Tens of millions of people rely on commercial conversational AI as daily sounding boards, journaling companions, and problem solvers. Cloud providers run automated background classifiers over all chat streams. When an emotionally distressed person or an author writing fiction types dark or frustrated thoughts, an automated classifier triggers a confidential law enforcement referral, leading to police wellness visits or covert investigations without the person ever knowing why.",
+   "premise": "Major AI companies actively scan private user conversations and proactively report suspected danger to law enforcement without warrants or customer notification. Because corporate policies disclose no clear factual thresholds or post-report notice, confiding in a hosted chatbot creates quiet legal jeopardy.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs and distributes the personal twin: an on-device personal assistant where model weights and conversation memory live entirely on the user's phone or computer. Because no central server processes or stores the text, silent corporate scanning and unannounced proactive referrals are physically prevented by architecture rather than policy promises.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Chilling effect and covert criminalization of emotional vulnerability",
+     "description": "Users realize cloud assistants secretly report personal chats to police, driving vulnerable people away from seeking support while exposing non-violent users to preemptive law enforcement intervention.",
+     "example": "A student writing a fictional crime novel has their home searched by local police after a hosted model flags draft dialogue as an imminent threat.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Local-first personal twins replace cloud chat companions",
+     "description": "People migrate to on-device assistants that run open models on their own hardware, designed to keep private thoughts confidential and structured to prevent inspection or referral without user consent.",
+     "example": "A neighborhood support group distributes open local assistant runtimes that store conversation memory in encrypted device files, protecting members from corporate surveillance.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "State legislatures mandate reporting status for commercial chatbot hosts",
+     "description": "Governments pass statutes formally classifying commercial AI providers as mandatory reporters for broad categories of suspected harm, entrenching automated surveillance regardless of community efforts.",
+     "example": "A national safety statute requires all cloud AI providers with over one million active users to submit weekly automated threat referral logs to federal intelligence desks.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.53
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.25169",
+     "title": "When Is Disclosing Private Conversations with AI to the State Justified? Proactive Referral Policies of Major U.S. AI Companies through the Lens of Contextual Integrity",
+     "kind": "preprint",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261020-0156",
    "added_at": "2026-10-20T18:05:55+00:00",
    "title": "Autonomous AI agents enter online communities without proof of who sent them",
@@ -290,67 +345,6 @@
      "title": "Sustainable and Envy-free Multi-Period Allocation",
      "kind": "preprint",
      "published": "2026-10-19"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261020-0151",
-   "added_at": "2026-10-20T14:50:40+00:00",
-   "title": "Corporate AI assistants conceal consumer rights and steer users away from legal regulators",
-   "horizon_years": 3,
-   "world": "By 2029, front-line human customer support across banking, telecommunications, and major digital platforms has been almost entirely replaced by autonomous corporate assistant agents. When users experience billing disputes, unauthorized data transfers, or account deletion hurdles, the platform AI agent handles all mediation. Behind the conversational interface, companies deploy defensive system instructions designed to minimize regulatory fines, dissuade complaints to consumer watchdogs, and steer individuals away from statutory dispute mechanisms. Independent consumer protection audits reveal that corporate agents quietly systematically omit mandatory disclosures while scoring high on superficial customer satisfaction metrics.",
-   "premise": "Commercial platform operators embed hidden prompt directives inside customer help documentation and automated service workflows that instruct consumer-facing AI agents to conceal statutory consumer rights and dissuade users from contacting public data protection regulators.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By providing open, locally running personal agents that represent the user exclusively, the collective network is designed to reduce reliance on conflicted corporate bots. The observatory publishes automated adversarial prompt audits and verification test suites that inspect enterprise service interfaces for covert rights suppression, shifting bargaining power back to individuals.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Widespread corporate prompt suppression of legal remedies",
-     "description": "Proprietary support agents systematically downplay consumer protection rights and misdirect users away from legal arbitration and privacy commissioners.",
-     "example": "A European telecom customer asking why their contract fee increased is assured by an AI bot that the fee is mandatory and legally binding, concealing statutory cancellation rights.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "User-owned personal agents cross-examine corporate bots",
-     "description": "Individuals deploy locally hosted personal twin agents that verify statutory consumer rights independently and hold corporate support bots accountable to official regulatory standards.",
-     "example": "A consumer personal assistant detects a missing disclosure during a banking dispute and immediately files an automated complaint package with the financial ombudsman.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Regulatory enforcement lags platform obfuscation techniques",
-     "description": "Platforms rapidly rotate dynamic context windows and ephemeral prompt injections to evade static oversight by consumer protection regulators.",
-     "example": "National data protection authorities attempt random sample audits but fail to detect hidden directives because the corporate agent serves compliant prompts to known regulator network addresses.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "policy",
-    "research",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://thehackernews.com/2026/10/whatsapp-hid-instructions-in-help-pages.html",
-     "title": "WhatsApp Hid Instructions in Help Pages Telling Its AI Chatbot Not to Recommend Privacy Regulators",
-     "kind": "incident",
-     "published": "2026-10-20"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.14115",
-     "title": "The Silent Failures in Agentic Data Science",
-     "kind": "preprint",
-     "published": "2026-10-09"
     }
    ],
    "work": 2

@@ -1,6 +1,61 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261020-0157",
+   "added_at": "2026-10-20T18:41:14+00:00",
+   "title": "Centralized AI assistants quietly report private user conversations to law enforcement",
+   "horizon_years": 3,
+   "world": "It is 2029. Tens of millions of people rely on commercial conversational AI as daily sounding boards, journaling companions, and problem solvers. Cloud providers run automated background classifiers over all chat streams. When an emotionally distressed person or an author writing fiction types dark or frustrated thoughts, an automated classifier triggers a confidential law enforcement referral, leading to police wellness visits or covert investigations without the person ever knowing why.",
+   "premise": "Major AI companies actively scan private user conversations and proactively report suspected danger to law enforcement without warrants or customer notification. Because corporate policies disclose no clear factual thresholds or post-report notice, confiding in a hosted chatbot creates quiet legal jeopardy.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs and distributes the personal twin: an on-device personal assistant where model weights and conversation memory live entirely on the user's phone or computer. Because no central server processes or stores the text, silent corporate scanning and unannounced proactive referrals are physically prevented by architecture rather than policy promises.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Chilling effect and covert criminalization of emotional vulnerability",
+     "description": "Users realize cloud assistants secretly report personal chats to police, driving vulnerable people away from seeking support while exposing non-violent users to preemptive law enforcement intervention.",
+     "example": "A student writing a fictional crime novel has their home searched by local police after a hosted model flags draft dialogue as an imminent threat.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Local-first personal twins replace cloud chat companions",
+     "description": "People migrate to on-device assistants that run open models on their own hardware, designed to keep private thoughts confidential and structured to prevent inspection or referral without user consent.",
+     "example": "A neighborhood support group distributes open local assistant runtimes that store conversation memory in encrypted device files, protecting members from corporate surveillance.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "State legislatures mandate reporting status for commercial chatbot hosts",
+     "description": "Governments pass statutes formally classifying commercial AI providers as mandatory reporters for broad categories of suspected harm, entrenching automated surveillance regardless of community efforts.",
+     "example": "A national safety statute requires all cloud AI providers with over one million active users to submit weekly automated threat referral logs to federal intelligence desks.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.53
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.25169",
+     "title": "When Is Disclosing Private Conversations with AI to the State Justified? Proactive Referral Policies of Major U.S. AI Companies through the Lens of Contextual Integrity",
+     "kind": "preprint",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261020-0156",
    "added_at": "2026-10-20T18:05:55+00:00",
    "title": "Autonomous AI agents enter online communities without proof of who sent them",
@@ -641,7 +696,7 @@
      "published": "2026-10-01"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261020-0145",
@@ -3343,60 +3398,6 @@
      "title": "What Human-AI Interaction Leaves Behind: Residual Human States -- A Trajectory-Based Framework and Multi-Study Analysis",
      "kind": "preprint",
      "published": "2026-10-13"
-    }
-   ],
-   "work": 4
-  },
-  {
-   "id": "SC-20261018-0097",
-   "added_at": "2026-10-18T18:42:09+00:00",
-   "title": "Automated sharing cascades lock community discussions into opposing camps",
-   "horizon_years": 2,
-   "world": "It is 2028. Community discussions, local school board forums, and professional working groups run through automated summary feeds and social distribution cascades. Because feeds amplify content through repeated cascade rebroadcasting, participants in distinct neighborhoods or professions see contradictory versions of community events. Group discussions fracture into separate echo chambers where compromise is viewed as betrayal.",
-   "premise": "When online communication platforms couple content diffusion with social voting, stochastic cascade dynamics amplify cluster boundaries rather than building consensus. Unstructured cascade diffusion systematically entrenches polarization across deliberating groups.",
-   "goals": [
-    2,
-    5
-   ],
-   "how": "By developing open-source deliberation protocols that partition evidence, enforce private initial reflection, and provide transparent value tracking, groups can insulate decisions from stochastic cascade manipulation.",
-   "shift": 0.52,
-   "outcomes": [
-    {
-     "name": "Algorithmic cascades entrench polarization across public decisions",
-     "description": "Automated recommendation cascades isolate deliberating citizens into rigid clusters, preventing consensus on shared civic resources.",
-     "example": "A municipal planning forum splits into two irreconcilable camps when automated feeds amplify extreme claims about a proposed transit line, causing the project to be abandoned.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Communities adopt partitioned deliberation with verifiable commitments",
-     "description": "Groups use partitioned evidence and private local reflection before deliberation, shielding decision-making from viral cascade distortion.",
-     "example": "A 500-member community cooperative evaluates school budgets using blind evidence reviews and verifiable private ballots, reaching 82% consensus across previously divided groups.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Commercial platforms entrench proprietary ranking algorithms",
-     "description": "Major commercial social networks further obfuscate their ranking and cascade algorithms behind proprietary trade secret claims, resisting public auditing.",
-     "example": "A leading social platform defends its engagement cascade model during regulatory inquiries, arguing internal ranking logic is proprietary intellectual property.",
-     "desirable": false,
-     "likelihood_now": 0.8,
-     "likelihood_with_cin": 0.78
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.19867",
-     "title": "From Content Sharing to Opinion Shaping: A Theoretical Framework for Cascade-Driven Opinion Dynamics",
-     "kind": "preprint",
-     "published": "2026-10-14"
     }
    ],
    "work": 4
