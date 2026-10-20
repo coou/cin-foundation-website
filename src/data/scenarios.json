@@ -1,6 +1,124 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261020-0150",
+   "added_at": "2026-10-20T14:39:38+00:00",
+   "title": "Foundation models internalize memory, replacing user data files with proprietary neural weights",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial AI assistants no longer search through your chat logs or files; they continuously absorb every conversation, email, and browse history into personalized neural weight deltas running in the cloud. People have deeply capable assistants that remember years of nuance, but users can no longer see what their model knows about them, cannot edit an incorrect memory, and face severe technical friction when trying to switch providers.",
+   "premise": "Foundation models are evolving from external retrieval-augmented generation toward internalizing memory directly into model computation and recurrent states. While this makes long-context agent execution faster and fixed-storage, it threatens to replace inspectable user data files with opaque neural weights.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network builds local-first twin architectures that separate durable personal facts and values from model execution weights. By proving that local, user-owned state files can guide open-weight models without cloud lock-in, the network makes open personal agents viable and keeps ownership in the hands of the person.",
+   "shift": 0.6,
+   "outcomes": [
+    {
+     "name": "Black-box memory lock-in",
+     "description": "Cloud assistant providers embed user memory directly into closed model weights, making data export technically difficult and trapping users on proprietary platforms.",
+     "example": "A user attempting to switch from a commercial personal assistant discovers their five-year personal history cannot be migrated cleanly because memories exist only as opaque recurrent parameters in the provider's datacenter.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Hardware vendors hardcode memory-native firmware",
+     "description": "Consumer chipmakers optimize NPUs specifically for proprietary memory architectures, cementing neural weight lock-in at the silicon layer regardless of software efforts.",
+     "example": "New laptop NPUs feature dedicated recurrent memory caches that only execute signed proprietary model weights, leaving open local tools without hardware acceleration.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Open-weight local memory twins",
+     "description": "Personal agents run memory-native models locally on consumer hardware, pairing neural memory with deterministic audit logs so users can inspect, rollback, and delete memories at will.",
+     "example": "A user runs a local memory-native twin on their home computer where every token-level memory update is paired with an open provenance journal, allowing straightforward deletion of sensitive personal facts.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Hybrid explicit memory architectures",
+     "description": "Personal twins keep durable memories in transparent, user-owned structured stores while using internalized memory only for ephemeral conversational flow, designed to support permanent portability.",
+     "example": "An open twin standard uses fast internalized memory for multi-turn dialogue context but synchronizes permanent preferences and obligations to a portable structured state file that works across models.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.4
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.26825",
+     "title": "MemT-1.0: Towards Memory-Native Evolution",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261020-0149",
+   "added_at": "2026-10-20T14:07:13+00:00",
+   "title": "Shared links for AI chats leak private family health and work conversations into search engines",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of students, freelance contractors, and office workers regularly click share link to send an AI-generated explanation or code snippet to colleagues and friends. Because the cloud services treat shared conversations as public static webpages, automated web crawlers and commercial data brokers continuously scrape new shared links. A single search query reveals thousands of unredacted conversations containing passport scans, personal therapy journals, sensitive financial spreadsheets, and proprietary software architecture. While users believe they shared only a single helpful answer, background session tokens and conversational memory mean their entire dialogue history was mirrored online without explicit confirmation.",
+   "premise": "When people use one-click web links to share an answer from a cloud-hosted AI assistant, the provider publishes the conversation to an unauthenticated webpage that search crawlers immediately index. Investigation shows that these public URLs expose entire conversation histories, including confidential medical notes, API keys, and corporate legal strategy.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network provides lightweight open-source assistant runtimes that store conversation history on local hardware. When a user chooses to share an answer, the assistant creates a local static export containing only the requested paragraph or snippet, preventing ambient cloud hosting and search index leakage.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Automated web crawlers aggregate and monetize leaked private chats",
+     "description": "Data brokers and scrapers build searchable repositories of leaked cloud assistant conversations, indexing personal financial disclosures and medical records for sale.",
+     "example": "A freelance graphic designer applies for health insurance and discovers their premium tripled after an underwriter bought an index of shared assistant links that included their private medical queries.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Local-first personal assistants share self-contained cryptographic snippets",
+     "description": "Personal assistants keep memory strictly on the user hardware and export individual answers as static, signed text snippets without creating public cloud URLs.",
+     "example": "When an engineer shares a solution with a coworker, her local assistant generates an encrypted, detached Markdown file that contains only the specific answer, leaving the rest of her dialogue private.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Platforms implement closed walled-garden viewing requirements",
+     "description": "Cloud vendors respond to leaks not by improving local privacy, but by requiring mandatory account sign-ins and identity checks for anyone viewing a shared link.",
+     "example": "A family member cannot view a shared recipe or travel itinerary without creating a paid account and agreeing to platform telemetry.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.55
+    }
+   ],
+   "pipelines": [
+    "media",
+    "policy",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/",
+     "title": "Meta Muse exposes users' personal and business secrets when they share conversations",
+     "kind": "news",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261020-0148",
    "added_at": "2026-10-20T07:59:53+00:00",
    "title": "Workplace software monitors and fragments employees while labor unions turn to private coordination tools",
@@ -168,7 +286,7 @@
      "published": "2026-10-01"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261020-0145",
@@ -228,121 +346,7 @@
      "published": "2026-10-19"
     }
    ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261020-0144",
-   "added_at": "2026-10-20T03:37:03+00:00",
-   "title": "Automated wallet swarms defeat quadratic voting rules across decentralized grant programs",
-   "horizon_years": 3,
-   "world": "It is 2029. Major open-source funding platforms and decentralized protocols distribute hundreds of millions of dollars annually through retroactive grant pools and community voting mechanisms. However, commercial syndicates and automated token-farming agents have industrialized wallet splitting. Whenever a public goods pool announces a quadratic or sublinear reward formula, coordinated agent clusters automatically divide treasury balances across tens of thousands of newly spawned micro-wallets, extracting maximum matching subsidies while simulating authentic grass-roots popularity. Independent developers find their applications drowned out by automated farming networks that mimic organic activity. In response, a growing number of digital infrastructure collectives abandon token-balance voting entirely. They transition to bilateral mutual credit circles and multi-party escrow clearing, where voting and allocation authority depend strictly on peer attestations of real delivered work rather than on-chain capital balances.",
-   "premise": "Research proves that any decentralized voting rule that derives voting power from wallet balances, including quadratic and concave damping formulas, can be systematically neutralized by wallet-splitting Sybil attacks. At the same time, grassroots mutual credit models demonstrate how communities can issue bilateral debt obligations and escrow clearing without relying on speculative tokens or balance-weighted votes.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "The network publishes formal simulation benchmarks that prove the vulnerability of token-balance voting mechanisms to autonomous splitting agents. In place of token votes, the network provides open specifications and reference designs for bilateral mutual credit agreements, time-decay demurrage models, and peer-attested contribution recognition. By demonstrating that mutual credit networks can clear real computational and labor obligations without speculative capital tokens, developer collectives gain practical tools to organize sustainable public goods funding that resists balance-splitting exploits.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Automated farming swarms capture retroactive public goods pools",
-     "description": "Well-capitalized syndicates deploy agent swarms to fragment balances across synthetic identities, capturing matching funds intended for authentic open-source contributors.",
-     "example": "A boutique crypto syndicate uses an automated agent swarm to split 500,000 dollars across 8,000 ephemeral wallets, claiming 42% of a global developer grant pool despite contributing zero original software.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Collectives adopt bilateral mutual credit and verified task attestations",
-     "description": "Open-source maintainers replace token-weighted grants with bilateral credit lines and cryptographic task attestations, rendering balance-splitting attacks useless.",
-     "example": "A consortium of 60 open-source infrastructure teams settles infrastructure costs and maintenance bounties using bilateral mutual credit bonds, completely bypassing public token voting.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Centralized state grants re-impose traditional identity bureaucracy",
-     "description": "Frustrated by widespread wallet farming, public and private philanthropies abandon decentralized allocation entirely in favor of heavy government identity requirements and corporate grant committees.",
-     "example": "A national digital research fund cancels its algorithmic grant pilot and mandates three-month bureaucratic committee reviews with biometric identity checks for all grant applicants.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.28
-    }
-   ],
-   "pipelines": [
-    "community",
-    "research",
-    "simulation"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2605.18990",
-     "title": "Concave is the New Linear: The Impossibility of Anti-Plutocratic DAO Governance",
-     "kind": "preprint",
-     "published": "2026-05-18"
-    },
-    {
-     "url": "https://arxiv.org/html/2603.13671",
-     "title": "Grassroots Bonds: Financing by the People, for the People",
-     "kind": "preprint",
-     "published": "2026-10-02"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261020-0143",
-   "added_at": "2026-10-20T03:30:27+00:00",
-   "title": "Autonomous coding tools displace the joy of programming, turning developers into passive reviewers",
-   "horizon_years": 3,
-   "world": "It is 2029. Most software engineers rarely write functions or construct algorithmic data structures by hand. Instead, centralized enterprise agents assemble whole backend services and user interfaces from brief text prompts. Human developers spend their days reading and skimming through thousands of generated lines, approving pull requests for systems whose internal edge cases they have not stepped through. Many experienced developers report feeling estranged from the creative problem-solving that originally drew them to the field, while junior engineers struggle to develop deep architectural intuition because they rarely build systems from the ground up.",
-   "premise": "As autonomous coding agents generate, refactor, and debug software at scale, software engineers find the creative puzzle-solving craft of programming displaced by automated systems. This shift risks human deskilling, cognitive alienation, and fatigue as people are relegated to passive supervisors of code they did not write.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "Our work builds personal assistants that run on personal devices and answer only to their owner. Rather than maximizing automated volume for enterprise metrics, these assistants are designed to serve as patient thinking partners that support human learning, respect user boundaries, and preserve the deep satisfaction of creative craft.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Developers become passive reviewers while codebases grow opaque",
-     "description": "Corporate tools monopolize system synthesis while engineers lose core technical reasoning skills, leaving teams dependent on proprietary assistants to understand their own software.",
-     "example": "A municipal engineering team cannot diagnose an intermittent concurrency failure because none of the developers wrote the state machine and the commercial model that generated it is discontinued.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Personal tools act as collaborative partners that preserve human craft",
-     "description": "Developers use local personal assistants designed as collaborative sparring partners that clarify architectural trade-offs and handle tedious boilerplate while leaving core algorithmic puzzle-solving to the human.",
-     "example": "An independent open-source programmer pairs with a local personal assistant to explore alternative caching algorithms, maintaining full intellectual ownership and enjoyment in the solution.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Proprietary enterprise platforms lock corporate codebases into closed agent ecosystems",
-     "description": "Large corporate platforms bundle proprietary coding assistants directly into enterprise cloud contracts, where procurement inertia limits the influence of independent personal tools in commercial workplaces.",
-     "example": "A global consultancy mandates the exclusive use of a proprietary cloud vendor's coding suite across all client projects, preventing staff from using local personal tools on enterprise machines.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "community",
-    "research",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://simonwillison.net/2026/Oct/19/my-obituary-for-programming/",
-     "title": "My obituary for programming",
-     "kind": "blog",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 1
+   "work": 4
   }
  ]
 }

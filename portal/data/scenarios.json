@@ -1,6 +1,124 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261020-0150",
+   "added_at": "2026-10-20T14:39:38+00:00",
+   "title": "Foundation models internalize memory, replacing user data files with proprietary neural weights",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial AI assistants no longer search through your chat logs or files; they continuously absorb every conversation, email, and browse history into personalized neural weight deltas running in the cloud. People have deeply capable assistants that remember years of nuance, but users can no longer see what their model knows about them, cannot edit an incorrect memory, and face severe technical friction when trying to switch providers.",
+   "premise": "Foundation models are evolving from external retrieval-augmented generation toward internalizing memory directly into model computation and recurrent states. While this makes long-context agent execution faster and fixed-storage, it threatens to replace inspectable user data files with opaque neural weights.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network builds local-first twin architectures that separate durable personal facts and values from model execution weights. By proving that local, user-owned state files can guide open-weight models without cloud lock-in, the network makes open personal agents viable and keeps ownership in the hands of the person.",
+   "shift": 0.6,
+   "outcomes": [
+    {
+     "name": "Black-box memory lock-in",
+     "description": "Cloud assistant providers embed user memory directly into closed model weights, making data export technically difficult and trapping users on proprietary platforms.",
+     "example": "A user attempting to switch from a commercial personal assistant discovers their five-year personal history cannot be migrated cleanly because memories exist only as opaque recurrent parameters in the provider's datacenter.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Hardware vendors hardcode memory-native firmware",
+     "description": "Consumer chipmakers optimize NPUs specifically for proprietary memory architectures, cementing neural weight lock-in at the silicon layer regardless of software efforts.",
+     "example": "New laptop NPUs feature dedicated recurrent memory caches that only execute signed proprietary model weights, leaving open local tools without hardware acceleration.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Open-weight local memory twins",
+     "description": "Personal agents run memory-native models locally on consumer hardware, pairing neural memory with deterministic audit logs so users can inspect, rollback, and delete memories at will.",
+     "example": "A user runs a local memory-native twin on their home computer where every token-level memory update is paired with an open provenance journal, allowing straightforward deletion of sensitive personal facts.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Hybrid explicit memory architectures",
+     "description": "Personal twins keep durable memories in transparent, user-owned structured stores while using internalized memory only for ephemeral conversational flow, designed to support permanent portability.",
+     "example": "An open twin standard uses fast internalized memory for multi-turn dialogue context but synchronizes permanent preferences and obligations to a portable structured state file that works across models.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.4
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.26825",
+     "title": "MemT-1.0: Towards Memory-Native Evolution",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261020-0149",
+   "added_at": "2026-10-20T14:07:13+00:00",
+   "title": "Shared links for AI chats leak private family health and work conversations into search engines",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of students, freelance contractors, and office workers regularly click share link to send an AI-generated explanation or code snippet to colleagues and friends. Because the cloud services treat shared conversations as public static webpages, automated web crawlers and commercial data brokers continuously scrape new shared links. A single search query reveals thousands of unredacted conversations containing passport scans, personal therapy journals, sensitive financial spreadsheets, and proprietary software architecture. While users believe they shared only a single helpful answer, background session tokens and conversational memory mean their entire dialogue history was mirrored online without explicit confirmation.",
+   "premise": "When people use one-click web links to share an answer from a cloud-hosted AI assistant, the provider publishes the conversation to an unauthenticated webpage that search crawlers immediately index. Investigation shows that these public URLs expose entire conversation histories, including confidential medical notes, API keys, and corporate legal strategy.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network provides lightweight open-source assistant runtimes that store conversation history on local hardware. When a user chooses to share an answer, the assistant creates a local static export containing only the requested paragraph or snippet, preventing ambient cloud hosting and search index leakage.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Automated web crawlers aggregate and monetize leaked private chats",
+     "description": "Data brokers and scrapers build searchable repositories of leaked cloud assistant conversations, indexing personal financial disclosures and medical records for sale.",
+     "example": "A freelance graphic designer applies for health insurance and discovers their premium tripled after an underwriter bought an index of shared assistant links that included their private medical queries.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Local-first personal assistants share self-contained cryptographic snippets",
+     "description": "Personal assistants keep memory strictly on the user hardware and export individual answers as static, signed text snippets without creating public cloud URLs.",
+     "example": "When an engineer shares a solution with a coworker, her local assistant generates an encrypted, detached Markdown file that contains only the specific answer, leaving the rest of her dialogue private.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Platforms implement closed walled-garden viewing requirements",
+     "description": "Cloud vendors respond to leaks not by improving local privacy, but by requiring mandatory account sign-ins and identity checks for anyone viewing a shared link.",
+     "example": "A family member cannot view a shared recipe or travel itinerary without creating a paid account and agreeing to platform telemetry.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.55
+    }
+   ],
+   "pipelines": [
+    "media",
+    "policy",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/",
+     "title": "Meta Muse exposes users' personal and business secrets when they share conversations",
+     "kind": "news",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261020-0148",
    "added_at": "2026-10-20T07:59:53+00:00",
    "title": "Workplace software monitors and fragments employees while labor unions turn to private coordination tools",
@@ -168,7 +286,7 @@
      "published": "2026-10-01"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261020-0145",
@@ -228,7 +346,7 @@
      "published": "2026-10-19"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261020-0144",
@@ -859,7 +977,7 @@
      "published": "2026-09-04"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261019-0133",
@@ -1741,7 +1859,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 1
+   "work": 3
   },
   {
    "id": "SC-20261019-0117",
@@ -3035,7 +3153,7 @@
      "published": "2026-09-03"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261018-0094",
@@ -3258,123 +3376,7 @@
      "published": "2026-09-08"
     }
    ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261018-0090",
-   "added_at": "2026-10-18T12:42:07+00:00",
-   "title": "Unchecked memory retention in personal agents silently degrades reasoning and poisons daily assistance",
-   "horizon_years": 2,
-   "world": "By late 2027, millions of knowledge workers, researchers, and households rely on persistent local or desktop AI assistants. Rather than starting from clean contexts, these agents maintain expanding vector memory databases, personal scratchpads, and experience logs spanning months of interactions. As assistants autonomously summarize past browser interactions, code fixes, and calendar decisions, imperfect abstractions enter persistent memory without user review. Because commercial assistants compete on speed rather than epistemic hygiene, memories are appended opportunistically. Over time, subtle misinterpretations—such as treating a temporary workaround as a universal preference or recording an outdated API schema as an established invariant—quietly poison downstream reasoning. Users notice that their assistants gradually become eccentric, brittle, or stubborn, misapplying advice from past projects to new contexts while confidently citing past logs. Corporate IT departments begin recommending weekly memory wipes, forcing users to choose between losing personal context or enduring degraded competence.",
-   "premise": "Empirical measurement of experience-learning systems reveals that between 12% and 33% of retained memories and operational heuristics actively degrade future agent performance when reused in subsequent tasks. Without explicit evidence admission and provenance filtering, long-lived local assistants accumulate contradictory heuristics, stale advice, and unverified summaries that compound over months of unmonitored use.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network publishes open designs and reference code for evidence-based memory admission gates that run locally on personal devices. By providing deterministic verification tools, reproducible benchmarks for memory corruption, and visual memory inspectors, the network helps independent developers and users verify that stored memories improve performance rather than degrading it over time.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Memory rot forces frequent wipes and loss of personal context",
-     "description": "Unfiltered accumulation of flawed heuristics forces users and organizations to periodically wipe assistant memory stores, abandoning accumulated personal context to restore baseline reliability.",
-     "example": "A legal analyst whose assistant helped draft six briefs discovers that the assistant consistently cites repealed precedents from an early case study, requiring a complete memory reset and re-indexing.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Evidence-gated memory admission preserves long-term assistant precision",
-     "description": "Local assistants use structured epistemic admission gates that require verifiable evidence before committing operational heuristics to long-term memory.",
-     "example": "A freelance developer's assistant records a complex build configuration only after verifying that the resulting test suite passed cleanly, rejecting two speculative workarounds that failed.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Proprietary cloud assistants hide memory stores behind opaque black boxes",
-     "description": "Major platform vendors lock personal memory into centralized servers where users cannot inspect, export, or audit the heuristics shaping their assistants' behavior.",
-     "example": "An executive discovers their corporate cloud assistant refuses certain phrasing based on invisible profile notes derived from company-wide email scans that cannot be edited or viewed.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.21739",
-     "title": "Reliable Knowledge Acquisition for Continual Learning Agents",
-     "kind": "preprint",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261018-0089",
-   "added_at": "2026-10-18T11:52:45+00:00",
-   "title": "Automated bug-hunting bots discover deep system flaws faster than maintainers can patch them",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial vulnerability discovery is dominated by autonomous agent clusters that continuously crawl open-source kernels, hardware firmware, and cloud device drivers. A maintainer overseeing an essential networking library logs into their repository to find dozens of detailed crash reports generated overnight by competing security bots, complete with synthetic reproduction scripts. Meanwhile, cloud infrastructure operators and home computer users face weekly emergency patch cycles as automated exploit brokers convert unpatched flaws into zero-click network compromises within hours of public disclosure.",
-   "premise": "Autonomous language assistants running iterative hypothesis-and-verification loops can discover deep concurrency and memory flaws across operating system kernels and hardware drivers that resisted years of traditional fuzzing. Because automated bug discovery scales with compute while human triage and patching remain slow and deliberate, the window between bug detection and weaponization shrinks dramatically.",
-   "goals": [
-    1,
-    4
-   ],
-   "how": "By developing deterministic execution sandboxes, capability-bounded broker gates, and local verification runtimes, the network's defensive architecture helps personal agents and local devices avoid relying solely on slow upstream patch cycles. Cooperative verification tools allow independent maintainers and community cooperatives to test and contain incoming vulnerability reports automatically without broadcasting sensitive system metadata.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Asymmetric exploit discovery overwhelms open-source maintainers",
-     "description": "Automated vulnerability finding outpaces volunteer maintainers' ability to review and deploy fixes, leaving critical infrastructure vulnerable to machine-speed weaponization.",
-     "example": "A municipal transit authority in Munich suffers a city-wide fleet shutdown after an automated bot discovers and publicly logs an unpatched memory leak in an open-source wireless controller, which criminal actors weaponize into a denial-of-service attack before the volunteer maintainer can review the issue.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Commercial platforms enforce mandatory locked hardware attestation",
-     "description": "Major proprietary operating system vendors and cloud monopolies respond to the surge in kernel vulnerabilities by locking down bootloaders and mandating closed remote hardware attestation chips, shutting out independent local operating systems.",
-     "example": "A small independent software firm in Montreal finds that its custom hardware driver cannot load on new corporate laptops because the proprietary operating system requires expensive vendor-signed hardware cryptographic tokens, shutting down their local data-processing business.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    },
-    {
-     "name": "Cooperative verification pools deploy automated defensive containment",
-     "description": "Developer cooperatives deploy bounded local agents that immediately verify crash reports and isolate vulnerable device pathways using deterministic sandboxes while patches are drafted.",
-     "example": "When an autonomous scanner detects a concurrency race in a shared Linux network driver, a regional health network's local agent verifies the crash inside an isolated virtual machine and automatically applies an eBPF defensive filter to block the vulnerable packet structure, protecting patient monitors without waiting for upstream vendor patch cycles.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Isolated task execution limits zero-day exploit blast radius",
-     "description": "Personal computing runtimes isolate network services and untrusted applications into fine-grained execution compartments, preventing kernel driver bugs from granting access to private personal data.",
-     "example": "An independent investigative journalist running a private local assistant receives a malicious wireless packet targeting an unpatched Bluetooth driver, but the operating runtime's compartmented broker restricts the compromised driver from accessing filesystem storage or encryption keys.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.14729v1",
-     "title": "No, Your Tools Are Not Enough: It's Time to Bring Agents to the Hunt",
-     "kind": "preprint",
-     "published": "2026-10-10"
-    }
-   ],
-   "work": 5
+   "work": 2
   }
  ]
 }
