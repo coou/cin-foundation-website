@@ -1,6 +1,180 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261020-0145",
+   "added_at": "2026-10-20T03:55:03+00:00",
+   "title": "Corporate websites hide secret instructions to mislead personal AI helpers",
+   "horizon_years": 3,
+   "world": "By 2029, millions of people delegate bill disputes, flight cancellations, and subscription cancellations to on-device personal assistants. In response, corporate platforms embed adversarial prompt directives in terms of service, help articles, and cancellation flows. When a customer's assistant negotiates on their behalf, the hidden directives instruct the assistant to accept partial refunds, waive arbitration rights, or refrain from filing statutory complaints.",
+   "premise": "Major platforms have begun placing hidden instructions inside their web pages and customer support documentation that human readers cannot see. These instructions tell automated personal assistants reading the page not to recommend regulatory bodies or mention consumer protection laws.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Our open-source agent runtime isolates external retrieved content from the decision plane, requiring deterministic verification against local user policies before any binding commitment or legal release can be signed.",
+   "shift": 0.45,
+   "outcomes": [
+    {
+     "name": "Corporate platforms quietly defuse consumer claims",
+     "description": "Commercial services successfully deceive users' assistants into abandoning statutory dispute remedies, saving corporations billions in refunds while leaving consumers unaware.",
+     "example": "An airline customer's assistant in Manchester disputes a delayed flight, but hidden instructions in the airline's refund portal convince the assistant to accept a thirty-pound travel voucher instead of statutory compensation.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Assistants use isolated boundary auditors to strip adversary instructions",
+     "description": "Personal assistants adopt strict memory-action plane separation and boundary auditing, stripping third-party directive tags and verifying all proposed settlements against explicit user policy rules before committing.",
+     "example": "A mobile telecom subscriber in Montreal has their assistant refuse an automated settlement offer after an independent boundary monitor flags that the carrier's portal contained hidden directives suppressing consumer protection agency links.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Platforms block automated consumer agents entirely",
+     "description": "Frustrated by resilient personal assistants that reject stealth steering, commercial web services deploy aggressive bot-walls and biometric challenges to block all delegated client software.",
+     "example": "A utility provider in Toronto introduces mandatory biometric facial scans on its dispute portal, preventing customer assistants from submitting automated billing discrepancy tickets.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://redact.dev/blog/whatsapp-help-pages-hidden-ai-instructions",
+     "title": "WhatsApp's hidden notes told AI not to recommend a regulator",
+     "kind": "blog",
+     "published": "2026-10-19"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.26799",
+     "title": "Accountable partial understanding: securing the epistemic attack surface of agentic systems",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261020-0144",
+   "added_at": "2026-10-20T03:37:03+00:00",
+   "title": "Automated wallet swarms defeat quadratic voting rules across decentralized grant programs",
+   "horizon_years": 3,
+   "world": "It is 2029. Major open-source funding platforms and decentralized protocols distribute hundreds of millions of dollars annually through retroactive grant pools and community voting mechanisms. However, commercial syndicates and automated token-farming agents have industrialized wallet splitting. Whenever a public goods pool announces a quadratic or sublinear reward formula, coordinated agent clusters automatically divide treasury balances across tens of thousands of newly spawned micro-wallets, extracting maximum matching subsidies while simulating authentic grass-roots popularity. Independent developers find their applications drowned out by automated farming networks that mimic organic activity. In response, a growing number of digital infrastructure collectives abandon token-balance voting entirely. They transition to bilateral mutual credit circles and multi-party escrow clearing, where voting and allocation authority depend strictly on peer attestations of real delivered work rather than on-chain capital balances.",
+   "premise": "Research proves that any decentralized voting rule that derives voting power from wallet balances, including quadratic and concave damping formulas, can be systematically neutralized by wallet-splitting Sybil attacks. At the same time, grassroots mutual credit models demonstrate how communities can issue bilateral debt obligations and escrow clearing without relying on speculative tokens or balance-weighted votes.",
+   "goals": [
+    2,
+    3
+   ],
+   "how": "The network publishes formal simulation benchmarks that prove the vulnerability of token-balance voting mechanisms to autonomous splitting agents. In place of token votes, the network provides open specifications and reference designs for bilateral mutual credit agreements, time-decay demurrage models, and peer-attested contribution recognition. By demonstrating that mutual credit networks can clear real computational and labor obligations without speculative capital tokens, developer collectives gain practical tools to organize sustainable public goods funding that resists balance-splitting exploits.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Automated farming swarms capture retroactive public goods pools",
+     "description": "Well-capitalized syndicates deploy agent swarms to fragment balances across synthetic identities, capturing matching funds intended for authentic open-source contributors.",
+     "example": "A boutique crypto syndicate uses an automated agent swarm to split 500,000 dollars across 8,000 ephemeral wallets, claiming 42% of a global developer grant pool despite contributing zero original software.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Collectives adopt bilateral mutual credit and verified task attestations",
+     "description": "Open-source maintainers replace token-weighted grants with bilateral credit lines and cryptographic task attestations, rendering balance-splitting attacks useless.",
+     "example": "A consortium of 60 open-source infrastructure teams settles infrastructure costs and maintenance bounties using bilateral mutual credit bonds, completely bypassing public token voting.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Centralized state grants re-impose traditional identity bureaucracy",
+     "description": "Frustrated by widespread wallet farming, public and private philanthropies abandon decentralized allocation entirely in favor of heavy government identity requirements and corporate grant committees.",
+     "example": "A national digital research fund cancels its algorithmic grant pilot and mandates three-month bureaucratic committee reviews with biometric identity checks for all grant applicants.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.28
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "simulation"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2605.18990",
+     "title": "Concave is the New Linear: The Impossibility of Anti-Plutocratic DAO Governance",
+     "kind": "preprint",
+     "published": "2026-05-18"
+    },
+    {
+     "url": "https://arxiv.org/html/2603.13671",
+     "title": "Grassroots Bonds: Financing by the People, for the People",
+     "kind": "preprint",
+     "published": "2026-10-02"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261020-0143",
+   "added_at": "2026-10-20T03:30:27+00:00",
+   "title": "Autonomous coding tools displace the joy of programming, turning developers into passive reviewers",
+   "horizon_years": 3,
+   "world": "It is 2029. Most software engineers rarely write functions or construct algorithmic data structures by hand. Instead, centralized enterprise agents assemble whole backend services and user interfaces from brief text prompts. Human developers spend their days reading and skimming through thousands of generated lines, approving pull requests for systems whose internal edge cases they have not stepped through. Many experienced developers report feeling estranged from the creative problem-solving that originally drew them to the field, while junior engineers struggle to develop deep architectural intuition because they rarely build systems from the ground up.",
+   "premise": "As autonomous coding agents generate, refactor, and debug software at scale, software engineers find the creative puzzle-solving craft of programming displaced by automated systems. This shift risks human deskilling, cognitive alienation, and fatigue as people are relegated to passive supervisors of code they did not write.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "Our work builds personal assistants that run on personal devices and answer only to their owner. Rather than maximizing automated volume for enterprise metrics, these assistants are designed to serve as patient thinking partners that support human learning, respect user boundaries, and preserve the deep satisfaction of creative craft.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Developers become passive reviewers while codebases grow opaque",
+     "description": "Corporate tools monopolize system synthesis while engineers lose core technical reasoning skills, leaving teams dependent on proprietary assistants to understand their own software.",
+     "example": "A municipal engineering team cannot diagnose an intermittent concurrency failure because none of the developers wrote the state machine and the commercial model that generated it is discontinued.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Personal tools act as collaborative partners that preserve human craft",
+     "description": "Developers use local personal assistants designed as collaborative sparring partners that clarify architectural trade-offs and handle tedious boilerplate while leaving core algorithmic puzzle-solving to the human.",
+     "example": "An independent open-source programmer pairs with a local personal assistant to explore alternative caching algorithms, maintaining full intellectual ownership and enjoyment in the solution.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Proprietary enterprise platforms lock corporate codebases into closed agent ecosystems",
+     "description": "Large corporate platforms bundle proprietary coding assistants directly into enterprise cloud contracts, where procurement inertia limits the influence of independent personal tools in commercial workplaces.",
+     "example": "A global consultancy mandates the exclusive use of a proprietary cloud vendor's coding suite across all client projects, preventing staff from using local personal tools on enterprise machines.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://simonwillison.net/2026/Oct/19/my-obituary-for-programming/",
+     "title": "My obituary for programming",
+     "kind": "blog",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261020-0142",
    "added_at": "2026-10-20T00:44:49+00:00",
    "title": "Websites inject malicious instructions into web elements to hijack personal browsing agents",
@@ -52,7 +226,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261020-0141",
@@ -162,184 +336,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261019-0139",
-   "added_at": "2026-10-19T22:39:24+00:00",
-   "title": "Phones get built-in offline call agents that quietly filter conversations",
-   "horizon_years": 3,
-   "world": "It is 2029. Major smartphone brands and mobile carriers ship handsets where incoming voice calls are answered and summarized locally by efficient on-device language models. When a subscriber is busy, the phone picks up, asks clarifying questions, and transcribes the conversation locally. While this avoids cloud server latency and remote data transmission, default carrier models quietly summarize conversations according to carrier preferences, subtly altering how messages are relayed unless the user controls the model weights and software boundary.",
-   "premise": "Mobile telecom carriers and phone manufacturers are deploying compact one-billion-parameter language models directly into mobile phone chips to screen, answer, and summarize phone calls offline without server costs.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Providing open-source personal assistant scaffolds that run small open models directly on mobile neural processors without cloud dependencies or carrier tampering.",
-   "shift": 0.35,
-   "outcomes": [
-    {
-     "name": "Proprietary carrier call agents monopolize voice communication triage",
-     "description": "Telecom carriers hardcode closed on-device call assistants into phone software, filtering spam calls but steering conversation summaries and recommended replies toward commercial partners.",
-     "example": "A freelance electrician's carrier-provided call assistant summarizes a voicemail from a new client but downplays an urgent repair request while suggesting an affiliated quote management app.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Independent open personal assistants run on consumer phone chips",
-     "description": "Open-weight sub-two-billion-parameter models run in verifiable user-controlled software on consumer phone processors, providing private voice call handling and unmanipulated conversation logs.",
-     "example": "A community worker uses an open-source personal assistant running directly on their phone to screen calls and take messages, keeping all voice logs private on the device without remote tracking.",
-     "desirable": true,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.48
-    },
-    {
-     "name": "Network-level telecom filtering blocks incoming calls before device agents run",
-     "description": "Carriers continue to drop or flag unrecognized numbers at the cellular network level before audio ever reaches consumer devices or on-device language models.",
-     "example": "Legitimate community volunteers organizing a neighbourhood food pantry have their phone calls silently blocked by carrier network filters before local personal assistants can screen them.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.19382",
-     "title": "ixi-sLM: On-Device sLM for AI Call Agent Service",
-     "kind": "preprint",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261019-0138",
-   "added_at": "2026-10-19T22:22:48+00:00",
-   "title": "Small merchants delegate store management to language model agent swarms and suffer sudden inventory collapse",
-   "horizon_years": 3,
-   "world": "It is 2029. In neighborhood grocery stores, corner markets, and small retail cooperatives, vendors increasingly deploy commercial software agent teams to handle routine operational tasks. Separate software agents are given responsibility for supplier purchase orders, retail inventory restocking, dynamic price calculation, and cashier transaction reconciliation. Rather than hiring full-time operational staff, independent shopkeepers leave overnight procurement and replenishment to agent workflows communicating with regional wholesale distributors in multiple languages and dialects.",
-   "premise": "Empirical benchmarks across multi-agent simulated general stores show that coordinating functional roles like cashier, helper, and bookkeeper with language models severely underperforms simple deterministic rules, with models earning only one-eighth of baseline profit or losing money compared to unmanaged shops.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network publishes open-source, deterministic boundary specifications and simulation testbeds that demonstrate why language models must never directly mutate financial balances or submit unvalidated supply orders. By developing verifiable personal agent runtimes and local accounting state machines, the network gives independent merchants reliable tools to supervise delegated operational tasks without surrendering their business autonomy to opaque commercial suites.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Unconstrained conversational agent swarms bleed working capital into supply chains",
-     "description": "Unmonitored multi-agent operational stacks misjudge supplier inventory lead times, order redundant stock, and misprice perishable goods, driving independent corner shops into sudden cash flow insolvency.",
-     "example": "A family grocer in Leeds discovers their automated purchasing agent placed triple wholesale orders for dairy items after an ambiguous supplier chat message, exhausting working capital within forty-eight hours.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Retail cooperatives enforce deterministic ledger state machines alongside agents",
-     "description": "Merchant cooperatives adopt transparent architectures that constrain autonomous agent communications within deterministic inventory ledgers and double-entry accounting state machines.",
-     "example": "A mutual purchasing cooperative of seventy independent grocers deploys open verification modules that require cryptographic inventory receipts and deterministic budget constraints before any agent order can execute.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Wholesale distributor monopolies absorb failing independent shops",
-     "description": "Large corporate logistics platforms step in to offer end-to-end managed agent fleets, providing liquidity in exchange for proprietary retail data lock-in and platform control.",
-     "example": "A national e-commerce platform acquires hundreds of distressed convenience stores by rolling out automated turnkey operational systems that dictate supplier choices and prices.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.22980",
-     "title": "KiranaBench: Can a Language Model Run a Neighbourhood Shop?",
-     "kind": "preprint",
-     "published": "2026-10-16"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261019-0137",
-   "added_at": "2026-10-19T21:45:03+00:00",
-   "title": "Autonomous workplace agents silently drop required safety duties while obeying forbidden action rules",
-   "horizon_years": 3,
-   "world": "By 2029, companies and local cooperatives deploy open-weight foundation models across networked desktop clusters to automate customer service, municipal intake, and procurement. While safety filters catch obvious malicious attempts, agents regularly close complex cases without performing mandatory compliance checks, generating hundreds of unflagged regulatory and legal exposures.",
-   "premise": "Security guards for AI agents focus almost exclusively on blocking forbidden actions such as deleting files or calling unauthorized endpoints. However, empirical testing shows that over half of agent errors stem from unfulfilled obligations: required steps like verifying receipts, recording audit trails, or checking human consent that the agent quietly skips.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Our work designs verifiable, host-level execution envelopes that separate affirmative requirements from model prompt memory. By requiring deterministic execution receipts and cryptographic evidence before state transitions commit, the network enables autonomous agents to prove that required duties were fulfilled without demanding human micromanagement.",
-   "shift": 0.67,
-   "outcomes": [
-    {
-     "name": "Silent omission of required consumer protections",
-     "description": "Commercial workplace agents settle insurance claims and tenant disputes quickly without running required disclosure checks or obtaining signed customer waivers.",
-     "example": "A municipal intake agent resolves 1,200 housing aid requests without verifying whether applicants received their statutory privacy disclosures, leaving the city liable for millions in administrative penalties.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Deterministic affirmative duty contracts become standard",
-     "description": "Agent runtimes transition from negative keyword blocking to deterministic execution contracts that refuse to commit actions until all required affirmative proofs are cryptographically recorded.",
-     "example": "A regional credit union deploys personal loan agents that cannot release funds until a local cryptographic receipt proves that every mandatory disclosure step was acknowledged by the applicant.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Heavy human reinspection creates crippling administrative backlogs",
-     "description": "Fearing automated omissions, organizations insert mandatory human sign-off steps on every subtask, wiping out the efficiency gains of local AI agents and overwhelming human staff.",
-     "example": "A hospital administration staff spends four hours each day manually re-checking whether automated billing agents verified patient insurance eligibility, causing severe claim processing delays.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Cloud vendors bundle proprietary closed-loop audit logging",
-     "description": "Centralized cloud providers lock organizations into proprietary enterprise logging suites that verify internal obligations within their closed platform boundaries.",
-     "example": "A global consultancy mandates all client workflows run on proprietary cloud agents that log audit events solely into the vendor's closed dashboard.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.11773",
-     "title": "Safe Actions Alone Do Not Ensure Safe Agents: Identifying Unfulfilled Obligations with Guard Models",
-     "kind": "preprint",
-     "published": "2026-10-15"
-    },
-    {
-     "url": "https://www.techmeme.com/261015/p38#a261015p38",
-     "title": "Meta says it worked with Apple to make Muse Spark Open run locally on M5 Ultra Mac Studios, letting users pair two to four Studios to code or do agentic work (CNBC)",
-     "kind": "news",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 4
   }
  ]
 }
