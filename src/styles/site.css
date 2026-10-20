@@ -1076,3 +1076,40 @@ html:not(.no-js) .tc-table { display: none; }
 .pe-ptag:hover { border-color: var(--accent); color: var(--accent); }
 .origin-cta { display: inline-flex; align-items: center; gap: .4rem; font: 600 .84rem/1 var(--sans); color: var(--paper); background: var(--ink); border-radius: 99px; padding: .6rem 1.05rem; text-decoration: none; margin-left: auto; }
 .origin-cta:hover { background: var(--accent); color: var(--paper); }
+
+/* ---------- update 2026-10-20b: ever-morphing sensor-to-ledger-to-principles interactive diagram & demo ---------- */
+.em-demo { margin-top: 2.2rem; background: var(--card); border: 1px solid var(--rule); border-radius: 22px; padding: clamp(1.2rem, 3vw, 2.2rem); display: grid; gap: 1.3rem; }
+.em-head h3 { font-size: clamp(1.4rem, 2.6vw, 1.85rem); line-height: 1.2; margin: .5rem 0 .5rem; }
+.em-head p { color: var(--ink-2); max-width: 54rem; margin: 0; }
+.em-bar { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; justify-content: space-between; }
+.em-scens { display: flex; flex-wrap: wrap; gap: .38rem; }
+.em-scens button, .em-Transport button { font: 600 .76rem/1.15 var(--sans); color: var(--ink-2); background: var(--paper); border: 1px solid var(--rule); border-radius: 99px; padding: .48rem .85rem; cursor: pointer; }
+.em-scens button:hover, .em-Transport button:hover { border-color: var(--ink-3); color: var(--ink); }
+.em-scens button[aria-pressed="true"], .em-Transport button.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.em-Transport { display: flex; gap: .38rem; align-items: center; }
+.em-svg-wrap { background: var(--paper); border: 1px solid var(--rule); border-radius: 16px; padding: .9rem 1rem; overflow-x: auto; }
+.em-svg { width: 100%; min-width: 680px; height: auto; display: block; }
+.em-edge { fill: none; stroke: var(--rule); stroke-width: 2.2; stroke-dasharray: 5 4; }
+.em-edge.active { stroke: var(--ok); stroke-width: 3; stroke-dasharray: none; }
+.em-edge-return { fill: none; stroke: var(--gold); stroke-width: 2.2; stroke-dasharray: 6 4; }
+.em-node { cursor: pointer; transition: transform .2s ease; }
+.em-node rect { fill: var(--card); stroke: var(--rule); stroke-width: 1.8; rx: 12px; transition: stroke .2s, fill .2s; }
+.em-node.on rect { stroke: var(--ok); stroke-width: 2.8; fill: color-mix(in srgb, var(--ok) 11%, var(--card)); }
+.em-node.done rect { stroke: color-mix(in srgb, var(--ok) 55%, var(--rule)); }
+.em-node-num { font: 700 10px var(--mono); fill: var(--accent); text-transform: uppercase; letter-spacing: .07em; }
+.em-node.on .em-node-num { fill: var(--ok); }
+.em-node-title { font: 700 12.5px var(--sans); fill: var(--ink); }
+.em-node-sub { font: 500 10.5px var(--sans); fill: var(--ink-3); }
+.em-stage-spotlight { background: var(--paper); border: 2px solid var(--ok); border-radius: 16px; padding: 1.1rem 1.3rem; display: grid; gap: .5rem; }
+.em-stage-spotlight .em-st-k { font: 700 .72rem/1.2 var(--mono); color: var(--ok); text-transform: uppercase; letter-spacing: .08em; }
+.em-stage-spotlight h4 { font-family: var(--serif); font-size: clamp(1.25rem, 2.2vw, 1.55rem); margin: 0; }
+.em-stage-spotlight p { margin: 0; font-size: .95rem; color: var(--ink-2); line-height: 1.5; }
+.em-pkt { font: 500 .8rem/1.45 var(--mono); color: var(--ink); background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .6rem .85rem; overflow-x: auto; }
+.em-grid7 { display: grid; grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr)); gap: .8rem; }
+.em-card7 { background: var(--paper); border: 1px solid var(--rule); border-radius: 14px; padding: .85rem 1rem; display: grid; gap: .35rem; align-content: start; cursor: pointer; text-align: left; transition: border-color .2s, background .2s; }
+.em-card7:hover { border-color: var(--ink-3); }
+.em-card7.on { border: 2px solid var(--ok); background: color-mix(in srgb, var(--ok) 6%, var(--paper)); }
+.em-card7 span { font: 700 .66rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); }
+.em-card7.on span { color: var(--ok); }
+.em-card7 b { font-family: var(--serif); font-size: 1.02rem; color: var(--ink); }
+.em-card7 p { margin: 0; font-size: .84rem; color: var(--ink-2); line-height: 1.42; }

@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=20">
+  <link rel="stylesheet" href="/styles/site.css?v=21">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -54,6 +54,116 @@
       <b>How to read this library</b>
       <p>No principle here is dogma. Every single entry (#1 to #550) is paired with <strong>the critic&rsquo;s challenge</strong> (how the raw idea could go wrong, overreach or be gamed) and <strong>the strongest defense &amp; safe mechanism</strong> (how personal agents and member-owned co-operatives put it to work safely). See how these principles play out across 30 real-world walks of life in <a href="/notes/thirty-lives">Thirty lives on the network &rarr;</a></p>
     </aside>
+
+        <div class="em-demo" style="margin:0 0 1.8rem" id="em-demo">
+      <div class="em-head">
+        <span class="label">An ever-morphing library &amp; ledger</span>
+        <h3>Interactive demo: from a human and a sensor, to the ledger, to economy, governance, and evolving principles.</h3>
+        <p>Neither the <a href="/notes/all-principles">550-principle library</a> nor the <a href="/notes/how-the-ledger-works">shared ledger</a> is frozen in stone. They are built to <strong>morph continuously</strong> as real signals arrive from the collective. Pick a real-life scenario below—or click any of the 7 stages in the diagram—to watch how a <a href="/notes/somatic-witness">lightweight sensor</a> observes human activity without surveillance, signs it onto the personal ledger, settles 5-dimensional value and demurrage on the shared ledger, enforces democratic governance, and adjusts the network&rsquo;s trajectory.</p>
+      </div>
+
+      <div class="em-bar">
+        <div class="em-scens" role="group" aria-label="Choose a real-life scenario">
+          <button type="button" data-em-scen="nurse" aria-pressed="true">1. ER nurse shift &amp; fatigue (Manila)</button>
+          <button type="button" data-em-scen="farmer" aria-pressed="false">2. Solar &amp; maize farmer (Kenya)</button>
+          <button type="button" data-em-scen="creator" aria-pressed="false">3. Illustrator &amp; open-source coder</button>
+          <button type="button" data-em-scen="oligarch" aria-pressed="false">4. 50,000-robot factory billionaire</button>
+        </div>
+        <div class="em-Transport" role="group" aria-label="Step through the 7 stages">
+          <button type="button" id="em-prev">&larr; Prev stage</button>
+          <button type="button" id="em-next" class="primary">Next stage &rarr;</button>
+          <button type="button" id="em-play">Auto-play loop &#9654;</button>
+        </div>
+      </div>
+
+      <div class="em-svg-wrap">
+        <svg class="em-svg" viewBox="0 0 980 230" role="img" aria-label="Seven-stage closed loop diagram: 1. Human and Edge Sensor, 2. Personal Ledger, 3. Shared Ledger ZK Proof, 4. Bounded Agents, 5. 5D Economy and Demurrage, 6. Equal-Voice Governance, 7. Ever-Morphing Principle Library feeding back to Stage 1.">
+          <!-- Forward edges 1->2->3->4->5->6->7 -->
+          <path class="em-edge active" data-em-edge="0" d="M132,72 L152,72"/>
+          <path class="em-edge" data-em-edge="1" d="M270,72 L290,72"/>
+          <path class="em-edge" data-em-edge="2" d="M408,72 L428,72"/>
+          <path class="em-edge" data-em-edge="3" d="M546,72 L566,72"/>
+          <path class="em-edge" data-em-edge="4" d="M684,72 L704,72"/>
+          <path class="em-edge" data-em-edge="5" d="M822,72 L842,72"/>
+          <!-- Return feedback arc from Stage 7 back to Stage 1 (Ever-morphing trajectory loop) -->
+          <path class="em-edge-return" data-em-edge="6" d="M901,126 L901,195 Q490,222 73,195 L73,126"/>
+          <text x="490" y="186" text-anchor="middle" font-size="11" font-family="monospace" fill="currentColor" opacity="0.78">&#8634; EVER-MORPHING FEEDBACK LOOP: Collective signals re-weight the 550 principles &amp; adjust the network trajectory</text>
+
+          <!-- Node 1 -->
+          <g class="em-node on" data-em-node="0" transform="translate(14,20)">
+            <rect width="118" height="104"/>
+            <text class="em-node-num" x="10" y="22">Stage 1</text>
+            <text class="em-node-title" x="10" y="43">Human &amp; Sensor</text>
+            <text class="em-node-sub" x="10" y="62">&lt;1 mW Somatic Ring</text>
+            <text class="em-node-sub" x="10" y="78">97% liveness check</text>
+            <text class="em-node-sub" x="10" y="94">0 raw bytes leave</text>
+          </g>
+          <!-- Node 2 -->
+          <g class="em-node" data-em-node="1" transform="translate(152,20)">
+            <rect width="118" height="104"/>
+            <text class="em-node-num" x="10" y="22">Stage 2</text>
+            <text class="em-node-title" x="10" y="43">Personal Ledger</text>
+            <text class="em-node-sub" x="10" y="62">On your own device</text>
+            <text class="em-node-sub" x="10" y="78">2-of-2 PUF + TPM</text>
+            <text class="em-node-sub" x="10" y="94">Air-gapped history</text>
+          </g>
+          <!-- Node 3 -->
+          <g class="em-node" data-em-node="2" transform="translate(290,20)">
+            <rect width="118" height="104"/>
+            <text class="em-node-num" x="10" y="22">Stage 3</text>
+            <text class="em-node-title" x="10" y="43">Shared Ledger</text>
+            <text class="em-node-sub" x="10" y="62">Zero-knowledge proof</text>
+            <text class="em-node-sub" x="10" y="78">3 independent watchers</text>
+            <text class="em-node-sub" x="10" y="94">Answers, never data</text>
+          </g>
+          <!-- Node 4 -->
+          <g class="em-node" data-em-node="3" transform="translate(428,20)">
+            <rect width="118" height="104"/>
+            <text class="em-node-num" x="10" y="22">Stage 4</text>
+            <text class="em-node-title" x="10" y="43">Bounded Agents</text>
+            <text class="em-node-sub" x="10" y="62">5 permission rings</text>
+            <text class="em-node-sub" x="10" y="78">4 training gates</text>
+            <text class="em-node-sub" x="10" y="94">30-day thriving label</text>
+          </g>
+          <!-- Node 5 -->
+          <g class="em-node" data-em-node="4" transform="translate(566,20)">
+            <rect width="118" height="104"/>
+            <text class="em-node-num" x="10" y="22">Stage 5</text>
+            <text class="em-node-title" x="10" y="43">5D Economy</text>
+            <text class="em-node-sub" x="10" y="62">Vital, effort, lineage</text>
+            <text class="em-node-sub" x="10" y="78">$25k floor (0% decay)</text>
+            <text class="em-node-sub" x="10" y="94">Idle hoard demurrage</text>
+          </g>
+          <!-- Node 6 -->
+          <g class="em-node" data-em-node="5" transform="translate(704,20)">
+            <rect width="118" height="104"/>
+            <text class="em-node-num" x="10" y="22">Stage 6</text>
+            <text class="em-node-title" x="10" y="43">Governance</text>
+            <text class="em-node-sub" x="10" y="62">1 person, 1 voice</text>
+            <text class="em-node-sub" x="10" y="78">Risk-scaled quorum</text>
+            <text class="em-node-sub" x="10" y="94">Power = visibility</text>
+          </g>
+          <!-- Node 7 -->
+          <g class="em-node" data-em-node="6" transform="translate(842,20)">
+            <rect width="118" height="104"/>
+            <text class="em-node-num" x="10" y="22">Stage 7</text>
+            <text class="em-node-title" x="10" y="43">Morphing Rules</text>
+            <text class="em-node-sub" x="10" y="62">550 principles adapt</text>
+            <text class="em-node-sub" x="10" y="78">Weights re-balance</text>
+            <text class="em-node-sub" x="10" y="94">Trajectory shifts</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="em-stage-spotlight" aria-live="polite">
+        <span class="em-st-k" id="em-st-k">Stage 1 of 7 · Human &amp; Lightweight Sensor (&lt; 1 mW)</span>
+        <h4 id="em-st-title">Maria finishes an 8.5-hour night shift in the emergency room</h4>
+        <p id="em-st-desc">Her open-hardware Somatic Witness ring senses coupled pulse-breath variability and muscle micro-vibrations on the chip. It confirms a real, uncoerced human is present (97.0% liveness), classifies 8.5 hours of high-intensity clinical care plus rising sleep debt, and overwrites the raw heartbeat waveform every 30 seconds.</p>
+        <div class="em-pkt" id="em-st-pkt">SENSOR_ENCLAVE -&gt; H_human: 0.9704 | Activity: CLINICAL_CARE_8.5H | SleepDebt: +2.4h | RawBiometricsShared: 0 bytes</div>
+      </div>
+
+      <div class="em-grid7" id="em-grid7" aria-label="All 7 stages at a glance"></div>
+    </div>
 
     <div class="lib-controls" id="lib-controls">
       <div class="lib-search-row">
@@ -101,6 +211,6 @@
 
 <script src="/scripts/site.js?v=10" defer></script>
 <script src="/scripts/all-principles-data.js?v=1" defer></script>
-<script src="/scripts/everyday.js?v=2" defer></script>
+<script src="/scripts/everyday.js?v=3" defer></script>
 </body>
 </html>

@@ -533,4 +533,299 @@
     });
     updateDm();
   }
+
+  /* ---------- 7. Ever-Morphing Sensor -> Ledger -> Agents -> Economy & Governance -> Principles Demo (#em-demo) ---------- */
+  var emRoot = document.getElementById('em-demo');
+  if (emRoot) {
+    var EM_SCENARIOS = {
+      nurse: {
+        label: 'ER nurse shift & fatigue signal (Manila)',
+        stages: [
+          {
+            k: 'Stage 1 of 7 · Human & Lightweight Sensor (< 1 mW)',
+            title: 'Maria finishes an 8.5-hour night shift in the emergency room',
+            desc: 'Her open-hardware Somatic Witness ring senses coupled pulse-breath variability and muscle micro-vibrations on the chip. It confirms a real, uncoerced human is present (97.0% liveness), classifies 8.5 hours of high-intensity clinical care plus rising sleep debt, and overwrites the raw heartbeat waveform every 30 seconds.',
+            pkt: 'SENSOR_ENCLAVE -> H_human: 0.9704 | Activity: CLINICAL_CARE_8.5H | SleepDebt: +2.4h | RawBiometricsShared: 0 bytes'
+          },
+          {
+            k: 'Stage 2 of 7 · Personal Ledger Capture (On Your Device)',
+            title: '2-of-2 hardware signature records the shift in her private log',
+            desc: 'Her ring’s un-copyable silicon key and her phone’s security chip co-sign the event into her encrypted Personal Ledger (Level 0 air-gapped memory). No hospital administrator, insurer or cloud server can read her private log.',
+            pkt: 'PERSONAL_DAG_APPEND -> Sig_RingPUF + Sig_PhoneTPM | Event #4812: 8.5h ER Care | FatigueFlag: HIGH_RECOVERY_NEEDED'
+          },
+          {
+            k: 'Stage 3 of 7 · Zero-Knowledge Proof to Shared Ledger',
+            title: 'Her outward agent proves the care happened—without exposing anyone',
+            desc: 'Maria’s Level-1 Personal Negotiator generates a zero-knowledge proof co-signed by the hospital co-op and treated patients’ agents. It proves 8.5 hours of verified critical care occurred without revealing a single patient chart or Maria’s private health data.',
+            pkt: 'SHARED_LEDGER_ZK_COMMIT -> Proof: pi_effort_9f3a | CounterpartyAttested: TRUE | IdentityLeakage: 0.0%'
+          },
+          {
+            k: 'Stage 4 of 7 · Bounded Agents & 4-Gate Training',
+            title: 'Agents protect her recovery and learn from 30-day thriving',
+            desc: 'The hospital’s Level-2/3 scheduling agent automatically blocks a dangerous back-to-back overtime assignment so Maria can sleep. Thirty days later, after her recovery is confirmed, the record passes the 4 quality gates to train better care-scheduling agents.',
+            pkt: 'AGENT_ACTION -> OvertimeBlocked: TRUE | TrainingGate1_4: PASSED (30d Thriving Score: 94.6 / 100)'
+          },
+          {
+            k: 'Stage 5 of 7 · Economic Implications (5D Value & Demurrage Floor)',
+            title: 'Full 5-dimensional care pay + $0 demurrage on her savings',
+            desc: 'Instead of an extractive wage squeezed by middlemen, the Shared Ledger credits Maria across five dimensions (Vital: 9.5, Effort: 9.2, Knowledge: 4.0, Ecology: 2.5, Lineage: 3.5). Her $4,200 savings sit safely inside the $25,000 personal security floor (0% demurrage), while 8%/yr demurrage on idle billionaire/robotic hoards funds her daily universal commons dividend.',
+            pkt: 'ECONOMY_SETTLEMENT -> 5D_Credit: +$185 shift + $23/day Commons Dividend | SavingsFloor ($4,200 <= $25,000): 0% Demurrage'
+          },
+          {
+            k: 'Stage 6 of 7 · Governance Implications (1 Voice & Power Scrutiny)',
+            title: 'Equal voice on hospital rules; full transparency from management',
+            desc: 'Because the staffing director holds Level-1 authority over livelihoods, every scheduling rule must be logged and explained to the nurses. On questions of values and safe staffing ratios, Maria’s personal agent casts one equal vote alongside every other affected worker—no wealth or hardware can buy extra weight.',
+            pkt: 'GOVERNANCE_GATE -> ManagerVisibility: LEVEL_1_AUDITED | ValueVoteWeight: 1.000 (Equal Human Voice)'
+          },
+          {
+            k: 'Stage 7 of 7 · Ever-Morphing Principle Library & Trajectory Shift',
+            title: 'Collective fatigue signals automatically evolve the network’s principles',
+            desc: 'When 14,000 nurses’ agents report a 18% rise in night-shift exhaustion via anonymized zero-knowledge totals, the ledger and principle library morph in response: the network boosts Vital-care compensation weights by +12% and opens an evidence-backed proposal to tighten Principle #491 (Safe Care Staffing Bounds), steering the collective trajectory.',
+            pkt: 'MORPHING_TRAJECTORY_UPDATE -> Signal: 14,000_Nurses_Fatigue_+18% | Principle #491 Updated | Trajectory Score: +1.4 toward thriving'
+          }
+        ]
+      },
+      farmer: {
+        label: 'Smallholder solar & maize farmer (Kenya)',
+        stages: [
+          {
+            k: 'Stage 1 of 7 · Human & Lightweight Sensor (< 1 mW)',
+            title: 'Jomo tends his agro-ecological maize plots and village solar mesh',
+            desc: 'His open-hardware work clip and soil-moisture sensors verify 7.5 hours of regenerative field labour and off-grid solar maintenance under a regional drought, with 96.4% human liveness and zero raw biometric upload.',
+            pkt: 'SENSOR_ENCLAVE -> H_human: 0.9640 | Activity: REGENERATIVE_AG_7.5H | SoilCarbonDelta: +1.8% | RawBiometricsShared: 0 bytes'
+          },
+          {
+            k: 'Stage 2 of 7 · Personal Ledger Capture (On Your Device)',
+            title: 'Offline village mesh logs his labour and soil restoration locally',
+            desc: 'Even while 2G cellular service is down, Jomo’s work clip and solar hub co-sign his daily work and soil readings into his encrypted Personal Ledger on his device.',
+            pkt: 'PERSONAL_DAG_APPEND -> OfflineMeshSync: READY | Event #1904: 7.5h Field & Solar Care | DroughtShockIndex: 0.74'
+          },
+          {
+            k: 'Stage 3 of 7 · Zero-Knowledge Proof to Shared Ledger',
+            title: 'Three independent satellite & drone watchers co-sign the ecological gain',
+            desc: 'When connectivity returns, Jomo’s agent posts a zero-knowledge proof of crop yield and soil regeneration, cross-checked by three independent environmental watcher agents.',
+            pkt: 'SHARED_LEDGER_ZK_COMMIT -> Proof: pi_eco_441b | IndependentWatchers: 3/3_AGREE | MiddlemanCut: 0%'
+          },
+          {
+            k: 'Stage 4 of 7 · Bounded Agents & 4-Gate Training',
+            title: 'His agent bypasses extractive middlemen and matches local food co-ops',
+            desc: 'Jomo’s Level-1 agent clears his harvest directly with three regional school-meal and household co-ops, and feeds verified drought-resilience patterns into the 4-gate agricultural training corpus.',
+            pkt: 'AGENT_ACTION -> DirectCoopClearing: 100% | MiddlemanMarkupSaved: +58% to Farmer'
+          },
+          {
+            k: 'Stage 5 of 7 · Economic Implications (5D Value & Debt Risk-Sharing)',
+            title: 'Ecological & vital credits + automatic drought debt pause',
+            desc: 'Because independent sensors confirmed a regional rainfall deficit, Jomo’s seed and solar-pump obligation automatically scales down with his ability to pay (Principle #255). He earns high Vital (8.4) and Ecological (9.1) value credits with 0% demurrage on his $1,800 savings.',
+            pkt: 'ECONOMY_SETTLEMENT -> 5D_Credit: +$142/day | SeedDebtShockPause: ACTIVE (-65% payment) | Demurrage: $0'
+          },
+          {
+            k: 'Stage 6 of 7 · Governance Implications (Watershed Commons Consent)',
+            title: '800 family farmers hold a risk-scaled veto over industrial water grabs',
+            desc: 'When an export estate requests extra river diversion during the drought (25% regional risk), the Shared Ledger requires 76.3% agreement from affected family farmers’ agents—blocking unilateral water depletion.',
+            pkt: 'GOVERNANCE_GATE -> RiverDiversionRisk: 25% | RequiredQuorum: 76.3% | FamilyFarmersVeto: UPHELD'
+          },
+          {
+            k: 'Stage 7 of 7 · Ever-Morphing Principle Library & Trajectory Shift',
+            title: 'Regional drought signals morph water-sharing and debt rules across the network',
+            desc: 'As thousands of smallholder agents report shifting monsoon patterns, the ever-morphing ledger increases ecological watershed credits by +19% and updates Principle #456 (Climate-Indexed Debt Scaling) with new empirical thresholds.',
+            pkt: 'MORPHING_TRAJECTORY_UPDATE -> Signal: EastAfrica_Monsoon_Shift | Principle #456 Threshold Refined'
+          }
+        ]
+      },
+      creator: {
+        label: 'Illustrator & open-source coder (São Paulo & Lagos)',
+        stages: [
+          {
+            k: 'Stage 1 of 7 · Human & Lightweight Sensor (< 1 mW)',
+            title: 'Camila illustrates a children’s book; Chidi patches a cryptography library',
+            desc: 'Their Somatic Witness rings verify 4 hours of focused human creative flow (96.7% human liveness), distinguishing authentic human craft from synthetic mass-generated spam.',
+            pkt: 'SENSOR_ENCLAVE -> H_human: 0.9666 | Activity: DEEP_CREATIVE_FLOW_4.0H | SyntheticSpamCheck: HUMAN_ORIGIN_VERIFIED'
+          },
+          {
+            k: 'Stage 2 of 7 · Personal Ledger Capture (On Your Device)',
+            title: 'Every brushstroke and code commit is hardware-signed into their personal DAG',
+            desc: 'Before their work ever touches the web, their local agents bind a cryptographic provenance fingerprint to the creation timestamp in their Personal Ledgers.',
+            pkt: 'PERSONAL_DAG_APPEND -> ProvenanceHash: sha256_88c1 | HumanAuthored: TRUE | License: OPEN_RECIPROCAL_LINEAGE'
+          },
+          {
+            k: 'Stage 3 of 7 · Zero-Knowledge Proof to Shared Ledger',
+            title: 'Downstream AI models and companies use their building blocks',
+            desc: 'When a commercial design studio or AI lab trains an adapter or ships software incorporating Camila’s visual style or Chidi’s code, the dependency graph on the Shared Ledger records the exact lineage link.',
+            pkt: 'SHARED_LEDGER_ZK_COMMIT -> LineageEdge: [Chidi_Lib_v4, Camila_Art_Set] -> DownstreamModel_X | Depth: d=1..3'
+          },
+          {
+            k: 'Stage 4 of 7 · Bounded Agents & 4-Gate Training',
+            title: 'Personal agents audit downstream usage and block uncredited scraping',
+            desc: 'Independent Level-2 watcher agents verify the lineage graph across participating co-ops and open-weight labs, ensuring training runs respect compute bounds and creator attribution.',
+            pkt: 'AGENT_ACTION -> LineageAudit: VERIFIED_BY_3_WATCHERS | UnconsentedScrapeBlocked: TRUE'
+          },
+          {
+            k: 'Stage 5 of 7 · Economic Implications (Automatic Lineage Royalties)',
+            title: 'Royalties flow upstream automatically—with zero lawsuits or exclusivity',
+            desc: 'Every time the downstream tool generates value, up to 15% of the value flows back up the provenance tree (halving at each step up to 5 steps) straight into Camila’s and Chidi’s wallets, without requiring them to join a corporation.',
+            pkt: 'ECONOMY_SETTLEMENT -> LineageRoyalty (alpha=0.5, d<=5): +$118/day Passive Reciprocity | StringsAttached: NONE'
+          },
+          {
+            k: 'Stage 6 of 7 · Governance Implications (Open Standards & Fork Right)',
+            title: 'Creators govern the attribution standard and can fork at any time',
+            desc: 'No single platform monopoly owns the provenance directory. Creators vote equally on attribution decay rates and retain the full right to exit or fork with their entire history.',
+            pkt: 'GOVERNANCE_GATE -> Standard: OPEN_PROVENANCE_DAG | VendorLockIn: 0% (Full Fork Right)'
+          },
+          {
+            k: 'Stage 7 of 7 · Ever-Morphing Principle Library & Trajectory Shift',
+            title: 'Decompilation attempts trigger an automatic upgrade to lineage rules',
+            desc: 'When collective signals show AI code-remixers trying to disguise copied functions by renaming variables, the ever-morphing principle library updates Principle #422 & #469 to measure semantic building-block equivalence rather than surface text.',
+            pkt: 'MORPHING_TRAJECTORY_UPDATE -> Signal: AST_Semantic_Remix_Detected | Principle #469 Upgraded to Semantic-Graph Matching'
+          }
+        ]
+      },
+      oligarch: {
+        label: '50,000-robot factory billionaire (Austin / Shenzhen)',
+        stages: [
+          {
+            k: 'Stage 1 of 7 · Human & Lightweight Sensor (< 1 mW)',
+            title: 'Victor attempts to launch a 50,000-bot energy market cornering script',
+            desc: 'Victor’s own neural-earpiece proves he is 1 real human (H_human = 0.95), but the 50,000 cloud accounts he spun up have 0% biological cardio-kinetic entropy (H_human = 0.0011) and fail the silicon PUF gate immediately.',
+            pkt: 'SENSOR_ENCLAVE -> Commander: 1 Real Human | 50,000 Cloud Bots: H_human=0.0011 -> REJECTED_AT_SILICON_GATE'
+          },
+          {
+            k: 'Stage 2 of 7 · Personal Ledger Capture (Role Visibility)',
+            title: 'Tier-3 mass-influence rules require continuous role attestation',
+            desc: 'While Victor’s private family life and health stay 100% private, his role as owner of 50,000 industrial robots and massive compute clusters carries mandatory Level-3 public role attestation.',
+            pkt: 'ROLE_LEDGER_APPEND -> Tier: LEVEL_3_MASS_INFLUENCE | RobotFleet: 50,000_UNITS | PrivateFamilyData: SHIELDED'
+          },
+          {
+            k: 'Stage 3 of 7 · Zero-Knowledge Proof to Shared Ledger',
+            title: 'Multi-vendor risk checkers flag 78% regional harm on the market order',
+            desc: 'When Victor’s agent submits the regional grid-cornering order to the Shared Ledger, three independent risk-evaluating agents from different vendors flag a 78% risk of livelihood harm to 10,000 local households.',
+            pkt: 'SHARED_LEDGER_ZK_COMMIT -> AssessedRisk: R=0.78 | BlastRadius: 10,000_Households | FakeBotsStripped: 50,000'
+          },
+          {
+            k: 'Stage 4 of 7 · Bounded Agents & Risk-Scaled Lock',
+            title: 'The 78%-risk gate requires 99.95% local resident consent—order blocked',
+            desc: 'Under the Risk-Proportional Coherence Law, a 78%-risk action requires 99.95% agreement from the real people in the blast radius plus a 44-hour cooling-off window. Only 4% approve, so the swarm order locks shut.',
+            pkt: 'AGENT_ACTION -> RequiredQuorum: 99.95% | ActualRealSupport: 4.0% -> BLOCKED_AT_THRESHOLD_GATE'
+          },
+          {
+            k: 'Stage 5 of 7 · Economic Implications (Demurrage & Robot Commons Dividend)',
+            title: 'Idle capital & robot output circulate back into the universal pool—or zero-interest loans',
+            desc: 'Victor’s first $25,000 is exempt, but his idle multimillion-dollar hoard decays at 8%/yr unless he deploys it into zero-interest community infrastructure loans. Meanwhile, his 50,000-robot fleet contributes a direct automation share into the universal commons pool.',
+            pkt: 'ECONOMY_SETTLEMENT -> IdleSurplusDemurrage: Recycled to Commons | ZeroInterestCoopStaking: 35% Exempt | Gini: 0.87 -> 0.58'
+          },
+          {
+            k: 'Stage 6 of 7 · Governance Implications (No Purchased Authority)',
+            title: 'Owning 50,000 robots still equals exactly 1 human vote on values',
+            desc: 'In governance over safety floors and community values, Victor’s $5M balance and 50,000 robots grant him the exact same single voice as Maria the nurse or Jomo the farmer.',
+            pkt: 'GOVERNANCE_GATE -> CapitalMultiplierOnValues: 0.0x | VoiceCount: 1.000'
+          },
+          {
+            k: 'Stage 7 of 7 · Ever-Morphing Principle Library & Trajectory Shift',
+            title: 'Attempted botnet bypasses harden the network’s anti-collusion principles',
+            desc: 'Every blocked sybil or market-cornering attempt is logged as an adversarial signal, automatically updating the detector weights in Principle #205 & #524 so the entire network grows more resilient.',
+            pkt: 'MORPHING_TRAJECTORY_UPDATE -> Signal: 50k_Sybil_Attempt_Blocked | Principle #524 Detector Weights Hardened'
+          }
+        ]
+      }
+    };
+
+    var scenBtns = [].slice.call(emRoot.querySelectorAll('[data-em-scen]'));
+    var svgNodes = [].slice.call(emRoot.querySelectorAll('[data-em-node]'));
+    var svgEdges = [].slice.call(emRoot.querySelectorAll('[data-em-edge]'));
+    var prevBtn = document.getElementById('em-prev');
+    var nextBtn = document.getElementById('em-next');
+    var playBtn = document.getElementById('em-play');
+    var elStK = document.getElementById('em-st-k');
+    var elStTitle = document.getElementById('em-st-title');
+    var elStDesc = document.getElementById('em-st-desc');
+    var elStPkt = document.getElementById('em-st-pkt');
+    var elGrid7 = document.getElementById('em-grid7');
+
+    var curScenKey = 'nurse';
+    var curStageIdx = 0;
+    var playTimer = null;
+
+    var renderEm = function () {
+      var scen = EM_SCENARIOS[curScenKey];
+      var st = scen.stages[curStageIdx];
+
+      if (elStK) elStK.textContent = st.k;
+      if (elStTitle) elStTitle.textContent = st.title;
+      if (elStDesc) elStDesc.textContent = st.desc;
+      if (elStPkt) elStPkt.textContent = st.pkt;
+
+      svgNodes.forEach(function (n, idx) {
+        n.classList.toggle('on', idx === curStageIdx);
+        n.classList.toggle('done', idx < curStageIdx);
+      });
+      svgEdges.forEach(function (e, idx) {
+        e.classList.toggle('active', idx <= curStageIdx);
+      });
+
+      if (elGrid7) {
+        elGrid7.innerHTML = scen.stages.map(function (s, idx) {
+          var on = idx === curStageIdx ? ' on' : '';
+          var shortK = s.k.split('·')[1] ? s.k.split('·')[1].trim() : ('Step ' + (idx + 1));
+          return '<button type="button" class="em-card7' + on + '" data-em-card="' + idx + '">' +
+            '<span>' + (idx + 1) + ' · ' + shortK + '</span>' +
+            '<b>' + s.title + '</b>' +
+            '<p>' + s.desc.slice(0, 125) + '&hellip;</p>' +
+          '</button>';
+        }).join('');
+
+        [].forEach.call(elGrid7.querySelectorAll('[data-em-card]'), function (b) {
+          b.addEventListener('click', function () {
+            curStageIdx = parseInt(b.getAttribute('data-em-card'), 10);
+            renderEm();
+          });
+        });
+      }
+    };
+
+    scenBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        curScenKey = b.getAttribute('data-em-scen');
+        curStageIdx = 0;
+        scenBtns.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        renderEm();
+      });
+    });
+
+    svgNodes.forEach(function (n) {
+      n.addEventListener('click', function () {
+        curStageIdx = parseInt(n.getAttribute('data-em-node'), 10);
+        renderEm();
+      });
+    });
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function () {
+        curStageIdx = (curStageIdx + 6) % 7;
+        renderEm();
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        curStageIdx = (curStageIdx + 1) % 7;
+        renderEm();
+      });
+    }
+    if (playBtn) {
+      playBtn.addEventListener('click', function () {
+        if (playTimer) {
+          clearInterval(playTimer);
+          playTimer = null;
+          playBtn.textContent = 'Auto-play loop ▶';
+        } else {
+          playBtn.textContent = 'Pause loop ⏸';
+          playTimer = setInterval(function () {
+            curStageIdx = (curStageIdx + 1) % 7;
+            renderEm();
+          }, 3400);
+        }
+      });
+    }
+
+    renderEm();
+  }
 })();
+
