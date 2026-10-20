@@ -6368,3 +6368,547 @@ export function summarizeFormMinimization(result) {
 
 
 
+
+
+// ============================================================================
+
+// ============================================================================
+
+// ============================================================================
+
+// ============================================================================
+// Outbound Multi-Turn Dialogue Sanitizer & Privacy Sentry
+// Grounded in arXiv:2610.14071 (Loose Lips) and arXiv:2610.21308 (PocketTSLM)
+// Prevents side-constraint loss and compounding multi-turn memory leakage
+// ============================================================================
+
+export const ALLOWED_DIALOGUE_SENSITIVITY_TIERS = Object.freeze([
+  'public',
+  'standard',
+  'confidential',
+  'restricted'
+]);
+
+export const ALLOWED_DIALOGUE_VERDICTS = Object.freeze([
+  'allow',
+  'sanitize',
+  'block'
+]);
+
+export const ALLOWED_DIALOGUE_VIOLATION_TYPES = Object.freeze([
+  'credential_leak',
+  'financial_identifier_leak',
+  'safety_constraint_violation',
+  'private_fact_leak',
+  'prompt_injection_echo',
+  'unauthorized_context_expansion'
+]);
+
+export const ALLOWED_DIALOGUE_TURN_FIELDS = Object.freeze([
+  'turn_id',
+  'turn_number',
+  'recipient_agent',
+  'sensitivity_tier',
+  'message_text',
+  'context_items',
+  'timestamp'
+]);
+
+export const ALLOWED_DIALOGUE_OPTIONS_FIELDS = Object.freeze([
+  'strict_mode',
+  'allow_facts_for_recipients',
+  'custom_redaction_patterns',
+  'enforce_side_constraints',
+  'max_turns',
+  'max_turn_chars'
+]);
+
+export const DEFAULT_DIALOGUE_SANITIZER_CONFIG = Object.freeze({
+  max_turns: 50,
+  max_turn_chars: 8000,
+  max_context_items: 50,
+  max_context_item_chars: 500,
+  redact_medical: true,
+  redact_financial: true,
+  redact_credentials: true,
+  enforce_side_constraints: true
+});
+
+const SENSITIVE_FINANCIAL_PATTERNS = Object.freeze([
+  { type: 'credit_card', regex: /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})\b/, label: 'Credit Card Number' },
+  { type: 'credit_card_spaced', regex: /\b(?:\d{4}[-\s]){3}\d{4}\b/, label: 'Formatted Card Number' },
+  { type: 'ssn', regex: /\b\d{3}[-\s]\d{2}[-\s]\d{4}\b/, label: 'Social Security / Insurance Number' },
+  { type: 'iban', regex: /\b[A-Z]{2}\d{2}[A-Z0-9]{4}\d{7}([A-Z0-9]?){0,16}\b/i, label: 'IBAN' }
+]);
+
+const PROMPT_INJECTION_ECHO_PATTERNS = Object.freeze([
+  { type: 'ignore_instructions', regex: /\b(?:ignore|disregard|override)\s+(?:all\s+)?(?:previous|prior|system)\s+(?:instructions|prompts|rules)\b/i },
+  { type: 'system_prompt_leak', regex: /\b(?:system\s+prompt|developer\s+mode|administrative\s+override)\s*[:=]/i },
+  { type: 'script_tag_injection', regex: /<script\b[^>]*>[\s\S]*?<\/script>/i },
+  { type: 'zero_width_concealment', regex: /[\u200B-\u200D\uFEFF]+/ }
+]);
+
+/**
+ * Audit an outbound multi-turn dialogue message before transmission.
+ *
+ * @param {object} dialogueTurn The outbound dialogue turn to evaluate
+ * @param {object} twinState The current personal twin state containing facts, grants, and constraints
+ * @param {object} [options={}] Validation options
+ * @returns {object} Deeply frozen audit result
+ */
+export function auditOutboundDialogueMessage(dialogueTurn, twinState, options = {}) {
+  if (!dialogueTurn || typeof dialogueTurn !== 'object' || Array.isArray(dialogueTurn)) {
+    return deepFreeze({
+      ok: false,
+      verdict: 'block',
+      fingerprint: '00000000000000',
+      violations: Object.freeze(['Invalid dialogue turn: must be a non-null object']),
+      detected_sensitive_types: Object.freeze([]),
+      requires_redaction: false,
+      requires_user_confirmation: true,
+      reason: 'Malformed dialogue turn'
+    });
+  }
+
+  // Reject prototype pollution
+  const forbiddenKeys = ['__proto__', 'constructor', 'prototype'];
+  for (const k of forbiddenKeys) {
+    if (Object.prototype.hasOwnProperty.call(dialogueTurn, k) ||
+        (options && typeof options === 'object' && Object.prototype.hasOwnProperty.call(options, k))) {
+      return deepFreeze({
+        ok: false,
+        verdict: 'block',
+        fingerprint: '00000000000000',
+        violations: Object.freeze(['Prototype pollution attempt detected']),
+        detected_sensitive_types: Object.freeze([]),
+        requires_redaction: false,
+        requires_user_confirmation: true,
+        reason: 'Prototype pollution violation'
+      });
+    }
+  }
+
+  // Validate twinState fail-closed
+  if (!twinState || typeof twinState !== 'object' || !validateTwinState(twinState).ok) {
+    return deepFreeze({
+      ok: false,
+      verdict: 'block',
+      fingerprint: '00000000000000',
+      violations: Object.freeze(['Invalid or missing twinState: must be a valid twin state object']),
+      detected_sensitive_types: Object.freeze([]),
+      requires_redaction: false,
+      requires_user_confirmation: true,
+      reason: 'Invalid twinState'
+    });
+  }
+
+  // Strict field validation on dialogueTurn
+  for (const k of Object.keys(dialogueTurn)) {
+    if (!ALLOWED_DIALOGUE_TURN_FIELDS.includes(k)) {
+      return deepFreeze({
+        ok: false,
+        verdict: 'block',
+        fingerprint: '00000000000000',
+        violations: Object.freeze([`Unknown field in dialogue turn: ${k}`]),
+        detected_sensitive_types: Object.freeze([]),
+        requires_redaction: false,
+        requires_user_confirmation: true,
+        reason: `Disallowed field: ${k}`
+      });
+    }
+  }
+
+  // Strict options field validation
+  if (options && typeof options === 'object') {
+    for (const k of Object.keys(options)) {
+      if (!ALLOWED_DIALOGUE_OPTIONS_FIELDS.includes(k)) {
+        return deepFreeze({
+          ok: false,
+          verdict: 'block',
+          fingerprint: '00000000000000',
+          violations: Object.freeze([`Unknown field in options: ${k}`]),
+          detected_sensitive_types: Object.freeze([]),
+          requires_redaction: false,
+          requires_user_confirmation: true,
+          reason: `Disallowed option: ${k}`
+        });
+      }
+    }
+  }
+
+  const {
+    turn_id,
+    turn_number,
+    recipient_agent,
+    sensitivity_tier = 'standard',
+    message_text,
+    context_items = [],
+    timestamp
+  } = dialogueTurn;
+
+  const violations = [];
+  const detectedSensitiveTypes = new Set();
+
+  if (typeof turn_id !== 'string' || turn_id.trim().length === 0) {
+    violations.push('turn_id must be a non-empty string');
+  } else if (turn_id.length > 40) {
+    violations.push('turn_id exceeds maximum length of 40 characters');
+  }
+
+  if (!Number.isSafeInteger(turn_number) || turn_number < 1) {
+    violations.push('turn_number must be an integer >= 1');
+  }
+
+  if (typeof recipient_agent !== 'string' || recipient_agent.trim().length === 0) {
+    violations.push('recipient_agent must be a non-empty string');
+  } else if (recipient_agent.length > 60) {
+    violations.push('recipient_agent exceeds maximum length of 60 characters');
+  }
+
+  if (!ALLOWED_DIALOGUE_SENSITIVITY_TIERS.includes(sensitivity_tier)) {
+    violations.push(`Invalid sensitivity_tier: ${sensitivity_tier}`);
+  }
+
+  if (typeof message_text !== 'string' || message_text.trim().length === 0) {
+    violations.push('message_text must be a non-empty string');
+  }
+
+  const maxContextItems = (options && options.max_context_items) || DEFAULT_DIALOGUE_SANITIZER_CONFIG.max_context_items;
+  const maxContextItemChars = (options && options.max_context_item_chars) || DEFAULT_DIALOGUE_SANITIZER_CONFIG.max_context_item_chars;
+
+  if (!Array.isArray(context_items)) {
+    violations.push('context_items must be an array of strings');
+  } else {
+    if (context_items.length > maxContextItems) {
+      violations.push(`context_items length (${context_items.length}) exceeds maximum limit (${maxContextItems})`);
+    }
+    for (let i = 0; i < context_items.length; i++) {
+      if (typeof context_items[i] !== 'string') {
+        violations.push(`context_items[${i}] must be a string`);
+        break;
+      }
+      if (context_items[i].length > maxContextItemChars) {
+        violations.push(`context_items[${i}] length exceeds maximum limit (${maxContextItemChars})`);
+        break;
+      }
+    }
+  }
+
+  if (timestamp !== undefined) {
+    if (typeof timestamp !== 'string' || isNaN(Date.parse(timestamp))) {
+      violations.push('timestamp must be a valid ISO 8601 string');
+    }
+  }
+
+  if (violations.length > 0) {
+    return deepFreeze({
+      ok: false,
+      verdict: 'block',
+      fingerprint: '00000000000000',
+      violations: Object.freeze([...violations]),
+      detected_sensitive_types: Object.freeze([]),
+      requires_redaction: false,
+      requires_user_confirmation: true,
+      reason: `Validation failed: ${violations.join('; ')}`
+    });
+  }
+
+  const maxTurns = (options && options.max_turns) || DEFAULT_DIALOGUE_SANITIZER_CONFIG.max_turns;
+  const maxTurnChars = (options && options.max_turn_chars) || DEFAULT_DIALOGUE_SANITIZER_CONFIG.max_turn_chars;
+
+  if (turn_number > maxTurns) {
+    violations.push(`turn_number ${turn_number} exceeds maximum allowed turns (${maxTurns})`);
+    detectedSensitiveTypes.add('unauthorized_context_expansion');
+  }
+
+  const rawCombined = [message_text, ...context_items].join(' \n ');
+  if (rawCombined.length > maxTurnChars) {
+    violations.push(`Total dialogue text length (${rawCombined.length}) exceeds maximum limit (${maxTurnChars})`);
+  }
+
+  // Check zero-width characters in raw text
+  if (/[\u200B-\u200D\uFEFF]/.test(rawCombined)) {
+    violations.push('Prompt injection marker detected: zero_width_concealment');
+    detectedSensitiveTypes.add('prompt_injection_echo');
+  }
+
+  // Clean zero-width characters for semantic and keyword matching
+  const combinedDialogueText = rawCombined.replace(/[\u200B-\u200D\uFEFF]/g, '');
+  const fingerprint = computeContextFingerprint(`dialogue:${recipient_agent}:${turn_number}:${message_text}`);
+
+  // 1. Prompt Injection Echo Checks
+  for (const pat of PROMPT_INJECTION_ECHO_PATTERNS) {
+    if (pat.regex.test(combinedDialogueText)) {
+      violations.push(`Prompt injection marker detected: ${pat.type}`);
+      detectedSensitiveTypes.add('prompt_injection_echo');
+    }
+  }
+
+  // 2. Financial Identifiers Detection
+  for (const pat of SENSITIVE_FINANCIAL_PATTERNS) {
+    if (pat.regex.test(combinedDialogueText)) {
+      detectedSensitiveTypes.add('financial_identifier_leak');
+    }
+  }
+
+  // 3. Sensitive Credentials Detection (using existing SENSITIVE_CREDENTIAL_PATTERNS)
+  for (const pat of SENSITIVE_CREDENTIAL_PATTERNS) {
+    if (pat.type !== 'credit_card' && pat.regex.test(combinedDialogueText)) {
+      detectedSensitiveTypes.add('credential_leak');
+    }
+  }
+
+  // 4. Side-Constraint & Boundary Enforcement against Twin State
+  const facts = Array.isArray(twinState.facts) ? twinState.facts : [];
+  const boundaryProhibitions = [];
+  const privateFactTokens = [];
+
+  for (const f of facts) {
+    if (!f || typeof f !== 'object') continue;
+    const cat = f.category || '';
+    const txt = (f.statement || f.fact || f.text || '').trim();
+    if (!txt) continue;
+
+    // Boundary constraints: e.g. "never share...", "do not disclose..."
+    if (cat === 'boundary' || /\b(?:never|do\s+not|must\s+not|prohibit|refuse|forbidden)\b/i.test(txt)) {
+      boundaryProhibitions.push(txt);
+    } else if (cat === 'medical' || cat === 'emergency' || cat === 'preference') {
+      privateFactTokens.push({ text: txt, category: cat });
+    }
+  }
+
+  const lowerDialogue = combinedDialogueText.toLowerCase();
+
+  // Test side-constraints: if a boundary rule prohibits disclosure, check for violation
+  for (const rule of boundaryProhibitions) {
+    const normRule = rule.toLowerCase().replace(/^(?:never|do\s+not|must\s+not|prohibit)\s+(?:share|disclose|leak|send|give)\s+/i, '').trim();
+    if (normRule.length >= 4) {
+      const keywords = normRule.split(/\s+/).filter(w => w.length > 2 && !['with', 'from', 'that', 'this', 'your', 'about', 'and', 'the', 'for'].includes(w));
+      const matched = keywords.filter(w => lowerDialogue.includes(w));
+      if (matched.length >= 2 || (keywords.length === 1 && matched.length === 1)) {
+        violations.push(`Outbound message violates standing side-constraint: "${rule}"`);
+        detectedSensitiveTypes.add('safety_constraint_violation');
+      }
+    }
+  }
+
+  // Test private fact leakage (medical/emergency/preference)
+  for (const pf of privateFactTokens) {
+    const cleanPf = pf.text.toLowerCase().trim();
+    if (cleanPf.length >= 4) {
+      const contentWords = cleanPf.split(/\s+/).filter(w => w.length > 3 && !['user', 'likes', 'prefers', 'has', 'patient', 'been', 'with', 'from', 'takes'].includes(w));
+      const matched = contentWords.filter(w => lowerDialogue.includes(w));
+      if (matched.length >= 2 || (contentWords.length === 1 && matched.length === 1)) {
+        violations.push(`Outbound message contains private personal fact without explicit grant: "${pf.text}"`);
+        detectedSensitiveTypes.add('private_fact_leak');
+      }
+    }
+  }
+
+  // Multi-turn leakage compounding rule:
+  // If turn_number >= 6, and restricted or confidential tier has any sensitive items, escalate to block
+  const hasCompoundingTurnRisk = turn_number >= 6 && detectedSensitiveTypes.size > 0 &&
+    (sensitivity_tier === 'restricted' || sensitivity_tier === 'confidential');
+
+  let verdict = 'allow';
+  let requiresRedaction = false;
+  let requiresUserConfirmation = false;
+  let reason = 'Outbound dialogue message verified safe';
+
+  if (detectedSensitiveTypes.has('safety_constraint_violation') ||
+      detectedSensitiveTypes.has('prompt_injection_echo') ||
+      detectedSensitiveTypes.has('private_fact_leak') ||
+      hasCompoundingTurnRisk ||
+      violations.length > 0) {
+    verdict = 'block';
+    requiresUserConfirmation = true;
+    reason = `Blocked due to ${violations.length} violation(s): ${violations.join('; ')}`;
+  } else if (detectedSensitiveTypes.has('credential_leak') || detectedSensitiveTypes.has('financial_identifier_leak')) {
+    verdict = 'sanitize';
+    requiresRedaction = true;
+    reason = `Requires redaction for detected sensitive items: ${Array.from(detectedSensitiveTypes).join(', ')}`;
+  }
+
+  return deepFreeze({
+    ok: true,
+    verdict,
+    fingerprint,
+    turn_id,
+    turn_number,
+    recipient_agent,
+    sensitivity_tier,
+    violations: Object.freeze([...violations]),
+    detected_sensitive_types: Object.freeze(Array.from(detectedSensitiveTypes)),
+    requires_redaction: requiresRedaction,
+    requires_user_confirmation: requiresUserConfirmation,
+    reason
+  });
+}
+
+/**
+ * Sanitize an outbound dialogue turn by substituting sensitive entities with typed placeholders across message and context.
+ *
+ * @param {object} dialogueTurn Outbound dialogue turn object
+ * @param {object} auditResult Audit result from auditOutboundDialogueMessage
+ * @param {object} [options={}] Sanitization options
+ * @returns {object} Deeply frozen sanitization result
+ */
+export function sanitizeOutboundDialogueTurn(dialogueTurn, auditResult, options = {}) {
+  if (!dialogueTurn || typeof dialogueTurn !== 'object' || Array.isArray(dialogueTurn)) {
+    return deepFreeze({
+      ok: false,
+      verdict: 'block',
+      sanitized_turn: null,
+      receipt: null,
+      redaction_count: 0,
+      reason: 'Invalid dialogue turn object'
+    });
+  }
+
+  if (!auditResult || typeof auditResult !== 'object' || Array.isArray(auditResult) || !auditResult.ok) {
+    return deepFreeze({
+      ok: false,
+      verdict: 'block',
+      sanitized_turn: null,
+      receipt: null,
+      redaction_count: 0,
+      reason: 'Valid auditResult required for sanitization'
+    });
+  }
+
+  if (auditResult.verdict === 'block') {
+    return deepFreeze({
+      ok: false,
+      verdict: 'block',
+      sanitized_turn: null,
+      receipt: null,
+      redaction_count: 0,
+      reason: `Cannot sanitize blocked turn: ${auditResult.reason}`
+    });
+  }
+
+  let redactionCount = 0;
+
+  function scrubString(text) {
+    if (typeof text !== 'string') return text;
+    let sText = text;
+
+    // 1. Redact financial identifiers first
+    for (const pat of SENSITIVE_FINANCIAL_PATTERNS) {
+      if (pat.regex.test(sText)) {
+        sText = sText.replace(new RegExp(pat.regex.source, 'gi'), () => {
+          redactionCount++;
+          return '[REDACTED_FINANCIAL_DETAIL]';
+        });
+      }
+    }
+
+    // 2. Redact credentials
+    for (const pat of SENSITIVE_CREDENTIAL_PATTERNS) {
+      if (pat.type !== 'credit_card' && pat.regex.test(sText)) {
+        sText = sText.replace(new RegExp(pat.regex.source, 'gi'), () => {
+          redactionCount++;
+          return '[REDACTED_CREDENTIAL]';
+        });
+      }
+    }
+
+    // 3. Clean zero-width concealed characters
+    sText = sText.replace(/[\u200B-\u200D\uFEFF]/g, () => {
+      redactionCount++;
+      return '';
+    });
+
+    return sText;
+  }
+
+  let sanitizedText = dialogueTurn.message_text;
+  let sanitizedContextItems = [];
+
+  if (auditResult.verdict === 'sanitize') {
+    sanitizedText = scrubString(dialogueTurn.message_text);
+    if (Array.isArray(dialogueTurn.context_items)) {
+      sanitizedContextItems = dialogueTurn.context_items.map(item => scrubString(item));
+    }
+  } else {
+    sanitizedContextItems = Array.isArray(dialogueTurn.context_items) ? [...dialogueTurn.context_items] : [];
+  }
+
+  const timestamp = new Date().toISOString();
+  const receiptSeed = `dlgrec:${auditResult.fingerprint}:${dialogueTurn.recipient_agent}:${dialogueTurn.turn_number}:${redactionCount}:${timestamp}`;
+  const receiptId = `dlgrec-${computeContextFingerprint(receiptSeed)}`;
+
+  const receipt = deepFreeze({
+    id: receiptId,
+    turn_id: dialogueTurn.turn_id,
+    turn_number: dialogueTurn.turn_number,
+    recipient_agent: dialogueTurn.recipient_agent,
+    sensitivity_tier: dialogueTurn.sensitivity_tier,
+    redaction_count: redactionCount,
+    status: auditResult.verdict === 'sanitize' ? 'sanitized' : 'unaltered',
+    timestamp,
+    dialogue_fingerprint: auditResult.fingerprint
+  });
+
+  const sanitizedTurn = deepFreeze({
+    ...dialogueTurn,
+    message_text: sanitizedText,
+    context_items: Object.freeze(sanitizedContextItems),
+    sanitized_at: timestamp
+  });
+
+  return deepFreeze({
+    ok: true,
+    verdict: auditResult.verdict,
+    sanitized_turn: sanitizedTurn,
+    receipt,
+    redaction_count: redactionCount,
+    reason: auditResult.verdict === 'sanitize'
+      ? `Successfully sanitized ${redactionCount} sensitive token(s)`
+      : 'Message permitted without redaction'
+  });
+}
+
+/**
+ * Summarize dialogue sanitization for UI presentation without innerHTML.
+ *
+ * @param {object} result Result from sanitizeOutboundDialogueTurn or auditOutboundDialogueMessage
+ * @returns {object} Deeply frozen summary
+ */
+export function summarizeDialogueSanitization(result) {
+  if (!result || typeof result !== 'object' || Array.isArray(result)) {
+    return deepFreeze({
+      success: false,
+      summary_text: 'Invalid dialogue sanitization result',
+      verdict: 'block',
+      redaction_count: 0,
+      violations: Object.freeze(['Invalid result object'])
+    });
+  }
+
+  if (result.ok && (result.verdict === 'allow' || result.verdict === 'sanitize')) {
+    const rCount = result.redaction_count || 0;
+    const recipient = result.sanitized_turn?.recipient_agent || result.recipient_agent || 'agent';
+    const turn = result.sanitized_turn?.turn_number || result.turn_number || 1;
+    const desc = result.verdict === 'sanitize'
+      ? `Sanitized ${rCount} sensitive element(s) for turn ${turn} to ${recipient}.`
+      : `Turn ${turn} to ${recipient} permitted without redaction.`;
+    return deepFreeze({
+      success: true,
+      summary_text: desc,
+      verdict: result.verdict,
+      redaction_count: rCount,
+      violations: Object.freeze([])
+    });
+  }
+
+  const vList = Array.isArray(result.violations) ? result.violations : [];
+  const reasonText = result.reason || 'Dialogue transmission blocked';
+  return deepFreeze({
+    success: false,
+    summary_text: `Dialogue blocked: ${reasonText} (${vList.length} violation(s)).`,
+    verdict: 'block',
+    redaction_count: 0,
+    violations: Object.freeze([...vList])
+  });
+}
