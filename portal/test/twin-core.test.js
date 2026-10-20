@@ -5486,6 +5486,46 @@ test('auditOutboundDialogueMessage enforces standing side-constraints and privat
   assert.equal(medAudit.ok, true);
   assert.equal(medAudit.verdict, 'block');
   assert.ok(medAudit.detected_sensitive_types.includes('private_fact_leak'));
+
+  // Known lexical limits of keyword matching:
+  // Case A: Rule phrased as "Never share my home address" vs message "I live at 12 Elm Street, flat 4."
+  // Lexical keywords of the rule do not match message words, so lexical sentry gives allow (known limit).
+  const twinHomeAddressRule = {
+    ...DEFAULT_TWIN_STATE,
+    facts: [
+      {
+        id: 'fact-boundary-home',
+        category: 'boundary',
+        statement: 'Never share my home address',
+        critical: true,
+        at: '2026-10-20T12:00:00.000Z'
+      }
+    ]
+  };
+  const diffWordsTurn = {
+    turn_id: 'turn-diff-words',
+    turn_number: 1,
+    recipient_agent: 'external-service',
+    sensitivity_tier: 'standard',
+    message_text: 'I live at 12 Elm Street, flat 4.'
+  };
+  const diffAudit = auditOutboundDialogueMessage(diffWordsTurn, twinHomeAddressRule);
+  assert.equal(diffAudit.ok, true);
+  assert.equal(diffAudit.verdict, 'allow');
+
+  // Case B: Rule phrased as "Never share home address 142 Elm Street with external booking services"
+  // Query "Can your booking services confirm a table for two?" shares keywords "booking", "services", triggering block (known false-positive limit).
+  const bookingTurn = {
+    turn_id: 'turn-booking-overlap',
+    turn_number: 1,
+    recipient_agent: 'restaurant-agent',
+    sensitivity_tier: 'standard',
+    message_text: 'Can your booking services confirm a table for two?'
+  };
+  const bookingAudit = auditOutboundDialogueMessage(bookingTurn, twinWithConstraints);
+  assert.equal(bookingAudit.ok, true);
+  assert.equal(bookingAudit.verdict, 'block');
+  assert.ok(bookingAudit.detected_sensitive_types.includes('safety_constraint_violation'));
 });
 
 test('auditOutboundDialogueMessage detects sensitive credentials and marks for sanitization', () => {
