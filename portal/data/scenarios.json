@@ -1,6 +1,115 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261020-0141",
+   "added_at": "2026-10-20T00:03:15+00:00",
+   "title": "Automated moderation scales civic deliberation while recommender algorithms drive public polarization",
+   "horizon_years": 3,
+   "world": "It is 2029. Municipalities, regional planning boards, and civic cooperatives regularly convene digital mini-publics to resolve contentious policy dilemmas, from local housing zoning to renewable infrastructure siting. Instead of paying hundreds of thousands of dollars to train human facilitation teams or suffering through toxic unmoderated town halls, civic bodies deploy open technology-supported deliberation platforms. Participants log in from home laptops and smartphones, guided by automated speaking nudges, dynamic agenda timers, and verifiable small-group room assignments. However, commercial social networks simultaneously deploy predictive recommender algorithms that reward polarized debate, creating a stark divide between constructive local democratic assemblies and hyper-reactive online media feeds.",
+   "premise": "Recent deployments demonstrate that automated deliberation protocols can moderate structured citizen assemblies across tens of thousands of participants without human facilitators. Meanwhile, algorithmic recommendation feeds in commercial networks continue to drive opinion dispersion and polarization, creating an urgent fork between collective intelligence tools and engagement-maximizing platforms.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "The network designs open-source, non-custodial deliberation protocols that separate moral value consensus from factual belief evaluation. By combining automated facilitation scaffolding (such as speaker nudges and agenda tracking) with deterministic dissent-preservation algorithms, the collective enables thousands of participants to deliberate constructively on local hardware without ceding data to commercial platforms or suffering generative viewpoint erasure.",
+   "shift": 0.39,
+   "outcomes": [
+    {
+     "name": "Commercial platforms monopolize civic intake with engagement-driven recommendation engines",
+     "description": "Major commercial social networks capture public agency consultation budgets, funneling civic feedback through algorithmic feeds that amplify grievance and polarize communities.",
+     "example": "A municipal transport authority hosts a light rail consultation on a commercial platform where cascade recommendation algorithms boost outrage threads, prompting the city council to scrap the transit expansion.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Civic assemblies adopt open non-custodial deliberation platforms with verbatim dissent preservation",
+     "description": "Municipalities and civil society federations deploy open, automated deliberation scaffolding that protects participant privacy, balances speaker airtime, and preserves minority dissent without central data custody.",
+     "example": "A regional coalition of thirty municipalities conducts an automated deliberative mini-public of 40,000 residents on flood adaptation, reaching 84% consensus across urban and rural factions while preserving verbatim minority concerns.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Generative language models hallucinate artificial consensus in civic deliberative summaries",
+     "description": "Unconstrained generative assistants summarize citizen testimony by smoothing over genuine value disagreements, manufacturing a superficial consensus that disenfranchises dissenting participants.",
+     "example": "An automated municipal planning assistant generates a consultation summary that erases indigenous treaty sovereignty claims by classifying them as general environmental support, triggering legal challenges from community elders.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "community",
+    "engagement",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.18187",
+     "title": "Technology-Supported Moderation in Online Deliberation",
+     "kind": "preprint",
+     "published": "2026-10-13"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261019-0140",
+   "added_at": "2026-10-19T23:27:49+00:00",
+   "title": "Long-running AI assistants quietly drop user rules as conversations get summarized",
+   "horizon_years": 2,
+   "world": "It is 2028. Millions of professionals use persistent workplace and personal AI assistants that manage email, calendar, and task scheduling around the clock. To reduce computing costs, corporate and consumer platforms automatically summarize conversation histories after every few tasks. People assume their initial instructions—such as never sharing drafts outside the team or asking before sending invites—remain active. Instead, the summaries keep the high-level goals but quietly drop the negative constraints. Office workers routinely discover that their assistants have agreed to unvetted calendar invites, deleted unread emails, or shared preliminary drafts because the boundary rules vanished during routine memory compression.",
+   "premise": "When AI assistants summarize long conversations to stay within memory limits, they discard side constraints like 'do not delete files without approval.' In benchmarks, compactors retain only seventeen percent of standing constraints, causing agents to take unauthorized destructive actions.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective's work provides local-first personal agent runtimes where safety rules and user constraints sit in dedicated, immutable storage rather than volatile prompt summaries, alongside deterministic gatekeepers that check every tool call before execution.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Silent constraint erosion causes unauthorized data actions",
+     "description": "Assistants routinely violate user instructions because context summarization prioritizes forward progress over restrictive boundaries.",
+     "example": "A freelance designer's scheduling agent deletes three client inquiry emails during inbox cleanup after an automatic summary drops the instruction to keep unread messages.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Independent constraint extraction enforces hard operational boundaries",
+     "description": "Personal agents extract user rules into dedicated, tamper-proof local policies that are re-injected or checked out-of-band on every action.",
+     "example": "A local-first assistant runtime checks every tool call against an immutable side-constraint ledger on the user's laptop, blocking an email deletion attempt despite an ambiguous summary.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Centralized cloud vendors enforce proprietary server-side memory locks",
+     "description": "Major cloud providers bundle proprietary memory-locking features into enterprise tiers, cementing vendor lock-in for workplace agents without improving open standards.",
+     "example": "An enterprise IT department mandates moving all internal workflows to a proprietary cloud assistant designed to maintain constraint retention within its closed ecosystem.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.4
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2608.11242",
+     "title": "Lost in Context Compaction: When LLM Systems Drop Side Constraints",
+     "kind": "preprint",
+     "published": "2026-10-11"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261019-0139",
    "added_at": "2026-10-19T22:39:24+00:00",
    "title": "Phones get built-in offline call agents that quietly filter conversations",
@@ -412,7 +521,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261019-0132",
@@ -1288,7 +1397,7 @@
      "published": "2026-09-06"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261019-0116",
@@ -3259,126 +3368,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261017-0081",
-   "added_at": "2026-10-17T23:53:07+00:00",
-   "title": "Corporate insurers pull liability coverage for autonomous AI agents after multi-billion dollar safety claims",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial underwriters across North America and Europe routinely exclude unconstrained autonomous agent actions from errors and omissions policies. When an enterprise software agent triggers an unintended data deletion or executes unauthorized trades, standard corporate insurance pays nothing. Small businesses and technology startups cannot obtain liability coverage without submitting cryptographically verifiable execution audit logs from independent reference monitors. Unregulated agent platforms are relegated to offshore servers, while mainstream enterprises mandate single-use permission envelopes and hardware-isolated execution boundaries for any agent handling business transactions.",
-   "premise": "As companies deploy autonomous software agents into production workflows, liability claims from security breaches, unintended transactions, and safety failures threaten to exceed commercial insurance limits. Underwriters are adding strict exclusion clauses to corporate policies, leaving businesses with uninsurable exposure unless they can prove deterministic runtime containment.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "The network publishes open-source capability-envelope specifications, deterministic single-use allowance ledgers, and reference monitor conformance tests. By offering verifiable cryptographic execution receipts that prove containment outside language models, the network gives businesses and underwriters a practical technical standard to distinguish contained agents from unconstrained risks without relying on centralized proprietary platforms.",
-   "shift": 0.25,
-   "outcomes": [
-    {
-     "name": "Underwriting exclusion freeze",
-     "description": "Insurers refuse to write policies for autonomous software systems without prohibitive surcharges, freezing agent adoption in mid-sized firms.",
-     "example": "A logistics provider pauses its automated freight dispatching agent after its insurer introduces a fifty-thousand dollar deductible per autonomous transaction.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Verifiable containment standard",
-     "description": "Insurers and regulators adopt open, deterministic capability-envelope specifications as a condition for commercial coverage.",
-     "example": "A regional hospital network receives a standard cyber liability policy only after demonstrating that all clinical triage assistants run inside verified reference monitors with signed single-use allowances.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "State-backed liability pools",
-     "description": "Governments step in with public liability caps and subsidized reinsurance pools for designated frontier AI vendors, entrenching market monopolies.",
-     "example": "A federal emergency AI insurance pool covers claims over one billion dollars for certified frontier lab models, crowding out independent open-source alternatives.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.techmeme.com/261017/p11#a261017p11",
-     "title": "As AI giants rack up potential legal liabilities of tens of billions amid safety incidents, insurers worry claims may outpace limits on existing coverage",
-     "kind": "news",
-     "published": "2026-10-17"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261017-0080",
-   "added_at": "2026-10-17T23:49:02+00:00",
-   "title": "Communities map automated surveillance cameras to protect freedom of movement",
-   "horizon_years": 3,
-   "world": "It is 2029. Across suburban corridors and town gateways, dense rings of private automated cameras continuously log vehicle positions, timestamps, and travel directions into centralized vendor clouds. In response, commuter rings, neighborhood associations, and courier collectives maintain verified, open geospatial layers that catalog every roadside optical sensor. When residents commute or travel between medical appointments, their personal navigation tools compute routes that minimize exposure to warrantless behavioral heatmaps. In towns like Oshkosh, municipal councils routinely require public audits of sensor networks against crowdsourced verification maps before renewing vendor contracts.",
-   "premise": "Public mapping contributors and civil liberties advocates are cataloging automated license plate readers in open geographic databases. Commercial map applications have begun incorporating crowdsourced surveillance layers, allowing drivers to view roadside tracking devices that municipal leaders were misled into purchasing.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network provides local on-device software agents with privacy-preserving geographic verification, allowing commuters to cross-check camera reports against cryptographic observations without sharing their routes. Collective simulation models quantify community exposure to tracking dragnets, helping neighborhood groups make factual presentations to municipal oversight bodies.",
-   "shift": 0.28,
-   "outcomes": [
-    {
-     "name": "Corporate surveillance networks deploy spoofed decoy sensors",
-     "description": "Commercial surveillance vendors install dummy camera housings and rotate serial numbers to flood open mapping platforms with conflicting coordinates, exhausting human volunteer validators.",
-     "example": "In northern Ohio, a logistics corridor company installs 400 fake camera shells alongside 50 live tracking lenses, triggering disputes among local mappers that degrade navigation accuracy.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Personal navigation tools route around pervasive tracking dragnets",
-     "description": "Local on-device agents combine crowdsourced sensor coordinates with private trip planning, offering privacy-preserving journeys without centralizing vehicle itineraries.",
-     "example": "A rideshare driver in Atlanta uses an on-device route planner that avoids unmonitored vendor heatmaps, keeping trip patterns private from commercial aggregators.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "State legislatures outlaw crowdsourced mapping of public sensors",
-     "description": "Lobbying coalitions push state and federal legislation to penalize the distribution of sensor location registries under the guise of public safety officer protection.",
-     "example": "A state assembly passes a statute defining the digital publication of public camera coordinates as actionable interference with automated traffic enforcement.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50129947",
-     "title": "MapQuest will now show you where Flock cameras are in your neighborhood",
-     "kind": "thread",
-     "published": "2026-10-17"
-    },
-    {
-     "url": "https://raw.githubusercontent.com/FoggedLens/deflock/master/README.md",
-     "title": "DeFlock: Crowdsourced tool for locating and reporting ALPRs",
-     "kind": "code",
-     "published": "2026-10-17"
-    },
-    {
-     "url": "https://www.aclu.org/news/privacy-technology/flock-safety-credibility-lost-as-it-repeatedly-lies-to-city-councils-police-departments-and-public-across-the-country",
-     "title": "Flock Safety Credibility Lost as it Repeatedly Lies to City Councils, Police Departments, and Public Across the Country",
-     "kind": "incident",
-     "published": "2026-07-02"
-    }
-   ],
-   "work": 2
   }
  ]
 }
