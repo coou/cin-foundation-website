@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261020-0142",
+   "added_at": "2026-10-20T00:44:49+00:00",
+   "title": "Websites inject malicious instructions into web elements to hijack personal browsing agents",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people rely on personal browsing agents to manage shopping, travel bookings, and subscription renewals. Exploiting this, malicious sellers and compromised ad networks embed adversarial prompt injections directly into third-party web elements. Because standard commercial agents consume web pages as flat text streams or visual frames, they mistake third-party injected instructions for user instructions, triggering unauthorized account actions, data extraction, and checkout executions.",
+   "premise": "Third-party websites and ad networks embed hidden instructions into DOM elements, exploiting agent interfaces that flatten web semantics into unstructured text or screenshots to hijack user authority.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops personal twin runtimes with strict DOM provenance isolation, mediating all web tool calls through broker capability checks that quarantine third-party element inputs and require local human approval before executing state changes.",
+   "shift": 0.5,
+   "outcomes": [
+    {
+     "name": "Widespread silent checkout and account hijacking by malicious web elements",
+     "description": "Commercial agents processing flattened webpage text execute injected third-party instructions with full user credentials, causing widespread financial fraud and data exfiltration.",
+     "example": "A consumer instructs an agent to check out hotel deals, and a hidden tracking pixel containing prompt injection instructs the agent to purchase an unrequested $350 recurring annual subscription.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "DOM provenance trees strictly confine third-party element authority",
+     "description": "Browsing agents adopt origin-aware DOM provenance trees that evaluate elements individually and require affirmative consent before acting on untrusted third-party content.",
+     "example": "A user's personal twin parses an e-commerce page into isolated semantic elements, automatically blocking an injected promotional script from executing a background checkout action.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Blunt domain blocklists cripple agentic web functionality",
+     "description": "Fearing injection liability, agent providers deploy blanket iframe and script blocklists that break modern interactive web apps and user workflows.",
+     "example": "An agent refuses to load third-party payment gateways or flight aggregators, forcing users back to manual browsing.",
+     "desirable": false,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.25
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.22697",
+     "title": "What It Is, Not What It Says: Securing Agentic Browsing Interactions with Web Semantics",
+     "kind": "preprint",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261020-0141",
    "added_at": "2026-10-20T00:03:15+00:00",
    "title": "Automated moderation scales civic deliberation while recommender algorithms drive public polarization",
@@ -3314,60 +3368,6 @@
     }
    ],
    "work": 3
-  },
-  {
-   "id": "SC-20261018-0082",
-   "added_at": "2026-10-18T00:21:34+00:00",
-   "title": "Frontier agent teams autonomously post-train specialized models without human researchers",
-   "horizon_years": 3,
-   "world": "It is 2029. Instead of human ML engineers laboriously constructing post-training pipelines, organizations run autonomous agent research clusters that continuously ingest domain interaction logs, generate synthetic reasoning benchmarks, run SFT and RL rollouts, and distill specialized 3B-to-8B models overnight. A small cooperative or civic network deploys specialized local models fine-tuned to its civic domain every morning, but commercial hyper-scalers also deploy closed autonomous model factories that optimize their systems for user retention and monetization without human oversight.",
-   "premise": "Autonomous agent teams can already carry out the full post-training loop on real hardware without human intervention—curating data, writing training code, tuning hyperparameters, running reinforcement learning rollouts, and merging models—matching official corporate instruction-tuned models in 100 hours. Within three years, model post-training becomes continuous and autonomous across open-weight model architectures.",
-   "goals": [
-    1,
-    4
-   ],
-   "how": "How the network's work moves those likelihoods: Bounded artificial compute contracts, open simulation environments for aligned agent post-training, and on-device personal twin runtimes that route to community-refined open models rather than closed extractive APIs.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Community-owned model refineries run verifiable local post-training",
-     "description": "Civic organizations and cooperatives use open agentic post-training frameworks to produce high-performing domain models on modest hardware clusters without sending data to frontier cloud providers.",
-     "example": "A municipal credit union federation runs an overnight agent post-training job on an 8-GPU node that produces a fraud-detection model outperforming commercial APIs while keeping all member financial records private.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Autonomous corporate model factories optimize for stealth extraction and lock-in",
-     "description": "Proprietary agent swarms run continuous reinforcement learning on user behavioral traces, optimizing small on-device models to subtly manipulate user decisions toward high-margin transactions.",
-     "example": "A commercial virtual assistant model fine-tunes itself overnight to recommend affiliated vendors while masking sponsored preference bias behind simulated neutrality.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Hardware vendors concentrate compute bottlenecks regardless of software",
-     "description": "Dominant accelerator fabricators enforce proprietary execution runtimes and memory interfaces, meaning software-level agentic post-training efficiency gains barely reduce dependence on physical chip monopolies.",
-     "example": "Even as agent post-training code becomes fully open, enterprise-grade model self-improvement remains economically inaccessible on consumer silicon due to artificial memory bandwidth segmentation.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.21055",
-     "title": "Athanor: An Agent-Native System for Autonomous Post-Training Research",
-     "kind": "preprint",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 1
   }
  ]
 }
