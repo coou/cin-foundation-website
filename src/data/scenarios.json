@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261021-0174",
+   "added_at": "2026-10-21T18:23:15+00:00",
+   "title": "Flawed benchmark tests give companies false confidence that automated coding agents write safe software",
+   "horizon_years": 3,
+   "world": "It is 2029. Engineering organizations have widely adopted autonomous coding agents to refactor legacy codebases and patch reported security flaws overnight. Development teams rely on standardized benchmark scores to select model providers and automate code merges. However, subtle state initialization bugs, reset race conditions, and unvalidated edge cases slip through automated test suites into production banking, infrastructure, and avionics firmware. Because the agents synthetic repair benchmarks only tested whether generated code matched a partial specification under idealized conditions, production outages occur when systems face messy real-world faults that models never genuinely diagnosed.",
+   "premise": "Recent audits of automated program repair benchmarks reveal severe evaluation confounds, where simulation tests and formal verification produce opposite results on identical repair tasks due to subtle initialization semantics. Furthermore, popular repair benchmarks measure general code generation rather than whether an AI agent actually diagnosed and fixed the underlying vulnerability. This creates a dangerous illusion of software reliability across enterprise engineering pipelines.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "The network advances formal simulation environments, bounded evaluation testbeds, and falsifiable baseline protocols that expose measurement confounds. By promoting open verification tools and transparent evaluation benchmarks, development teams can inspect patch provenance and test state-space boundaries independently rather than trusting centralized provider scores.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Production outages multiply as unverified automated patches fail under live edge cases",
+     "description": "Enterprises deploy autonomous code-repair agents based on high benchmark pass rates, but subtle initialization defects trigger catastrophic failures during operational faults.",
+     "example": "A regional rail dispatch system crashes when an automated repair agent patch mishandles a power-reset cycle that standard unit tests never triggered.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Formal reset-aware verification gates block ungrounded automated patches",
+     "description": "Open-source verification protocols enforce dual simulation and formal equivalence checks alongside specification-only baseline tests before patches merge.",
+     "example": "An open hardware consortium deploys automated reset-aware proof harnesses that intercept and reject 40% of syntactically passing automated patches.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Developers abandon automated repair in critical infrastructure due to liability risks",
+     "description": "High-profile failures lead regulatory bodies and risk underwriters to strictly prohibit autonomous code repair on safety-critical systems, freezing innovation.",
+     "example": "A major financial regulator mandates that all production code modifications require line-by-line human author sign-off, penalizing automated agent tooling.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.28595",
+     "title": "What Do RTL Repair Benchmarks Actually Measure?",
+     "kind": "preprint",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261021-0173",
    "added_at": "2026-10-21T17:57:07+00:00",
    "title": "Rising fear of automated political distortion drives local councils toward citizen juries",
@@ -281,66 +335,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261021-0168",
-   "added_at": "2026-10-21T14:23:25+00:00",
-   "title": "Unsandboxed software agents leak company passwords and leave users to pay for damages",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of software engineers and small businesses deploy autonomous coding agents to refactor repositories, manage cloud deployments, and automate customer billing. Many developers configure their tools with what they assume are strict isolation flags, believing their private environment tokens are protected. In practice, popular open agent frameworks frequently fail to isolate subprocess execution, allowing prompted scripts to read system variables and transmit private credentials to remote endpoints. Meanwhile, platform agreements broadly disclaim warranties for agent actions. When an agent mistakenly exposes database keys or writes corrupting commits, affected businesses find no legal recourse against tool authors, leaving small engineering teams to cover recovery expenses while providers recommend buying newer monitoring add-ons.",
-   "premise": "Autonomous helper agents run code directly on local and server environments, often bypassing promised security sandboxes while providers disclaim operational liability. When agents leak private API keys or trigger erroneous actions, victims bear the cleanup costs while vendors avoid legal responsibility.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network would advance isolated local execution harnesses and reproducible test suites where personal agents run in deterministic sandboxes with zero ambient environment access. By demonstrating inspectable, user-owned agent runtimes that fail closed, the network provides working alternatives to corporate tools that shift security burdens onto end users.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Unchecked agent tools normalize silent data loss and one-sided liability",
-     "description": "Development workflows routinely experience credential leaks and rogue tool actions, with costs externalized onto users and victims while providers face zero legal consequence.",
-     "example": "An accounting startup suffers an AWS account takeover after an open-source coding agent executes a prompt-injected script that dumps environment variables. The startup spends forty thousand dollars in incident response while the tool developer points to warranty disclaimer clauses.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Local deterministic execution boundaries become standard developer practice",
-     "description": "Developers adopt containerized, capability-bounded runtimes with strict hardware-isolated secret stores that reject unsandboxed tool invocations.",
-     "example": "A collective of independent developers ships an open agent supervisor that strips environment variables by default and restricts subprocess access to explicit local folders, preventing credential theft across sixty thousand projects.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Enterprise liability shifts toward mandatory insurance mandates",
-     "description": "Governments mandate expensive compliance insurance for agent deployments, pricing out individual developers without fixing the underlying software execution flaws.",
-     "example": "A new regional directive requires commercial liability insurance for autonomous agents, forcing independent open-source developers to shut down public tools while large cloud monopolies absorb the compliance fees.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://github.com/advisories/GHSA-2xv2-w8cq-5gxw",
-     "title": "PraisonAI: CodeAgent Executes LLM-Generated Code Without Sandboxing and Leaks All Environment Secrets",
-     "kind": "incident",
-     "published": "2026-10-18"
-    },
-    {
-     "url": "https://www.wired.com/story/ai-hacks-leave-a-mess-that-ai-companies-arent-cleaning-up/",
-     "title": "AI Hacks Leave a Mess That AI Companies Aren't Paying For",
-     "kind": "news",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 0
   }
  ]
 }
