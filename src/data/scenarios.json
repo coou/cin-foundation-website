@@ -1,6 +1,68 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261021-0166",
+   "added_at": "2026-10-21T11:50:54+00:00",
+   "title": "Companies launch massive swarms of AI agents that burn power without solving harder problems",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial enterprises and research labs routinely instantiate parallel swarms of tens of thousands of automated agents to tackle software architecture, market research, and scientific forecasting. Hyperscale data center operators build dedicated gigawatt substations to power these multi-agent clusters. Yet engineering leads find that expanding from a hundred agents to ten thousand yields almost no improvement in solving foundational bugs or inventing novel architectures. The identical agents repeatedly explore the same dead ends, flood shared repositories with superficially plausible pull requests, and consume vast amounts of electrical grid capacity. Meanwhile, small collaborative teams using diverse, bounded personal assistants with strict verification gates outperform massive brute-force corporate swarms on difficult conceptual problems.",
+   "premise": "Empirical benchmarks across frontier model swarms show that adding parallel agents increases execution speed but hits steep diminishing returns on complex reasoning, formal mathematical proofs, and system-level discovery. Homogeneous swarms rapidly saturate because identical models share common blind spots and suffer massive coordination overhead.",
+   "goals": [
+    1,
+    2,
+    4
+   ],
+   "how": "The network moves these likelihoods by demonstrating that genuine collective intelligence arises from diversity, fractured alignment, and deterministic verification rather than brute-force scaling of homogeneous models. By building runtime adapters that enforce local containment, private memory boundaries, and mutual verification protocols, open-source cooperatives can pool diverse personal agents to solve complex problems efficiently without requiring centralized multi-gigawatt cloud clusters.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Hyperscale compute waste crowds out local energy grids",
+     "description": "Venture-funded firms burn gigawatts running redundant homogeneous swarms across regional grids, passing substation infrastructure costs onto residential ratepayers while delivering marginal software gains.",
+     "example": "An enterprise software vendor runs a 20,000-agent swarm for six months trying to automate operating system kernel rewrites, accomplishing only superficial refactoring while regional residential electricity rates spike 18% in the surrounding valley.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Open cooperatives adopt bounded heterogeneous agent rings",
+     "description": "Decentralized teams deploy small, specialized ensembles of diverse personal agents running on local hardware with deterministic verification gates, achieving breakthrough results without brute-force cloud clusters.",
+     "example": "A cooperative of eighty bio-engineers coordinates their on-device assistants through a shared mathematical verification protocol, solving an enzyme folding pathway in three weeks using under five hundred watts of aggregate power.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Proprietary frontier models monopolize remaining breakthrough niches",
+     "description": "Because raw swarm parallelization fails, frontier labs centralize massive proprietary pre-training runs, locking advanced conceptual capabilities behind closed cloud APIs.",
+     "example": "A single multinational tech conglomerate holds the only three models capable of formal theorem discovery, charging prohibitive subscription rates while open researchers remain capped by compute constraints.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2606.00655",
+     "title": "Scaling Behavior of Single LLM-Driven Multi-Agent Systems",
+     "kind": "preprint",
+     "published": "2026-05-30"
+    },
+    {
+     "url": "https://www.noahpinion.blog/p/can-a-million-ai-agents-create-superintelligence",
+     "title": "Can a million AI agents create superintelligence?",
+     "kind": "newsletter",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261021-0165",
    "added_at": "2026-10-21T10:20:31+00:00",
    "title": "Public AI test scores become a way to sneak hidden backdoors into models",
@@ -292,68 +354,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261020-0160",
-   "added_at": "2026-10-20T20:22:39+00:00",
-   "title": "Personal On-Device AI Assistants Face Silent Failure From Environmental Rule Drift",
-   "horizon_years": 3,
-   "world": "It is 2029. High-performance personal computers with over 100 gigabytes of unified memory sit in millions of homes and small offices, running private multi-modal models locally without sending personal keystrokes or files to remote cloud providers. People rely on their local agents to manage medical appointments, verify billing statements, monitor employment rights, and filter inbound communications. However, commercial web services and public sector gateways frequently update authentication flows, rate ceilings, and procedural rules without announcement. Because private agents operate disconnected from central monitoring telemetry, millions of personal assistants silently hallucinate obsolete answers or execute broken workflows, unaware that the underlying rules of the digital environment have changed around them.",
-   "premise": "Affordable unified memory hardware allows people to run private personal agents locally on their own machines, but without continuous active probing, local agents quietly fail as external APIs, platform terms, and institutional rules shift unexpectedly.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective intelligence network provides decentralized test harnesses, synthetic probe generators, and cryptographically verified environmental drift alerts. Local personal agents periodically run isolated sandbox probes against external endpoints, mathematically invalidating stale assumptions without leaking private user session data. By decoupling rule discovery from centralized telemetry, individuals maintain accurate local assistants while preserving total privacy.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Silent compliance failure in isolated personal assistants",
-     "description": "Unmonitored local agents rely on stale operational assumptions, causing people to miss critical regulatory deadlines, pay incorrect invoices, or violate unannounced municipal criteria.",
-     "example": "A local tenant assistant repeatedly submits housing subsidy claims using last year's qualification formula, causing an elderly resident to lose eligibility after three uncorrected submissions.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Decentralized rule verification swarms maintain live proofs",
-     "description": "Personal assistants collaboratively verify external interface specifications through anonymous, zero-knowledge probe logs, alerting local agents to rule drifts without sharing private user tasks.",
-     "example": "When a national revenue agency updates its tax deduction schema, local agents detect verification mismatches, run synthetic test probes, and publish a signed cryptographic schema update that updates 100,000 personal models within hours.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Users abandon local models in favor of proprietary cloud agents",
-     "description": "Frustrated by silent drift failures in local agents, non-technical users migrate back to centralized cloud providers that constantly monitor and patch their models remotely, sacrificing personal privacy.",
-     "example": "A freelance cooperative abandons self-hosted 120GB workstation assistants after two billing errors, paying monthly subscriptions to a centralized corporate platform that indexes all member messages.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "hardware",
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://raw.githubusercontent.com/gufo-org/gufo/main/README.md",
-     "title": "Gufo: The Open Source Strix Halo AI engine",
-     "kind": "code",
-     "published": "2026-10-20"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.25950",
-     "title": "AdaExploreBench: Benchmarking LLM Agents for Proactive Exploration and Test-time Adaptation in Evolving Environments",
-     "kind": "preprint",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 1
+   "work": 3
   }
  ]
 }
