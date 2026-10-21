@@ -1063,7 +1063,7 @@ function renderAuthorityEnvelopeInspector() {
     const p = el('p');
     if (summary.success) {
       p.className = 'status-ok';
-      const badge = el('strong', 'status-pass', 'Permitted by envelope. ');
+      const badge = el('strong', 'status-pass', 'Permitted. ');
       p.appendChild(badge);
       p.appendChild(document.createTextNode(summary.summary_text));
       resultBox.appendChild(p);
