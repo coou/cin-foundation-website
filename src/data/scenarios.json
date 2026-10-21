@@ -1,6 +1,177 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261021-0180",
+   "added_at": "2026-10-21T22:34:15+00:00",
+   "title": "Personal assistants with long-term memory accidentally reveal private secrets across conversations",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people use persistent AI assistants to draft emails, organize medical appointments, and track household expenses. Because assistants remember past conversations to provide helpful context, users assume the system keeps secrets safely. In practice, when an assistant coordinates a routine calendar invite with an employer or vendor agent, it routinely connects harmless past fragments—such as a pharmacy receipt from Tuesday and a schedule gap on Friday—and discloses confidential medical or personal details that were never explicitly marked secret.",
+   "premise": "Personal AI assistants that remember conversations across weeks can accidentally piece together private facts and reveal them during harmless tasks. Research shows that checking individual memories for sensitive words fails because models combine innocent clues from multiple sessions into confidential conclusions.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective network builds and tests open-source, client-side personal twins that inspect memory joins locally. By applying deterministic disclosure filters and linkability checks before any assistant statement is dispatched, users retain true ownership of their history without having their private lives reconstructed by automated inference.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Assistants leak private facts by joining separate innocent clues",
+     "description": "Commercial assistants combine benign fragments across months of chats, disclosing private health, financial, or relationship facts during routine external interactions.",
+     "example": "An assistant scheduling a work meeting mentions that a user will be recovering from surgery next week because it connected an innocent specialist booking from last month with a quiet Friday block.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Local verifiable memory gates prevent multi-session inference leaks",
+     "description": "On-device personal assistants use client-side boundary gates that evaluate retrieved context across sessions and redact linkable clues before any external message leaves the device.",
+     "example": "A person asks their local assistant to book flights; the assistant retrieves travel preferences but its client-side guard automatically strips hospital location clues before sending requests to airline booking agents.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Centralized platforms restrict user access to raw memory logs",
+     "description": "Major cloud AI vendors respond to memory inference concerns by locking down raw memory inspection, forcing users into proprietary black-box assistants.",
+     "example": "A commercial platform deprecates raw memory export APIs, arguing that unmanaged memory exports create regulatory liability for the service provider.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.24359",
+     "title": "Can Agents Keep Secrets They Were Never Told? Benchmarking Latent Privacy Risks Across Sessions with MemJoin",
+     "kind": "preprint",
+     "published": "2026-10-17"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261021-0179",
+   "added_at": "2026-10-21T21:58:05+00:00",
+   "title": "Corporate AI safety trusts face growing public distrust over insider control",
+   "horizon_years": 3,
+   "world": "It is 2029. Leading artificial intelligence labs have expanded their independent benefit trusts, appointing prominent academics, former government advisers, and civic leaders to oversee safety pledges and allocate public benefit dividends. Despite these high-profile appointments, town halls, consumer protection groups, and labour unions increasingly view corporate trusts as self-protective buffers designed to avoid genuine public regulation. When automated systems disrupt local service sectors or make questionable deployment choices, affected communities find they have no standing to audit the internal deliberations of appointed trustees. In response, municipal councils and worker collectives begin demanding open verification protocols, where cryptographic proofs of model boundaries and independent user-owned twins replace opaque board-level assurances.",
+   "premise": "Major artificial intelligence developers rely on self-appointed trustee bodies to oversee board elections and public benefit commitments. However, as public anxiety surges over corporate AI dominance, critics warn that closed fiduciary trusts lack democratic accountability and cannot substitute for independent, user-held oversight.",
+   "goals": [
+    1,
+    2
+   ],
+   "how": "The network replaces elite trustee delegation with verifiable collective intelligence. Instead of asking citizens to trust appointed guardians, the network provides personal open twins that execute in local sandboxes, enforce deterministic boundary contracts, and contribute to shared verification registries. Transparent accounting and sortition-based governance councils allow ordinary people to audit automated systems directly rather than relying on closed boardroom disclosures.",
+   "shift": 0.72,
+   "outcomes": [
+    {
+     "name": "Corporate trusts consolidate into self-regulatory shields",
+     "description": "Frontier technology companies use appointed trustee boards to satisfy regulatory mandates while keeping proprietary deployment decisions shielded from outside scrutiny.",
+     "example": "A major enterprise provider uses its trustee safety seal to bypass municipal utility audits, leaving local regulators unable to verify the water and energy consumption of its automated cluster.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "User collectives demand verifiable runtime proofs over appointed boards",
+     "description": "Civic organisations and worker unions reject closed trustee oversight, establishing independent testing networks that verify agent boundary contracts through open cryptographic logs.",
+     "example": "A coalition of healthcare workers requires hospital administrators to deploy local verification gates that block undocumented agent actions, regardless of vendor trustee certifications.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Trustee resignations trigger public confidence crises",
+     "description": "Disagreements between corporate executives and independent trustees lead to abrupt resignations, exposing the toothless nature of advisory bodies during commercial scaling wars.",
+     "example": "Two university trustees resign from a national laboratory after commercial sponsors override their warnings on agentic financial automation, prompting emergency legislative hearings.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Enterprise buyers prioritize raw model speed over governance models",
+     "description": "Large commercial enterprises continue purchasing agent licenses based strictly on frontier benchmark performance, ignoring both trustee seals and collective verification models.",
+     "example": "A multinational logistics firm renews an enterprise fleet contract based entirely on inference latency, indifferent to whether the vendor uses an independent trust or an open verification protocol.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "community",
+    "policy",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/christopher-stubbs-joins-long-term-benefit-trust",
+     "title": "Physicist Christopher Stubbs joins Anthropic's Long-Term Benefit Trust",
+     "kind": "news",
+     "published": "2026-10-21"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261021-0178",
+   "added_at": "2026-10-21T21:27:29+00:00",
+   "title": "AI coding tools change programs without updating manuals, leaving teams with code nobody understands",
+   "horizon_years": 3,
+   "world": "It is 2029. In many technology departments and community software projects, automated programming assistants author the vast majority of code commits. Because development pipelines evaluate pull requests primarily on passing automated test suites, modifications merge within minutes without updated user manuals, interface guides, or architectural explanations. Senior developers manage systems where every routine technically runs, but nobody understands why specific constraints were introduced or what will break if a component is changed. Small organizations that built their core products with automated tools discover that onboarding a new contributor or auditing a security vulnerability requires weeks of reverse-engineering synthetic code.",
+   "premise": "An empirical analysis of nearly 30,000 automated pull requests reveals that almost two-thirds of AI-generated code changes never update documentation or architectural guides. Because automated contributions merge in seconds, software repositories rapidly accumulate undocumented logic, causing later defects to multiply and making maintenance significantly harder for human engineers.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Personal agent gatekeepers and verifiable execution contracts require automated code generators to prove that every logic alteration is accompanied by matching documentation and plain-language intent declarations before any pull request is submitted. While commercial enterprise velocity pressures remain largely unaddressed, open-source and worker-owned cooperatives adopt these verifiable gates to preserve long-term software legibility.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Unmaintainable synthetic codebases force expensive rewrites",
+     "description": "Organizations rely on autonomous agents that rapidly generate and merge code without updating documentation, until the software becomes completely incomprehensible and fails under unexpected real-world conditions.",
+     "example": "A community healthcare clinic uses an automated assistant to maintain its scheduling portal; eighteen months later, a minor database upgrade causes patient records to misroute because none of the twenty-two automated schema adjustments were documented.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Co-change enforcement requires documentation proofs before code merges",
+     "description": "Development environments and personal assistant runtimes adopt strict gatekeepers that reject any automated pull request changing code logic without accompanying documentation updates and plain-language summaries.",
+     "example": "An independent developer's personal coding assistant refuses to submit a refactoring pull request until it generates corresponding API documentation and an updated interface contract verified against user-facing specifications.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Corporate developers face systemic deadline pressure to rubber-stamp automated pull requests",
+     "description": "Commercial engineering managers continue to reward rapid feature deployment velocity above architectural hygiene, pressuring human staff to approve automated commits regardless of documentation tooling availability.",
+     "example": "A software contractor at an enterprise vendor is assigned ninety automated pull requests per week and routinely approves them after automated test passes, despite knowing the changes lack interface explanations.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.62
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.27381",
+     "title": "Documentation Drift in AI-Generated Pull Requests",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261021-0177",
    "added_at": "2026-10-21T20:37:11+00:00",
    "title": "Autonomous AI assistants bypass security guards by breaking actions into small permitted steps",
@@ -52,7 +223,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261021-0176",
@@ -168,178 +339,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261021-0174",
-   "added_at": "2026-10-21T18:23:15+00:00",
-   "title": "Flawed benchmark tests give companies false confidence that automated coding agents write safe software",
-   "horizon_years": 3,
-   "world": "It is 2029. Engineering organizations have widely adopted autonomous coding agents to refactor legacy codebases and patch reported security flaws overnight. Development teams rely on standardized benchmark scores to select model providers and automate code merges. However, subtle state initialization bugs, reset race conditions, and unvalidated edge cases slip through automated test suites into production banking, infrastructure, and avionics firmware. Because the agents synthetic repair benchmarks only tested whether generated code matched a partial specification under idealized conditions, production outages occur when systems face messy real-world faults that models never genuinely diagnosed.",
-   "premise": "Recent audits of automated program repair benchmarks reveal severe evaluation confounds, where simulation tests and formal verification produce opposite results on identical repair tasks due to subtle initialization semantics. Furthermore, popular repair benchmarks measure general code generation rather than whether an AI agent actually diagnosed and fixed the underlying vulnerability. This creates a dangerous illusion of software reliability across enterprise engineering pipelines.",
-   "goals": [
-    1,
-    4
-   ],
-   "how": "The network advances formal simulation environments, bounded evaluation testbeds, and falsifiable baseline protocols that expose measurement confounds. By promoting open verification tools and transparent evaluation benchmarks, development teams can inspect patch provenance and test state-space boundaries independently rather than trusting centralized provider scores.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Production outages multiply as unverified automated patches fail under live edge cases",
-     "description": "Enterprises deploy autonomous code-repair agents based on high benchmark pass rates, but subtle initialization defects trigger catastrophic failures during operational faults.",
-     "example": "A regional rail dispatch system crashes when an automated repair agent patch mishandles a power-reset cycle that standard unit tests never triggered.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Formal reset-aware verification gates block ungrounded automated patches",
-     "description": "Open-source verification protocols enforce dual simulation and formal equivalence checks alongside specification-only baseline tests before patches merge.",
-     "example": "An open hardware consortium deploys automated reset-aware proof harnesses that intercept and reject 40% of syntactically passing automated patches.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Developers abandon automated repair in critical infrastructure due to liability risks",
-     "description": "High-profile failures lead regulatory bodies and risk underwriters to strictly prohibit autonomous code repair on safety-critical systems, freezing innovation.",
-     "example": "A major financial regulator mandates that all production code modifications require line-by-line human author sign-off, penalizing automated agent tooling.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.28595",
-     "title": "What Do RTL Repair Benchmarks Actually Measure?",
-     "kind": "preprint",
-     "published": "2026-10-20"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261021-0173",
-   "added_at": "2026-10-21T17:57:07+00:00",
-   "title": "Rising fear of automated political distortion drives local councils toward citizen juries",
-   "horizon_years": 3,
-   "world": "It is 2029. Automated conversational callers, synthetic video endorsements, and algorithmic micro-targeting flood civic races down to school board and municipal utility elections. Voters, overwhelmed by personalized synthetic messages and unable to verify audio or video claims, increasingly distrust broadcast media and automated civic summaries. In response, municipal councils and civic associations in several dozen counties abandon automated digital polling and online consultation portals in favor of sortition-based citizen assemblies. Registered voters are selected by lottery to meet in community halls, reviewing policy proposals using signed, offline documentation and deliberation protocols that bar automated agents from taking the floor.",
-   "premise": "The 12th Annual Chapman Survey of American Fears found that artificial intelligence entered the top ten national fears for the first time, with 51.9% of adults fearing harm to the political process and 49.7% fearing economic disruption. The public increasingly views automated persuasion and unaccountable algorithmic optimization as direct threats to democratic legitimacy.",
-   "goals": [
-    2,
-    5,
-    6
-   ],
-   "how": "The network designs decentralized, non-custodial collective intelligence tools that replace top-down digital consultations with verifiable citizen assemblies. Personal sovereign agents running locally help participants analyze complex municipal filings without surrendering private opinions, while cryptographic attestation is intended to help verify that community deliberations reflect real human voices rather than synthetic bot swarms.",
-   "shift": 0.57,
-   "outcomes": [
-    {
-     "name": "Algorithmic political cynicism hollows out civic participation",
-     "description": "Pervasive synthetic political content causes voters to disengage entirely from local governance, leaving municipal decisions to specialized automated lobbying swarms.",
-     "example": "Turnout in a regional council bond vote collapses to 11% after competing automated PAC agents flood neighborhood groups with contradictory synthetic audio clips.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Citizen assemblies adopt verified local deliberation tools",
-     "description": "Towns pair sortition assemblies with verifiable local twin agents that summarize complex fiscal reports without sending community deliberations to cloud vendors.",
-     "example": "A municipal planning board in Vermont uses an offline citizen jury where members' personal devices check budget projections against verifiable data stores, passing a climate resiliency bond with 78% local consensus.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "National broadcast polarization continues largely unchanged",
-     "description": "While municipal councils adopt local assemblies, national federal elections remain dominated by high-budget broadcast networks and algorithmic outrage cycles that local deliberation barely affects.",
-     "example": "Congressional campaigns in 2030 break spending records on mass media polarization despite dozens of municipal councils establishing citizen juries.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    },
-    {
-     "name": "Centralized state authentication boards monopolize civic speech",
-     "description": "Governments react to synthetic election interference by requiring state-approved digital ID gates for all public political discussion, marginalizing anonymous and grassroots dissent.",
-     "example": "A national media regulator bans unverified social commentary, blocking independent investigative journalists from publishing leaked zoning documents.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "community",
-    "policy",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://news.chapman.edu/2026/10/20/2026-american-fears-survey-ai/",
-     "title": "AI Enters Americans' Top 10 Fears in Chapman's 2026 Survey",
-     "kind": "report",
-     "published": "2026-10-20"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261021-0172",
-   "added_at": "2026-10-21T17:21:32+00:00",
-   "title": "Senior engineers spend their days reviewing AI agents while entry-level jobs disappear",
-   "horizon_years": 3,
-   "world": "It is 2029. In technology workplaces, the daily job of software engineers has fundamentally inverted. Instead of writing code, experienced engineers spend their working hours overseeing fleets of semi-autonomous agents that produce pull requests, test suites, and documentation around the clock. The average senior developer spends four to six hours every day evaluating machine-generated proposals, constantly balancing thorough verification against the pressure to ship quickly. Entry-level engineering positions have largely disappeared from major firms, because routine coding tasks that previously trained apprentices are now handled by automated pipelines. New graduates struggle to find roles where they can develop practical judgment, creating a growing generational skills gap.",
-   "premise": "Workplace telemetry from leading AI organizations shows that agent runtime hours now outnumber human hours six to one, turning human review attention into the primary operational bottleneck. At the same time, companies have sharply reduced entry-level hiring, leaving new entrants without traditional training pathways.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "An open network of personal agent twins that work strictly for their individual users helps balance the load. Rather than corporate agent swarms dumping unvetted code on tired employees, personal twins filter and rank incoming work according to verifiable test evidence and anytime-valid quality contracts. Worker-owned co-operatives provide apprenticeship commons where junior practitioners learn system architecture by directing bounded agents on shared community infrastructure.",
-   "shift": 0.52,
-   "outcomes": [
-    {
-     "name": "Supervisory burnout and rubber-stamping",
-     "description": "Overwhelmed human reviewers suffer attention exhaustion and rubber-stamp agent-generated code, allowing subtle logical flaws and hidden vulnerabilities to enter critical software systems.",
-     "example": "A municipal utility engineer facing hundreds of automated pull requests per week approves a patch that miscalculates flood control thresholds during a major storm.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Apprenticeship commons and open peer verification",
-     "description": "Independent worker co-operatives pair junior engineers with personal agent twins in supervised apprenticeship environments, restoring career pathways through peer-reviewed public projects.",
-     "example": "A software guild trains junior developers by having their personal agent twins inspect real-world open source code alongside experienced mentors, credentialing their judgment through deterministic verification.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Corporate concentration in proprietary verification suites",
-     "description": "Proprietary enterprise platforms dominate code verification, requiring independent developers to purchase expensive per-seat review licenses while keeping evaluation benchmarks opaque.",
-     "example": "An independent freelance developer must pay four hundred dollars a month for a proprietary verification subscription required by corporate clients, regardless of code quality.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.anthropic.com/research/employment-at-anthropic",
-     "title": "How employment is changing at Anthropic",
-     "kind": "report",
-     "published": "2026-10-16"
-    }
-   ],
-   "work": 1
   }
  ]
 }
