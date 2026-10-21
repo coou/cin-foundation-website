@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=24">
+  <link rel="stylesheet" href="/styles/site.css?v=23">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -96,8 +96,8 @@
     </figure>
 
     <figure class="envelope-demo" id="envelope-demo">
-      <h3>Interactive test: what gets through the boundary?</h3>
-      <p class="envelope-desc">A personal agent runs inside a strict client-side authority envelope. Outside requests are checked against your disclosure budget and policy contracts before anything runs. Try each scenario to compare a personal agent against an unprotected assistant.</p>
+      <h3>How it is meant to work: what gets through?</h3>
+      <p class="envelope-desc">This is an illustration of the design. No personal agent like this is running yet. Outside requests are checked against the limits you set before anything runs. Try each scenario to compare a personal agent in protected mode against an unprotected assistant.</p>
 
       <div class="envelope-scenarios" id="env-scenarios">
         <button type="button" class="env-btn" aria-pressed="true">Affordability check</button>
@@ -107,8 +107,8 @@
       </div>
 
       <div class="env-toggle-wrap">
-        <span id="env-mode-label">Client-side envelope active (isolated execution boundary)</span>
-        <button type="button" class="env-toggle-btn" id="env-toggle-btn">Switch to unprotected agent</button>
+        <span id="env-mode-label">Protected mode active (the limits you set)</span>
+        <button type="button" class="env-toggle-btn" id="env-toggle-btn">Switch to unprotected mode</button>
       </div>
 
       <div class="env-panel">
@@ -121,7 +121,7 @@
           <span class="env-val" id="env-action">Evaluates transaction ledger on-device and signs a cryptographic proof: &ldquo;Monthly income exceeds $4,500: true&rdquo;.</span>
         </div>
         <div class="env-row">
-          <span class="env-label">Boundary check</span>
+          <span class="env-label">Protected check</span>
           <span class="env-val"><span class="env-badge ok" id="env-badge">Answers, not data</span></span>
         </div>
         <div class="env-row">
@@ -130,18 +130,18 @@
         </div>
         <div class="env-row">
           <span class="env-label">Why it matters</span>
-          <span class="env-val" id="env-detail">The authority boundary limits outbound disclosure to the exact question asked. No banking details leave the device.</span>
+          <span class="env-val" id="env-detail">Your rules limit outbound disclosure to the exact question asked. No banking details leave the device.</span>
         </div>
       </div>
 
       <div class="env-table-wrap env-fallback-table">
       <table class="env-table">
-        <caption>Summary comparison: unprotected assistant vs. personal agent with boundary envelope</caption>
+        <caption>Summary comparison: unprotected assistant vs. personal agent in protected mode</caption>
         <thead>
           <tr>
             <th scope="col">Incoming request</th>
             <th scope="col">Unprotected agent</th>
-            <th scope="col">With boundary envelope</th>
+            <th scope="col">In protected mode</th>
             <th scope="col">Data transmitted</th>
           </tr>
         </thead>
@@ -161,7 +161,7 @@
           <tr>
             <td>Hidden prompt injection</td>
             <td>Executes hijacked network export</td>
-            <td>Halts execution at policy boundary</td>
+            <td>Stops action at your rules</td>
             <td>0 bytes (export refused)</td>
           </tr>
           <tr>
@@ -174,7 +174,7 @@
       </table>
       </div>
 
-      <figcaption>Try different requests to see how on-device policy gates stop data leaks and unauthorized actions before execution.</figcaption>
+      <figcaption>Try different requests to see how on-device rules stop data leaks and unauthorized actions before anything runs.</figcaption>
     </figure>
 
 

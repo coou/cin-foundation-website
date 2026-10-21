@@ -1534,12 +1534,15 @@ html:not(.no-js) .tc-table { display: none; }
   color: var(--ink-2);
   font-weight: 600;
 }
-html:not(.no-js) .env-fallback-table {
-  display: none;
-}
 html.no-js .envelope-scenarios,
 html.no-js .env-toggle-wrap,
 html.no-js .env-panel {
+  display: none !important;
+}
+html.no-js .env-fallback-table {
+  display: block !important;
+}
+html:not(.no-js) .env-fallback-table {
   display: none;
 }
 .envelope-demo figcaption {
