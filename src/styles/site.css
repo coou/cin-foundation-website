@@ -933,15 +933,16 @@ html:not(.no-js) .tc-table { display: none; }
 @media (max-width: 860px) { .ls-grid { grid-template-columns: 1fr; } }
 .ls-h { font: 700 .72rem/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 .5rem; }
 .ls-all { display: inline-block; margin-top: .5rem; font-weight: 600; font-size: .9rem; }
-.upd-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; }
-.upd-list li { display: grid; gap: .2rem; border-top: 1px solid var(--rule); padding-top: .7rem; min-width: 0; }
+.upd-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; width: 100%; min-width: 0; }
+.upd-list li { display: grid; gap: .2rem; border-top: 1px solid var(--rule); padding-top: .7rem; min-width: 0; width: 100%; }
 .upd-list li:first-child { border-top: 0; padding-top: 0; }
-.upd-list a, .upd-list b { font-weight: 600; overflow-wrap: anywhere; }
+.upd-list a, .upd-list b { font-weight: 600; }
+.upd-list a, .upd-list b, .upd-list p, .upd-meta { overflow-wrap: anywhere; word-break: break-word; }
 .upd-list p { margin: .2rem 0 0; color: var(--ink-2); }
 .upd-meta { font: 600 .68rem/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
 .upd-list.compact { gap: .55rem; }
 .upd-list.compact li { padding-top: .5rem; font-size: .92rem; }
-#upd-list { max-width: 46rem; margin-top: 1.5rem; }
+#upd-list { max-width: 46rem; margin-top: 1.5rem; width: 100%; min-width: 0; }
 
 /* ---------- update 2026-10-19: expanded principle cards, everyday life tabs & swarm lock ---------- */
 .pr-card-deep { margin: 0 0 1.2rem; padding: 1rem 1.1rem; border-radius: 14px; background: var(--paper); border: 1px solid var(--rule); }
