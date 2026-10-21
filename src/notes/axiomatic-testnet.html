@@ -143,6 +143,100 @@
         <p style="margin-top:.3rem">A principle chain is only as wise as the breadth of real human lives represented in its shards. Right now our test-net simulation models 30 personas and 6 community shards—we need <strong>real nurses, farmers, teachers, open-source maintainers, mechanics, caregivers, and independent researchers</strong> to test local agent nodes, propose new principle branches, and challenge existing weights. Try the <a href="https://cintnet.org/twin">browser memory prototype</a>, propose a principle diff on <a href="https://cintnet.org/ideas">cintnet.org/ideas</a>, or write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a> to register a community test shard.</p>
       </aside>
     </div>
+
+    <!-- ================================================================
+         4. LOCAL SYMBOLIC CYBER-SPACE COLLECTOR & DYNAMIC COMMUNITY SEARCH
+         ================================================================ -->
+    <div class="gm-sim" id="sym-search-sim" style="margin-top:2rem">
+      <span class="label">On-device symbolic cyber-space substrate &middot; Dynamic vs. static recognition</span>
+      <h2 style="margin:.35rem 0 .6rem">Community Search through Dynamic Algorithmic Recognition vs. Static Community Detection</h2>
+      <p>How does your personal agent learn which communities and problem-solving quests fit you&mdash;without forcing you to fill out hundreds of manual sliders, and without uploading your browsing history to a corporate surveillance cloud? Every day, your lived curiosity and craft leave <strong>symbolic cyber-space traces</strong> on your own device: the code commits and repositories you author, the preprints and essays you dwell on, the search queries you investigate, and the local co-op or civic threads you audit.</p>
+      <p>Large commercial platforms and centralized AI labs harvest those traces using <strong>Community Detection through Static Algorithmic Recognition</strong>: they ingest raw behavioral logs into a single global graph and run deterministic partitioning functions (such as static Louvain modularity or fixed <i>k</i>-means clustering) over your 90-day historical average. That static approach freezes you into past behavioral filter bubbles, collapses cross-disciplinary polymaths into homogeneous echo chambers, and leaks <span class="math-chip">~147 KB</span> of raw traces per batch.</p>
+      <p>Our test-net replaces static partitioning with <strong>Community Search through Dynamic Algorithmic Recognition</strong>:</p>
+
+      <div class="gm-formula-box">
+        <div><strong>1. Dual-Horizon On-Device Symbolic Distillation (<span class="math-chip">0 bytes</span> raw trace leakage):</strong> Your local agent parses browser, git, query, and feed motifs into a <strong>Temporal Symbolic Motif Graph</strong> <span class="math-chip">M<sub>u</sub>(t)</span>, separating your <strong>7-day fast attentional trajectory</strong> <span class="math-chip"><b>v</b><sub>u</sub><sup>(fast)</sup>(t)</span> (with a <span class="math-chip">1.65&times;</span> active-creation boost for code commits and authored notes) from your <strong>90-day slow structural anchor</strong> <span class="math-chip"><b>v</b><sub>u</sub><sup>(slow)</sup>(t)</span>:
+        <br><span class="math-chip">w<sub>fast</sub>(e<sub>m</sub>) = w<sub>dwell</sub> &middot; (1 + 0.65 &middot; I<sub>create</sub>) &middot; exp(&minus;&Delta;t<sub>m</sub> / 7d), &nbsp; w<sub>slow</sub>(e<sub>m</sub>) = w<sub>dwell</sub> &middot; (1 + 0.65 &middot; I<sub>create</sub>) &middot; exp(&minus;&Delta;t<sub>m</sub> / 90d)</span></div>
+        <div style="margin-top:.45rem"><strong>2. Zero-Knowledge LSH Rendezvous &amp; Query-Conditioned Subspace Search:</strong> Only salted 4-band Locality-Sensitive Hashing tokens (<span class="math-chip">B0:a9f2 &hellip; B3:7c31</span>) leave your device. When a live quest <span class="math-chip">q(t)</span> is broadcast with dimensional mask <span class="math-chip"><b>W</b><sub>q</sub></span>, the protocol searches for a <span class="math-chip">k</span>-member micro-community maximizing <strong>Subspace Resonance</strong> plus <strong>Complementary Skill Entropy</strong> <span class="math-chip">H<sub>skill</sub>(C)</span>:
+        <br><span class="math-chip">C*(u<sub>0</sub>, q, t) = argmax<sub>|C|=k</sub> [ &alpha; &sum;<sub>v &isin; C</sub> Resonance(<b>v</b><sup>(fast)</sup>, <b>q</b>; <b>W</b><sub>q</sub>) + &beta; H<sub>skill</sub>(C) + &gamma; Cohesion(C; <b>W</b><sub>q</sub>) ]</span></div>
+      </div>
+
+      <div class="gm-grid">
+        <div class="gm-box">
+          <h4>1. On-Device Symbolic Cyber-Space Trace Extractor (Toggle or Add Local Motifs)</h4>
+          <p style="font-size:.81rem;color:var(--ink-2);margin:0 0 .5rem">Select which local cyber-space activities your personal agent observed on your device this week (fast 7-day horizon) vs. two months ago (slow 90-day anchor):</p>
+          <div class="gm-shard-list" id="sym-trace-list">
+            <label class="gm-shard-item"><span><input type="checkbox" data-sym-motif="git_sqlite" checked> <b>git commit (0.4d ago &middot; create):</b> <code>sqlite-wal-local-encryption</code></span><span class="math-chip">Systems +1.65&times;</span></label>
+            <label class="gm-shard-item"><span><input type="checkbox" data-sym-motif="arxiv_zklsh" checked> <b>arXiv read (1.2d ago &middot; dwell 18m):</b> <code>zk-lsh-private-rendezvous</code></span><span class="math-chip">Crypto/ZK</span></label>
+            <label class="gm-shard-item"><span><input type="checkbox" data-sym-motif="rss_hrv" checked> <b>sensor log (1.8d ago &middot; local ring):</b> <code>hrv-vagal-autonomic-guard</code></span><span class="math-chip">Biometrics</span></label>
+            <label class="gm-shard-item"><span><input type="checkbox" data-sym-motif="git_riscv"> <b>git commit (2.1d ago &middot; create):</b> <code>riscv-npu-open-firmware</code></span><span class="math-chip">Hardware +1.65&times;</span></label>
+            <label class="gm-shard-item"><span><input type="checkbox" data-sym-motif="query_brier"> <b>search query (3.0d ago &middot; local):</b> <code>brier-proper-scoring-calibration</code></span><span class="math-chip">Forecasting</span></label>
+            <label class="gm-shard-item"><span><input type="checkbox" data-sym-motif="query_worgl" checked> <b>archive read (68d ago &middot; slow anchor):</b> <code>worgl-stamp-scrip-demurrage</code></span><span class="math-chip">Co-op Econ (90d)</span></label>
+            <label class="gm-shard-item"><span><input type="checkbox" data-sym-motif="forum_solar" checked> <b>forum thread (74d ago &middot; slow anchor):</b> <code>microgrid-solar-tariff-coop</code></span><span class="math-chip">Ecology (90d)</span></label>
+            <label class="gm-shard-item"><span><input type="checkbox" data-sym-motif="url_polis"> <b>civic deliberation (81d ago &middot; slow):</b> <code>pol.is/municipal-budgeting</code></span><span class="math-chip">Civic Gov (90d)</span></label>
+          </div>
+
+          <div style="margin-top:.65rem">
+            <label for="sym-custom-input" style="display:block;font-size:.8rem;font-weight:600;margin-bottom:.25rem">Or paste a sample URL, git commit message, or search query to classify locally in your browser:</label>
+            <div style="display:flex;gap:.4rem">
+              <input id="sym-custom-input" type="text" placeholder="e.g. git commit: zero-knowledge sqlite local ring signature" style="flex:1;padding:.4rem .55rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.82rem">
+              <button id="sym-custom-btn" type="button" style="padding:.4rem .75rem;border-radius:6px;border:1px solid var(--rule);background:var(--ink);color:var(--bg);font:inherit;font-size:.8rem;font-weight:600;cursor:pointer">Extract Motif</button>
+            </div>
+          </div>
+
+          <div style="margin-top:.7rem;padding:.55rem .7rem;border-radius:8px;background:var(--bg-2);border:1px solid var(--rule);font-size:.8rem">
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem">
+              <span><b>Salted ZK-LSH Rendezvous Tokens:</b> <code id="sym-lsh-tokens">B0:9a4c &middot; B1:3f18 &middot; B2:e20d &middot; B3:7b51</code></span>
+              <span class="math-chip" style="color:var(--ok,#1d5c42)">Raw URLs transmitted: 0 bytes</span>
+            </div>
+            <div id="sym-vector-summary" style="margin-top:.35rem;color:var(--ink-2)"></div>
+          </div>
+        </div>
+
+        <div class="gm-box">
+          <h4>2. Dynamic Community Search vs. Static Community Detection (36-Node Benchmark)</h4>
+          <label for="sym-quest-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Active Test-Net Problem / Quest Query <span class="math-chip">q(t)</span>:</label>
+          <select id="sym-quest-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.6rem">
+            <option value="Q-01">Q-01: Zero-Knowledge Biometric Hardware Ring &amp; Local Ledger Attestation (Needs: Crypto, Biometrics, Hardware, Systems)</option>
+            <option value="Q-02">Q-02: Municipal Solar Microgrid Co-op with Demurrage Mutual-Credit Settlement (Needs: Co-op Econ, Ecology, Civic, Forecasting)</option>
+            <option value="Q-03">Q-03: Federated Epistemic Observatory &amp; Sybil-Resistant Principle Merge Protocol (Needs: Forecasting, Crypto, Civic, Systems)</option>
+          </select>
+
+          <div class="lib-scores-row" id="sym-metrics" style="margin-bottom:.55rem"></div>
+          <div class="gm-axes-bars" id="sym-bars"></div>
+          <div class="gm-diff" id="sym-diff" aria-live="polite" style="margin-top:.55rem"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         5. 105-PLATFORM FEDERATED SOCIAL ENGAGEMENT DIRECTORY (#social-100)
+         ================================================================ -->
+    <div class="gm-sim" id="social-100" style="margin-top:2rem">
+      <span class="label">Multi-platform outreach &amp; community onboarding &middot; 105 surfaces across 10 ecosystems</span>
+      <h2 style="margin:.35rem 0 .6rem">Where we engage: 105 Federated, Technical, Civic &amp; Regional Social Platforms</h2>
+      <p>A collective intelligence network cannot rely on a single corporate megaphone&mdash;and it must never spam identical broadcast copy across the internet. Instead, we map <strong>105 distinct social, technical, open-science, co-operative, and regional communities</strong> across 10 ecosystems, pairing each surface with the specific test-net quest and interactive sandbox that matches its craft.</p>
+
+      <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin:.85rem 0;align-items:center">
+        <select id="soc-eco-sel" aria-label="Filter by ecosystem" style="padding:.45rem .65rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem">
+          <option value="all">All 10 Ecosystems (105 Platforms)</option>
+          <option value="dev">1. Open-Source, Local-First &amp; Systems Engineering (12)</option>
+          <option value="safety">2. AI Safety, Interpretability &amp; Forecasting (10)</option>
+          <option value="fediverse">3. Decentralized Social &amp; Fediverse Protocols (12)</option>
+          <option value="reddit">4. Domain-Specific Reddit Communities (15)</option>
+          <option value="science">5. Academic, Preprint &amp; Open-Science Networks (10)</option>
+          <option value="coop">6. Civic Tech, Co-operatives, Commons &amp; Plurality (11)</option>
+          <option value="hardware">7. Hardware, Biometrics, Quantified Self &amp; Edge AI (10)</option>
+          <option value="creator">8. Long-Form Writing, Podcasts &amp; Video Commons (8)</option>
+          <option value="qa">9. Q&amp;A, Knowledge Graphs &amp; PKM Communities (8)</option>
+          <option value="regional">10. Regional, Multilingual &amp; Global Plurality Hubs (9)</option>
+        </select>
+        <input id="soc-q-input" type="search" placeholder="Search 105 platforms, protocols (ActivityPub, ATProto, Nostr, Git), or skills..." style="flex:1;min-width:220px;padding:.45rem .65rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem">
+        <span id="soc-count" class="math-chip">Showing 105 of 105 platforms</span>
+      </div>
+
+      <div id="soc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:.65rem;max-height:520px;overflow-y:auto;padding:.25rem"></div>
+    </div>
   </div>
 
   <footer class="note-foot wrap-narrow">
@@ -160,6 +254,6 @@
 
 <script src="/scripts/site.js?v=10" defer></script>
 <script src="/scripts/all-principles-data.js?v=2" defer></script>
-<script src="/scripts/everyday.js?v=4" defer></script>
+<script src="/scripts/everyday.js?v=5" defer></script>
 </body>
 </html>

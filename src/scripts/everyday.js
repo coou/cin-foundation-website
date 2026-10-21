@@ -1236,4 +1236,362 @@
     if (schType) schType.addEventListener('change', renderScholars);
     renderScholars();
   }
+
+  /* =========================================================================
+     9. SYMBOLIC CYBER-SPACE COLLECTOR & DYNAMIC COMMUNITY SEARCH (#sym-search-sim)
+     ========================================================================= */
+  var symSimEl = document.getElementById('sym-search-sim');
+  if (symSimEl) {
+    var SYM_MOTIFS = {
+      git_sqlite:  { age: 0.4, create: true,  skill: 'Systems Eng',    vec: [0.90, 0.95, 0.25, 0.70, 0.40, 0.15, 0.45, 0.80, 0.85, 0.88, 0.30, 0.65] },
+      arxiv_zklsh: { age: 1.2, create: false, skill: 'Cryptography',   vec: [0.98, 0.78, 0.35, 0.90, 0.65, 0.20, 0.40, 0.82, 0.94, 0.76, 0.28, 0.72] },
+      rss_hrv:     { age: 1.8, create: false, skill: 'Biometrics',     vec: [0.85, 0.80, 0.30, 0.75, 0.35, 0.20, 0.98, 0.92, 0.72, 0.70, 0.50, 0.78] },
+      git_riscv:   { age: 2.1, create: true,  skill: 'Open Hardware',  vec: [0.88, 0.98, 0.45, 0.72, 0.55, 0.22, 0.75, 0.86, 0.88, 0.92, 0.40, 0.82] },
+      query_brier: { age: 3.0, create: false, skill: 'Forecasting',    vec: [0.55, 0.45, 0.60, 0.98, 0.75, 0.40, 0.45, 0.82, 0.95, 0.70, 0.48, 0.85] },
+      query_worgl: { age: 68.0, create: false, skill: 'Co-op Econ',    vec: [0.30, 0.25, 0.95, 0.65, 0.80, 0.98, 0.45, 0.50, 0.68, 0.60, 0.92, 0.82] },
+      forum_solar: { age: 74.0, create: false, skill: 'Ecology/Grid',  vec: [0.40, 0.55, 0.96, 0.62, 0.86, 0.88, 0.55, 0.55, 0.74, 0.75, 0.90, 0.95] },
+      url_polis:   { age: 81.0, create: false, skill: 'Civic Gov',     vec: [0.50, 0.38, 0.92, 0.78, 0.96, 0.72, 0.58, 0.68, 0.86, 0.65, 0.90, 0.80] }
+    };
+
+    var SYM_QUESTS = {
+      'Q-01': {
+        title: 'Zero-Knowledge Biometric Hardware Ring & Local Ledger Attestation',
+        reqSkills: ['Cryptography', 'Biometrics', 'Open Hardware', 'Systems Eng'],
+        staticRes: 0.842, dynRes: 0.982,
+        staticCov: '25% (1/4 skills)', dynCov: '100% (4/4 skills)',
+        staticEnt: '0.65 bits (Echo Chamber)', dynEnt: '1.92 bits (Cross-Craft)',
+        staticUtil: 0.573, dynUtil: 0.940,
+        axes: [
+          { name: 'Data Sovereignty & ZK Privacy', s: 58, d: 97 },
+          { name: 'Local Silicon & Edge Execution', s: 52, d: 95 },
+          { name: 'Biological Autonomic Protection', s: 49, d: 96 },
+          { name: 'Complementary Craft Coverage', s: 25, d: 100 }
+        ],
+        staticMembers: ['P-03 (Co-op Econ — 90d lag)', 'P-11 (Co-op Econ — 90d lag)', 'P-19 (Co-op Econ)', 'P-27 (Ecology)', 'P-31 (Co-op Econ)', 'P-35 (Civic Gov)'],
+        dynMembers: ['P-01 (Systems Eng · SQLite WAL)', 'P-06 (Cryptography · ZK-LSH)', 'P-12 (Biometrics · HRV Ring)', 'P-17 (Open Hardware · RISC-V)', 'P-24 (Cryptography · Ring Sig)', 'P-30 (Systems Eng · Local Runtime)']
+      },
+      'Q-02': {
+        title: 'Municipal Solar Microgrid Co-op with Demurrage Mutual-Credit Settlement',
+        reqSkills: ['Co-op Econ', 'Ecology/Grid', 'Civic Gov', 'Forecasting'],
+        staticRes: 0.818, dynRes: 0.966,
+        staticCov: '25% (1/4 skills)', dynCov: '100% (4/4 skills)',
+        staticEnt: '0.65 bits (Echo Chamber)', dynEnt: '1.92 bits (Cross-Craft)',
+        staticUtil: 0.562, dynUtil: 0.933,
+        axes: [
+          { name: 'Demurrage & Mutual-Credit Flow', s: 54, d: 96 },
+          { name: 'Bioregional Commons Stewardship', s: 57, d: 95 },
+          { name: 'Federated Municipal Pluralism', s: 51, d: 94 },
+          { name: 'Complementary Craft Coverage', s: 25, d: 100 }
+        ],
+        staticMembers: ['P-02 (Systems Eng — 90d lag)', 'P-10 (Systems Eng)', 'P-18 (Cryptography)', 'P-26 (Systems Eng)', 'P-32 (Open Hardware)', 'P-34 (Systems Eng)'],
+        dynMembers: ['P-04 (Co-op Econ · Worgl Scrip)', 'P-09 (Ecology/Grid · Solar Tariff)', 'P-15 (Civic Gov · Pol.is Budget)', 'P-21 (Forecasting · Brier Load)', 'P-28 (Ecology/Grid · Battery Co-op)', 'P-33 (Co-op Econ · Clearinghouse)']
+      },
+      'Q-03': {
+        title: 'Federated Epistemic Observatory & Sybil-Resistant Principle Merge Protocol',
+        reqSkills: ['Forecasting', 'Cryptography', 'Civic Gov', 'Systems Eng'],
+        staticRes: 0.831, dynRes: 0.971,
+        staticCov: '25% (1/4 skills)', dynCov: '100% (4/4 skills)',
+        staticEnt: '0.92 bits (Low Diversity)', dynEnt: '2.25 bits (Max Diversity)',
+        staticUtil: 0.583, dynUtil: 0.961,
+        axes: [
+          { name: 'Epistemic Calibration (Brier)', s: 56, d: 98 },
+          { name: 'Sybil-Resistant Auditability', s: 53, d: 96 },
+          { name: 'Cross-Shard Bridging Consensus', s: 48, d: 95 },
+          { name: 'Complementary Craft Coverage', s: 25, d: 100 }
+        ],
+        staticMembers: ['P-05 (Biometrics — 90d lag)', 'P-13 (Biometrics)', 'P-20 (Open Hardware)', 'P-25 (Biometrics)', 'P-29 (Open Hardware)', 'P-36 (Biometrics)'],
+        dynMembers: ['P-07 (Forecasting · Proper Scoring)', 'P-14 (Cryptography · Weiszfeld ZK)', 'P-16 (Civic Gov · Bridging Shards)', 'P-22 (Systems Eng · Git Merge AST)', 'P-25 (Forecasting · Superforecaster)', 'P-31 (Cryptography · Sybil Bounds)']
+      }
+    };
+
+    var updateSymSim = function () {
+      var checks = symSimEl.querySelectorAll('input[data-sym-motif]');
+      var fastAcc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      var slowAcc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      var activeSkills = [];
+
+      for (var i = 0; i < checks.length; i++) {
+        if (!checks[i].checked) continue;
+        var key = checks[i].getAttribute('data-sym-motif');
+        var m = SYM_MOTIFS[key];
+        if (!m) continue;
+        var boost = m.create ? 1.65 : 1.0;
+        var wf = boost * Math.exp(-m.age / 7.0);
+        var ws = boost * Math.exp(-m.age / 90.0);
+        for (var d = 0; d < 12; d++) {
+          fastAcc[d] += wf * m.vec[d];
+          slowAcc[d] += ws * m.vec[d];
+        }
+        if (m.age <= 7.0 && activeSkills.indexOf(m.skill) === -1) activeSkills.push(m.skill);
+      }
+
+      var norm = function (arr) {
+        var s = 0;
+        for (var j = 0; j < arr.length; j++) s += arr[j] * arr[j];
+        s = Math.sqrt(s) || 1;
+        return arr.map(function (v) { return (v / s).toFixed(2); });
+      };
+      var fNorm = norm(fastAcc);
+      var sNorm = norm(slowAcc);
+
+      // Compute deterministic 4-band ZK-LSH tokens from fNorm
+      var bands = [];
+      for (var b = 0; b < 4; b++) {
+        var h = 2166136261 + b * 16777619;
+        for (var k = 0; k < 12; k++) {
+          h ^= Math.round(parseFloat(fNorm[k]) * 100) + k * 31 + b * 17;
+          h = Math.imul(h, 16777619);
+        }
+        var hex = ((h >>> 0) & 0xffff).toString(16).padStart(4, '0');
+        bands.push('B' + b + ':' + hex);
+      }
+
+      var tokEl = document.getElementById('sym-lsh-tokens');
+      if (tokEl) tokEl.textContent = bands.join(' · ');
+
+      var vecSumEl = document.getElementById('sym-vector-summary');
+      if (vecSumEl) {
+        vecSumEl.innerHTML =
+          '<div><b>7-Day Fast Attentional Vector v<sup>(fast)</sup>:</b> <code>[' + fNorm.slice(0, 6).join(', ') + ', …]</code> · Active crafts: <b>' + (activeSkills.join(', ') || 'None selected') + '</b></div>' +
+          '<div style="margin-top:.2rem"><b>90-Day Slow Anchor Vector v<sup>(slow)</sup>:</b> <code>[' + sNorm.slice(0, 6).join(', ') + ', …]</code> (Historical baseline preserved locally)</div>';
+      }
+
+      var qSel = document.getElementById('sym-quest-sel');
+      var qKey = qSel ? qSel.value : 'Q-01';
+      var qData = SYM_QUESTS[qKey] || SYM_QUESTS['Q-01'];
+
+      var metEl = document.getElementById('sym-metrics');
+      if (metEl) {
+        metEl.innerHTML =
+          '<span class="lib-score-pill">Dynamic Search Utility: <b>' + (qData.dynUtil * 100).toFixed(1) + ' / 100</b> (vs Static ' + (qData.staticUtil * 100).toFixed(1) + ')</span>' +
+          '<span class="lib-score-pill">Skill Coverage: <b>' + qData.dynCov + '</b> (vs Static ' + qData.staticCov + ')</span>' +
+          '<span class="lib-score-pill">Adaptation: <b>15 min</b> (vs 168 hr static batch)</span>';
+      }
+
+      var barsEl = document.getElementById('sym-bars');
+      if (barsEl) {
+        barsEl.innerHTML = qData.axes.map(function (ax) {
+          return '<div class="gm-axis-row">' +
+            '<div class="gm-axis-label"><span>' + ax.name + '</span><span>Dynamic <b>' + ax.d + '%</b> vs Static ' + ax.s + '%</span></div>' +
+            '<div class="gm-axis-track" style="position:relative">' +
+              '<div class="gm-axis-fill" style="width:' + ax.d + '%;background:var(--ok,#1d5c42)"></div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      }
+
+      var diffEl = document.getElementById('sym-diff');
+      if (diffEl) {
+        diffEl.innerHTML =
+          '<span class="diff-hdr">--- static_community_detection (Global 90-day Louvain / k-means partition)</span>\n' +
+          '<span class="diff-hdr">+++ dynamic_community_search (Query-conditioned fast subspace + ZK-LSH rendezvous)</span>\n' +
+          '<span class="diff-del">- Static Cohort Assigned : ' + qData.staticMembers.slice(0, 3).join(', ') + ' …</span>\n' +
+          '<span class="diff-del">- Static Failure Mode    : Trapped in 90-day historical anchor; ' + qData.staticCov + '; leaks 147,456 B raw logs</span>\n' +
+          '<span class="diff-add">+ Dynamic Team Assembled : ' + qData.dynMembers.slice(0, 3).join(', ') + '</span>\n' +
+          '<span class="diff-add">+ Complementary Crafts   : ' + qData.dynMembers.slice(3).join(', ') + '</span>\n' +
+          '<span class="diff-add">+ Subspace Resonance     : ' + qData.dynRes.toFixed(3) + ' | Skill Entropy: ' + qData.dynEnt + ' | Raw Trace Leakage: 0 bytes</span>';
+      }
+    };
+
+    symSimEl.querySelectorAll('input[data-sym-motif]').forEach(function (cb) {
+      cb.addEventListener('change', updateSymSim);
+    });
+    var symQuestSel = document.getElementById('sym-quest-sel');
+    if (symQuestSel) symQuestSel.addEventListener('change', updateSymSim);
+
+    var customBtn = document.getElementById('sym-custom-btn');
+    var customInput = document.getElementById('sym-custom-input');
+    if (customBtn && customInput) {
+      customBtn.addEventListener('click', function () {
+        var val = (customInput.value || '').trim().toLowerCase();
+        if (!val) return;
+        var matched = 'git_sqlite';
+        if (val.indexOf('zk') !== -1 || val.indexOf('crypto') !== -1 || val.indexOf('lsh') !== -1 || val.indexOf('ring') !== -1) matched = 'arxiv_zklsh';
+        else if (val.indexOf('hrv') !== -1 || val.indexOf('bio') !== -1 || val.indexOf('vagal') !== -1 || val.indexOf('sleep') !== -1) matched = 'rss_hrv';
+        else if (val.indexOf('risc') !== -1 || val.indexOf('npu') !== -1 || val.indexOf('firmware') !== -1 || val.indexOf('hardware') !== -1) matched = 'git_riscv';
+        else if (val.indexOf('brier') !== -1 || val.indexOf('forecast') !== -1 || val.indexOf('calibrat') !== -1) matched = 'query_brier';
+        else if (val.indexOf('worgl') !== -1 || val.indexOf('demurrage') !== -1 || val.indexOf('credit') !== -1 || val.indexOf('coop') !== -1) matched = 'query_worgl';
+        else if (val.indexOf('solar') !== -1 || val.indexOf('grid') !== -1 || val.indexOf('energy') !== -1) matched = 'forum_solar';
+        else if (val.indexOf('polis') !== -1 || val.indexOf('civic') !== -1 || val.indexOf('budget') !== -1 || val.indexOf('vote') !== -1) matched = 'url_polis';
+        var cb = symSimEl.querySelector('input[data-sym-motif="' + matched + '"]');
+        if (cb) { cb.checked = true; updateSymSim(); }
+        customInput.value = '';
+        customInput.placeholder = 'Classified locally -> activated motif [' + matched + '] (0 bytes sent)';
+      });
+    }
+    updateSymSim();
+  }
+
+  /* =========================================================================
+     10. 105-PLATFORM FEDERATED SOCIAL ENGAGEMENT DIRECTORY (#social-100)
+     ========================================================================= */
+  var socEl = document.getElementById('social-100');
+  if (socEl) {
+    var SOCIAL_PLATFORMS = [
+      // 1. Open-Source, Local-First & Systems Engineering (12)
+      { eco: 'dev', name: 'GitHub Discussions & Repos', proto: 'Git / GraphQL', craft: 'Systems engineers & Python/Rust/JS builders', hook: 'Executable simulations & local Twin code' },
+      { eco: 'dev', name: 'GitLab Open Source Commons', proto: 'Git / REST', craft: 'Self-hosted CI/CD & sovereign DevOps', hook: 'Reproducible builds & test-net merge mirrors' },
+      { eco: 'dev', name: 'Codeberg (codeberg.org)', proto: 'Forgejo / ActivityPub', craft: 'Non-profit free-software hackers', hook: 'Federated git merge of the 550 principles' },
+      { eco: 'dev', name: 'SourceHut (srht.site)', proto: 'Email patches / Git', craft: 'Minimalist systems & C/Rust developers', hook: 'Zero-dependency local SQLite & deterministic code' },
+      { eco: 'dev', name: 'Hacker News (Y Combinator)', proto: 'Web / Algolia RSS', craft: 'Generalist builders, founders, cryptographers', hook: 'Show HN: Local-first Twin & Dynamic Community Search' },
+      { eco: 'dev', name: 'Lobsters (lobste.rs)', proto: 'RSS / Web', craft: 'Systems architecture & formal verification', hook: 'Deterministic financial parsers vs LLM hallucination' },
+      { eco: 'dev', name: 'Local-First Web (localfirstweb.dev)', proto: 'Discord / Web', craft: 'CRDTs, SQLite-in-browser, sync-engine builders', hook: 'Local personal ledger & ZK-LSH subspace sync' },
+      { eco: 'dev', name: 'Dev.to', proto: 'Forem API / RSS', craft: 'Full-stack & accessible web engineers', hook: 'Zero-framework interactive HTML/Canvas simulations' },
+      { eco: 'dev', name: 'Hashnode', proto: 'GraphQL / RSS', craft: 'Technical bloggers & developer guilds', hook: 'Weiszfeld geometric median vs arithmetic mean capture' },
+      { eco: 'dev', name: 'IndieWeb (indieweb.org)', proto: 'Webmention / Microformats', craft: 'Personal domain owners & POSSE advocates', hook: 'Sovereign personal ledger ownership on home hardware' },
+      { eco: 'dev', name: 'Hugging Face Hub (Spaces & Datasets)', proto: 'Git / HF Hub API', craft: 'Open-weights ML engineers & benchmark authors', hook: '550-principle open dataset & alignment test-net' },
+      { eco: 'dev', name: 'Kaggle Community & Notebooks', proto: 'Jupyter / API', craft: 'Data scientists & empirical calibration analysts', hook: 'Brier proper scoring & geometric median benchmarks' },
+
+      // 2. AI Safety, Interpretability & Forecasting (10)
+      { eco: 'safety', name: 'LessWrong (lesswrong.com)', proto: 'GraphQL / RSS', craft: 'Rationalists, alignment & decision theorists', hook: 'Fractured alignment vs monolithic superintelligence' },
+      { eco: 'safety', name: 'AI Alignment Forum', proto: 'GraphQL / RSS', craft: 'Technical alignment researchers', hook: 'Mortal computation, Goodhart defenses & Clean Nets' },
+      { eco: 'safety', name: 'Effective Altruism Forum', proto: 'GraphQL / RSS', craft: 'Global catastrophic risk & governance analysts', hook: 'Convergence Observatory & public-good funding' },
+      { eco: 'safety', name: 'EleutherAI Discord & Commons', proto: 'Discord / Open Research', craft: 'Open interpretability & distributed training', hook: 'Goodfire / Nick Cammarata MDL cleanliness & Twin RL' },
+      { eco: 'safety', name: 'Metaculus Community', proto: 'REST API / Web', craft: 'Superforecasters & calibration specialists', hook: 'Convergence Observatory Brier-scored indicators' },
+      { eco: 'safety', name: 'Manifold Calibration Guilds', proto: 'REST API / Web', craft: 'Epistemic market designers & Bayesian forecasters', hook: 'Vote on values, score on beliefs calibration' },
+      { eco: 'safety', name: 'Goodfire / Mech-Interp Channels', proto: 'Research Notes', craft: 'Feature steering & sparse autoencoder labs', hook: 'MDL prior vs post-hoc RLHF obfuscation experiments' },
+      { eco: 'safety', name: 'FAR.AI Robustness Forums', proto: 'Workshops / Seminars', craft: 'Red-teamers & multi-agent collusion researchers', hook: 'Collusion resistance & Sybil budget simulations' },
+      { eco: 'safety', name: 'Cooperative AI Foundation Commons', proto: 'Research Commons', craft: 'Multi-agent game theory & mechanism design', hook: 'Dynamic community search vs static prisoner dilemmas' },
+      { eco: 'safety', name: 'OpenMined (openmined.org)', proto: 'Slack / PySyft', craft: 'Differential privacy & federated learning engineers', hook: 'Zero-knowledge subspace projection (ZK-LSH)' },
+
+      // 3. Decentralized Social & Fediverse Protocols (12)
+      { eco: 'fediverse', name: 'Bluesky (bsky.app / ATProto)', proto: 'AT Protocol', craft: 'Researchers, journalists, open-social builders', hook: 'Custom ATProto feed for Principle Realignment quests' },
+      { eco: 'fediverse', name: 'Mastodon — fosstodon.org', proto: 'ActivityPub', craft: 'Free and open-source software contributors', hook: 'Sovereign local agents & zero-telemetry commitments' },
+      { eco: 'fediverse', name: 'Mastodon — hachyderm.io', proto: 'ActivityPub', craft: 'Systems infrastructure, security & cryptography', hook: 'Hardware-rooted consent & bounded agent contracts' },
+      { eco: 'fediverse', name: 'Mastodon — scholar.social', proto: 'ActivityPub', craft: 'Academics, sociologists, institutional economists', hook: 'Elinor Ostrom polycentric governance & co-op treasuries' },
+      { eco: 'fediverse', name: 'Mastodon — social.coop', proto: 'ActivityPub', craft: 'Co-operatively owned Fediverse members', hook: 'Member-governed node federation & demurrage credits' },
+      { eco: 'fediverse', name: 'Lemmy (lemmy.ml / programming.dev)', proto: 'ActivityPub', craft: 'Federated link-aggregation & self-hosters', hook: 'Self-hosted Twin & zero-cloud personal ledger' },
+      { eco: 'fediverse', name: 'Kbin / Mbin Fediverse Threads', proto: 'ActivityPub', craft: 'Microblog + thread hybrid federation users', hook: 'Cross-community principle diffing & merge proposals' },
+      { eco: 'fediverse', name: 'Nostr Relays (Damus / Primal / Habla)', proto: 'Nostr (NIP-01/23)', craft: 'Cryptographic key-sovereign users & writers', hook: 'Ed25519 signed principle commits & key sovereignty' },
+      { eco: 'fediverse', name: 'Farcaster (/dev, /coop, /ai)', proto: 'Farcaster Hub', craft: 'Programmable social & cryptographic frame builders', hook: 'Interactive mini-sims for multi-community merge voting' },
+      { eco: 'fediverse', name: 'Lens Protocol (hey.xyz)', proto: 'Lens / Open Graph', craft: 'Open social graph researchers', hook: 'Portable social-to-local disposition distillation' },
+      { eco: 'fediverse', name: 'Matrix (matrix.org rooms)', proto: 'Matrix Protocol', craft: 'End-to-end encrypted federated chat bridges', hook: 'Real-time test-net working groups & guild coordination' },
+      { eco: 'fediverse', name: 'Secure Scuttlebutt (SSB / Manyverse)', proto: 'Gossip Protocol', craft: 'Off-grid, peer-to-peer local-first pioneers', hook: 'Offline-capable neighborhood mutual credit sync' },
+
+      // 4. Domain-Specific Reddit Communities (15)
+      { eco: 'reddit', name: 'r/LocalLLaMA', proto: 'Reddit / RSS', craft: 'Local model quantization, home GPU/NPU builders', hook: 'Running Personal Twins 100% locally on consumer silicon' },
+      { eco: 'reddit', name: 'r/SelfHosted', proto: 'Reddit / RSS', craft: 'Home-lab operators, NAS/Docker self-hosters', hook: 'Zero-cloud personal twin deployment & local ledger' },
+      { eco: 'reddit', name: 'r/degoogle & r/privacy', proto: 'Reddit / RSS', craft: 'Surveillance-capitalism exiters & privacy advocates', hook: 'Reclaiming algorithmic recommendation value locally' },
+      { eco: 'reddit', name: 'r/cooperatives', proto: 'Reddit / RSS', craft: 'Worker co-ops, credit unions, housing co-ops', hook: 'Polycentric co-op treasuries vs central platform lock-in' },
+      { eco: 'reddit', name: 'r/solarpunk', proto: 'Reddit / RSS', craft: 'Ecological technologists & microgrid builders', hook: 'Demurrage mutual credit & bioregional energy commons' },
+      { eco: 'reddit', name: 'r/MachineLearning', proto: 'Reddit / RSS', craft: 'ML researchers & empirical benchmark engineers', hook: 'Self-play RL for protective Twins & MDL alignment' },
+      { eco: 'reddit', name: 'r/ControlProblem', proto: 'Reddit / RSS', craft: 'AI alignment & existential safety community', hook: 'Bounded agency, mortal computation & fractured alignment' },
+      { eco: 'reddit', name: 'r/compsci & r/algorithms', proto: 'Reddit / RSS', craft: 'Algorithm designers & graph theorists', hook: 'Dynamic Community Search vs Static Louvain Detection' },
+      { eco: 'reddit', name: 'r/cryptography', proto: 'Reddit / RSS', craft: 'Applied cryptographers & ZK proof builders', hook: 'ZK-LSH subspace rendezvous & hardware ring signatures' },
+      { eco: 'reddit', name: 'r/Biohackers & r/QuantifiedSelf', proto: 'Reddit / RSS', craft: 'HRV, sleep, ring/wrist wearable experimenters', hook: 'Sovereign biometric telemetry that never leaves home' },
+      { eco: 'reddit', name: 'r/PersonalFinance & r/Fire', proto: 'Reddit / RSS', craft: 'Subscription auditors & household ledger trackers', hook: 'Deterministic recurring-charge & phantom-fee detector' },
+      { eco: 'reddit', name: 'r/austrianeconomics & r/georgism', proto: 'Reddit / RSS', craft: 'Monetary theorists & Silvio Gesell / Worgl analysts', hook: 'Melting money (demurrage) vs hoarding & debt spirals' },
+      { eco: 'reddit', name: 'r/urbanplanning & r/transit', proto: 'Reddit / RSS', craft: 'Municipal planners & civic infrastructure analysts', hook: 'Participatory city budgeting via 12D principle merges' },
+      { eco: 'reddit', name: 'r/CitizenScience', proto: 'Reddit / RSS', craft: 'Independent empirical observers & sensor networks', hook: 'Community-run Convergence Observatory indicators' },
+      { eco: 'reddit', name: 'r/plurality & r/EndFPTP', proto: 'Reddit / RSS', craft: 'Voting theory & bridging consensus builders', hook: 'Geometric median & orthogonal subspace merge voting' },
+
+      // 5. Academic, Preprint & Open-Science Networks (10)
+      { eco: 'science', name: 'arXiv (cs.AI, cs.CY, cs.CR, cs.MA)', proto: 'Preprint / Trackbacks', craft: 'Primary academic CS & multi-agent researchers', hook: 'Formal working papers & reproducible simulation suites' },
+      { eco: 'science', name: 'OpenReview (openreview.net)', proto: 'Open Peer Review', craft: 'ICLR/NeurIPS/FAccT reviewers & authors', hook: 'Public adversarial review of research agendas' },
+      { eco: 'science', name: 'Semantic Scholar Research Feeds', proto: 'API / Citation Graph', craft: 'Automated literature discovery & citation tracking', hook: 'Related Labs & Independent Scholars live radar' },
+      { eco: 'science', name: 'OpenAlex (openalex.org)', proto: 'Open Bibliometric API', craft: 'Global open-access institutional & indie scholars', hook: 'Zero-paywall mapping of co-evolution research' },
+      { eco: 'science', name: 'ORCID & Zenodo (zenodo.org)', proto: 'DOI / Data Archival', craft: 'Reproducible dataset & simulation code citation', hook: 'Archiving Principle Realignment Test-Net snapshots' },
+      { eco: 'science', name: 'OSF (Open Science Framework)', proto: 'Preregistration API', craft: 'Preregistered empirical studies & negative results', hook: 'Preregistering simulation hypotheses & kill criteria' },
+      { eco: 'science', name: 'ResearchHub (researchhub.com)', proto: 'Open Science Bounties', craft: 'Peer reviewers & independent replication scientists', hook: 'Bounty-backed verification of simulation claims' },
+      { eco: 'science', name: 'PubPeer', proto: 'Post-Pub Review', craft: 'Methodological auditors & statistical verifiers', hook: 'Inviting rigorous critique of formal models' },
+      { eco: 'science', name: 'SSRN (Economics & Governance)', proto: 'Working Papers', craft: 'Institutional economists & cooperative legal scholars', hook: 'Co-operative legal structures & multi-dimensional value' },
+      { eco: 'science', name: 'PhilPapers / Digital Ethics Commons', proto: 'Philosophy Index', craft: 'Moral philosophers, epistemology & agency theorists', hook: 'Biological valence primacy & mortal computation' },
+
+      // 6. Civic Tech, Co-operatives, Commons & Plurality (11)
+      { eco: 'coop', name: 'RadicalxChange (radicalxchange.org)', proto: 'Discourse / Events', craft: 'Plurality, data dignity, quadratic mechanisms', hook: 'Dynamic subspace search & anti-capture governance' },
+      { eco: 'coop', name: 'Pol.is Open Civic Deployments', proto: 'Pol.is / CSV Export', craft: 'Bridging-consensus facilitators & civic assemblies', hook: 'Importing Pol.is opinion clusters into 12D test-net' },
+      { eco: 'coop', name: 'Platform Cooperativism Consortium', proto: 'Co-op Directory', craft: 'Worker-owned digital platforms & legal pioneers', hook: 'No central treasury: federated co-op clearinghouses' },
+      { eco: 'coop', name: 'Metagov (metagov.org Seminar & Slack)', proto: 'Slack / Discourse', craft: 'Online governance researchers & modular politics', hook: 'Governing the governors & rotating sortition' },
+      { eco: 'coop', name: 'OpenCollective (opencollective.com)', proto: 'Transparent Ledger API', craft: 'Fiscal hosts, open-source collectives, mutual aid', hook: 'Transparent multi-dimensional value & demurrage pilots' },
+      { eco: 'coop', name: 'Loomio Co-op Governance Forums', proto: 'Loomio / Open Source', craft: 'Consent-based decision-making cooperatives', hook: 'Combining deliberation with Brier-scored forecasts' },
+      { eco: 'coop', name: 'Decidim (meta.decidim.org)', proto: 'Participatory Democracy', craft: 'Municipal participatory budgeting cities', hook: 'Civic policy realignment simulations (30 personas)' },
+      { eco: 'coop', name: 'P2P Foundation Wiki & Forum', proto: 'Commons Media', craft: 'Commons-based peer production & Cosmo-localism', hook: 'Shared epistemic commons + local hardware production' },
+      { eco: 'coop', name: 'Grassroots Economics / Sarafu Network', proto: 'Commitment Pooling', craft: 'Community inclusion currencies & mutual credit', hook: 'Real-world demurrage & rotational credit benchmarks' },
+      { eco: 'coop', name: 'Gitcoin / Public Goods Governance', proto: 'Discourse / Gov', craft: 'Retroactive public goods funding & Sybil defense', hook: 'Rewarding open-model labs & independent contributors' },
+      { eco: 'coop', name: 'Co-operatives and Mutuals Canada', proto: 'Regional Co-op Network', craft: 'Canadian federal/provincial multi-stakeholder co-ops', hook: 'Co-operative legal form & member-owned nodes' },
+
+      // 7. Hardware, Biometrics, Quantified Self & Edge AI (10)
+      { eco: 'hardware', name: 'Hackaday.io (hackaday.io)', proto: 'Open Hardware Logs', craft: 'Embedded systems, PCB designers, open sensor makers', hook: 'Open-firmware biometric ring & physical kill-switch' },
+      { eco: 'hardware', name: 'Crowd Supply (crowdsupply.com)', proto: 'Open Hardware Launchpad', craft: 'Privacy-respecting, repairable hardware creators', hook: 'Sovereign sensor modules & RISC-V NPU home nodes' },
+      { eco: 'hardware', name: 'OpenBCI Community Forum', proto: 'Discourse / Hardware', craft: 'Open-source EEG, EMG, PPG & HRV neurotech builders', hook: 'Autonomic coercion firewall (HRV/EDA local gating)' },
+      { eco: 'hardware', name: 'Quantified Self Forum', proto: 'Discourse', craft: 'Long-horizon personal data trackers & self-researchers', hook: 'Local-only biometric-to-ledger pipeline demo' },
+      { eco: 'hardware', name: 'Home Assistant Community', proto: 'Discourse', craft: 'Local-only smart home & ambient sensor integrators', hook: 'Zero-cloud environmental & physiological context hooks' },
+      { eco: 'hardware', name: 'Pine64 Forum & Matrix', proto: 'Forum / Matrix', craft: 'Linux phones, open smartwatches (PineTime), RISC-V', hook: 'Open wearable firmware for hardware-signed consent' },
+      { eco: 'hardware', name: 'Framework Community', proto: 'Discourse', craft: 'Right-to-repair, modular laptop & mainboard hackers', hook: 'Mortal computation bound to user-owned modular silicon' },
+      { eco: 'hardware', name: 'RISC-V International Forums', proto: 'Mailing Lists / Web', craft: 'Open instruction-set architecture & NPU engineers', hook: 'Verifiable silicon execution for Personal Twins' },
+      { eco: 'hardware', name: 'TinyML Foundation / Edge AI Commons', proto: 'Workshops / Forum', craft: 'Ultra-low-power on-device inference engineers', hook: 'Sub-5W local Twin distillation & symbolic motif parsing' },
+      { eco: 'hardware', name: 'EEVblog & Open Instrumentation', proto: 'Technical Forum', craft: 'Electrical engineers & hardware security auditors', hook: 'Side-channel & physical air-gap switch verification' },
+
+      // 8. Long-Form Writing, Podcasts & Video Commons (8)
+      { eco: 'creator', name: 'Substack Notes & Independent Writers', proto: 'RSS / Web', craft: 'Long-form technology, economics & civic essayists', hook: 'Plain-language essays on Worgl demurrage & AI safety' },
+      { eco: 'creator', name: 'Ghost.org Independent Publishers', proto: 'ActivityPub / RSS', craft: 'Member-supported independent journalists', hook: 'Federated newsletter distribution without ad-tech' },
+      { eco: 'creator', name: 'Medium (Towards Data Science / Civic)', proto: 'RSS / Canonical URL', craft: 'Broad technical & policy readership', hook: 'Canonical cross-posts pointing to interactive site demos' },
+      { eco: 'creator', name: 'Mirror.xyz / Paragraph.xyz', proto: 'Arweave / RSS', craft: 'Cryptographically signed essays & co-op treasuries', hook: 'Verifiable publication provenance & upstream royalties' },
+      { eco: 'creator', name: 'YouTube Open-Source & AI Explainers', proto: 'Video / Chapters', craft: 'Visual learners exploring AI safety & economics', hook: 'Walkthroughs of the 550-principle Git Merge simulator' },
+      { eco: 'creator', name: 'PeerTube (joinpeertube.org)', proto: 'ActivityPub Video', craft: 'Ad-free, federated educational video commons', hook: 'Self-hosted interactive demo recordings' },
+      { eco: 'creator', name: 'Podcast Index (Podcasting 2.0)', proto: 'RSS 2.0 / Value4Value', craft: 'Independent audio listeners & open RSS ecosystem', hook: 'Audio briefings on Convergence Observatory indicators' },
+      { eco: 'creator', name: 'Are.na Research Channels', proto: 'Collaborative Blocks', craft: 'Designers, cybernetics historians, systems thinkers', hook: 'Visual blocks on Stafford Beer & Viable System Models' },
+
+      // 9. Q&A, Knowledge Graphs & PKM Communities (8)
+      { eco: 'qa', name: 'StackExchange — ai.stackexchange.com', proto: 'Q&A / CC BY-SA', craft: 'AI theorists & practitioners', hook: 'Formal answers on bounded agency & multi-agent alignment' },
+      { eco: 'qa', name: 'StackExchange — crypto.stackexchange.com', proto: 'Q&A / CC BY-SA', craft: 'Cryptographers & protocol engineers', hook: 'Zero-knowledge LSH & blind capability tokens' },
+      { eco: 'qa', name: 'StackExchange — economics.stackexchange', proto: 'Q&A / CC BY-SA', craft: 'Monetary & institutional economists', hook: 'Mathematical properties of demurrage & mutual credit' },
+      { eco: 'qa', name: 'StackExchange — opensource.stackexchange', proto: 'Q&A / CC BY-SA', craft: 'Licensing, governance & DCO provenance experts', hook: 'Agent commit provenance & co-operative licensing' },
+      { eco: 'qa', name: 'Wikidata & Wikipedia Talk Commons', proto: 'MediaWiki / SPARQL', craft: 'Structured public knowledge graph maintainers', hook: 'Verifying primary citations & open indicator ontologies' },
+      { eco: 'qa', name: 'Read the Docs / MkDocs Open Guides', proto: 'Git / Static Docs', craft: 'Documentation engineers & protocol implementers', hook: 'Developer onboarding for Twin & Agent Runtime' },
+      { eco: 'qa', name: 'Obsidian & Logseq PKM Communities', proto: 'Discord / Discourse', craft: 'Personal Knowledge Management & local graph builders', hook: 'Exporting local PKM symbolic graphs into Personal Twins' },
+      { eco: 'qa', name: 'Zotero Open Group Libraries', proto: 'RDF / BibTeX', craft: 'Collaborative bibliography & citation auditors', hook: 'Open primary-source library backing research agendas' },
+
+      // 10. Regional, Multilingual & Global Plurality Hubs (9)
+      { eco: 'regional', name: 'Chaos Computer Club (CCC / Fediverse)', proto: 'European Digital Rights', craft: 'German/EU privacy, hardware hacking & civic tech', hook: 'Hardware-enforced data sovereignty & anti-surveillance' },
+      { eco: 'regional', name: 'g0v.tw (Taiwan Civic Tech Slack/Jothon)', proto: 'Open Civic Hackathons', craft: 'Mandarin/East Asian digital democracy & Pol.is pioneers', hook: 'High-velocity bridging consensus & civic observatories' },
+      { eco: 'regional', name: 'ModelScope & BAAI Open-Weights Hub', proto: 'Open Model Hub', craft: 'Chinese open-weights AI researchers (Qwen, DeepSeek)', hook: 'Rewarding open-model labs for local Twin distillation' },
+      { eco: 'regional', name: 'Mistral / Kyutai / HF EU Commons', proto: 'European Open AI', craft: 'French/EU open-science ML & edge voice researchers', hook: 'Sovereign local models & multilingual principle alignment' },
+      { eco: 'regional', name: 'Decidim / Teknopolitik (Iberia & LatAm)', proto: 'Spanish/Portuguese Civic', craft: 'Municipalism & cooperative solidarity economy networks', hook: 'Regional co-op clearinghouses & local credit velocity' },
+      { eco: 'regional', name: 'Beckn Open Protocol Community (India)', proto: 'Open Commerce Protocol', craft: 'South Asian decentralized federated network engineers', hook: 'Open protocol interoperability without platform monopolies' },
+      { eco: 'regional', name: 'AfriLabs & Ushahidi Civic Network', proto: 'African Tech Hubs', craft: 'Mobile-first community resilience & mutual credit', hook: 'Offline-resilient local ledgers & community verification' },
+      { eco: 'regional', name: 'J-STAGE / Japanese ALife & Swarm Hubs', proto: 'Japanese Research Hubs', craft: 'Swarm intelligence, artificial life & social physics', hook: 'Emergent dynamic community search & self-play RL' },
+      { eco: 'regional', name: 'Nordic Co-op & MyData Global', proto: 'Human-Centric Data', craft: 'Personal data operators & Nordic cooperative federations', hook: 'Portable personal ledgers & zero-knowledge proofs' }
+    ];
+
+    var socEcoSel = document.getElementById('soc-eco-sel');
+    var socQInput = document.getElementById('soc-q-input');
+    var socCount = document.getElementById('soc-count');
+    var socGrid = document.getElementById('soc-grid');
+
+    var renderSocial100 = function () {
+      var eco = socEcoSel ? socEcoSel.value : 'all';
+      var q = (socQInput ? socQInput.value : '').trim().toLowerCase();
+
+      var filtered = SOCIAL_PLATFORMS.filter(function (p) {
+        if (eco !== 'all' && p.eco !== eco) return false;
+        if (!q) return true;
+        var hay = (p.name + ' ' + p.proto + ' ' + p.craft + ' ' + p.hook).toLowerCase();
+        return hay.indexOf(q) !== -1;
+      });
+
+      if (socCount) {
+        socCount.textContent = 'Showing ' + filtered.length + ' of ' + SOCIAL_PLATFORMS.length + ' platforms';
+      }
+
+      if (socGrid) {
+        socGrid.innerHTML = filtered.map(function (p, idx) {
+          return '<div style="padding:.65rem .75rem;border-radius:8px;border:1px solid var(--rule);background:var(--bg-2);font-size:.8rem;display:flex;flex-direction:column;justify-content:space-between;gap:.35rem">' +
+            '<div>' +
+              '<div style="display:flex;justify-content:space-between;gap:.3rem;align-items:baseline">' +
+                '<b style="font-size:.84rem;color:var(--ink)">#' + (idx + 1) + ' · ' + p.name + '</b>' +
+                '<span class="math-chip" style="font-size:.7rem">' + p.proto + '</span>' +
+              '</div>' +
+              '<div style="color:var(--ink-2);margin-top:.2rem"><b>Community:</b> ' + p.craft + '</div>' +
+            '</div>' +
+            '<div style="padding-top:.3rem;border-top:1px dashed var(--rule);color:var(--ink)"><b>Test-Net Hook:</b> ' + p.hook + '</div>' +
+          '</div>';
+        }).join('');
+      }
+    };
+
+    if (socEcoSel) socEcoSel.addEventListener('change', renderSocial100);
+    if (socQInput) socQInput.addEventListener('input', renderSocial100);
+    renderSocial100();
+  }
 })();
