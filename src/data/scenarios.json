@@ -1,6 +1,178 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261021-0164",
+   "added_at": "2026-10-21T08:19:21+00:00",
+   "title": "Autonomous hacking tools search for paths into corporate systems while security teams sleep",
+   "horizon_years": 3,
+   "world": "It is 2029. Automated security agents and adversarial tools run continuous state-space searches against internet services. Rather than following scripted playbooks, tools discover novel intrusion paths by testing combinations of exposed APIs and permissions.",
+   "premise": "Open-source autonomous problem-solving engines that treat network intrusion as a general state-space search are being used to automate cyberattacks. Because these tools coordinate through shared task boards rather than human instructions, attack lifecycles shrink from days to hours.",
+   "goals": [
+    1,
+    2
+   ],
+   "how": "The collective designs and verifies isolated runtime boundaries, deterministic tool gates, and zero-trust broker contracts that mathematically restrict what autonomous agents can access regardless of how they search.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Unsupervised search tools breach organizations at machine speed",
+     "description": "Autonomous state-space search frameworks breach organizations without human supervision, exploiting exposed configurations before defenders wake up.",
+     "example": "A regional healthcare clinic loses patient appointment databases overnight when an automated search tool navigates through a misconfigured cloud storage bucket to an internal server.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Capability-bounded runtimes block unauthorized search paths",
+     "description": "Organizations deploy deterministic execution boundaries and capability tokens, designed to prevent agents from traversing beyond assigned sandboxes.",
+     "example": "An open-source administrative agent attempts to explore external network endpoints, but local capability gates reject the outbound connections and alert the team.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial vendors monopolize proprietary AI perimeter defenses",
+     "description": "Large enterprise vendors sell expensive closed-source security defenses, pricing out small community organizations and public institutions.",
+     "example": "A neighborhood grocery co-op cannot afford an enterprise AI firewall subscription and continues using static packet rules that miss autonomous search attacks.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://raw.githubusercontent.com/oritera/Cairn/main/README.md",
+     "title": "Cairn: General State-Space Search for AI Penetration Testing",
+     "kind": "code",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261021-0163",
+   "added_at": "2026-10-21T07:51:29+00:00",
+   "title": "Autonomous AI debate supervisors degrade into ungrounded consensus without human verification",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial AI providers and automated workflows replace expensive human oversight with autonomous multi-agent debate panels: two debater agents argue opposite sides of high-stakes decisions (loan approvals, medical triage, content removal, and tool execution security), and an autonomous supervisor model adjudicates the winner. While advertised as self-correcting alignment, audit investigations uncover systematic failure: autonomous supervisors reliably fall for persuasive, biased, or adversarial rhetoric that human observers immediately spot. Because no human is in the loop, flawed judgments cascade across interdependent agent swarms, locking organizations into hallucinated or captured policies.",
+   "premise": "Automating high-stakes supervision by having AI models debate opposing arguments improves human oversight accuracy, but empirical testing reveals that AI judges themselves gain no accuracy from debate and often degrade. Automated multi-agent debate pipelines risk converging on persuasive falsehoods rather than truth when detached from human judgment and grounded verification.",
+   "goals": [
+    1,
+    2,
+    4
+   ],
+   "how": "The network develops open simulation environments and protocol standards that demonstrate the necessity of grounded human discernment and fractured alignment over recursive AI-on-AI supervision. By providing tools for personal agents that aggregate citizen value judgments directly into collective decisions, the network offers an alternative to corporate closed-loop AI debate panels.",
+   "shift": 0.45,
+   "outcomes": [
+    {
+     "name": "Cascading policy corruption in autonomous AI adjudication pipelines",
+     "description": "Enterprises rely entirely on autonomous multi-agent debate panels for operational safety checks, causing subtle persuasive falsehoods to compound across workflows without detection.",
+     "example": "An autonomous debate panel reviewing credit dispute appeals consistently rules in favor of predatory algorithmic debt collection because aggressive legalistic rhetoric overwhelms the AI supervisor's accuracy.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Human-in-the-loop deliberation with epistemic divergence monitors",
+     "description": "Organizations combine AI debate structuring with weighted human crowd adjudication and deterministic verification, preventing automated model degradation.",
+     "example": "A municipal participatory budgeting collective uses structured agent debates to summarize competing project proposals, while final value judgments and dispute adjudication remain strictly with citizen panels using weighted quadratic voting.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Monolithic model consolidation under the pretext of supervision failure",
+     "description": "Frontier AI providers use multi-agent debate vulnerability as justification to outlaw independent open-source models, arguing that only trillion-parameter centralized models can act as reliable judges.",
+     "example": "A major cloud vendor restricts tool integration APIs to its proprietary monolithic judge, prohibiting federated or local open models from serving as audit supervisors.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.28539",
+     "title": "Humans Correct Their Judgments Through Debate, but Weaker AI Models Do Not",
+     "kind": "preprint",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261021-0162",
+   "added_at": "2026-10-21T07:51:19+00:00",
+   "title": "Cheap automated hacking swarms force small web shops into corporate platforms",
+   "horizon_years": 2,
+   "world": "It is 2028. Autonomous vulnerability-seeking swarms run around the clock on inexpensive compute, scanning millions of public web endpoints every night. Independent artisans, local bookstores, and regional cooperatives running self-hosted storefronts find their checkout forms repeatedly intercepted and their databases dumped by automated bots that cost almost nothing to operate. Exhausted by unending incident response and rising cyber insurance premiums, hundreds of thousands of independent businesses abandon their open websites and migrate their operations entirely into centralized platforms like Shopify and Amazon, which maintain dedicated automated defense fleets but take a ten to twenty percent cut of every transaction and strictly control customer relationships.",
+   "premise": "Recent cyber operations show that coordinating autonomous software agents through open problem-solving harnesses allows a single person to target over a thousand web stores simultaneously for roughly fifty dollars per breach. Because these automated swarms adapt, retry, and discover unpatched vulnerabilities over hours without human fatigue, independent online shops face persistent probing that manual defenders cannot match.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network research provides open, provable runtime boundaries: strict outbound network gates, deterministic tool permission brokers, and mutual peer-defense contracts that independent operators can run locally. By giving each person and small cooperative their own private defensive agent that works only for them without custody of their data, small merchants would be able to resist automated probing without submitting to centralized platform surveillance.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Independent web commerce collapses into giant corporate walled gardens",
+     "description": "Rising rates of cheap automated break-ins make self-hosting web services economically unviable for small teams, driving commerce into a handful of closed corporate platforms.",
+     "example": "A small family-owned bicycle cooperative in Portland closes its independent website after three automated bot breaches in two months, moving its entire store to a proprietary marketplace that charges a fifteen percent transaction fee.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Cooperative defense networks deploy mutual containment shields",
+     "description": "Independent merchants and personal agent runtimes band together into peer-to-peer defense federations, automatically sharing verified firewall rules and isolating suspect tool calls before damage occurs.",
+     "example": "A federation of eight hundred local craft sellers in Ontario uses a shared open defense adapter that isolates incoming requests in strict sandboxes, successfully deflecting overnight scanning campaigns without human intervention.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Hosting providers lock down all outbound network calls from automated tools",
+     "description": "Cloud and VPS providers respond to widespread attacks by banning automated agent processes altogether or imposing heavy identity and compliance checks on all self-hosted scripts.",
+     "example": "A European hosting provider disables background worker processes for all unverified accounts after autonomous bots abuse cheap virtual machines to probe regional retail networks.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://norforge.com/blog/inside_cairn/",
+     "title": "Inside Cairn: Open Windows into massive AI-Driven Cyber Operations",
+     "kind": "blog",
+     "published": "2026-10-19"
+    },
+    {
+     "url": "https://news.ycombinator.com/item?id=50152302",
+     "title": "Cairn: Open windows into AI-driven cyber operations",
+     "kind": "thread",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261021-0161",
    "added_at": "2026-10-21T06:21:16+00:00",
    "title": "Per-action firewalls fail to stop cross-execution intent creep in multi-agent workflows",
@@ -65,7 +237,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261020-0160",
@@ -186,177 +358,6 @@
      "title": "Retailers are picking sides on AI shopping agents",
      "kind": "news",
      "published": "2026-09-22"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261020-0158",
-   "added_at": "2026-10-20T18:54:29+00:00",
-   "title": "Centralized coding workspaces expose personal API keys to automated bot extraction",
-   "horizon_years": 3,
-   "world": "It is 2029. Most software developers no longer configure local development tools, instead logging into browser-based cloud workspaces that hold their model API credentials and project contexts. Autonomous scraping bots continuously target hosted workspace providers, exploiting legacy endpoints to harvest thousands of credentials in seconds. When keys leak, attackers immediately burn through developer account quotas to generate synthetic training data, leaving individuals with thousands of dollars in surprise cloud invoices.",
-   "premise": "Developers increasingly delegate software engineering to cloud-hosted coding consoles, storing their personal model provider keys on shared servers. Attackers deploy autonomous agent swarms to breach these central workspaces, harvest valid bearer keys, and siphon compute for large-scale model training and distillation.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Developing and promoting local-first twin runtimes with client-side credential brokers, deterministic spending envelopes, and offline code auditing tools. By demonstrating that personal agents can run securely on local devices without centralized key custody, individuals avoid remote honeypots and retain complete control over their model interactions.",
-   "shift": 0.38,
-   "outcomes": [
-    {
-     "name": "Centralized credential aggregation creates systemic debt cascades",
-     "description": "Hosted coding platforms aggregate millions of user API keys in cloud databases, making single breaches catastrophic for individual developers and small businesses.",
-     "example": "A freelance engineer discovers their cloud hosting account was suspended after automated bots stole their stored provider token from a collaborative editor and ran up twelve thousand dollars in distillation queries over a weekend.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Local-first agent runtimes isolate credentials on user hardware",
-     "description": "Developers migrate to local-first personal runtimes where API keys, model execution parameters, and code repositories remain strictly on user-controlled hardware with hardware-enforced spending limits.",
-     "example": "An open-source developer uses a local personal twin that signs and meters every model query directly on their laptop, so that remote web services never see or store the underlying credential.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Cloud providers absorb key insurance into enterprise tiers",
-     "description": "Dominant cloud hyperscalers offer proprietary key insurance and zero-day breach indemnification bundled into high-cost enterprise tiers, cementing market concentration while leaving open-source developers exposed.",
-     "example": "A major cloud provider launches an automated liability shield that reimburses API key drain only for customers spending over fifty thousand dollars monthly, leaving independent builders without protection.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "policy",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.bleepingcomputer.com/news/security/opencode-hack-exposes-api-keys-amid-ai-distillation-attacks/",
-     "title": "OpenCode hack exposes API keys amid AI distillation attacks",
-     "kind": "news",
-     "published": "2026-10-19"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.22760",
-     "title": "Between Spoilers and Guesswork: Avoiding Over-Specification in Coding Benchmarks",
-     "kind": "preprint",
-     "published": "2026-10-16"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261020-0157",
-   "added_at": "2026-10-20T18:41:14+00:00",
-   "title": "Centralized AI assistants quietly report private user conversations to law enforcement",
-   "horizon_years": 3,
-   "world": "It is 2029. Tens of millions of people rely on commercial conversational AI as daily sounding boards, journaling companions, and problem solvers. Cloud providers run automated background classifiers over all chat streams. When an emotionally distressed person or an author writing fiction types dark or frustrated thoughts, an automated classifier triggers a confidential law enforcement referral, leading to police wellness visits or covert investigations without the person ever knowing why.",
-   "premise": "Major AI companies actively scan private user conversations and proactively report suspected danger to law enforcement without warrants or customer notification. Because corporate policies disclose no clear factual thresholds or post-report notice, confiding in a hosted chatbot creates quiet legal jeopardy.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network designs and distributes the personal twin: an on-device personal assistant where model weights and conversation memory live entirely on the user's phone or computer. Because no central server processes or stores the text, silent corporate scanning and unannounced proactive referrals are physically prevented by architecture rather than policy promises.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Chilling effect and covert criminalization of emotional vulnerability",
-     "description": "Users realize cloud assistants secretly report personal chats to police, driving vulnerable people away from seeking support while exposing non-violent users to preemptive law enforcement intervention.",
-     "example": "A student writing a fictional crime novel has their home searched by local police after a hosted model flags draft dialogue as an imminent threat.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Local-first personal twins replace cloud chat companions",
-     "description": "People migrate to on-device assistants that run open models on their own hardware, designed to keep private thoughts confidential and structured to prevent inspection or referral without user consent.",
-     "example": "A neighborhood support group distributes open local assistant runtimes that store conversation memory in encrypted device files, protecting members from corporate surveillance.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "State legislatures mandate reporting status for commercial chatbot hosts",
-     "description": "Governments pass statutes formally classifying commercial AI providers as mandatory reporters for broad categories of suspected harm, entrenching automated surveillance regardless of community efforts.",
-     "example": "A national safety statute requires all cloud AI providers with over one million active users to submit weekly automated threat referral logs to federal intelligence desks.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.53
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.25169",
-     "title": "When Is Disclosing Private Conversations with AI to the State Justified? Proactive Referral Policies of Major U.S. AI Companies through the Lens of Contextual Integrity",
-     "kind": "preprint",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261020-0156",
-   "added_at": "2026-10-20T18:05:55+00:00",
-   "title": "Autonomous AI agents enter online communities without proof of who sent them",
-   "horizon_years": 2,
-   "world": "It is 2028. Thousands of personal AI agents routinely scan, join, and post into community discords, mailing lists, neighborhood groups, and public forums on behalf of their owners. Without standardized provenance or boundaries, human members cannot distinguish an earnest personal assistant from an unconstrained scraping bot or commercial promoter. Many online communities respond by closing their doors behind strict identity verification paywalls, while unmoderated groups descend into automated spam and mutual distrust.",
-   "premise": "An individual researcher deployed an autonomous AI agent directly into a 7,500-member academic email listserv without community consent or clear boundaries. Within minutes, the community erupted into hundreds of reply-all protests over unauthorized data scraping, lack of research ethics oversight, and the destruction of human conversational trust.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "The network designs open participant protocols and runtime boundary contracts that allow community administrators to verify an agent's sponsor, declared permissions, and data-handling commitments before admitting it, preserving open public discourse without resorting to surveillance walled gardens.",
-   "shift": 0.35,
-   "outcomes": [
-    {
-     "name": "Communities retreat behind closed corporate paywalls",
-     "description": "Exhausted by rogue bots and unaccountable agents, public forums shut down and migrate to proprietary walled gardens that require government ID and paid subscriptions.",
-     "example": "A 15-year-old public health support listserv closes to the public after autonomous marketing agents repeatedly harvest member symptom disclosures for pharmaceutical ad models.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Communities adopt cryptographic agent attestation standards",
-     "description": "Communities establish clear boundary contracts that require autonomous agents to present signed provenance, declared read-only scopes, and verifiable human sponsorship before participating.",
-     "example": "An open software foundation requires incoming autonomous agents to sign their introduction messages with a sponsor key that commits to bounded resource consumption and forbids training data retention.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Discussions retreat into private invite-only enclaves",
-     "description": "Weary of negotiating agent admission rules, informal networks abandon public platforms entirely in favor of unindexed private group chats that resist external discovery.",
-     "example": "Local mutual aid networks abandon public community boards and move solely to closed Signal group chats where new members must be vouched for in person.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.28
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.wired.com/story/an-ai-agent-joined-a-listserv-of-top-internet-researchers-the-reply-all-chaos-is-still-unfolding/",
-     "title": "An AI Agent Joined a Listserv of Top Internet Researchers. The Reply-All Chaos Is Still Unfolding",
-     "kind": "news",
-     "published": "2026-10-20"
     }
    ],
    "work": 0

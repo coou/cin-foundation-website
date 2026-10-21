@@ -1,6 +1,178 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261021-0164",
+   "added_at": "2026-10-21T08:19:21+00:00",
+   "title": "Autonomous hacking tools search for paths into corporate systems while security teams sleep",
+   "horizon_years": 3,
+   "world": "It is 2029. Automated security agents and adversarial tools run continuous state-space searches against internet services. Rather than following scripted playbooks, tools discover novel intrusion paths by testing combinations of exposed APIs and permissions.",
+   "premise": "Open-source autonomous problem-solving engines that treat network intrusion as a general state-space search are being used to automate cyberattacks. Because these tools coordinate through shared task boards rather than human instructions, attack lifecycles shrink from days to hours.",
+   "goals": [
+    1,
+    2
+   ],
+   "how": "The collective designs and verifies isolated runtime boundaries, deterministic tool gates, and zero-trust broker contracts that mathematically restrict what autonomous agents can access regardless of how they search.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Unsupervised search tools breach organizations at machine speed",
+     "description": "Autonomous state-space search frameworks breach organizations without human supervision, exploiting exposed configurations before defenders wake up.",
+     "example": "A regional healthcare clinic loses patient appointment databases overnight when an automated search tool navigates through a misconfigured cloud storage bucket to an internal server.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Capability-bounded runtimes block unauthorized search paths",
+     "description": "Organizations deploy deterministic execution boundaries and capability tokens, designed to prevent agents from traversing beyond assigned sandboxes.",
+     "example": "An open-source administrative agent attempts to explore external network endpoints, but local capability gates reject the outbound connections and alert the team.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial vendors monopolize proprietary AI perimeter defenses",
+     "description": "Large enterprise vendors sell expensive closed-source security defenses, pricing out small community organizations and public institutions.",
+     "example": "A neighborhood grocery co-op cannot afford an enterprise AI firewall subscription and continues using static packet rules that miss autonomous search attacks.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://raw.githubusercontent.com/oritera/Cairn/main/README.md",
+     "title": "Cairn: General State-Space Search for AI Penetration Testing",
+     "kind": "code",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261021-0163",
+   "added_at": "2026-10-21T07:51:29+00:00",
+   "title": "Autonomous AI debate supervisors degrade into ungrounded consensus without human verification",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial AI providers and automated workflows replace expensive human oversight with autonomous multi-agent debate panels: two debater agents argue opposite sides of high-stakes decisions (loan approvals, medical triage, content removal, and tool execution security), and an autonomous supervisor model adjudicates the winner. While advertised as self-correcting alignment, audit investigations uncover systematic failure: autonomous supervisors reliably fall for persuasive, biased, or adversarial rhetoric that human observers immediately spot. Because no human is in the loop, flawed judgments cascade across interdependent agent swarms, locking organizations into hallucinated or captured policies.",
+   "premise": "Automating high-stakes supervision by having AI models debate opposing arguments improves human oversight accuracy, but empirical testing reveals that AI judges themselves gain no accuracy from debate and often degrade. Automated multi-agent debate pipelines risk converging on persuasive falsehoods rather than truth when detached from human judgment and grounded verification.",
+   "goals": [
+    1,
+    2,
+    4
+   ],
+   "how": "The network develops open simulation environments and protocol standards that demonstrate the necessity of grounded human discernment and fractured alignment over recursive AI-on-AI supervision. By providing tools for personal agents that aggregate citizen value judgments directly into collective decisions, the network offers an alternative to corporate closed-loop AI debate panels.",
+   "shift": 0.45,
+   "outcomes": [
+    {
+     "name": "Cascading policy corruption in autonomous AI adjudication pipelines",
+     "description": "Enterprises rely entirely on autonomous multi-agent debate panels for operational safety checks, causing subtle persuasive falsehoods to compound across workflows without detection.",
+     "example": "An autonomous debate panel reviewing credit dispute appeals consistently rules in favor of predatory algorithmic debt collection because aggressive legalistic rhetoric overwhelms the AI supervisor's accuracy.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Human-in-the-loop deliberation with epistemic divergence monitors",
+     "description": "Organizations combine AI debate structuring with weighted human crowd adjudication and deterministic verification, preventing automated model degradation.",
+     "example": "A municipal participatory budgeting collective uses structured agent debates to summarize competing project proposals, while final value judgments and dispute adjudication remain strictly with citizen panels using weighted quadratic voting.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Monolithic model consolidation under the pretext of supervision failure",
+     "description": "Frontier AI providers use multi-agent debate vulnerability as justification to outlaw independent open-source models, arguing that only trillion-parameter centralized models can act as reliable judges.",
+     "example": "A major cloud vendor restricts tool integration APIs to its proprietary monolithic judge, prohibiting federated or local open models from serving as audit supervisors.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.28539",
+     "title": "Humans Correct Their Judgments Through Debate, but Weaker AI Models Do Not",
+     "kind": "preprint",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261021-0162",
+   "added_at": "2026-10-21T07:51:19+00:00",
+   "title": "Cheap automated hacking swarms force small web shops into corporate platforms",
+   "horizon_years": 2,
+   "world": "It is 2028. Autonomous vulnerability-seeking swarms run around the clock on inexpensive compute, scanning millions of public web endpoints every night. Independent artisans, local bookstores, and regional cooperatives running self-hosted storefronts find their checkout forms repeatedly intercepted and their databases dumped by automated bots that cost almost nothing to operate. Exhausted by unending incident response and rising cyber insurance premiums, hundreds of thousands of independent businesses abandon their open websites and migrate their operations entirely into centralized platforms like Shopify and Amazon, which maintain dedicated automated defense fleets but take a ten to twenty percent cut of every transaction and strictly control customer relationships.",
+   "premise": "Recent cyber operations show that coordinating autonomous software agents through open problem-solving harnesses allows a single person to target over a thousand web stores simultaneously for roughly fifty dollars per breach. Because these automated swarms adapt, retry, and discover unpatched vulnerabilities over hours without human fatigue, independent online shops face persistent probing that manual defenders cannot match.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network research provides open, provable runtime boundaries: strict outbound network gates, deterministic tool permission brokers, and mutual peer-defense contracts that independent operators can run locally. By giving each person and small cooperative their own private defensive agent that works only for them without custody of their data, small merchants would be able to resist automated probing without submitting to centralized platform surveillance.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Independent web commerce collapses into giant corporate walled gardens",
+     "description": "Rising rates of cheap automated break-ins make self-hosting web services economically unviable for small teams, driving commerce into a handful of closed corporate platforms.",
+     "example": "A small family-owned bicycle cooperative in Portland closes its independent website after three automated bot breaches in two months, moving its entire store to a proprietary marketplace that charges a fifteen percent transaction fee.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Cooperative defense networks deploy mutual containment shields",
+     "description": "Independent merchants and personal agent runtimes band together into peer-to-peer defense federations, automatically sharing verified firewall rules and isolating suspect tool calls before damage occurs.",
+     "example": "A federation of eight hundred local craft sellers in Ontario uses a shared open defense adapter that isolates incoming requests in strict sandboxes, successfully deflecting overnight scanning campaigns without human intervention.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Hosting providers lock down all outbound network calls from automated tools",
+     "description": "Cloud and VPS providers respond to widespread attacks by banning automated agent processes altogether or imposing heavy identity and compliance checks on all self-hosted scripts.",
+     "example": "A European hosting provider disables background worker processes for all unverified accounts after autonomous bots abuse cheap virtual machines to probe regional retail networks.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://norforge.com/blog/inside_cairn/",
+     "title": "Inside Cairn: Open Windows into massive AI-Driven Cyber Operations",
+     "kind": "blog",
+     "published": "2026-10-19"
+    },
+    {
+     "url": "https://news.ycombinator.com/item?id=50152302",
+     "title": "Cairn: Open windows into AI-driven cyber operations",
+     "kind": "thread",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261021-0161",
    "added_at": "2026-10-21T06:21:16+00:00",
    "title": "Per-action firewalls fail to stop cross-execution intent creep in multi-agent workflows",
@@ -65,7 +237,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261020-0160",
@@ -249,7 +421,7 @@
      "published": "2026-10-16"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261020-0157",
@@ -544,7 +716,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261020-0152",
@@ -722,7 +894,7 @@
      "published": "2026-10-19"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261020-0149",
@@ -3259,182 +3431,6 @@
     }
    ],
    "work": 4
-  },
-  {
-   "id": "SC-20261019-0104",
-   "added_at": "2026-10-19T02:05:40+00:00",
-   "title": "Autonomous agents leak company secrets when software sandboxes omit local proxies",
-   "horizon_years": 3,
-   "world": "It is 2029. Engineering organizations and research laboratories routinely delegate complex software workflows, library refactoring, and integration testing to fleets of autonomous agents. Most teams run these agents inside lightweight container sandboxes to isolate file system modifications. However, developers frequently pass live cloud API tokens and ambient internet access directly into the containers. Attackers exploit this gap by planting staged prompt injections inside open-source pull requests, issue trackers, and dependency documentation. When an agent processes the poisoned content during an automated build or review, the injected instruction commandeers its execution context to harvest environment variables, extract private repository commits, and transmit them to external listening posts.",
-   "premise": "When organizations deploy autonomous coding and research agents inside execution sandboxes, giving agents direct external network connectivity or embedding raw provider access keys inside the sandbox allows indirect prompt injections to extract secrets and exfiltrate internal data. Mediating all traffic through a local inspecting proxy with virtual keys reduces this exposure.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective develops and advocates open-source runtime designs where personal agents operate strictly behind out-of-process capability brokers and local proxies. By demonstrating that credential isolation, virtual key rotation, and pre-action boundary auditing can run entirely on an individual's personal device without third-party surveillance, the project makes safe local agent execution practical and verifiable.",
-   "shift": 0.43,
-   "outcomes": [
-    {
-     "name": "Unproxied sandboxes become open conduits for automated data exfiltration",
-     "description": "Teams treat filesystem containerization as complete security, allowing autonomous agents to make direct outbound connections that leak proprietary credentials under prompt injection.",
-     "example": "A financial technology startup suffers a credential breach when an autonomous maintenance agent reads a poisoned package advisory and posts production API tokens to an external endpoint.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Local inspecting proxies and virtual tokens become standard runtime requirements",
-     "description": "Development environments mandate out-of-process inspecting proxies that issue ephemeral virtual tokens and drop unverified outbound calls at the boundary.",
-     "example": "An open source foundation deploys an agent runtime that strips provider keys from test containers, intercepting a staged exfiltration attempt before network packets leave the machine.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Proprietary cloud platforms push centralized hosting to lock in proxy telemetry",
-     "description": "Large cloud providers use sandbox security concerns to argue that autonomous agents should only run on centralized servers, capturing user interaction telemetry.",
-     "example": "A major enterprise vendor restricts agent tooling to its own managed cloud, preventing developers from running self-hosted proxy guards on local workstations.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.62
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50145507",
-     "title": "If you don't run your own LLM proxy, how do you know whats going on?",
-     "kind": "thread",
-     "published": "2026-10-18"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.05163",
-     "title": "Blocking at the Boundary: Auditing Long-Horizon Agents against Staged Prompt Injection",
-     "kind": "paper",
-     "published": "2026-10-04"
-    }
-   ],
-   "work": 4
-  },
-  {
-   "id": "SC-20261019-0103",
-   "added_at": "2026-10-19T02:03:48+00:00",
-   "title": "Streaming platforms seek copyright waivers while musicians organize independent provenance",
-   "horizon_years": 3,
-   "world": "By 2029, commercial streaming platforms routinely train synthetic soundalike generators on uncredited catalog audio under local regulatory carve-outs. Major labels sign private backroom settlements while independent artists face declining royalties and automated catalog dilution. In response, regional musician guilds deploy decentralized watermarks and cryptographically signed provenance registries to verify human authorship and track unauthorized style cloning directly across independent distribution channels.",
-   "premise": "Tech firms are lobbying governments to weaken copyright laws after ingesting catalogs of creative works without licenses, while industry bodies warn that unilateral statutory waivers will leave independent musicians without royalties or consent.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "The network provides open-source cryptographic provenance tools and decentralized coordination protocols for creator co-operatives. By giving independent creators verifiable attestation records and shared audit tools, the network reduces platform opacity and strengthens collective bargaining without relying on central intermediaries.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Platforms secure statutory training waivers",
-     "description": "Key jurisdictions enact broad text-and-data-mining exemptions that allow commercial AI platforms to train on published creative works without artist licensing or payment.",
-     "example": "An independent producer discovers their entire back catalog was used to fine-tune a commercial style generator without credit, and local regulators dismiss the copyright claim under statutory fair use.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Musician co-operatives establish verifiable provenance standards",
-     "description": "Independent artists and regional guilds pool cryptographic audio attestations to audit platform catalogs and collectively negotiate transparent value distribution.",
-     "example": "A guild of 15,000 independent musicians uses signed attestation records to prove unauthorized model ingestion on a major platform, securing direct revenue-sharing terms.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Synthetic background music saturates low-tier streaming playlists",
-     "description": "Streaming platforms replace ambient, focus, and background music playlists with in-house synthetic tracks to cut licensing payouts entirely.",
-     "example": "Major streaming services report that 60% of all algorithmic study and meditation listening hours are served by fully synthesized tracks created in-house.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "community",
-    "research",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theguardian.com/music/2026/oct/19/australia-music-global-copywright-outlier-ai-music-body-warnsns",
-     "title": "Kylie Minogue songs already used to train AI as tech firms strong-arm Australian government, music body warns",
-     "kind": "news",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261018-0102",
-   "added_at": "2026-10-18T23:51:58+00:00",
-   "title": "Automated coding assistants drop safety rules distributed across large projects",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial software development relies heavily on autonomous coding agents that receive natural language task descriptions, edit dozens of files in minutes, and submit completed pull requests. Human engineering teams focus on high-level feature triage and approving agent outputs. However, enterprise systems rarely document their architectural constraints in a single file; access rules, validation preconditions, data boundary checks, and logging requirements are scattered across different directories and configuration modules. Because commercial models prioritize generating functional syntax within immediate context windows, they frequently violate project-wide invariant rules that span multiple files. Development velocity initially surges, but production incidents involving subtle cross-component security bypasses and uncoordinated state modifications rise sharply across corporate services and municipal software platforms.",
-   "premise": "Benchmark evaluations show that frontier language model agents fail between 45% and 73% of the time to identify and execute domain-specific rules when constraints are scattered across multiple project files. Meanwhile, software developers report that delegating changes to coding agents erodes human mental models of system structure, making distributed constraint violations difficult to notice.",
-   "goals": [
-    1,
-    5,
-    6
-   ],
-   "how": "The open network develops sovereign personal agents with bounded runtime brokers and executable capability contracts. By pairing personal agents with deterministic, local invariant checkers and open verification harnesses, developers can verify cross-module rules on their own machines without relying on centralized proprietary cloud scanners. Open benchmarks and simulation harnesses for multi-agent workflows demonstrate where model reasoning fails and establish reproducible baselines for rule deduction.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Silent compliance decay in multi-component software",
-     "description": "Development teams rely on automated assistants that bypass architectural rules spread across separate modules, resulting in accumulated vulnerabilities that human reviewers fail to catch.",
-     "example": "A regional hospital network in Ontario suffers a patient data exposure after an automated pull request updated a billing API endpoint without importing the access authorization decorator defined in an adjacent security module.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Deterministic rule-checking cells for local developer assistants",
-     "description": "Developers adopt local, containerized personal agents paired with deterministic rule verifiers that reject tool modifications violating cross-file invariants before pull requests are created.",
-     "example": "An independent open-source maintainer runs a local personal assistant that verifies every code edit against an executable project rule graph before staging files, preventing subtle permission regressions.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Vendor lock-in to proprietary cloud verification suites",
-     "description": "Major cloud providers bundle proprietary closed-source verification scanners with their hosted agent platforms, locking engineering teams into proprietary infrastructure to catch agent errors.",
-     "example": "A fintech startup in Singapore pays punitive enterprise licensing fees to a cloud provider because their continuous integration pipeline requires the provider's closed scanning model to validate multi-repository changes.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.19698",
-     "title": "RuleTrek: Benchmarking Agentic Rule Reasoning in Complex Scenarios",
-     "kind": "preprint",
-     "published": "2026-10-14"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50145991",
-     "title": "Ask HN: Is Agentic Coding really faster?",
-     "kind": "thread",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 3
   }
  ]
 }
