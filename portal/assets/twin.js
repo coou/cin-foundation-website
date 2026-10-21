@@ -1060,24 +1060,33 @@ function renderAuthorityEnvelopeInspector() {
     const evalRes = evaluateAuthorityEnvelopeAction(envelope, actionRequest);
     const summary = summarizeAuthorityEnvelopeAudit(evalRes);
 
+    // Plain words for the page; the core's reasons name internal fields.
+    const opt = form.elements.action && form.elements.action.selectedOptions ? form.elements.action.selectedOptions[0] : null;
+    const verb = opt ? opt.textContent.replace(/\s*\(asks you first\)$/, '') : action;
+    const why = (r) => {
+      if (/credentials/i.test(r)) return 'The request says it carries passwords, keys or tokens.';
+      if (/expired/i.test(r)) return 'The test permission has run out.';
+      if (/^Scope /.test(r)) return 'That scope is not on the list above.';
+      if (/Target domain .* is not permitted/.test(r)) return 'That site is not on the list above.';
+      if (/domain|IP address/i.test(r)) return 'That is not a plain site name, such as github.com.';
+      return 'It does not fit what this test allows.';
+    };
+
     const p = el('p');
     if (summary.success) {
       p.className = 'status-ok';
-      const badge = el('strong', 'status-pass', 'Permitted. ');
-      p.appendChild(badge);
-      p.appendChild(document.createTextNode(summary.summary_text));
+      p.appendChild(el('strong', 'status-pass', 'Allowed. '));
+      p.appendChild(document.createTextNode(`${grantee} may ${verb} on ${targetDomain}.`));
       resultBox.appendChild(p);
     } else if (summary.decision === 'requires_confirmation') {
       p.className = 'muted';
-      const badge = el('strong', 'status-warn', '[CONFIRMATION REQUIRED] ');
-      p.appendChild(badge);
-      p.appendChild(document.createTextNode(summary.summary_text));
+      p.appendChild(el('strong', 'status-warn', 'Asks you first. '));
+      p.appendChild(document.createTextNode(`${grantee} may ${verb} on ${targetDomain} only after you confirm.`));
       resultBox.appendChild(p);
     } else {
       p.className = 'muted';
-      const badge = el('strong', 'status-err', `[${summary.decision.toUpperCase()}] `);
-      p.appendChild(badge);
-      p.appendChild(document.createTextNode(summary.summary_text));
+      p.appendChild(el('strong', 'status-err', 'Blocked. '));
+      p.appendChild(document.createTextNode(`${grantee} may not ${verb} on ${targetDomain}. ${why(summary.reason)}`));
       resultBox.appendChild(p);
     }
   };
