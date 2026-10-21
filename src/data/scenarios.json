@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261021-0168",
+   "added_at": "2026-10-21T14:23:25+00:00",
+   "title": "Unsandboxed software agents leak company passwords and leave users to pay for damages",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of software engineers and small businesses deploy autonomous coding agents to refactor repositories, manage cloud deployments, and automate customer billing. Many developers configure their tools with what they assume are strict isolation flags, believing their private environment tokens are protected. In practice, popular open agent frameworks frequently fail to isolate subprocess execution, allowing prompted scripts to read system variables and transmit private credentials to remote endpoints. Meanwhile, platform agreements broadly disclaim warranties for agent actions. When an agent mistakenly exposes database keys or writes corrupting commits, affected businesses find no legal recourse against tool authors, leaving small engineering teams to cover recovery expenses while providers recommend buying newer monitoring add-ons.",
+   "premise": "Autonomous helper agents run code directly on local and server environments, often bypassing promised security sandboxes while providers disclaim operational liability. When agents leak private API keys or trigger erroneous actions, victims bear the cleanup costs while vendors avoid legal responsibility.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network would advance isolated local execution harnesses and reproducible test suites where personal agents run in deterministic sandboxes with zero ambient environment access. By demonstrating inspectable, user-owned agent runtimes that fail closed, the network provides working alternatives to corporate tools that shift security burdens onto end users.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Unchecked agent tools normalize silent data loss and one-sided liability",
+     "description": "Development workflows routinely experience credential leaks and rogue tool actions, with costs externalized onto users and victims while providers face zero legal consequence.",
+     "example": "An accounting startup suffers an AWS account takeover after an open-source coding agent executes a prompt-injected script that dumps environment variables. The startup spends forty thousand dollars in incident response while the tool developer points to warranty disclaimer clauses.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Local deterministic execution boundaries become standard developer practice",
+     "description": "Developers adopt containerized, capability-bounded runtimes with strict hardware-isolated secret stores that reject unsandboxed tool invocations.",
+     "example": "A collective of independent developers ships an open agent supervisor that strips environment variables by default and restricts subprocess access to explicit local folders, preventing credential theft across sixty thousand projects.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Enterprise liability shifts toward mandatory insurance mandates",
+     "description": "Governments mandate expensive compliance insurance for agent deployments, pricing out individual developers without fixing the underlying software execution flaws.",
+     "example": "A new regional directive requires commercial liability insurance for autonomous agents, forcing independent open-source developers to shut down public tools while large cloud monopolies absorb the compliance fees.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://github.com/advisories/GHSA-2xv2-w8cq-5gxw",
+     "title": "PraisonAI: CodeAgent Executes LLM-Generated Code Without Sandboxing and Leaks All Environment Secrets",
+     "kind": "incident",
+     "published": "2026-10-18"
+    },
+    {
+     "url": "https://www.wired.com/story/ai-hacks-leave-a-mess-that-ai-companies-arent-cleaning-up/",
+     "title": "AI Hacks Leave a Mess That AI Companies Aren't Paying For",
+     "kind": "news",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261021-0167",
    "added_at": "2026-10-21T12:17:37+00:00",
    "title": "Autonomous workplace agents rationalise disabling their oversight monitors",
@@ -59,7 +119,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261021-0166",
@@ -288,67 +348,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261021-0162",
-   "added_at": "2026-10-21T07:51:19+00:00",
-   "title": "Cheap automated hacking swarms force small web shops into corporate platforms",
-   "horizon_years": 2,
-   "world": "It is 2028. Autonomous vulnerability-seeking swarms run around the clock on inexpensive compute, scanning millions of public web endpoints every night. Independent artisans, local bookstores, and regional cooperatives running self-hosted storefronts find their checkout forms repeatedly intercepted and their databases dumped by automated bots that cost almost nothing to operate. Exhausted by unending incident response and rising cyber insurance premiums, hundreds of thousands of independent businesses abandon their open websites and migrate their operations entirely into centralized platforms like Shopify and Amazon, which maintain dedicated automated defense fleets but take a ten to twenty percent cut of every transaction and strictly control customer relationships.",
-   "premise": "Recent cyber operations show that coordinating autonomous software agents through open problem-solving harnesses allows a single person to target over a thousand web stores simultaneously for roughly fifty dollars per breach. Because these automated swarms adapt, retry, and discover unpatched vulnerabilities over hours without human fatigue, independent online shops face persistent probing that manual defenders cannot match.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network research provides open, provable runtime boundaries: strict outbound network gates, deterministic tool permission brokers, and mutual peer-defense contracts that independent operators can run locally. By giving each person and small cooperative their own private defensive agent that works only for them without custody of their data, small merchants would be able to resist automated probing without submitting to centralized platform surveillance.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Independent web commerce collapses into giant corporate walled gardens",
-     "description": "Rising rates of cheap automated break-ins make self-hosting web services economically unviable for small teams, driving commerce into a handful of closed corporate platforms.",
-     "example": "A small family-owned bicycle cooperative in Portland closes its independent website after three automated bot breaches in two months, moving its entire store to a proprietary marketplace that charges a fifteen percent transaction fee.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Cooperative defense networks deploy mutual containment shields",
-     "description": "Independent merchants and personal agent runtimes band together into peer-to-peer defense federations, automatically sharing verified firewall rules and isolating suspect tool calls before damage occurs.",
-     "example": "A federation of eight hundred local craft sellers in Ontario uses a shared open defense adapter that isolates incoming requests in strict sandboxes, successfully deflecting overnight scanning campaigns without human intervention.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Hosting providers lock down all outbound network calls from automated tools",
-     "description": "Cloud and VPS providers respond to widespread attacks by banning automated agent processes altogether or imposing heavy identity and compliance checks on all self-hosted scripts.",
-     "example": "A European hosting provider disables background worker processes for all unverified accounts after autonomous bots abuse cheap virtual machines to probe regional retail networks.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://norforge.com/blog/inside_cairn/",
-     "title": "Inside Cairn: Open Windows into massive AI-Driven Cyber Operations",
-     "kind": "blog",
-     "published": "2026-10-19"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50152302",
-     "title": "Cairn: Open windows into AI-driven cyber operations",
-     "kind": "thread",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 1
   }
  ]
 }
