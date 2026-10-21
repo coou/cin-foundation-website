@@ -3417,7 +3417,52 @@ export const ALLOWED_AGREEMENT_OPTIONS_FIELDS = Object.freeze([
   'tolerance_cents'
 ]);
 
-const CURRENCY_RE = /^[A-Z]{3}$/;
+export const ALLOWED_FINANCIAL_QUERY_OPTIONS = Object.freeze([
+  'duplicate_id_policy'
+]);
+
+export const ALLOWED_LEDGER_CURRENCIES = Object.freeze([
+  'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN',
+  'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND', 'BOB', 'BRL',
+  'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY',
+  'COP', 'CRC', 'CUC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD',
+  'EGP', 'ERN', 'ETB', 'EUR', 'FJD', 'FKP', 'GBP', 'GEL', 'GHS', 'GIP',
+  'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR',
+  'ILS', 'INR', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'JPY', 'KES', 'KGS',
+  'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR',
+  'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP',
+  'MRU', 'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO',
+  'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN',
+  'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG',
+  'SEK', 'SGD', 'SHP', 'SLL', 'SLE', 'SOS', 'SRD', 'SSP', 'STN', 'SVC',
+  'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD',
+  'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VES', 'VND', 'VUV', 'WST',
+  'XAF', 'XCD', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW', 'ZWL'
+]);
+
+export function isValidCurrencyCode(code) {
+  return typeof code === 'string' && ALLOWED_LEDGER_CURRENCIES.includes(code);
+}
+
+export function isValidCalendarDate(dateStr) {
+  if (typeof dateStr !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return false;
+  }
+  const parts = dateStr.split('-');
+  const y = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const d = parseInt(parts[2], 10);
+  if (m < 1 || m > 12 || d < 1 || d > 31) {
+    return false;
+  }
+  const dateObj = new Date(Date.UTC(y, m - 1, d));
+  if (isNaN(dateObj.getTime())) {
+    return false;
+  }
+  return dateObj.getUTCFullYear() === y &&
+         dateObj.getUTCMonth() === (m - 1) &&
+         dateObj.getUTCDate() === d;
+}
 
 /**
  * Deterministically compute a short hex fingerprint for a financial ledger query.
@@ -3449,14 +3494,14 @@ function validateLedgerEntry(entry, index) {
   if (typeof entry.id !== 'string' || !entry.id.trim()) {
     return `Entry at index ${index} must have a non-empty string id`;
   }
-  if (typeof entry.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(entry.date) || isNaN(Date.parse(entry.date))) {
-    return `Entry at index ${index} has invalid date (must be YYYY-MM-DD)`;
+  if (!isValidCalendarDate(entry.date)) {
+    return `Entry at index ${index} has invalid date (must be a valid calendar YYYY-MM-DD)`;
   }
-  if (!Number.isInteger(entry.amount_cents) || !Number.isFinite(entry.amount_cents)) {
-    return `Entry at index ${index} amount_cents must be an integer, not float, NaN, or Infinity`;
+  if (!Number.isSafeInteger(entry.amount_cents)) {
+    return `Entry at index ${index} amount_cents must be a safe integer, not float, NaN, Infinity, or unsafe integer`;
   }
-  if (typeof entry.currency !== 'string' || !CURRENCY_RE.test(entry.currency)) {
-    return `Entry at index ${index} must have a 3-letter uppercase ISO currency code`;
+  if (!isValidCurrencyCode(entry.currency)) {
+    return `Entry at index ${index} must have a valid 3-letter uppercase ISO currency code`;
   }
   if (entry.kind !== 'debit' && entry.kind !== 'credit') {
     return `Entry at index ${index} kind must be 'debit' or 'credit'`;
@@ -3498,6 +3543,40 @@ export function evaluateFinancialLedgerQuery(ledger, query, options = {}) {
     });
   }
 
+  if (options !== undefined && options !== null) {
+    if (typeof options !== 'object' || Array.isArray(options)) {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_options',
+        reason: 'Options must be a non-null object',
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
+    for (const k of Object.keys(options)) {
+      if (!ALLOWED_FINANCIAL_QUERY_OPTIONS.includes(k)) {
+        return Object.freeze({
+          ok: false,
+          error: 'unknown_option',
+          reason: `Unknown option in query options: ${k}`,
+          matching_count: 0,
+          total_cents: 0
+        });
+      }
+    }
+    if (options.duplicate_id_policy !== undefined &&
+        options.duplicate_id_policy !== 'reject' &&
+        options.duplicate_id_policy !== 'skip') {
+      return Object.freeze({
+        ok: false,
+        error: 'invalid_options',
+        reason: "duplicate_id_policy must be 'reject' or 'skip'",
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
+  }
+
   if (!query || typeof query !== 'object' || Array.isArray(query)) {
     return Object.freeze({
       ok: false,
@@ -3531,22 +3610,22 @@ export function evaluateFinancialLedgerQuery(ledger, query, options = {}) {
     });
   }
 
-  if (typeof query.currency !== 'string' || !CURRENCY_RE.test(query.currency)) {
+  if (!isValidCurrencyCode(query.currency)) {
     return Object.freeze({
       ok: false,
       error: 'missing_or_invalid_currency',
-      reason: 'Query must specify a 3-letter uppercase ISO currency',
+      reason: 'Query must specify a valid 3-letter uppercase ISO currency',
       matching_count: 0,
       total_cents: 0
     });
   }
 
   if (query.start_date !== undefined) {
-    if (typeof query.start_date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(query.start_date) || isNaN(Date.parse(query.start_date))) {
+    if (!isValidCalendarDate(query.start_date)) {
       return Object.freeze({
         ok: false,
         error: 'invalid_start_date',
-        reason: 'start_date must be a valid YYYY-MM-DD date string',
+        reason: 'start_date must be a valid calendar YYYY-MM-DD date string',
         matching_count: 0,
         total_cents: 0
       });
@@ -3554,11 +3633,11 @@ export function evaluateFinancialLedgerQuery(ledger, query, options = {}) {
   }
 
   if (query.end_date !== undefined) {
-    if (typeof query.end_date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(query.end_date) || isNaN(Date.parse(query.end_date))) {
+    if (!isValidCalendarDate(query.end_date)) {
       return Object.freeze({
         ok: false,
         error: 'invalid_end_date',
-        reason: 'end_date must be a valid YYYY-MM-DD date string',
+        reason: 'end_date must be a valid calendar YYYY-MM-DD date string',
         matching_count: 0,
         total_cents: 0
       });
@@ -3610,20 +3689,25 @@ export function evaluateFinancialLedgerQuery(ledger, query, options = {}) {
   }
 
   if (query.expected_amount_cents !== undefined) {
-    if (!Number.isInteger(query.expected_amount_cents) || !Number.isFinite(query.expected_amount_cents)) {
+    if (!Number.isSafeInteger(query.expected_amount_cents)) {
       return Object.freeze({
         ok: false,
         error: 'invalid_expected_amount',
-        reason: 'expected_amount_cents must be an integer',
+        reason: 'expected_amount_cents must be a safe integer',
         matching_count: 0,
         total_cents: 0
       });
     }
   }
 
-  // Validate all entries fail-closed
+  // Validate all entries fail-closed and check duplicate IDs
+  const seenIds = new Set();
+  const dupPolicy = (options && options.duplicate_id_policy) || 'reject';
+  const validEntries = [];
+
   for (let i = 0; i < ledger.length; i++) {
-    const err = validateLedgerEntry(ledger[i], i);
+    const entry = ledger[i];
+    const err = validateLedgerEntry(entry, i);
     if (err) {
       return Object.freeze({
         ok: false,
@@ -3633,16 +3717,31 @@ export function evaluateFinancialLedgerQuery(ledger, query, options = {}) {
         total_cents: 0
       });
     }
+    if (seenIds.has(entry.id)) {
+      if (dupPolicy === 'reject') {
+        return Object.freeze({
+          ok: false,
+          error: 'duplicate_ledger_id',
+          reason: `Duplicate ledger entry ID detected: ${entry.id}`,
+          matching_count: 0,
+          total_cents: 0
+        });
+      }
+      // If skip, skip duplicate entry
+      continue;
+    }
+    seenIds.add(entry.id);
+    validEntries.push(entry);
   }
 
-  // Filter matching records
+  // Filter matching records with safe integer accumulation
   const matched = [];
   const breakdownMap = Object.create(null);
   let totalCents = 0;
   let debitCents = 0;
   let creditCents = 0;
 
-  for (const entry of ledger) {
+  for (const entry of validEntries) {
     if (entry.currency !== query.currency) {
       continue;
     }
@@ -3665,10 +3764,39 @@ export function evaluateFinancialLedgerQuery(ledger, query, options = {}) {
     }
 
     matched.push(entry);
+
+    if (!Number.isSafeInteger(totalCents + entry.amount_cents)) {
+      return Object.freeze({
+        ok: false,
+        error: 'integer_overflow',
+        reason: 'Integer overflow detected: total cents exceeds safe integer range',
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
     totalCents += entry.amount_cents;
+
     if (entry.kind === 'debit') {
+      if (!Number.isSafeInteger(debitCents + entry.amount_cents)) {
+        return Object.freeze({
+          ok: false,
+          error: 'integer_overflow',
+          reason: 'Integer overflow detected in debit cents',
+          matching_count: 0,
+          total_cents: 0
+        });
+      }
       debitCents += entry.amount_cents;
     } else {
+      if (!Number.isSafeInteger(creditCents + entry.amount_cents)) {
+        return Object.freeze({
+          ok: false,
+          error: 'integer_overflow',
+          reason: 'Integer overflow detected in credit cents',
+          matching_count: 0,
+          total_cents: 0
+        });
+      }
       creditCents += entry.amount_cents;
     }
 
@@ -3677,6 +3805,15 @@ export function evaluateFinancialLedgerQuery(ledger, query, options = {}) {
       breakdownMap[catKey] = { count: 0, total_cents: 0 };
     }
     breakdownMap[catKey].count += 1;
+    if (!Number.isSafeInteger(breakdownMap[catKey].total_cents + entry.amount_cents)) {
+      return Object.freeze({
+        ok: false,
+        error: 'integer_overflow',
+        reason: `Integer overflow detected in category ${catKey}`,
+        matching_count: 0,
+        total_cents: 0
+      });
+    }
     breakdownMap[catKey].total_cents += entry.amount_cents;
   }
 
@@ -3761,12 +3898,12 @@ export function verifyLedgerQueryAgreement(primary, checker, options = {}) {
       }
     }
     if (options.tolerance_cents !== undefined) {
-      if (!Number.isInteger(options.tolerance_cents) || options.tolerance_cents < 0) {
+      if (!Number.isSafeInteger(options.tolerance_cents) || options.tolerance_cents < 0) {
         return Object.freeze({
           ok: false,
           status: 'error',
           sure: false,
-          reason: 'tolerance_cents must be a non-negative integer'
+          reason: 'tolerance_cents must be a non-negative safe integer'
         });
       }
     }
@@ -3804,25 +3941,134 @@ export function verifyLedgerQueryAgreement(primary, checker, options = {}) {
     });
   }
 
+  // Complete schema and type validation on both readings
+  const readings = [
+    { label: 'Primary', r: primary },
+    { label: 'Checker', r: checker }
+  ];
+
+  for (const { label, r } of readings) {
+    if (typeof r.operation !== 'string' || !ALLOWED_LEDGER_OPERATIONS.includes(r.operation)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading has unknown or invalid operation: "${r.operation}"`
+      });
+    }
+
+    if (!isValidCurrencyCode(r.currency)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading has invalid or unrecognised currency code: "${r.currency}"`
+      });
+    }
+
+    if (r.start_date !== undefined && !isValidCalendarDate(r.start_date)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading has invalid start_date: "${r.start_date}"`
+      });
+    }
+
+    if (r.end_date !== undefined && !isValidCalendarDate(r.end_date)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading has invalid end_date: "${r.end_date}"`
+      });
+    }
+
+    if (r.start_date && r.end_date && r.start_date > r.end_date) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading has start_date after end_date`
+      });
+    }
+
+    if (r.total_cents !== undefined && !Number.isSafeInteger(r.total_cents)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading total_cents must be a safe integer`
+      });
+    }
+
+    if (r.matching_count !== undefined && (!Number.isSafeInteger(r.matching_count) || r.matching_count < 0)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading matching_count must be a non-negative safe integer`
+      });
+    }
+
+    if (r.expected_amount_cents !== undefined && !Number.isSafeInteger(r.expected_amount_cents)) {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading expected_amount_cents must be a safe integer`
+      });
+    }
+
+    if (r.category !== undefined && typeof r.category !== 'string') {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading category must be a string`
+      });
+    }
+
+    if (r.merchant !== undefined && typeof r.merchant !== 'string') {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading merchant must be a string`
+      });
+    }
+
+    if (r.kind !== undefined && r.kind !== 'debit' && r.kind !== 'credit') {
+      return Object.freeze({
+        ok: false,
+        status: 'error',
+        sure: false,
+        reason: `${label} reading kind must be 'debit' or 'credit'`
+      });
+    }
+  }
+
   // Compare semantic query boundaries
-  const compareFields = ['operation', 'currency', 'start_date', 'end_date', 'category', 'merchant', 'kind'];
+  const compareFields = ['operation', 'currency', 'start_date', 'end_date', 'category', 'merchant', 'kind', 'expected_amount_cents'];
   for (const f of compareFields) {
     if (primary[f] !== undefined || checker[f] !== undefined) {
-      if (String(primary[f] || '').trim().toLowerCase() !== String(checker[f] || '').trim().toLowerCase()) {
+      const pVal = primary[f] !== undefined ? String(primary[f]).trim().toLowerCase() : '';
+      const cVal = checker[f] !== undefined ? String(checker[f]).trim().toLowerCase() : '';
+      if (pVal !== cVal) {
         return Object.freeze({
           ok: true,
           status: 'disagreement',
           sure: false,
           field: f,
-          primary_value: primary[f] || null,
-          checker_value: checker[f] || null,
+          primary_value: primary[f] !== undefined ? primary[f] : null,
+          checker_value: checker[f] !== undefined ? checker[f] : null,
           reason: `Readings disagree on ${f}: "${primary[f]}" vs "${checker[f]}"`
         });
       }
     }
   }
 
-  // Check calculation symmetry: if one supplies total_cents, both must supply it
+  // Check calculation symmetry: total_cents
   const primaryHasTotal = primary.total_cents !== undefined;
   const checkerHasTotal = checker.total_cents !== undefined;
   if (primaryHasTotal !== checkerHasTotal) {
@@ -3848,20 +4094,11 @@ export function verifyLedgerQueryAgreement(primary, checker, options = {}) {
     });
   }
 
-  // If calculation was supplied, assert integer validity and bounds
+  let totalDiff = 0;
   if (primaryHasTotal) {
-    if (!Number.isInteger(primary.total_cents) || !Number.isInteger(checker.total_cents)) {
-      return Object.freeze({
-        ok: false,
-        status: 'error',
-        sure: false,
-        reason: 'total_cents must be an integer in both readings'
-      });
-    }
-
-    const diff = Math.abs(primary.total_cents - checker.total_cents);
-    const tol = options && Number.isInteger(options.tolerance_cents) ? options.tolerance_cents : 0;
-    if (diff > tol) {
+    totalDiff = Math.abs(primary.total_cents - checker.total_cents);
+    const tol = options && Number.isSafeInteger(options.tolerance_cents) ? options.tolerance_cents : 0;
+    if (totalDiff > tol) {
       return Object.freeze({
         ok: true,
         status: 'disagreement',
@@ -3875,14 +4112,6 @@ export function verifyLedgerQueryAgreement(primary, checker, options = {}) {
   }
 
   if (primaryHasCount) {
-    if (!Number.isInteger(primary.matching_count) || !Number.isInteger(checker.matching_count)) {
-      return Object.freeze({
-        ok: false,
-        status: 'error',
-        sure: false,
-        reason: 'matching_count must be an integer in both readings'
-      });
-    }
     if (primary.matching_count !== checker.matching_count) {
       return Object.freeze({
         ok: true,
@@ -3896,16 +4125,24 @@ export function verifyLedgerQueryAgreement(primary, checker, options = {}) {
     }
   }
 
-  const verifiedCents = primaryHasTotal ? primary.total_cents : null;
+  // Acceptance 2 rule: "no sure for unknown operations, invalid currencies/dates/counts or unequal exact cents via tolerance."
+  // If totalDiff > 0 (readings differ within tolerance), sure MUST BE false!
+  const isExactCentsMatch = totalDiff === 0;
+  const isSure = isExactCentsMatch;
+  const verifiedCents = isExactCentsMatch && primaryHasTotal ? primary.total_cents : null;
 
   return Object.freeze({
     ok: true,
-    status: 'agreement',
-    sure: true,
+    status: isExactCentsMatch ? 'agreement' : 'approximate_agreement',
+    sure: isSure,
+    approximate: !isExactCentsMatch,
+    discrepancy_cents: totalDiff,
     verified_cents: verifiedCents,
     currency: primary.currency,
     matching_count: primaryHasCount ? primary.matching_count : null,
-    reason: 'Both readings agree on query parameters and calculations'
+    reason: isExactCentsMatch
+      ? 'Both readings agree on query parameters and calculations'
+      : `Readings agree within tolerance, but exact cents differ by ${totalDiff}`
   });
 }
 

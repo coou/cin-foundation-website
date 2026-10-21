@@ -76,6 +76,10 @@ import {
   ALLOWED_FINANCIAL_QUERY_FIELDS,
   ALLOWED_READING_FIELDS,
   ALLOWED_AGREEMENT_OPTIONS_FIELDS,
+  ALLOWED_FINANCIAL_QUERY_OPTIONS,
+  ALLOWED_LEDGER_CURRENCIES,
+  isValidCurrencyCode,
+  isValidCalendarDate,
   evaluateFinancialLedgerQuery,
   verifyLedgerQueryAgreement,
   summarizeLedgerEvaluation,
@@ -6091,4 +6095,277 @@ test('summarizeDialogueSanitization produces clean deterministic text summaries'
   const invalidSummary = summarizeDialogueSanitization(null);
   assert.equal(invalidSummary.success, false);
   assert.equal(invalidSummary.verdict, 'block');
+});
+
+/* =========================================================================
+   L-1003: Strict Round-Trip Calendar Validation, Safe Integer Arithmetic,
+   Duplicate Ledger ID Policies, and Agreement Dual-Reading Verification
+   ========================================================================= */
+
+test('L-1003: isValidCalendarDate strictly validates calendar round-trip and rejects impossible dates', () => {
+  // Impossible leap days and rollover dates
+  assert.equal(isValidCalendarDate('2026-02-30'), false); // Audit D-0409 case
+  assert.equal(isValidCalendarDate('2026-02-29'), false); // 2026 is not a leap year
+  assert.equal(isValidCalendarDate('2024-02-29'), true);  // 2024 is a leap year
+  assert.equal(isValidCalendarDate('2026-04-31'), false); // April has 30 days
+  assert.equal(isValidCalendarDate('2026-06-31'), false); // June has 30 days
+  assert.equal(isValidCalendarDate('2026-09-31'), false); // September has 30 days
+  assert.equal(isValidCalendarDate('2026-11-31'), false); // November has 30 days
+  assert.equal(isValidCalendarDate('2026-13-01'), false); // Month 13 out of bounds
+  assert.equal(isValidCalendarDate('2026-00-15'), false); // Month 00 out of bounds
+  assert.equal(isValidCalendarDate('2026-01-32'), false); // Day 32 out of bounds
+  assert.equal(isValidCalendarDate('2026-01-00'), false); // Day 00 out of bounds
+
+  // Malformed or non-string inputs
+  assert.equal(isValidCalendarDate(null), false);
+  assert.equal(isValidCalendarDate(undefined), false);
+  assert.equal(isValidCalendarDate(''), false);
+  assert.equal(isValidCalendarDate('invalid-date'), false);
+  assert.equal(isValidCalendarDate('2026/02/28'), false);
+  assert.equal(isValidCalendarDate(20260228), false);
+
+  // Valid calendar dates
+  assert.equal(isValidCalendarDate('2026-01-31'), true);
+  assert.equal(isValidCalendarDate('2026-02-28'), true);
+  assert.equal(isValidCalendarDate('2026-10-21'), true);
+  assert.equal(isValidCalendarDate('2026-12-31'), true);
+});
+
+test('L-1003: isValidCurrencyCode and ALLOWED_LEDGER_CURRENCIES enforce ISO 4217 currency allowlist', () => {
+  assert.equal(Object.isFrozen(ALLOWED_LEDGER_CURRENCIES), true);
+  assert.equal(isValidCurrencyCode('USD'), true);
+  assert.equal(isValidCurrencyCode('CAD'), true);
+  assert.equal(isValidCurrencyCode('EUR'), true);
+  assert.equal(isValidCurrencyCode('GBP'), true);
+  assert.equal(isValidCurrencyCode('JPY'), true);
+
+  // Invalid, case-variant, or synthetic currencies (Checklist item 2 - reject case variants)
+  assert.equal(isValidCurrencyCode('usd'), false);
+  assert.equal(isValidCurrencyCode('Eur'), false);
+  assert.equal(isValidCurrencyCode('cad'), false);
+  assert.equal(isValidCurrencyCode('ZZZ'), false); // Audit D-0409 case
+  assert.equal(isValidCurrencyCode('GARBAGE'), false);
+  assert.equal(isValidCurrencyCode('US'), false);
+  assert.equal(isValidCurrencyCode('USDD'), false);
+  assert.equal(isValidCurrencyCode(123), false);
+  assert.equal(isValidCurrencyCode(null), false);
+});
+
+test('L-1003: evaluateFinancialLedgerQuery rejects impossible dates, unsafe integers, and invalid currencies in entries', () => {
+  // Impossible date in ledger entry fails closed
+  const impossibleDateLedger = [
+    {
+      id: 'tx-bad-date',
+      date: '2026-02-30',
+      amount_cents: -2500,
+      currency: 'USD',
+      kind: 'debit',
+      category: 'dining'
+    }
+  ];
+  const badDateRes = evaluateFinancialLedgerQuery(impossibleDateLedger, { operation: 'sum', currency: 'USD' });
+  assert.equal(badDateRes.ok, false);
+  assert.equal(badDateRes.error, 'malformed_ledger_entry');
+  assert.ok(badDateRes.reason.includes('invalid date'));
+
+  // MAX_SAFE_INTEGER + 2 in ledger entry fails closed
+  const unsafeIntLedger = [
+    {
+      id: 'tx-unsafe-int',
+      date: '2026-10-20',
+      amount_cents: Number.MAX_SAFE_INTEGER + 2,
+      currency: 'USD',
+      kind: 'credit',
+      category: 'salary'
+    }
+  ];
+  const unsafeIntRes = evaluateFinancialLedgerQuery(unsafeIntLedger, { operation: 'sum', currency: 'USD' });
+  assert.equal(unsafeIntRes.ok, false);
+  assert.equal(unsafeIntRes.error, 'malformed_ledger_entry');
+  assert.ok(unsafeIntRes.reason.includes('safe integer'));
+
+  // Invalid currency ZZZ in ledger entry fails closed
+  const zzzLedger = [
+    {
+      id: 'tx-zzz',
+      date: '2026-10-20',
+      amount_cents: -1000,
+      currency: 'ZZZ',
+      kind: 'debit',
+      category: 'test'
+    }
+  ];
+  const zzzRes = evaluateFinancialLedgerQuery(zzzLedger, { operation: 'sum', currency: 'USD' });
+  assert.equal(zzzRes.ok, false);
+  assert.equal(zzzRes.error, 'malformed_ledger_entry');
+  assert.ok(zzzRes.reason.includes('currency code'));
+});
+
+test('L-1003: evaluateFinancialLedgerQuery rejects impossible dates, invalid currencies, and unsafe expected amounts in queries', () => {
+  const validLedger = [
+    { id: 'tx-1', date: '2026-10-15', amount_cents: -5000, currency: 'USD', kind: 'debit', category: 'groceries' }
+  ];
+
+  // Impossible query start_date fails closed
+  const badStart = evaluateFinancialLedgerQuery(validLedger, {
+    operation: 'sum',
+    currency: 'USD',
+    start_date: '2026-02-30'
+  });
+  assert.equal(badStart.ok, false);
+  assert.equal(badStart.error, 'invalid_start_date');
+
+  // Impossible query end_date fails closed
+  const badEnd = evaluateFinancialLedgerQuery(validLedger, {
+    operation: 'sum',
+    currency: 'USD',
+    end_date: '2026-04-31'
+  });
+  assert.equal(badEnd.ok, false);
+  assert.equal(badEnd.error, 'invalid_end_date');
+
+  // Query currency ZZZ fails closed
+  const badCurr = evaluateFinancialLedgerQuery(validLedger, {
+    operation: 'sum',
+    currency: 'ZZZ'
+  });
+  assert.equal(badCurr.ok, false);
+  assert.equal(badCurr.error, 'missing_or_invalid_currency');
+
+  // Unsafe expected_amount_cents fails closed
+  const unsafeExpected = evaluateFinancialLedgerQuery(validLedger, {
+    operation: 'sum',
+    currency: 'USD',
+    expected_amount_cents: Number.MAX_SAFE_INTEGER + 2
+  });
+  assert.equal(unsafeExpected.ok, false);
+  assert.equal(unsafeExpected.error, 'invalid_expected_amount');
+});
+
+test('L-1003: evaluateFinancialLedgerQuery enforces explicit duplicate ledger ID policy', () => {
+  const duplicateLedger = [
+    { id: 'tx-dup-1', date: '2026-10-15', amount_cents: -2000, currency: 'USD', kind: 'debit', category: 'food' },
+    { id: 'tx-dup-1', date: '2026-10-16', amount_cents: -3000, currency: 'USD', kind: 'debit', category: 'transport' }
+  ];
+
+  // Default duplicate policy is 'reject' fail-closed
+  const rejectRes = evaluateFinancialLedgerQuery(duplicateLedger, { operation: 'sum', currency: 'USD' });
+  assert.equal(rejectRes.ok, false);
+  assert.equal(rejectRes.error, 'duplicate_ledger_id');
+  assert.ok(rejectRes.reason.includes('tx-dup-1'));
+
+  // Explicit duplicate_id_policy: 'reject'
+  const explicitReject = evaluateFinancialLedgerQuery(duplicateLedger, { operation: 'sum', currency: 'USD' }, { duplicate_id_policy: 'reject' });
+  assert.equal(explicitReject.ok, false);
+  assert.equal(explicitReject.error, 'duplicate_ledger_id');
+
+  // Explicit duplicate_id_policy: 'skip'
+  const skipRes = evaluateFinancialLedgerQuery(duplicateLedger, { operation: 'sum', currency: 'USD' }, { duplicate_id_policy: 'skip' });
+  assert.equal(skipRes.ok, true);
+  assert.equal(skipRes.matching_count, 1);
+  assert.equal(skipRes.total_cents, -2000);
+
+  // Unknown option fails closed
+  const badOpt = evaluateFinancialLedgerQuery(duplicateLedger, { operation: 'sum', currency: 'USD' }, { allow_duplicates: true });
+  assert.equal(badOpt.ok, false);
+  assert.equal(badOpt.error, 'unknown_option');
+});
+
+test('L-1003: evaluateFinancialLedgerQuery detects and blocks integer overflow during accumulation', () => {
+  const hugeLedger = [
+    { id: 'tx-huge-1', date: '2026-10-15', amount_cents: Number.MAX_SAFE_INTEGER - 10, currency: 'USD', kind: 'credit', category: 'capital' },
+    { id: 'tx-huge-2', date: '2026-10-16', amount_cents: 100, currency: 'USD', kind: 'credit', category: 'capital' }
+  ];
+
+  const overflowRes = evaluateFinancialLedgerQuery(hugeLedger, { operation: 'sum', currency: 'USD' });
+  assert.equal(overflowRes.ok, false);
+  assert.equal(overflowRes.error, 'integer_overflow');
+  assert.ok(overflowRes.reason.includes('safe integer'));
+});
+
+test('L-1003: verifyLedgerQueryAgreement validates complete schemas and types, refusing sure for unknown operations, invalid currencies/dates, or unequal cents via tolerance', () => {
+  const validPrimary = {
+    operation: 'sum',
+    currency: 'USD',
+    start_date: '2026-10-01',
+    end_date: '2026-10-20',
+    total_cents: -8500,
+    matching_count: 3
+  };
+  const validChecker = { ...validPrimary };
+
+  // 1. Exact match produces agreement and sure: true
+  const exactAgree = verifyLedgerQueryAgreement(validPrimary, validChecker);
+  assert.equal(exactAgree.ok, true);
+  assert.equal(exactAgree.status, 'agreement');
+  assert.equal(exactAgree.sure, true);
+  assert.equal(exactAgree.verified_cents, -8500);
+
+  // 2. Unknown operation 'garbage' fails closed with error and sure: false (Audit D-0409 case)
+  const garbageOp = verifyLedgerQueryAgreement(
+    { ...validPrimary, operation: 'garbage' },
+    { ...validChecker, operation: 'garbage' }
+  );
+  assert.equal(garbageOp.ok, false);
+  assert.equal(garbageOp.status, 'error');
+  assert.equal(garbageOp.sure, false);
+  assert.ok(garbageOp.reason.includes('unknown or invalid operation'));
+
+  // 3. Invalid currency 'ZZZ' fails closed with error and sure: false (Audit D-0409 case)
+  const zzzCurrency = verifyLedgerQueryAgreement(
+    { ...validPrimary, currency: 'ZZZ' },
+    { ...validChecker, currency: 'ZZZ' }
+  );
+  assert.equal(zzzCurrency.ok, false);
+  assert.equal(zzzCurrency.status, 'error');
+  assert.equal(zzzCurrency.sure, false);
+  assert.ok(zzzCurrency.reason.includes('invalid or unrecognised currency code'));
+
+  // 4. Impossible date '2026-02-30' fails closed with error and sure: false
+  const impossibleDateReading = verifyLedgerQueryAgreement(
+    { ...validPrimary, start_date: '2026-02-30' },
+    { ...validChecker, start_date: '2026-02-30' }
+  );
+  assert.equal(impossibleDateReading.ok, false);
+  assert.equal(impossibleDateReading.status, 'error');
+  assert.equal(impossibleDateReading.sure, false);
+  assert.ok(impossibleDateReading.reason.includes('invalid start_date'));
+
+  // 5. Unsafe integer total_cents fails closed with error and sure: false
+  const unsafeTotalReading = verifyLedgerQueryAgreement(
+    { ...validPrimary, total_cents: Number.MAX_SAFE_INTEGER + 2 },
+    { ...validChecker, total_cents: Number.MAX_SAFE_INTEGER + 2 }
+  );
+  assert.equal(unsafeTotalReading.ok, false);
+  assert.equal(unsafeTotalReading.status, 'error');
+  assert.equal(unsafeTotalReading.sure, false);
+  assert.ok(unsafeTotalReading.reason.includes('safe integer'));
+
+  // 6. Unequal exact cents within tolerance MUST NOT receive sure: true (Audit D-0409 requirement)
+  const tolChecker = { ...validChecker, total_cents: -8505 }; // 5 cents diff
+  const tolResult = verifyLedgerQueryAgreement(validPrimary, tolChecker, { tolerance_cents: 10 });
+  assert.equal(tolResult.ok, true);
+  assert.equal(tolResult.status, 'approximate_agreement');
+  assert.equal(tolResult.sure, false); // NO SURE for unequal exact cents via tolerance!
+  assert.equal(tolResult.approximate, true);
+  assert.equal(tolResult.discrepancy_cents, 5);
+  assert.equal(tolResult.verified_cents, null); // Cannot verify exact cents when they differ
+
+  // 7. Cents exceeding tolerance produces disagreement and sure: false
+  const exceedingTolResult = verifyLedgerQueryAgreement(validPrimary, tolChecker, { tolerance_cents: 2 });
+  assert.equal(exceedingTolResult.ok, true);
+  assert.equal(exceedingTolResult.status, 'disagreement');
+  assert.equal(exceedingTolResult.sure, false);
+  assert.equal(exceedingTolResult.field, 'total_cents');
+
+  // 8. Negative or non-safe-integer tolerance fails closed
+  const badTol1 = verifyLedgerQueryAgreement(validPrimary, validChecker, { tolerance_cents: -1 });
+  assert.equal(badTol1.ok, false);
+  assert.equal(badTol1.status, 'error');
+  assert.equal(badTol1.sure, false);
+
+  const badTol2 = verifyLedgerQueryAgreement(validPrimary, validChecker, { tolerance_cents: Number.MAX_SAFE_INTEGER + 2 });
+  assert.equal(badTol2.ok, false);
+  assert.equal(badTol2.status, 'error');
+  assert.equal(badTol2.sure, false);
 });
