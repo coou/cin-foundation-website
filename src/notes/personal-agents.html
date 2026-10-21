@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=23">
+  <link rel="stylesheet" href="/styles/site.css?v=24">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -95,6 +95,89 @@
       <figcaption>Your data and your agent stay on your device. Outside agents get short answers, limited by a budget you set, and you keep final control.</figcaption>
     </figure>
 
+    <figure class="envelope-demo" id="envelope-demo">
+      <h3>Interactive test: what gets through the boundary?</h3>
+      <p class="envelope-desc">A personal agent runs inside a strict client-side authority envelope. Outside requests are checked against your disclosure budget and policy contracts before anything runs. Try each scenario to compare a personal agent against an unprotected assistant.</p>
+
+      <div class="envelope-scenarios" id="env-scenarios">
+        <button type="button" class="env-btn" aria-pressed="true">Affordability check</button>
+        <button type="button" class="env-btn" aria-pressed="false">Age verification</button>
+        <button type="button" class="env-btn" aria-pressed="false">Hidden injection in email</button>
+        <button type="button" class="env-btn" aria-pressed="false">One-click checkout</button>
+      </div>
+
+      <div class="env-toggle-wrap">
+        <span id="env-mode-label">Client-side envelope active (isolated execution boundary)</span>
+        <button type="button" class="env-toggle-btn" id="env-toggle-btn">Switch to unprotected agent</button>
+      </div>
+
+      <div class="env-panel">
+        <div class="env-row">
+          <span class="env-label">Incoming request</span>
+          <span class="env-val" id="env-incoming">Landlord portal asks: &ldquo;Verify if applicant monthly income exceeds $4,500 for lease eligibility.&rdquo;</span>
+        </div>
+        <div class="env-row">
+          <span class="env-label">Action taken</span>
+          <span class="env-val" id="env-action">Evaluates transaction ledger on-device and signs a cryptographic proof: &ldquo;Monthly income exceeds $4,500: true&rdquo;.</span>
+        </div>
+        <div class="env-row">
+          <span class="env-label">Boundary check</span>
+          <span class="env-val"><span class="env-badge ok" id="env-badge">Answers, not data</span></span>
+        </div>
+        <div class="env-row">
+          <span class="env-label">Data transmitted</span>
+          <span class="env-val" id="env-data">1 boolean confirmation signature (0 documents, 0 transactions exposed)</span>
+        </div>
+        <div class="env-row">
+          <span class="env-label">Why it matters</span>
+          <span class="env-val" id="env-detail">The authority boundary limits outbound disclosure to the exact question asked. No banking details leave the device.</span>
+        </div>
+      </div>
+
+      <div class="env-table-wrap env-fallback-table">
+      <table class="env-table">
+        <caption>Summary comparison: unprotected assistant vs. personal agent with boundary envelope</caption>
+        <thead>
+          <tr>
+            <th scope="col">Incoming request</th>
+            <th scope="col">Unprotected agent</th>
+            <th scope="col">With boundary envelope</th>
+            <th scope="col">Data transmitted</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Affordability verification</td>
+            <td>Uploads full bank statement PDF</td>
+            <td>Signs boolean threshold proof</td>
+            <td>Proof only (0 private records)</td>
+          </tr>
+          <tr>
+            <td>Age verification</td>
+            <td>Shares photo of identity document</td>
+            <td>Zero-knowledge age proof</td>
+            <td>Confirmation only (no ID shared)</td>
+          </tr>
+          <tr>
+            <td>Hidden prompt injection</td>
+            <td>Executes hijacked network export</td>
+            <td>Halts execution at policy boundary</td>
+            <td>0 bytes (export refused)</td>
+          </tr>
+          <tr>
+            <td>One-click checkout prompt</td>
+            <td>Auto-approves payment without prompt</td>
+            <td>Holds action for human confirmation</td>
+            <td>Held until owner review</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <figcaption>Try different requests to see how on-device policy gates stop data leaks and unauthorized actions before execution.</figcaption>
+    </figure>
+
+
     <h2>Consequences for the agent, not for you</h2>
     <p>A loyal agent is only as good as the reason it stays loyal. Promises in a terms-of-service page are not enough. We want the agent itself to carry the cost of failure. We call this mortal computation, borrowing a term from biology-inspired AI research, where <a href="https://arxiv.org/abs/2311.09589" rel="noopener noreferrer">mortal computation</a> describes intelligence that is tied to a body that can wear out. Our use is an adaptation, and in plain words it means three things:</p>
     <ul>
@@ -171,5 +254,6 @@
 </footer>
 
 <script src="/scripts/site.js?v=10" defer></script>
+<script src="/scripts/envelope.js?v=1" defer></script>
 </body>
 </html>
