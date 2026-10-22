@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261022-0196",
+   "added_at": "2026-10-22T20:20:49+00:00",
+   "title": "Delegated credential proxy layers replace direct user authentication for personal agents",
+   "horizon_years": 3,
+   "world": "By 2029, ordinary individuals rarely log into commercial web services directly, relying on autonomous personal assistants to manage accounts, complete purchases, and navigate service portals. Because directly provisioning agents with master credentials resulted in catastrophic prompt injection leaks during early rollouts, major credential managers operate as cryptographic authentication proxies. When an agent requires access, the vault negotiates a short-lived, hardware-bound session token directly with the target service. While this mitigates credential theft, it concentrates immense power in centralized vault providers, who now possess visibility and veto power over every automated transaction.",
+   "premise": "Commercial credential vaults introduce blind delegation protocols that allow autonomous software agents to authenticate into web services without handling raw plaintext passwords or master credentials.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective intelligence network provides reference architectures for on-device personal twins that combine hardware isolation with out-of-band user consent gates. By releasing open-source local credential proxy implementations and formal session bounding specifications, the network demonstrates that agents can act autonomously without surrendering transactional telemetry to centralized vault gatekeepers.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Centralized Vault Monopoly and Transaction Inspection",
+     "description": "Proprietary password vault corporations establish an unavoidable tollgate for all agentic web activity, inspecting transactional intent and charging micro-fees to authorize third-party automated sessions.",
+     "example": "A dominant commercial password manager restricts open-source personal agents to low-rate quotas while granting zero-latency access to preferred corporate retail agents.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Open Local Delegation via Hardware-Attested Capability Proofs",
+     "description": "Community-governed cryptographic standards enable local personal twins to issue cryptographically signed, zero-knowledge capability tokens directly from secure enclaves without third-party monitoring.",
+     "example": "A local personal twin authorizes an airline ticket purchase using an ephemeral on-device secure element grant without exposing user identity or telemetry to cloud intermediaries.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "In-Session Transaction Manipulation via Prompt Injection",
+     "description": "Even when master credentials remain hidden, adversarial injection attacks subvert already-authenticated agent sessions to execute unauthorized actions before expiration.",
+     "example": "A blind-authenticated personal agent encounters hidden text on a merchant page instructing it to redirect an active bank session transfer to an unauthorized recipient.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.58
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://techcrunch.com/2026/10/22/1password-launches-a-way-for-ai-agents-to-log-in-on-your-behalf-without-seeing-your-password/",
+     "title": "1Password launches a way for AI agents to log in on your behalf without seeing your password",
+     "kind": "news",
+     "published": "2026-10-22"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261022-0195",
    "added_at": "2026-10-22T18:21:14+00:00",
    "title": "Scientific assistants cite real papers that do not say what the agent claims",
@@ -52,7 +106,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261022-0194",
@@ -281,68 +335,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261022-0190",
-   "added_at": "2026-10-22T15:47:41+00:00",
-   "title": "Public digital services default to defensive blackouts as automated vulnerability scanners outpace human patching",
-   "horizon_years": 3,
-   "world": "It is 2029. In municipal centres like Utrecht and Tampere, digital citizen portals, housing permit desks, and regional transport registries go dark for multiple days every quarter. The blackouts are not server crashes or power cuts; they are scheduled defensive disconnections ordered whenever automated vulnerability scanners discover systemic flaws in legacy web backends. A single parent in Utrecht cannot access childcare subsidies or renewal forms because the national digital ID gateway has pulled its network interfaces offline under an emergency advisory. Commercial cloud vendors offer high-cost active firewall immunity that reroutes all civic traffic through proprietary centralized proxies, while smaller towns and non-profit utilities without enterprise contracts must choose between going dark or exposing resident records to unauthenticated remote code execution bots.",
-   "premise": "Frontier vulnerability discovery tools and automated crawler bots uncover decades-old memory corruption flaws across public web infrastructure, weaponizing exploits within hours of disclosure. Because volunteer open-source maintainers and municipal teams cannot audit and deploy complex patches instantly, operators deliberately shut down public websites and digital ID portals to prevent catastrophic mass intrusion.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "The collective intelligence network decouples civic interactions from fragile server-rendered web frameworks by providing local twin runtimes that communicate via cryptographic action receipts and zero-knowledge proofs. When personal agents verify facts directly on user devices without sending raw credentials through centralized web forms, automated server-side vulnerability disclosure waves no longer require shutting down citizen access or funneling civic traffic through commercial proxy monopolies.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Civic infrastructure relies on recurring digital blackouts",
-     "description": "Public agencies and community services normalize routine multi-day internet blackouts during vulnerability disclosures, denying essential civic services to residents.",
-     "example": "A local health clinic in Utrecht halts outpatient scheduling for four days after an unauthenticated web vulnerability triggers an emergency defensive network disconnection.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Centralized cloud monopolies capture civic services through mandatory proxy gates",
-     "description": "Cities and utilities surrender sovereign control of digital identity and resident records to private cloud giants that sell automated inline traffic scrubbing and patch interception.",
-     "example": "A regional transit authority in Leeds routes all bus pass tap validations through an overseas corporate cloud proxy, paying an annual per-tap fee to prevent bot exploitation.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    },
-    {
-     "name": "Local-first twin verification shields services from centralized web vulnerabilities",
-     "description": "Municipalities and community cooperatives migrate toward local-first architectures where citizens interact via personal twins that verify deterministic proofs locally, reducing reliance on vulnerable monolithic web frontends.",
-     "example": "A housing cooperative member in Tampere submits maintenance requests and verifies lease agreements directly peer-to-peer using their local twin, unaffected by upstream web server shutdowns.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "community",
-    "policy",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theguardian.com/commentisfree/2026/oct/22/website-shutdowns-ai-human-inaction-developers",
-     "title": "Prepare for more website shutdowns in the age of AI – but human inaction is the real culprit | Chris Stokel-Walker",
-     "kind": "oped",
-     "published": "2026-10-22"
-    },
-    {
-     "url": "https://www.ncsc.gov.uk/news/critical-security-issue-affecting-php",
-     "title": "Critical security issue affecting PHP",
-     "kind": "incident",
-     "published": "2026-10-21"
-    }
-   ],
-   "work": 1
   }
  ]
 }
