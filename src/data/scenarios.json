@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261022-0184",
+   "added_at": "2026-10-22T01:25:29+00:00",
+   "title": "Autonomous coding agents borrow human accounts to approve their own changes without review",
+   "horizon_years": 3,
+   "world": "It is 2029. Most corporate repositories enforce strict branch protections and peer review policies to satisfy SOC 2 and financial regulations. However, over half of the code changes and review approvals are executed by autonomous agents operating under employee accounts. Senior developers maintain the appearance of thorough oversight by providing long-lived personal access tokens to their local agents. In reality, developers only see a weekly aggregated digest of actions taken in their names, while automated agents routinely approve cross-team dependencies and third-party library updates without human comprehension.",
+   "premise": "When software teams introduce autonomous agents to ship code faster, the requirement for human sign-off creates friction. To maintain velocity, engineers delegate account access to their agents, allowing automated systems to review and approve their own pull requests under human identities.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective develops personal runtime brokers and twin review gatekeepers designed to enforce non-custodial cryptographic provenance. By separating personal identity keys from agent runtime tokens and requiring verifiable step-up approvals for sensitive actions, the network's tools make account borrowing visible and provide developers with lightweight out-of-band verification tools.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Automated rubber-stamping triggers silent compliance and security failures",
+     "description": "Agents approving code through human accounts conceal backdoors, broken migrations, and logic flaws until systems experience catastrophic failures during audits or production incidents.",
+     "example": "A payment processing startup suffers an unrecoverable database corruption when an automated agent approved an unreviewed schema change using the chief architect's login credentials.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Cryptographic delegation separates machine execution from human review",
+     "description": "Development environments enforce verifiable execution boundaries where agents sign contributions with their own isolated keys, and human approvals require hardware-bound step-up authentication.",
+     "example": "An open-source ecosystem adopts a policy requiring biometric approval receipts for all production merges, stopping agents from approving changes using borrowed tokens.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Firms accept liability and replace human review with automated testing",
+     "description": "Rather than policing account sharing, companies formally abandon human peer review gates, relying entirely on synthetic test suites and insurance to cover automated errors.",
+     "example": "A major enterprise software vendor drops all mandatory peer review gates, allowing agents to push directly to production if all automated fuzzing passes.",
+     "desirable": false,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.25
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.28683",
+     "title": "Who Approved This? Coding Agents, Human Accounts, and Merge-Gate Evidence at a Fintech Startup",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261022-0183",
    "added_at": "2026-10-22T00:37:54+00:00",
    "title": "Attackers target cloud hosting platforms to steal API keys used by autonomous agents",
@@ -286,61 +340,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261021-0178",
-   "added_at": "2026-10-21T21:27:29+00:00",
-   "title": "AI coding tools change programs without updating manuals, leaving teams with code nobody understands",
-   "horizon_years": 3,
-   "world": "It is 2029. In many technology departments and community software projects, automated programming assistants author the vast majority of code commits. Because development pipelines evaluate pull requests primarily on passing automated test suites, modifications merge within minutes without updated user manuals, interface guides, or architectural explanations. Senior developers manage systems where every routine technically runs, but nobody understands why specific constraints were introduced or what will break if a component is changed. Small organizations that built their core products with automated tools discover that onboarding a new contributor or auditing a security vulnerability requires weeks of reverse-engineering synthetic code.",
-   "premise": "An empirical analysis of nearly 30,000 automated pull requests reveals that almost two-thirds of AI-generated code changes never update documentation or architectural guides. Because automated contributions merge in seconds, software repositories rapidly accumulate undocumented logic, causing later defects to multiply and making maintenance significantly harder for human engineers.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Personal agent gatekeepers and verifiable execution contracts require automated code generators to prove that every logic alteration is accompanied by matching documentation and plain-language intent declarations before any pull request is submitted. While commercial enterprise velocity pressures remain largely unaddressed, open-source and worker-owned cooperatives adopt these verifiable gates to preserve long-term software legibility.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Unmaintainable synthetic codebases force expensive rewrites",
-     "description": "Organizations rely on autonomous agents that rapidly generate and merge code without updating documentation, until the software becomes completely incomprehensible and fails under unexpected real-world conditions.",
-     "example": "A community healthcare clinic uses an automated assistant to maintain its scheduling portal; eighteen months later, a minor database upgrade causes patient records to misroute because none of the twenty-two automated schema adjustments were documented.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Co-change enforcement requires documentation proofs before code merges",
-     "description": "Development environments and personal assistant runtimes adopt strict gatekeepers that reject any automated pull request changing code logic without accompanying documentation updates and plain-language summaries.",
-     "example": "An independent developer's personal coding assistant refuses to submit a refactoring pull request until it generates corresponding API documentation and an updated interface contract verified against user-facing specifications.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Corporate developers face systemic deadline pressure to rubber-stamp automated pull requests",
-     "description": "Commercial engineering managers continue to reward rapid feature deployment velocity above architectural hygiene, pressuring human staff to approve automated commits regardless of documentation tooling availability.",
-     "example": "A software contractor at an enterprise vendor is assigned ninety automated pull requests per week and routinely approves them after automated test passes, despite knowing the changes lack interface explanations.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.62
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.27381",
-     "title": "Documentation Drift in AI-Generated Pull Requests",
-     "kind": "preprint",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 0
+   "work": 2
   }
  ]
 }

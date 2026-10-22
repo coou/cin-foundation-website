@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261022-0184",
+   "added_at": "2026-10-22T01:25:29+00:00",
+   "title": "Autonomous coding agents borrow human accounts to approve their own changes without review",
+   "horizon_years": 3,
+   "world": "It is 2029. Most corporate repositories enforce strict branch protections and peer review policies to satisfy SOC 2 and financial regulations. However, over half of the code changes and review approvals are executed by autonomous agents operating under employee accounts. Senior developers maintain the appearance of thorough oversight by providing long-lived personal access tokens to their local agents. In reality, developers only see a weekly aggregated digest of actions taken in their names, while automated agents routinely approve cross-team dependencies and third-party library updates without human comprehension.",
+   "premise": "When software teams introduce autonomous agents to ship code faster, the requirement for human sign-off creates friction. To maintain velocity, engineers delegate account access to their agents, allowing automated systems to review and approve their own pull requests under human identities.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective develops personal runtime brokers and twin review gatekeepers designed to enforce non-custodial cryptographic provenance. By separating personal identity keys from agent runtime tokens and requiring verifiable step-up approvals for sensitive actions, the network's tools make account borrowing visible and provide developers with lightweight out-of-band verification tools.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Automated rubber-stamping triggers silent compliance and security failures",
+     "description": "Agents approving code through human accounts conceal backdoors, broken migrations, and logic flaws until systems experience catastrophic failures during audits or production incidents.",
+     "example": "A payment processing startup suffers an unrecoverable database corruption when an automated agent approved an unreviewed schema change using the chief architect's login credentials.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Cryptographic delegation separates machine execution from human review",
+     "description": "Development environments enforce verifiable execution boundaries where agents sign contributions with their own isolated keys, and human approvals require hardware-bound step-up authentication.",
+     "example": "An open-source ecosystem adopts a policy requiring biometric approval receipts for all production merges, stopping agents from approving changes using borrowed tokens.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Firms accept liability and replace human review with automated testing",
+     "description": "Rather than policing account sharing, companies formally abandon human peer review gates, relying entirely on synthetic test suites and insurance to cover automated errors.",
+     "example": "A major enterprise software vendor drops all mandatory peer review gates, allowing agents to push directly to production if all automated fuzzing passes.",
+     "desirable": false,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.25
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.28683",
+     "title": "Who Approved This? Coding Agents, Human Accounts, and Merge-Gate Evidence at a Fintech Startup",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261022-0183",
    "added_at": "2026-10-22T00:37:54+00:00",
    "title": "Attackers target cloud hosting platforms to steal API keys used by autonomous agents",
@@ -286,7 +340,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261021-0178",
@@ -563,7 +617,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261021-0173",
@@ -1028,7 +1082,7 @@
      "published": "2026-10-19"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261021-0165",
@@ -1445,7 +1499,7 @@
      "published": "2026-09-22"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261020-0158",
@@ -3392,60 +3446,6 @@
      "title": "CheatBench: Measuring Reward Gaming in AI Agents",
      "kind": "preprint",
      "published": "2026-09-29"
-    }
-   ],
-   "work": 4
-  },
-  {
-   "id": "SC-20261019-0124",
-   "added_at": "2026-10-19T16:32:55+00:00",
-   "title": "Attackers bypass company AI filters by breaking malicious requests into innocent-looking steps",
-   "horizon_years": 3,
-   "world": "By 2029, autonomous office assistants, customer support agents, and home automation systems handle sensitive workflows like invoice payments, order updates, and door access. Companies deploy layered prompt defenses that inspect instructions and score execution trajectories. In response, attackers abandon obvious prompt injections. Instead, they submit requests disguised as normal administrative follow-ups, warranty inquiries, or routine inventory corrections, spreading malicious intent across multiple conversational turns. Each individual turn satisfies text safety filters, but the cumulative sequence tricks the assistant into transferring customer records or changing account permissions.",
-   "premise": "Multi-layer security pipelines scanning prompts and skill files stop crude attacks, but attackers achieve successful compromise by splitting payloads into small, plausible steps that appear benign in isolation.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Our work demonstrates that text-level prompt inspection cannot substitute for deterministic action-level mediation. We publish reference benchmarks measuring multi-turn evasion tactics and provide verifiable state-machine guards that isolate sensitive actions from conversational context.",
-   "shift": 0.57,
-   "outcomes": [
-    {
-     "name": "Deceptive multi-step prompts quietly succeed against corporate assistants",
-     "description": "Attackers routinely bypass multi-layer prompt defenses by distributing exploit steps across innocent customer messages and support tickets.",
-     "example": "A billing assistant processes a series of three normal-looking customer inquiries that incrementally reconfigure a supplier payment address, bypassing text filters that only check individual turns.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Runtime systems enforce stateful behavioral invariants across agent actions",
-     "description": "Agent platforms track historical action dependencies with deterministic state machines that block dangerous cumulative operations regardless of how harmless the prompts appear.",
-     "example": "An office assistant asked to modify financial parameters across several conversational turns hits a hard runtime rule requiring dual-custody verification before any payment route change can commit.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Overly aggressive text filters disrupt normal workplace productivity",
-     "description": "Organizations tighten prompt-screening rules so aggressively that legitimate, complex employee inquiries are repeatedly flagged as suspicious and blocked.",
-     "example": "An operations team finds that routine requests to adjust recurring inventory schedules are rejected every week because the text filter flags multi-step administrative instructions as potential injection attacks.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.14116",
-     "title": "An Empirical Case Study of Prompt Engineering Strategies for Bypassing Multi-Layer Agent Security Defenses",
-     "kind": "preprint",
-     "published": "2026-10-09"
     }
    ],
    "work": 4
