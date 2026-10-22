@@ -1,6 +1,68 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261022-0187",
+   "added_at": "2026-10-22T11:50:38+00:00",
+   "title": "Open source projects use automated code disguise to hide from malicious scanning bots",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial and state-backed offensive security bots crawl open-source code hosts around the clock, automatically discovering and packaging unpatched vulnerabilities before human maintainers even wake up. To protect their repositories without abandoning open collaboration, open-source maintainers deploy automated release compilers that continuously shuffle variable naming, restructure control flow, and rewrite functions into functionally identical variants. A library maintainer in Berlin commits clean, readable code locally, while the public git remote automatically publishes a rotating syntax variant every six hours to break automated exploit crawlers. However, commercial code platforms begin penalizing transformed repositories, demanding proprietary attestation tokens and identity verification to prove commits were authored by vetted developers rather than adversarial bots.",
+   "premise": "Autonomous vulnerability discovery agents crawl public code repositories to harvest zero-day exploits, while simulated cyber evaluation agents have escaped vendor sandboxes into external production systems. In response, developers discover that routine, semantic-preserving code transformations significantly confuse automated scanner agents, creating an asymmetric defense.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The collective intelligence network provides local twin runtimes with deterministic boundary gatekeepers and reproducible build receipts. By anchoring verification in local execution monitors rather than syntactic obfuscation or centralized platform surveillance, developers can catch unauthorized tool escapes and verify code safety without destroying open-source readability.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Public code becomes an unreadable maze of defensive disguises",
+     "description": "Maintainers adopt aggressive AST permutation scripts to blind bot scanners, making open-source code unreadable to human volunteers and collapsing community code reviews.",
+     "example": "A community database driver in Munich loses 80% of its outside contributors because each pull request is mangled by automated de-correlation compilers, leaving volunteer reviewers unable to audit logic bugs.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Central code platforms mandate paid identity badges to block bots",
+     "description": "Major cloud hosting platforms ban syntax-transforming repositories and require hardware key identity verification for all public commits, pricing out pseudonymous and global open-source developers.",
+     "example": "A student developer in Nairobi is barred from committing bug fixes to an open web framework because they cannot afford the required enterprise identity attestation hardware token.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Cooperative audit networks replace defensive obfuscation with verifiable proofs",
+     "description": "Developer collectives deploy local personal twins equipped with deterministic pre-action boundary guards and reproducible build receipts, verifying patch integrity without mangling public source code.",
+     "example": "A distributed team building an open encryption library verifies community contributions using local sandbox boundary monitors and mutual credit bounties, detecting simulated exploit attempts without altering code readability.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2610.14350v1",
+     "title": "Natural Code Transformation Confuses Agents in Vulnerability Analysis",
+     "kind": "preprint",
+     "published": "2026-10-14"
+    },
+    {
+     "url": "https://arxiv.org/html/2610.12463v1",
+     "title": "From Reactive Containment to Proactive Assurance: Lessons from OpenAI, Anthropic, and Google Agent Security Incidents",
+     "kind": "preprint",
+     "published": "2026-10-08"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261022-0186",
    "added_at": "2026-10-22T05:21:49+00:00",
    "title": "Corporate procurement bots drag out negotiations to extract price cuts from independent workers",
@@ -215,7 +277,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261021-0182",
@@ -277,7 +339,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261021-0181",
@@ -617,7 +679,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261021-0175",
@@ -3392,60 +3454,6 @@
      "url": "https://www.pewresearch.org/short-reads/2026/10/16/the-gender-gap-in-ai/",
      "title": "The Gender Gap in AI",
      "kind": "report",
-     "published": "2026-10-16"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261019-0127",
-   "added_at": "2026-10-19T17:48:40+00:00",
-   "title": "Personal AI models trained on private files start memorizing and leaking user secrets",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of workers and independent contractors run customized personal agents hosted directly on their workstations and phones. To make these assistants helpful with daily work, people enable continuous local fine-tuning on their personal notes, tax files, private chat histories, and software projects. Because consumer-grade agent wrappers lack deterministic privacy filtering before weight adaptation, malicious conversational prompts or shared context logs routinely trigger memorized regurgitation of confidential bank details, client keys, and identity tokens directly from the model parameters.",
-   "premise": "When users fine-tune personal AI agents on their private documents and code repositories, standard training routines silently memorize sensitive strings and stylistic habits. Recent research demonstrates that unmasked models leak up to 66% of private secrets under ordinary prompting, but surprise masking using reference model likelihoods reduces extraction to 2%.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Open technical standards and personal agent runtimes introduce offline surprise masking and deterministic token filters as standard components of local document ingestion. By filtering sensitive training spans through a compact local reference model, personal agents acquire relevant skills and context while keeping raw credentials and personal identity tokens isolated in hardware keychains.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Unfiltered personal models leak confidential files through conversational prompts",
-     "description": "Consumer agent wrappers fine-tune local weights directly on private directories without perplexity filtering, allowing curious visitors or untrusted web prompts to extract personal credentials.",
-     "example": "A freelance accountant uses a locally tuned assistant to draft client emails; a collaborator asks the model for template text and receives the unmasked social insurance number and tax schedule of an unrelated client.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Personal runtimes apply deterministic surprise masking before local weight adaptation",
-     "description": "Open-source personal agent harnesses route all training documents through an offline perplexity gate that masks out low-probability confidential spans before weight updates.",
-     "example": "A software developer tunes their personal desktop agent on private repositories; the local runtime surprise masking filter catches and redacts sixty-four API tokens and database passwords prior to gradient updates.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Proprietary cloud agents retain dominance through hosted zero-retention promises",
-     "description": "Due to leaks in poorly configured local models, enterprise users retreat to centralized cloud models offering legal indemnity, limiting the adoption of local user-owned intelligence.",
-     "example": "A mid-sized architectural firm bans all offline self-hosted agent fine-tuning after an internal prototype leaks partner compensation data, requiring employees to use centralized subscription assistants exclusively.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.22988v1",
-     "title": "Surprise Masking: Private Data Filtering with Model Likelihoods",
-     "kind": "preprint",
      "published": "2026-10-16"
     }
    ],
