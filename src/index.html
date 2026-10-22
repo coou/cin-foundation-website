@@ -16,7 +16,7 @@
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/images/logo-192.png">
-  <link rel="stylesheet" href="/styles/site.css?v=24">
+  <link rel="stylesheet" href="/styles/site.css?v=25">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"Collective Intelligence Network","alternateName":"CIN","description":"An independent research and design project preparing people for advanced AI: containment, personal agents and collective intelligence."}
   </script>
@@ -53,8 +53,13 @@
       <span class="status-pill"><span class="dot" aria-hidden="true"></span>Early research &amp; design · nothing to install yet</span>
       <h1>Superintelligence is coming.<span class="line2">Everyone needs an agent of their own.</span></h1>
       <p class="lede">Advanced AI is arriving faster than our institutions can adapt. The Collective Intelligence Network is building the layer between people and AI: <strong>frontier models kept contained, a personal agent loyal to each person, and a collective intelligence</strong> that coordinates better than the systems we have now.</p>
+      <div class="hero-rule-box" style="margin-top:1.15rem;padding:.95rem 1.15rem;border-radius:12px;border:1px solid var(--rule);background:var(--card);font-size:.94rem;line-height:1.55">
+        <div style="font:600 .73rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ok);margin-bottom:.35rem">Why living with superintelligence requires two separate internets</div>
+        <p style="margin:0;color:var(--ink-2)">If superintelligent agents share the same internet as unshielded people, human attention and trust become an indefensible attack surface. In our architecture, <strong>your agents are never allowed to communicate with other humans directly—only with you</strong> (verified by local biometrics and hardware on your own devices) <strong>and with other agents across an agent-only internet</strong> governed by cryptographic <strong>trust thresholds (<span class="mono">&tau;</span>)</strong>, while the human internet stays strictly human-to-human.</p>
+      </div>
       <div class="cta-row">
         <a class="btn primary" href="#for-you">What this means for you</a>
+        <a class="btn ghost" href="/notes/agent-only-internet-biometrics-hardware">Why ASI needs an agent-only internet &rarr;</a>
         <a class="btn ghost" href="#fractured">How fractured alignment works</a>
       </div>
     </div>
@@ -62,6 +67,7 @@
       <div class="bd-tabs js-only" id="bd-tabs" role="tablist" aria-label="Which way">
         <button type="button" role="tab" data-tab="in" aria-selected="true">Who asks for your data</button>
         <button type="button" role="tab" data-tab="out" aria-selected="false">What you need</button>
+        <button type="button" role="tab" data-tab="split" aria-selected="false">Two internets &amp; hardware</button>
       </div>
       <div class="boundary-frame">
         <canvas id="boundary" aria-hidden="true"></canvas>
@@ -88,7 +94,95 @@
         </div>
         <div class="bd-logwrap" id="nw-logwrap"><span class="bd-k">What your agents did</span><ol class="bd-log" id="nw-log" aria-live="polite"><li class="bd-empty">Pick a need, or watch.</li></ol></div>
       </div>
-      <figcaption><span id="bd-cap"><strong>Your agents stand at your boundary.</strong> A fleet of narrow agents, one for your health, one for your money and so on, learns from quiet sensors on your own devices. Pick a situation to play it through and decide what goes out. Point at any agent or sensor to see what it knows.</span><span id="nw-cap" hidden><strong>Your needs go out, through rings of trust.</strong> Your own agents try first. Then the agents of people you trust, then friends of friends, then the wider network, each seeing less about you. Offers come back, you decide, and the shared record credits everyone who helped.</span> <span class="mono">(An illustration, not a working product.)</span></figcaption>
+      <div class="boundary-frame split-frame" id="split-frame" hidden style="aspect-ratio:auto;padding:1.1rem">
+        <div style="font:600 .72rem/1.3 var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.55rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem">
+          <span>NON-CONTACT LAW: AGENT &rarr; OTHER HUMAN = FORBIDDEN</span>
+          <span style="color:var(--ok)">PUF + TPM 2-of-2 · &lt;1 mW HRV LIVENESS</span>
+        </div>
+        <svg id="split-svg" viewBox="0 0 520 330" role="img" aria-label="Two Internets diagram: Human Internet on the left, Non-Contact Silicon Firewall in the middle, and Agent-Only Internet with Trust Thresholds on the right." style="width:100%;height:auto;border-radius:12px;background:color-mix(in srgb, var(--paper) 45%, transparent);border:1px solid var(--rule)">
+          <defs>
+            <marker id="sp-ok" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4fb3a8"/></marker>
+            <marker id="sp-bad" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ef6a52"/></marker>
+          </defs>
+          <!-- Left: Human Space -->
+          <rect x="10" y="12" width="154" height="306" rx="10" fill="none" stroke="currentColor" stroke-opacity="0.25"/>
+          <text x="87" y="30" text-anchor="middle" font-size="10" font-weight="700" font-family="monospace" fill="currentColor">HUMAN INTERNET</text>
+          <text x="87" y="43" text-anchor="middle" font-size="8.5" font-family="monospace" fill="currentColor" opacity="0.65">Human &harr; Human Only</text>
+
+          <rect x="22" y="56" width="130" height="58" rx="8" fill="none" stroke="#4fb3a8" stroke-width="1.5"/>
+          <text x="87" y="75" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">YOU (Human)</text>
+          <text x="87" y="90" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#4fb3a8">&lt;1mW HRV + Breath Live</text>
+          <text x="87" y="104" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">Wearable PUF + Device TPM</text>
+
+          <line x1="87" y1="114" x2="87" y2="146" stroke="#4fb3a8" stroke-width="1.6" marker-end="url(#sp-ok)"/>
+          <text x="92" y="134" font-size="8" font-family="monospace" fill="#4fb3a8">human speed</text>
+
+          <rect x="22" y="150" width="130" height="44" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35"/>
+          <text x="87" y="170" text-anchor="middle" font-size="10" font-weight="600" fill="currentColor">Other Humans</text>
+          <text x="87" y="184" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.65">0 bots · verified liveness</text>
+
+          <line x1="87" y1="114" x2="87" y2="232" stroke="#4fb3a8" stroke-width="1.4" stroke-dasharray="3 3"/>
+          <rect x="22" y="234" width="130" height="68" rx="8" fill="none" stroke="#4fb3a8" stroke-width="1.5"/>
+          <text x="87" y="253" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor">Your 6 Local Agents</text>
+          <text x="87" y="268" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#4fb3a8">Talks ONLY to You + Agents</text>
+          <text x="87" y="282" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">3-of-6 Quorum · Local Enclave</text>
+          <text x="87" y="294" text-anchor="middle" font-size="7.5" font-family="monospace" fill="currentColor" opacity="0.55">ID · Health · Money · Home · Work</text>
+
+          <!-- Middle: Non-Contact Protocol Wall -->
+          <rect x="176" y="12" width="142" height="306" rx="10" fill="none" stroke="#ef6a52" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text x="247" y="30" text-anchor="middle" font-size="9.5" font-weight="700" font-family="monospace" fill="#ef6a52">PROTOCOL FIREWALL</text>
+          <text x="247" y="43" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.65">Silicon Plane Separation</text>
+
+          <line id="sp-attack-line" x1="330" y1="84" x2="156" y2="84" stroke="#ef6a52" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#sp-bad)"/>
+          <rect x="186" y="64" width="122" height="40" rx="6" fill="none" stroke="#ef6a52"/>
+          <text x="247" y="81" text-anchor="middle" font-size="9" font-weight="700" font-family="monospace" fill="#ef6a52">&#10005; HARD-BLOCKED</text>
+          <text x="247" y="95" text-anchor="middle" font-size="7.8" font-family="monospace" fill="currentColor" opacity="0.75">No Agent &rarr; Human Direct</text>
+
+          <rect x="186" y="124" width="122" height="78" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.3"/>
+          <text x="247" y="142" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor">3 Hardware Gates</text>
+          <text x="247" y="158" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">1. SRAM PUF + TPM 2-of-2</text>
+          <text x="247" y="173" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">2. Calm HRV (&ge; 24 ms)</text>
+          <text x="247" y="188" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">3. Trust Ring (&tau; Check)</text>
+
+          <line id="sp-ok-line" x1="152" y1="268" x2="330" y2="268" stroke="#4fb3a8" stroke-width="2" marker-end="url(#sp-ok)"/>
+          <text x="247" y="258" text-anchor="middle" font-size="8.5" font-weight="700" font-family="monospace" fill="#4fb3a8">Agent &harr; Agent ZK Proof</text>
+          <text x="247" y="284" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">1 fact out · access expires</text>
+
+          <!-- Right: Agent-Only Internet -->
+          <rect x="330" y="12" width="180" height="306" rx="10" fill="none" stroke="currentColor" stroke-opacity="0.25"/>
+          <text x="420" y="30" text-anchor="middle" font-size="10" font-weight="700" font-family="monospace" fill="currentColor">AGENT-ONLY INTERNET</text>
+          <text x="420" y="43" text-anchor="middle" font-size="8.5" font-family="monospace" fill="currentColor" opacity="0.65">Agent &harr; Agent by Trust &tau;</text>
+
+          <rect x="342" y="56" width="156" height="46" rx="7" fill="none" stroke="#ef6a52"/>
+          <text x="420" y="75" text-anchor="middle" font-size="9.5" font-weight="700" fill="#ef6a52">Unverified / ASI Persuader</text>
+          <text x="420" y="90" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">No PUF hardware · Blocked</text>
+
+          <rect x="342" y="114" width="156" height="54" rx="7" fill="none" stroke="#4fb3a8"/>
+          <text x="420" y="133" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor">Ring 1: Trusted (&tau; &ge; 0.85)</text>
+          <text x="420" y="148" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">Family, friends, clinician agents</text>
+          <text x="420" y="160" text-anchor="middle" font-size="7.8" font-family="monospace" fill="currentColor" opacity="0.65">Scoped mutual aid &amp; referrals</text>
+
+          <rect x="342" y="178" width="156" height="50" rx="7" fill="none" stroke="currentColor" stroke-opacity="0.35"/>
+          <text x="420" y="197" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor">Ring 2: 2-Hop (&tau; &ge; 0.60)</text>
+          <text x="420" y="213" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">Friends-of-friends&rsquo; agents</text>
+
+          <rect x="342" y="238" width="156" height="64" rx="7" fill="none" stroke="#4fb3a8" stroke-width="1.5"/>
+          <text x="420" y="257" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor">Ring 3: Wider Net (&tau; &ge; 0.30)</text>
+          <text x="420" y="273" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">Zero-knowledge 1-fact proof</text>
+          <text x="420" y="287" text-anchor="middle" font-size="7.8" font-family="monospace" fill="currentColor" opacity="0.7">&ldquo;Over 18: yes&rdquo; · 0 raw data</text>
+        </svg>
+      </div>
+      <div class="bd-dock" id="split-side" hidden>
+        <div class="bd-logwrap">
+          <span class="bd-k">Why agents never contact other humans directly</span>
+          <ol class="bd-log">
+            <li class="bd-no"><b>Blocked Direct Bot Contact:</b> Foreign agents can never DM, call, or persuade a human; packets to humans are dropped in silicon.</li>
+            <li class="bd-ok"><b>Biometric + 2-of-2 PUF Custody:</b> Your <span class="mono">&lt;1 mW</span> wearable checks coupled pulse-breath liveness and calm HRV (<span class="mono">&ge; 24 ms</span>) so duress or cloned VMs cannot hijack your agent.</li>
+            <li class="bd-ok"><b>Trust-Threshold Agent Internet:</b> Your agents speak only to you and to other agents across <span class="mono">&tau; &ge; 0.85 / 0.60 / 0.30</span> trust rings. <a href="/notes/agent-only-internet-biometrics-hardware">Read the full blog post &amp; simulator &rarr;</a></li>
+          </ol>
+        </div>
+      </div>
+      <figcaption><span id="bd-cap"><strong>Your agents stand at your boundary—and never contact other humans directly.</strong> A fleet of 6 narrow agents learns from quiet biometric and device sensors inside your hardware enclave (<span class="mono">PUF + TPM</span>). Foreign agents can never message you directly; they must speak to your agents across the agent-only internet, and 3 of your agents must agree before a single verified fact goes out.</span><span id="nw-cap" hidden><strong>Your needs go out across the agent-only internet, through rings of trust (<span class="mono">&tau;</span>).</strong> Your own agents try first (<span class="mono">&tau; = 1.00</span>). Then they negotiate with the agents of people you trust (<span class="mono">&tau; &ge; 0.85</span>), friends of friends (<span class="mono">&tau; &ge; 0.60</span>), and the wider agent network (<span class="mono">&tau; &ge; 0.30</span>), never bothering other humans directly.</span><span id="split-cap" hidden><strong>Two internets for a human world living with superintelligence.</strong> The human internet stays strictly human-to-human, protected by local <span class="mono">&lt;1 mW</span> biometric liveness and 2-of-2 silicon custody. All machine-speed coordination happens on the agent-only internet. <a href="/notes/agent-only-internet-biometrics-hardware">Open the full note &amp; interactive simulator &rarr;</a></span> <span class="mono">(An illustration, not a working product.)</span></figcaption>
     </figure>
   </div>
 </section>
@@ -1146,13 +1240,13 @@
   </div>
 </dialog>
 
-<script src="/scripts/site.js?v=10" defer></script>
+<script src="/scripts/site.js?v=11" defer></script>
 <script src="/scripts/risk-lab.js?v=4" defer></script>
 <script src="/scripts/trajectory.js?v=1" defer></script>
-<script src="/scripts/network.js?v=3" defer></script>
+<script src="/scripts/network.js?v=4" defer></script>
 <script src="/scripts/principles.js?v=5" defer></script>
 <script src="/scripts/all-principles-data.js?v=2" defer></script>
-<script src="/scripts/everyday.js?v=4" defer></script>
+<script src="/scripts/everyday.js?v=6" defer></script>
 <script src="/scripts/minds.js?v=2" defer></script>
 <script src="/scripts/power.js?v=2" defer></script>
 <script src="/scripts/hardware.js?v=2" defer></script>

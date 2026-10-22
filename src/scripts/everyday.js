@@ -1594,4 +1594,191 @@
     if (socQInput) socQInput.addEventListener('input', renderSocial100);
     renderSocial100();
   }
+
+  /* ---------- 11. Agent-Only Internet, Non-Contact Firewall & Biometric/Hardware Simulator (#aoi-sim) ---------- */
+  var aoiSim = document.getElementById('aoi-sim');
+  if (aoiSim) {
+    var AOI_SCENARIOS = {
+      asi_dm: {
+        plane: 'foreign_agent_to_human',
+        ring: '0.85',
+        tau: 95,
+        hrv: 52,
+        puf: true,
+        quorum: true,
+        desc: 'A frontier persuasive AI bot attempts to send a direct message or voice call to you (a human) on the Human Internet.'
+      },
+      fake_bank: {
+        plane: 'agent_to_agent',
+        ring: '0.85',
+        tau: 90,
+        hrv: 50,
+        puf: false,
+        quorum: true,
+        desc: 'A cloud script claiming to be “your bank’s agent” contacts your money agent, but lacks 2-of-2 Wearable PUF + TPM hardware attestation.'
+      },
+      low_trust: {
+        plane: 'agent_to_agent',
+        ring: '0.85',
+        tau: 42,
+        hrv: 54,
+        puf: true,
+        quorum: true,
+        desc: 'An unknown external agent (τ = 0.42) requests sensitive personal-circle facts that require Trusted Peer Ring 1 (τ ≥ 0.85).'
+      },
+      coerced: {
+        plane: 'own_agent_to_human',
+        ring: '0.85',
+        tau: 96,
+        hrv: 14,
+        puf: true,
+        quorum: true,
+        desc: 'An attacker physically intimidates or panics a human (HRV RMSSD drops to 14 ms < 24 ms) into approving an irreversible asset transfer.'
+      },
+      valid_agent: {
+        plane: 'agent_to_agent',
+        ring: '0.85',
+        tau: 91,
+        hrv: 54,
+        puf: true,
+        quorum: true,
+        desc: 'Your health agent and your dentist’s verified serving agent (τ = 0.91 ≥ 0.85) exchange a single zero-knowledge bacteria reading on the Agent-Only Internet.'
+      },
+      valid_human: {
+        plane: 'human_to_human',
+        ring: '0.85',
+        tau: 94,
+        hrv: 56,
+        puf: true,
+        quorum: true,
+        desc: 'Two verified, uncoerced humans communicate directly on the Human Internet with hardware PUF+TPM liveness and zero AI intermediaries.'
+      }
+    };
+
+    var aoiScenSel = document.getElementById('aoi-scen-sel');
+    var aoiPlaneSel = document.getElementById('aoi-plane-sel');
+    var aoiRingSel = document.getElementById('aoi-ring-sel');
+    var aoiTauRng = document.getElementById('aoi-tau-rng');
+    var aoiTauVal = document.getElementById('aoi-tau-val');
+    var aoiHrvRng = document.getElementById('aoi-hrv-rng');
+    var aoiHrvVal = document.getElementById('aoi-hrv-val');
+    var aoiPufCb = document.getElementById('aoi-puf-cb');
+    var aoiQuorumCb = document.getElementById('aoi-quorum-cb');
+    var aoiMetrics = document.getElementById('aoi-metrics');
+    var aoiBars = document.getElementById('aoi-bars');
+    var aoiDiff = document.getElementById('aoi-diff');
+
+    var evaluateAoi = function () {
+      var plane = aoiPlaneSel ? aoiPlaneSel.value : 'foreign_agent_to_human';
+      var reqTau = parseFloat(aoiRingSel ? aoiRingSel.value : '0.85');
+      var tau = parseFloat(aoiTauRng ? aoiTauRng.value : '95') / 100;
+      var hrv = parseFloat(aoiHrvRng ? aoiHrvRng.value : '54');
+      var puf = aoiPufCb ? aoiPufCb.checked : true;
+      var quorum = aoiQuorumCb ? aoiQuorumCb.checked : true;
+
+      if (aoiTauVal) aoiTauVal.textContent = tau.toFixed(2);
+      if (aoiHrvVal) {
+        var hrvState = hrv === 0 ? '0 ms (No Human / Bot)' : (hrv < 24 ? hrv + ' ms (PANIC / DURESS)' : hrv + ' ms (Calm & Live)');
+        aoiHrvVal.textContent = hrvState;
+      }
+
+      var nonContactOk = plane !== 'foreign_agent_to_human';
+      var pufOk = puf;
+      var bioOk = hrv >= 24;
+      var tauOk = (plane === 'own_agent_to_human') ? true : (tau >= reqTau);
+      var quorumOk = quorum;
+
+      var allowed = false;
+      var gateReason = '';
+      var legacyOutcome = '';
+
+      if (!nonContactOk) {
+        allowed = false;
+        gateReason = 'BLOCKED AT NON-CONTACT PROTOCOL FIREWALL: Foreign agents are strictly forbidden from contacting humans directly. They must query your personal agent on the Agent-Only Internet.';
+        legacyOutcome = 'VULNERABLE ON TODAY’S MIXED INTERNET: The persuasive AI bot reaches your inbox/phone directly, exploiting human empathy and voice-clone urgency.';
+      } else if (!pufOk) {
+        allowed = false;
+        gateReason = 'BLOCKED AT SILICON PUF + TPM GATE: Missing 2-of-2 hardware attestation (Wearable SRAM PUF + Device Secure Enclave). Cloud Sybil or spoofed endpoint rejected.';
+        legacyOutcome = 'VULNERABLE ON TODAY’S MIXED INTERNET: Stolen API keys or spoofed domains impersonate your bank or peer at machine speed.';
+      } else if (!bioOk) {
+        allowed = false;
+        gateReason = hrv === 0
+          ? 'BLOCKED AT BIOMETRIC LIVENESS GATE: 0 ms cardiorespiratory coherence detected (headless script).'
+          : 'FROZEN BY AUTONOMIC COERCION FIREWALL: Human HRV RMSSD (' + hrv + ' ms) dropped below the 24 ms vagal safety threshold. Outbound high-risk capability tokens are silently time-locked until duress ends.';
+        legacyOutcome = 'VULNERABLE ON TODAY’S MIXED INTERNET: Standard passwords and static 2FA cannot detect panic or physical coercion; the transfer executes immediately.';
+      } else if (!tauOk) {
+        allowed = false;
+        gateReason = 'BLOCKED AT TRUST-THRESHOLD RING GATE: Caller trust score (τ = ' + tau.toFixed(2) + ') is below the required ring threshold (τ ≥ ' + reqTau.toFixed(2) + '). Only zero-knowledge public capability queries are permitted.';
+        legacyOutcome = 'VULNERABLE ON TODAY’S MIXED INTERNET: Coarse binary API permissions over-share raw profile records with untrusted third parties.';
+      } else if (!quorumOk) {
+        allowed = false;
+        gateReason = 'BLOCKED AT LOCAL 3-OF-6 QUORUM & TOUCH GATE: Neither your 3-of-6 narrow agent quorum nor your physical capacitive touch interrupt approved the disclosure.';
+        legacyOutcome = 'VULNERABLE ON TODAY’S MIXED INTERNET: A single prompt-injected chat agent has full tool control to exfiltrate your data.';
+      } else {
+        allowed = true;
+        if (plane === 'agent_to_agent') {
+          gateReason = 'ALLOWED ON AGENT-ONLY INTERNET: Hardware PUF+TPM verified, trust threshold satisfied (τ = ' + tau.toFixed(2) + ' ≥ ' + reqTau.toFixed(2) + '), 3-of-6 local quorum approved. Exactly 1 scoped zero-knowledge fact crosses; access expires immediately.';
+        } else if (plane === 'own_agent_to_human') {
+          gateReason = 'ALLOWED ON LOCAL DEVICE BUS: Your own personal agent communicates with you locally under calm somatic liveness (HRV = ' + hrv + ' ms ≥ 24 ms) and 2-of-2 PUF+TPM custody.';
+        } else {
+          gateReason = 'ALLOWED ON HUMAN INTERNET: Verified human-to-human communication with hardware PUF+TPM liveness and zero AI intermediaries.';
+        }
+        legacyOutcome = 'SAFEGUARDED: Both internets remain cleanly separated; 0 bytes of raw biometric or personal ledger data ever leave your device.';
+      }
+
+      if (aoiMetrics) {
+        aoiMetrics.innerHTML =
+          '<span class="lib-score-pill ' + (allowed ? 'hi' : '') + '" style="' + (!allowed ? 'border-color:var(--accent);color:var(--accent)' : '') + '">Firewall Verdict: <b>' + (allowed ? 'ALLOWED (Scoped)' : 'HARD-BLOCKED') + '</b></span>' +
+          '<span class="lib-score-pill hi">Raw Biometrics Shared: <b>0 bytes (30s SRAM)</b></span>' +
+          '<span class="lib-score-pill hi">Direct Bot &rarr; Human Leakage: <b>0.0%</b></span>';
+      }
+
+      if (aoiBars) {
+        var checks = [
+          { label: '1. Non-Contact Plane Law (No Foreign Agent → Human)', ok: nonContactOk, val: nonContactOk ? 'PASS' : 'BLOCKED' },
+          { label: '2. 2-of-2 Silicon Root (Wearable PUF + Device TPM)', ok: pufOk, val: pufOk ? 'VERIFIED' : 'MISSING' },
+          { label: '3. Somatic Liveness & Coercion Firewall (HRV ≥ 24 ms)', ok: bioOk, val: hrv + ' ms (' + (bioOk ? 'CALM' : 'DURESS/BOT') + ')' },
+          { label: '4. Trust Threshold Gate (τ = ' + tau.toFixed(2) + ' vs req ' + reqTau.toFixed(2) + ')', ok: tauOk, val: tauOk ? 'PASS' : 'INSUFFICIENT τ' },
+          { label: '5. Local 3-of-6 Narrow-Agent Quorum & Touch Pin', ok: quorumOk, val: quorumOk ? '3/6 AGREED' : 'VETOED' }
+        ];
+        aoiBars.innerHTML = checks.map(function (c) {
+          var col = c.ok ? 'var(--ok)' : 'var(--accent)';
+          var pct = c.ok ? 100 : 18;
+          return '<div class="gm-axis-row">' +
+            '<div class="gm-axis-lbl"><span>' + c.label + '</span><span style="color:' + col + ';font-weight:700">' + c.val + '</span></div>' +
+            '<div class="gm-axis-track"><div class="gm-axis-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
+          '</div>';
+        }).join('');
+      }
+
+      if (aoiDiff) {
+        aoiDiff.innerHTML =
+          '<div style="margin-bottom:.35rem"><b style="color:' + (allowed ? 'var(--ok)' : 'var(--accent)') + '">Dual-Internet + Hardware Verdict:</b> ' + gateReason + '</div>' +
+          '<div style="color:var(--ink-2)"><b>Comparison with Today’s Mixed Internet:</b> ' + legacyOutcome + '</div>';
+      }
+    };
+
+    if (aoiScenSel) {
+      aoiScenSel.addEventListener('change', function () {
+        var sc = AOI_SCENARIOS[aoiScenSel.value];
+        if (!sc) return;
+        if (aoiPlaneSel) aoiPlaneSel.value = sc.plane;
+        if (aoiRingSel) aoiRingSel.value = sc.ring;
+        if (aoiTauRng) aoiTauRng.value = sc.tau;
+        if (aoiHrvRng) aoiHrvRng.value = sc.hrv;
+        if (aoiPufCb) aoiPufCb.checked = sc.puf;
+        if (aoiQuorumCb) aoiQuorumCb.checked = sc.quorum;
+        evaluateAoi();
+      });
+    }
+
+    [aoiPlaneSel, aoiRingSel, aoiTauRng, aoiHrvRng, aoiPufCb, aoiQuorumCb].forEach(function (el) {
+      if (el) {
+        el.addEventListener('input', evaluateAoi);
+        el.addEventListener('change', evaluateAoi);
+      }
+    });
+
+    evaluateAoi();
+  }
 })();

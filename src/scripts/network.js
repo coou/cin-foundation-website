@@ -17,9 +17,9 @@
     C.card = cssVar('--card') || '#fbf9f4'; C.rule = cssVar('--rule') || '#d8d2c4';
   }
 
-  // The network: you, your own agents, then three rings of other people's agents.
-  var RINGS = [{ r: 0.38, n: 6, label: 'people you trust', key: 'trusted' }, { r: 0.6, n: 10, label: 'friends of friends', key: 'fof' },
-               { r: 0.84, n: 18, label: 'the wider network', key: 'swarm' }];
+  // The network: you, your own agents, then three rings of other people's agents by trust threshold (τ).
+  var RINGS = [{ r: 0.38, n: 6, label: 'trusted agents (τ ≥ 0.85)', key: 'trusted' }, { r: 0.6, n: 10, label: 'friends-of-friends’ agents (τ ≥ 0.60)', key: 'fof' },
+               { r: 0.84, n: 18, label: 'wider agent-only internet (τ ≥ 0.30 · ZK)', key: 'swarm' }];
   var NODES = [];
   RINGS.forEach(function (ring, ri) {
     for (var i = 0; i < ring.n; i++) NODES.push({ ring: ri, a: -Math.PI / 2 + (i + 0.5 + (ri % 2) * 0.25) * TAU / ring.n, r: ring.r, glow: 0, many: false });   // no dot under the ring's label
@@ -116,9 +116,9 @@
     RINGS.forEach(function (ring, ri) {
       if (p !== ring.key) return;
       NODES.forEach(function (n) { if (n.ring === ri) n.glow = 1; });
-      log(ri === 0 ? 'Asked the agents of people you trust. They see: ' + s.seen + '.'
-          : ri === 1 ? 'Widened to friends of friends. Your name and address stay with you.'
-          : 'Posted to the wider network as an anonymous task. Any agent that can help may answer.');
+      log(ri === 0 ? 'Asked the agents of people you trust (τ ≥ 0.85, agent-to-agent). They see: ' + s.seen + '.'
+          : ri === 1 ? 'Widened to friends-of-friends’ agents (τ ≥ 0.60). Your name and address stay with you.'
+          : 'Posted to the wider agent-only internet (τ ≥ 0.30, zero-knowledge). Any agent that can help may answer.');
     });
     if (p === 'offers') {
       var pool = NODES.filter(function (n) { return n.ring === lv; });
@@ -173,9 +173,12 @@
         ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(p[0], p[1]); ctx.strokeStyle = C.gold; ctx.globalAlpha = 0.6; ctx.lineWidth = 2; ctx.stroke(); ctx.globalAlpha = 1;
       }
       ctx.beginPath(); ctx.arc(p[0], p[1], rr * (1 + n.glow * 0.5), 0, TAU);
-      ctx.fillStyle = col; ctx.globalAlpha = 0.35 + 0.65 * Math.max(n.glow, n.ring > reach ? 0.25 : 0.6); ctx.fill(); ctx.globalAlpha = 1;
+      ctx.fillStyle = col; ctx.globalAlpha = 0.35 + 0.65 * Math.max(n.glow, n.ring > reach ? 0.25 : 0.6); ctx.fill();
+      ctx.beginPath(); ctx.arc(p[0], p[1], rr * 1.75, 0, TAU);
+      ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.globalAlpha = 0.22 + 0.45 * n.glow; ctx.stroke();
+      ctx.globalAlpha = 1;
     });
-    // offers travelling back to you
+    // offers travelling back to you (agent-to-agent)
     packets.forEach(function (k) {
       var age = (now - k.born) / (reduced ? 300 : 1400); if (age < 0 || age > 1) return;
       var p = pos(k.from), x = p[0] + (cx - p[0]) * age, y = p[1] + (cy - p[1]) * age;
@@ -193,19 +196,23 @@
     ctx.beginPath(); ctx.arc(cx, cy, 0.2 * R, 0, TAU); ctx.strokeStyle = C.ok; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.5; ctx.stroke(); ctx.globalAlpha = 1;
     ctx.fillStyle = C.card; ctx.font = '600 ' + fs + 'px ' + MONO; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('you', cx, cy + 0.5);
     ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = C.ink3; ctx.font = '600 ' + Math.max(8, fs - 1) + 'px ' + MONO;
+    ctx.fillText('NO AGENT CONTACTS OTHER HUMANS DIRECTLY · AGENT ↔ AGENT ONLY', cx, H - Math.max(8, fs * 0.8));
     if (scene && phase && phase !== 'sense') {
       ctx.fillStyle = scene.harm ? C.bad : C.ink; ctx.font = '600 ' + fs + 'px ' + MONO;
       ctx.fillText(scene.chip.toLowerCase(), cx, cy + 0.27 * R);
     }
   }
 
-  // Tabs: who asks for your data (the boundary) / what you need (the network).
+  // Tabs: who asks for your data (the boundary) / what you need (the network) / two internets & hardware (split).
   var inward = ['boundary-frame', 'bd-scenes', 'bd-side', 'bd-cap'].map(function (c) { return document.querySelector('.' + c) || document.getElementById(c); });
   var outward = ['nw-frame', 'nw-scenes', 'nw-side', 'nw-cap'].map(function (id) { return document.getElementById(id); });
+  var split = ['split-frame', 'split-side', 'split-cap'].map(function (id) { return document.getElementById(id); });
   function show(which) {
     tabs.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === which)); });
     inward.forEach(function (e) { if (e) e.hidden = which !== 'in'; });
     outward.forEach(function (e) { if (e) e.hidden = which !== 'out'; });
+    split.forEach(function (e) { if (e) e.hidden = which !== 'split'; });
     if (which === 'out') {
       colors(); size();
       if (!scene) start(SCENES[0]); else if (!running) { running = true; requestAnimationFrame(frame); }

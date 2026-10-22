@@ -107,6 +107,7 @@
     { id: 'job', chip: 'New job', who: 'an employer’s agent', tag: 'employer’s agent', k: 5, out: 'licensed electrician: yes', back: 'an interview', when: 'hiring', q: 'Prove you hold an electrician’s licence, without your name or address?' },
     { id: 'vote', chip: 'Voting', who: 'the election office’s agent', tag: 'election office', k: 0, out: 'eligible here: yes', back: 'a ballot', when: 'the election', q: 'Prove you may vote here, without showing your ID?' },
     { id: 'er', chip: 'Emergency', who: 'a paramedic’s agent', tag: 'paramedic’s agent', k: 1, emergency: true, out: 'blood type, allergies', back: 'safe treatment', when: 'the emergency' },
+    { id: 'botdm', chip: 'Direct bot DM', who: 'a persuasive AI bot', tag: 'persuasive AI bot', k: 0, fake: true, directHuman: true },
     { id: 'fake', chip: 'Fake bank', who: '“your bank”', tag: '“your bank”', k: 2, fake: true }
   ];
   var END = 13.4, END_FAKE = 8.6, ASK_AT = 6.2;
@@ -213,7 +214,7 @@
 
   /* events: routine questions, and the occasional new relationship */
   var reqs = [], scene = null, t0 = performance.now(), last = 0, lastSpawn = -9999, planI = 0, auto = !reduce;
-  var PLAN = ['ask', 'dentist', 'ask', 'grab', 'insure', 'ask', 'fake', 'ask', 'rent', 'grab', 'ask', 'er', 'ask', 'job', 'grab', 'pharmacy', 'ask', 'vote'];
+  var PLAN = ['ask', 'botdm', 'dentist', 'ask', 'grab', 'insure', 'ask', 'fake', 'ask', 'rent', 'grab', 'ask', 'er', 'ask', 'job', 'grab', 'pharmacy', 'ask', 'vote'];
   var glow = [0, 0, 0, 0, 0, 0], kept = [];
 
   function spawnAsk(now, grab) {
@@ -232,7 +233,8 @@
   }
   function endScene(now) {
     var s = scene, def = s.def;
-    if (def.fake) log('no', 'Blocked ' + esc(def.who) + ': it could not prove its hardware. Nothing shared.');
+    if (def.directHuman) log('no', 'Blocked ' + esc(def.who) + ': agents may never contact humans directly—only your agents over the agent-only internet.');
+    else if (def.fake) log('no', 'Blocked ' + esc(def.who) + ': it could not prove its hardware. Nothing shared.');
     else if (s.decision === 'no') log('no', esc(cap(def.who)) + ': you declined. Nothing shared.');
     else log('ok', esc(cap(def.who)) + ' got <b>' + esc(def.out) + '</b>' + (def.emergency ? ' under your emergency rule.' : '. Access expired.'), def.k);
     if (s.sensor && s.decision !== 'no' && !kept.some(function (x) { return x.name === s.sensor.name; })) kept.push({ k: s.sensor.k, a: s.sensor.a, r: s.sensor.r, name: s.sensor.name });
@@ -329,6 +331,21 @@
         ctx.globalAlpha = 1; ctx.lineWidth = 1;
       }
       if (d > 2.2 && d < 3.9) ring(pos, z + ((d - 2.2) % 0.6) / 0.6 * fs * 2, proofCol, 1 - ((d - 2.2) % 0.6) / 0.6, 1.5);
+      if (def.directHuman && d > 2.2 && d < 6.6) {
+        var reachK = clamp01((d - 2.2) / 1.1);
+        var targetPt = lerp(pos, bp, ease(reachK));
+        line(pos, targetPt, colors.bad, 0.85, [4, 4], 2.2);
+        if (d > 3.1) {
+          ctx.save();
+          ctx.strokeStyle = colors.bad;
+          ctx.lineWidth = 3.2;
+          ctx.globalAlpha = 0.75 * (1 - clamp01((d - 5.8) / 0.8));
+          ctx.beginPath();
+          ctx.arc(cx, cy, R + 2, ha - 0.38, ha + 0.38);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
       if (def.fake) {
         if (d > 4.2 && d < 6.4) ring(hp, nodeR() * (1.6 + 0.4 * Math.sin(d * 8)), colors.bad, 0.8, 2);
         return d < end;
@@ -363,7 +380,10 @@
     if (def.fake) {
       badge({ x: pos.x + z, y: pos.y - z }, false, d > 3.9 ? Math.min(1, (d - 3.9) / 0.2) * fade : 0);
       if (d > 4.2 && d < 6.6) { badgeAt(k, false, fadeIn(d, 4.2)); badgeAt(team[0], false, fadeIn(d, 4.5)); badgeAt(team[1], false, fadeIn(d, 4.7)); }
-      if (d > 4.4 && d < 6.8) label('not verified: blocked', pos.x, pos.y + z + fs * 1.6, colors.bad, colors.card, 'center');
+      if (d > 4.0 && d < 6.8) {
+        var blockMsg = def.directHuman ? 'non-contact rule: no bot → human DM' : 'not verified: blocked';
+        label(blockMsg, pos.x, pos.y + z + fs * 1.6, colors.bad, colors.card, 'center');
+      }
       return d < end;
     }
     badge({ x: pos.x + z, y: pos.y - z }, true, d > 3.9 && d < 11.2 ? Math.min(1, (d - 3.9) / 0.2) : 0);
@@ -390,7 +410,9 @@
 
   function captionFor(s) {
     var def = s.def, d = s.d, steps = [[0, '1  ' + def.who + ' asks to connect']];
-    if (def.fake) {
+    if (def.directHuman) {
+      steps.push([2.2, '2  it tries to message you (a human) directly'], [4.0, '3  blocked at firewall: agents never contact humans directly'], [6.0, '4  only agent-to-agent by trust threshold (τ) is allowed']);
+    } else if (def.fake) {
       steps.push([2.2, '2  it cannot prove what hardware it runs on'], [4.2, '3  refused: it only claimed to be your bank'], [6.2, '4  you are warned; nothing was shared']);
     } else {
       steps.push([2.2, '2  its hardware is verified; each link is logged']);
@@ -423,11 +445,11 @@
     if (!detail || (consent && !consent.hidden)) return;       // your decision keeps the panel
     if (!h) { detail.hidden = true; logWrap.hidden = false; return; }
     var html;
-    if (h.you) html = '<b>You</b><span>Every agent answers to you. You can see what each one has shared, and override any of it.</span>';
-    else if (h.s) html = '<b>' + esc(cap(h.s.name)) + ' sensor</b><span>Feeds only your ' + FLEET[h.s.k].id + ' agent. What it records never leaves your devices.</span>';
+    if (h.you) html = '<b>You (Human Plane · Biometric &amp; PUF Root)</b><span>Your personal agents talk inward only to you, verified by your &lt;1 mW pulse-breath liveness ring and 2-of-2 hardware key. No external agent can ever message you directly.</span>';
+    else if (h.s) html = '<b>' + esc(cap(h.s.name)) + ' sensor</b><span>Feeds only your ' + FLEET[h.s.k].id + ' agent over your local hardware bus. Raw readings are overwritten on-chip and never leave your devices.</span>';
     else {
       var f = FLEET[h.k], feeds = f.feeds.concat(kept.filter(function (x) { return x.k === h.k; }).map(function (x) { return x.name; }));
-      html = '<b>Your ' + f.id + ' agent</b><span>Knows ' + f.about + ', learning from ' + feeds.join(', ') + '. It answers verified askers with the one fact they need; the readings themselves never leave.</span><span class="bd-count">Facts shared so far: ' + shared[h.k] + '</span>';
+      html = '<b>Your ' + f.id + ' agent (3-of-6 Quorum)</b><span>Knows ' + f.about + ', learning from ' + feeds.join(', ') + '. It negotiates outward on the agent-only internet by trust threshold (τ) and never contacts other humans directly.</span><span class="bd-count">Facts shared so far: ' + shared[h.k] + '</span>';
     }
     detail.innerHTML = html; detail.hidden = false; logWrap.hidden = true;
   }
@@ -452,23 +474,46 @@
     for (var gx = step / 2; gx < W; gx += step) for (var gy = step / 2; gy < H; gy += step) { ctx.globalAlpha = 0.55; ctx.fillRect(gx, gy, 1.2, 1.2); }
     ctx.globalAlpha = 1;
 
-    // boundary ring
+    // outer agent-only internet orbital zone
     ctx.save();
-    ctx.setLineDash([4, 7]); ctx.lineDashOffset = -t * 6;
-    ctx.strokeStyle = colors.ink; ctx.globalAlpha = 0.55; ctx.lineWidth = 1.4;
+    ctx.setLineDash([2, 6]);
+    ctx.strokeStyle = colors.ink3; ctx.globalAlpha = 0.28; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(cx, cy, R * 1.24, 0, TAU); ctx.stroke();
+    ctx.restore();
+    text('AGENT-ONLY INTERNET · AGENT ↔ AGENT BY TRUST (τ)', cx, Math.max(fs * 3.1, cy - R * 1.24 - fs * 0.55), colors.ink3, 600, Math.max(8, Math.round(fs * 0.82)), 'center', 0.72);
+
+    // non-contact protocol firewall & hardware enclave boundary ring
+    ctx.save();
+    ctx.strokeStyle = colors.ok; ctx.globalAlpha = 0.18; ctx.lineWidth = 5;
     ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke();
+    ctx.setLineDash([5, 6]); ctx.lineDashOffset = -t * 6;
+    ctx.strokeStyle = colors.ink; ctx.globalAlpha = 0.68; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke();
+    ctx.restore();
+
+    // 6 narrow-agent protocol gates on the firewall ring
+    FLEET.forEach(function (f) {
+      var g0 = P(f.a, R - 4), g1 = P(f.a, R + 4);
+      line(g0, g1, colors.ok, 0.55, [], 2);
+    });
+
+    // inner 6-agent quorum mesh ring (3-of-6 consensus bus)
+    ctx.save();
+    ctx.setLineDash([2, 4]);
+    ctx.strokeStyle = colors.ok; ctx.globalAlpha = 0.25; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.arc(cx, cy, R * 0.56, 0, TAU); ctx.stroke();
     ctx.restore();
 
     // sensors feed their agent; readings flow inward and never out
     var sensors = SENSORS.concat(kept);
     sensors.forEach(function (s, j) {
       var sp = sensorPos(s), ap = agentPos(s.k);
-      line(sp, ap, colors.ink3, 0.18);
+      line(sp, ap, colors.ink3, 0.22);
       var per = 1.8 + (j * 0.37) % 1.6, ph = ((t + j * 0.71) % per) / per;
-      if (ph < 0.5) disc(lerp(sp, ap, ease(ph / 0.5)), 1.6, colors.ok, 0.85);
+      if (ph < 0.5) disc(lerp(sp, ap, ease(ph / 0.5)), 1.7, colors.ok, 0.88);
     });
-    // every agent answers to the person
-    for (i = 0; i < N; i++) line(agentPos(-1), agentPos(i), colors.ink3, 0.28);
+    // every agent answers to the person over the local device bus
+    for (i = 0; i < N; i++) line(agentPos(-1), agentPos(i), colors.ink3, 0.32);
 
     // advance the story; it waits for you at the decision
     schedule(now);
@@ -488,20 +533,23 @@
     // sensors (drawn over their lines)
     sensors.forEach(function (s) { diamond(sensorPos(s), sizeS(), colors.ink3, 0.9); });
 
-    // the person
+    // the person + <1 mW somatic liveness & 2-of-2 PUF+TPM ring
+    var bioR = R * 0.19 + Math.sin(t * 2.8) * 1.8;
+    ring({ x: cx, y: cy }, bioR, colors.ok, 0.45, 1.5);
     disc({ x: cx, y: cy }, R * 0.15, colors.ink);
-    text('you', cx, cy + 1, colors.card, 700, Math.max(9, Math.round(R * 0.1)), 'center');
+    text('you', cx, cy - 1, colors.card, 700, Math.max(9, Math.round(R * 0.1)), 'center');
+    text('HRV+PUF', cx, cy + R * 0.23, colors.ok, 600, Math.max(7, Math.round(fs * 0.72)), 'center', 0.85);
 
-    // the fleet
+    // the fleet (your 6 narrow agents)
     var nr = nodeR();
     FLEET.forEach(function (f, k) {
       var p = agentPos(k), ux = Math.cos(f.a);
       if (glow[k] > 0) disc(p, nr * 2.3, colors.ok, glow[k] * 0.28);
-      disc(p, nr, colors.card); ring(p, nr, colors.ok, 1, 1.6);
+      disc(p, nr, colors.card); ring(p, nr, colors.ok, 1, 1.8);
       var lp = P(f.a, R * 0.56 + nr + fs * 0.95);
-      text(f.id, lp.x, lp.y, colors.ink, 600, Math.round(fs * 0.92), ux > 0.3 ? 'left' : ux < -0.3 ? 'right' : 'center', 0.85);
+      text(f.id, lp.x, lp.y, colors.ink, 600, Math.round(fs * 0.92), ux > 0.3 ? 'left' : ux < -0.3 ? 'right' : 'center', 0.88);
     });
-    text('YOUR DEVICES', cx, cy + R + fs * 1.5, colors.ink3, 600, Math.max(9, Math.round(W / 50)), 'center');
+    text('NON-CONTACT FIREWALL · YOUR 2-OF-2 PUF + TPM DEVICES', cx, cy + R + fs * 1.45, colors.ink3, 600, Math.max(8, Math.round(W / 54)), 'center');
 
     // what you are pointing at
     if (hover) {
