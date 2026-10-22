@@ -62,7 +62,7 @@
     var b = cv.getBoundingClientRect(); if (!b.width) return;
     dpr = Math.min(window.devicePixelRatio || 1, 2); W = b.width; H = b.height;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    R = Math.min(W, H) / 2 * 0.92; cx = W / 2; cy = H / 2; fs = Math.max(9, Math.round(R / 24));
+    R = Math.min(W, H) / 2 * 0.88; cx = W / 2; cy = H / 2; fs = Math.max(10, Math.round(R / 19));
   }
   function pos(n) { return [cx + Math.cos(n.a) * n.r * R, cy + Math.sin(n.a) * n.r * R]; }
   function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
@@ -196,8 +196,19 @@
     ctx.beginPath(); ctx.arc(cx, cy, 0.2 * R, 0, TAU); ctx.strokeStyle = C.ok; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.5; ctx.stroke(); ctx.globalAlpha = 1;
     ctx.fillStyle = C.card; ctx.font = '600 ' + fs + 'px ' + MONO; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('you', cx, cy + 0.5);
     ctx.textBaseline = 'alphabetic';
-    ctx.fillStyle = C.ink3; ctx.font = '600 ' + Math.max(8, fs - 1) + 'px ' + MONO;
-    ctx.fillText('NO AGENT CONTACTS OTHER HUMANS DIRECTLY · AGENT ↔ AGENT ONLY', cx, H - Math.max(8, fs * 0.8));
+    if (W > H * 1.35) {
+      ctx.textAlign = 'left';
+      ctx.fillStyle = C.ok; ctx.font = '700 ' + Math.max(9.5, fs - 1) + 'px ' + MONO;
+      ctx.fillText('RINGS OF TRUST (AGENT ↔ AGENT)', 22, 34);
+      ctx.fillStyle = C.ink3; ctx.font = '600 ' + Math.max(9, fs - 1.5) + 'px ' + MONO;
+      ctx.fillText('• Local sandbox first (τ = 1.00)', 22, 56);
+      ctx.fillText('• Trusted circle (τ ≥ 0.85)', 22, 76);
+      ctx.fillText('• Friends of friends (τ ≥ 0.60)', 22, 96);
+      ctx.fillText('• Wider network (τ ≥ 0.30 · ZK)', 22, 116);
+    }
+    ctx.textAlign = 'center';
+    ctx.fillStyle = C.ink3; ctx.font = '600 ' + Math.max(9, fs - 1) + 'px ' + MONO;
+    ctx.fillText('OUTSIDE AGENTS NEVER CONTACT HUMANS DIRECTLY · AGENT ↔ AGENT ONLY', cx, H - Math.max(10, fs * 0.9));
     if (scene && phase && phase !== 'sense') {
       ctx.fillStyle = scene.harm ? C.bad : C.ink; ctx.font = '600 ' + fs + 'px ' + MONO;
       ctx.fillText(scene.chip.toLowerCase(), cx, cy + 0.27 * R);

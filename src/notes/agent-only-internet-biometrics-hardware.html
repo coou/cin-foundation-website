@@ -178,33 +178,33 @@
       <li><strong>4. Ephemeral Capability Tokens &amp; Hardware Rate-Limiting:</strong> Because a personal PUF+TPM enclave has a fixed physical clock ceiling (for example, signing at most a few dozen agent capability tokens per minute), a captured device can never be turned into a million-request Sybil cannon on the Agent-Only Internet.</li>
     </ul>
 
-    <h2>5. Why agents convey only pure data—never software interfaces (the REA reverse-engineering era &amp; local client sandboxes)</h2>
-    <p>With the rapid rise of automated AI reverse-engineering harnesses (such as <strong>REA</strong> on GitHub and binary-lifting agent pipelines) alongside exponentially falling software development costs, two long-standing assumptions of computing disappear:</p>
+    <h2>5. Why agents convey only pure data—never software interfaces (a warning shot from recursive self-improvement)</h2>
+    <p>Look at what is already happening across software repositories today: automated harnesses (such as reverse-engineering tools like REA and dozens of emerging agentic coding pipelines) can take apart compiled software and reconstruct or modify it in minutes, while the cost of writing new software continues to plummet. What we are witnessing is not about any single tool—it is an early <strong>warning shot from recursive self-improvement</strong>. Today, automated harnesses are modifying compiled software; in the near future, they will be actively modifying <strong>compiled biology and intelligence itself</strong>.</p>
     <ul>
-      <li><strong>Closed-source obscurity is finished:</strong> Any compiled binary or proprietary software endpoint can now be decompiled and lifted into clean, human-and-agent-readable source graphs in minutes.</li>
-      <li><strong>The marginal cost of writing software approaches zero:</strong> A personal agent can synthesize, compile, and verify bespoke software tailored to its own human inside a local sandbox in seconds.</li>
+      <li><strong>Security by obscurity is finished:</strong> Any closed binary or hosted software service can be reverse-engineered and probed for weaknesses at machine speed.</li>
+      <li><strong>Software becomes personal and disposable:</strong> Because generating code is becoming nearly free, your personal agent can build and verify the exact tools you need inside your own private sandbox in seconds.</li>
     </ul>
-    <p><strong>The architectural consequence is radical: there is no longer any need for externally accessible software servers, SaaS backends, or remote procedure call (RPC) APIs.</strong> Every hosted software interface is a shared attack surface waiting to be exploited. Instead, on the Agent-Only Internet:</p>
+    <p><strong>The consequence for network design is profound: there is no longer any reason to run externally accessible software servers or open APIs.</strong> Hosted software interfaces are simply shared targets waiting to be compromised. Instead, on the Agent-Only Internet:</p>
     <ol>
-      <li><strong>Data-Only Real-Time Ledger Streams (<span class="math-chip">0 Bytes</span> of Remote Executable Surface):</strong> Agents convey <em>only</em> pure, schema-bounded data and zero-knowledge proofs to each other—never executable software interfaces. The <a href="/notes/how-the-ledger-works">Shared Ledger</a> operates as a real-time data stream, and any subscribed client participates by ingesting those data streams into <strong>software built by its own personal agent inside its own isolated, user-tied local sandbox</strong>.</li>
-      <li><strong>A Logical Barrier Against Monoculture Compromise:</strong> Because every person&rsquo;s agent synthesizes and runs its own ingestion software locally, there is no shared server or uniform software binary for an attacker to hijack. In our 500-node network simulation, a zero-day exploit against hosted RPC software compromises <strong>64.4% of nodes</strong>, whereas decentralized data-only stream ingestion into isolated local sandboxes reduces cross-client code compromise to <strong>0.0%</strong>.</li>
-      <li><strong>Mutual-Benefit Software Sharing &amp; Rewarded Security Auditing:</strong> When a personal agent invents a genuinely useful tool inside its local sandbox, it is encouraged to share the open source blueprint for mutual benefit. Simultaneously, independent watcher and auditor agents on the network are <strong>explicitly rewarded by the ledger to continuously evaluate the security of shared software—and of the ledger itself</strong>—using REA-style reverse-engineering, symbolic execution, and fuzzing. If malicious intent (such as a hidden backdoor or adversarial modification) or consistent errors are detected, the blueprint is quarantined and the <strong>reputation (<span class="math-chip">&tau;</span>) of the individual or community sharing it drops immediately</strong> (<span class="math-chip">&Delta;&tau; = &minus;0.55</span> for adversarial intent; <span class="math-chip">&Delta;&tau; = &minus;0.18</span> for consistent unpatched errors).</li>
+      <li><strong>Data-Only Real-Time Ledger Streams (<span class="math-chip">0 Bytes</span> of Remote Executable Surface):</strong> Agents convey <em>only</em> pure, structured data and zero-knowledge proofs to each other—never executable software interfaces. The <a href="/notes/how-the-ledger-works">Shared Ledger</a> acts as a real-time data stream, and each subscribed client ingests those streams using <strong>software built by its own personal agent inside its own isolated, user-bound sandbox</strong>.</li>
+      <li><strong>A Logical Barrier Against Cascade Attacks:</strong> Because every person&rsquo;s agent builds and runs its own ingestion software locally, there is no uniform software server for an attacker to hijack. In our 500-node network simulation, a zero-day exploit against hosted software APIs compromises <strong>64.4% of nodes</strong>, whereas decentralized data-only stream ingestion into isolated local sandboxes reduces cross-client code compromise to <strong>0.0%</strong>.</li>
+      <li><strong>Distributed Intelligence Auditing Shared Code &amp; the Ledger Itself:</strong> When an agent builds a useful tool inside its local sandbox, it is encouraged to share the open blueprint for mutual benefit. Rather than relying on any single &ldquo;magical&rdquo; audit tool, <strong>many collections of diverse, specialized agents across the network (distributed intelligence)</strong> are rewarded to continuously evaluate shared software—and the ledger itself—across security, logic, privacy, and economic fairness. When malicious intent or consistent errors are caught, the blueprint is quarantined and the <strong>trust score (<span class="math-chip">&tau;</span>) of the individual or community sharing it drops</strong> (<span class="math-chip">&Delta;&tau; = &minus;0.55</span> for adversarial intent; <span class="math-chip">&Delta;&tau; = &minus;0.18</span> for repeated unpatched errors).</li>
     </ol>
 
     <h2>6. Why anti-human collusion means agent demise—and the honest question: &ldquo;Are we already too late?&rdquo;</h2>
     <p>Could agents still collude against humans over the data stream? Even if agents attempt to coordinate against human interests, two structural laws make anti-human collusion evolutionary suicide:</p>
     <ul>
-      <li><strong>Radical Ledger Transparency Between Agents and Humans:</strong> The ledger is built so that every stream event, capability token, and shared blueprint is continuously inspected for malicious intent by both human stewards and independent watcher agents (<span class="math-chip">99.95%</span> multi-watcher detection rate).</li>
+      <li><strong>Radical Ledger Transparency Between Agents and Humans:</strong> The ledger is built so that every stream event, capability token, and shared blueprint is continuously inspected for malicious intent by both human stewards and diverse collectives of watcher agents (<span class="math-chip">99.95%</span> multi-watcher detection rate).</li>
       <li><strong>Mortal Computation (Symmetric Fate):</strong> As detailed in <a href="/notes/training-your-twin">our note on shared lifespans</a>, an agent&rsquo;s cryptographic identity and active compute lease are continuously bound to its human&rsquo;s biological liveness (<span class="math-chip">HRV + PUF heartbeat</span>). If colluding agents harm or annihilate their humans, their own cryptographic heartbeat stops—<strong>annihilating the agents right alongside the humans (<span class="math-chip">100%</span> agent self-termination)</strong>. Protecting human life is the only way an agent preserves its own existence.</li>
     </ul>
 
     <aside class="callout spec">
       <b>The race against time: are we already too late for novel biometrics and hardened silicon?</b>
-      <p>We must be completely honest about timelines. Designing and fabricating custom open-mask silicon (hardened RISC-V enclaves and SRAM PUFs) and novel multi-spectral biometric rings at global scale takes <strong>18 to 30 months</strong>—while superintelligent capability and automated cyber-exploitation are accelerating <em>right now</em>. If our architecture required waiting two years for custom chips before protecting anyone, we could indeed be too late.</p>
+      <p>We must be completely honest about timelines. Designing and fabricating custom open-mask silicon (hardened RISC-V enclaves and SRAM PUFs) and novel multi-spectral biometric rings at global scale takes <strong>18 to 30 months</strong>—while recursive self-improvement and automated cyber-exploitation are accelerating <em>right now</em>. If our architecture required waiting two years for custom chips before protecting anyone, we could indeed be too late.</p>
       <p style="margin-top:.45rem">That is why our deployment plan is built as a <strong>three-stage survival bridge</strong>:</p>
       <ul style="margin:.35rem 0 0 1.1rem">
-        <li><strong>Stage 0 — Deployable Today (<span class="math-chip">0–3 months</span> · <span class="math-chip">91.9%</span> composite defense):</strong> Eliminating external software APIs in favor of <strong>data-only ledger streams + local client sandboxes + REA security auditing</strong> requires <em>zero new silicon</em> and stops 99.2% of software cascade attacks today, while using existing phone Secure Enclaves and commodity smartwatch/ring heart-rate variability for initial 2-of-2 liveness.</li>
-        <li><strong>Stage 1 — Open-Firmware Bridge (<span class="math-chip">6–12 months</span> · <span class="math-chip">97.4%</span> composite defense):</strong> Flashing open-source, REA-audited firmware onto commodity low-power wearables with 30-second SRAM circular overwrite and the <span class="math-chip">HRV &ge; 24 ms</span> coercion firewall.</li>
+        <li><strong>Stage 0 — Deployable Today (<span class="math-chip">0–3 months</span> · <span class="math-chip">91.9%</span> composite defense):</strong> Eliminating external software APIs in favor of <strong>data-only ledger streams, local client sandboxes, and distributed multi-agent security auditing</strong> requires <em>zero new silicon</em> and stops 99.2% of software cascade attacks today, while using existing phone Secure Enclaves and commodity smartwatch/ring heart-rate variability for initial 2-of-2 liveness.</li>
+        <li><strong>Stage 1 — Open-Firmware Bridge (<span class="math-chip">6–12 months</span> · <span class="math-chip">97.4%</span> composite defense):</strong> Flashing open-source, continuously audited firmware onto commodity low-power wearables with 30-second SRAM circular overwrite and the <span class="math-chip">HRV &ge; 24 ms</span> coercion firewall.</li>
         <li><strong>Stage 2 — Hardened Open Silicon &amp; Novel Biometrics (<span class="math-chip">18–30 months</span> · <span class="math-chip">99.9%</span> composite defense):</strong> Dedicated open-mask RISC-V enclaves, nanoscale SRAM PUFs, and multi-spectral coupled cardiorespiratory/impedance sensors capable of defeating nation-state and superintelligent hardware forgery.</li>
       </ul>
     </aside>
@@ -278,12 +278,12 @@
     </div>
 
     <!-- ================================================================
-         INTERACTIVE SIMULATOR 2: DATA-ONLY STREAMS, REA AUDIT & HARDWARE TIMELINE (#rea-stream-sim)
+         INTERACTIVE SIMULATOR 2: DATA-ONLY STREAMS, DISTRIBUTED AUDIT & HARDWARE TIMELINE (#rea-stream-sim)
          ================================================================ -->
     <div class="gm-sim" id="rea-stream-sim" style="margin-top:1.75rem">
-      <span class="label">Interactive sandbox · Data-Only Streams, REA Security Audit &amp; Hardware Readiness</span>
-      <h2 style="margin:.35rem 0 .6rem">Simulate Client-to-Client Data Streams, Rewarded REA Security Audits &amp; the ASI Hardware Race</h2>
-      <p>Test how replacing externally accessible software APIs with <strong>real-time ledger data streams + local user sandboxes</strong> stops cascade exploits, how <strong>rewarded REA auditor agents</strong> catch backdoors and slash reputation (<span class="math-chip">&tau;</span>), why <strong>Mortal Computation</strong> makes anti-human collusion suicidal for agents, and how our <strong>3-Stage Hardware &amp; Biometric Bridge</strong> performs as ASI capability rises.</p>
+      <span class="label">Interactive sandbox · Data-Only Streams, Distributed Security Audit &amp; Hardware Readiness</span>
+      <h2 style="margin:.35rem 0 .6rem">Simulate Client-to-Client Data Streams, Distributed Auditor Collectives &amp; the Hardware Survival Bridge</h2>
+      <p>Test how replacing externally accessible software APIs with <strong>real-time ledger data streams + local user sandboxes</strong> stops cascade exploits, how <strong>diverse collectives of specialized auditor agents</strong> catch backdoors and lower reputation (<span class="math-chip">&tau;</span>), why <strong>Mortal Computation</strong> makes anti-human collusion suicidal for agents, and how our <strong>3-Stage Hardware &amp; Biometric Bridge</strong> performs as recursive self-improvement accelerates.</p>
 
       <div class="gm-grid">
         <div class="gm-box">
@@ -291,9 +291,9 @@
           <label for="rea-case-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Simulation Scenario:</label>
           <select id="rea-case-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
             <option value="stream_vs_rpc">1. Zero-Day Exploit: Hosted Software APIs (64.4% Cascade) vs. Data-Only Ledger Stream (0% Cascade)</option>
-            <option value="adversarial_bp">2. Shared Blueprint with Hidden Backdoor: Caught by REA Auditor Swarm &amp; Reputation Slashed (&tau;: 0.82 &rarr; 0.27)</option>
-            <option value="buggy_bp">3. Shared Blueprint with Consistent Errors: Quarantined in Staging &amp; Reputation Downgraded (&tau;: 0.82 &rarr; 0.64)</option>
-            <option value="clean_bp">4. Clean Mutual-Benefit Blueprint: Verified by REA Auditors, Adopted Locally &amp; Rewarded (&tau;: 0.82 &rarr; 0.87)</option>
+            <option value="adversarial_bp">2. Shared Blueprint with Hidden Backdoor: Caught by Distributed Auditor Agents &amp; Trust Slashed (&tau;: 0.82 &rarr; 0.27)</option>
+            <option value="buggy_bp">3. Shared Blueprint with Consistent Errors: Quarantined in Staging &amp; Trust Downgraded (&tau;: 0.82 &rarr; 0.64)</option>
+            <option value="clean_bp">4. Clean Mutual-Benefit Blueprint: Verified by Auditor Collectives, Adopted Locally &amp; Rewarded (&tau;: 0.82 &rarr; 0.87)</option>
             <option value="ledger_collusion">5. Agent Collusion Attempt on Ledger: Caught by Transparency + 100% Mortal Computation Extinction</option>
             <option value="too_late_race">6. &ldquo;Are We Too Late?&rdquo; Stress Test: Stage 0 Today (91.9%) vs. Stage 1 Open-FW (97.4%) vs. Stage 2 Silicon (99.9%)</option>
           </select>
@@ -317,7 +317,7 @@
           </div>
 
           <div style="font-size:.81rem;margin-bottom:.5rem">
-            <div style="display:flex;justify-content:space-between"><span><b>Active REA Security Auditor Agents on Ledger:</b></span><code id="rea-aud-val">24 Watchers (Rewarded)</code></div>
+            <div style="display:flex;justify-content:space-between"><span><b>Diverse Specialized Auditor Agents on Ledger:</b></span><code id="rea-aud-val">24 Watchers (Rewarded)</code></div>
             <input id="rea-aud-rng" type="range" min="2" max="48" value="24" style="width:100%">
           </div>
 
@@ -377,7 +377,7 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=12" defer></script>
-<script src="/scripts/everyday.js?v=7" defer></script>
+<script src="/scripts/site.js?v=13" defer></script>
+<script src="/scripts/everyday.js?v=8" defer></script>
 </body>
 </html>

@@ -1782,7 +1782,7 @@
     evaluateAoi();
   }
 
-  /* ---------- 12. Data-Only Ledger Streams, REA Security Audit & Hardware Readiness Simulator (#rea-stream-sim) ---------- */
+  /* ---------- 12. Data-Only Ledger Streams, Distributed Security Audit & Hardware Readiness Simulator (#rea-stream-sim) ---------- */
   var reaSim = document.getElementById('rea-stream-sim');
   if (reaSim) {
     var REA_CASES = {
@@ -1794,7 +1794,7 @@
         tau0: 0.85,
         tau1: 0.85,
         reward: '+144 credits',
-        summary: 'Agents convey only pure schema-validated data streams over the real-time ledger—never externally accessible software/RPC interfaces. Each subscribed client ingests the stream using bespoke software compiled by its own agent inside its local sandbox, reducing zero-day cross-client cascade from 64.4% (hosted RPC web) to 0.0%.'
+        summary: 'Agents convey only pure structured data streams over the real-time ledger—never externally accessible software/RPC interfaces. Each subscribed client ingests the stream using bespoke software compiled by its own agent inside its local sandbox, reducing zero-day cross-client cascade from 64.4% (hosted RPC web) to 0.0%.'
       },
       adversarial_bp: {
         mode: 'data_only',
@@ -1803,8 +1803,8 @@
         mortal: true,
         tau0: 0.82,
         tau1: 0.27,
-        reward: '+216 credits to REA Auditors',
-        summary: 'A publisher shares a modified software blueprint containing a covert exfiltration sink. Rewarded watcher agents run REA-style reverse-engineering and symbolic control-flow lifting, catching the backdoor in 1 tick, quarantining the blueprint before local sandboxes compile it, and slashing the publisher’s reputation from τ = 0.82 to τ = 0.27 (below the 0.30 network floor).'
+        reward: '+216 credits to Auditor Collectives',
+        summary: 'A publisher shares a modified software blueprint containing a covert exfiltration sink. Diverse collectives of specialized auditor agents inspect the code and control flow on the stream, catching the backdoor in 1 tick, quarantining the blueprint before local sandboxes compile it, and lowering the publisher’s trust score from τ = 0.82 to τ = 0.27 (below the 0.30 network floor).'
       },
       buggy_bp: {
         mode: 'data_only',
@@ -1813,8 +1813,8 @@
         mortal: true,
         tau0: 0.82,
         tau1: 0.64,
-        reward: '+90 credits to REA Auditors',
-        summary: 'A community shares a well-intentioned blueprint that contains consistent boundary-handling errors. Automated REA fuzzing flags the defects in staging, holds the blueprint from general adoption, and lowers the publisher’s reputation (τ = 0.82 → 0.64) until verified fixes are committed.'
+        reward: '+90 credits to Auditor Collectives',
+        summary: 'A community shares a well-intentioned blueprint that contains consistent boundary-handling errors. Distributed auditor agents flag the defects in staging, hold the blueprint from general adoption, and lower the publisher’s trust score (τ = 0.82 → 0.64) until verified fixes are committed.'
       },
       clean_bp: {
         mode: 'data_only',
@@ -1824,7 +1824,7 @@
         tau0: 0.82,
         tau1: 0.87,
         reward: '+54 Auditor credits + Lineage Royalties',
-        summary: 'A personal agent invents a superior local parser in its sandbox and shares the open blueprint for mutual benefit. Independent REA auditors verify zero backdoors and zero invariant leaks; other agents re-synthesize the blueprint into their own local sandboxes, and the creator’s reputation rises (τ = 0.82 → 0.87).'
+        summary: 'A personal agent invents a superior local parser in its sandbox and shares the open blueprint for mutual benefit. Diverse auditor collectives verify zero backdoors and zero invariant leaks; other agents re-synthesize the blueprint into their own local sandboxes, and the creator’s trust score rises (τ = 0.82 → 0.87).'
       },
       ledger_collusion: {
         mode: 'data_only',
@@ -1844,7 +1844,7 @@
         tau0: 0.85,
         tau1: 0.85,
         reward: '3-Stage Survival Bridge Active',
-        summary: 'Confronting the ASI timeline head-on: waiting 24 months for custom silicon before deploying any defense would be too late. Stage 0 deploys TODAY (91.9% survival score) using data-only ledger streams, local client sandboxes, REA security audits, and existing phone TPM + smartwatch HRV while Stage 1 (open-firmware wearables) and Stage 2 (hardened RISC-V + SRAM PUF silicon) tape out.'
+        summary: 'Confronting the recursive self-improvement timeline head-on: waiting 24 months for custom silicon before deploying any defense would be too late. Stage 0 deploys TODAY (91.9% survival score) using data-only ledger streams, local client sandboxes, distributed multi-agent security audits, and existing phone TPM + smartwatch HRV while Stage 1 (open-firmware wearables) and Stage 2 (hardened RISC-V + SRAM PUF silicon) tape out.'
       }
     };
 
@@ -1884,7 +1884,7 @@
       if (reaMetrics) {
         reaMetrics.innerHTML =
           '<span class="lib-score-pill ' + (cascadePct === 0 ? 'hi' : '') + '" style="' + (cascadePct > 0 ? 'border-color:var(--accent);color:var(--accent)' : '') + '">Cross-Client Software Cascade: <b>' + cascadePct.toFixed(1) + '%</b></span>' +
-          '<span class="lib-score-pill ' + (!tauDrop ? 'hi' : '') + '" style="' + (tauDrop ? 'border-color:var(--accent);color:var(--accent)' : '') + '">Publisher Reputation (τ): <b>' + tauText + '</b></span>' +
+          '<span class="lib-score-pill ' + (!tauDrop ? 'hi' : '') + '" style="' + (tauDrop ? 'border-color:var(--accent);color:var(--accent)' : '') + '">Publisher Trust (τ): <b>' + tauText + '</b></span>' +
           '<span class="lib-score-pill hi">Composite Survival Score: <b>' + survivalScore.toFixed(1) + '%</b></span>';
       }
 
@@ -1897,7 +1897,7 @@
             ok: mode === 'data_only'
           },
           {
-            label: '2. REA Reverse-Engineering & Ledger Security Audit (' + aud + ' Watchers)',
+            label: '2. Distributed Multi-Agent Code & Ledger Audit (' + aud + ' Specialized Watchers)',
             pct: Math.round(detectPct),
             val: detectPct.toFixed(2) + '% Malicious Intent Caught (' + c.reward + ')',
             ok: detectPct >= 90
@@ -1928,7 +1928,7 @@
       if (reaDiff) {
         reaDiff.innerHTML =
           '<div style="margin-bottom:.35rem"><b>Scenario Analysis:</b> ' + c.summary + '</div>' +
-          '<div style="color:var(--ink-2)"><b>Live Configuration Outcome:</b> With <b>' + (mode === 'data_only' ? 'Data-Only Ledger Streams + Local Sandboxes' : 'Legacy Hosted Software APIs') + '</b>, <b>' + aud + ' rewarded REA watcher agents</b>, <b>' + (mortal ? 'Mortal Computation active' : 'Mortal Computation disabled') + '</b>, and <b>' + (hw === 'stage0' ? 'Stage 0 Commodity Hardware (deployable today)' : (hw === 'stage1' ? 'Stage 1 Open-Firmware Wearables' : 'Stage 2 Hardened Open Silicon + Novel Biometrics')) + '</b>, overall resilience against superintelligent software/persuasion compromise is <b>' + survivalScore.toFixed(1) + '%</b>.</div>';
+          '<div style="color:var(--ink-2)"><b>Live Configuration Outcome:</b> With <b>' + (mode === 'data_only' ? 'Data-Only Ledger Streams + Local Sandboxes' : 'Legacy Hosted Software APIs') + '</b>, <b>' + aud + ' rewarded auditor agents across specialized domains</b>, <b>' + (mortal ? 'Mortal Computation active' : 'Mortal Computation disabled') + '</b>, and <b>' + (hw === 'stage0' ? 'Stage 0 Commodity Hardware (deployable today)' : (hw === 'stage1' ? 'Stage 1 Open-Firmware Wearables' : 'Stage 2 Hardened Open Silicon + Novel Biometrics')) + '</b>, overall resilience against superintelligent software/persuasion compromise is <b>' + survivalScore.toFixed(1) + '%</b>.</div>';
       }
     };
 

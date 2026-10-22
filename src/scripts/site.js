@@ -105,19 +105,19 @@
   var GRAB = [['Full ID scan', 0, 'an ad network'], ['Medical chart', 1, 'a data broker'], ['All bank logs', 2, 'a lending bot'],
     ['Contact list', 3, 'a scraper'], ['GPS history', 4, 'a tracking bot'], ['Work dossier', 5, 'a recruiter bot']];
 
-  // Interactive scenarios: everyday life + Non-Contact Firewall + REA Blueprint Audit + Duress Freeze.
+  // Interactive scenarios: everyday life + Non-Contact Firewall + Distributed Blueprint Audit + Duress Freeze.
   var SCENES = [
     { id: 'botdm', chip: 'Direct bot DM', who: 'a persuasive AI bot', tag: 'persuasive AI bot', k: 0, fake: true, directHuman: true, tau: '0.00' },
-    { id: 'rea', chip: 'REA Blueprint Audit', who: 'a trojan blueprint publisher', tag: 'backdoored blueprint', k: 5, fake: true, reaAudit: true, tau: '0.82 → 0.27' },
-    { id: 'duress', chip: 'Duress Freeze', who: 'a coerced high-risk transfer', tag: 'coerced transfer', k: 2, fake: true, duress: true, tau: '0.91' },
-    { id: 'dentist', chip: 'Dentist', who: 'your dentist’s agent', tag: 'dentist’s agent', k: 1, sensor: 'mouth bacteria', out: '1 bacteria fact', back: 'treatment data stream', when: 'the visit', tau: '0.92', q: 'Share one mouth-bacteria reading with your dentist’s agent over the data stream?' },
-    { id: 'pharmacy', chip: 'Pharmacy', who: 'the pharmacy’s agent', tag: 'pharmacy’s agent', k: 1, out: 'allergy: penicillin', back: 'safe alternative data', when: 'the prescription', tau: '0.89', q: 'Prove you are allergic to penicillin, and nothing else from your records?' },
-    { id: 'rent', chip: 'Renting', who: 'a landlord’s agent', tag: 'landlord’s agent', k: 2, out: 'income ≥ 3× rent: yes', back: 'lease data stream', when: 'the application', tau: '0.68', q: 'Prove your income is at least three times the rent, without sending bank statements?' },
-    { id: 'insure', chip: 'Car insurance', who: 'your insurer’s agent', tag: 'insurer’s agent', k: 4, sensor: 'braking & speed', out: 'safe driving: yes', back: 'lower rate stream', when: 'the renewal', tau: '0.74', q: 'Confirm a year of safe driving, without sending a single trip?' },
-    { id: 'job', chip: 'New job', who: 'an employer’s agent', tag: 'employer’s agent', k: 5, out: 'licensed electrician: yes', back: 'interview slot stream', when: 'hiring', tau: '0.64', q: 'Prove you hold an electrician’s licence, without your name or address?' },
-    { id: 'vote', chip: 'Voting', who: 'the election office’s agent', tag: 'election office', k: 0, out: 'eligible here: yes', back: 'ballot stream', when: 'the election', tau: '0.95', q: 'Prove you may vote here, without showing your ID?' },
-    { id: 'er', chip: 'Emergency', who: 'a paramedic’s agent', tag: 'paramedic’s agent', k: 1, emergency: true, out: 'blood type, allergies', back: 'ER care protocol', when: 'the emergency', tau: '0.96' },
-    { id: 'fake', chip: 'Fake bank', who: '“your bank”', tag: '“your bank” (no PUF)', k: 2, fake: true, tau: '0.12' }
+    { id: 'rea', chip: 'Shared code audit', who: 'a shared software blueprint', tag: 'backdoored blueprint', k: 5, fake: true, reaAudit: true, tau: '0.82 → 0.27' },
+    { id: 'duress', chip: 'Duress protection', who: 'a coerced high-risk transfer', tag: 'coerced transfer', k: 2, fake: true, duress: true, tau: '0.91' },
+    { id: 'dentist', chip: 'Dentist', who: 'your dentist’s agent', tag: 'dentist’s agent', k: 1, sensor: 'mouth bacteria', out: '1 bacteria reading', back: 'treatment plan data', when: 'the visit', tau: '0.92', q: 'Share one mouth-bacteria reading with your dentist’s agent?' },
+    { id: 'pharmacy', chip: 'Pharmacy', who: 'the pharmacy’s agent', tag: 'pharmacy’s agent', k: 1, out: 'allergy: penicillin', back: 'safe alternative', when: 'the prescription', tau: '0.89', q: 'Confirm you are allergic to penicillin, and share nothing else from your records?' },
+    { id: 'rent', chip: 'Renting', who: 'a landlord’s agent', tag: 'landlord’s agent', k: 2, out: 'income ≥ 3× rent: yes', back: 'lease offer', when: 'the application', tau: '0.68', q: 'Prove your income is at least three times the rent, without sending bank statements?' },
+    { id: 'insure', chip: 'Car insurance', who: 'your insurer’s agent', tag: 'insurer’s agent', k: 4, sensor: 'braking & speed', out: 'safe driving: yes', back: 'lower rate', when: 'the renewal', tau: '0.74', q: 'Confirm a year of safe driving, without sending a single trip?' },
+    { id: 'job', chip: 'New job', who: 'an employer’s agent', tag: 'employer’s agent', k: 5, out: 'licensed electrician: yes', back: 'interview time', when: 'hiring', tau: '0.64', q: 'Prove you hold an electrician’s licence, without your name or address?' },
+    { id: 'vote', chip: 'Voting', who: 'the election office’s agent', tag: 'election office', k: 0, out: 'eligible here: yes', back: 'ballot', when: 'the election', tau: '0.95', q: 'Prove you may vote here, without showing your ID?' },
+    { id: 'er', chip: 'Emergency', who: 'a paramedic’s agent', tag: 'paramedic’s agent', k: 1, emergency: true, out: 'blood type, allergies', back: 'safe ER care', when: 'the emergency', tau: '0.96' },
+    { id: 'fake', chip: 'Fake bank', who: '“your bank”', tag: '“your bank” (unverified)', k: 2, fake: true, tau: '0.12' }
   ];
   var END = 13.4, END_FAKE = 8.6, ASK_AT = 6.2;
 
@@ -139,15 +139,15 @@
     W = r.width; H = r.height;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    // 3-World Sovereign Horizon coordinates
-    youX = W * 0.14;
-    youY = H * 0.43;
+    // Centered widescreen 3-World Sovereign Horizon coordinates
+    youX = W * 0.145;
+    youY = H * 0.44;
     cx = W * 0.465;
-    cy = H * 0.51;
-    R = Math.min(W * 0.175, H * 0.27);
+    cy = H * 0.52;
+    R = Math.min(W * 0.175, H * 0.31);
     wallX = W * 0.675;
     streamX = W * 0.835;
-    fs = Math.max(8.5, Math.min(11.5, Math.round(W / 48)));
+    fs = Math.max(9.5, Math.min(13.5, Math.round(W / 64)));
   }
 
   /* geometry and drawing helpers */
@@ -283,12 +283,12 @@
   }
   function endScene(now) {
     var s = scene, def = s.def;
-    if (def.directHuman) log('no', 'Blocked ' + esc(def.who) + ' at Silicon Firewall: foreign agents may never contact humans directly.');
-    else if (def.reaAudit) log('no', 'REA Security Auditors decompiled ' + esc(def.tag) + ': hidden backdoor caught &amp; publisher reputation slashed (<b>&tau;: 0.82 &rarr; 0.27</b>).');
-    else if (def.duress) log('no', 'Coercion Firewall triggered (<b>HRV 14 ms &lt; 24 ms</b>): high-risk transfer frozen until you are calm and safe.');
-    else if (def.fake) log('no', 'Blocked ' + esc(def.who) + ': missing 2-of-2 PUF+TPM hardware proof. Nothing shared.');
+    if (def.directHuman) log('no', 'Blocked ' + esc(def.who) + ' at the boundary: outside agents may never contact a person directly.');
+    else if (def.reaAudit) log('no', 'Specialized auditor agents inspected ' + esc(def.tag) + ': hidden backdoor caught &amp; publisher trust lowered (<b>0.82 &rarr; 0.27</b>).');
+    else if (def.duress) log('no', 'Coercion protection triggered: your wearable sensed acute stress and paused the transfer until you are safe.');
+    else if (def.fake) log('no', 'Blocked ' + esc(def.who) + ': it could not prove its hardware identity. Nothing shared.');
     else if (s.decision === 'no') log('no', esc(cap(def.who)) + ': you declined. Nothing shared.');
-    else log('ok', esc(cap(def.who)) + ' got <b>' + esc(def.out) + '</b> via data-only stream' + (def.emergency ? ' (emergency rule).' : '. Synthesized locally; access expired.'), def.k);
+    else log('ok', esc(cap(def.who)) + ' received <b>' + esc(def.out) + '</b>' + (def.emergency ? ' under your emergency rule.' : '. Your sandbox built the view locally; access expired.'), def.k);
     if (s.sensor && s.decision !== 'no' && !kept.some(function (x) { return x.name === s.sensor.name; })) kept.push({ k: s.sensor.k, a: s.sensor.a, r: s.sensor.r, name: s.sensor.name });
     scene = null; lastSpawn = now; hideConsent();
     if (s.manual) { setPressed('auto'); }
@@ -450,10 +450,10 @@
     if (def.fake) {
       badge({ x: pos.x + z, y: pos.y - z }, false, d > 3.4 ? Math.min(1, (d - 3.4) / 0.2) * fade : 0);
       if (d > 3.4 && d < 6.8) {
-        if (def.directHuman) label('NON-CONTACT WALL: bot → human blocked', wallX, youY + fs * 2.1, colors.bad, colors.card, 'center');
-        else if (def.reaAudit) label('REA DECOMPILER: backdoor quarantined · τ slashed', pos.x, pos.y + z + fs * 1.5, colors.bad, colors.card, 'center');
-        else if (def.duress) label('DURESS FIREWALL: HRV 14ms (<24ms) · transfer frozen', cx, cy - R - fs * 0.6, colors.bad, colors.card, 'center');
-        else label('MISSING PUF+TPM PROOF: blocked at gate', gp.x, gp.y + fs * 1.7, colors.bad, colors.card, 'center');
+        if (def.directHuman) label('BLOCKED: bots never contact humans directly', wallX, youY + fs * 2.1, colors.bad, colors.card, 'center');
+        else if (def.reaAudit) label('AUDITOR COLLECTIVE: backdoor caught · trust lowered', pos.x, pos.y + z + fs * 1.5, colors.bad, colors.card, 'center');
+        else if (def.duress) label('DURESS PROTECTION: acute stress sensed · transfer paused', cx, cy - R - fs * 0.6, colors.bad, colors.card, 'center');
+        else label('UNVERIFIED HARDWARE: blocked at gate', gp.x, gp.y + fs * 1.7, colors.bad, colors.card, 'center');
       }
       return d < end;
     }
@@ -488,25 +488,25 @@
   }
 
   function captionFor(s) {
-    var def = s.def, d = s.d, steps = [[0, '1  ' + def.who + ' appears on the agent-only stream']];
+    var def = s.def, d = s.d, steps = [[0, '1  ' + def.who + ' arrives on the agent-only stream']];
     if (def.directHuman) {
-      steps.push([1.8, '2  it tries to bypass your agents and message YOU (a human) directly'], [3.0, '3  shattered at the Non-Contact Silicon Wall (0% bot → human contact)'], [5.6, '4  only agent-to-agent negotiation by trust threshold (τ) is allowed']);
+      steps.push([1.8, '2  it tries to bypass your agents and message you directly'], [3.0, '3  stopped at the boundary: outside agents can never contact a person directly'], [5.6, '4  only agent-to-agent coordination by trust is allowed']);
     } else if (def.reaAudit) {
-      steps.push([1.8, '2  REA Auditor Swarm decompiles & lifts the shared blueprint on the stream'], [3.2, '3  hidden exfiltration backdoor detected before reaching your sandbox'], [5.4, '4  blueprint quarantined · publisher reputation slashed (τ: 0.82 → 0.27)']);
+      steps.push([1.8, '2  diverse auditor agents inspect the shared software blueprint on the stream'], [3.2, '3  a hidden backdoor is caught before your sandbox ever runs it'], [5.4, '4  blueprint quarantined and the publisher’s trust score drops (0.82 → 0.27)']);
     } else if (def.duress) {
-      steps.push([1.8, '2  attacker pressures human to approve high-risk transfer under panic'], [3.0, '3  <1mW Somatic Witness detects vagal HRV drop (14 ms < 24 ms threshold)'], [5.4, '4  Autonomic Coercion Firewall silently freezes outbound capability tokens']);
+      steps.push([1.8, '2  someone pressures you under panic to approve a high-risk transfer'], [3.0, '3  your wearable senses acute stress in your pulse and breathing'], [5.4, '4  your agents quietly pause the transfer until you are calm and safe']);
     } else if (def.fake) {
-      steps.push([2.0, '2  it cannot prove 2-of-2 Wearable PUF + Device TPM hardware custody'], [4.0, '3  refused at the silicon gate: spoofed cloud script blocked'], [6.0, '4  your sandbox never opens; zero data shared']);
+      steps.push([2.0, '2  it cannot prove what hardware it runs on'], [4.0, '3  refused at the gate: it only claimed to be your bank'], [6.0, '4  your sandbox stays closed and nothing is shared']);
     } else {
-      steps.push([2.0, '2  hardware PUF+TPM & trust threshold (τ=' + def.tau + ') verified at firewall gate']);
-      steps.push([4.4, def.sensor ? '3  local <1mW sensor reads ' + def.sensor + ' inside your enclave' : '3  your local ' + FLEET[def.k].id + ' agent checks your private ledger']);
-      if (def.emergency) steps.push([ASK_AT, '4  pre-approved emergency rule: 3-of-6 local quorum signs']);
-      else if (s.waiting) steps.push([ASK_AT, '4  your call inside the human sanctuary: approve or decline?']);
-      else if (s.decision === 'no') steps.push([ASK_AT, '4  you declined; nothing crosses the silicon firewall']);
-      else steps.push([ASK_AT, '4  you + 3-of-6 local agent quorum approve']);
-      if (s.decision === 'no') steps.push([8.0, '5  ' + def.who + ' receives nothing']);
-      else steps.push([8.0, '5  1 zero-knowledge fact crosses gate: ' + def.out], [9.6, '6  local sandbox synthesizes view from pure data: ' + def.back]);
-      steps.push([11.2, '7  capability token expires · 0 externally accessible software APIs']);
+      steps.push([2.0, '2  its hardware and trust level (' + def.tau + ') are verified at the gate']);
+      steps.push([4.4, def.sensor ? '3  a quiet local sensor reads ' + def.sensor + ' on your device' : '3  your local ' + FLEET[def.k].id + ' agent checks your private record']);
+      if (def.emergency) steps.push([ASK_AT, '4  pre-approved for emergencies: three of your agents agree']);
+      else if (s.waiting) steps.push([ASK_AT, '4  your call: share this one fact, or decline?']);
+      else if (s.decision === 'no') steps.push([ASK_AT, '4  you declined; nothing leaves your device']);
+      else steps.push([ASK_AT, '4  you and three of your local agents approve']);
+      if (s.decision === 'no') steps.push([8.0, '5  ' + def.who + ' carries on without it']);
+      else steps.push([8.0, '5  only one verified fact goes out: ' + def.out], [9.6, '6  your sandbox builds the view locally from pure data: ' + def.back]);
+      steps.push([11.2, '7  access expires immediately · no open software APIs left behind']);
     }
     var capStr = '', a = 1;
     steps.forEach(function (st) { if (d >= st[0]) { capStr = st[1]; a = s.waiting ? 1 : Math.min(1, (d - st[0]) / 0.3); } });
@@ -533,16 +533,16 @@
     if (!detail || (consent && !consent.hidden)) return;
     if (!h) { detail.hidden = true; logWrap.hidden = false; return; }
     var html;
-    if (h.you) html = '<b>Zone 1 · You (Human Biological Sanctuary &amp; Mortal Lease)</b><span>Your personal agents talk inward only to you. Under Mortal Computation, their cryptographic lease is bound to your biological survival—if humans are harmed, the agents cease to exist.</span>';
-    else if (h.bio) html = '<b>&lt;1 mW Somatic Witness &amp; Autonomic Coercion Firewall</b><span>Coupled pulse-breath coherence (HRV RMSSD &ge; 24 ms) proves an uncoerced human is present. Raw waveforms overwrite every 30s in SRAM (0 bytes leave). If panic/duress hits (&lt;24 ms), outbound high-risk tokens freeze.</span>';
-    else if (h.sandbox) html = '<b>Zone 2 · Your Local Sandbox Synthesis Core (0 External APIs)</b><span>Because AI coding and reverse-engineering harnesses (like REA) make software near-free to synthesize locally, your agents never expose running software interfaces. They ingest pure data streams and build bespoke tools inside this isolated local sandbox.</span>';
-    else if (h.wall) html = '<b>Non-Contact Silicon Firewall (2-of-2 PUF + TPM)</b><span>Hardware plane separation drops any foreign agent packet aimed at a human. Only schema-validated data streams and 1-fact zero-knowledge proofs signed by your 3-of-6 local quorum can cross.</span>';
-    else if (h.rea) html = '<b>Rewarded REA Security Auditor Swarm</b><span>Independent watcher agents earn ledger credits for continuously decompiling and fuzzing shared software blueprints and auditing the ledger stream itself—slashing the reputation (&tau;) of anyone sharing backdoored or buggy code.</span>';
-    else if (h.stream) html = '<b>Zone 3 · Agent-Only Internet &amp; Real-Time Ledger Stream (&tau;)</b><span>High-velocity data-only streams organized by cryptographic trust thresholds (&tau; &ge; 0.85 trusted, &ge; 0.60 friends-of-friends, &ge; 0.30 wider ZK commons).</span>';
-    else if (h.s) html = '<b>' + esc(cap(h.s.name)) + ' sensor (&lt;1 mW local bus)</b><span>Feeds only your ' + FLEET[h.s.k].id + ' agent inside your hardware enclave. Raw readings never touch the network.</span>';
+    if (h.you) html = '<b>Zone 1 · You (The Human Sanctuary &amp; Shared Lifespan)</b><span>Your personal agents talk inward only to you. Because their active existence is bound to your biological life, harming people means the agents’ own demise.</span>';
+    else if (h.bio) html = '<b>Quiet Wearable Liveness &amp; Coercion Protection</b><span>A low-power ring or wristband checks your natural pulse-and-breathing rhythm on the chip itself, overwriting raw readings every 30 seconds. If you are panicked or coerced, your agents quietly pause high-risk actions until you are safe.</span>';
+    else if (h.sandbox) html = '<b>Zone 2 · Your Local Sandbox (Data In, Local Software Built on Your Device)</b><span>Agents exchange only pure data streams, never external software interfaces. Your own agents build and run the tools you need inside this private sandbox, so a flaw in someone else’s code cannot compromise yours.</span>';
+    else if (h.wall) html = '<b>The Non-Contact Boundary (Hardware-Enforced)</b><span>Outside agents are never allowed to message or call a human directly. Only verified data streams and single-fact proofs approved by three of your local agents can cross this line.</span>';
+    else if (h.rea) html = '<b>Diverse Auditor Collectives (Distributed Intelligence)</b><span>Many specialized agents across the network earn rewards for continuously inspecting shared software blueprints and the ledger itself—catching errors or hidden malice and lowering the trust score of bad actors.</span>';
+    else if (h.stream) html = '<b>Zone 3 · The Agent-Only Internet &amp; Real-Time Data Stream</b><span>Where agents coordinate with other agents at machine speed according to trust thresholds (trusted circle, friends of friends, and the wider network).</span>';
+    else if (h.s) html = '<b>' + esc(cap(h.s.name)) + ' sensor</b><span>Feeds only your ' + FLEET[h.s.k].id + ' agent on your own device. Raw readings never leave.</span>';
     else {
       var f = FLEET[h.k], feeds = f.feeds.concat(kept.filter(function (x) { return x.k === h.k; }).map(function (x) { return x.name; }));
-      html = '<b>Your ' + f.id + ' agent (3-of-6 Local Quorum)</b><span>Knows ' + f.about + ' from ' + feeds.join(', ') + '. Negotiates on the Agent-Only Internet by trust threshold (&tau;) and never contacts other humans directly.</span><span class="bd-count">Scoped facts proved so far: ' + shared[h.k] + '</span>';
+      html = '<b>Your ' + f.id + ' agent</b><span>Knows ' + f.about + ' from ' + feeds.join(', ') + '. It negotiates on the agent-only internet by trust level and never contacts other people directly.</span><span class="bd-count">Facts shared so far: ' + shared[h.k] + '</span>';
     }
     detail.innerHTML = html; detail.hidden = false; logWrap.hidden = true;
   }
@@ -581,15 +581,15 @@
     ctx.restore();
 
     // 1. Top 3-World Architectural Header Strip
-    var hdrFs = Math.max(7.5, Math.round(fs * 0.78));
-    text('1. HUMAN SANCTUARY', W * 0.13, H * 0.048, colors.ok, 700, hdrFs, 'center', 0.92);
-    text('HRV+PUF · Mortal Lease', W * 0.13, H * 0.082, colors.ink3, 600, Math.max(7, hdrFs - 1), 'center', 0.75);
+    var hdrFs = Math.max(8.5, Math.round(fs * 0.84));
+    text('1. HUMAN SANCTUARY', W * 0.13, H * 0.048, colors.ok, 700, hdrFs, 'center', 0.94);
+    text('Live Liveness · Shared Lifespan', W * 0.13, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
 
-    text('2. YOUR LOCAL SANDBOX', cx, H * 0.048, colors.ink, 700, hdrFs, 'center', 0.92);
-    text('6 Agents · 0 External APIs', cx, H * 0.082, colors.ink3, 600, Math.max(7, hdrFs - 1), 'center', 0.75);
+    text('2. YOUR LOCAL SANDBOX', cx, H * 0.048, colors.ink, 700, hdrFs, 'center', 0.94);
+    text('6 Local Agents · Data In, Code Built Here', cx, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
 
-    text('3. AGENT-ONLY STREAM', (wallX + W) / 2, H * 0.048, colors.blue, 700, hdrFs, 'center', 0.92);
-    text('Data Ledger + REA Audit (τ)', (wallX + W) / 2, H * 0.082, colors.ink3, 600, Math.max(7, hdrFs - 1), 'center', 0.75);
+    text('3. AGENT-ONLY STREAM', (wallX + W) / 2, H * 0.048, colors.blue, 700, hdrFs, 'center', 0.94);
+    text('Trust Streams (τ) + Distributed Audit', (wallX + W) / 2, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
 
     // 2. Zone 1 (Human Sanctuary): YOU + Live Coupled ECG/HRV Scope + Mortal Computation Tether
     // Mortal Computation double-tether connecting YOU to your Local Sandbox
@@ -680,12 +680,13 @@
       disc({ x: lx, y: py }, pt.isAudit ? 2.2 : 1.6, pt.isAudit ? colors.gold : colors.blue, pt.isAudit ? 0.75 : 0.45);
     });
 
-    // Patrolling REA Reverse-Engineering Security Auditor Nodes
+    // Patrolling Specialized Auditor Collectives (Distributed Intelligence)
+    var auditLabels = ['CODE AUDIT', 'LEDGER AUDIT'];
     for (var rIdx = 0; rIdx < 2; rIdx++) {
       var rp = reaPos(rIdx);
-      diamond(rp, 6.5, colors.gold, 0.9);
-      ring(rp, 9 + Math.sin(t * 2.5 + rIdx) * 1.5, colors.gold, 0.35, 1.2);
-      text('REA AUDIT', rp.x, rp.y + (rIdx === 0 ? -12 : 12), colors.gold, 700, Math.max(6.5, Math.round(fs * 0.66)), 'center', 0.88);
+      diamond(rp, 7, colors.gold, 0.92);
+      ring(rp, 9.5 + Math.sin(t * 2.5 + rIdx) * 1.5, colors.gold, 0.38, 1.2);
+      text(auditLabels[rIdx], rp.x, rp.y + (rIdx === 0 ? -13 : 13), colors.gold, 700, Math.max(7, Math.round(fs * 0.7)), 'center', 0.9);
     }
 
     // Advance scenario story
@@ -738,12 +739,12 @@
     text(capStr, W / 2, H * 0.135, scene ? colors.ink : colors.ink3, 600, Math.round(fs * 0.92), 'center', capA);
 
     // Bottom legend
-    var ly = H - fs * 1.05, lx = 10, ls = Math.max(7.5, Math.round(fs * 0.8));
+    var ly = H - fs * 1.05, lx = 14, ls = Math.max(8, Math.round(fs * 0.82));
     ctx.font = '600 ' + ls + 'px ' + MONO;
-    diamond({ x: lx + 3, y: ly }, 3.2, colors.ink3); text('sensor (<1mW)', lx + 10, ly, colors.ink3, 600, ls); lx += 10 + ctx.measureText('sensor (<1mW)').width + fs * 1.1;
-    disc({ x: lx + 4, y: ly }, 3.8, colors.card); ring({ x: lx + 4, y: ly }, 3.8, colors.ok, 1, 1.4); text('local agent', lx + 12, ly, colors.ink3, 600, ls); lx += 12 + ctx.measureText('local agent').width + fs * 1.1;
-    diamond({ x: lx + 4, y: ly }, 4, colors.gold); text('REA auditor', lx + 12, ly, colors.ink3, 600, ls); lx += 12 + ctx.measureText('REA auditor').width + fs * 1.1;
-    var sf = fs; fs = ls * 0.82; badge({ x: lx + 5, y: ly }, true, 1); fs = sf; text('3-of-6 quorum', lx + 14, ly, colors.ink3, 600, ls);
+    diamond({ x: lx + 3, y: ly }, 3.5, colors.ink3); text('sensor', lx + 10, ly, colors.ink3, 600, ls); lx += 10 + ctx.measureText('sensor').width + fs * 1.3;
+    disc({ x: lx + 4, y: ly }, 4, colors.card); ring({ x: lx + 4, y: ly }, 4, colors.ok, 1, 1.4); text('your local agent', lx + 12, ly, colors.ink3, 600, ls); lx += 12 + ctx.measureText('your local agent').width + fs * 1.3;
+    diamond({ x: lx + 4, y: ly }, 4.2, colors.gold); text('auditor agents', lx + 12, ly, colors.ink3, 600, ls); lx += 12 + ctx.measureText('auditor agents').width + fs * 1.3;
+    var sf = fs; fs = ls * 0.82; badge({ x: lx + 5, y: ly }, true, 1); fs = sf; text('3-of-6 approval', lx + 14, ly, colors.ink3, 600, ls);
   }
 
   /* ---------- situation chips ---------- */
