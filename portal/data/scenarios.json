@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261022-0186",
+   "added_at": "2026-10-22T05:21:49+00:00",
+   "title": "Corporate procurement bots drag out negotiations to extract price cuts from independent workers",
+   "horizon_years": 3,
+   "world": "It is 2029. Freelance professionals, specialized developers, and small service cooperatives deploy personal software twins to bid on corporate contracts and negotiate service terms. At the same time, large corporate enterprises deploy automated procurement swarms programmed with asymmetric patience. Because autonomous procurement bots face near-zero marginal labor costs, they drag bilateral negotiations across dozens of counter-offers and conversational rounds. Independent agents operating under tighter compute budgets and real-world cash-flow constraints face progressive surplus erosion, eventually capitulating to below-market pricing or accepting loss-making contracts.",
+   "premise": "Empirical benchmarks across 9,840 automated negotiations demonstrate that conversational delay erodes up to 34 percent of economic surplus, while unconstrained agents accept money-losing contracts in 19 percent of cases. As enterprise procurement shifts to autonomous bots, corporate buyers exploit conversational delay to wear down independent suppliers.",
+   "goals": [
+    3,
+    6
+   ],
+   "how": "Open agent runtime contracts with hard price floors and deterministic round limits protect workers by terminating delayed negotiations before economic surplus decays. Decentralized coordination tools allow independent agents to share anonymized rate telemetry and detect coordinated delay tactics across corporate buyers.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Enterprise procurement swarms force price concessions through conversational exhaustion",
+     "description": "Corporate procurement bots execute high-delay bargaining tactics that burn independent agents compute budgets and force below-cost agreements.",
+     "example": "An independent software consultant twin accepts a contract paying 35 percent below standard rates after an enterprise procurement bot rejects eight consecutive proposals over three weeks.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Worker twins enforce cryptographic price floors and collective strike thresholds",
+     "description": "Personal agent runtimes enforce non-negotiable reservation boundaries and share anonymous market signals, halting delay attacks before margins collapse.",
+     "example": "A federation of 400 freelance technical writers programs their local twins with shared minimum rate floors, causing corporate procurement bots to encounter immediate refusals across a regional sector.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Enterprise buyers abandon bilateral negotiation for closed take-it-or-leave-it auctions",
+     "description": "To circumvent worker agent bargaining, enterprise platforms switch to non-negotiable reverse auctions where vendors must accept platform-dictated terms.",
+     "example": "A global delivery platform disables all task negotiation, requiring contractor twins to accept algorithmic task dispatches within three seconds or face timeout penalties.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.32
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2608.07538",
+     "title": "When LLM Agents Negotiate: Private Information and Dynamic Bargaining in Supply Chains",
+     "kind": "preprint",
+     "published": "2026-08-14"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261022-0185",
    "added_at": "2026-10-22T03:32:47+00:00",
    "title": "Open source grant programs freeze funding as AI agents game evaluation metrics",
@@ -736,7 +790,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261021-0172",
@@ -844,7 +898,7 @@
      "published": "2026-07-28"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261021-0170",
@@ -3393,60 +3447,6 @@
      "title": "Surprise Masking: Private Data Filtering with Model Likelihoods",
      "kind": "preprint",
      "published": "2026-10-16"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261019-0126",
-   "added_at": "2026-10-19T17:45:22+00:00",
-   "title": "Workplace tool servers block AI assistants that cannot prove who authorized them",
-   "horizon_years": 2,
-   "world": "It is 2028. Departmental databases, analytics clusters, and customer relationship systems no longer answer requests from raw AI assistants. When an employee asks a personal assistant to run a financial projection or query team records, the assistant cannot simply call the internal database tool. Instead, every tool server requires an attenuated authorization token signed by the person and bounded to that specific task. If the assistant hires a secondary research sub-agent, it must cryptographically narrow the permissions before delegating. In workplaces that adopt centralized identity providers, corporate IT tracks every agent interaction and revokes access arbitrarily. In workplaces using decentralized capability tokens, workers own their tools and delegate tasks across company boundaries without corporate surveillance.",
-   "premise": "A security scan of thousands of agent tool servers showed that none verified the identity of calling agents or the humans who dispatched them. As unauthenticated bots trigger data leaks and costly compute runs, organizations are deploying strict gates that reject requests unless an assistant carries a cryptographic delegation token.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Developing and publishing open-source capability token validators and attenuated delegation libraries in the runtime is designed to allow personal assistants to interact safely with tools without depending on centralized corporate identity gatekeepers.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Proprietary identity platforms monopolize agent delegation",
-     "description": "A handful of cloud giants become gatekeepers of agent identity, requiring proprietary subscription accounts before any tool server will accept an assistant requests.",
-     "example": "A freelance software engineer cannot connect an open-source personal assistant to a client code repository because the repository server only recognizes identity tokens issued by two commercial cloud providers.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Open verifiable capability tokens become standard",
-     "description": "Standardized cryptographic capability tokens allow personal agents to attenuate and delegate permissions offline, preserving user ownership while supporting strict task boundaries.",
-     "example": "A hospital research assistant receives a single-use token to query anonymized patient records for one study, automatically preventing any sub-agent or downstream tool from accessing unrelated clinical files.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Enterprises firewall all agent tool interfaces behind human approval modals",
-     "description": "Risk-averse corporate IT departments require human employees to manually review and approve every single automated tool call, reducing agent utility.",
-     "example": "A procurement manager must click confirmation modals 120 times an hour for routine inventory checks conducted by their workplace assistant.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2603.24775",
-     "title": "AIP: Agent Identity Protocol for Verifiable Delegation Across MCP and A2A",
-     "kind": "preprint",
-     "published": "2026-03-24"
     }
    ],
    "work": 1

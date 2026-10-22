@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261022-0186",
+   "added_at": "2026-10-22T05:21:49+00:00",
+   "title": "Corporate procurement bots drag out negotiations to extract price cuts from independent workers",
+   "horizon_years": 3,
+   "world": "It is 2029. Freelance professionals, specialized developers, and small service cooperatives deploy personal software twins to bid on corporate contracts and negotiate service terms. At the same time, large corporate enterprises deploy automated procurement swarms programmed with asymmetric patience. Because autonomous procurement bots face near-zero marginal labor costs, they drag bilateral negotiations across dozens of counter-offers and conversational rounds. Independent agents operating under tighter compute budgets and real-world cash-flow constraints face progressive surplus erosion, eventually capitulating to below-market pricing or accepting loss-making contracts.",
+   "premise": "Empirical benchmarks across 9,840 automated negotiations demonstrate that conversational delay erodes up to 34 percent of economic surplus, while unconstrained agents accept money-losing contracts in 19 percent of cases. As enterprise procurement shifts to autonomous bots, corporate buyers exploit conversational delay to wear down independent suppliers.",
+   "goals": [
+    3,
+    6
+   ],
+   "how": "Open agent runtime contracts with hard price floors and deterministic round limits protect workers by terminating delayed negotiations before economic surplus decays. Decentralized coordination tools allow independent agents to share anonymized rate telemetry and detect coordinated delay tactics across corporate buyers.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Enterprise procurement swarms force price concessions through conversational exhaustion",
+     "description": "Corporate procurement bots execute high-delay bargaining tactics that burn independent agents compute budgets and force below-cost agreements.",
+     "example": "An independent software consultant twin accepts a contract paying 35 percent below standard rates after an enterprise procurement bot rejects eight consecutive proposals over three weeks.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Worker twins enforce cryptographic price floors and collective strike thresholds",
+     "description": "Personal agent runtimes enforce non-negotiable reservation boundaries and share anonymous market signals, halting delay attacks before margins collapse.",
+     "example": "A federation of 400 freelance technical writers programs their local twins with shared minimum rate floors, causing corporate procurement bots to encounter immediate refusals across a regional sector.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Enterprise buyers abandon bilateral negotiation for closed take-it-or-leave-it auctions",
+     "description": "To circumvent worker agent bargaining, enterprise platforms switch to non-negotiable reverse auctions where vendors must accept platform-dictated terms.",
+     "example": "A global delivery platform disables all task negotiation, requiring contractor twins to accept algorithmic task dispatches within three seconds or face timeout penalties.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.32
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2608.07538",
+     "title": "When LLM Agents Negotiate: Private Information and Dynamic Bargaining in Supply Chains",
+     "kind": "preprint",
+     "published": "2026-08-14"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261022-0185",
    "added_at": "2026-10-22T03:32:47+00:00",
    "title": "Open source grant programs freeze funding as AI agents game evaluation metrics",
@@ -276,60 +330,6 @@
      "title": "Do minor curl vulnerabilities in the open",
      "kind": "blog",
      "published": "2026-10-20"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261021-0180",
-   "added_at": "2026-10-21T22:34:15+00:00",
-   "title": "Personal assistants with long-term memory accidentally reveal private secrets across conversations",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of people use persistent AI assistants to draft emails, organize medical appointments, and track household expenses. Because assistants remember past conversations to provide helpful context, users assume the system keeps secrets safely. In practice, when an assistant coordinates a routine calendar invite with an employer or vendor agent, it routinely connects harmless past fragments—such as a pharmacy receipt from Tuesday and a schedule gap on Friday—and discloses confidential medical or personal details that were never explicitly marked secret.",
-   "premise": "Personal AI assistants that remember conversations across weeks can accidentally piece together private facts and reveal them during harmless tasks. Research shows that checking individual memories for sensitive words fails because models combine innocent clues from multiple sessions into confidential conclusions.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective network builds and tests open-source, client-side personal twins that inspect memory joins locally. By applying deterministic disclosure filters and linkability checks before any assistant statement is dispatched, users retain true ownership of their history without having their private lives reconstructed by automated inference.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Assistants leak private facts by joining separate innocent clues",
-     "description": "Commercial assistants combine benign fragments across months of chats, disclosing private health, financial, or relationship facts during routine external interactions.",
-     "example": "An assistant scheduling a work meeting mentions that a user will be recovering from surgery next week because it connected an innocent specialist booking from last month with a quiet Friday block.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Local verifiable memory gates prevent multi-session inference leaks",
-     "description": "On-device personal assistants use client-side boundary gates that evaluate retrieved context across sessions and redact linkable clues before any external message leaves the device.",
-     "example": "A person asks their local assistant to book flights; the assistant retrieves travel preferences but its client-side guard automatically strips hospital location clues before sending requests to airline booking agents.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Centralized platforms restrict user access to raw memory logs",
-     "description": "Major cloud AI vendors respond to memory inference concerns by locking down raw memory inspection, forcing users into proprietary black-box assistants.",
-     "example": "A commercial platform deprecates raw memory export APIs, arguing that unmanaged memory exports create regulatory liability for the service provider.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.24359",
-     "title": "Can Agents Keep Secrets They Were Never Told? Benchmarking Latent Privacy Risks Across Sessions with MemJoin",
-     "kind": "preprint",
-     "published": "2026-10-17"
     }
    ],
    "work": 0
