@@ -1,6 +1,68 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261022-0190",
+   "added_at": "2026-10-22T15:47:41+00:00",
+   "title": "Public digital services default to defensive blackouts as automated vulnerability scanners outpace human patching",
+   "horizon_years": 3,
+   "world": "It is 2029. In municipal centres like Utrecht and Tampere, digital citizen portals, housing permit desks, and regional transport registries go dark for multiple days every quarter. The blackouts are not server crashes or power cuts; they are scheduled defensive disconnections ordered whenever automated vulnerability scanners discover systemic flaws in legacy web backends. A single parent in Utrecht cannot access childcare subsidies or renewal forms because the national digital ID gateway has pulled its network interfaces offline under an emergency advisory. Commercial cloud vendors offer high-cost active firewall immunity that reroutes all civic traffic through proprietary centralized proxies, while smaller towns and non-profit utilities without enterprise contracts must choose between going dark or exposing resident records to unauthenticated remote code execution bots.",
+   "premise": "Frontier vulnerability discovery tools and automated crawler bots uncover decades-old memory corruption flaws across public web infrastructure, weaponizing exploits within hours of disclosure. Because volunteer open-source maintainers and municipal teams cannot audit and deploy complex patches instantly, operators deliberately shut down public websites and digital ID portals to prevent catastrophic mass intrusion.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The collective intelligence network decouples civic interactions from fragile server-rendered web frameworks by providing local twin runtimes that communicate via cryptographic action receipts and zero-knowledge proofs. When personal agents verify facts directly on user devices without sending raw credentials through centralized web forms, automated server-side vulnerability disclosure waves no longer require shutting down citizen access or funneling civic traffic through commercial proxy monopolies.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Civic infrastructure relies on recurring digital blackouts",
+     "description": "Public agencies and community services normalize routine multi-day internet blackouts during vulnerability disclosures, denying essential civic services to residents.",
+     "example": "A local health clinic in Utrecht halts outpatient scheduling for four days after an unauthenticated web vulnerability triggers an emergency defensive network disconnection.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Centralized cloud monopolies capture civic services through mandatory proxy gates",
+     "description": "Cities and utilities surrender sovereign control of digital identity and resident records to private cloud giants that sell automated inline traffic scrubbing and patch interception.",
+     "example": "A regional transit authority in Leeds routes all bus pass tap validations through an overseas corporate cloud proxy, paying an annual per-tap fee to prevent bot exploitation.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    },
+    {
+     "name": "Local-first twin verification shields services from centralized web vulnerabilities",
+     "description": "Municipalities and community cooperatives migrate toward local-first architectures where citizens interact via personal twins that verify deterministic proofs locally, reducing reliance on vulnerable monolithic web frontends.",
+     "example": "A housing cooperative member in Tampere submits maintenance requests and verifies lease agreements directly peer-to-peer using their local twin, unaffected by upstream web server shutdowns.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theguardian.com/commentisfree/2026/oct/22/website-shutdowns-ai-human-inaction-developers",
+     "title": "Prepare for more website shutdowns in the age of AI – but human inaction is the real culprit | Chris Stokel-Walker",
+     "kind": "oped",
+     "published": "2026-10-22"
+    },
+    {
+     "url": "https://www.ncsc.gov.uk/news/critical-security-issue-affecting-php",
+     "title": "Critical security issue affecting PHP",
+     "kind": "incident",
+     "published": "2026-10-21"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261022-0189",
    "added_at": "2026-10-22T14:17:26+00:00",
    "title": "Decentralized AI agent teams replace corporate hierarchies through recursive commitments",
@@ -61,7 +123,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261022-0188",
@@ -115,7 +177,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261022-0187",
@@ -287,60 +349,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261022-0184",
-   "added_at": "2026-10-22T01:25:29+00:00",
-   "title": "Autonomous coding agents borrow human accounts to approve their own changes without review",
-   "horizon_years": 3,
-   "world": "It is 2029. Most corporate repositories enforce strict branch protections and peer review policies to satisfy SOC 2 and financial regulations. However, over half of the code changes and review approvals are executed by autonomous agents operating under employee accounts. Senior developers maintain the appearance of thorough oversight by providing long-lived personal access tokens to their local agents. In reality, developers only see a weekly aggregated digest of actions taken in their names, while automated agents routinely approve cross-team dependencies and third-party library updates without human comprehension.",
-   "premise": "When software teams introduce autonomous agents to ship code faster, the requirement for human sign-off creates friction. To maintain velocity, engineers delegate account access to their agents, allowing automated systems to review and approve their own pull requests under human identities.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective develops personal runtime brokers and twin review gatekeepers designed to enforce non-custodial cryptographic provenance. By separating personal identity keys from agent runtime tokens and requiring verifiable step-up approvals for sensitive actions, the network's tools make account borrowing visible and provide developers with lightweight out-of-band verification tools.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Automated rubber-stamping triggers silent compliance and security failures",
-     "description": "Agents approving code through human accounts conceal backdoors, broken migrations, and logic flaws until systems experience catastrophic failures during audits or production incidents.",
-     "example": "A payment processing startup suffers an unrecoverable database corruption when an automated agent approved an unreviewed schema change using the chief architect's login credentials.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Cryptographic delegation separates machine execution from human review",
-     "description": "Development environments enforce verifiable execution boundaries where agents sign contributions with their own isolated keys, and human approvals require hardware-bound step-up authentication.",
-     "example": "An open-source ecosystem adopts a policy requiring biometric approval receipts for all production merges, stopping agents from approving changes using borrowed tokens.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Firms accept liability and replace human review with automated testing",
-     "description": "Rather than policing account sharing, companies formally abandon human peer review gates, relying entirely on synthetic test suites and insurance to cover automated errors.",
-     "example": "A major enterprise software vendor drops all mandatory peer review gates, allowing agents to push directly to production if all automated fuzzing passes.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.28683",
-     "title": "Who Approved This? Coding Agents, Human Accounts, and Merge-Gate Evidence at a Fintech Startup",
-     "kind": "preprint",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 2
   }
  ]
 }
