@@ -3,7 +3,7 @@
 import { backend, mountAuth, signIn, el, getJSON, ago } from './portal.js?v=3';
 import { collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, doc, setDoc, deleteDoc, getCountFromServer, getDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { IDEA_CATEGORIES, IDEA_STATUSES, filterIdeas, calculateCategoryCounts, validateIdeaSubmission } from './ideas-logic.js?v=1';
+import { IDEA_CATEGORIES, IDEA_STATUSES, filterIdeas, calculateCategoryCounts, validateIdeaSubmission } from './ideas-logic.js?v=2';
 
 let user = null, db = null, status = {};
 let allIdeas = [];

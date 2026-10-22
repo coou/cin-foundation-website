@@ -178,3 +178,14 @@ test('validateIdeaSubmission: validation rules and edge cases', () => {
   assert.strictEqual(validateIdeaSubmission('Title', null, 'safety').ok, false);
   assert.strictEqual(validateIdeaSubmission('Title', 'Some body', null).ok, false);
 });
+
+test('unknown categories are listed under Other, matching the Other count', () => {
+  const ideas = [
+    { id: 'a', data: { category: 'gardening' }, status: {} },
+    { id: 'b', data: { category: 'other' }, status: {} },
+    { id: 'c', data: {}, status: {} },
+  ];
+  const counts = calculateCategoryCounts(ideas);
+  assert.equal(counts.other, 3);
+  assert.equal(filterIdeas(ideas, 'other').length, counts.other);
+});

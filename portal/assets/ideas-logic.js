@@ -40,7 +40,8 @@ export function filterIdeas(ideas, activeCategory = 'all') {
     if (category === 'all') return true;
 
     const data = item.data || {};
-    const itemCat = typeof data.category === 'string' ? data.category.toLowerCase().trim() : 'other';
+    const raw = typeof data.category === 'string' ? data.category.toLowerCase().trim() : 'other';
+    const itemCat = VALID_CATEGORIES.has(raw) ? raw : 'other';
     return itemCat === category;
   });
 }
