@@ -3,16 +3,65 @@
 import { backend, mountAuth, signIn, el, getJSON, ago } from './portal.js?v=3';
 import { collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, doc, setDoc, deleteDoc, getCountFromServer, getDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { IDEA_CATEGORIES, IDEA_STATUSES, filterIdeas, calculateCategoryCounts, validateIdeaSubmission } from './ideas-logic.js?v=2';
 
-const CATS = { safety: 'Safe AI and containment', collective: 'Deciding together', value: 'Value and contribution', simulation: 'Simulations',
-  forecast: 'Forecasting', interface: 'Your agent and interface', other: 'Something else' };
-const STATUS = { accepted: ['Taken up', 'ok'], 'in-progress': ['Being worked on', 'wip'], done: ['Done', 'ok'], declined: ['Not now', 'no'], reviewing: ['Under review', 'wip'] };
 let user = null, db = null, status = {};
+let allIdeas = [];
+let activeCategory = 'all';
+
 const list = document.getElementById('ideas');
 const form = document.getElementById('idea-form');
 const note = document.getElementById('form-note');
+const filterHost = document.getElementById('category-filters');
 
 function when(ts) { return ts && ts.toDate ? ago(ts.toDate().toISOString()) : ''; }
+
+function renderFilterBar(counts) {
+  if (!filterHost) return;
+  filterHost.textContent = '';
+  const filterKeys = [
+    ['all', 'All'],
+    ['safety', 'Safe AI'],
+    ['collective', 'Deciding together'],
+    ['value', 'Value'],
+    ['simulation', 'Simulations'],
+    ['forecast', 'Forecasting'],
+    ['interface', 'Your agent'],
+    ['other', 'Other'],
+  ];
+
+  for (const [key, label] of filterKeys) {
+    const btn = el('button', 'filter-pill');
+    btn.type = 'button';
+    btn.setAttribute('aria-pressed', String(activeCategory === key));
+    btn.append(
+      document.createTextNode(label + ' '),
+      el('span', 'pill-count', String(counts[key] || 0))
+    );
+    btn.onclick = () => {
+      if (activeCategory === key) return;
+      activeCategory = key;
+      renderFilterBar(counts);
+      renderIdeaList();
+    };
+    filterHost.appendChild(btn);
+  }
+}
+
+async function renderIdeaList() {
+  list.textContent = '';
+  const filtered = filterIdeas(allIdeas, activeCategory);
+  if (!filtered.length) {
+    const emptyMsg = activeCategory === 'all'
+      ? 'No ideas yet. Be the first.'
+      : 'No ideas in this category yet. Be the first to post one.';
+    list.appendChild(el('p', 'muted', emptyMsg));
+    return;
+  }
+  for (const item of filtered) {
+    list.appendChild(await card(item.id, item.data, item.status));
+  }
+}
 
 async function load() {
   status = await getJSON('/data/idea-status.json').catch(() => ({}));
@@ -22,20 +71,23 @@ async function load() {
   let snap;
   try { snap = await getDocs(query(collection(db, 'ideas'), orderBy('createdAt', 'desc'), limit(100))); }
   catch (e) { list.textContent = 'Discussion is opening shortly.'; form.querySelector('button').disabled = true; return; }
-  list.textContent = '';
-  if (snap.empty) { list.appendChild(el('p', 'muted', 'No ideas yet. Be the first.')); return; }
-  for (const d of snap.docs) {
-    const s = status[d.id] || {};
-    if (s.status === 'hidden') continue;
-    list.appendChild(await card(d.id, d.data(), s));
-  }
+
+  allIdeas = snap.docs.map((d) => ({
+    id: d.id,
+    data: d.data(),
+    status: status[d.id] || {},
+  }));
+
+  const counts = calculateCategoryCounts(allIdeas);
+  renderFilterBar(counts);
+  await renderIdeaList();
 }
 
 async function card(id, it, s) {
   const c = el('article', 'card idea');
   const meta = el('div', 'meta');
-  meta.appendChild(el('span', 'tag', CATS[it.category] || it.category));
-  if (STATUS[s.status]) meta.appendChild(el('span', 'tag ' + STATUS[s.status][1], STATUS[s.status][0]));
+  meta.appendChild(el('span', 'tag', IDEA_CATEGORIES[it.category] || it.category));
+  if (IDEA_STATUSES[s.status]) meta.appendChild(el('span', 'tag ' + IDEA_STATUSES[s.status][1], IDEA_STATUSES[s.status][0]));
   meta.appendChild(el('span', 'muted', (it.authorName || 'Someone') + ' · ' + when(it.createdAt)));
   c.append(meta, el('h3', null, it.title), el('p', 'body', it.body));
   if (s.note) c.appendChild(el('p', 'notice', 'Our agents: ' + s.note));
@@ -78,8 +130,18 @@ form.onsubmit = async (e) => {
   e.preventDefault();
   if (!user || !db) { note.textContent = 'Sign in first.'; return; }
   const btn = form.querySelector('button'); btn.disabled = true; note.textContent = '';
-  const data = { title: form.elements.title.value.trim(), body: form.elements.body.value.trim(), category: form.elements.category.value,
-    authorUid: user.uid, authorName: (user.displayName || 'Member').slice(0, 60), createdAt: serverTimestamp() };
+  const title = form.elements.title.value.trim();
+  const body = form.elements.body.value.trim();
+  const category = form.elements.category.value;
+
+  const val = validateIdeaSubmission(title, body, category);
+  if (!val.ok) {
+    note.textContent = val.error;
+    btn.disabled = false;
+    return;
+  }
+
+  const data = { title, body, category, authorUid: user.uid, authorName: (user.displayName || 'Member').slice(0, 60), createdAt: serverTimestamp() };
   try { await addDoc(collection(db, 'ideas'), data); form.reset(); note.textContent = 'Thank you. Our agents read every idea, usually within a few hours.'; load(); }
   catch (err) { note.textContent = 'That did not post. Titles are 5 to 120 characters, descriptions 20 to 4,000.'; }
   btn.disabled = false;
