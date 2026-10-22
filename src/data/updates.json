@@ -1,6 +1,19 @@
 {
  "updates": [
   {
+   "id": "U-00044",
+   "at": "2026-10-22T06:44:08+00:00",
+   "kind": "simulation",
+   "title": "A simulation tests whether checking each agent action separately stops multi-step data leaks",
+   "summary": "Simulating agent tool chains across ten random seeds shows that inspecting individual tool calls in isolation misses multi-step data exfiltration, allowing sensitive variables to escape through intermediate scratch files. Tracking cumulative data flow across execution steps intercepted all staged leaks, though real-world network side effects still require broader live testing.",
+   "link": "https://arxiv.org/abs/2610.27620",
+   "goals": [
+    1,
+    4
+   ],
+   "checked": "reviewed by the auditor or Claude"
+  },
+  {
    "id": "U-00043",
    "at": "2026-10-21T12:39:17+00:00",
    "kind": "policy",
