@@ -7881,3 +7881,521 @@ export function summarizeDialogueSanitization(result) {
     violations: Object.freeze([...vList])
   });
 }
+
+// ============================================================================
+
+// ============================================================================
+// DELEGATION RESPONSIBILITY TRACKING & COMMITMENT LEDGER (arXiv:2610.21243)
+// ============================================================================
+
+export const ALLOWED_DELEGATION_STATUSES = Object.freeze([
+  'pending',
+  'active',
+  'fulfilled',
+  'failed',
+  'escalated'
+]);
+
+export const ALLOWED_ESCALATION_MODES = Object.freeze([
+  'upstream_return',
+  'peer_failover',
+  'supervisor_escalate'
+]);
+
+export const ALLOWED_FAILURE_CODES = Object.freeze([
+  'timeout',
+  'tool_unavailable',
+  'constraint_violation',
+  'capability_denied',
+  'unhandled_error',
+  'resource_exhaustion'
+]);
+
+export const ALLOWED_DELEGATION_FIELDS = Object.freeze([
+  'commitment_id',
+  'delegator_agent',
+  'delegatee_agent',
+  'task_hash',
+  'description',
+  'status',
+  'created_at',
+  'deadline',
+  'chain_depth',
+  'upstream_commitment_id',
+  'escalation_mode',
+  'failure_code',
+  'failure_reason',
+  'fulfilled_at',
+  'escalated_to'
+]);
+
+export const ALLOWED_DELEGATION_OPTIONS_FIELDS = Object.freeze([
+  'allow_downstream_delegation',
+  'max_chain_depth',
+  'require_provenance',
+  'escalation_mode',
+  'current_time'
+]);
+
+export const MAX_DELEGATION_CHAIN_DEPTH = 5;
+export const MAX_DELEGATION_LEDGER_ENTRIES = 100;
+
+export const DEFAULT_DELEGATION_CONFIG = Object.freeze({
+  allow_downstream_delegation: true,
+  max_chain_depth: MAX_DELEGATION_CHAIN_DEPTH,
+  require_provenance: true,
+  escalation_mode: 'upstream_return'
+});
+
+const AGENT_ID_RE = /^[a-zA-Z0-9_\-\.@]{3,64}$/;
+const COMMITMENT_ID_RE = /^[a-zA-Z0-9_\-:]{4,64}$/;
+const TASK_HASH_RE = /^[a-zA-Z0-9_\-]{8,128}$/;
+
+/**
+ * Validates a single delegation commitment object against strict schema constraints.
+ * Fails closed on any unknown, malformed, or boundary-violating property.
+ *
+ * @param {object} raw Raw commitment input
+ * @returns {{ ok: boolean, value?: object, error?: string }}
+ */
+export function validateDelegationCommitment(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    return { ok: false, error: 'Delegation commitment must be a non-null object' };
+  }
+
+  // Prevent prototype pollution
+  if (Object.prototype.hasOwnProperty.call(raw, '__proto__') ||
+      Object.prototype.hasOwnProperty.call(raw, 'constructor') ||
+      Object.prototype.hasOwnProperty.call(raw, 'prototype')) {
+    return { ok: false, error: 'Prototype pollution detected in delegation commitment' };
+  }
+
+  const keys = Object.keys(raw);
+  for (const k of keys) {
+    if (!ALLOWED_DELEGATION_FIELDS.includes(k)) {
+      return { ok: false, error: `Unknown field in delegation commitment: ${k}` };
+    }
+  }
+
+  // Required core fields
+  const requiredFields = ['commitment_id', 'delegator_agent', 'delegatee_agent', 'task_hash', 'description', 'status', 'created_at', 'deadline', 'chain_depth', 'escalation_mode'];
+  for (const rf of requiredFields) {
+    if (raw[rf] === undefined || raw[rf] === null) {
+      return { ok: false, error: `Missing required field in delegation commitment: ${rf}` };
+    }
+  }
+
+  if (typeof raw.commitment_id !== 'string' || !COMMITMENT_ID_RE.test(raw.commitment_id)) {
+    return { ok: false, error: 'commitment_id must be an alphanumeric string (4-64 chars)' };
+  }
+
+  if (typeof raw.delegator_agent !== 'string' || !AGENT_ID_RE.test(raw.delegator_agent)) {
+    return { ok: false, error: 'delegator_agent must match valid agent identifier format' };
+  }
+
+  if (typeof raw.delegatee_agent !== 'string' || !AGENT_ID_RE.test(raw.delegatee_agent)) {
+    return { ok: false, error: 'delegatee_agent must match valid agent identifier format' };
+  }
+
+  if (raw.delegator_agent.trim().toLowerCase() === raw.delegatee_agent.trim().toLowerCase()) {
+    return { ok: false, error: 'delegator_agent and delegatee_agent cannot be identical' };
+  }
+
+  if (typeof raw.task_hash !== 'string' || !TASK_HASH_RE.test(raw.task_hash)) {
+    return { ok: false, error: 'task_hash must be a valid hash token (8-128 chars)' };
+  }
+
+  if (typeof raw.description !== 'string' || raw.description.trim().length < 3 || raw.description.trim().length > 300) {
+    return { ok: false, error: 'description must be a string between 3 and 300 characters' };
+  }
+
+  if (typeof raw.status !== 'string' || !ALLOWED_DELEGATION_STATUSES.includes(raw.status)) {
+    return { ok: false, error: `Invalid status: ${raw.status}` };
+  }
+
+  if (typeof raw.created_at !== 'string' || !ISO_RE.test(raw.created_at) || !isValidCalendarDate(raw.created_at.slice(0, 10)) || isNaN(Date.parse(raw.created_at))) {
+    return { ok: false, error: 'created_at must be a valid ISO-8601 calendar date timestamp string' };
+  }
+
+  if (typeof raw.deadline !== 'string' || !ISO_RE.test(raw.deadline) || !isValidCalendarDate(raw.deadline.slice(0, 10)) || isNaN(Date.parse(raw.deadline))) {
+    return { ok: false, error: 'deadline must be a valid ISO-8601 calendar date timestamp string' };
+  }
+
+  const createdMs = Date.parse(raw.created_at);
+  const deadlineMs = Date.parse(raw.deadline);
+  if (deadlineMs < createdMs) {
+    return { ok: false, error: 'deadline cannot precede created_at' };
+  }
+
+  if (typeof raw.chain_depth !== 'number' || !Number.isSafeInteger(raw.chain_depth) || raw.chain_depth < 0 || raw.chain_depth > MAX_DELEGATION_CHAIN_DEPTH) {
+    return { ok: false, error: `chain_depth must be an integer between 0 and ${MAX_DELEGATION_CHAIN_DEPTH}` };
+  }
+
+  if (typeof raw.escalation_mode !== 'string' || !ALLOWED_ESCALATION_MODES.includes(raw.escalation_mode)) {
+    return { ok: false, error: `Invalid escalation_mode: ${raw.escalation_mode}` };
+  }
+
+  // Upstream linkage rules
+  if (raw.chain_depth > 0) {
+    if (typeof raw.upstream_commitment_id !== 'string' || !COMMITMENT_ID_RE.test(raw.upstream_commitment_id)) {
+      return { ok: false, error: 'upstream_commitment_id is required when chain_depth > 0' };
+    }
+    if (raw.upstream_commitment_id === raw.commitment_id) {
+      return { ok: false, error: 'upstream_commitment_id cannot reference self' };
+    }
+  } else {
+    if (raw.upstream_commitment_id !== null && raw.upstream_commitment_id !== undefined) {
+      return { ok: false, error: 'upstream_commitment_id must be null or omitted when chain_depth is 0' };
+    }
+  }
+
+  // Terminal & failure state validation
+  if (raw.status === 'failed' || raw.status === 'escalated') {
+    if (typeof raw.failure_code !== 'string' || !ALLOWED_FAILURE_CODES.includes(raw.failure_code)) {
+      return { ok: false, error: `failure_code is required for ${raw.status} status and must be valid` };
+    }
+    if (typeof raw.failure_reason !== 'string' || raw.failure_reason.trim().length < 3 || raw.failure_reason.trim().length > 300) {
+      return { ok: false, error: `failure_reason must be a string between 3 and 300 chars for ${raw.status} status` };
+    }
+  } else {
+    if (raw.failure_code !== null && raw.failure_code !== undefined) {
+      return { ok: false, error: 'failure_code must not be set unless status is failed or escalated' };
+    }
+    if (raw.failure_reason !== null && raw.failure_reason !== undefined) {
+      return { ok: false, error: 'failure_reason must not be set unless status is failed or escalated' };
+    }
+  }
+
+  if (raw.status === 'fulfilled') {
+    if (typeof raw.fulfilled_at !== 'string' || !ISO_RE.test(raw.fulfilled_at) || !isValidCalendarDate(raw.fulfilled_at.slice(0, 10)) || isNaN(Date.parse(raw.fulfilled_at))) {
+      return { ok: false, error: 'fulfilled_at must be a valid ISO-8601 calendar date timestamp string for fulfilled status' };
+    }
+    if (Date.parse(raw.fulfilled_at) < createdMs) {
+      return { ok: false, error: 'fulfilled_at cannot precede created_at' };
+    }
+  } else {
+    if (raw.fulfilled_at !== null && raw.fulfilled_at !== undefined) {
+      return { ok: false, error: 'fulfilled_at must not be set unless status is fulfilled' };
+    }
+  }
+
+  if (raw.status === 'escalated') {
+    if (raw.escalated_to !== null && raw.escalated_to !== undefined) {
+      if (typeof raw.escalated_to !== 'string' || !AGENT_ID_RE.test(raw.escalated_to)) {
+        return { ok: false, error: 'escalated_to must be a valid agent identifier' };
+      }
+    }
+  } else {
+    if (raw.escalated_to !== null && raw.escalated_to !== undefined) {
+      return { ok: false, error: 'escalated_to must not be set unless status is escalated' };
+    }
+  }
+
+  const clean = {
+    commitment_id: raw.commitment_id,
+    delegator_agent: raw.delegator_agent.trim(),
+    delegatee_agent: raw.delegatee_agent.trim(),
+    task_hash: raw.task_hash,
+    description: raw.description.trim(),
+    status: raw.status,
+    created_at: raw.created_at,
+    deadline: raw.deadline,
+    chain_depth: raw.chain_depth,
+    upstream_commitment_id: raw.upstream_commitment_id || null,
+    escalation_mode: raw.escalation_mode,
+    failure_code: raw.failure_code || null,
+    failure_reason: raw.failure_reason ? raw.failure_reason.trim() : null,
+    fulfilled_at: raw.fulfilled_at || null,
+    escalated_to: raw.escalated_to ? raw.escalated_to.trim() : null
+  };
+
+  return { ok: true, value: deepFreeze(clean) };
+}
+
+/**
+ * Creates and validates a new delegation commitment record.
+ *
+ * @param {object} params Core parameters
+ * @param {object} [options] Optional configuration options
+ * @returns {{ ok: boolean, commitment?: object, error?: string }}
+ */
+export function createDelegationCommitment(params, options = {}) {
+  if (!params || typeof params !== 'object' || Array.isArray(params)) {
+    return { ok: false, error: 'Parameters must be an object' };
+  }
+
+  if (options && typeof options === 'object') {
+    for (const optKey of Object.keys(options)) {
+      if (!ALLOWED_DELEGATION_OPTIONS_FIELDS.includes(optKey)) {
+        return { ok: false, error: `Unknown option: ${optKey}` };
+      }
+    }
+  }
+
+  const nowIso = options.current_time || new Date().toISOString();
+  const raw = {
+    commitment_id: params.commitment_id,
+    delegator_agent: params.delegator_agent,
+    delegatee_agent: params.delegatee_agent,
+    task_hash: params.task_hash,
+    description: params.description,
+    status: params.status || 'pending',
+    created_at: params.created_at || nowIso,
+    deadline: params.deadline,
+    chain_depth: params.chain_depth !== undefined ? params.chain_depth : 0,
+    upstream_commitment_id: params.upstream_commitment_id || null,
+    escalation_mode: params.escalation_mode || options.escalation_mode || DEFAULT_DELEGATION_CONFIG.escalation_mode,
+    failure_code: params.failure_code || null,
+    failure_reason: params.failure_reason || null,
+    fulfilled_at: params.fulfilled_at || null,
+    escalated_to: params.escalated_to || null
+  };
+
+  const validation = validateDelegationCommitment(raw);
+  if (!validation.ok) {
+    return { ok: false, error: validation.error };
+  }
+
+  return { ok: true, commitment: validation.value };
+}
+
+/**
+ * Detects cyclic delegation loops across commitments (e.g. Agent A -> Agent B -> Agent A).
+ *
+ * @param {Array<object>} commitments List of delegation commitments
+ * @returns {{ has_cycle: boolean, cycle_path: string[], error?: string }}
+ */
+export function detectDelegationCycles(commitments) {
+  if (!Array.isArray(commitments)) {
+    return { has_cycle: false, cycle_path: [], error: 'Commitments must be an array' };
+  }
+
+  // Construct adjacency graph of agent delegations
+  const adj = new Map();
+  for (const c of commitments) {
+    if (!c || typeof c !== 'object') continue;
+    const u = c.delegator_agent;
+    const v = c.delegatee_agent;
+    if (typeof u === 'string' && typeof v === 'string') {
+      const uNorm = u.trim().toLowerCase();
+      const vNorm = v.trim().toLowerCase();
+      if (!adj.has(uNorm)) adj.set(uNorm, new Set());
+      adj.get(uNorm).add(vNorm);
+    }
+  }
+
+  const visited = new Set();
+  const recStack = new Set();
+  let foundCycle = null;
+
+  function dfs(node, path) {
+    visited.add(node);
+    recStack.add(node);
+
+    const neighbors = adj.get(node) || new Set();
+    for (const neighbor of neighbors) {
+      if (!visited.has(neighbor)) {
+        if (dfs(neighbor, [...path, neighbor])) return true;
+      } else if (recStack.has(neighbor)) {
+        foundCycle = [...path, neighbor];
+        return true;
+      }
+    }
+
+    recStack.delete(node);
+    return false;
+  }
+
+  for (const node of adj.keys()) {
+    if (!visited.has(node)) {
+      if (dfs(node, [node])) {
+        return { has_cycle: true, cycle_path: foundCycle || [] };
+      }
+    }
+  }
+
+  return { has_cycle: false, cycle_path: [] };
+}
+
+/**
+ * Transitions a delegation commitment through its lifecycle with verifiable diagnostics.
+ *
+ * @param {object} commitment Existing valid commitment
+ * @param {string} targetStatus Target status
+ * @param {object} [context] Context parameters (failure_code, diagnostic_message, fulfilled_at, timestamp)
+ * @returns {{ ok: boolean, updated_commitment?: object, escalation_packet?: object, error?: string }}
+ */
+export function evaluateDelegationTransition(commitment, targetStatus, context = {}) {
+  const currentValidation = validateDelegationCommitment(commitment);
+  if (!currentValidation.ok) {
+    return { ok: false, error: `Invalid source commitment: ${currentValidation.error}` };
+  }
+
+  const current = currentValidation.value;
+  if (!ALLOWED_DELEGATION_STATUSES.includes(targetStatus)) {
+    return { ok: false, error: `Invalid target status: ${targetStatus}` };
+  }
+
+  // Immutability of terminal states
+  if (current.status === 'fulfilled' || current.status === 'failed') {
+    return { ok: false, error: `Cannot transition from terminal status '${current.status}'` };
+  }
+
+  // State machine rules
+  if (current.status === 'pending') {
+    if (targetStatus !== 'active' && targetStatus !== 'failed') {
+      return { ok: false, error: `Cannot transition from 'pending' directly to '${targetStatus}'` };
+    }
+  } else if (current.status === 'active') {
+    if (targetStatus !== 'fulfilled' && targetStatus !== 'failed' && targetStatus !== 'escalated') {
+      return { ok: false, error: `Cannot transition from 'active' to '${targetStatus}'` };
+    }
+  } else if (current.status === 'escalated') {
+    if (targetStatus !== 'fulfilled' && targetStatus !== 'failed') {
+      return { ok: false, error: `Cannot transition from 'escalated' to '${targetStatus}'` };
+    }
+  }
+
+  const nowIso = context.timestamp || new Date().toISOString();
+  let failureCode = null;
+  let failureReason = null;
+  let fulfilledAt = null;
+  let escalatedTo = null;
+  let escalationPacket = null;
+
+  if (targetStatus === 'failed' || targetStatus === 'escalated') {
+    if (!context.failure_code || !ALLOWED_FAILURE_CODES.includes(context.failure_code)) {
+      return { ok: false, error: `failure_code is required when transitioning to ${targetStatus}` };
+    }
+    if (!context.diagnostic_message || typeof context.diagnostic_message !== 'string' || context.diagnostic_message.trim().length < 3) {
+      return { ok: false, error: `diagnostic_message is required when transitioning to ${targetStatus}` };
+    }
+    failureCode = context.failure_code;
+    failureReason = context.diagnostic_message.trim();
+
+    if (targetStatus === 'escalated') {
+      escalatedTo = context.escalated_to || current.delegator_agent;
+      const recAction = failureCode === 'timeout'
+        ? 'retry_with_extended_budget'
+        : failureCode === 'tool_unavailable'
+          ? 'failover_to_alternate_peer'
+          : 'abort_task_branch';
+
+      escalationPacket = deepFreeze({
+        commitment_id: current.commitment_id,
+        delegator_agent: current.delegator_agent,
+        delegatee_agent: current.delegatee_agent,
+        failure_code: failureCode,
+        diagnostic_message: failureReason,
+        timestamp: nowIso,
+        escalated_to: escalatedTo,
+        upstream_commitment_id: current.upstream_commitment_id || null,
+        recommended_action: recAction
+      });
+    }
+  } else if (targetStatus === 'fulfilled') {
+    fulfilledAt = context.fulfilled_at || nowIso;
+  }
+
+  const updatedRaw = {
+    ...current,
+    status: targetStatus,
+    failure_code: failureCode,
+    failure_reason: failureReason,
+    fulfilled_at: fulfilledAt,
+    escalated_to: escalatedTo
+  };
+
+  const revalidation = validateDelegationCommitment(updatedRaw);
+  if (!revalidation.ok) {
+    return { ok: false, error: `Revalidation failed: ${revalidation.error}` };
+  }
+
+  return {
+    ok: true,
+    updated_commitment: revalidation.value,
+    escalation_packet: escalationPacket
+  };
+}
+
+/**
+ * Produces deterministic aggregate metrics and plain-language summary for delegation commitments.
+ *
+ * @param {Array<object>} commitments List of delegation commitments
+ * @param {string|number|null} [asOfTime] Optional temporal evaluation point
+ * @returns {object} Deeply frozen summary
+ */
+export function summarizeDelegationLedger(commitments, asOfTime = null) {
+  if (!Array.isArray(commitments)) {
+    return deepFreeze({
+      ok: false,
+      total: 0,
+      active: 0,
+      pending: 0,
+      fulfilled: 0,
+      failed: 0,
+      escalated: 0,
+      overdue: 0,
+      max_chain_depth: 0,
+      summary_text: 'Invalid delegation commitments array'
+    });
+  }
+
+  let asOfMs;
+  if (asOfTime === null || asOfTime === undefined) {
+    asOfMs = Date.now();
+  } else if (typeof asOfTime === 'string') {
+    asOfMs = Date.parse(asOfTime);
+  } else if (typeof asOfTime === 'number' && Number.isFinite(asOfTime)) {
+    asOfMs = asOfTime;
+  } else {
+    asOfMs = Date.now();
+  }
+
+  let active = 0;
+  let pending = 0;
+  let fulfilled = 0;
+  let failed = 0;
+  let escalated = 0;
+  let overdue = 0;
+  let maxDepth = 0;
+
+  for (const c of commitments) {
+    if (!c || typeof c !== 'object') continue;
+    const st = c.status;
+    if (st === 'active') active++;
+    else if (st === 'pending') pending++;
+    else if (st === 'fulfilled') fulfilled++;
+    else if (st === 'failed') failed++;
+    else if (st === 'escalated') escalated++;
+
+    if (typeof c.chain_depth === 'number' && c.chain_depth > maxDepth) {
+      maxDepth = c.chain_depth;
+    }
+
+    if ((st === 'active' || st === 'pending') && c.deadline) {
+      const dMs = Date.parse(c.deadline);
+      if (!isNaN(dMs) && asOfMs > dMs) {
+        overdue++;
+      }
+    }
+  }
+
+  const total = commitments.length;
+  const desc = total === 0
+    ? 'No delegation commitments registered.'
+    : `Delegation ledger: ${total} commitment(s) (${active} active, ${pending} pending, ${fulfilled} fulfilled, ${failed} failed, ${escalated} escalated; ${overdue} overdue; max depth ${maxDepth}).`;
+
+  return deepFreeze({
+    ok: true,
+    total,
+    active,
+    pending,
+    fulfilled,
+    failed,
+    escalated,
+    overdue,
+    max_chain_depth: maxDepth,
+    summary_text: desc
+  });
+}

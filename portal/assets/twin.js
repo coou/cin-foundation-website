@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=3';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit, evaluateAuthorityEnvelopeAction, summarizeAuthorityEnvelopeAudit } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit, evaluateAuthorityEnvelopeAction, summarizeAuthorityEnvelopeAudit, createDelegationCommitment, evaluateDelegationTransition, summarizeDelegationLedger } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -1092,6 +1092,57 @@ function renderAuthorityEnvelopeInspector() {
   };
 }
 
-renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderReceiptInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler(); renderCapabilityInspector(); renderVisualAuditorInspector(); renderAuthorityEnvelopeInspector();
+renderGrants(); renderQuest(); renderContributions(); renderObligations(); renderActions(); renderEvents(); renderAccessInspector(); renderReceiptInspector(); renderFacts(); renderQuests(); renderValues(); renderContextAssembler(); renderCapabilityInspector(); renderVisualAuditorInspector(); 
+
+function renderDelegationInspector() {
+  const form = document.getElementById('test-delegation');
+  const resultBox = document.getElementById('delegation-eval-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+
+    const delegator = (form.elements.delegator.value || '').trim();
+    const delegatee = (form.elements.delegatee.value || '').trim();
+    const taskDesc = (form.elements.task_desc.value || '').trim();
+    const depth = parseInt(form.elements.depth.value, 10);
+    const escMode = form.elements.esc_mode.value;
+
+    const deadline = new Date(Date.now() + 3600 * 1000).toISOString();
+    const commitmentParams = {
+      commitment_id: 'del_' + Date.now().toString(36),
+      delegator_agent: delegator,
+      delegatee_agent: delegatee,
+      task_hash: 'task_hash_demo12345',
+      description: taskDesc,
+      deadline,
+      chain_depth: depth,
+      upstream_commitment_id: depth > 0 ? 'del_root_demo' : null,
+      escalation_mode: escMode
+    };
+
+    const res = createDelegationCommitment(commitmentParams);
+    const p = el('p');
+
+    if (!res.ok) {
+      p.className = 'muted';
+      p.appendChild(el('strong', 'status-err', 'Blocked. '));
+      p.appendChild(document.createTextNode('Commitment rejected fail-closed: ' + res.error + '.'));
+      resultBox.appendChild(p);
+      return;
+    }
+
+    const commitment = res.commitment;
+    const activeRes = evaluateDelegationTransition(commitment, 'active');
+
+    p.className = 'status-ok';
+    p.appendChild(el('strong', 'status-pass', 'Verified. '));
+    p.appendChild(document.createTextNode('Delegation commitment accepted: ' + delegator + ' -> ' + delegatee + ' (chain depth ' + depth + ', ' + escMode + '). Upstream accountability log active.'));
+    resultBox.appendChild(p);
+  };
+}
+
+renderAuthorityEnvelopeInspector(); renderDelegationInspector();
 
 
