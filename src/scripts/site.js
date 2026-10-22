@@ -288,7 +288,7 @@
     else if (def.duress) log('no', 'Coercion protection triggered: your wearable sensed acute stress and paused the transfer until you are safe.');
     else if (def.fake) log('no', 'Blocked ' + esc(def.who) + ': it could not prove its hardware identity. Nothing shared.');
     else if (s.decision === 'no') log('no', esc(cap(def.who)) + ': you declined. Nothing shared.');
-    else log('ok', esc(cap(def.who)) + ' received <b>' + esc(def.out) + '</b>' + (def.emergency ? ' under your emergency rule.' : '. Your sandbox built the view locally; access expired.'), def.k);
+    else log('ok', esc(cap(def.who)) + ' received <b>' + esc(def.out) + '</b>' + (def.emergency ? ' under your emergency rule.' : '. Your sandbox built the view locally, and the one-time gate closed cleanly behind it.'), def.k);
     if (s.sensor && s.decision !== 'no' && !kept.some(function (x) { return x.name === s.sensor.name; })) kept.push({ k: s.sensor.k, a: s.sensor.a, r: s.sensor.r, name: s.sensor.name });
     scene = null; lastSpawn = now; hideConsent();
     if (s.manual) { setPressed('auto'); }
@@ -483,7 +483,7 @@
       disc(rk, 4.5, colors.gold);
       label('sandbox ingests: ' + def.back, rk.x, rk.y - fs * 1.9, colors.ink, colors.card, 'center');
     }
-    if (d > 11.2 && d < 12.6) label('ephemeral token expired · 0 open APIs', gp.x, gp.y + fs * 1.5, colors.ok, colors.card, 'center');
+    if (d > 11.2 && d < 12.6) label('exchange complete · one-time gate closed', gp.x, gp.y + fs * 1.5, colors.ok, colors.card, 'center');
     return d < end;
   }
 
@@ -506,7 +506,7 @@
       else steps.push([ASK_AT, '4  you and three of your local agents approve']);
       if (s.decision === 'no') steps.push([8.0, '5  ' + def.who + ' carries on without it']);
       else steps.push([8.0, '5  only one verified fact goes out: ' + def.out], [9.6, '6  your sandbox builds the view locally from pure data: ' + def.back]);
-      steps.push([11.2, '7  access expires immediately · no open software APIs left behind']);
+      steps.push([11.2, '7  exchange complete — one-time pass burned so no outside service keeps standing access']);
     }
     var capStr = '', a = 1;
     steps.forEach(function (st) { if (d >= st[0]) { capStr = st[1]; a = s.waiting ? 1 : Math.min(1, (d - st[0]) / 0.3); } });
