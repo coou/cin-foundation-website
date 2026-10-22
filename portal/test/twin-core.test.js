@@ -10,6 +10,18 @@ import {
   auditOutboundDialogueMessage,
   sanitizeOutboundDialogueTurn,
   summarizeDialogueSanitization,
+  ALLOWED_DELEGATION_STATUSES,
+  ALLOWED_ESCALATION_MODES,
+  ALLOWED_FAILURE_CODES,
+  ALLOWED_DELEGATION_FIELDS,
+  ALLOWED_DELEGATION_OPTIONS_FIELDS,
+  MAX_DELEGATION_CHAIN_DEPTH,
+  DEFAULT_DELEGATION_CONFIG,
+  validateDelegationCommitment,
+  createDelegationCommitment,
+  detectDelegationCycles,
+  evaluateDelegationTransition,
+  summarizeDelegationLedger,
 
   ALLOWED_CONTRIBUTION_KINDS,
   ALLOWED_ACTION_STATUSES,
@@ -6368,4 +6380,350 @@ test('L-1003: verifyLedgerQueryAgreement validates complete schemas and types, r
   assert.equal(badTol2.ok, false);
   assert.equal(badTol2.status, 'error');
   assert.equal(badTol2.sure, false);
+});
+
+// ============================================================================
+// DELEGATION RESPONSIBILITY TRACKING & COMMITMENT LEDGER TESTS (arXiv:2610.21243)
+// ============================================================================
+
+test('delegation responsibility constants are deeply frozen and valid', () => {
+  assert.ok(Object.isFrozen(ALLOWED_DELEGATION_STATUSES));
+  assert.ok(Object.isFrozen(ALLOWED_ESCALATION_MODES));
+  assert.ok(Object.isFrozen(ALLOWED_FAILURE_CODES));
+  assert.ok(Object.isFrozen(ALLOWED_DELEGATION_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_DELEGATION_OPTIONS_FIELDS));
+  assert.ok(Object.isFrozen(DEFAULT_DELEGATION_CONFIG));
+
+  assert.equal(ALLOWED_DELEGATION_STATUSES.length, 5);
+  assert.equal(ALLOWED_ESCALATION_MODES.length, 3);
+  assert.equal(ALLOWED_FAILURE_CODES.length, 6);
+  assert.equal(MAX_DELEGATION_CHAIN_DEPTH, 5);
+  assert.equal(DEFAULT_DELEGATION_CONFIG.escalation_mode, 'upstream_return');
+});
+
+test('validateDelegationCommitment accepts well-formed root commitment and enforces deep freeze', () => {
+  const root = {
+    commitment_id: 'del_root_001',
+    delegator_agent: 'agent_alice',
+    delegatee_agent: 'agent_bob',
+    task_hash: 'task_hash_12345678',
+    description: 'Verify model integrity and audit verification logs',
+    status: 'pending',
+    created_at: '2026-10-22T10:00:00.000Z',
+    deadline: '2026-10-22T12:00:00.000Z',
+    chain_depth: 0,
+    escalation_mode: 'upstream_return'
+  };
+
+  const res = validateDelegationCommitment(root);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.commitment_id, 'del_root_001');
+  assert.equal(res.value.chain_depth, 0);
+  assert.equal(res.value.upstream_commitment_id, null);
+  assert.ok(Object.isFrozen(res.value));
+});
+
+test('validateDelegationCommitment accepts well-formed delegated subtask with upstream reference', () => {
+  const subtask = {
+    commitment_id: 'del_sub_002',
+    delegator_agent: 'agent_bob',
+    delegatee_agent: 'agent_charlie',
+    task_hash: 'task_hash_87654321',
+    description: 'Subordinate feature extraction subtask',
+    status: 'active',
+    created_at: '2026-10-22T10:15:00.000Z',
+    deadline: '2026-10-22T11:45:00.000Z',
+    chain_depth: 1,
+    upstream_commitment_id: 'del_root_001',
+    escalation_mode: 'upstream_return'
+  };
+
+  const res = validateDelegationCommitment(subtask);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.commitment_id, 'del_sub_002');
+  assert.equal(res.value.chain_depth, 1);
+  assert.equal(res.value.upstream_commitment_id, 'del_root_001');
+});
+
+test('validateDelegationCommitment fails closed on malformed or prototype-polluted inputs', () => {
+  assert.equal(validateDelegationCommitment(null).ok, false);
+  assert.equal(validateDelegationCommitment(undefined).ok, false);
+  assert.equal(validateDelegationCommitment('string').ok, false);
+  assert.equal(validateDelegationCommitment([1, 2, 3]).ok, false);
+
+  const polluted = JSON.parse('{"__proto__": {"injected": true}}');
+  assert.equal(validateDelegationCommitment(polluted).ok, false);
+});
+
+test('validateDelegationCommitment fails closed on unknown fields and missing required properties', () => {
+  const valid = {
+    commitment_id: 'del_root_001',
+    delegator_agent: 'agent_alice',
+    delegatee_agent: 'agent_bob',
+    task_hash: 'task_hash_12345678',
+    description: 'Task description',
+    status: 'pending',
+    created_at: '2026-10-22T10:00:00.000Z',
+    deadline: '2026-10-22T12:00:00.000Z',
+    chain_depth: 0,
+    escalation_mode: 'upstream_return'
+  };
+
+  // Unknown field
+  assert.equal(validateDelegationCommitment({ ...valid, extra_field: 123 }).ok, false);
+
+  // Missing required field
+  const missing = { ...valid };
+  delete missing.task_hash;
+  assert.equal(validateDelegationCommitment(missing).ok, false);
+});
+
+test('validateDelegationCommitment rejects self-delegation fail-closed', () => {
+  const selfDel = {
+    commitment_id: 'del_root_001',
+    delegator_agent: 'agent_alice',
+    delegatee_agent: 'agent_alice', // Self delegation prohibited!
+    task_hash: 'task_hash_12345678',
+    description: 'Self delegation attempt',
+    status: 'pending',
+    created_at: '2026-10-22T10:00:00.000Z',
+    deadline: '2026-10-22T12:00:00.000Z',
+    chain_depth: 0,
+    escalation_mode: 'upstream_return'
+  };
+
+  const res = validateDelegationCommitment(selfDel);
+  assert.equal(res.ok, false);
+  assert.ok(res.error.includes('cannot be identical'));
+});
+
+test('validateDelegationCommitment enforces temporal validity and rejects backwards deadlines', () => {
+  const backwards = {
+    commitment_id: 'del_root_001',
+    delegator_agent: 'agent_alice',
+    delegatee_agent: 'agent_bob',
+    task_hash: 'task_hash_12345678',
+    description: 'Backwards deadline test',
+    status: 'pending',
+    created_at: '2026-10-22T10:00:00.000Z',
+    deadline: '2026-10-22T09:00:00.000Z', // 1 hour earlier!
+    chain_depth: 0,
+    escalation_mode: 'upstream_return'
+  };
+
+  const res = validateDelegationCommitment(backwards);
+  assert.equal(res.ok, false);
+  assert.ok(res.error.includes('cannot precede'));
+});
+
+test('validateDelegationCommitment enforces recursive chain depth bounds and upstream linkage', () => {
+  const base = {
+    commitment_id: 'del_sub_001',
+    delegator_agent: 'agent_alice',
+    delegatee_agent: 'agent_bob',
+    task_hash: 'task_hash_12345678',
+    description: 'Depth test',
+    status: 'pending',
+    created_at: '2026-10-22T10:00:00.000Z',
+    deadline: '2026-10-22T12:00:00.000Z',
+    chain_depth: 1,
+    upstream_commitment_id: 'del_root_000',
+    escalation_mode: 'upstream_return'
+  };
+
+  // Depth > 0 without upstream fails closed
+  const noUpstream = { ...base, upstream_commitment_id: null };
+  assert.equal(validateDelegationCommitment(noUpstream).ok, false);
+
+  // Depth === 0 with upstream fails closed
+  const rootWithUpstream = { ...base, chain_depth: 0, upstream_commitment_id: 'del_root_000' };
+  assert.equal(validateDelegationCommitment(rootWithUpstream).ok, false);
+
+  // Exceeding MAX_DELEGATION_CHAIN_DEPTH fails closed
+  const excessiveDepth = { ...base, chain_depth: 6 };
+  assert.equal(validateDelegationCommitment(excessiveDepth).ok, false);
+
+  // Negative or non-safe-integer depth fails closed
+  assert.equal(validateDelegationCommitment({ ...base, chain_depth: -1 }).ok, false);
+  assert.equal(validateDelegationCommitment({ ...base, chain_depth: 1.5 }).ok, false);
+  assert.equal(validateDelegationCommitment({ ...base, chain_depth: '1' }).ok, false);
+
+  // Self-referencing upstream fails closed
+  assert.equal(validateDelegationCommitment({ ...base, upstream_commitment_id: 'del_sub_001' }).ok, false);
+});
+
+test('createDelegationCommitment creates valid commitments with deterministic defaults and options', () => {
+  const created = createDelegationCommitment({
+    commitment_id: 'del_factory_01',
+    delegator_agent: 'coordinator_twin',
+    delegatee_agent: 'research_twin',
+    task_hash: 'hash_abc1234567',
+    description: 'Literature survey verification',
+    deadline: '2026-10-22T18:00:00.000Z'
+  }, {
+    current_time: '2026-10-22T14:00:00.000Z',
+    escalation_mode: 'peer_failover'
+  });
+
+  assert.equal(created.ok, true);
+  assert.equal(created.commitment.status, 'pending');
+  assert.equal(created.commitment.created_at, '2026-10-22T14:00:00.000Z');
+  assert.equal(created.commitment.escalation_mode, 'peer_failover');
+
+  // Unknown option fails closed
+  const badOpt = createDelegationCommitment({
+    commitment_id: 'del_factory_02',
+    delegator_agent: 'coordinator_twin',
+    delegatee_agent: 'research_twin',
+    task_hash: 'hash_abc1234567',
+    description: 'Literature survey verification',
+    deadline: '2026-10-22T18:00:00.000Z'
+  }, { unknown_opt: true });
+  assert.equal(badOpt.ok, false);
+  assert.ok(badOpt.error.includes('Unknown option'));
+});
+
+test('detectDelegationCycles identifies cycles across agent commitments', () => {
+  const acyclic = [
+    { delegator_agent: 'agent_a', delegatee_agent: 'agent_b' },
+    { delegator_agent: 'agent_b', delegatee_agent: 'agent_c' },
+    { delegator_agent: 'agent_c', delegatee_agent: 'agent_d' }
+  ];
+  const resAcyclic = detectDelegationCycles(acyclic);
+  assert.equal(resAcyclic.has_cycle, false);
+  assert.equal(resAcyclic.cycle_path.length, 0);
+
+  const cyclic = [
+    { delegator_agent: 'agent_a', delegatee_agent: 'agent_b' },
+    { delegator_agent: 'agent_b', delegatee_agent: 'agent_c' },
+    { delegator_agent: 'agent_c', delegatee_agent: 'agent_a' }
+  ];
+  const resCyclic = detectDelegationCycles(cyclic);
+  assert.equal(resCyclic.has_cycle, true);
+  assert.ok(resCyclic.cycle_path.length >= 3);
+
+  assert.equal(detectDelegationCycles('not an array').has_cycle, false);
+  assert.equal(detectDelegationCycles([]).has_cycle, false);
+});
+
+test('evaluateDelegationTransition manages state transitions, terminal immutability, and escalation payloads', () => {
+  const root = {
+    commitment_id: 'del_root_trans',
+    delegator_agent: 'agent_alice',
+    delegatee_agent: 'agent_bob',
+    task_hash: 'task_hash_trans123',
+    description: 'Transition test task',
+    status: 'pending',
+    created_at: '2026-10-22T10:00:00.000Z',
+    deadline: '2026-10-22T12:00:00.000Z',
+    chain_depth: 0,
+    escalation_mode: 'upstream_return'
+  };
+
+  // 1. Pending -> Active
+  const toActive = evaluateDelegationTransition(root, 'active');
+  assert.equal(toActive.ok, true);
+  assert.equal(toActive.updated_commitment.status, 'active');
+
+  // 2. Pending -> Fulfilled blocked (must be accepted first)
+  const directFulfilled = evaluateDelegationTransition(root, 'fulfilled');
+  assert.equal(directFulfilled.ok, false);
+
+  // 3. Active -> Fulfilled
+  const toFulfilled = evaluateDelegationTransition(toActive.updated_commitment, 'fulfilled', {
+    fulfilled_at: '2026-10-22T11:00:00.000Z'
+  });
+  assert.equal(toFulfilled.ok, true);
+  assert.equal(toFulfilled.updated_commitment.status, 'fulfilled');
+  assert.equal(toFulfilled.updated_commitment.fulfilled_at, '2026-10-22T11:00:00.000Z');
+
+  // 4. Terminal state cannot transition
+  const terminalTransition = evaluateDelegationTransition(toFulfilled.updated_commitment, 'active');
+  assert.equal(terminalTransition.ok, false);
+  assert.ok(terminalTransition.error.includes('terminal status'));
+
+  // 5. Active -> Escalated requires failure_code and diagnostic_message
+  const badEsc = evaluateDelegationTransition(toActive.updated_commitment, 'escalated');
+  assert.equal(badEsc.ok, false);
+
+  const goodEsc = evaluateDelegationTransition(toActive.updated_commitment, 'escalated', {
+    failure_code: 'tool_unavailable',
+    diagnostic_message: 'Downstream calculation service unreachable',
+    timestamp: '2026-10-22T11:30:00.000Z'
+  });
+  assert.equal(goodEsc.ok, true);
+  assert.equal(goodEsc.updated_commitment.status, 'escalated');
+  assert.equal(goodEsc.updated_commitment.failure_code, 'tool_unavailable');
+  assert.ok(goodEsc.escalation_packet);
+  assert.equal(goodEsc.escalation_packet.recommended_action, 'failover_to_alternate_peer');
+  assert.equal(goodEsc.escalation_packet.escalated_to, 'agent_alice');
+  assert.ok(Object.isFrozen(goodEsc.escalation_packet));
+});
+
+test('summarizeDelegationLedger aggregates metrics deterministically without internal jargon', () => {
+  const commitments = [
+    {
+      commitment_id: 'c1',
+      status: 'active',
+      chain_depth: 0,
+      deadline: '2026-10-22T15:00:00.000Z'
+    },
+    {
+      commitment_id: 'c2',
+      status: 'pending',
+      chain_depth: 1,
+      deadline: '2026-10-22T12:00:00.000Z' // Overdue as of 14:00
+    },
+    {
+      commitment_id: 'c3',
+      status: 'fulfilled',
+      chain_depth: 2,
+      deadline: '2026-10-22T11:00:00.000Z'
+    }
+  ];
+
+  const summary = summarizeDelegationLedger(commitments, '2026-10-22T14:00:00.000Z');
+  assert.equal(summary.ok, true);
+  assert.equal(summary.total, 3);
+  assert.equal(summary.active, 1);
+  assert.equal(summary.pending, 1);
+  assert.equal(summary.fulfilled, 1);
+  assert.equal(summary.overdue, 1);
+  assert.equal(summary.max_chain_depth, 2);
+  assert.ok(summary.summary_text.includes('Delegation ledger: 3 commitment(s)'));
+  assert.ok(!summary.summary_text.includes('tier'));
+  assert.ok(!summary.summary_text.includes('ticket'));
+  assert.ok(!summary.summary_text.includes('steward'));
+  assert.ok(Object.isFrozen(summary));
+
+  // Empty list
+  const empty = summarizeDelegationLedger([]);
+  assert.equal(empty.total, 0);
+  assert.ok(empty.summary_text.includes('No delegation commitments registered'));
+
+  // Invalid input fails closed
+  const invalid = summarizeDelegationLedger(null);
+  assert.equal(invalid.ok, false);
+});
+test('validateDelegationCommitment rejects impossible calendar dates like February 31 fail-closed', () => {
+  const base = {
+    commitment_id: 'del_date_test',
+    delegator_agent: 'agent_alice',
+    delegatee_agent: 'agent_bob',
+    task_hash: 'task_hash_12345678',
+    description: 'Impossible date test',
+    status: 'pending',
+    created_at: '2026-02-31T10:00:00.000Z',
+    deadline: '2026-03-05T12:00:00.000Z',
+    chain_depth: 0,
+    escalation_mode: 'upstream_return'
+  };
+
+  const res = validateDelegationCommitment(base);
+  assert.equal(res.ok, false);
+  assert.ok(res.error.includes('calendar date'));
+
+  // Impossible deadline (April 31 does not exist)
+  const badDeadline = { ...base, created_at: '2026-04-20T10:00:00.000Z', deadline: '2026-04-31T10:00:00.000Z' };
+  assert.equal(validateDelegationCommitment(badDeadline).ok, false);
 });
