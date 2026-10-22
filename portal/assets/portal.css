@@ -121,3 +121,12 @@ label:has(> input[type="checkbox"]) { display: flex; align-items: center; gap: .
 .status-pass { color: var(--ok); }
 .status-warn { color: var(--gold); }
 .twin-context-pre { white-space: pre-wrap; word-break: break-word; background: var(--paper-2); padding: 0.75rem; border-radius: 4px; font-size: 0.85rem; max-height: 280px; overflow-y: auto; font-family: var(--mono); }
+
+
+/* ideas category filter toolbar */
+.filter-track { display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.2rem 0 0.8rem; margin-bottom: 1rem; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+.filter-pill { font: 600 0.82rem var(--sans); border: 1px solid var(--rule); border-radius: 99px; padding: 0.35rem 0.75rem; background: var(--paper-2); color: var(--ink-2); cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.4rem; transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease; flex-shrink: 0; }
+.filter-pill:hover { background: var(--card); color: var(--ink); border-color: var(--ink-3); }
+.filter-pill[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.filter-pill .pill-count { font: 600 0.72rem var(--mono); padding: 1px 5px; border-radius: 99px; background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.filter-pill[aria-pressed="true"] .pill-count { background: color-mix(in srgb, var(--paper) 25%, transparent); color: var(--paper); }
