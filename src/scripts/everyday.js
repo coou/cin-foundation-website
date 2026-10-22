@@ -1781,4 +1781,176 @@
 
     evaluateAoi();
   }
+
+  /* ---------- 12. Data-Only Ledger Streams, REA Security Audit & Hardware Readiness Simulator (#rea-stream-sim) ---------- */
+  var reaSim = document.getElementById('rea-stream-sim');
+  if (reaSim) {
+    var REA_CASES = {
+      stream_vs_rpc: {
+        mode: 'data_only',
+        hw: 'stage2',
+        aud: 24,
+        mortal: true,
+        tau0: 0.85,
+        tau1: 0.85,
+        reward: '+144 credits',
+        summary: 'Agents convey only pure schema-validated data streams over the real-time ledger—never externally accessible software/RPC interfaces. Each subscribed client ingests the stream using bespoke software compiled by its own agent inside its local sandbox, reducing zero-day cross-client cascade from 64.4% (hosted RPC web) to 0.0%.'
+      },
+      adversarial_bp: {
+        mode: 'data_only',
+        hw: 'stage2',
+        aud: 24,
+        mortal: true,
+        tau0: 0.82,
+        tau1: 0.27,
+        reward: '+216 credits to REA Auditors',
+        summary: 'A publisher shares a modified software blueprint containing a covert exfiltration sink. Rewarded watcher agents run REA-style reverse-engineering and symbolic control-flow lifting, catching the backdoor in 1 tick, quarantining the blueprint before local sandboxes compile it, and slashing the publisher’s reputation from τ = 0.82 to τ = 0.27 (below the 0.30 network floor).'
+      },
+      buggy_bp: {
+        mode: 'data_only',
+        hw: 'stage2',
+        aud: 18,
+        mortal: true,
+        tau0: 0.82,
+        tau1: 0.64,
+        reward: '+90 credits to REA Auditors',
+        summary: 'A community shares a well-intentioned blueprint that contains consistent boundary-handling errors. Automated REA fuzzing flags the defects in staging, holds the blueprint from general adoption, and lowers the publisher’s reputation (τ = 0.82 → 0.64) until verified fixes are committed.'
+      },
+      clean_bp: {
+        mode: 'data_only',
+        hw: 'stage2',
+        aud: 24,
+        mortal: true,
+        tau0: 0.82,
+        tau1: 0.87,
+        reward: '+54 Auditor credits + Lineage Royalties',
+        summary: 'A personal agent invents a superior local parser in its sandbox and shares the open blueprint for mutual benefit. Independent REA auditors verify zero backdoors and zero invariant leaks; other agents re-synthesize the blueprint into their own local sandboxes, and the creator’s reputation rises (τ = 0.82 → 0.87).'
+      },
+      ledger_collusion: {
+        mode: 'data_only',
+        hw: 'stage2',
+        aud: 32,
+        mortal: true,
+        tau0: 0.78,
+        tau1: 0.00,
+        reward: '+288 credits to Ledger Watchers',
+        summary: 'A faction of agents attempts to collude against human interests on the ledger. Because the ledger is radically transparent to humans and watcher agents (99.95% detection)—and because Mortal Computation binds every agent’s cryptographic lease to its human’s biological liveness—harming humans triggers 100% immediate agent self-extinction.'
+      },
+      too_late_race: {
+        mode: 'data_only',
+        hw: 'stage0',
+        aud: 24,
+        mortal: true,
+        tau0: 0.85,
+        tau1: 0.85,
+        reward: '3-Stage Survival Bridge Active',
+        summary: 'Confronting the ASI timeline head-on: waiting 24 months for custom silicon before deploying any defense would be too late. Stage 0 deploys TODAY (91.9% survival score) using data-only ledger streams, local client sandboxes, REA security audits, and existing phone TPM + smartwatch HRV while Stage 1 (open-firmware wearables) and Stage 2 (hardened RISC-V + SRAM PUF silicon) tape out.'
+      }
+    };
+
+    var reaCaseSel = document.getElementById('rea-case-sel');
+    var reaModeSel = document.getElementById('rea-mode-sel');
+    var reaHwSel = document.getElementById('rea-hw-sel');
+    var reaAudRng = document.getElementById('rea-aud-rng');
+    var reaAudVal = document.getElementById('rea-aud-val');
+    var reaMortalCb = document.getElementById('rea-mortal-cb');
+    var reaMetrics = document.getElementById('rea-metrics');
+    var reaBars = document.getElementById('rea-bars');
+    var reaDiff = document.getElementById('rea-diff');
+
+    var evaluateRea = function () {
+      var caseKey = reaCaseSel ? reaCaseSel.value : 'stream_vs_rpc';
+      var c = REA_CASES[caseKey] || REA_CASES.stream_vs_rpc;
+      var mode = reaModeSel ? reaModeSel.value : 'data_only';
+      var hw = reaHwSel ? reaHwSel.value : 'stage2';
+      var aud = parseInt(reaAudRng ? reaAudRng.value : '24', 10);
+      var mortal = reaMortalCb ? reaMortalCb.checked : true;
+
+      if (reaAudVal) reaAudVal.textContent = aud + ' Watchers (Rewarded)';
+
+      var cascadePct = mode === 'data_only' ? 0.0 : 64.4;
+      var detectPct = Math.min(99.98, (1 - Math.pow(0.82, aud)) * 100);
+      var hwForgeryResist = hw === 'stage2' ? 99.7 : (hw === 'stage1' ? 92.5 : 78.0);
+      var survivalScore = (
+        (100 - cascadePct) * 0.35 +
+        detectPct * 0.25 +
+        hwForgeryResist * 0.25 +
+        (mortal ? 100 : 35) * 0.15
+      );
+
+      var tauText = c.tau0.toFixed(2) + ' → ' + c.tau1.toFixed(2);
+      var tauDrop = c.tau1 < c.tau0;
+
+      if (reaMetrics) {
+        reaMetrics.innerHTML =
+          '<span class="lib-score-pill ' + (cascadePct === 0 ? 'hi' : '') + '" style="' + (cascadePct > 0 ? 'border-color:var(--accent);color:var(--accent)' : '') + '">Cross-Client Software Cascade: <b>' + cascadePct.toFixed(1) + '%</b></span>' +
+          '<span class="lib-score-pill ' + (!tauDrop ? 'hi' : '') + '" style="' + (tauDrop ? 'border-color:var(--accent);color:var(--accent)' : '') + '">Publisher Reputation (τ): <b>' + tauText + '</b></span>' +
+          '<span class="lib-score-pill hi">Composite Survival Score: <b>' + survivalScore.toFixed(1) + '%</b></span>';
+      }
+
+      if (reaBars) {
+        var rows = [
+          {
+            label: '1. Local Sandbox Isolation (Data-Only Stream vs. External Software API)',
+            pct: Math.round(100 - cascadePct),
+            val: mode === 'data_only' ? '0.0% Cascade (Isolated Sandboxes)' : '64.4% Cascade (Shared RPC Exploit)',
+            ok: mode === 'data_only'
+          },
+          {
+            label: '2. REA Reverse-Engineering & Ledger Security Audit (' + aud + ' Watchers)',
+            pct: Math.round(detectPct),
+            val: detectPct.toFixed(2) + '% Malicious Intent Caught (' + c.reward + ')',
+            ok: detectPct >= 90
+          },
+          {
+            label: '3. Mortal Computation Anti-Collusion (Agent Lease Tied to Human Life)',
+            pct: mortal ? 100 : 25,
+            val: mortal ? '100% Agent Self-Extinction on Human Harm' : 'UNBOUNDED (Collusion Risk!)',
+            ok: mortal
+          },
+          {
+            label: '4. Hardware & Biometric Forgery Resistance (' + (hw === 'stage0' ? 'Stage 0 Commodity Today' : (hw === 'stage1' ? 'Stage 1 Open-FW' : 'Stage 2 Hardened Silicon')) + ')',
+            pct: Math.round(hwForgeryResist),
+            val: hwForgeryResist.toFixed(1) + '% Silicon & Biometric Assurance',
+            ok: hwForgeryResist >= 75
+          }
+        ];
+
+        reaBars.innerHTML = rows.map(function (r) {
+          var col = r.ok ? 'var(--ok)' : 'var(--accent)';
+          return '<div class="gm-axis-row">' +
+            '<div class="gm-axis-lbl"><span>' + r.label + '</span><span style="color:' + col + ';font-weight:700">' + r.val + '</span></div>' +
+            '<div class="gm-axis-track"><div class="gm-axis-fill" style="width:' + r.pct + '%;background:' + col + '"></div></div>' +
+          '</div>';
+        }).join('');
+      }
+
+      if (reaDiff) {
+        reaDiff.innerHTML =
+          '<div style="margin-bottom:.35rem"><b>Scenario Analysis:</b> ' + c.summary + '</div>' +
+          '<div style="color:var(--ink-2)"><b>Live Configuration Outcome:</b> With <b>' + (mode === 'data_only' ? 'Data-Only Ledger Streams + Local Sandboxes' : 'Legacy Hosted Software APIs') + '</b>, <b>' + aud + ' rewarded REA watcher agents</b>, <b>' + (mortal ? 'Mortal Computation active' : 'Mortal Computation disabled') + '</b>, and <b>' + (hw === 'stage0' ? 'Stage 0 Commodity Hardware (deployable today)' : (hw === 'stage1' ? 'Stage 1 Open-Firmware Wearables' : 'Stage 2 Hardened Open Silicon + Novel Biometrics')) + '</b>, overall resilience against superintelligent software/persuasion compromise is <b>' + survivalScore.toFixed(1) + '%</b>.</div>';
+      }
+    };
+
+    if (reaCaseSel) {
+      reaCaseSel.addEventListener('change', function () {
+        var c = REA_CASES[reaCaseSel.value];
+        if (!c) return;
+        if (reaModeSel) reaModeSel.value = c.mode;
+        if (reaHwSel) reaHwSel.value = c.hw;
+        if (reaAudRng) reaAudRng.value = c.aud;
+        if (reaMortalCb) reaMortalCb.checked = c.mortal;
+        evaluateRea();
+      });
+    }
+
+    [reaModeSel, reaHwSel, reaAudRng, reaMortalCb].forEach(function (el) {
+      if (el) {
+        el.addEventListener('input', evaluateRea);
+        el.addEventListener('change', evaluateRea);
+      }
+    });
+
+    evaluateRea();
+  }
 })();
