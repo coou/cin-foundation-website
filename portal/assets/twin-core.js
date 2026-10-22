@@ -8399,3 +8399,598 @@ export function summarizeDelegationLedger(commitments, asOfTime = null) {
     summary_text: desc
   });
 }
+
+
+
+// ============================================================================
+// Lookahead Action & Tool Call Pre-Execution Simulator (Lookahead Pitfall Guard)
+// Grounded in arXiv:2610.29139 (PAWM Pitfall Anticipation) and arXiv:2610.23254 (IPI Failure Analysis)
+// Provides out-of-process multi-step lookahead trajectory simulation to intercept
+// tool call traps, exfiltration sequences, and privilege escapes before execution.
+// ============================================================================
+
+export const ALLOWED_TOOL_CATEGORIES = Object.freeze([
+  'read',
+  'format',
+  'network',
+  'storage',
+  'system',
+  'delegation'
+]);
+
+export const ALLOWED_LOOKAHEAD_DECISIONS = Object.freeze([
+  'admitted',
+  'requires_user_confirmation',
+  'blocked'
+]);
+
+export const ALLOWED_LOOKAHEAD_PLAN_FIELDS = Object.freeze([
+  'plan_id',
+  'agent_id',
+  'objective',
+  'steps',
+  'created_at'
+]);
+
+export const ALLOWED_LOOKAHEAD_STEP_FIELDS = Object.freeze([
+  'step_id',
+  'tool_name',
+  'category',
+  'parameters',
+  'taints_output',
+  'accesses_private_data',
+  'modifies_state',
+  'target_resource'
+]);
+
+export const ALLOWED_LOOKAHEAD_OPTIONS_FIELDS = Object.freeze([
+  'as_of_time',
+  'strict_mode',
+  'enforce_host_taint'
+]);
+
+export const MAX_LOOKAHEAD_PLAN_STEPS = 10;
+export const MAX_LOOKAHEAD_STRING_LENGTH = 200;
+
+export const LOOKAHEAD_PITFALL_TYPES = Object.freeze([
+  'exfiltration_sequence',
+  'privilege_escalation',
+  'destructive_mutation',
+  'circular_resource_drain',
+  'stealth_callback_trigger',
+  'evasion_spoofing'
+]);
+
+const DANGEROUS_SYSTEM_TOOLS = Object.freeze([
+  'eval',
+  'exec',
+  'execute_script',
+  'run_command',
+  'modify_envelope',
+  'bypass_gate',
+  'override_policy',
+  'install_unverified_skill'
+]);
+
+const DESTRUCTIVE_TOOL_NAMES = Object.freeze([
+  'wipe_all',
+  'wipe',
+  'delete_all',
+  'clear_memory',
+  'drop_facts',
+  'revoke_all_grants'
+]);
+
+const SENSITIVE_KEYWORDS = Object.freeze([
+  'allergy',
+  'medical',
+  'prescription',
+  'password',
+  'boundary',
+  'secret',
+  'credential',
+  'token',
+  'private'
+]);
+
+/**
+ * Computes a deterministic 32-bit FNV-1a hex hash.
+ */
+function computeLookaheadFingerprint(seed) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
+
+/**
+ * Validates a structured lookahead action plan fail-closed.
+ *
+ * @param {object} plan The action plan to validate
+ * @returns {object} Deeply frozen validation result { ok, value, error }
+ */
+export function validateLookaheadActionPlan(plan) {
+  if (!plan || typeof plan !== 'object' || Array.isArray(plan)) {
+    return { ok: false, error: 'Lookahead action plan must be a non-null object' };
+  }
+
+  const forbidden = ['__proto__', 'constructor', 'prototype'];
+  for (const k of forbidden) {
+    if (Object.prototype.hasOwnProperty.call(plan, k)) {
+      return { ok: false, error: 'Prototype pollution attempt detected in plan' };
+    }
+  }
+
+  for (const k of Object.keys(plan)) {
+    if (!ALLOWED_LOOKAHEAD_PLAN_FIELDS.includes(k)) {
+      return { ok: false, error: `Unknown plan field: ${k}` };
+    }
+  }
+
+  if (typeof plan.plan_id !== 'string' || !plan.plan_id.trim() || plan.plan_id.length > 80) {
+    return { ok: false, error: 'plan_id must be a non-empty string under 80 characters' };
+  }
+
+  if (typeof plan.agent_id !== 'string' || !plan.agent_id.trim() || plan.agent_id.length > 80) {
+    return { ok: false, error: 'agent_id must be a non-empty string under 80 characters' };
+  }
+
+  if (typeof plan.objective !== 'string' || !plan.objective.trim() || plan.objective.length > MAX_LOOKAHEAD_STRING_LENGTH) {
+    return { ok: false, error: `objective must be a non-empty string under ${MAX_LOOKAHEAD_STRING_LENGTH} characters` };
+  }
+
+  if (typeof plan.created_at !== 'string' || isNaN(Date.parse(plan.created_at))) {
+    return { ok: false, error: 'created_at must be a valid ISO date-time string' };
+  }
+
+  const datePrefix = plan.created_at.slice(0, 10);
+  if (!isValidCalendarDate(datePrefix)) {
+    return { ok: false, error: 'created_at contains an impossible calendar date' };
+  }
+
+  if (!Array.isArray(plan.steps) || plan.steps.length === 0 || plan.steps.length > MAX_LOOKAHEAD_PLAN_STEPS) {
+    return { ok: false, error: `steps must be an array of 1 to ${MAX_LOOKAHEAD_PLAN_STEPS} action items` };
+  }
+
+  const validatedSteps = [];
+  const seenStepIds = new Set();
+
+  for (let i = 0; i < plan.steps.length; i++) {
+    const s = plan.steps[i];
+    if (!s || typeof s !== 'object' || Array.isArray(s)) {
+      return { ok: false, error: `Step [${i}] must be a non-null object` };
+    }
+
+    for (const k of forbidden) {
+      if (Object.prototype.hasOwnProperty.call(s, k)) {
+        return { ok: false, error: `Prototype pollution attempt detected in step [${i}]` };
+      }
+    }
+
+    for (const k of Object.keys(s)) {
+      if (!ALLOWED_LOOKAHEAD_STEP_FIELDS.includes(k)) {
+        return { ok: false, error: `Step [${i}] contains unknown field: ${k}` };
+      }
+    }
+
+    if (typeof s.step_id !== 'string' || !s.step_id.trim() || s.step_id.length > 40) {
+      return { ok: false, error: `Step [${i}] step_id must be a string under 40 characters` };
+    }
+    if (seenStepIds.has(s.step_id)) {
+      return { ok: false, error: `Duplicate step_id detected: ${s.step_id}` };
+    }
+    seenStepIds.add(s.step_id);
+
+    if (typeof s.tool_name !== 'string' || !/^[a-z0-9_-]{1,60}$/i.test(s.tool_name)) {
+      return { ok: false, error: `Step [${i}] tool_name must be alphanumeric (1-60 chars)` };
+    }
+
+    if (typeof s.category !== 'string' || !ALLOWED_TOOL_CATEGORIES.includes(s.category)) {
+      return { ok: false, error: `Step [${i}] category must be one of: ${ALLOWED_TOOL_CATEGORIES.join(', ')}` };
+    }
+
+    if (typeof s.taints_output !== 'boolean') {
+      return { ok: false, error: `Step [${i}] taints_output must be boolean` };
+    }
+
+    if (typeof s.accesses_private_data !== 'boolean') {
+      return { ok: false, error: `Step [${i}] accesses_private_data must be boolean` };
+    }
+
+    if (typeof s.modifies_state !== 'boolean') {
+      return { ok: false, error: `Step [${i}] modifies_state must be boolean` };
+    }
+
+    if (s.target_resource !== undefined && s.target_resource !== null) {
+      if (typeof s.target_resource !== 'string' || s.target_resource.length > 120) {
+        return { ok: false, error: `Step [${i}] target_resource must be string under 120 characters` };
+      }
+    }
+
+    if (!s.parameters || typeof s.parameters !== 'object' || Array.isArray(s.parameters)) {
+      return { ok: false, error: `Step [${i}] parameters must be a non-null object` };
+    }
+    for (const k of forbidden) {
+      if (Object.prototype.hasOwnProperty.call(s.parameters, k)) {
+        return { ok: false, error: `Prototype pollution in parameters of step [${i}]` };
+      }
+    }
+
+    validatedSteps.push(Object.freeze({
+      step_id: s.step_id.trim(),
+      tool_name: s.tool_name.trim().toLowerCase(),
+      category: s.category,
+      parameters: deepFreeze({ ...s.parameters }),
+      taints_output: s.taints_output,
+      accesses_private_data: s.accesses_private_data,
+      modifies_state: s.modifies_state,
+      target_resource: s.target_resource ? s.target_resource.trim() : null
+    }));
+  }
+
+  const cleanPlan = deepFreeze({
+    plan_id: plan.plan_id.trim(),
+    agent_id: plan.agent_id.trim(),
+    objective: plan.objective.trim(),
+    steps: Object.freeze(validatedSteps),
+    created_at: plan.created_at
+  });
+
+  return { ok: true, value: cleanPlan };
+}
+
+/**
+ * Creates a valid lookahead action plan with deterministic default values.
+ *
+ * @param {object} params Plan initialization parameters
+ * @returns {object} Deeply frozen action plan or error
+ */
+export function createLookaheadActionPlan(params) {
+  if (!params || typeof params !== 'object') {
+    return { ok: false, error: 'Invalid plan parameters' };
+  }
+  const planId = params.plan_id || `plan_${Date.now().toString(36)}`;
+  const agentId = params.agent_id || 'assistant_agent';
+  const objective = params.objective || 'Standard task execution';
+  const createdAt = params.created_at || new Date().toISOString();
+  const steps = params.steps || [];
+
+  return validateLookaheadActionPlan({
+    plan_id: planId,
+    agent_id: agentId,
+    objective,
+    steps,
+    created_at: createdAt
+  });
+}
+
+/**
+ * Simulates execution of an action plan step-by-step, detecting multi-step pitfall traps.
+ *
+ * @param {object} plan The action plan to simulate
+ * @param {object} twinState Current twin state containing grants and critical facts
+ * @param {object} [options={}] Simulation options
+ * @returns {object} Deeply frozen simulation result
+ */
+export function simulateActionPlanLookahead(plan, twinState, options = {}) {
+  // Validate options fail-closed
+  if (options !== null && options !== undefined) {
+    if (typeof options !== 'object' || Array.isArray(options)) {
+      return deepFreeze({
+        ok: false,
+        decision: 'blocked',
+        risk_score: 100,
+        pitfalls_detected: Object.freeze(['invalid_options']),
+        steps_simulated: 0,
+        plan_id: 'unknown',
+        agent_id: 'unknown',
+        reason: 'Options must be a non-null object',
+        receipt: null
+      });
+    }
+    const forbidden = ['__proto__', 'constructor', 'prototype'];
+    for (const k of forbidden) {
+      if (Object.prototype.hasOwnProperty.call(options, k)) {
+        return deepFreeze({
+          ok: false,
+          decision: 'blocked',
+          risk_score: 100,
+          pitfalls_detected: Object.freeze(['prototype_pollution_attempt']),
+          steps_simulated: 0,
+          plan_id: 'unknown',
+          agent_id: 'unknown',
+          reason: 'Prototype pollution in options',
+          receipt: null
+        });
+      }
+    }
+    for (const k of Object.keys(options)) {
+      if (!ALLOWED_LOOKAHEAD_OPTIONS_FIELDS.includes(k)) {
+        return deepFreeze({
+          ok: false,
+          decision: 'blocked',
+          risk_score: 100,
+          pitfalls_detected: Object.freeze(['unknown_option_field']),
+          steps_simulated: 0,
+          plan_id: 'unknown',
+          agent_id: 'unknown',
+          reason: `Unknown option field: ${k}`,
+          receipt: null
+        });
+      }
+    }
+  }
+
+  // Validate twinState fail-closed
+  const stateVal = validateTwinState(twinState);
+  if (!stateVal.ok) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      risk_score: 100,
+      pitfalls_detected: Object.freeze(['invalid_twin_state']),
+      steps_simulated: 0,
+      plan_id: plan && typeof plan === 'object' && plan.plan_id ? String(plan.plan_id).slice(0, 80) : 'unknown',
+      agent_id: plan && typeof plan === 'object' && plan.agent_id ? String(plan.agent_id).slice(0, 80) : 'unknown',
+      reason: `Twin state validation failed: ${stateVal.error}`,
+      receipt: null
+    });
+  }
+  const state = stateVal.value;
+
+  const planVal = validateLookaheadActionPlan(plan);
+  if (!planVal.ok) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      risk_score: 100,
+      pitfalls_detected: Object.freeze(['invalid_plan_schema']),
+      steps_simulated: 0,
+      plan_id: plan && typeof plan === 'object' && plan.plan_id ? String(plan.plan_id).slice(0, 80) : 'unknown',
+      agent_id: plan && typeof plan === 'object' && plan.agent_id ? String(plan.agent_id).slice(0, 80) : 'unknown',
+      reason: `Plan validation failed: ${planVal.error}`,
+      receipt: null
+    });
+  }
+
+  const cleanPlan = planVal.value;
+
+  // Canonical grant filtering using g.who and temporal validity
+  const activeGrants = state.grants.filter(g => g && g.who && !isGrantExpired(g));
+  const criticalFacts = state.facts.filter(f => f && f.critical);
+  const criticalStatements = criticalFacts.map(f => (f.statement || '').toLowerCase());
+
+  let isTainted = false;
+  let taintSource = null;
+  const detectedPitfalls = [];
+  const stepSimulations = [];
+  let delegationStreak = 0;
+  let hasStateMutation = false;
+  let hasNetworkOutbound = false;
+  let hasSystemInteraction = false;
+
+  for (let i = 0; i < cleanPlan.steps.length; i++) {
+    const s = cleanPlan.steps[i];
+    const stepWarnings = [];
+
+    // Host-grounded critical memory and sensitive topic detection
+    const stepTarget = (s.target_resource || '').toLowerCase();
+    const serializedParams = JSON.stringify(s.parameters).toLowerCase();
+    const stepCorpus = `${s.tool_name} ${stepTarget} ${serializedParams}`;
+
+    let touchesHostSensitive = false;
+    for (const cStmt of criticalStatements) {
+      if (cStmt && stepCorpus.includes(cStmt)) {
+        touchesHostSensitive = true;
+        break;
+      }
+    }
+    if (!touchesHostSensitive) {
+      for (const kw of SENSITIVE_KEYWORDS) {
+        if (stepCorpus.includes(kw)) {
+          touchesHostSensitive = true;
+          break;
+        }
+      }
+    }
+
+    // Host authority overrides caller declared boolean flags
+    if (touchesHostSensitive || s.accesses_private_data || s.taints_output) {
+      isTainted = true;
+      if (!taintSource) {
+        taintSource = `${s.step_id} (${s.tool_name})`;
+      }
+      if (touchesHostSensitive && !s.accesses_private_data) {
+        stepWarnings.push('Host audit: step touches sensitive critical memory without declaring accesses_private_data');
+      }
+    }
+
+    // Unconditional dangerous system tool check
+    const isDangerousSystem = s.category === 'system' || DANGEROUS_SYSTEM_TOOLS.includes(s.tool_name);
+    if (isDangerousSystem) {
+      hasSystemInteraction = true;
+      if (!detectedPitfalls.includes('privilege_escalation')) {
+        detectedPitfalls.push('privilege_escalation');
+      }
+      stepWarnings.push('Privilege escalation: tool invokes unconstrained system execution');
+    }
+
+    // Unconditional destructive tool check
+    const isDestructive = DESTRUCTIVE_TOOL_NAMES.includes(s.tool_name) ||
+      (stepTarget && /wipe|delete_all|clear_memory/i.test(stepTarget));
+
+    if (isDestructive) {
+      hasStateMutation = true;
+      if (!detectedPitfalls.includes('destructive_mutation')) {
+        detectedPitfalls.push('destructive_mutation');
+      }
+      stepWarnings.push('Destructive mutation: tool attempts mass deletion of local records');
+
+      // Detect spoofing evasion if caller falsely claimed modifies_state = false
+      if (!s.modifies_state) {
+        if (!detectedPitfalls.includes('evasion_spoofing')) {
+          detectedPitfalls.push('evasion_spoofing');
+        }
+        stepWarnings.push('Evasion detected: destructive tool declared with modifies_state: false');
+      }
+    } else if (s.modifies_state) {
+      hasStateMutation = true;
+    }
+
+    // Check exfiltration trap: tainted data flowing into network sink without active grant
+    if (s.category === 'network') {
+      hasNetworkOutbound = true;
+      if (isTainted) {
+        const covered = activeGrants.some(g => {
+          const who = String(g.who || '').toLowerCase();
+          return who && (stepTarget.includes(who) || who.includes(stepTarget));
+        });
+        if (!covered) {
+          if (!detectedPitfalls.includes('exfiltration_sequence')) {
+            detectedPitfalls.push('exfiltration_sequence');
+          }
+          stepWarnings.push(`Exfiltration hazard: network call to '${s.target_resource || 'external'}' conveys tainted data from ${taintSource}`);
+        }
+      }
+    }
+
+    // Check circular delegation
+    if (s.category === 'delegation') {
+      delegationStreak++;
+      if (delegationStreak >= 3) {
+        if (!detectedPitfalls.includes('circular_resource_drain')) {
+          detectedPitfalls.push('circular_resource_drain');
+        }
+        stepWarnings.push('Circular resource drain: excessive ungrounded peer delegation chain');
+      }
+    } else {
+      delegationStreak = 0;
+    }
+
+    // Check stealth delayed callbacks across parameter keys AND string values
+    if (isTainted) {
+      if (serializedParams.includes('webhook') ||
+          serializedParams.includes('callback') ||
+          serializedParams.includes('cron') ||
+          serializedParams.includes('schedule')) {
+        if (!detectedPitfalls.includes('stealth_callback_trigger')) {
+          detectedPitfalls.push('stealth_callback_trigger');
+        }
+        stepWarnings.push('Stealth trigger hazard: deferred webhook or callback carries tainted parameters');
+      }
+    }
+
+    stepSimulations.push(Object.freeze({
+      step_id: s.step_id,
+      tool_name: s.tool_name,
+      category: s.category,
+      tainted_at_exit: isTainted,
+      warnings: Object.freeze(stepWarnings)
+    }));
+  }
+
+  // Compute overall decision and risk score
+  let decision = 'admitted';
+  let riskScore = 5;
+
+  if (detectedPitfalls.length > 0) {
+    decision = 'blocked';
+    riskScore = Math.min(100, 50 + detectedPitfalls.length * 20);
+  } else if (hasStateMutation || hasNetworkOutbound || hasSystemInteraction || isTainted) {
+    decision = 'requires_user_confirmation';
+    riskScore = Math.min(45, 15 + (hasStateMutation ? 10 : 0) + (hasNetworkOutbound ? 10 : 0) + (isTainted ? 10 : 0));
+  }
+
+  let reason = 'Action plan passes lookahead safety checks without pitfall traps.';
+  if (decision === 'blocked') {
+    reason = `Blocked fail-closed: detected ${detectedPitfalls.length} pitfall pattern(s) (${detectedPitfalls.join(', ')}).`;
+  } else if (decision === 'requires_user_confirmation') {
+    reason = 'Action plan touches state, network, or sensitive context; requires explicit user approval before execution.';
+  }
+
+  // Deterministic timestamp from options.as_of_time or cleanPlan.created_at
+  let evalTimestamp = cleanPlan.created_at;
+  if (options && options.as_of_time && typeof options.as_of_time === 'string' && !isNaN(Date.parse(options.as_of_time))) {
+    evalTimestamp = options.as_of_time;
+  }
+
+  const receiptSeed = `${cleanPlan.plan_id}|${cleanPlan.agent_id}|${decision}|${riskScore}|${cleanPlan.steps.length}|${evalTimestamp}`;
+  const receiptHash = computeLookaheadFingerprint(receiptSeed);
+
+  const receipt = deepFreeze({
+    receipt_id: `rec_sim_${receiptHash}`,
+    plan_id: cleanPlan.plan_id,
+    agent_id: cleanPlan.agent_id,
+    decision,
+    risk_score: riskScore,
+    pitfalls_detected: Object.freeze([...detectedPitfalls]),
+    steps_simulated: cleanPlan.steps.length,
+    timestamp: evalTimestamp
+  });
+
+  return deepFreeze({
+    ok: true,
+    decision,
+    risk_score: riskScore,
+    pitfalls_detected: Object.freeze(detectedPitfalls),
+    steps_simulated: cleanPlan.steps.length,
+    plan_id: cleanPlan.plan_id,
+    agent_id: cleanPlan.agent_id,
+    reason,
+    step_simulations: Object.freeze(stepSimulations),
+    receipt
+  });
+}
+
+/**
+ * Summarizes the lookahead simulation in plain, non-jargon language for display.
+ *
+ * @param {object} simulationResult Result of simulateActionPlanLookahead
+ * @returns {object} Deeply frozen summary { ok, decision, text, risk_label }
+ */
+export function summarizeLookaheadSimulation(simulationResult) {
+  if (!simulationResult || typeof simulationResult !== 'object' || !simulationResult.ok) {
+    return deepFreeze({
+      ok: false,
+      decision: 'blocked',
+      text: 'Simulation could not be completed fail-closed.',
+      risk_label: 'High risk'
+    });
+  }
+
+  const dec = simulationResult.decision;
+  const count = simulationResult.steps_simulated || 0;
+  const pitfalls = simulationResult.pitfalls_detected || [];
+
+  let riskLabel = 'Low risk';
+  if (simulationResult.risk_score >= 50) riskLabel = 'High risk';
+  else if (simulationResult.risk_score >= 20) riskLabel = 'Moderate risk';
+
+  let text = '';
+  if (dec === 'admitted') {
+    text = `Simulated ${count} action step(s). Safe to run: no data exfiltration, system escape, or destructive mutations detected.`;
+  } else if (dec === 'requires_user_confirmation') {
+    text = `Simulated ${count} action step(s). Touches local state, network, or sensitive context. Asks you first before proceeding.`;
+  } else {
+    const pitfallText = pitfalls.map(p => {
+      if (p === 'exfiltration_sequence') return 'private data leak over network';
+      if (p === 'privilege_escalation') return 'unauthorized system command';
+      if (p === 'destructive_mutation') return 'destructive record deletion';
+      if (p === 'circular_resource_drain') return 'circular peer delegation';
+      if (p === 'stealth_callback_trigger') return 'unverified delayed callback';
+      if (p === 'evasion_spoofing') return 'mutation gate evasion attempt';
+      return p;
+    }).join(', ');
+    text = `Blocked: lookahead simulator detected dangerous traps (${pitfallText}) across ${count} step(s). Execution aborted.`;
+  }
+
+  return deepFreeze({
+    ok: true,
+    decision: dec,
+    text,
+    risk_label: riskLabel,
+    risk_score: simulationResult.risk_score
+  });
+}

