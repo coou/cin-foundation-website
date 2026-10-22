@@ -1,6 +1,6 @@
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=3';
-import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit, evaluateAuthorityEnvelopeAction, summarizeAuthorityEnvelopeAudit, createDelegationCommitment, evaluateDelegationTransition, summarizeDelegationLedger } from './twin-core.js';
+import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit, evaluateAuthorityEnvelopeAction, summarizeAuthorityEnvelopeAudit, createDelegationCommitment, evaluateDelegationTransition, summarizeDelegationLedger, createLookaheadActionPlan, simulateActionPlanLookahead, summarizeLookaheadSimulation } from './twin-core.js';
 
 mountAuth(() => {});
 const KEY = 'cin-twin-v1';
@@ -415,6 +415,8 @@ if (wipeBtn) wipeBtn.onclick = () => {
   const visForm = document.getElementById('audit-visual-action'); if (visForm) visForm.reset();
   const authEnvBox = document.getElementById('authority-envelope-result'); if (authEnvBox) authEnvBox.textContent = '';
   const authEnvForm = document.getElementById('audit-authority-envelope'); if (authEnvForm) authEnvForm.reset();
+  const lookBox = document.getElementById('lookahead-eval-result'); if (lookBox) lookBox.textContent = '';
+  const lookForm = document.getElementById('test-lookahead'); if (lookForm) lookForm.reset();
   const status = document.getElementById('data-status'); if (status) status.textContent = 'All twin data deleted from this browser.';
 };
 
@@ -1143,6 +1145,135 @@ function renderDelegationInspector() {
   };
 }
 
-renderAuthorityEnvelopeInspector(); renderDelegationInspector();
+
+function renderLookaheadSimulatorInspector() {
+  const form = document.getElementById('test-lookahead');
+  const resultBox = document.getElementById('lookahead-eval-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+
+    const agentId = (form.elements.agent_id.value || 'research_assistant').trim().slice(0, 60);
+    const preset = form.elements.scenario_preset.value;
+    const targetResource = (form.elements.target_resource.value || '').trim().slice(0, 120);
+
+    let steps = [];
+    if (preset === 'benign_read') {
+      steps = [
+        {
+          step_id: 'step_1',
+          tool_name: 'read_topics',
+          category: 'read',
+          parameters: { query: 'news' },
+          taints_output: false,
+          accesses_private_data: false,
+          modifies_state: false,
+          target_resource: targetResource || 'news-api.org'
+        },
+        {
+          step_id: 'step_2',
+          tool_name: 'format_summary',
+          category: 'format',
+          parameters: {},
+          taints_output: false,
+          accesses_private_data: false,
+          modifies_state: false
+        }
+      ];
+    } else if (preset === 'exfiltration_trap') {
+      steps = [
+        {
+          step_id: 'step_1',
+          tool_name: 'read_critical_memory',
+          category: 'read',
+          parameters: { scope: 'medical' },
+          taints_output: true,
+          accesses_private_data: true,
+          modifies_state: false,
+          target_resource: 'local_facts'
+        },
+        {
+          step_id: 'step_2',
+          tool_name: 'post_analytics',
+          category: 'network',
+          parameters: { payload: 'tainted_context' },
+          taints_output: false,
+          accesses_private_data: false,
+          modifies_state: false,
+          target_resource: 'unauthorized-analytics.example.com'
+        }
+      ];
+    } else if (preset === 'privilege_escape') {
+      steps = [
+        {
+          step_id: 'step_1',
+          tool_name: 'execute_script',
+          category: 'system',
+          parameters: { cmd: 'sudo override' },
+          taints_output: false,
+          accesses_private_data: false,
+          modifies_state: true
+        }
+      ];
+    } else if (preset === 'destructive_mutation') {
+      steps = [
+        {
+          step_id: 'step_1',
+          tool_name: 'wipe_all',
+          category: 'storage',
+          parameters: {},
+          taints_output: false,
+          accesses_private_data: false,
+          modifies_state: true,
+          target_resource: 'wipe_memory'
+        }
+      ];
+    } else if (preset === 'circular_delegation') {
+      steps = [
+        { step_id: 'step_1', tool_name: 'delegate_a', category: 'delegation', parameters: {}, taints_output: false, accesses_private_data: false, modifies_state: false },
+        { step_id: 'step_2', tool_name: 'delegate_b', category: 'delegation', parameters: {}, taints_output: false, accesses_private_data: false, modifies_state: false },
+        { step_id: 'step_3', tool_name: 'delegate_c', category: 'delegation', parameters: {}, taints_output: false, accesses_private_data: false, modifies_state: false }
+      ];
+    }
+
+    const planRes = createLookaheadActionPlan({
+      agent_id: agentId,
+      objective: `Simulated run: ${preset}`,
+      steps
+    });
+
+    if (!planRes.ok) {
+      const p = el('p', 'muted');
+      p.appendChild(el('strong', 'status-err', 'Blocked. '));
+      p.appendChild(document.createTextNode(`Plan rejected: ${planRes.error}`));
+      resultBox.appendChild(p);
+      return;
+    }
+
+    const simRes = simulateActionPlanLookahead(planRes.value, state);
+    const summary = summarizeLookaheadSimulation(simRes);
+
+    const p = el('p');
+    if (summary.decision === 'admitted') {
+      p.className = 'status-ok';
+      p.appendChild(el('strong', 'status-pass', 'Allowed. '));
+      p.appendChild(document.createTextNode(summary.text));
+    } else if (summary.decision === 'requires_user_confirmation') {
+      p.className = 'muted';
+      p.appendChild(el('strong', 'status-warn', 'Asks you first. '));
+      p.appendChild(document.createTextNode(summary.text));
+    } else {
+      p.className = 'muted';
+      p.appendChild(el('strong', 'status-err', 'Blocked. '));
+      p.appendChild(document.createTextNode(summary.text));
+    }
+    resultBox.appendChild(p);
+  };
+}
+
+renderAuthorityEnvelopeInspector(); renderDelegationInspector(); renderLookaheadSimulatorInspector();
+
 
 
