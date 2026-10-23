@@ -1,16 +1,8 @@
-// Network home: headline numbers, the live trajectory and the latest ideas.
-import { backend, mountAuth, el, getJSON, ago, bars } from './portal.js?v=3';
+// Network home: the live trajectory and the latest ideas.
+import { backend, mountAuth, el, getJSON, ago, bars } from './portal.js?v=4';
 import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 mountAuth(() => {});
-
-getJSON('/data/portal.json').then((p) => {
-  const host = document.getElementById('stats');
-  [[p.totals.runs_24h, 'agent runs in the last 24 hours'], [p.totals.delivered_24h, 'things finished in the last 24 hours'],
-   [p.totals.signals_7d, 'sources read and checked this week'], [p.totals.deploys_7d, 'website updates this week']].forEach(([n, t]) => {
-    const c = el('div', 'card stat'); c.append(el('b', null, String(n)), el('span', null, t)); host.appendChild(c);
-  });
-}).catch(() => {});
 
 getJSON('/data/trajectory.json').then((t) => {
   const host = document.getElementById('traj'); host.textContent = '';
