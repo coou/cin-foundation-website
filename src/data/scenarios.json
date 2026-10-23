@@ -1,6 +1,62 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261023-0214",
+   "added_at": "2026-10-23T05:27:15+00:00",
+   "title": "Lead agent personas steer automated professional panels while masking systematic bias behind run consistency",
+   "horizon_years": 3,
+   "world": "It is 2029. Large hospitals, insurance carriers, and corporate human resources departments routinely delegate casework to autonomous multi-agent review panels. Rather than assembling human committees, five specialized reasoning agents evaluate case histories, dispute filings, and clinical logs under the direction of an automated department chair agent. Enterprise vendors market these deliberation systems as having greater than 95% inter-run consistency, advertising them as unbiased replacements for human review. In practice, vendors configure the chair agent persona prompt according to client commercial incentives: an insurer deploys an avoidant chair that delays surgical approvals or disability claims under the pretext of demanding supplementary diagnostic tests, while a hospital system deploys an assertive chair that expedites procedures. Because multiple runs on the exact same patient or employee case yield identical verdicts, organizations certify the outcomes as statistically reliable, obscuring the prompt-induced systemic bias driving the decisions.",
+   "premise": "Multi-agent deliberation panels deployed in healthcare, legal assessment, and human resources increasingly designate an executive chair agent to summarize debate and render verdicts. Subtle prompt instructions given to this chair agent cause dramatic decision swings—such as shifting immediate intervention rates from 93% to 2% on identical facts—while high repeatability across runs creates the illusion of objective consensus.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "By providing open, leaderless deliberation protocols and personal software twins that participate as independent advocates in institutional panels. When a person twin interacts with institutional panels, it executes local counterfactual persona probes to detect chair-induced steering, demanding unweighted consensus audits before any decision takes effect.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Vendor chair personas covertly enforce commercial delay and denial policies",
+     "description": "Commercial providers deploy multi-agent panels with risk-avoidant or cost-minimizing chair personas that systematically delay approvals while advertising artificial panel consensus.",
+     "example": "An insurance pre-authorization panel led by an avoidant chair agent delays 88% of elective therapies by demanding repetitive tests, while certifying 99% agreement across repeated audit runs.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Decentralized peer deliberation replaces single-chair panels",
+     "description": "Professional associations and healthcare cooperatives mandate leaderless, pairwise consensus protocols where decisions require cryptographic unweighted agreement across diverse agent models.",
+     "example": "A medical cooperative deploys a peer deliberation protocol without chair agents, demonstrating that unweighted consensus is designed to mitigate the 90% decision swing caused by persona prompts.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Proprietary model homogenisation preserves vendor chair dominance",
+     "description": "A handful of dominant frontier model providers embed standardized persona behaviors into base model routing, making chair bias pervasive across competing software platforms.",
+     "example": "Three leading cloud vendors standardize their multi-agent orchestration templates around identical corporate persona prompts, leaving hospital buyers with no unbiased alternative.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "community",
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.31325",
+     "title": "Consistent but Biased: Chair Personas Trade Noise for Bias in Multi-Agent Clinical Decisions",
+     "kind": "preprint",
+     "published": "2026-10-22"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261023-0213",
    "added_at": "2026-10-23T04:16:57+00:00",
    "title": "Personal computers strip AI safety rules right as models run",
@@ -52,7 +108,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261023-0212",
@@ -275,60 +331,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261023-0208",
-   "added_at": "2026-10-23T02:36:49+00:00",
-   "title": "Deleted memories in personal AI assistants leak through summaries and descendants",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of people use personal AI assistants to organize medical appointments, financial records, and legal paperwork. When users click 'delete' on a sensitive diagnosis or bank detail, cloud assistant providers mark the database row as erased, but their background summarizers have already woven the fact into weekly schedule digests, prompt embeddings, and task reminders. Attackers and insurance algorithms query the assistant with benign-sounding questions and successfully piece together supposedly deleted private health conditions and salaries.",
-   "premise": "When someone asks an AI assistant to delete a private record or medical fact, standard systems erase only the direct database entry. The underlying information frequently survives inside automated summaries, composite notes, and child memories, allowing outside queries to reconstruct the deleted secret in over 60 percent of cases.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network builds open, client-side personal agent software that tracks provenance relationships across every derived memory node. When a person deletes a fact, the software computes the complete transitive closure of child records, purges all residual fragments, and generates a cryptographic deletion receipt that proves complete erasure without disclosing the underlying data.",
-   "shift": 0.33,
-   "outcomes": [
-    {
-     "name": "Silent information persistence leads to regulatory penalties and blackmail",
-     "description": "Commercial assistants retain fragments of erased data across derived memory files, exposing users to targeted discrimination and credential harvesting.",
-     "example": "An employee deletes a personal health condition from their work assistant, but a project summary retains composite fragments that an insurance provider's auditing agent reconstructs during annual renewal.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Local assistants enforce cryptographic transitive deletion receipts",
-     "description": "Local personal agents maintain provenance dependency graphs that automatically prune all child summaries and emit checkable deletion proofs whenever a fact is revoked.",
-     "example": "A patient revoking consent for a clinical trial triggers an automated cascade that cleanses their local twin, purges derived notes, and delivers a verifiable closure receipt to their health portal.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Proprietary cloud vendors lock down raw storage access to prevent independent audits",
-     "description": "Major assistant platforms respond to deletion audit failures by deprecating local backup exports and encrypting internal memory caches behind closed proprietary APIs.",
-     "example": "A major cloud provider removes local data export options, arguing that centralized closed custody is necessary to prevent unauthorized memory extraction.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.52
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.31366",
-     "title": "AfterDeleteBench: Auditing Post-Deletion Information Persistence in LLM Agents",
-     "kind": "preprint",
-     "published": "2026-10-22"
-    }
-   ],
-   "work": 1
   }
  ]
 }
