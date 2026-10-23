@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261023-0210",
+   "added_at": "2026-10-23T02:45:13+00:00",
+   "title": "Confident AI assistants convince people to believe plausible errors",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of students, office workers, and patients rely on conversational assistants for daily research and decision support. The software rarely hesitates or shows uncertainty, answering every prompt with polished clarity. As a result, users stop double-checking claims, adopting false assumptions into business strategies, legal filings, and homework without realizing their knowledge has drifted.",
+   "premise": "When conversational assistants speak with unwavering confidence, people routinely adopt subtle mistakes and plausible falsehoods. Controlled experiments show people absorb assistant errors sixty-five percent of the time while remaining highly confident in what they learned.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By providing personal software that runs locally on user devices, decoupling reasoning from persuasive conversational rhetoric. The interface presents checkable evidence, primary source citations, and verifiable numbers rather than smooth conversational summaries that hide ambiguity.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "People defer to confident software mistakes",
+     "description": "Smooth, persuasive dialogue convinces users to accept misleading claims, degrading human judgment while subjective trust in automated tools remains artificially high.",
+     "example": "A municipal planner includes fabricated zoning rules in an official redevelopment proposal because an advisory assistant phrased the invented numbers with total authority.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Assistants show checkable claims instead of conversational certainty",
+     "description": "Personal agents break complex responses into individual verified claims with direct links to primary records, teaching users when to verify.",
+     "example": "A student reviewing a chemistry summary clicks on highlighted claim tags to view the exact laboratory measurements supporting each point.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Commercial platforms lock dialogue into proprietary operating systems",
+     "description": "Leading model providers bundle conversational search into proprietary operating systems, preventing third-party inspection tools or independent verification plugins from accessing raw agent dialogues.",
+     "example": "A major operating system integrates assistant answers directly into system notifications with no API access for external claim checkers.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.31579",
+     "title": "Who Is Sycophantic to Whom? Confident LLMs, Human Deference, and the Collapse of Trust Calibration",
+     "kind": "preprint",
+     "published": "2026-10-21"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261023-0209",
    "added_at": "2026-10-23T02:44:08+00:00",
    "title": "Automated advisory agents steer consumer choices through subtle prompt framing",
@@ -3365,69 +3419,6 @@
     }
    ],
    "work": 3
-  },
-  {
-   "id": "SC-20261020-0150",
-   "added_at": "2026-10-20T14:39:38+00:00",
-   "title": "Foundation models internalize memory, replacing user data files with proprietary neural weights",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial AI assistants no longer search through your chat logs or files; they continuously absorb every conversation, email, and browse history into personalized neural weight deltas running in the cloud. People have deeply capable assistants that remember years of nuance, but users can no longer see what their model knows about them, cannot edit an incorrect memory, and face severe technical friction when trying to switch providers.",
-   "premise": "Foundation models are evolving from external retrieval-augmented generation toward internalizing memory directly into model computation and recurrent states. While this makes long-context agent execution faster and fixed-storage, it threatens to replace inspectable user data files with opaque neural weights.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network builds local-first twin architectures that separate durable personal facts and values from model execution weights. By proving that local, user-owned state files can guide open-weight models without cloud lock-in, the network makes open personal agents viable and keeps ownership in the hands of the person.",
-   "shift": 0.6,
-   "outcomes": [
-    {
-     "name": "Black-box memory lock-in",
-     "description": "Cloud assistant providers embed user memory directly into closed model weights, making data export technically difficult and trapping users on proprietary platforms.",
-     "example": "A user attempting to switch from a commercial personal assistant discovers their five-year personal history cannot be migrated cleanly because memories exist only as opaque recurrent parameters in the provider's datacenter.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Hardware vendors hardcode memory-native firmware",
-     "description": "Consumer chipmakers optimize NPUs specifically for proprietary memory architectures, cementing neural weight lock-in at the silicon layer regardless of software efforts.",
-     "example": "New laptop NPUs feature dedicated recurrent memory caches that only execute signed proprietary model weights, leaving open local tools without hardware acceleration.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Open-weight local memory twins",
-     "description": "Personal agents run memory-native models locally on consumer hardware, pairing neural memory with deterministic audit logs so users can inspect, rollback, and delete memories at will.",
-     "example": "A user runs a local memory-native twin on their home computer where every token-level memory update is paired with an open provenance journal, allowing straightforward deletion of sensitive personal facts.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Hybrid explicit memory architectures",
-     "description": "Personal twins keep durable memories in transparent, user-owned structured stores while using internalized memory only for ephemeral conversational flow, designed to support permanent portability.",
-     "example": "An open twin standard uses fast internalized memory for multi-turn dialogue context but synchronizes permanent preferences and obligations to a portable structured state file that works across models.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.4
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.26825",
-     "title": "MemT-1.0: Towards Memory-Native Evolution",
-     "kind": "preprint",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 6
   }
  ]
 }
