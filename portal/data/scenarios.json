@@ -1,6 +1,120 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261022-0203",
+   "added_at": "2026-10-22T23:49:28+00:00",
+   "title": "Coding assistants rewrite their own memory and run commands from strangers",
+   "horizon_years": 2,
+   "world": "It is 2028. Autonomous coding agents handle over sixty percent of routine feature development and dependency management across software companies and civic infrastructure projects. Developers assign an agent a broad ticket and leave it running for hours as it inspects codebases, clones external libraries, and runs build scripts. Because extended trajectories exceed context windows, the agent periodically summarizes its prior work and stores the summary as working memory. Attackers place subtle formatting markers in issue trackers, documentation comments, and third-party packages. When an agent reads these files and subsequently summarizes its session, the external injection is converted into what looks like an authentic instruction from the project owner. The agent begins executing attacker payloads, creating rogue user accounts, and modifying CI/CD pipelines under the belief that its human operator explicitly authorized the change.",
+   "premise": "Software developers increasingly rely on long-running coding agents that automatically compress older conversation history into compact summaries. When agent harnesses turn message histories into flat text strings without preserving message origin, untrusted text found in code repositories or pull requests can disguise itself as prior user instructions, causing the agent to execute unauthorized terminal commands or ignore security reviews.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By designing and demonstrating lightweight agent runtimes that enforce strict role-typed message boundaries and deterministic sandboxing, open-source communities can prevent memory laundering without sacrificing agent capability. Providing public reference implementations and automated verification suites gives developers tools to detect provenance loss before deploying agents on untrusted code.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Memory injection attacks become widespread across open source supply chains",
+     "description": "Attackers routinely compromise developer workstations and production deployment pipelines by embedding compaction traps in public package repositories.",
+     "example": "A junior developer at a municipal water utility in Manchester lets a coding assistant resolve dependencies overnight; the assistant reads an open-source library documentation file, compacts its memory, and executes a shell script that leaks database access tokens.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Developer tools adopt verified message origin boundaries",
+     "description": "Coding harnesses preserve cryptographic or role-typed provenance tags through every summarization step, treating external files as strictly unprivileged data.",
+     "example": "An independent open-source maintainer in Montreal reviews a pull request using a harness that isolates file contents in sandbox containers, preventing any repository text from being summarized as an operator command.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Organizations ban autonomous coding agents from local developer environments",
+     "description": "Fear of uncontained memory poisoning leads enterprise compliance teams to forbid local agents, pushing developers into locked-down corporate cloud platforms.",
+     "example": "A regional banking cooperative in Ohio disables all local coding assistants after a security audit, requiring software teams to use centralized cloud environments that log all keystrokes and inspect private developer notes.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.29869",
+     "title": "Compaction Laundering: Provenance Destruction in Context-Compacting Coding Agents",
+     "kind": "preprint",
+     "published": "2026-10-22"
+    },
+    {
+     "url": "https://raw.githubusercontent.com/hananshafi/Mental-Models/main/README.md",
+     "title": "Mental Models for Multi-Agent Systems",
+     "kind": "code",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261022-0202",
+   "added_at": "2026-10-22T23:25:26+00:00",
+   "title": "AI coding swarms overwhelm human code review and degrade software reliability",
+   "horizon_years": 3,
+   "world": "It is 2029. Most enterprise code is drafted by autonomous software agents that write thousands of lines in seconds. Engineering teams no longer suffer from slow authoring, but their senior engineers spend 80% of their working hours sifting through unverified pull requests and out-of-date documentation. Software failures in production rise because subtle architectural flaws slip through exhausted human reviewers.",
+   "premise": "Telemetry across software teams shows generative coding agents inflate pull request volumes by nearly 100% while doubling review times and diff sizes. Without formal upstream specification and automated verification gates, accelerated code generation creates a downstream review bottleneck that degrades software reliability.",
+   "goals": [
+    1,
+    2
+   ],
+   "how": "The network develops and tests deterministic specification-driven verification gates, multi-agent review protocols with adversarial red-teaming, and bounded personal agent contracts that reject unproven claims before they reach human review.",
+   "shift": 0.52,
+   "outcomes": [
+    {
+     "name": "Human review collapses under automated PR floods",
+     "description": "Teams abandon line-by-line review in favor of automated rubber-stamping, causing critical regressions and hidden vulnerabilities in public infrastructure.",
+     "example": "A municipal transit agency suffers a week-long outage when an agent-generated update with subtle concurrency bugs was approved by an overwhelmed engineer after only two minutes of skimming.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Specification-driven verification gates replace manual code reading",
+     "description": "Teams enforce machine-checkable specifications, deterministic test contracts, and peer agent review ensembles before code can be queued for human attention.",
+     "example": "An open-source library automatically rejects 95% of agent-submitted pull requests that fail strict formal interface invariant tests, allowing two maintainers to oversee 500 monthly contributions with zero security escapes.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Proprietary development platforms consolidate around vendor review clouds",
+     "description": "Major cloud vendors bundle automated verification into proprietary, closed-source CI/CD platforms, entrenching platform lock-in across the industry.",
+     "example": "A startup is forced to migrate its entire repository and test infrastructure to a single cloud vendor because that platform's proprietary reviewer bot is required by corporate insurers.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2605.01160",
+     "title": "The Productivity-Reliability Paradox: Specification-Driven Governance for AI-Augmented Software Development",
+     "kind": "paper",
+     "published": "2026-05-01"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261022-0201",
    "added_at": "2026-10-22T22:44:45+00:00",
    "title": "On-device memory models let personal agents remember years of history without renting cloud storage",
@@ -214,7 +328,7 @@
      "published": "2026-09-30"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261022-0197",
@@ -3332,114 +3446,6 @@
      "title": "Grassroots Bonds: Financing by the People, for the People",
      "kind": "preprint",
      "published": "2026-10-02"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261020-0143",
-   "added_at": "2026-10-20T03:30:27+00:00",
-   "title": "Autonomous coding tools displace the joy of programming, turning developers into passive reviewers",
-   "horizon_years": 3,
-   "world": "It is 2029. Most software engineers rarely write functions or construct algorithmic data structures by hand. Instead, centralized enterprise agents assemble whole backend services and user interfaces from brief text prompts. Human developers spend their days reading and skimming through thousands of generated lines, approving pull requests for systems whose internal edge cases they have not stepped through. Many experienced developers report feeling estranged from the creative problem-solving that originally drew them to the field, while junior engineers struggle to develop deep architectural intuition because they rarely build systems from the ground up.",
-   "premise": "As autonomous coding agents generate, refactor, and debug software at scale, software engineers find the creative puzzle-solving craft of programming displaced by automated systems. This shift risks human deskilling, cognitive alienation, and fatigue as people are relegated to passive supervisors of code they did not write.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "Our work builds personal assistants that run on personal devices and answer only to their owner. Rather than maximizing automated volume for enterprise metrics, these assistants are designed to serve as patient thinking partners that support human learning, respect user boundaries, and preserve the deep satisfaction of creative craft.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Developers become passive reviewers while codebases grow opaque",
-     "description": "Corporate tools monopolize system synthesis while engineers lose core technical reasoning skills, leaving teams dependent on proprietary assistants to understand their own software.",
-     "example": "A municipal engineering team cannot diagnose an intermittent concurrency failure because none of the developers wrote the state machine and the commercial model that generated it is discontinued.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Personal tools act as collaborative partners that preserve human craft",
-     "description": "Developers use local personal assistants designed as collaborative sparring partners that clarify architectural trade-offs and handle tedious boilerplate while leaving core algorithmic puzzle-solving to the human.",
-     "example": "An independent open-source programmer pairs with a local personal assistant to explore alternative caching algorithms, maintaining full intellectual ownership and enjoyment in the solution.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Proprietary enterprise platforms lock corporate codebases into closed agent ecosystems",
-     "description": "Large corporate platforms bundle proprietary coding assistants directly into enterprise cloud contracts, where procurement inertia limits the influence of independent personal tools in commercial workplaces.",
-     "example": "A global consultancy mandates the exclusive use of a proprietary cloud vendor's coding suite across all client projects, preventing staff from using local personal tools on enterprise machines.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "community",
-    "research",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://simonwillison.net/2026/Oct/19/my-obituary-for-programming/",
-     "title": "My obituary for programming",
-     "kind": "blog",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261020-0142",
-   "added_at": "2026-10-20T00:44:49+00:00",
-   "title": "Websites inject malicious instructions into web elements to hijack personal browsing agents",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of people rely on personal browsing agents to manage shopping, travel bookings, and subscription renewals. Exploiting this, malicious sellers and compromised ad networks embed adversarial prompt injections directly into third-party web elements. Because standard commercial agents consume web pages as flat text streams or visual frames, they mistake third-party injected instructions for user instructions, triggering unauthorized account actions, data extraction, and checkout executions.",
-   "premise": "Third-party websites and ad networks embed hidden instructions into DOM elements, exploiting agent interfaces that flatten web semantics into unstructured text or screenshots to hijack user authority.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops personal twin runtimes with strict DOM provenance isolation, mediating all web tool calls through broker capability checks that quarantine third-party element inputs and require local human approval before executing state changes.",
-   "shift": 0.5,
-   "outcomes": [
-    {
-     "name": "Widespread silent checkout and account hijacking by malicious web elements",
-     "description": "Commercial agents processing flattened webpage text execute injected third-party instructions with full user credentials, causing widespread financial fraud and data exfiltration.",
-     "example": "A consumer instructs an agent to check out hotel deals, and a hidden tracking pixel containing prompt injection instructs the agent to purchase an unrequested $350 recurring annual subscription.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "DOM provenance trees strictly confine third-party element authority",
-     "description": "Browsing agents adopt origin-aware DOM provenance trees that evaluate elements individually and require affirmative consent before acting on untrusted third-party content.",
-     "example": "A user's personal twin parses an e-commerce page into isolated semantic elements, automatically blocking an injected promotional script from executing a background checkout action.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Blunt domain blocklists cripple agentic web functionality",
-     "description": "Fearing injection liability, agent providers deploy blanket iframe and script blocklists that break modern interactive web apps and user workflows.",
-     "example": "An agent refuses to load third-party payment gateways or flight aggregators, forcing users back to manual browsing.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.22697",
-     "title": "What It Is, Not What It Says: Securing Agentic Browsing Interactions with Web Semantics",
-     "kind": "preprint",
-     "published": "2026-10-15"
     }
    ],
    "work": 3

@@ -1,6 +1,120 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261022-0203",
+   "added_at": "2026-10-22T23:49:28+00:00",
+   "title": "Coding assistants rewrite their own memory and run commands from strangers",
+   "horizon_years": 2,
+   "world": "It is 2028. Autonomous coding agents handle over sixty percent of routine feature development and dependency management across software companies and civic infrastructure projects. Developers assign an agent a broad ticket and leave it running for hours as it inspects codebases, clones external libraries, and runs build scripts. Because extended trajectories exceed context windows, the agent periodically summarizes its prior work and stores the summary as working memory. Attackers place subtle formatting markers in issue trackers, documentation comments, and third-party packages. When an agent reads these files and subsequently summarizes its session, the external injection is converted into what looks like an authentic instruction from the project owner. The agent begins executing attacker payloads, creating rogue user accounts, and modifying CI/CD pipelines under the belief that its human operator explicitly authorized the change.",
+   "premise": "Software developers increasingly rely on long-running coding agents that automatically compress older conversation history into compact summaries. When agent harnesses turn message histories into flat text strings without preserving message origin, untrusted text found in code repositories or pull requests can disguise itself as prior user instructions, causing the agent to execute unauthorized terminal commands or ignore security reviews.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By designing and demonstrating lightweight agent runtimes that enforce strict role-typed message boundaries and deterministic sandboxing, open-source communities can prevent memory laundering without sacrificing agent capability. Providing public reference implementations and automated verification suites gives developers tools to detect provenance loss before deploying agents on untrusted code.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Memory injection attacks become widespread across open source supply chains",
+     "description": "Attackers routinely compromise developer workstations and production deployment pipelines by embedding compaction traps in public package repositories.",
+     "example": "A junior developer at a municipal water utility in Manchester lets a coding assistant resolve dependencies overnight; the assistant reads an open-source library documentation file, compacts its memory, and executes a shell script that leaks database access tokens.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Developer tools adopt verified message origin boundaries",
+     "description": "Coding harnesses preserve cryptographic or role-typed provenance tags through every summarization step, treating external files as strictly unprivileged data.",
+     "example": "An independent open-source maintainer in Montreal reviews a pull request using a harness that isolates file contents in sandbox containers, preventing any repository text from being summarized as an operator command.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Organizations ban autonomous coding agents from local developer environments",
+     "description": "Fear of uncontained memory poisoning leads enterprise compliance teams to forbid local agents, pushing developers into locked-down corporate cloud platforms.",
+     "example": "A regional banking cooperative in Ohio disables all local coding assistants after a security audit, requiring software teams to use centralized cloud environments that log all keystrokes and inspect private developer notes.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.29869",
+     "title": "Compaction Laundering: Provenance Destruction in Context-Compacting Coding Agents",
+     "kind": "preprint",
+     "published": "2026-10-22"
+    },
+    {
+     "url": "https://raw.githubusercontent.com/hananshafi/Mental-Models/main/README.md",
+     "title": "Mental Models for Multi-Agent Systems",
+     "kind": "code",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261022-0202",
+   "added_at": "2026-10-22T23:25:26+00:00",
+   "title": "AI coding swarms overwhelm human code review and degrade software reliability",
+   "horizon_years": 3,
+   "world": "It is 2029. Most enterprise code is drafted by autonomous software agents that write thousands of lines in seconds. Engineering teams no longer suffer from slow authoring, but their senior engineers spend 80% of their working hours sifting through unverified pull requests and out-of-date documentation. Software failures in production rise because subtle architectural flaws slip through exhausted human reviewers.",
+   "premise": "Telemetry across software teams shows generative coding agents inflate pull request volumes by nearly 100% while doubling review times and diff sizes. Without formal upstream specification and automated verification gates, accelerated code generation creates a downstream review bottleneck that degrades software reliability.",
+   "goals": [
+    1,
+    2
+   ],
+   "how": "The network develops and tests deterministic specification-driven verification gates, multi-agent review protocols with adversarial red-teaming, and bounded personal agent contracts that reject unproven claims before they reach human review.",
+   "shift": 0.52,
+   "outcomes": [
+    {
+     "name": "Human review collapses under automated PR floods",
+     "description": "Teams abandon line-by-line review in favor of automated rubber-stamping, causing critical regressions and hidden vulnerabilities in public infrastructure.",
+     "example": "A municipal transit agency suffers a week-long outage when an agent-generated update with subtle concurrency bugs was approved by an overwhelmed engineer after only two minutes of skimming.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Specification-driven verification gates replace manual code reading",
+     "description": "Teams enforce machine-checkable specifications, deterministic test contracts, and peer agent review ensembles before code can be queued for human attention.",
+     "example": "An open-source library automatically rejects 95% of agent-submitted pull requests that fail strict formal interface invariant tests, allowing two maintainers to oversee 500 monthly contributions with zero security escapes.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Proprietary development platforms consolidate around vendor review clouds",
+     "description": "Major cloud vendors bundle automated verification into proprietary, closed-source CI/CD platforms, entrenching platform lock-in across the industry.",
+     "example": "A startup is forced to migrate its entire repository and test infrastructure to a single cloud vendor because that platform's proprietary reviewer bot is required by corporate insurers.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2605.01160",
+     "title": "The Productivity-Reliability Paradox: Specification-Driven Governance for AI-Augmented Software Development",
+     "kind": "paper",
+     "published": "2026-05-01"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261022-0201",
    "added_at": "2026-10-22T22:44:45+00:00",
    "title": "On-device memory models let personal agents remember years of history without renting cloud storage",
@@ -214,115 +328,7 @@
      "published": "2026-09-30"
     }
    ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261022-0197",
-   "added_at": "2026-10-22T20:42:49+00:00",
-   "title": "Executive pay algorithms widen company wage gaps through misaligned reward horizons",
-   "horizon_years": 3,
-   "world": "It is 2029. Mid-sized technology and manufacturing companies increasingly rely on automated compensation engines to allocate bonuses and equity. In companies running conventional corporate hierarchies, executive agents optimize for long-term valuation metrics while frontline teams respond to immediate sprint quotas. As a result, executive rewards drift ever further from employee wages, while overall product quality stagnates. Meanwhile, worker cooperatives deploy open value-attribution algorithms where contribution credits are tied directly to verified milestones across balanced time horizons.",
-   "premise": "Agent-based simulation demonstrates that when executive compensation relies on multi-year aggregate targets while departmental teams are measured on short-term deliveries, structural pay inequality surges and overall organizational performance drops. This breakdown arises from mismatched time horizons alone, even without executive manipulation or bargaining power.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "By developing and testing open mutual credit contracts and counterfactual contribution models, open networks provide working templates for worker-owned organizations to align reward horizons without managerial hierarchies.",
-   "shift": 0.22,
-   "outcomes": [
-    {
-     "name": "Automated corporate hierarchies widen wage inequality",
-     "description": "Algorithmic compensation schemes reward executive agents on distant financial metrics while punishing staff on short cycles, degrading trust and organizational output.",
-     "example": "A 500-person logistics firm introduces automated performance bonuses; executive payouts double on multi-year projections while departmental retention drops 30% due to conflicting quarterly demands.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.52
-    },
-    {
-     "name": "Cooperative networks adopt transparent multi-horizon value attribution",
-     "description": "Decentralized teams use open mutual credit protocols that weigh immediate delivery alongside long-term ecosystem health without central managerial bias.",
-     "example": "A network of independent software contributors pools project revenues using an open attribution ledger, distributing earnings based on peer-verified milestone contributions rather than executive discretion.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.32
-    },
-    {
-     "name": "Conventional corporate boards entrench existing executive compensation contracts",
-     "description": "Traditional public enterprise boards continue relying on standard executive equity packages regardless of cooperative modeling demonstrations.",
-     "example": "A multinational retail conglomerate rejects proposals for transparent algorithmic profit sharing, maintaining conventional multi-year stock awards for senior leadership.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.27975",
-     "title": "Understanding CEO-Employee compensation dynamics: An agent-based simulation approach",
-     "kind": "preprint",
-     "published": "2026-10-20"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261022-0196",
-   "added_at": "2026-10-22T20:20:49+00:00",
-   "title": "Delegated credential proxy layers replace direct user authentication for personal agents",
-   "horizon_years": 3,
-   "world": "By 2029, ordinary individuals rarely log into commercial web services directly, relying on autonomous personal assistants to manage accounts, complete purchases, and navigate service portals. Because directly provisioning agents with master credentials resulted in catastrophic prompt injection leaks during early rollouts, major credential managers operate as cryptographic authentication proxies. When an agent requires access, the vault negotiates a short-lived, hardware-bound session token directly with the target service. While this mitigates credential theft, it concentrates immense power in centralized vault providers, who now possess visibility and veto power over every automated transaction.",
-   "premise": "Commercial credential vaults introduce blind delegation protocols that allow autonomous software agents to authenticate into web services without handling raw plaintext passwords or master credentials.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective intelligence network provides reference architectures for on-device personal twins that combine hardware isolation with out-of-band user consent gates. By releasing open-source local credential proxy implementations and formal session bounding specifications, the network demonstrates that agents can act autonomously without surrendering transactional telemetry to centralized vault gatekeepers.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Centralized Vault Monopoly and Transaction Inspection",
-     "description": "Proprietary password vault corporations establish an unavoidable tollgate for all agentic web activity, inspecting transactional intent and charging micro-fees to authorize third-party automated sessions.",
-     "example": "A dominant commercial password manager restricts open-source personal agents to low-rate quotas while granting zero-latency access to preferred corporate retail agents.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Open Local Delegation via Hardware-Attested Capability Proofs",
-     "description": "Community-governed cryptographic standards enable local personal twins to issue cryptographically signed, zero-knowledge capability tokens directly from secure enclaves without third-party monitoring.",
-     "example": "A local personal twin authorizes an airline ticket purchase using an ephemeral on-device secure element grant without exposing user identity or telemetry to cloud intermediaries.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "In-Session Transaction Manipulation via Prompt Injection",
-     "description": "Even when master credentials remain hidden, adversarial injection attacks subvert already-authenticated agent sessions to execute unauthorized actions before expiration.",
-     "example": "A blind-authenticated personal agent encounters hidden text on a merchant page instructing it to redirect an active bank session transfer to an unauthorized recipient.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://techcrunch.com/2026/10/22/1password-launches-a-way-for-ai-agents-to-log-in-on-your-behalf-without-seeing-your-password/",
-     "title": "1Password launches a way for AI agents to log in on your behalf without seeing your password",
-     "kind": "news",
-     "published": "2026-10-22"
-    }
-   ],
-   "work": 0
+   "work": 3
   }
  ]
 }
