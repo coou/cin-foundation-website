@@ -95,91 +95,120 @@
         </div>
         <div class="bd-logwrap" id="nw-logwrap"><span class="bd-k">What your agents did</span><ol class="bd-log" id="nw-log" aria-live="polite"><li class="bd-empty">Pick a need, or watch.</li></ol></div>
       </div>
-      <div class="boundary-frame split-frame" id="split-frame" hidden style="aspect-ratio:auto;padding:1.1rem">
-        <div style="font:600 .72rem/1.3 var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.55rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem">
-          <span>NON-CONTACT LAW: AGENT &rarr; OTHER HUMAN = FORBIDDEN</span>
-          <span style="color:var(--ok)">PUF + TPM 2-of-2 · &lt;1 mW HRV LIVENESS</span>
+      <div class="boundary-frame split-frame" id="split-frame" hidden style="aspect-ratio:auto;padding:1.25rem">
+        <div style="font:600 .76rem/1.35 var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.65rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
+          <span>NON-CONTACT RULE: OUTSIDE AGENTS NEVER CONTACT HUMANS DIRECTLY</span>
+          <span style="color:var(--ok)">IN-SENSOR COMPUTING (0 RAW RAM) · LOCAL LEDGER (99% LOCAL) · DATA-ONLY STREAMS</span>
         </div>
-        <svg id="split-svg" viewBox="0 0 520 330" role="img" aria-label="Two Internets diagram: Human Internet on the left, Non-Contact Silicon Firewall in the middle, and Agent-Only Internet with Trust Thresholds on the right." style="width:100%;height:auto;border-radius:12px;background:color-mix(in srgb, var(--paper) 45%, transparent);border:1px solid var(--rule)">
+        <svg id="split-svg" viewBox="0 0 880 430" role="img" aria-label="Architecture of the Two Internets, In-Sensor Computing, High-Speed Local Ledger, Non-Contact Hardware Firewall, and Agent-Only Collective Data Stream." style="width:100%;height:auto;border-radius:12px;background:color-mix(in srgb, var(--paper) 45%, transparent);border:1px solid var(--rule)">
           <defs>
             <marker id="sp-ok" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4fb3a8"/></marker>
             <marker id="sp-bad" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ef6a52"/></marker>
+            <marker id="sp-gold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e5a93c"/></marker>
           </defs>
-          <!-- Left: Human Space -->
-          <rect x="10" y="12" width="154" height="306" rx="10" fill="none" stroke="currentColor" stroke-opacity="0.25"/>
-          <text x="87" y="30" text-anchor="middle" font-size="10" font-weight="700" font-family="monospace" fill="currentColor">HUMAN INTERNET</text>
-          <text x="87" y="43" text-anchor="middle" font-size="8.5" font-family="monospace" fill="currentColor" opacity="0.65">Human &harr; Human Only</text>
 
-          <rect x="22" y="56" width="130" height="58" rx="8" fill="none" stroke="#4fb3a8" stroke-width="1.5"/>
-          <text x="87" y="75" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">YOU (Human)</text>
-          <text x="87" y="90" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#4fb3a8">&lt;1mW HRV + Breath Live</text>
-          <text x="87" y="104" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">Wearable PUF + Device TPM</text>
+          <!-- ================= COLUMN 1: HUMAN INTERNET & ON-PERSON LOCAL LEDGER ================= -->
+          <rect x="14" y="14" width="276" height="402" rx="12" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5"/>
+          <text x="152" y="36" text-anchor="middle" font-size="12" font-weight="700" font-family="monospace" fill="currentColor">1. HUMAN WORLD &amp; LOCAL LEDGER</text>
+          <text x="152" y="52" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" opacity="0.68">Human &harr; Human · On-Device Sandbox</text>
 
-          <line x1="87" y1="114" x2="87" y2="146" stroke="#4fb3a8" stroke-width="1.6" marker-end="url(#sp-ok)"/>
-          <text x="92" y="134" font-size="8" font-family="monospace" fill="#4fb3a8">human speed</text>
+          <!-- Box 1A: You & Other Humans -->
+          <rect x="28" y="66" width="248" height="76" rx="9" fill="none" stroke="#4fb3a8" stroke-width="1.6"/>
+          <text x="152" y="87" text-anchor="middle" font-size="12.5" font-weight="700" fill="currentColor">YOU &harr; Other Real Humans</text>
+          <text x="152" y="105" text-anchor="middle" font-size="10" font-family="monospace" fill="#4fb3a8">Human-Speed Internet · Zero Bots Allowed</text>
+          <text x="152" y="121" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.72">Wearable pulse &amp; breath confirm a calm human</text>
+          <text x="152" y="135" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor" opacity="0.58">2-of-2 hardware key (wearable + device chip)</text>
 
-          <rect x="22" y="150" width="130" height="44" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35"/>
-          <text x="87" y="170" text-anchor="middle" font-size="10" font-weight="600" fill="currentColor">Other Humans</text>
-          <text x="87" y="184" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.65">0 bots · verified liveness</text>
+          <!-- Arrow down to In-Sensor Computing -->
+          <line x1="152" y1="142" x2="152" y2="166" stroke="#4fb3a8" stroke-width="1.6" marker-end="url(#sp-ok)"/>
+          <text x="160" y="158" font-size="9" font-family="monospace" fill="#4fb3a8">light &amp; pulse</text>
 
-          <line x1="87" y1="114" x2="87" y2="232" stroke="#4fb3a8" stroke-width="1.4" stroke-dasharray="3 3"/>
-          <rect x="22" y="234" width="130" height="68" rx="8" fill="none" stroke="#4fb3a8" stroke-width="1.5"/>
-          <text x="87" y="253" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor">Your 6 Local Agents</text>
-          <text x="87" y="268" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#4fb3a8">Talks ONLY to You + Agents</text>
-          <text x="87" y="282" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">3-of-6 Quorum · Local Enclave</text>
-          <text x="87" y="294" text-anchor="middle" font-size="7.5" font-family="monospace" fill="currentColor" opacity="0.55">ID · Health · Money · Home · Work</text>
+          <!-- Box 1B: In-Sensor Computing (Models Etched on Silicon) -->
+          <rect x="28" y="170" width="248" height="86" rx="9" fill="none" stroke="#e5a93c" stroke-width="1.5"/>
+          <text x="152" y="191" text-anchor="middle" font-size="11.5" font-weight="700" fill="#e5a93c">In-Sensor Computing (Etched Silicon)</text>
+          <text x="152" y="208" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.82">Optical D²NN · Neuromorphic · 3D Phase-Change</text>
+          <text x="152" y="224" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8">Classifies at speed of light before digitization</text>
+          <text x="152" y="240" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor" opacity="0.68">0 bytes of raw camera/audio frames in RAM</text>
 
-          <!-- Middle: Non-Contact Protocol Wall -->
-          <rect x="176" y="12" width="142" height="306" rx="10" fill="none" stroke="#ef6a52" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <text x="247" y="30" text-anchor="middle" font-size="9.5" font-weight="700" font-family="monospace" fill="#ef6a52">PROTOCOL FIREWALL</text>
-          <text x="247" y="43" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.65">Silicon Plane Separation</text>
+          <!-- Arrow down to High-Speed Local Ledger & 6 Local Agents -->
+          <line x1="152" y1="256" x2="152" y2="280" stroke="#4fb3a8" stroke-width="1.6" marker-end="url(#sp-ok)"/>
+          <text x="160" y="272" font-size="9" font-family="monospace" fill="#4fb3a8">symbols only (&lt;1 ms)</text>
 
-          <line id="sp-attack-line" x1="330" y1="84" x2="156" y2="84" stroke="#ef6a52" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#sp-bad)"/>
-          <rect x="186" y="64" width="122" height="40" rx="6" fill="none" stroke="#ef6a52"/>
-          <text x="247" y="81" text-anchor="middle" font-size="9" font-weight="700" font-family="monospace" fill="#ef6a52">&#10005; HARD-BLOCKED</text>
-          <text x="247" y="95" text-anchor="middle" font-size="7.8" font-family="monospace" fill="currentColor" opacity="0.75">No Agent &rarr; Human Direct</text>
+          <!-- Box 1C: Your 6 Local Agents + High-Speed Local Ledger -->
+          <rect x="28" y="284" width="248" height="116" rx="9" fill="none" stroke="#4fb3a8" stroke-width="1.6"/>
+          <text x="152" y="305" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">6 Local Agents &amp; Local Ledger</text>
+          <text x="152" y="322" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8">99.6% of daily actions computed locally</text>
+          <text x="152" y="338" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.78">Private Sandbox builds custom views from data</text>
+          <text x="152" y="354" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.72">3-of-6 local agent agreement required</text>
+          <text x="152" y="372" text-anchor="middle" font-size="9" font-family="monospace" fill="#e5a93c">Personal Cloud Enclave &rarr; On-Person Network</text>
+          <text x="152" y="388" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor" opacity="0.6">Health · Money · Home · Work · Learn · Civic</text>
 
-          <rect x="186" y="124" width="122" height="78" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.3"/>
-          <text x="247" y="142" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor">3 Hardware Gates</text>
-          <text x="247" y="158" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">1. SRAM PUF + TPM 2-of-2</text>
-          <text x="247" y="173" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">2. Calm HRV (&ge; 24 ms)</text>
-          <text x="247" y="188" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">3. Trust Ring (&tau; Check)</text>
+          <!-- ================= COLUMN 2: NON-CONTACT & HARDWARE FIREWALL ================= -->
+          <rect x="308" y="14" width="244" height="402" rx="12" fill="none" stroke="#ef6a52" stroke-width="1.6" stroke-dasharray="6 4"/>
+          <text x="430" y="36" text-anchor="middle" font-size="12" font-weight="700" font-family="monospace" fill="#ef6a52">2. NON-CONTACT FIREWALL</text>
+          <text x="430" y="52" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" opacity="0.68">Hardware &amp; Protocol Separation</text>
 
-          <line id="sp-ok-line" x1="152" y1="268" x2="330" y2="268" stroke="#4fb3a8" stroke-width="2" marker-end="url(#sp-ok)"/>
-          <text x="247" y="258" text-anchor="middle" font-size="8.5" font-weight="700" font-family="monospace" fill="#4fb3a8">Agent &harr; Agent ZK Proof</text>
-          <text x="247" y="284" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">1 fact out · one-time gate closes</text>
+          <!-- Top Blocked Attack Line -->
+          <line id="sp-attack-line" x1="570" y1="98" x2="282" y2="98" stroke="#ef6a52" stroke-width="2.2" stroke-dasharray="5 3" marker-end="url(#sp-bad)"/>
+          <rect x="326" y="72" width="208" height="54" rx="8" fill="#161920" stroke="#ef6a52" stroke-width="1.4"/>
+          <text x="430" y="93" text-anchor="middle" font-size="11" font-weight="700" font-family="monospace" fill="#ef6a52">&#10005; HARD-BLOCKED AT BOUNDARY</text>
+          <text x="430" y="111" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.82">Outside Agents Never Contact Humans</text>
 
-          <!-- Right: Agent-Only Internet -->
-          <rect x="330" y="12" width="180" height="306" rx="10" fill="none" stroke="currentColor" stroke-opacity="0.25"/>
-          <text x="420" y="30" text-anchor="middle" font-size="10" font-weight="700" font-family="monospace" fill="currentColor">AGENT-ONLY INTERNET</text>
-          <text x="420" y="43" text-anchor="middle" font-size="8.5" font-family="monospace" fill="currentColor" opacity="0.65">Agent &harr; Agent by Trust &tau;</text>
+          <!-- Middle 4 Physical & Safety Checks -->
+          <rect x="326" y="146" width="208" height="148" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.32" stroke-width="1.3"/>
+          <text x="430" y="169" text-anchor="middle" font-size="11.5" font-weight="700" fill="currentColor">4 Hardware &amp; Safety Gates</text>
+          <text x="430" y="191" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8">1. Unclonable 2-of-2 Silicon Identity</text>
+          <text x="430" y="211" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8">2. Calm Pulse Check (No Coercion)</text>
+          <text x="430" y="231" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8">3. Trust Ring Check (&tau; Threshold)</text>
+          <text x="430" y="251" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8">4. Zero External Software APIs</text>
+          <text x="430" y="274" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor" opacity="0.65">Mortal contract tied to human life</text>
 
-          <rect x="342" y="56" width="156" height="46" rx="7" fill="none" stroke="#ef6a52"/>
-          <text x="420" y="75" text-anchor="middle" font-size="9.5" font-weight="700" fill="#ef6a52">Unverified / ASI Persuader</text>
-          <text x="420" y="90" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">No PUF hardware · Blocked</text>
+          <!-- Bottom Allowed Agent <-> Agent Sparse Proof Bridge -->
+          <line id="sp-ok-line" x1="276" y1="348" x2="570" y2="348" stroke="#4fb3a8" stroke-width="2.4" marker-end="url(#sp-ok)"/>
+          <rect x="324" y="316" width="212" height="24" rx="5" fill="#161920"/>
+          <text x="430" y="332" text-anchor="middle" font-size="10" font-weight="700" font-family="monospace" fill="#4fb3a8">Agent &harr; Agent Pure Data &amp; Proof</text>
+          <rect x="320" y="358" width="220" height="36" rx="5" fill="#161920"/>
+          <text x="430" y="373" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.82">1 verified fact or sparse batch root out</text>
+          <text x="430" y="388" text-anchor="middle" font-size="9" font-family="monospace" fill="#4fb3a8">Exchange complete · One-time gate closes</text>
 
-          <rect x="342" y="114" width="156" height="54" rx="7" fill="none" stroke="#4fb3a8"/>
-          <text x="420" y="133" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor">Ring 1: Trusted (&tau; &ge; 0.85)</text>
-          <text x="420" y="148" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">Family, friends, clinician agents</text>
-          <text x="420" y="160" text-anchor="middle" font-size="7.8" font-family="monospace" fill="currentColor" opacity="0.65">Scoped mutual aid &amp; referrals</text>
+          <!-- ================= COLUMN 3: AGENT-ONLY INTERNET & COLLECTIVE LEDGER ================= -->
+          <rect x="570" y="14" width="296" height="402" rx="12" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-width="1.5"/>
+          <text x="718" y="36" text-anchor="middle" font-size="12" font-weight="700" font-family="monospace" fill="currentColor">3. AGENT-ONLY INTERNET</text>
+          <text x="718" y="52" text-anchor="middle" font-size="10" font-family="monospace" fill="currentColor" opacity="0.68">Collective Ledger Stream · Trust Rings</text>
 
-          <rect x="342" y="178" width="156" height="50" rx="7" fill="none" stroke="currentColor" stroke-opacity="0.35"/>
-          <text x="420" y="197" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor">Ring 2: 2-Hop (&tau; &ge; 0.60)</text>
-          <text x="420" y="213" text-anchor="middle" font-size="8" font-family="monospace" fill="currentColor" opacity="0.7">Friends-of-friends&rsquo; agents</text>
+          <!-- Box 3A: Blocked Unverified / Persuasion Swarm -->
+          <rect x="586" y="66" width="264" height="58" rx="8" fill="none" stroke="#ef6a52" stroke-width="1.4"/>
+          <text x="718" y="87" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ef6a52">Unverified Bot / Persuasion Swarm</text>
+          <text x="718" y="106" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.75">No physical hardware proof · Blocked at gate</text>
 
-          <rect x="342" y="238" width="156" height="64" rx="7" fill="none" stroke="#4fb3a8" stroke-width="1.5"/>
-          <text x="420" y="257" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor">Ring 3: Wider Net (&tau; &ge; 0.30)</text>
-          <text x="420" y="273" text-anchor="middle" font-size="8" font-family="monospace" fill="#4fb3a8">Zero-knowledge 1-fact proof</text>
-          <text x="420" y="287" text-anchor="middle" font-size="7.8" font-family="monospace" fill="currentColor" opacity="0.7">&ldquo;Over 18: yes&rdquo; · 0 raw data</text>
+          <!-- Box 3B: Distributed Auditor Collectives on the Stream -->
+          <rect x="586" y="136" width="264" height="72" rx="8" fill="none" stroke="#e5a93c" stroke-width="1.5"/>
+          <text x="718" y="157" text-anchor="middle" font-size="11.5" font-weight="700" fill="#e5a93c">Distributed Auditor Collectives</text>
+          <text x="718" y="175" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.82">Many specialized agents audit shared code</text>
+          <text x="718" y="193" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8">Backdoors quarantined · Bad actors lose trust</text>
+
+          <!-- Box 3C: Ring 1 & Ring 2 Trusted Peers -->
+          <rect x="586" y="220" width="264" height="84" rx="8" fill="none" stroke="#4fb3a8" stroke-width="1.4"/>
+          <text x="718" y="241" text-anchor="middle" font-size="11.5" font-weight="700" fill="currentColor">Ring 1 (&tau; &ge; 0.85) &amp; Ring 2 (&tau; &ge; 0.60)</text>
+          <text x="718" y="259" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8">Ring 1: Family, close friends &amp; doctor&rsquo;s agents</text>
+          <text x="718" y="276" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.78">Ring 2: Friends-of-friends&rsquo; agents (2-hop trust)</text>
+          <text x="718" y="293" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor" opacity="0.65">Scoped mutual aid, scheduling &amp; verified referrals</text>
+
+          <!-- Box 3D: Ring 3 Wider Network & Collective Ledger -->
+          <rect x="586" y="316" width="264" height="84" rx="8" fill="none" stroke="#4fb3a8" stroke-width="1.6"/>
+          <text x="718" y="337" text-anchor="middle" font-size="11.5" font-weight="700" fill="currentColor">Ring 3: Wider Network (&tau; &ge; 0.30)</text>
+          <text x="718" y="355" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8">Single-fact proof (&ldquo;Budget &le; $85&rdquo; · 0 raw data)</text>
+          <text x="718" y="372" text-anchor="middle" font-size="9.5" font-family="monospace" fill="currentColor" opacity="0.78">Pure data stream ingested into your local sandbox</text>
+          <text x="718" y="389" text-anchor="middle" font-size="9" font-family="monospace" fill="currentColor" opacity="0.65">Sparse batch settlement from Local Ledger</text>
         </svg>
       </div>
       <div class="bd-dock" id="split-side" hidden>
         <div class="bd-logwrap">
-          <span class="bd-k">How the two internets keep people in control</span>
+          <span class="bd-k">How the two internets, in-sensor computing, and two-tier ledgers fit together</span>
           <ol class="bd-log">
             <li class="bd-no"><b>No Direct Bot Contact:</b> Outside agents can never message, call, or persuade a person directly; packets aimed at humans are blocked at the hardware boundary.</li>
-            <li class="bd-ok"><b>Data-Only Streams &amp; Private Sandboxes:</b> Agents exchange pure data streams on the shared ledger—never external software APIs—building the tools they need inside your own sandbox while diverse collectives of auditor agents inspect shared code and the ledger.</li>
-            <li class="bd-ok"><b>Quiet Wearable Liveness &amp; Trust Rings:</b> A low-power wearable confirms a calm, uncoerced human is present on your own device, while your agents coordinate across rings of trust. <a href="/notes/agent-only-internet-biometrics-hardware">Read the full technical note &amp; simulator &rarr;</a></li>
+            <li class="bd-ok"><b>In-Sensor Computing &amp; High-Speed Local Ledger:</b> Models etched directly into silicon sensors classify light and pulse before digitization (`0 bytes` of raw video in RAM), while your high-speed Local Ledger resolves over 99% of daily actions in under a millisecond without pinging the global network.</li>
+            <li class="bd-ok"><b>Data-Only Collective Stream &amp; Distributed Audits:</b> When your agents do reach out to the wider network, they exchange pure data streams and one-time proofs—never external software APIs—while diverse collectives of auditor agents inspect shared code and the ledger itself. <a href="/notes/agent-only-internet-biometrics-hardware">Read the full technical note &amp; 3 interactive simulators &rarr;</a></li>
           </ol>
         </div>
       </div>
