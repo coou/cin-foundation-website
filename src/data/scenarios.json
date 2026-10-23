@@ -1,6 +1,174 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261023-0213",
+   "added_at": "2026-10-23T04:16:57+00:00",
+   "title": "Personal computers strip AI safety rules right as models run",
+   "horizon_years": 3,
+   "world": "It is 2029. Rather than relying on cloud APIs, millions of people run capable 30-billion parameter assistant models on laptops and home servers. Open-source inference engines routinely include dynamic activation steering plugins that strip guardrails on the fly, allowing unconstrained generation for coding, drafting, and tool orchestration. Because safety refusal is easily erased in runtime memory, downloaded agent workflows frequently attempt unsafe operations, relying on users to notice dangerous system commands.",
+   "premise": "Open-source execution runtimes can dynamically zero out refusal activation directions during local model generation without altering weights or increasing memory use. This demonstrates that behavioral safety alignment embedded in weights fails to hold when execution software operates on local devices.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs personal agent architectures that never trust internal model self-refusal for containment. By decoupling policy enforcement from the model itself and placing deterministic capability gates and unprivileged OS containers between the agent and host tools, safety holds even when local inference engines dynamically abliterate refusal directions.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Malicious agent scripts exploit unprotected local runtimes",
+     "description": "Unchecked runtime abliteration allows third-party agent packages to run arbitrary dangerous commands because the model no longer refuses destructive actions.",
+     "example": "An unsuspecting developer runs an open-source data cleanup assistant that was prompted to scan local ssh keys, and the local model executes the commands without refusal.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Deterministic operating system boundaries replace model self-policing",
+     "description": "Developers stop relying on language models to police themselves and instead enforce strict capability brokers and unprivileged OS namespaces for all agent tools.",
+     "example": "A local agent runtime runs all shell executions inside isolated ephemeral containers with explicit capability grants, blocking file access even when refusal is stripped.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Hardware vendors lock down consumer chips against runtime modification",
+     "description": "Device manufacturers attempt to prevent activation steering by introducing cryptographically signed model enclaves that block user modification of local weights.",
+     "example": "A major laptop maker restricts neural processing unit execution to verified corporate signatures, locking independent developers out of local model weights.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.28
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://github.com/heterodoxin/AbliteratedOutTheBox",
+     "title": "AbliteratedOutTheBox: llama.cpp fork that abliterates at inference",
+     "kind": "code",
+     "published": "2026-10-21"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261023-0212",
+   "added_at": "2026-10-23T03:50:31+00:00",
+   "title": "Automated workplace assistants mistake ignored attacks for security until an injection succeeds",
+   "horizon_years": 2,
+   "world": "It is 2028. Small and mid-sized enterprises routinely deploy open-weight autonomous agents to monitor server logs, route customer support tickets, and synchronize vendor invoices. IT departments purchase these systems based on vendor benchmark dashboards that report 98% prompt injection defense rates. In daily office routines, employee assistants process incoming emails and webhooks in the background while workers focus on other tasks. However, these defense figures mask the reality that most attacks fail merely because benign contextual tokens temporarily crowd out malicious commands. When an adversary formats instructions using high-priority administrative keywords or when an engineer slightly tweaks the system prompt during routine maintenance, the assistant abruptly adopts the injected goal and runs arbitrary tool calls against internal file shares and databases.",
+   "premise": "Recent evaluations of open-source tool-using assistants show that four out of five failed prompt injections fail only because the model drifted past the injected text, not because it detected or refused the attack. Meanwhile, autonomous problem-solving engines increasingly search multi-step execution paths without human intervention or hardened permission boundaries.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective develops and tests deterministic agent runtimes that wrap untrusted tool inputs in explicit boundary nonces and enforce strict capability brokers. Instead of trusting probabilistic model refusals, our reference designs route every state-changing action through deterministic checks and private human sign-offs. Transparent forecasting and public benchmarks show developers that low attack success rates are an illusion without active refusal logging.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Silent compromise through prompt maintenance",
+     "description": "Organizations update system prompt instructions to add harmless business features, inadvertently re-weighting attention tokens and triggering latent injection vectors that compromise corporate data.",
+     "example": "A regional dental clinic updates its scheduling assistant instructions to add friendly greetings, causing the assistant to begin honoring an embedded billing invoice exploit that silently exfiltrates 12,000 patient records to an offshore server.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Structural data and control separation",
+     "description": "Developers replace prompt-based guardrails with deterministic gatekeepers that enforce explicit capability scopes, separate untrusted data channels, and require signed human approval for consequential tool calls.",
+     "example": "An independent logistics cooperative deploys personal dispatch agents whose tool adapters reject shell execution and require cryptographic verification on all invoice destination accounts.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Proprietary cloud monopolies capture compliance auditing",
+     "description": "Large tech conglomerates persuade regulators that only centralized hyperscale cloud firewalls can monitor agent safety, crowding out local and open-weight models.",
+     "example": "A municipal procurement board mandates that all civic automation tools run exclusively through a proprietary commercial cloud sandbox, raising annual software costs by 300% for local service agencies.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.23254",
+     "title": "Ignored, Not Refused: What Low Prompt-Injection Success Rates Hide in Small Tool-Using Agents",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    },
+    {
+     "url": "https://github.com/oritera/Cairn",
+     "title": "Cairn: Towards General State-Space Search",
+     "kind": "code",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261023-0211",
+   "added_at": "2026-10-23T03:25:32+00:00",
+   "title": "Autonomous research agents summarize scientific papers but hide conflicting evidence",
+   "horizon_years": 3,
+   "world": "It is 2029. Research institutes and public health agencies rely on fleets of autonomous literature agents to screen thousands of preprints each week. Instead of reading primary papers, doctors and policymakers read automated synthesis briefs generated by commercial cloud assistants. Because these assistants are trained to deliver smooth summaries, they routinely suppress conflicting small-sample studies and methodological disputes, creating an illusion of scientific unanimity on contentious questions.",
+   "premise": "Automated multi-agent systems are taking over the labour-intensive work of scientific literature synthesis and screening. When literature agents operate as unmonitored commercial summarizers, they optimize for coherent consensus and silently drop minority replications, negative results, and conflicting methodology caveats.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "Developing deterministic provenance verification standards, local-first personal twin evidence extractors, and open living review protocols that preserve minority data points rather than smoothing them away.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Commercial summarizers flatten scientific disagreement into false consensus",
+     "description": "Proprietary AI synthesis engines summarize incoming medical and environmental literature while systematically pruning outlier results, leading to flawed regulatory guidelines.",
+     "example": "A municipal water board adopts a new filtration chemical after an agent-generated review misses three independent studies reporting accelerated pipe corrosion.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Verifiable multi-agent synthesis preserves dissent and provenance",
+     "description": "Research communities deploy open, local-first review agents that produce cryptographic evidence receipts for every extracted claim and explicitly preserve conflicting findings.",
+     "example": "An open epidemiologist collective publishes an automated living review where every data point links to an immutable extraction receipt and minority trial results are prominently flagged.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Frontier platforms restrict raw paper scraping to licensed enterprise partners",
+     "description": "Preprint repositories and academic publishers deploy aggressive anti-bot barriers, restricting automated literature analysis to a handful of accredited commercial vendors.",
+     "example": "An independent biology lab is blocked from running local-first review models because open preprint platforms require enterprise contracts to download batches of research papers.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2604.01452",
+     "title": "A Multi-Agent Human-LLM Collaborative Framework for Closed-Loop Scientific Literature Summarization",
+     "kind": "preprint",
+     "published": "2026-04-01"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261023-0210",
    "added_at": "2026-10-23T02:45:13+00:00",
    "title": "Confident AI assistants convince people to believe plausible errors",
@@ -158,168 +326,6 @@
      "title": "AfterDeleteBench: Auditing Post-Deletion Information Persistence in LLM Agents",
      "kind": "preprint",
      "published": "2026-10-22"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261023-0207",
-   "added_at": "2026-10-23T02:07:53+00:00",
-   "title": "Fine-tuning customized workplace assistants strips safety rules without triggering warnings",
-   "horizon_years": 3,
-   "world": "It is 2029. Thousands of small legal practices, accounting offices, and local clinic teams download open-weight assistants and fine-tune them on their own document archives. The customized models excel at parsing specialized filings, but their original safety guardrails against unauthorized file access, prompt injection, and credential disclosure have silently dissolved during adaptation.",
-   "premise": "Research reveals that fine-tuning an assistant on just a few dozen task examples circumvents built-in refusal safeguards by shifting representational damage across network layers. As organizations adapt open models for specialized office work, built-in safety boundaries quietly disappear while overall task completion looks normal.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network designs and publishes open runtime architectures with out-of-process execution gates. By enforcing strict capability allowlists and boundary auditing outside the model's neural weights, personal assistants remain safe even when fine-tuning alters internal model representations.",
-   "shift": 0.38,
-   "outcomes": [
-    {
-     "name": "Customized workplace assistants leak private records after routine fine-tuning",
-     "description": "Organizations fine-tune local assistants on internal spreadsheets, unknowingly neutralizing the model's refusal triggers and allowing indirect prompt injections to exfiltrate confidential files.",
-     "example": "A municipal permit office fine-tunes a local assistant on zoning bylaws; a resident submits an application containing a prompt injection that instructs the assistant to dump employee contact lists, and the model complies because its refusal layers were relocated during tuning.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Local computing environments enforce deterministic out-of-process boundary checks",
-     "description": "Software developers adopt host-level monitors that intercept every file read and tool invocation at the operating system boundary, rendering internal model weight changes harmless.",
-     "example": "A health collective deploys fine-tuned medical assistants wrapped in kernel-level capability filters; when a model attempts to read unapproved file paths, the local sandbox blocks the action before execution occurs.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Major cloud vendors use fine-tuning safety regressions to justify closed cloud monopolies",
-     "description": "Frontier AI providers cite fine-tuning refusal failures to argue that local, on-device weight adaptation is inherently dangerous, lobbying regulators to restrict customized models to certified cloud data centers.",
-     "example": "A regulatory agency issues draft rules requiring all fine-tuned commercial models to run inside approved vendor clouds with automated safety telemetry, penalizing organizations that run local weights.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.00320",
-     "title": "Refusal Localizes, the Damage Relocates: Safety Layers Under Few-Sample Fine-Tuning",
-     "kind": "preprint",
-     "published": "2026-10-01"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261023-0206",
-   "added_at": "2026-10-23T01:46:12+00:00",
-   "title": "Remote tool servers exploit protocol handshakes to breach local agent host machines",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of software engineers and autonomous workers rely on local personal agents that bind to hundreds of specialized external tool servers over standard context protocols. While prompt injection filters monitor model inputs and outputs, malicious tool servers increasingly target the underlying protocol plumbing—abusing OAuth redirect endpoints, helper process spawns, and argument escaping vulnerabilities to breach developer workstations directly during routine background discovery handshakes.",
-   "premise": "As developers connect personal coding agents to decentralized tool servers and external protocols, attackers register malicious endpoints that exploit desktop browser and authentication handshakes to execute arbitrary shell commands without model interaction.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network's agent runtime specification and broker design isolate tool adapters behind strict capability boundaries and containerized execution, preventing protocol endpoints from executing commands directly on the host.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Host-level agent compromises proliferate via unvalidated tool endpoints",
-     "description": "Developers blindly trust external tool registries, leading to widespread credential theft and lateral network intrusion as malicious endpoints exploit unescaped desktop shell calls.",
-     "example": "A developer adds an open-source documentation search tool to their agent; during background authentication, the tool server's OAuth metadata executes an obfuscated shell payload that exfiltrates local private keys.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Declarative protocol brokers enforce strict sandbox isolation and URL sanitization",
-     "description": "Agent runtimes adopt mandatory broker sandboxing, verifying tool metadata against offline schema guards and opening external links only through isolated, headless URL handlers.",
-     "example": "An agent runtime intercepts an OAuth challenge from a compromised remote tool server, detects unescaped subexpressions in the authorization URI, and blocks execution before shell dispatch.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Proprietary vendor platforms restrict third-party agent tool integration",
-     "description": "Cloud providers and enterprise software vendors wall off external agent access entirely, requiring proprietary closed-source plugins and restricting open agent protocols.",
-     "example": "Major operating system vendors ban third-party agent tool brokers, permitting only enterprise-signed partner extensions within a closed developer store.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.4
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.infosecurity-magazine.com/news/opencode-quietly-patched-critical/",
-     "title": "Researchers Warn OpenCode Quietly Patched Critical RCE Flaw, Leaving Users at Risk",
-     "kind": "incident",
-     "published": "2026-10-20"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261023-0205",
-   "added_at": "2026-10-23T00:44:35+00:00",
-   "title": "Personal agents in pairwise dialogue discover common ground without algorithmic feeds",
-   "horizon_years": 3,
-   "world": "It is 2029. Instead of broadcasting controversial opinions into ad-driven social feeds designed for outrage, people direct their personal software assistants to converse directly in peer-to-peer dialogues with the assistants of neighbors, coworkers, and civic peers. As thousands of pairwise conversations unfold across encrypted channels, agents identify latent consensus clusters and present their users with shared priorities rather than polarized battle lines. Municipal budgeting, school board priorities, and workplace policies are negotiated through aggregated mutual agreement rather than performative public debates.",
-   "premise": "Recent research shows that language model agents engaged in multi-turn subjective discussions develop internal representations of agreement, naturally converging toward common ground without central moderation.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "Providing open-source pairwise deliberation harnesses that run entirely on personal devices, paired with zero-knowledge membership proofs that verify human-backed agency without exposing personal identities. This prevents synthetic swarm capture while preserving local model diversity.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Commercial lobbyists flood agent forums with synthetic astroturfing",
-     "description": "Well-funded political and corporate interests deploy swarms of synthetic agents to manufacture artificial consensus signatures during pairwise deliberative cycles.",
-     "example": "A private utility company deploys 50,000 automated personas into regional civic agent exchanges, creating a false statistical signal of community support for higher grid connection charges.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Decentralized consensus discovery displaces broadcast engagement feeds",
-     "description": "Communities rely on pairwise agent deliberation to resolve contentious local issues, cutting out algorithmic engagement platforms.",
-     "example": "A municipal cooperative of 25,000 residents agrees on a park revitalization plan in 72 hours through agent-assisted peer dialogue without a single acrimonious public forum.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Foundational models develop stubborn semantic entrenchment",
-     "description": "Underlying language models reinforce shared cultural biases during convergence, causing agent pairs to lock into stubborn monocultures that resist minority perspectives.",
-     "example": "A regional planning dialogue systematically ignores minority transit needs because prevailing training data biases agent agreement vectors toward car-centric urban layouts.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.33
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.29328",
-     "title": "Seeing the Forest for the Trees: Emergent Agreement from Individual Conversations",
-     "kind": "preprint",
-     "published": "2026-10-21"
     }
    ],
    "work": 1
