@@ -8,11 +8,11 @@
 
   /* ---------- header, menu, active section ---------- */
   var head = document.querySelector('.site-head');
-  var onScroll = function () { head.classList.toggle('scrolled', window.scrollY > 8); };
+  var onScroll = function () { if (head) head.classList.toggle('scrolled', window.scrollY > 8); };
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
   var btn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');
-  if (btn) {
+  if (btn && nav) {
     btn.addEventListener('click', function () {
       var open = nav.classList.toggle('open');
       btn.setAttribute('aria-expanded', String(open));
@@ -21,6 +21,83 @@
     nav.addEventListener('click', function (e) {
       if (e.target.tagName === 'A') { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); btn.textContent = 'Menu'; }
     });
+  }
+
+  /* ---------- reliable #top & section hash navigation (compensates for sticky header & async layout shifts) ---------- */
+  var hashLockId = null, hashLockUntil = 0;
+  function scrollToHashTarget(id, smooth) {
+    if (!id || id === 'top') {
+      hashLockId = null;
+      window.scrollTo({ top: 0, behavior: (smooth && !reduce) ? 'smooth' : 'auto' });
+      return true;
+    }
+    var target = document.getElementById(id);
+    if (!target) return false;
+    // Reveal any unrevealed elements inside or on the target immediately so translateY(14px) doesn't offset it
+    target.classList.add('in');
+    target.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+    var headH = head ? head.getBoundingClientRect().height : 64;
+    var y = Math.max(0, target.getBoundingClientRect().top + window.scrollY - headH - 8);
+    window.scrollTo({ top: y, behavior: (smooth && !reduce) ? 'smooth' : 'auto' });
+    return true;
+  }
+
+  // Cancel async hash lock immediately if the user manually scrolls via wheel, touch, or keys
+  ['wheel', 'touchstart', 'keydown'].forEach(function (ev) {
+    window.addEventListener(ev, function () { hashLockId = null; hashLockUntil = 0; }, { passive: true });
+  });
+
+  if ('ResizeObserver' in window) {
+    var bodyRo = new ResizeObserver(function () {
+      if (hashLockId && performance.now() < hashLockUntil) {
+        scrollToHashTarget(hashLockId, false);
+      }
+    });
+    bodyRo.observe(document.body);
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href]');
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    var isSamePageHash = false, hash = '';
+    if (href.charAt(0) === '#') {
+      isSamePageHash = true;
+      hash = href.slice(1);
+    } else if (href.indexOf('/#') === 0 && (location.pathname === '/' || location.pathname === '/index.html')) {
+      isSamePageHash = true;
+      hash = href.slice(2);
+    }
+    if (!isSamePageHash) return;
+    if (hash === 'top' || href === '#') {
+      e.preventDefault();
+      if (history.pushState) history.pushState(null, '', '#top');
+      scrollToHashTarget('top', true);
+      return;
+    }
+    if (hash && document.getElementById(hash)) {
+      e.preventDefault();
+      if (history.pushState) history.pushState(null, '', '#' + hash);
+      hashLockId = hash;
+      hashLockUntil = performance.now() + 1400;
+      scrollToHashTarget(hash, true);
+    }
+  });
+
+  if (location.hash) {
+    var initId = decodeURIComponent(location.hash.slice(1));
+    if (initId === 'top') {
+      window.scrollTo(0, 0);
+      window.addEventListener('load', function () { window.scrollTo(0, 0); });
+    } else if (initId) {
+      hashLockId = initId;
+      hashLockUntil = performance.now() + 2500;
+      setTimeout(function () { scrollToHashTarget(initId, false); }, 30);
+      window.addEventListener('load', function () {
+        scrollToHashTarget(initId, false);
+        setTimeout(function () { if (hashLockId === initId) scrollToHashTarget(initId, false); }, 350);
+      });
+    }
   }
 
   if ('IntersectionObserver' in window) {

@@ -554,7 +554,6 @@
   var t2 = el('text', { x: C, y: C + 18, class: 'pr-core-t', 'text-anchor': 'middle' }, core); t2.textContent = 'commitments';
   var t3 = el('text', { x: C, y: C + 34, class: 'pr-core-t', 'text-anchor': 'middle' }, core); t3.textContent = 'for our own systems';
   core.addEventListener('click', function () { floor(); });
-  core.addEventListener('mouseenter', function () { floor(); });
 
   /* ---------- the panel & expanded card ---------- */
   var catEl = document.getElementById('pr-cat'), titleEl = document.getElementById('pr-title'), textEl = document.getElementById('pr-text');
@@ -563,7 +562,7 @@
     cardBox = document.createElement('div');
     cardBox.id = 'pr-card-deep';
     cardBox.className = 'pr-card-deep';
-    cardBox.hidden = true;
+    cardBox.hidden = false;
     textEl.parentNode.insertBefore(cardBox, document.getElementById('pr-legend'));
   }
 
@@ -576,8 +575,8 @@
 
   function renderExpandedCard(it) {
     if (!it || !it.card) {
-      cardBox.hidden = true;
-      cardBox.innerHTML = '';
+      cardBox.hidden = false;
+      cardBox.innerHTML = '<div class="prc-body"><p class="prc-sub">Select any dot on the wheel or any principle below to explore its real-life scenario, critic vs. steelman debate, trade-offs, and test criteria.</p></div>';
       return;
     }
     var c = it.card;
@@ -643,25 +642,33 @@
   function pick(g) {
     focusGroup(g);
     if (current) { current.dot.classList.remove('sel'); current = null; }
-    cardBox.hidden = true;
-    catEl.textContent = g.items.length + ' principles'; catEl.style.color = g.color;
+    catEl.textContent = g.items.length + ' principles in this group'; catEl.style.color = g.color;
     titleEl.textContent = g.name;
-    textEl.textContent = '';
+    textEl.textContent = 'Choose a principle below (or point at its dot on the wheel) to inspect its real-life scenario, critic vs. steelman debate, and how we test it.';
+    cardBox.hidden = false;
+    cardBox.innerHTML = '<div class="prc-tabs" role="tablist"><span style="font:600 .72rem/1 var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em">Principles in ' + g.name + '</span></div><div class="prc-body" id="prc-pick-host"></div>';
+    var host = document.getElementById('prc-pick-host');
     var ul = document.createElement('ul'); ul.className = 'pr-pick';
     g.items.forEach(function (it) {
       var li = document.createElement('li'), b = document.createElement('button');
       b.type = 'button'; b.textContent = it.title; b.addEventListener('click', function () { show(g, it); });
       li.appendChild(b); ul.appendChild(li);
     });
-    textEl.appendChild(ul);
+    if (host) host.appendChild(ul);
   }
   function floor() {
     focusGroup(null);
     if (current) { current.dot.classList.remove('sel'); current = null; }
-    cardBox.hidden = true;
     catEl.textContent = 'The floor'; catEl.style.color = '';
     titleEl.textContent = floorCount + ' commitments for our own systems';
-    textEl.textContent = 'They bind what the CIN builds, and change only through a broad, public process. They are listed in full above. Every principle around them has to fit inside them.';
+    textEl.textContent = 'They bind what the network builds, and change only through a broad, public process. Every working principle around the wheel has to fit inside them.';
+    cardBox.hidden = false;
+    cardBox.innerHTML =
+      '<div class="prc-tabs"><span style="font:600 .72rem/1 var(--mono);color:var(--ok);text-transform:uppercase;letter-spacing:.08em">Non-negotiable floor commitments</span></div>' +
+      '<div class="prc-body">' +
+      '<p><b>What the floor guarantees:</b> Your data stays on your devices; outside services get verified answers rather than raw records; your personal agent works only for you; and pooled funds sit with member-owned cooperatives rather than a single central treasury.</p>' +
+      '<p class="prc-sub">Point at any dot around the ring—or pick a category pill below—to explore the working principles that build on this floor.</p>' +
+      '</div>';
   }
   groups.forEach(function (g) {
     var b = document.createElement('button');
