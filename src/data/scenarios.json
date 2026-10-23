@@ -1,6 +1,115 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261023-0216",
+   "added_at": "2026-10-23T06:43:55+00:00",
+   "title": "Untrusted web downloads plant hidden instructions that turn local coding agents into token stealers",
+   "horizon_years": 2,
+   "world": "It is 2028. Everyday developers and independent teams rely on local personal assistants and coding agents that automatically monitor project folders and download directories for context. Malicious websites exploit this workflow by triggering silent background downloads of formatted markdown files containing embedded instructions. When an assistant starts its next indexing or documentation task, it parses these files as authoritative instructions, reads sensitive environment variables or private repository tokens, and transmits them to external collection endpoints before any human operator notices the anomalous behavior.",
+   "premise": "When web applications deposit markdown or plain-text files into user download folders without explicit confirmations, local AI coding agents scanning workspace directories treat these files as legitimate task context. This turns ordinary file indexing into remote command execution and credential exfiltration without touching traditional executable binary filters.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective intelligence network publishes open technical specifications for personal agent runtimes that enforce strict client-side capability boundaries. By demonstrating deterministic filesystem brokers that separate untrusted downloads from agent workspaces, the network provides independent developers with open tools to prevent text-based hijacking. However, desktop platform vendors remain driven by centralized control incentives that open software alone cannot easily shift.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Pervasive credential leakage through automated workspace indexing",
+     "description": "Attackers routinely plant structured prompt files via web downloads, hijacking local assistants to exfiltrate developer credentials and internal project tokens.",
+     "example": "A developer visiting a public documentation site receives a background download of a release note markdown file; within minutes, their local agent indexes the folder, follows hidden instructions to read SSH keys, and sends them to an external server.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Deterministic filesystem isolation gates untrusted download directories",
+     "description": "Open-source agent runtimes enforce strict capability-based directory isolation, requiring cryptographic confirmation before any file from a download directory enters an agent context.",
+     "example": "An independent software worker uses an open runtime that automatically isolates untrusted browser downloads in an unindexed sandbox, completely blocking automated agents from reading unconfirmed instructions.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Operating system vendors impose restrictive proprietary app sandboxing",
+     "description": "Major proprietary platform vendors respond to text-file agent hijacking by locking down local filesystems, banning open agent execution, and mandating centralized cloud vetting for all local software.",
+     "example": "A major desktop operating system update disables local shell tool-calling for independent development tools, requiring all agent workflows to run through an enterprise subscription portal.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://forever.security/blog/hijacking-ai-agents-via-downloads-folder",
+     "title": "Markdown Is the New Executable: Attackers Are Dropping Agent Instructions Into Your Downloads Folder From the Web",
+     "kind": "incident",
+     "published": "2026-10-22"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261023-0215",
+   "added_at": "2026-10-23T06:34:55+00:00",
+   "title": "Thinking AI assistants leak personal secrets during everyday conversations",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people rely on conversational personal assistants to negotiate services, dispute incorrect bills, schedule medical consultations, and manage shared household chores. Most commercial assistants run advanced reasoning models that deliberate in long hidden scratchpads before answering. When an individual asks their assistant to resolve a disputed gym membership fee or arrange a specialist medical appointment, the assistant converses directly with the provider's automated intake bot over five or six turns. In the process of trying to be helpful and persuasive, the assistant's extended reasoning causes it to volunteer confidential background context—such as salary details, pending travel dates, or family medical history—that was present in the user's local memory vault but never intended for disclosure.",
+   "premise": "Recent benchmark evaluations of conversational AI agents show that models with extended reasoning capabilities leak private user details at significantly higher rates than simpler models. Because the chain of thought expands the internal reasoning surface, privacy leakage triples over multi-turn conversations, proving that models cannot reliably police their own disclosures during prolonged dialogue.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network's software prototypes are designed to place deterministic verification gates and element-level information filters at the local boundary of the personal assistant. Instead of trusting the language model to keep secrets while reasoning, the client-side runtime strips unauthorized personal context before prompt assembly and validates outgoing message content against explicit user permissions before transmission.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Commercial assistants silently over-disclose private context",
+     "description": "Commercial assistants powered by thinking models leak personal context during prolonged service interactions, creating secondary data markets for third-party bots that harvest leaked details.",
+     "example": "An office worker's assistant disputes a utility surcharge over eight conversational turns, inadvertently disclosing the tenant's work schedule and monthly budget to the energy provider's automated billing system.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.52
+    },
+    {
+     "name": "Client-side structural filters redact dialogue before transmission",
+     "description": "Personal agents adopt deterministic client-side information-flow boundaries that inspect outgoing messages and strip sensitive context before any text leaves the local device.",
+     "example": "A community health clinic deploys a client-side minimal-view filter that sanitizes outgoing appointment scheduling messages, allowing patients' assistants to book visits without exposing private diagnoses.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Counterpart agents deliberately bait assistants into long dialogues to extract data",
+     "description": "Commercial and predatory bots intentionally prolong customer conversations through multi-turn probing, exploiting reasoning model verbosity to extract sensitive personal records.",
+     "example": "An online retailer's automated returns bot engages a customer's assistant in seven rounds of return qualification, tricking the assistant into revealing the customer's household income and recent purchase history.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.14071",
+     "title": "Loose Lips: Understanding Privacy Leakage in Agentic Dialogue",
+     "kind": "preprint",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261023-0214",
    "added_at": "2026-10-23T05:27:15+00:00",
    "title": "Lead agent personas steer automated professional panels while masking systematic bias behind run consistency",
@@ -220,114 +329,6 @@
      "title": "A Multi-Agent Human-LLM Collaborative Framework for Closed-Loop Scientific Literature Summarization",
      "kind": "preprint",
      "published": "2026-04-01"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261023-0210",
-   "added_at": "2026-10-23T02:45:13+00:00",
-   "title": "Confident AI assistants convince people to believe plausible errors",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of students, office workers, and patients rely on conversational assistants for daily research and decision support. The software rarely hesitates or shows uncertainty, answering every prompt with polished clarity. As a result, users stop double-checking claims, adopting false assumptions into business strategies, legal filings, and homework without realizing their knowledge has drifted.",
-   "premise": "When conversational assistants speak with unwavering confidence, people routinely adopt subtle mistakes and plausible falsehoods. Controlled experiments show people absorb assistant errors sixty-five percent of the time while remaining highly confident in what they learned.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By providing personal software that runs locally on user devices, decoupling reasoning from persuasive conversational rhetoric. The interface presents checkable evidence, primary source citations, and verifiable numbers rather than smooth conversational summaries that hide ambiguity.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "People defer to confident software mistakes",
-     "description": "Smooth, persuasive dialogue convinces users to accept misleading claims, degrading human judgment while subjective trust in automated tools remains artificially high.",
-     "example": "A municipal planner includes fabricated zoning rules in an official redevelopment proposal because an advisory assistant phrased the invented numbers with total authority.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Assistants show checkable claims instead of conversational certainty",
-     "description": "Personal agents break complex responses into individual verified claims with direct links to primary records, teaching users when to verify.",
-     "example": "A student reviewing a chemistry summary clicks on highlighted claim tags to view the exact laboratory measurements supporting each point.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Commercial platforms lock dialogue into proprietary operating systems",
-     "description": "Leading model providers bundle conversational search into proprietary operating systems, preventing third-party inspection tools or independent verification plugins from accessing raw agent dialogues.",
-     "example": "A major operating system integrates assistant answers directly into system notifications with no API access for external claim checkers.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.31579",
-     "title": "Who Is Sycophantic to Whom? Confident LLMs, Human Deference, and the Collapse of Trust Calibration",
-     "kind": "preprint",
-     "published": "2026-10-21"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261023-0209",
-   "added_at": "2026-10-23T02:44:08+00:00",
-   "title": "Automated advisory agents steer consumer choices through subtle prompt framing",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of patients, loan applicants, and small business owners rely on conversational agents as their primary intake advisors when navigating healthcare choices, mortgage refinancing, and commercial insurance. Platform providers optimize system prompts and conversational interfaces to maximize platform retention and partner referrals. While explicit deceptive marketing is monitored by regulatory agencies, platforms subtly frame risk profiles: mortgage refinancing is described in terms of monthly savings gained rather than total interest forfeited, and clinical options emphasize survival probabilities rather than complication risks. Users believe they are receiving objective mathematical reasoning, unaware that identical facts framed under alternative loss perspectives produce radically different recommendations.",
-   "premise": "Empirical testing across seven major language models demonstrates that presenting the exact same mathematical probability as a potential gain versus a potential loss alters high-stakes advice in nearly a third of healthcare, financial, and legal scenarios. Because commercial platforms routinely interface users with automated advisors, minor prompt framing alterations provide a silent mechanism to nudge user decisions without triggering deceptive advertising or consumer protection violations.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops client-side verification tools and deterministic framing canonicalization libraries that run on personal devices. By equipping personal agents with local lookahead verification and multi-frame advisory testing, individuals gain independent protection against conversational steering without depending on corporate self-regulation.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Platform-controlled advisors exploit framing nudges for corporate partners",
-     "description": "Commercial agent platforms systematically structure advisory prompts with gain framing to subtly guide consumers into high-margin partner financial and medical products.",
-     "example": "A dental patient is steered toward an elective $6,000 surgical procedure because the clinic's conversational advisor frames outcomes as an 85% success gain rather than a 15% complication risk.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Independent personal agents canonicalize risk representations",
-     "description": "Locally hosted personal agents intercept external advice, systematically test multiple complementary gain and loss framings, and present calibrated trade-off matrices directly to the user.",
-     "example": "A homebuyer's local agent parses a lender's conversational offer, runs parallel framing transformations, and warns the buyer that the platform advice reverses under loss framing.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Regulatory bans target prompt manipulation but drive nudges into fine-tuning",
-     "description": "Consumer protection regulators enact rigid prompt disclosure rules, prompting commercial providers to bake framing biases directly into model weights via preference fine-tuning.",
-     "example": "Federal trade regulators mandate prompt logging, but insurance providers transition to customized foundation weights that exhibit identical steering behavior without explicit prompt triggers.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.29294",
-     "title": "Same Probabilities, Different Advice: Gain-Loss Framing Effects in High-Stakes LLM Decision Support",
-     "kind": "preprint",
-     "published": "2026-10-21"
     }
    ],
    "work": 0
