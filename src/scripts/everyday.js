@@ -1953,4 +1953,158 @@
 
     evaluateRea();
   }
+
+  // ================================================================
+  // 10. IN-SENSOR COMPUTING & TWO-TIER LOCAL LEDGER SIMULATOR (#insensor-ledger-sim)
+  // ================================================================
+  var iscRoot = document.getElementById('insensor-ledger-sim');
+  if (iscRoot) {
+    var ISC_SENSORS = {
+      hybrid_3d_stacked_pcm: {
+        name: 'Hybrid 3D-Stacked CMOS + Rewritable Phase-Change (Sb2Se3)',
+        latencyText: '0.12 ms (120 µs)',
+        powerText: '1.4 mW',
+        rawRamMBs: 0.0,
+        privacyPct: 100,
+        efficiencyPct: 97,
+        rewritable: true,
+        desc: 'Combines a laser-rewritable phase-change optical metasurface (Sb2Se3) on top of the pixels with a 3D-stacked CMOS logic die beneath. The optical layer performs first-layer spatial feature compression at zero energy, while the stacked logic gates beneath apply non-linear ReLU activations in 0.12 ms—with 0 bytes of raw image frames ever entering digital RAM.'
+      },
+      optical_metasurface_d2nn: {
+        name: 'Optical Metasurface D²NN (TiO2 Nanopillars Etched On Top)',
+        latencyText: '2 ps (Speed of Light)',
+        powerText: '0.045 mW (45 µW readout)',
+        rawRamMBs: 0.0,
+        privacyPct: 100,
+        efficiencyPct: 100,
+        rewritable: false,
+        desc: 'Subwavelength TiO2/SiO2 nanopillars (6.25M neurons/mm²) etched above the CMOS imager diffract incoming light waves at the speed of light onto class-specific pixel zones. Optical math consumes zero power, and no raw image is ever digitized—though weights are fixed at lithography and linear.'
+      },
+      neuromorphic_tunable_aps: {
+        name: 'Optoelectronic / Neuromorphic Pixels (WSe2 Etched Into Sensor)',
+        latencyText: '4.5 ns (RC Readout)',
+        powerText: '0.008 mW (8 µW analog sum)',
+        rawRamMBs: 0.0,
+        privacyPct: 100,
+        efficiencyPct: 99,
+        rewritable: true,
+        desc: 'Classifier weights are programmed directly into the bias-tunable photoresponsivity of 2D WSe2 photodetectors. Summing photocurrents along readout lines via Kirchhoff’s current law computes matrix-vector multiplication in the analog domain in 4.5 nanoseconds before any ADC step.'
+      },
+      traditional_cmos_npu: {
+        name: 'Conventional CMOS Camera + Digital ISP/NPU',
+        latencyText: '18.0 ms',
+        powerText: '420.0 mW',
+        rawRamMBs: 186.6,
+        privacyPct: 15,
+        efficiencyPct: 18,
+        rewritable: true,
+        desc: 'Digitizes full raw video frames (186.6 MB/sec at 1080p 30 fps) into addressable DRAM/SRAM before running a digital classifier—consuming ~420 mW and leaving raw visual frames exposed in memory to kernel or DMA exploits.'
+      }
+    };
+
+    var ISC_LEDGERS = {
+      on_person_fabric_local_ledger: {
+        name: 'On-Person High-BW Body-Area Network + Local Ledger',
+        localRatio: 0.996,
+        latencyMs: 0.28,
+        desc: 'Target Horizon: Your active in-sensor modules and six specialist agents communicate over a high-bandwidth on-person fabric, computing and recording 99.6% of daily actions on your Local Ledger in 0.28 ms without pinging the global network.'
+      },
+      cloud_enclave_local_ledger: {
+        name: 'Isolated Personal Cloud Enclave Local Ledger (Bridge)',
+        localRatio: 0.992,
+        latencyMs: 6.4,
+        desc: 'Bridge Phase: High-bandwidth personal ledger running inside a hardware-isolated confidential cloud enclave paired with your devices. Resolves 99.2% of actions on your Local Ledger (6.4 ms) and only commits sparse zero-knowledge batch roots to the Collective Ledger.'
+      },
+      constant_collective: {
+        name: 'Naive Constant Collective Ledger Sync',
+        localRatio: 0.0,
+        latencyMs: 185.0,
+        desc: 'Naive Baseline: Every sensor classification and agent action reaches out directly to the global Collective Ledger (185 ms latency), creating massive bandwidth overhead and exposing continuous timing metadata.'
+      }
+    };
+
+    var iscSensorSel = document.getElementById('isc-sensor-sel');
+    var iscLedgerSel = document.getElementById('isc-ledger-sel');
+    var iscEventsRng = document.getElementById('isc-events-rng');
+    var iscEventsVal = document.getElementById('isc-events-val');
+    var iscMetrics = document.getElementById('isc-metrics');
+    var iscBars = document.getElementById('isc-bars');
+    var iscDiff = document.getElementById('isc-diff');
+
+    var evaluateIsc = function () {
+      var sKey = iscSensorSel ? iscSensorSel.value : 'hybrid_3d_stacked_pcm';
+      var lKey = iscLedgerSel ? iscLedgerSel.value : 'on_person_fabric_local_ledger';
+      var events = parseInt(iscEventsRng ? iscEventsRng.value : '86400', 10);
+      var s = ISC_SENSORS[sKey] || ISC_SENSORS.hybrid_3d_stacked_pcm;
+      var l = ISC_LEDGERS[lKey] || ISC_LEDGERS.on_person_fabric_local_ledger;
+
+      if (iscEventsVal) iscEventsVal.textContent = events.toLocaleString() + ' events/day';
+
+      var localEvents = Math.round(events * l.localRatio);
+      var crossEvents = events - localEvents;
+      var collectiveCommits = l.localRatio === 0 ? events : (24 + Math.round(crossEvents * (lKey === 'on_person_fabric_local_ledger' ? 0.10 : 0.15)));
+      var baselineBwKB = events * 0.512;
+      var actualBwKB = l.localRatio === 0 ? baselineBwKB : (collectiveCommits * 1.024);
+      var bwReductionPct = l.localRatio === 0 ? 0.0 : Math.max(0, (1 - actualBwKB / baselineBwKB) * 100);
+
+      if (iscMetrics) {
+        iscMetrics.innerHTML =
+          '<span class="lib-score-pill ' + (s.rawRamMBs === 0 ? 'hi' : '') + '" style="' + (s.rawRamMBs > 0 ? 'border-color:var(--accent);color:var(--accent)' : '') + '">Raw Image in RAM: <b>' + (s.rawRamMBs === 0 ? '0 bytes (Pre-ADC)' : s.rawRamMBs.toFixed(1) + ' MB/s') + '</b></span>' +
+          '<span class="lib-score-pill hi">Sensor Speed &amp; Power: <b>' + s.latencyText + ' · ' + s.powerText + '</b></span>' +
+          '<span class="lib-score-pill ' + (bwReductionPct > 90 ? 'hi' : '') + '">Collective Ledger Traffic Cut: <b>' + bwReductionPct.toFixed(2) + '%</b></span>';
+      }
+
+      if (iscBars) {
+        var rows = [
+          {
+            label: '1. Pre-ADC Physical Privacy (Zero Raw Frames in Digital Memory)',
+            pct: s.privacyPct,
+            val: s.rawRamMBs === 0 ? '0 bytes Raw Frame in RAM (Enforced by Physics)' : '186.6 MB/s Exposed in RAM',
+            ok: s.rawRamMBs === 0
+          },
+          {
+            label: '2. In-Sensor Compute Efficiency (Speed & Power vs. Traditional CMOS)',
+            pct: s.efficiencyPct,
+            val: s.latencyText + ' · ' + s.powerText + (s.rewritable ? ' · Rewritable Weights' : ' · Fixed Lithography'),
+            ok: s.efficiencyPct >= 90
+          },
+          {
+            label: '3. Local High-Speed Ledger Resolution (' + localEvents.toLocaleString() + ' / ' + events.toLocaleString() + ' daily actions)',
+            pct: Math.round(l.localRatio * 100),
+            val: (l.localRatio * 100).toFixed(1) + '% Computed on Local Ledger (' + l.latencyMs + ' ms)',
+            ok: l.localRatio >= 0.95
+          },
+          {
+            label: '4. Collective Ledger Bandwidth & Metadata Protection',
+            pct: Math.round(bwReductionPct),
+            val: collectiveCommits.toLocaleString() + ' ZK Batch Commits/day (' + actualBwKB.toFixed(1) + ' KB/day)',
+            ok: bwReductionPct >= 95
+          }
+        ];
+
+        iscBars.innerHTML = rows.map(function (r) {
+          var col = r.ok ? 'var(--ok)' : 'var(--accent)';
+          return '<div class="gm-axis-row">' +
+            '<div class="gm-axis-lbl"><span>' + r.label + '</span><span style="color:' + col + ';font-weight:700">' + r.val + '</span></div>' +
+            '<div class="gm-axis-track"><div class="gm-axis-fill" style="width:' + r.pct + '%;background:' + col + '"></div></div>' +
+          '</div>';
+        }).join('');
+      }
+
+      if (iscDiff) {
+        iscDiff.innerHTML =
+          '<div style="margin-bottom:.35rem"><b>Sensor Physics (' + s.name + '):</b> ' + s.desc + '</div>' +
+          '<div style="color:var(--ink-2)"><b>Two-Tier Ledger Outcome (' + l.name + '):</b> ' + l.desc + ' Out of <b>' + events.toLocaleString() + '</b> daily events, <b>' + localEvents.toLocaleString() + '</b> settle locally in <b>' + l.latencyMs + ' ms</b> and only <b>' + collectiveCommits.toLocaleString() + '</b> compressed zero-knowledge proofs reach the Collective Ledger.</div>';
+      }
+    };
+
+    [iscSensorSel, iscLedgerSel, iscEventsRng].forEach(function (el) {
+      if (el) {
+        el.addEventListener('input', evaluateIsc);
+        el.addEventListener('change', evaluateIsc);
+      }
+    });
+
+    evaluateIsc();
+  }
 })();

@@ -334,6 +334,126 @@
         </div>
       </div>
     </div>
+
+    <!-- ================================================================
+         SECTION 6: IN-SENSOR COMPUTING & TWO-TIER LOCAL LEDGER
+         ================================================================ -->
+    <h2>6. In-Sensor Computing &amp; The Two-Tier Local Ledger: Privacy Enforced at the Speed of Light</h2>
+    <p>How can your personal agents sense what you need in the physical world without ever storing a raw camera frame or audio recording that could be stolen? The answer is emerging in a new class of silicon hardware known as <strong>in-sensor computing</strong> (including all-optical diffractive deep neural networks, or D&sup2;NNs), where a classification model is physically etched directly <em>on top of</em> or <em>into</em> an active pixel sensor.</p>
+    <p>In a conventional camera, light is first converted into a full digital picture in memory (about 6.2 megabytes per frame at 1080p, or 186 megabytes per second of raw video) before a processor inspects it. Even when software promises to delete the image afterward, a raw picture briefly existed in memory. In-sensor computing changes the physics: incoming light is classified at the speed of light <em>before or during</em> conversion into a digital signal, so <strong>no raw image frame ever enters digital memory (`0 bytes` in RAM)</strong>. Only the symbolic result—such as <em>&ldquo;posture: fall detected&rdquo;</em> or <em>&ldquo;pulse: calm&rdquo;</em>—leaves the sensor readout wire.</p>
+
+    <div class="lib-card" style="margin:1.2rem 0">
+      <h3 style="margin-top:0">Three Hardware Approaches to Sensor-Etched Classification</h3>
+      <ol>
+        <li><strong>Optical Metasurfaces Etched &ldquo;On Top&rdquo; of the Sensor (D&sup2;NN):</strong> Neural network weights are physically etched via nanolithography into transparent dielectric layers (titanium dioxide, TiO<sub>2</sub>, or silicon dioxide, SiO<sub>2</sub>) mounted directly above a standard CMOS pixel array. Subwavelength nanopillars (&ldquo;meta-atoms&rdquo;) act as artificial neurons—demonstrated at <strong>6.25 million neurons per mm&sup2;</strong> in <a href="https://www.nature.com/articles/s41377-022-00844-2" rel="noopener noreferrer"><em>Nature Light: Science &amp; Applications</em> (2022)</a>. As light passes through, diffraction constructively focuses the wave onto specific class regions of the pixels at the speed of light (picoseconds to femtoseconds) with <strong>zero computational power consumed by the optical layer</strong>.</li>
+        <li><strong>Optoelectronic / Neuromorphic Pixels Etched &ldquo;Into&rdquo; the Sensor:</strong> Rather than shaping light above the sensor, model weights are encoded directly into 2D arrays of photodetectors (such as WSe<sub>2</sub> or metal-semiconductor-metal detectors) whose photoresponsivity is tuned via bias voltages (<a href="https://www.nature.com/articles/s41598-022-09594-y" rel="noopener noreferrer"><em>Scientific Reports</em>, 2022</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8983698/" rel="noopener noreferrer">PMC8983698</a>). Each pixel generates a photocurrent proportional to light intensity multiplied by its programmed weight; summing those currents along the readout lines via Kirchhoff&rsquo;s laws computes matrix-vector multiplication directly in the analog domain in <strong>nanoseconds</strong> at <strong>nanowatt-to-microwatt power</strong> (&gt;98% accuracy on MNIST digit classification).</li>
+        <li><strong>3D-Stacked CMOS &amp; Rewritable Phase-Change Metasurfaces:</strong> Because passive optical diffraction alone is linear (lacking activation functions like ReLU) and fixed once etched, hybrid designs combine <strong>rewritable phase-change optical films (Sb<sub>2</sub>Se<sub>3</sub>)</strong>—whose weights can be updated via laser pulses (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12518764/" rel="noopener noreferrer">PMC12518764</a>)—with a <strong>3D-stacked CMOS logic die</strong> directly beneath the pixels. The optical front-end compresses spatial features at zero energy while the stacked electronic layer beneath applies non-linear activations in <strong>sub-millisecond time</strong>.</li>
+      </ol>
+    </div>
+
+    <div style="overflow-x:auto;margin:1.25rem 0">
+      <table style="width:100%;border-collapse:collapse;font-size:.82rem;line-height:1.45">
+        <thead>
+          <tr style="border-bottom:2px solid var(--rule);text-align:left">
+            <th style="padding:.55rem">Feature</th>
+            <th style="padding:.55rem">1. Etched Optical Metasurface (D&sup2;NN)</th>
+            <th style="padding:.55rem">2. Neuromorphic / Tunable APS</th>
+            <th style="padding:.55rem">3. Hybrid 3D-Stacked CMOS + Phase-Change</th>
+            <th style="padding:.55rem">Conventional CMOS + Digital NPU</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--rule)">
+            <td style="padding:.55rem"><strong>Physical Location</strong></td>
+            <td style="padding:.55rem">Etched into dielectric layers (TiO<sub>2</sub>/SiO<sub>2</sub>) directly above pixels</td>
+            <td style="padding:.55rem">Etched into semiconductor pixel photodiodes (WSe<sub>2</sub>)</td>
+            <td style="padding:.55rem">Optical encoder on top + 3D logic gates beneath pixels</td>
+            <td style="padding:.55rem">External processor after full-frame digitization</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--rule)">
+            <td style="padding:.55rem"><strong>Weight Storage</strong></td>
+            <td style="padding:.55rem">Nanopillar geometry (fixed, 6.25M/mm&sup2;)</td>
+            <td style="padding:.55rem">Analog bias voltages or floating-gate sensitivity</td>
+            <td style="padding:.55rem">Rewritable Sb<sub>2</sub>Se<sub>3</sub> phase shifts + stacked SRAM/memristors</td>
+            <td style="padding:.55rem">Off-sensor DRAM / SRAM</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--rule)">
+            <td style="padding:.55rem"><strong>Inference Speed</strong></td>
+            <td style="padding:.55rem"><strong>Speed of light (ps to fs)</strong></td>
+            <td style="padding:.55rem"><strong>Nanoseconds (~4.5 ns RC readout)</strong></td>
+            <td style="padding:.55rem"><strong>Sub-millisecond (~0.12 ms)</strong></td>
+            <td style="padding:.55rem">~18 ms (frame capture + ADC + NPU)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--rule)">
+            <td style="padding:.55rem"><strong>Power Consumption</strong></td>
+            <td style="padding:.55rem"><strong>Zero optical power</strong> (~45 &mu;W readout)</td>
+            <td style="padding:.55rem"><strong>Ultra-low (~8 &mu;W, nW–&mu;W)</strong></td>
+            <td style="padding:.55rem"><strong>Low (~1.4 mW)</strong></td>
+            <td style="padding:.55rem">High (~420 mW continuous video)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--rule)">
+            <td style="padding:.55rem"><strong>Raw Image in Digital RAM</strong></td>
+            <td style="padding:.55rem"><strong>0 bytes</strong> (pre-ADC optical classification)</td>
+            <td style="padding:.55rem"><strong>0 bytes</strong> (Kirchhoff analog current sum)</td>
+            <td style="padding:.55rem"><strong>0 bytes</strong> (optical feature compression)</td>
+            <td style="padding:.55rem">186.6 MB/sec (@ 30 fps 1080p)</td>
+          </tr>
+          <tr>
+            <td style="padding:.55rem"><strong>Primary Limitation</strong></td>
+            <td style="padding:.55rem">Lacks native optical non-linearity; fixed weights</td>
+            <td style="padding:.55rem">Lower pixel fill-factor; mainly linear classification</td>
+            <td style="padding:.55rem">Higher 3D fabrication &amp; alignment complexity</td>
+            <td style="padding:.55rem">High power, latency &amp; raw-frame privacy risk</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Coupling Active Sensors to a Two-Tier Local &amp; Collective Ledger</h3>
+    <p>When active sensors classify events in picoseconds or nanoseconds and your six personal agents coordinate throughout the day, they can easily generate <strong>tens of thousands of symbolic events per day</strong>. Reaching out to the global <strong>Collective Ledger</strong> on every single action would choke network bandwidth, add hundreds of milliseconds of delay, and expose a continuous trail of timing metadata.</p>
+    <p>Instead, advances in high-bandwidth computing allow a <strong>two-tier ledger architecture</strong>:</p>
+    <ul>
+      <li><strong>Tier 1 — Your High-Speed Local Ledger (Cloud Personal Enclave Today &rarr; On-Person Body-Area Network Tomorrow):</strong> Over <strong>99% of daily actions</strong>—sensor readings, local budget checks, home automation, and coordination among your own specialist agents—are computed and recorded on your private, high-bandwidth <strong>Local Ledger</strong>. Today, this high-speed network can run inside a hardware-isolated personal cloud enclave paired with your devices (`~6.4 ms` latency); as high-bandwidth on-person silicon matures, the entire fabric moves physically onto your body (`~0.28 ms` latency).</li>
+      <li><strong>Tier 2 — The Collective Ledger (Sparse Batch Settlement):</strong> Your Local Ledger only reaches out to the shared Collective Ledger <strong>sparsely and asynchronously</strong>—publishing compressed zero-knowledge proofs when you transact across trust boundaries or committing hourly principle-realignment medians. This cuts collective network bandwidth by <strong>over 99.7%</strong> while keeping your everyday life instantaneous and private.</li>
+    </ul>
+
+    <div class="gm-sim" id="insensor-ledger-sim" style="margin-top:1.5rem">
+      <span class="label">Interactive sandbox · In-Sensor Computing &amp; Two-Tier Local Ledger</span>
+      <h2 style="margin:.35rem 0 .6rem">Simulate Sensor-Etched Optical/Neuromorphic Classifiers &amp; Local-vs-Collective Ledger Bandwidth</h2>
+      <p>Compare the four sensor hardware architectures across inference speed, power draw, and raw-frame memory exposure, and test how running a <strong>High-Speed Local Ledger</strong> (in an isolated personal cloud enclave or directly on-person) eliminates constant calls to the Collective Ledger.</p>
+
+      <div class="gm-grid">
+        <div class="gm-box">
+          <h4>1. Select Sensor Silicon &amp; Local Ledger Topology</h4>
+          <label for="isc-sensor-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Active Sensor Hardware Architecture:</label>
+          <select id="isc-sensor-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
+            <option value="hybrid_3d_stacked_pcm" selected>3. Hybrid 3D-Stacked CMOS + Rewritable Phase-Change (Sb2Se3) — 0.12 ms · 1.4 mW · 0 Raw RAM</option>
+            <option value="optical_metasurface_d2nn">1. Optical Metasurface D²NN (TiO2 Etched On Top) — 2 ps (Speed of Light) · 45 µW · 0 Raw RAM</option>
+            <option value="neuromorphic_tunable_aps">2. Neuromorphic Tunable Pixels (WSe2 Etched Into Sensor) — 4.5 ns · 8 µW · 0 Raw RAM</option>
+            <option value="traditional_cmos_npu">Baseline: Conventional CMOS Camera + Digital NPU — 18 ms · 420 mW · 186.6 MB/s Raw RAM</option>
+          </select>
+
+          <label for="isc-ledger-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">High-Bandwidth Ledger Topology:</label>
+          <select id="isc-ledger-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
+            <option value="on_person_fabric_local_ledger" selected>Target Horizon: On-Person High-BW Network + Local Ledger (99.6% Local · 0.28 ms)</option>
+            <option value="cloud_enclave_local_ledger">Bridge Phase: Isolated Personal Cloud Enclave Local Ledger (99.2% Local · 6.4 ms)</option>
+            <option value="constant_collective">Naive Baseline: Constant Collective Ledger Sync (0% Local · 185 ms · Full Timing Exposure)</option>
+          </select>
+
+          <div style="font-size:.81rem;margin-bottom:.5rem">
+            <div style="display:flex;justify-content:space-between"><span><b>Daily Active Sensor &amp; Agent Actions:</b></span><code id="isc-events-val">86,400 events/day</code></div>
+            <input id="isc-events-rng" type="range" min="10000" max="250000" step="5000" value="86400" style="width:100%">
+          </div>
+        </div>
+
+        <div class="gm-box">
+          <h4>2. Pre-ADC Physical Privacy &amp; Two-Tier Ledger Telemetry</h4>
+          <div class="lib-scores-row" id="isc-metrics" style="margin-bottom:.55rem"></div>
+          <div class="gm-axes-bars" id="isc-bars"></div>
+          <div class="gm-diff" id="isc-diff" aria-live="polite" style="margin-top:.55rem"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer class="note-foot wrap-narrow">
@@ -377,7 +497,7 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=13" defer></script>
-<script src="/scripts/everyday.js?v=8" defer></script>
+<script src="/scripts/site.js?v=14" defer></script>
+<script src="/scripts/everyday.js?v=9" defer></script>
 </body>
 </html>
