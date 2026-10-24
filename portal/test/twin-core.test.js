@@ -7140,3 +7140,314 @@ test('summarizeLookaheadSimulation produces plain language summaries without int
   assert.ok(sumBlocked.text.includes('private data leak over network'));
   assert.ok(sumBlocked.text.includes('mutation gate evasion attempt'));
 });
+
+import {
+  ALLOWED_INCOME_PROOF_TIERS,
+  INCOME_DROP_TIER_THRESHOLDS,
+  ALLOWED_BANK_FEED_ENTRY_FIELDS,
+  ALLOWED_INCOME_PROOF_PARAM_FIELDS,
+  FORBIDDEN_RECEIPT_LEAK_FIELDS,
+  validateBankFeedEntries,
+  validateIncomeProofParameters,
+  computeIncomeProofCommitment,
+  generateIncomeVerificationProof,
+  verifyIncomeVerificationProof,
+  summarizeIncomeProof
+} from '../assets/twin-core.js';
+
+test('income verification constants are deeply frozen and valid', () => {
+  assert.ok(Object.isFrozen(ALLOWED_INCOME_PROOF_TIERS));
+  assert.ok(Object.isFrozen(INCOME_DROP_TIER_THRESHOLDS));
+  assert.ok(Object.isFrozen(ALLOWED_BANK_FEED_ENTRY_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_INCOME_PROOF_PARAM_FIELDS));
+  assert.ok(Object.isFrozen(FORBIDDEN_RECEIPT_LEAK_FIELDS));
+
+  assert.equal(INCOME_DROP_TIER_THRESHOLDS.severe_shock, 50);
+  assert.equal(INCOME_DROP_TIER_THRESHOLDS.substantial_drop, 30);
+  assert.equal(INCOME_DROP_TIER_THRESHOLDS.moderate_drop, 20);
+  assert.equal(INCOME_DROP_TIER_THRESHOLDS.minor_drop, 5);
+});
+
+test('validateBankFeedEntries accepts well-formed entries and enforces deep freeze', () => {
+  const sampleFeed = [
+    { id: 'tx_1', date: '2026-06-01', amount_cents: 250000, currency: 'USD', kind: 'credit', category: 'income', merchant: 'Employer A' },
+    { id: 'tx_2', date: '2026-06-15', amount_cents: 250000, currency: 'USD', kind: 'credit', category: 'income', merchant: 'Employer A' },
+    { id: 'tx_3', date: '2026-06-20', amount_cents: -4500, currency: 'USD', kind: 'debit', category: 'groceries' }
+  ];
+  const res = validateBankFeedEntries(sampleFeed);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.length, 3);
+  assert.ok(Object.isFrozen(res.value));
+  assert.ok(Object.isFrozen(res.value[0]));
+});
+
+test('validateBankFeedEntries fails closed on malformed, invalid, or prototype-polluted inputs', () => {
+  assert.equal(validateBankFeedEntries(null).ok, false);
+  assert.equal(validateBankFeedEntries([]).ok, false);
+  assert.equal(validateBankFeedEntries('not-an-array').ok, false);
+
+  // Prototype pollution attempt
+  const polluted = JSON.parse('{"__proto__": {"injected": true}}');
+  assert.equal(validateBankFeedEntries([polluted]).ok, false);
+
+  // Duplicate id
+  const dupes = [
+    { id: 'tx_dup', date: '2026-06-01', amount_cents: 10000, currency: 'USD', kind: 'credit' },
+    { id: 'tx_dup', date: '2026-06-02', amount_cents: 10000, currency: 'USD', kind: 'credit' }
+  ];
+  assert.equal(validateBankFeedEntries(dupes).ok, false);
+
+  // Impossible calendar date (Feb 31)
+  const badDate = [
+    { id: 'tx_bad_date', date: '2026-02-31', amount_cents: 10000, currency: 'USD', kind: 'credit' }
+  ];
+  assert.equal(validateBankFeedEntries(badDate).ok, false);
+
+  // Unsafe integer or float amount_cents
+  const badAmount = [
+    { id: 'tx_float', date: '2026-06-01', amount_cents: 100.5, currency: 'USD', kind: 'credit' }
+  ];
+  assert.equal(validateBankFeedEntries(badAmount).ok, false);
+
+  // Mixed currencies in a single feed
+  const mixedCurr = [
+    { id: 'tx_usd', date: '2026-06-01', amount_cents: 10000, currency: 'USD', kind: 'credit' },
+    { id: 'tx_eur', date: '2026-06-02', amount_cents: 10000, currency: 'EUR', kind: 'credit' }
+  ];
+  assert.equal(validateBankFeedEntries(mixedCurr).ok, false);
+
+  // Debit with positive cents / credit with negative cents
+  const badCredit = [
+    { id: 'tx_neg_cred', date: '2026-06-01', amount_cents: -5000, currency: 'USD', kind: 'credit' }
+  ];
+  assert.equal(validateBankFeedEntries(badCredit).ok, false);
+
+  // Unknown forbidden field
+  const forbiddenField = [
+    { id: 'tx_leak', date: '2026-06-01', amount_cents: 5000, currency: 'USD', kind: 'credit', raw_ssn: '123-45-6789' }
+  ];
+  assert.equal(validateBankFeedEntries(forbiddenField).ok, false);
+});
+
+test('validateIncomeProofParameters strictly enforces date ranges and thresholds fail-closed', () => {
+  const valid = {
+    baseline_start: '2026-01-01',
+    baseline_end: '2026-03-31',
+    evaluation_start: '2026-04-01',
+    evaluation_end: '2026-06-30',
+    qualification_threshold_percent: 25,
+    currency: 'USD'
+  };
+  const res = validateIncomeProofParameters(valid);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.qualification_threshold_percent, 25);
+  assert.equal(res.value.salt, 'cin_local_twin_salt');
+
+  // Inverted baseline range
+  assert.equal(validateIncomeProofParameters({ ...valid, baseline_start: '2026-04-01', baseline_end: '2026-03-01' }).ok, false);
+
+  // Inverted evaluation range
+  assert.equal(validateIncomeProofParameters({ ...valid, evaluation_start: '2026-07-01', evaluation_end: '2026-06-01' }).ok, false);
+
+  // Overlapping baseline and evaluation
+  assert.equal(validateIncomeProofParameters({ ...valid, baseline_end: '2026-05-01', evaluation_start: '2026-04-01' }).ok, false);
+
+  // Impossible date (April 31)
+  assert.equal(validateIncomeProofParameters({ ...valid, baseline_end: '2026-04-31' }).ok, false);
+
+  // Invalid threshold bounds (< 1 or > 99)
+  assert.equal(validateIncomeProofParameters({ ...valid, qualification_threshold_percent: 0 }).ok, false);
+  assert.equal(validateIncomeProofParameters({ ...valid, qualification_threshold_percent: 100 }).ok, false);
+  assert.equal(validateIncomeProofParameters({ ...valid, qualification_threshold_percent: NaN }).ok, false);
+
+  // Forbidden fields
+  assert.equal(validateIncomeProofParameters({ ...valid, unauthorized_option: true }).ok, false);
+});
+
+test('generateIncomeVerificationProof calculates income drop accurately across tiers and avoids data leakage', () => {
+  // Baseline income: $6,000/mo ($12,000 total across 2 months)
+  // Eval income: $4,000 total across 2 months (66.67% drop) -> severe_shock
+  const feed = [
+    { id: 'b1', date: '2026-01-15', amount_cents: 600000, currency: 'USD', kind: 'credit', category: 'income' },
+    { id: 'b2', date: '2026-02-15', amount_cents: 600000, currency: 'USD', kind: 'credit', category: 'income' },
+    { id: 'b_debit', date: '2026-02-20', amount_cents: -120000, currency: 'USD', kind: 'debit', category: 'rent' },
+    { id: 'e1', date: '2026-04-15', amount_cents: 200000, currency: 'USD', kind: 'credit', category: 'income' },
+    { id: 'e2', date: '2026-05-15', amount_cents: 200000, currency: 'USD', kind: 'credit', category: 'income' }
+  ];
+
+  const params = {
+    baseline_start: '2026-01-01',
+    baseline_end: '2026-02-28',
+    evaluation_start: '2026-04-01',
+    evaluation_end: '2026-05-31',
+    qualification_threshold_percent: 30,
+    currency: 'USD',
+    category: 'income'
+  };
+
+  const gen = generateIncomeVerificationProof(feed, params);
+  assert.equal(gen.ok, true);
+  assert.equal(gen.client_summary.baseline_income_cents, 1200000);
+  assert.equal(gen.client_summary.evaluation_income_cents, 400000);
+  assert.equal(gen.client_summary.drop_percent, 66.67);
+  assert.equal(gen.client_summary.tier, 'severe_shock');
+  assert.equal(gen.client_summary.qualifies_for_relief, true);
+
+  const receipt = gen.receipt;
+  assert.ok(receipt.receipt_id.startsWith('proof_inc_'));
+  assert.equal(receipt.qualification_tier, 'severe_shock');
+  assert.equal(receipt.qualifies_for_relief, true);
+  assert.equal(receipt.threshold_percent, 30);
+  assert.equal(receipt.currency, 'USD');
+  assert.equal(receipt.transaction_count, 4);
+
+  // Strict Zero-Knowledge Verification: Assert that zero raw transaction details leak into receipt
+  const receiptKeys = Object.keys(receipt);
+  for (const forbidden of FORBIDDEN_RECEIPT_LEAK_FIELDS) {
+    assert.ok(!receiptKeys.includes(forbidden), `Receipt must not contain forbidden field: ${forbidden}`);
+  }
+  const serializedReceipt = JSON.stringify(receipt);
+  assert.ok(!serializedReceipt.includes('1200000'), 'Raw dollar amounts must not appear in receipt');
+  assert.ok(!serializedReceipt.includes('400000'), 'Raw dollar amounts must not appear in receipt');
+  assert.ok(!serializedReceipt.includes('b1'), 'Transaction IDs must not appear in receipt');
+  assert.ok(!serializedReceipt.includes('rent'), 'Merchant/category notes must not appear in receipt');
+});
+
+test('generateIncomeVerificationProof evaluates moderate, substantial, and zero drops correctly', () => {
+  // Baseline: $10,000
+  // Eval: $7,500 (25% drop) -> moderate_drop
+  const feedModerate = [
+    { id: 'b1', date: '2026-01-15', amount_cents: 1000000, currency: 'USD', kind: 'credit' },
+    { id: 'e1', date: '2026-04-15', amount_cents: 750000, currency: 'USD', kind: 'credit' }
+  ];
+  const params20 = {
+    baseline_start: '2026-01-01',
+    baseline_end: '2026-01-31',
+    evaluation_start: '2026-04-01',
+    evaluation_end: '2026-04-30',
+    qualification_threshold_percent: 20,
+    currency: 'USD'
+  };
+  const genMod = generateIncomeVerificationProof(feedModerate, params20);
+  assert.equal(genMod.ok, true);
+  assert.equal(genMod.receipt.qualification_tier, 'moderate_drop');
+  assert.equal(genMod.receipt.qualifies_for_relief, true);
+
+  // No drop (Eval income > Baseline income)
+  const feedNoDrop = [
+    { id: 'b1', date: '2026-01-15', amount_cents: 1000000, currency: 'USD', kind: 'credit' },
+    { id: 'e1', date: '2026-04-15', amount_cents: 1200000, currency: 'USD', kind: 'credit' }
+  ];
+  const genNoDrop = generateIncomeVerificationProof(feedNoDrop, params20);
+  assert.equal(genNoDrop.ok, true);
+  assert.equal(genNoDrop.receipt.qualification_tier, 'no_drop');
+  assert.equal(genNoDrop.receipt.qualifies_for_relief, false);
+
+  // Zero baseline income fails closed
+  const feedZeroBase = [
+    { id: 'e1', date: '2026-04-15', amount_cents: 500000, currency: 'USD', kind: 'credit' }
+  ];
+  const genZero = generateIncomeVerificationProof(feedZeroBase, params20);
+  assert.equal(genZero.ok, false);
+  assert.equal(genZero.error, 'zero_baseline_income');
+});
+
+test('verifyIncomeVerificationProof authenticates valid receipts and detects tampering fail-closed', () => {
+  const feed = [
+    { id: 'b1', date: '2026-01-15', amount_cents: 500000, currency: 'USD', kind: 'credit' },
+    { id: 'e1', date: '2026-04-15', amount_cents: 300000, currency: 'USD', kind: 'credit' }
+  ];
+  const params = {
+    baseline_start: '2026-01-01',
+    baseline_end: '2026-01-31',
+    evaluation_start: '2026-04-01',
+    evaluation_end: '2026-04-30',
+    qualification_threshold_percent: 30,
+    currency: 'USD',
+    salt: 'test_salt_123'
+  };
+
+  const gen = generateIncomeVerificationProof(feed, params);
+  assert.equal(gen.ok, true);
+  const receipt = gen.receipt;
+
+  // Authentic verification
+  const verifyValid = verifyIncomeVerificationProof(receipt, {
+    expected_tier: 'substantial_drop',
+    expected_currency: 'USD',
+    require_qualification: true,
+    preimage: {
+      baseline_cents: 500000,
+      eval_cents: 300000,
+      salt: 'test_salt_123'
+    }
+  });
+  assert.equal(verifyValid.ok, true);
+  assert.equal(verifyValid.verified, true);
+  assert.equal(verifyValid.qualification_tier, 'substantial_drop');
+
+  // Tampered receipt_id
+  const tamperedId = { ...receipt, receipt_id: 'proof_inc_00000000000000' };
+  const verifyBadId = verifyIncomeVerificationProof(tamperedId);
+  assert.equal(verifyBadId.ok, false);
+  assert.equal(verifyBadId.error, 'receipt_tampered_or_corrupted');
+
+  // Tampered tier (attacker tries to claim severe_shock instead of substantial_drop)
+  const tamperedTier = { ...receipt, qualification_tier: 'severe_shock' };
+  const verifyBadTier = verifyIncomeVerificationProof(tamperedTier);
+  assert.equal(verifyBadTier.ok, false);
+  assert.equal(verifyBadTier.error, 'receipt_tampered_or_corrupted');
+
+  // Tampered relief status (attacker flips false to true on ineligible receipt)
+  const tamperedRelief = { ...receipt, qualifies_for_relief: false };
+  const verifyBadRelief = verifyIncomeVerificationProof(tamperedRelief);
+  assert.equal(verifyBadRelief.ok, false);
+  assert.equal(verifyBadRelief.error, 'receipt_tampered_or_corrupted');
+
+  // Injected leak property (attacker embeds private bank feed into receipt)
+  const leakedReceipt = { ...receipt, transactions: [{ id: 'leaked' }] };
+  const verifyLeak = verifyIncomeVerificationProof(leakedReceipt);
+  assert.equal(verifyLeak.ok, false);
+  assert.equal(verifyLeak.error, 'receipt_violates_zero_leakage_boundary');
+
+  // Mismatched expected tier
+  const mismatchTier = verifyIncomeVerificationProof(receipt, { expected_tier: 'moderate_drop' });
+  assert.equal(mismatchTier.ok, true);
+  assert.equal(mismatchTier.verified, false);
+  assert.equal(mismatchTier.error, 'tier_mismatch');
+
+  // Mismatched preimage amounts
+  const badPreimage = verifyIncomeVerificationProof(receipt, {
+    preimage: { baseline_cents: 999999, eval_cents: 300000, salt: 'test_salt_123' }
+  });
+  assert.equal(badPreimage.ok, false);
+  assert.equal(badPreimage.error, 'commitment_preimage_mismatch');
+});
+
+test('summarizeIncomeProof produces clear plain language without internal jargon', () => {
+  const result = {
+    ok: true,
+    receipt: {
+      receipt_id: 'proof_inc_abcdef12345678',
+      qualification_tier: 'substantial_drop',
+      qualifies_for_relief: true,
+      threshold_percent: 20,
+      currency: 'USD',
+      transaction_count: 14
+    },
+    client_summary: {
+      drop_percent: 35.5
+    }
+  };
+
+  const sum = summarizeIncomeProof(result);
+  assert.equal(sum.ok, true);
+  assert.equal(sum.tier_label, 'Substantial income drop (>= 30% drop)');
+  assert.ok(sum.text.includes('Local proof generated'));
+  assert.ok(sum.text.includes('Substantial income drop'));
+  assert.ok(sum.text.includes('zero raw details exposed'));
+  assert.ok(sum.text.includes('Qualifies for relief under 20% threshold'));
+  assert.ok(!sum.text.includes('tier 2'));
+  assert.ok(!sum.text.includes('ticket'));
+  assert.ok(!sum.text.includes('steward'));
+});

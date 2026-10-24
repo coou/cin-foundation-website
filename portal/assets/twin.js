@@ -1,3 +1,4 @@
+import { generateIncomeVerificationProof, verifyIncomeVerificationProof, summarizeIncomeProof } from './twin-core.js';
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=3';
 import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit, evaluateAuthorityEnvelopeAction, summarizeAuthorityEnvelopeAudit, createDelegationCommitment, evaluateDelegationTransition, summarizeDelegationLedger, createLookaheadActionPlan, simulateActionPlanLookahead, summarizeLookaheadSimulation } from './twin-core.js';
@@ -1277,3 +1278,78 @@ renderAuthorityEnvelopeInspector(); renderDelegationInspector(); renderLookahead
 
 
 
+
+function renderIncomeProofInspector() {
+  const form = document.getElementById('generate-income-proof');
+  const resultBox = document.getElementById('income-proof-eval-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+
+    const feedType = form.scenario_feed.value;
+    const threshold = parseInt(form.threshold.value, 10) || 20;
+
+    let feed;
+    if (feedType === 'severe_shock') {
+      feed = [
+        { id: 'b1', date: '2026-01-15', amount_cents: 600000, currency: 'USD', kind: 'credit', category: 'income' },
+        { id: 'b2', date: '2026-02-15', amount_cents: 600000, currency: 'USD', kind: 'credit', category: 'income' },
+        { id: 'e1', date: '2026-04-15', amount_cents: 200000, currency: 'USD', kind: 'credit', category: 'income' },
+        { id: 'e2', date: '2026-05-15', amount_cents: 200000, currency: 'USD', kind: 'credit', category: 'income' }
+      ];
+    } else if (feedType === 'moderate_drop') {
+      feed = [
+        { id: 'b1', date: '2026-01-15', amount_cents: 500000, currency: 'USD', kind: 'credit', category: 'income' },
+        { id: 'b2', date: '2026-02-15', amount_cents: 500000, currency: 'USD', kind: 'credit', category: 'income' },
+        { id: 'e1', date: '2026-04-15', amount_cents: 375000, currency: 'USD', kind: 'credit', category: 'income' },
+        { id: 'e2', date: '2026-05-15', amount_cents: 375000, currency: 'USD', kind: 'credit', category: 'income' }
+      ];
+    } else {
+      feed = [
+        { id: 'b1', date: '2026-01-15', amount_cents: 500000, currency: 'USD', kind: 'credit', category: 'income' },
+        { id: 'b2', date: '2026-02-15', amount_cents: 500000, currency: 'USD', kind: 'credit', category: 'income' },
+        { id: 'e1', date: '2026-04-15', amount_cents: 500000, currency: 'USD', kind: 'credit', category: 'income' },
+        { id: 'e2', date: '2026-05-15', amount_cents: 500000, currency: 'USD', kind: 'credit', category: 'income' }
+      ];
+    }
+
+    const proofRes = generateIncomeVerificationProof(feed, {
+      baseline_start: '2026-01-01',
+      baseline_end: '2026-02-28',
+      evaluation_start: '2026-04-01',
+      evaluation_end: '2026-05-31',
+      qualification_threshold_percent: threshold,
+      currency: 'USD',
+      category: 'income'
+    });
+
+    if (!proofRes.ok) {
+      const p = el('p', 'muted');
+      p.appendChild(el('strong', 'status-err', 'Failed. '));
+      p.appendChild(document.createTextNode(proofRes.reason || proofRes.error));
+      resultBox.appendChild(p);
+      return;
+    }
+
+    const summary = summarizeIncomeProof(proofRes);
+    const p = el('p', summary.status_class);
+    p.appendChild(el('strong', summary.qualifies ? 'status-pass' : 'status-warn', summary.qualifies ? 'Qualified. ' : 'Not qualified. '));
+    p.appendChild(document.createTextNode(summary.text));
+    resultBox.appendChild(p);
+
+    const receiptBox = el('div', 'twin-subblock');
+    receiptBox.appendChild(el('h4', 'flush', 'Portable zero-leakage receipt:'));
+    const pre = el('pre', 'plain', JSON.stringify(proofRes.receipt, null, 2));
+    receiptBox.appendChild(pre);
+
+    const verifyVerdict = verifyIncomeVerificationProof(proofRes.receipt);
+    const verifyNote = el('p', 'muted', verifyVerdict.verified ? 'Cryptographic receipt verified authentic against local fingerprint.' : 'Receipt verification failed.');
+    receiptBox.appendChild(verifyNote);
+
+    resultBox.appendChild(receiptBox);
+  };
+}
+
+renderIncomeProofInspector();
