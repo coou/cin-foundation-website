@@ -61,6 +61,18 @@
     <section class="card"><h2 class="flush">Context assembler</h2><p class="muted">Compile a token-budgeted prompt context for local on-device models. Prioritizes safety-critical constraints, active obligations, and focus quests under strict memory limits without sending data anywhere.</p>
       <form id="assemble-context" class="stack"><label>Token budget <select name="budget"><option value="512">512 tokens (compact on-device)</option><option value="1024" selected>1024 tokens (standard edge)</option><option value="2048">2048 tokens (extended)</option><option value="4096">4096 tokens (full context)</option></select></label><label>System role prompt <input type="text" name="system_prompt" value="You are a personal twin assistant operating strictly within the person's local browser device." maxlength="200"></label><button class="btn">Compile context</button></form><div id="context-assembly-result" class="twin-summary"></div></section>
   </div>
+      <section class="card"><h2 class="flush">Income verification proof</h2><p class="muted">Generate a portable qualification receipt during income shocks or job transition without handing over raw bank feeds or account numbers. Evaluates cash flow locally in this browser.</p>
+      <div id="income-proof-inspector" class="twin-subblock">
+        <form id="generate-income-proof" class="stack">
+          <label>Pre-shock baseline period <input type="text" name="baseline_dates" value="2026-01-01 to 2026-02-28" readonly></label>
+          <label>Post-shock evaluation period <input type="text" name="eval_dates" value="2026-04-01 to 2026-05-31" readonly></label>
+          <label>Scenario test feed <select name="scenario_feed"><option value="severe_shock" selected>Severe income shock (-66% drop)</option><option value="moderate_drop">Moderate income drop (-25% drop)</option><option value="no_drop">Stable income (0% drop)</option></select></label>
+          <label>Required relief threshold <select name="threshold"><option value="20" selected>20% drop required</option><option value="30">30% drop required</option><option value="50">50% drop required</option></select></label>
+          <button class="btn">Generate zero-leakage proof</button>
+        </form>
+        <div id="income-proof-eval-result" class="twin-result"></div>
+      </div>
+    </section>
   <section class="card stack twin-card-stack">
     <h2 class="flush">Your data, your control</h2>
     <p class="muted">You own your twin's data. Download a local backup, restore a previous backup, or delete everything stored in this browser.</p>

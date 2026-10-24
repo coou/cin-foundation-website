@@ -8994,3 +8994,569 @@ export function summarizeLookaheadSimulation(simulationResult) {
     risk_score: simulationResult.risk_score
   });
 }
+
+// ============================================================================
+// LOCAL-FIRST INCOME VERIFICATION PROOF GENERATOR (arXiv:2610.23901, Scenario SC-20261024-0233)
+// ============================================================================
+
+export const ALLOWED_INCOME_PROOF_TIERS = Object.freeze([
+  'no_drop',
+  'minor_drop',
+  'moderate_drop',
+  'substantial_drop',
+  'severe_shock'
+]);
+
+export const INCOME_DROP_TIER_THRESHOLDS = Object.freeze({
+  severe_shock: 50,      // >= 50% drop
+  substantial_drop: 30,  // >= 30% drop
+  moderate_drop: 20,     // >= 20% drop
+  minor_drop: 5          // >= 5% drop
+});
+
+export const ALLOWED_BANK_FEED_ENTRY_FIELDS = Object.freeze([
+  'id',
+  'date',
+  'amount_cents',
+  'currency',
+  'kind',
+  'category',
+  'merchant',
+  'description'
+]);
+
+export const ALLOWED_INCOME_PROOF_PARAM_FIELDS = Object.freeze([
+  'baseline_start',
+  'baseline_end',
+  'evaluation_start',
+  'evaluation_end',
+  'qualification_threshold_percent',
+  'currency',
+  'category',
+  'salt'
+]);
+
+export const FORBIDDEN_RECEIPT_LEAK_FIELDS = Object.freeze([
+  'transactions',
+  'entries',
+  'accounts',
+  'account_number',
+  'bank_feed',
+  'raw_data',
+  'merchant',
+  'merchants',
+  'descriptions',
+  'baseline_income_cents',
+  'evaluation_income_cents'
+]);
+
+/**
+ * Validates a list of client-side bank feed entries fail-closed.
+ *
+ * @param {Array<object>} entries Bank feed entries
+ * @returns {object} { ok: true, value: frozenEntries } or { ok: false, error: string }
+ */
+export function validateBankFeedEntries(entries) {
+  if (!Array.isArray(entries) || entries.length === 0) {
+    return { ok: false, error: 'bank_feed must be a non-empty array of transaction entries' };
+  }
+
+  const seenIds = new Set();
+  let feedCurrency = null;
+  const sanitized = [];
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+      return { ok: false, error: `Entry at index ${i} must be a non-null object` };
+    }
+
+    if (Object.prototype.hasOwnProperty.call(entry, '__proto__') ||
+        Object.prototype.hasOwnProperty.call(entry, 'constructor') ||
+        Object.prototype.hasOwnProperty.call(entry, 'prototype')) {
+      return { ok: false, error: `Entry at index ${i} contains illegal prototype pollution property` };
+    }
+
+    const keys = Object.keys(entry);
+    for (const k of keys) {
+      if (!ALLOWED_BANK_FEED_ENTRY_FIELDS.includes(k)) {
+        return { ok: false, error: `Entry at index ${i} contains forbidden field: ${k}` };
+      }
+    }
+
+    if (typeof entry.id !== 'string' || !entry.id.trim() || entry.id.length > 64) {
+      return { ok: false, error: `Entry at index ${i} must have a valid non-empty string id (max 64 chars)` };
+    }
+    if (seenIds.has(entry.id)) {
+      return { ok: false, error: `Duplicate transaction id detected: ${entry.id}` };
+    }
+    seenIds.add(entry.id);
+
+    if (typeof entry.date !== 'string' || !isValidCalendarDate(entry.date)) {
+      return { ok: false, error: `Entry at index ${i} has invalid date (must be a valid calendar date YYYY-MM-DD)` };
+    }
+
+    if (!Number.isSafeInteger(entry.amount_cents)) {
+      return { ok: false, error: `Entry at index ${i} amount_cents must be a safe integer` };
+    }
+
+    if (!isValidCurrencyCode(entry.currency)) {
+      return { ok: false, error: `Entry at index ${i} has invalid currency code: ${entry.currency}` };
+    }
+
+    if (feedCurrency === null) {
+      feedCurrency = entry.currency;
+    } else if (entry.currency !== feedCurrency) {
+      return { ok: false, error: `Mixed currencies in bank feed (${feedCurrency} vs ${entry.currency}) not permitted for income verification` };
+    }
+
+    if (entry.kind !== 'credit' && entry.kind !== 'debit') {
+      return { ok: false, error: `Entry at index ${i} kind must be 'credit' or 'debit'` };
+    }
+
+    if (entry.kind === 'credit' && entry.amount_cents < 0) {
+      return { ok: false, error: `Entry at index ${i} is credit but has negative amount_cents` };
+    }
+    if (entry.kind === 'debit' && entry.amount_cents > 0) {
+      return { ok: false, error: `Entry at index ${i} is debit but has positive amount_cents` };
+    }
+
+    if (entry.category !== undefined && (typeof entry.category !== 'string' || entry.category.length > 80)) {
+      return { ok: false, error: `Entry at index ${i} category must be a string up to 80 chars` };
+    }
+    if (entry.merchant !== undefined && (typeof entry.merchant !== 'string' || entry.merchant.length > 120)) {
+      return { ok: false, error: `Entry at index ${i} merchant must be a string up to 120 chars` };
+    }
+    if (entry.description !== undefined && (typeof entry.description !== 'string' || entry.description.length > 200)) {
+      return { ok: false, error: `Entry at index ${i} description must be a string up to 200 chars` };
+    }
+
+    sanitized.push({
+      id: entry.id,
+      date: entry.date,
+      amount_cents: entry.amount_cents,
+      currency: entry.currency,
+      kind: entry.kind,
+      ...(entry.category !== undefined ? { category: entry.category } : {}),
+      ...(entry.merchant !== undefined ? { merchant: entry.merchant } : {}),
+      ...(entry.description !== undefined ? { description: entry.description } : {})
+    });
+  }
+
+  return { ok: true, value: deepFreeze(sanitized) };
+}
+
+/**
+ * Validates income verification proof parameters fail-closed.
+ *
+ * @param {object} params Verification parameters
+ * @returns {object} { ok: true, value: frozenParams } or { ok: false, error: string }
+ */
+export function validateIncomeProofParameters(params) {
+  if (!params || typeof params !== 'object' || Array.isArray(params)) {
+    return { ok: false, error: 'parameters must be a non-null object' };
+  }
+
+  if (Object.prototype.hasOwnProperty.call(params, '__proto__') ||
+      Object.prototype.hasOwnProperty.call(params, 'constructor') ||
+      Object.prototype.hasOwnProperty.call(params, 'prototype')) {
+    return { ok: false, error: 'parameters contain illegal prototype pollution property' };
+  }
+
+  const keys = Object.keys(params);
+  for (const k of keys) {
+    if (!ALLOWED_INCOME_PROOF_PARAM_FIELDS.includes(k)) {
+      return { ok: false, error: `Forbidden parameter field: ${k}` };
+    }
+  }
+
+  const { baseline_start, baseline_end, evaluation_start, evaluation_end } = params;
+
+  if (typeof baseline_start !== 'string' || !isValidCalendarDate(baseline_start)) {
+    return { ok: false, error: 'baseline_start must be a valid calendar date YYYY-MM-DD' };
+  }
+  if (typeof baseline_end !== 'string' || !isValidCalendarDate(baseline_end)) {
+    return { ok: false, error: 'baseline_end must be a valid calendar date YYYY-MM-DD' };
+  }
+  if (baseline_start > baseline_end) {
+    return { ok: false, error: 'baseline_start cannot be after baseline_end' };
+  }
+
+  if (typeof evaluation_start !== 'string' || !isValidCalendarDate(evaluation_start)) {
+    return { ok: false, error: 'evaluation_start must be a valid calendar date YYYY-MM-DD' };
+  }
+  if (typeof evaluation_end !== 'string' || !isValidCalendarDate(evaluation_end)) {
+    return { ok: false, error: 'evaluation_end must be a valid calendar date YYYY-MM-DD' };
+  }
+  if (evaluation_start > evaluation_end) {
+    return { ok: false, error: 'evaluation_start cannot be after evaluation_end' };
+  }
+
+  if (baseline_end > evaluation_start) {
+    return { ok: false, error: 'baseline period cannot overlap evaluation period' };
+  }
+
+  const threshold = params.qualification_threshold_percent;
+  if (typeof threshold !== 'number' || isNaN(threshold) || !isFinite(threshold) || threshold < 1 || threshold > 99) {
+    return { ok: false, error: 'qualification_threshold_percent must be a number between 1 and 99' };
+  }
+
+  if (!isValidCurrencyCode(params.currency)) {
+    return { ok: false, error: `Invalid currency code: ${params.currency}` };
+  }
+
+  if (params.category !== undefined && (typeof params.category !== 'string' || !params.category.trim())) {
+    return { ok: false, error: 'category if provided must be a non-empty string' };
+  }
+
+  const salt = (typeof params.salt === 'string' && params.salt.trim()) ? params.salt.trim() : 'cin_local_twin_salt';
+  if (salt.length > 128) {
+    return { ok: false, error: 'salt exceeds maximum length of 128 characters' };
+  }
+
+  return {
+    ok: true,
+    value: deepFreeze({
+      baseline_start,
+      baseline_end,
+      evaluation_start,
+      evaluation_end,
+      qualification_threshold_percent: threshold,
+      currency: params.currency,
+      ...(params.category ? { category: params.category.trim() } : {}),
+      salt
+    })
+  };
+}
+
+/**
+ * Computes a cryptographic commitment hash over aggregate income amounts and temporal parameters.
+ *
+ * @param {object} data Commitment data components
+ * @returns {string} Deterministic hex digest
+ */
+export function computeIncomeProofCommitment(data) {
+  if (!data || typeof data !== 'object') return '00000000000000';
+  const seed = `${data.baseline_income_cents}|${data.evaluation_income_cents}|${data.qualification_tier}|${data.currency}|${data.salt}|${data.baseline_period?.start}|${data.baseline_period?.end}|${data.evaluation_period?.start}|${data.evaluation_period?.end}`;
+  return computeContextFingerprint(seed);
+}
+
+/**
+ * Evaluates cash flow on-device and generates a zero-leakage income verification proof receipt.
+ *
+ * @param {Array<object>} bankFeed Array of verified ledger transactions
+ * @param {object} params Verification parameters (baseline & eval windows, threshold, currency)
+ * @returns {object} Deeply frozen result with tamper-evident receipt and zero transaction leakage
+ */
+export function generateIncomeVerificationProof(bankFeed, params) {
+  const feedRes = validateBankFeedEntries(bankFeed);
+  if (!feedRes.ok) {
+    return deepFreeze({ ok: false, error: feedRes.error });
+  }
+
+  const paramRes = validateIncomeProofParameters(params);
+  if (!paramRes.ok) {
+    return deepFreeze({ ok: false, error: paramRes.error });
+  }
+
+  const cleanFeed = feedRes.value;
+  const p = paramRes.value;
+
+  let baselineCents = 0;
+  let evalCents = 0;
+  let baselineTxCount = 0;
+  let evalTxCount = 0;
+
+  for (const tx of cleanFeed) {
+    if (tx.currency !== p.currency) {
+      return deepFreeze({
+        ok: false,
+        error: `Transaction currency mismatch: expected ${p.currency}, found ${tx.currency}`
+      });
+    }
+
+    if (tx.kind === 'credit') {
+      if (p.category && tx.category !== p.category) {
+        continue;
+      }
+
+      if (tx.date >= p.baseline_start && tx.date <= p.baseline_end) {
+        baselineCents += tx.amount_cents;
+        baselineTxCount++;
+        if (!Number.isSafeInteger(baselineCents)) {
+          return deepFreeze({ ok: false, error: 'integer_overflow_in_baseline_income' });
+        }
+      } else if (tx.date >= p.evaluation_start && tx.date <= p.evaluation_end) {
+        evalCents += tx.amount_cents;
+        evalTxCount++;
+        if (!Number.isSafeInteger(evalCents)) {
+          return deepFreeze({ ok: false, error: 'integer_overflow_in_evaluation_income' });
+        }
+      }
+    }
+  }
+
+  if (baselineCents <= 0) {
+    return deepFreeze({
+      ok: false,
+      error: 'zero_baseline_income',
+      reason: 'No baseline credit income recorded in the baseline window to evaluate drop.'
+    });
+  }
+
+  const dropCents = baselineCents - evalCents;
+  let dropPercent = 0;
+  let tier = 'no_drop';
+
+  if (dropCents > 0) {
+    dropPercent = Math.round(((dropCents * 100) / baselineCents) * 100) / 100;
+    if (dropPercent >= INCOME_DROP_TIER_THRESHOLDS.severe_shock) {
+      tier = 'severe_shock';
+    } else if (dropPercent >= INCOME_DROP_TIER_THRESHOLDS.substantial_drop) {
+      tier = 'substantial_drop';
+    } else if (dropPercent >= INCOME_DROP_TIER_THRESHOLDS.moderate_drop) {
+      tier = 'moderate_drop';
+    } else if (dropPercent >= INCOME_DROP_TIER_THRESHOLDS.minor_drop) {
+      tier = 'minor_drop';
+    } else {
+      tier = 'no_drop';
+    }
+  }
+
+  const qualifies = dropPercent >= p.qualification_threshold_percent;
+
+  const commitmentData = {
+    baseline_income_cents: baselineCents,
+    evaluation_income_cents: evalCents,
+    qualification_tier: tier,
+    currency: p.currency,
+    salt: p.salt,
+    baseline_period: { start: p.baseline_start, end: p.baseline_end },
+    evaluation_period: { start: p.evaluation_start, end: p.evaluation_end }
+  };
+  const commitmentHash = computeIncomeProofCommitment(commitmentData);
+
+  const totalTxCount = baselineTxCount + evalTxCount;
+  const receiptSeed = `${tier}|${qualifies}|${p.qualification_threshold_percent}|${p.currency}|${commitmentHash}|${totalTxCount}|${p.baseline_start}|${p.baseline_end}|${p.evaluation_start}|${p.evaluation_end}`;
+  const receiptHash = computeContextFingerprint(receiptSeed);
+  const receiptId = `proof_inc_${receiptHash}`;
+
+  const receipt = deepFreeze({
+    receipt_id: receiptId,
+    qualification_tier: tier,
+    qualifies_for_relief: qualifies,
+    threshold_percent: p.qualification_threshold_percent,
+    currency: p.currency,
+    baseline_period: deepFreeze({ start: p.baseline_start, end: p.baseline_end }),
+    evaluation_period: deepFreeze({ start: p.evaluation_start, end: p.evaluation_end }),
+    commitment_hash: commitmentHash,
+    transaction_count: totalTxCount,
+    generated_at: new Date().toISOString()
+  });
+
+  for (const forbidden of FORBIDDEN_RECEIPT_LEAK_FIELDS) {
+    if (Object.prototype.hasOwnProperty.call(receipt, forbidden)) {
+      return deepFreeze({ ok: false, error: `Receipt integrity fault: exposed ${forbidden}` });
+    }
+  }
+
+  return deepFreeze({
+    ok: true,
+    receipt,
+    client_summary: deepFreeze({
+      drop_percent: dropPercent,
+      baseline_income_cents: baselineCents,
+      evaluation_income_cents: evalCents,
+      qualifies_for_relief: qualifies,
+      tier
+    })
+  });
+}
+
+/**
+ * Verifies a portable income verification proof receipt fail-closed.
+ *
+ * @param {object} receipt The portable proof receipt
+ * @param {object} [options] Verification criteria (expected_tier, expected_currency, require_qualification, preimage)
+ * @returns {object} Deeply frozen verification verdict
+ */
+export function verifyIncomeVerificationProof(receipt, options = {}) {
+  if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_receipt_object' });
+  }
+
+  for (const forbidden of FORBIDDEN_RECEIPT_LEAK_FIELDS) {
+    if (Object.prototype.hasOwnProperty.call(receipt, forbidden)) {
+      return deepFreeze({
+        ok: false,
+        verified: false,
+        error: 'receipt_violates_zero_leakage_boundary',
+        reason: `Receipt contains forbidden transaction detail: ${forbidden}`
+      });
+    }
+  }
+
+  if (typeof receipt.receipt_id !== 'string' || !receipt.receipt_id.startsWith('proof_inc_')) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_receipt_id_format' });
+  }
+
+  if (!ALLOWED_INCOME_PROOF_TIERS.includes(receipt.qualification_tier)) {
+    return deepFreeze({ ok: false, verified: false, error: 'unknown_qualification_tier' });
+  }
+
+  if (typeof receipt.qualifies_for_relief !== 'boolean') {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_qualifies_for_relief_boolean' });
+  }
+
+  if (typeof receipt.threshold_percent !== 'number' || isNaN(receipt.threshold_percent) || receipt.threshold_percent < 1 || receipt.threshold_percent > 99) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_threshold_percent' });
+  }
+
+  if (!isValidCurrencyCode(receipt.currency)) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_currency_code' });
+  }
+
+  if (!receipt.baseline_period || typeof receipt.baseline_period !== 'object' ||
+      !isValidCalendarDate(receipt.baseline_period.start) || !isValidCalendarDate(receipt.baseline_period.end)) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_baseline_period' });
+  }
+
+  if (!receipt.evaluation_period || typeof receipt.evaluation_period !== 'object' ||
+      !isValidCalendarDate(receipt.evaluation_period.start) || !isValidCalendarDate(receipt.evaluation_period.end)) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_evaluation_period' });
+  }
+
+  if (typeof receipt.commitment_hash !== 'string' || receipt.commitment_hash.length < 8) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_commitment_hash' });
+  }
+
+  if (!Number.isSafeInteger(receipt.transaction_count) || receipt.transaction_count < 0) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_transaction_count' });
+  }
+
+  const expectedSeed = `${receipt.qualification_tier}|${receipt.qualifies_for_relief}|${receipt.threshold_percent}|${receipt.currency}|${receipt.commitment_hash}|${receipt.transaction_count}|${receipt.baseline_period.start}|${receipt.baseline_period.end}|${receipt.evaluation_period.start}|${receipt.evaluation_period.end}`;
+  const expectedReceiptHash = computeContextFingerprint(expectedSeed);
+  const expectedReceiptId = `proof_inc_${expectedReceiptHash}`;
+
+  if (receipt.receipt_id !== expectedReceiptId) {
+    return deepFreeze({
+      ok: false,
+      verified: false,
+      error: 'receipt_tampered_or_corrupted',
+      reason: 'Receipt fingerprint mismatch indicates tampered or altered parameters.'
+    });
+  }
+
+  if (options && typeof options === 'object') {
+    if (options.expected_tier && receipt.qualification_tier !== options.expected_tier) {
+      return deepFreeze({
+        ok: true,
+        verified: false,
+        error: 'tier_mismatch',
+        reason: `Receipt tier '${receipt.qualification_tier}' does not match expected tier '${options.expected_tier}'`
+      });
+    }
+
+    if (options.expected_currency && receipt.currency !== options.expected_currency) {
+      return deepFreeze({
+        ok: true,
+        verified: false,
+        error: 'currency_mismatch',
+        reason: `Receipt currency '${receipt.currency}' does not match expected '${options.expected_currency}'`
+      });
+    }
+
+    if (options.require_qualification && !receipt.qualifies_for_relief) {
+      return deepFreeze({
+        ok: true,
+        verified: false,
+        error: 'relief_threshold_not_met',
+        reason: `Receipt indicates qualification threshold of ${receipt.threshold_percent}% was not met`
+      });
+    }
+
+    if (options.preimage && typeof options.preimage === 'object') {
+      const preHash = computeIncomeProofCommitment({
+        baseline_income_cents: options.preimage.baseline_cents,
+        evaluation_income_cents: options.preimage.eval_cents,
+        qualification_tier: receipt.qualification_tier,
+        currency: receipt.currency,
+        salt: options.preimage.salt || 'cin_local_twin_salt',
+        baseline_period: receipt.baseline_period,
+        evaluation_period: receipt.evaluation_period
+      });
+      if (preHash !== receipt.commitment_hash) {
+        return deepFreeze({
+          ok: false,
+          verified: false,
+          error: 'commitment_preimage_mismatch',
+          reason: 'Preimage amounts or salt do not produce the receipt commitment hash'
+        });
+      }
+    }
+  }
+
+  return deepFreeze({
+    ok: true,
+    verified: true,
+    receipt_id: receipt.receipt_id,
+    qualification_tier: receipt.qualification_tier,
+    qualifies_for_relief: receipt.qualifies_for_relief,
+    currency: receipt.currency,
+    transaction_count: receipt.transaction_count,
+    reason: `Receipt verified authentic with tier: ${receipt.qualification_tier}`
+  });
+}
+
+/**
+ * Summarizes the income verification proof result for UI display without innerHTML.
+ *
+ * @param {object} result Result from generateIncomeVerificationProof
+ * @returns {object} Deeply frozen summary { ok, text, tier_label, status_class }
+ */
+export function summarizeIncomeProof(result) {
+  if (!result || typeof result !== 'object' || !result.ok || !result.receipt) {
+    return deepFreeze({
+      ok: false,
+      text: result?.reason || result?.error || 'Verification proof could not be generated fail-closed.',
+      tier_label: 'Generation failed',
+      status_class: 'status-err'
+    });
+  }
+
+  const r = result.receipt;
+  const cs = result.client_summary;
+  const dropPct = cs?.drop_percent !== undefined ? `${cs.drop_percent}%` : '';
+
+  let tierLabel = 'No income drop';
+  let statusClass = 'status-ok';
+
+  if (r.qualification_tier === 'severe_shock') {
+    tierLabel = 'Severe income shock (>= 50% drop)';
+    statusClass = 'status-warn';
+  } else if (r.qualification_tier === 'substantial_drop') {
+    tierLabel = 'Substantial income drop (>= 30% drop)';
+    statusClass = 'status-warn';
+  } else if (r.qualification_tier === 'moderate_drop') {
+    tierLabel = 'Moderate income drop (>= 20% drop)';
+    statusClass = 'status-warn';
+  } else if (r.qualification_tier === 'minor_drop') {
+    tierLabel = 'Minor income drop (>= 5% drop)';
+    statusClass = 'status-ok';
+  }
+
+  const qualifiesText = r.qualifies_for_relief
+    ? `Qualifies for relief under ${r.threshold_percent}% threshold.`
+    : `Does not meet relief threshold of ${r.threshold_percent}%.`;
+
+  const text = `Local proof generated (${r.receipt_id}). Evaluated ${r.transaction_count} transactions with zero raw details exposed. Income drop: ${dropPct} (${tierLabel}). ${qualifiesText}`;
+
+  return deepFreeze({
+    ok: true,
+    text,
+    tier_label: tierLabel,
+    qualifies: r.qualifies_for_relief,
+    status_class: statusClass,
+    receipt_id: r.receipt_id
+  });
+}
