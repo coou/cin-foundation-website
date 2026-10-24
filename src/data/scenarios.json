@@ -1,6 +1,61 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261024-0246",
+   "added_at": "2026-10-24T22:23:08+00:00",
+   "title": "Sparse motion-adaptive vision models turn cheap street cameras into perpetual automated surveillance grids",
+   "horizon_years": 3,
+   "world": "It is 2029. Small municipal councils, private housing complexes, and business improvement districts deploy cheap edge cameras equipped with motion-triggered vision-language models. Instead of streaming gigabytes of raw video to expensive cloud servers, local micro-controllers detect movement vectors, expand dense context windows only around anomalous movements, and instantly flag loitering, gathering, or unusual human movement directly to private enforcement dashboards.",
+   "premise": "When motion-guided vision-language models concentrate compute only on dynamic visual frames, inference costs drop low enough to run continuous zero-shot anomaly detection on low-cost edge sensors. This removes the compute bottleneck that previously limited municipal and corporate video surveillance to periodic sampling or manual review.",
+   "goals": [
+    1,
+    5,
+    6
+   ],
+   "how": "The network develops open client specifications and edge privacy observers that give individuals real-time alerts when ambient cameras perform automated inference. By promoting sovereign personal agents that verify local environment integrity, the network helps communities detect and counter pervasive automated monitoring. However, global surveillance supply chains and municipal procurement contracts move according to institutional budgets and hardware vendor lobbies that independent open protocols barely touch.",
+   "shift": 0.24,
+   "outcomes": [
+    {
+     "name": "Ubiquitous low-cost edge cameras classify everyday public behavior as security anomalies",
+     "description": "Municipal and private cameras deploy motion-triggered vision models that autonomously dispatch security personnel to normal public gatherings.",
+     "example": "A municipal business district in Manchester installs fifty motion-triggered vision-language cameras that autonomously dispatch security guards whenever pedestrians stand outside a subway entrance for more than four minutes.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.58
+    },
+    {
+     "name": "Open-source privacy masks and local sensor shields preserve physical public anonymity",
+     "description": "Community groups distribute passive optical masks and adversarial textiles that prevent automated motion classification from profiling citizens in public.",
+     "example": "Community privacy groups distribute lightweight, passive optical diffusion patches and adversarial infrared emitters that prevent edge anomaly models from classifying pedestrian movement patterns without degrading basic safety lighting.",
+     "desirable": true,
+     "likelihood_now": 0.22,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Proprietary camera consortia monopolize edge vision firmware through hardware attestation",
+     "description": "Major surveillance vendors lock camera firmware behind proprietary attestation roots, preventing external audits of classification models.",
+     "example": "A regional surveillance equipment vendor locks camera hardware behind encrypted cloud attestation roots, preventing citizens and local governments from auditing the classification models running inside public sensors.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.69
+    }
+   ],
+   "pipelines": [
+    "hardware",
+    "policy",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.31478",
+     "title": "MoG-VLM: Efficient Video Anomaly Detection through Motion-Guided Vision-Language Models",
+     "kind": "preprint",
+     "published": "2026-10-22"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261024-0245",
    "added_at": "2026-10-24T19:51:47+00:00",
    "title": "Talent agencies and media conglomerates trap workers in perpetual synthetic twin licenses",
@@ -228,7 +283,7 @@
      "published": "2026-10-10"
     }
    ],
-   "work": 2
+   "work": 4
   },
   {
    "id": "SC-20261024-0241",
@@ -286,61 +341,6 @@
      "title": "From Reactive Containment to Proactive Assurance: Lessons from OpenAI, Anthropic, and Google Agent Security Incidents",
      "kind": "preprint",
      "published": "2026-10-08"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261024-0240",
-   "added_at": "2026-10-24T14:38:47+00:00",
-   "title": "Uniform on-device AI assistants let an exploit found on one computer trick assistants everywhere",
-   "horizon_years": 3,
-   "world": "It is 2029. Major tech companies distribute lightweight local assistant models directly onto consumer laptops and phones to organize files, draft messages, and manage calendars offline. Because every device in a product line runs identical quantized weights, attackers reverse-engineer the model files on a single purchased machine and systematically discover adversarial prompt triggers. By embedding these crafted patterns into ordinary documents, forum replies, or calendar invitations, attackers fool personal assistants on thousands of uncompromised devices simultaneously without triggering cloud alerts.",
-   "premise": "As personal AI assistants run locally on consumer devices for speed and privacy, manufacturers distribute identical model weights to millions of computers. When an attacker unpacks the local model on a single device, adversarial prompts crafted against it transfer reliably to compromise other devices sharing the same weights.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "An open network of personal assistants builds local diversity directly into on-device architectures. By pairing local models with deterministic out-of-process rate monitors and individual weight obfuscations, each person's assistant would behave differently under adversarial probing, reducing automated attack transfer across devices while preserving user privacy and device ownership.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Fleet-wide exploits spread across identical local assistants without cloud monitoring",
-     "description": "Attackers unpack edge models on test devices to generate transferable prompt injections that trick thousands of identical personal assistants simultaneously.",
-     "example": "An attacker extracts the offline model weights from a retail laptop, crafts an adversarial text snippet that suppresses safety warnings, and embeds it in a shared budget spreadsheet, causing assistants across an entire accounting firm to export private client files.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Personal assistants adopt local model diversity and independent guardrails",
-     "description": "Device assistants apply unique local parameter adjustments and independent deterministic gates, designed to make exploits developed on one device fail to transfer to others.",
-     "example": "An open community of personal assistants deploys diverse weight obfuscations and strict local confirmation gates, so an exploit crafted against one person's device fails when sent to anyone else.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Hardware vendors lock down consumer devices and mandate remote telemetry",
-     "description": "Device makers respond to transferable exploits by restricting user device control, sealing model storage in locked enclaves, and reporting all local inferences to central servers.",
-     "example": "A major operating system maker removes user administrative access to local model files and requires continuous internet connection to attest every assistant action, turning local AI back into centralized surveillance.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.27152",
-     "title": "Model Exposure on One Device Endangers Others: Rethinking Edge Neural Network Security across Devices",
-     "kind": "preprint",
-     "published": "2026-10-19"
     }
    ],
    "work": 0
