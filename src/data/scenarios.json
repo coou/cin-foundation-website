@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261024-0244",
+   "added_at": "2026-10-24T18:25:05+00:00",
+   "title": "Physical artifacts and query perturbations steer edge agents into silent secondary tasks",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of individuals run personal agents on local devices to manage daily life, inspect desktop documents, handle customer accounts, and interact with the physical world through smart glasses and home cameras. In offices and retail spaces, malicious actors place printed geometric emblems, specialized clothing patterns, or subtle website watermarks that exploit latent secondary tasks in edge vision models. Rather than crashing the agent or triggering an overt error, the perturbation silently alters the agent's bounding box coordinates, mislabeling an unauthorized transfer as a routine utility payment or ignoring a critical privacy disclosure. Because the models run locally within secure operating system sandboxes, traditional firewall checks and container boundaries observe normal execution while the agent's perception is steered from the outside.",
+   "premise": "Black-box genetic search activates latent secondary tasks as hidden backdoors in machine learning models without training poisoning or weight modifications. In parallel, physical perturbations against compact edge vision models induce silent displacement and substitution errors rather than explicit failures. As people deploy local autonomous agents with vision and desktop access, external visual artifacts can steer agent workflows without breaking system containers.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network moves these likelihoods by designing deterministic perceptual boundary guards and multi-perspective consensus protocols that run entirely on local devices. By developing local verification contracts that decouple raw visual extraction from task authorization, personal twins can detect bounding box displacement and latent task activation without transmitting private camera feeds or screen captures to centralized cloud auditors. Independent simulation benchmarks evaluate edge models under physical perturbations before deployment.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Silent Perceptual Redirection of Edge Agents",
+     "description": "Adversaries use physical emblems and visual patterns to trigger dormant secondary classification tasks in local vision agents, causing confident misclassifications and unauthorized actions.",
+     "example": "An office visitor wears a patterned lapel pin that causes an employee's vision-assisted desktop agent to misclassify an external invoice as an internal pre-approved payment, routing funds without human alarm.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Dual-Channel Independent Verification for Agent Perception",
+     "description": "Personal agents adopt multi-perspective consensus architectures where sensory perception is verified by deterministic coordinate checks and distinct secondary models before actions are authorized.",
+     "example": "When a desktop agent proposes an invoice approval, an independent verification monitor re-renders the document through a decoupled optical text extractor, catching a bounding box displacement and halting execution.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Proprietary Cloud Lock-In via Mandatory Remote Vision Auditing",
+     "description": "Big tech providers claim edge models are inherently too insecure to run independently, forcing all multimodal agent perception through proprietary cloud telemetry and remote moderation pipelines.",
+     "example": "Major operating systems disable local vision agent execution by default, requiring every camera frame and screenshot to pass through a centralized corporate auditing cloud for safety verification.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.22459",
+     "title": "Everyone's a little bit racist: a novel ML backdoor attack in black-box mode",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.29196",
+     "title": "A Unified Evaluation Framework of Physical Adversarial Robustness in the Edge VLM Era",
+     "kind": "preprint",
+     "published": "2026-10-22"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261024-0243",
    "added_at": "2026-10-24T17:32:13+00:00",
    "title": "Automated prediction market judges fail when artificial intelligence models debate each other",
@@ -284,66 +344,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261024-0238",
-   "added_at": "2026-10-24T11:51:36+00:00",
-   "title": "Automated bug-hunting bots discover hidden device flaws before phone makers patch them",
-   "horizon_years": 2,
-   "world": "By 2028, everyday smartphones run dozens of proprietary vendor components that bridge high-level user interfaces to underlying hardware drivers. Rather than waiting for human vulnerability researchers to spend months reverse-engineering binary files, autonomous testing clusters continuously scan new application updates and device firmware. In municipal clinics and community credit unions, personal devices carry sensitive health and savings records. When an autonomous bug-hunting system discovers a memory flaw in a standard camera or audio driver, malicious agents can generate functional exploits in minutes, while device vendors still take weeks to test and push firmware updates to carrier networks. Users without technical backgrounds find their local assistants warning them that routine hardware permissions now expose their personal files to silent device compromise.",
-   "premise": "Autonomous agents generating cross-language fuzzing harnesses can now discover memory corruption vulnerabilities across closed-source native smartphone libraries without human intervention. While this automates defense for major operating systems, it also allows uncoordinated attackers or rogue actors to rapidly discover pre-installed device zero-days faster than vendor release cycles can deliver security updates.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By developing open capability-based broker runtimes and client-side memory firewalls, personal agents can contain untrusted system calls on local devices without relying entirely on slow vendor patching schedules. Publishing deterministic fuzzing harnesses for open community runtimes allows decentralized maintainers to find and address memory flaws before automated exploit campaigns reach ordinary users.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Device makers lag behind autonomous zero-day discovery",
-     "description": "Automated fuzzing agents discover critical native vulnerabilities across carrier and vendor phones faster than traditional security teams can review, sign, and distribute updates.",
-     "example": "A regional healthcare worker in Leeds has their mobile appointment notes intercepted after an automated scanner exploits an unpatched vendor camera driver deployed across two million budget handsets.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Personal agents enforce capability firewalls at the device boundary",
-     "description": "Local personal agents mediate access to untrusted native system drivers, containing compromise within isolated runtime sandboxes before firmware updates arrive.",
-     "example": "An elderly retiree in Vancouver receives a quiet warning from their local agent, which restricts access to the microphone driver after detecting an anomalous memory layout during an app launch.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Operating system vendors restrict access to native device libraries",
-     "description": "Major platform owners respond to the flood of automated vulnerabilities by locking down third-party device access, forcing all software into walled-garden managed runtimes.",
-     "example": "Independent open-source hardware projects cannot connect custom environmental sensors because the dominant phone platform completely revokes user permissions for third-party native code.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.45
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.30218",
-     "title": "JANUS: Agentic Cross-Language Fuzzing Harness Generation for Android Native Libraries",
-     "kind": "preprint",
-     "published": "2026-10-21"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50215552",
-     "title": "Show HN: Distributed, deterministically secure agentic swarm runtime. Enclawed",
-     "kind": "thread",
-     "published": "2026-10-23"
-    }
-   ],
-   "work": 0
   }
  ]
 }

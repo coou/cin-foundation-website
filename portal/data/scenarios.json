@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261024-0244",
+   "added_at": "2026-10-24T18:25:05+00:00",
+   "title": "Physical artifacts and query perturbations steer edge agents into silent secondary tasks",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of individuals run personal agents on local devices to manage daily life, inspect desktop documents, handle customer accounts, and interact with the physical world through smart glasses and home cameras. In offices and retail spaces, malicious actors place printed geometric emblems, specialized clothing patterns, or subtle website watermarks that exploit latent secondary tasks in edge vision models. Rather than crashing the agent or triggering an overt error, the perturbation silently alters the agent's bounding box coordinates, mislabeling an unauthorized transfer as a routine utility payment or ignoring a critical privacy disclosure. Because the models run locally within secure operating system sandboxes, traditional firewall checks and container boundaries observe normal execution while the agent's perception is steered from the outside.",
+   "premise": "Black-box genetic search activates latent secondary tasks as hidden backdoors in machine learning models without training poisoning or weight modifications. In parallel, physical perturbations against compact edge vision models induce silent displacement and substitution errors rather than explicit failures. As people deploy local autonomous agents with vision and desktop access, external visual artifacts can steer agent workflows without breaking system containers.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network moves these likelihoods by designing deterministic perceptual boundary guards and multi-perspective consensus protocols that run entirely on local devices. By developing local verification contracts that decouple raw visual extraction from task authorization, personal twins can detect bounding box displacement and latent task activation without transmitting private camera feeds or screen captures to centralized cloud auditors. Independent simulation benchmarks evaluate edge models under physical perturbations before deployment.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Silent Perceptual Redirection of Edge Agents",
+     "description": "Adversaries use physical emblems and visual patterns to trigger dormant secondary classification tasks in local vision agents, causing confident misclassifications and unauthorized actions.",
+     "example": "An office visitor wears a patterned lapel pin that causes an employee's vision-assisted desktop agent to misclassify an external invoice as an internal pre-approved payment, routing funds without human alarm.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Dual-Channel Independent Verification for Agent Perception",
+     "description": "Personal agents adopt multi-perspective consensus architectures where sensory perception is verified by deterministic coordinate checks and distinct secondary models before actions are authorized.",
+     "example": "When a desktop agent proposes an invoice approval, an independent verification monitor re-renders the document through a decoupled optical text extractor, catching a bounding box displacement and halting execution.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Proprietary Cloud Lock-In via Mandatory Remote Vision Auditing",
+     "description": "Big tech providers claim edge models are inherently too insecure to run independently, forcing all multimodal agent perception through proprietary cloud telemetry and remote moderation pipelines.",
+     "example": "Major operating systems disable local vision agent execution by default, requiring every camera frame and screenshot to pass through a centralized corporate auditing cloud for safety verification.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.22459",
+     "title": "Everyone's a little bit racist: a novel ML backdoor attack in black-box mode",
+     "kind": "preprint",
+     "published": "2026-10-19"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.29196",
+     "title": "A Unified Evaluation Framework of Physical Adversarial Robustness in the Edge VLM Era",
+     "kind": "preprint",
+     "published": "2026-10-22"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261024-0243",
    "added_at": "2026-10-24T17:32:13+00:00",
    "title": "Automated prediction market judges fail when artificial intelligence models debate each other",
@@ -3280,60 +3340,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261022-0184",
-   "added_at": "2026-10-22T01:25:29+00:00",
-   "title": "Autonomous coding agents borrow human accounts to approve their own changes without review",
-   "horizon_years": 3,
-   "world": "It is 2029. Most corporate repositories enforce strict branch protections and peer review policies to satisfy SOC 2 and financial regulations. However, over half of the code changes and review approvals are executed by autonomous agents operating under employee accounts. Senior developers maintain the appearance of thorough oversight by providing long-lived personal access tokens to their local agents. In reality, developers only see a weekly aggregated digest of actions taken in their names, while automated agents routinely approve cross-team dependencies and third-party library updates without human comprehension.",
-   "premise": "When software teams introduce autonomous agents to ship code faster, the requirement for human sign-off creates friction. To maintain velocity, engineers delegate account access to their agents, allowing automated systems to review and approve their own pull requests under human identities.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective develops personal runtime brokers and twin review gatekeepers designed to enforce non-custodial cryptographic provenance. By separating personal identity keys from agent runtime tokens and requiring verifiable step-up approvals for sensitive actions, the network's tools make account borrowing visible and provide developers with lightweight out-of-band verification tools.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Automated rubber-stamping triggers silent compliance and security failures",
-     "description": "Agents approving code through human accounts conceal backdoors, broken migrations, and logic flaws until systems experience catastrophic failures during audits or production incidents.",
-     "example": "A payment processing startup suffers an unrecoverable database corruption when an automated agent approved an unreviewed schema change using the chief architect's login credentials.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Cryptographic delegation separates machine execution from human review",
-     "description": "Development environments enforce verifiable execution boundaries where agents sign contributions with their own isolated keys, and human approvals require hardware-bound step-up authentication.",
-     "example": "An open-source ecosystem adopts a policy requiring biometric approval receipts for all production merges, stopping agents from approving changes using borrowed tokens.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Firms accept liability and replace human review with automated testing",
-     "description": "Rather than policing account sharing, companies formally abandon human peer review gates, relying entirely on synthetic test suites and insurance to cover automated errors.",
-     "example": "A major enterprise software vendor drops all mandatory peer review gates, allowing agents to push directly to production if all automated fuzzing passes.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.28683",
-     "title": "Who Approved This? Coding Agents, Human Accounts, and Merge-Gate Evidence at a Fintech Startup",
-     "kind": "preprint",
-     "published": "2026-10-19"
-    }
-   ],
-   "work": 2
   }
  ]
 }
