@@ -1564,3 +1564,166 @@ html:not(.no-js) .env-fallback-table {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+
+/* ---------- v29: comprehensive mobile responsiveness (desktop untouched) ---------- */
+.em-svg-wrap {
+  margin-top: 1.2rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+@media (max-width: 860px) {
+  body {
+    overflow-x: clip;
+  }
+  .wrap, .wrap-narrow, .hero-grid, .hero-grid > *,
+  .split > *, .involve > *, .ls-grid > *,
+  .pe-stage > *, .pr-stage > *, .pv-stage > *,
+  .hw-stage > *, .mn-stage > *, .gm-grid > *,
+  .gm-box, .lib-card, .callout {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Prevent sticky figures from overlapping stacked panels in 1-column mobile layout */
+  .pv-figure, .pr-wheel, .pe-list {
+    position: static;
+  }
+  /* Release desktop fixed heights on Principles Wheel panel when stacked on mobile */
+  .pr-panel {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+  .pr-card-deep {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+  }
+  /* Scrollable mobile nav menu with comfortable tap targets */
+  .nav.open {
+    max-height: calc(100dvh - 3.8rem);
+    overflow-y: auto;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, .24);
+  }
+  .nav.open a {
+    padding: .5rem .25rem;
+  }
+  /* Ensure tables and wide formulas scroll or wrap cleanly on mobile */
+  .note-body table, .callout table, .gm-box table, table.tbl {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .math-chip {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-width: 100%;
+  }
+  select, input, textarea {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .sch-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 1.8rem 0 1.5rem;
+  }
+  .status-pill {
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    font-size: .7rem;
+    padding: .4rem .75rem;
+    line-height: 1.35;
+    border-radius: 16px;
+  }
+  h1 {
+    font-size: clamp(1.95rem, 7.6vw, 2.55rem);
+    line-height: 1.08;
+    overflow-wrap: break-word;
+  }
+  .lede {
+    font-size: 1.02rem;
+  }
+  .hero-rule-box {
+    padding: .95rem 1.05rem !important;
+    font-size: .92rem !important;
+    text-align: left;
+  }
+  .bd-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px;
+    padding: .3rem;
+    gap: .25rem;
+  }
+  .bd-tabs button {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: .45rem .65rem;
+    font-size: .74rem;
+  }
+  /* Release absolute-positioned dock height on mobile so consent/details never clip */
+  .bd-dock {
+    height: auto;
+    min-height: 8.5rem;
+    overflow: visible;
+  }
+  .bd-dock > * {
+    position: relative;
+    inset: auto;
+    padding-top: .7rem;
+  }
+  .bd-dock > [hidden] {
+    display: none;
+  }
+  .bd-logwrap::after {
+    display: none;
+  }
+  #split-frame {
+    padding: .75rem !important;
+  }
+  .gm-sim, .lib-explorer {
+    padding: 1rem .95rem;
+  }
+  .gm-box {
+    padding: .85rem .9rem;
+  }
+  .gm-box > div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  .gm-shard-item {
+    flex-wrap: wrap;
+  }
+  .honest-list li {
+    grid-template-columns: 4.8rem 1fr;
+    gap: .6rem;
+  }
+  .receipt-dlg {
+    padding: 1.35rem 1.15rem;
+  }
+  .receipt .row {
+    grid-template-columns: 1fr;
+    gap: .15rem;
+  }
+}

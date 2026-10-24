@@ -290,23 +290,26 @@
   function fadeIn(d, at) { return d > at ? Math.min(1, (d - at) / 0.2) : 0; }
   function label(textStr, x, y, color, bg, align) {
     ctx.font = '600 ' + Math.round(fs * 0.92) + 'px ' + MONO;
-    var w = ctx.measureText(textStr).width + 12, h = Math.max(18, fs * 1.75);
+    var maxW = Math.max(80, W - 12);
+    var w = Math.min(maxW, ctx.measureText(textStr).width + 12), h = Math.max(18, fs * 1.75);
     var lx = align === 'right' ? x - w : align === 'center' ? x - w / 2 : x;
     lx = Math.max(5, Math.min(W - w - 5, lx));
     var ly = Math.max(H * 0.17, Math.min(H - h - 22, y - h / 2));
     ctx.fillStyle = bg; ctx.strokeStyle = color; ctx.lineWidth = 1;
     roundRect(lx, ly, w, h, 5); ctx.fill(); ctx.stroke();
     ctx.fillStyle = color; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
-    ctx.fillText(textStr, lx + 6, ly + h / 2 + 0.5);
+    ctx.fillText(textStr, lx + 6, ly + h / 2 + 0.5, w - 12);
   }
   function roundRect(x, y, w, h, r) {
     ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
     ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
   }
-  function text(str, x, y, col, weight, size, align, alpha) {
+  function text(str, x, y, col, weight, size, align, alpha, maxW) {
     ctx.globalAlpha = alpha == null ? 1 : alpha; ctx.fillStyle = col;
     ctx.font = (weight || 600) + ' ' + (size || fs) + 'px ' + MONO;
-    ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(str, x, y); ctx.globalAlpha = 1;
+    ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle';
+    if (maxW) ctx.fillText(str, x, y, maxW); else ctx.fillText(str, x, y);
+    ctx.globalAlpha = 1;
   }
   function neighbours(k) { return [(k + 1) % N, (k + N - 1) % N]; }
 
@@ -658,15 +661,16 @@
     ctx.restore();
 
     // 1. Top 3-World Architectural Header Strip
+    var compact = W < 560;
     var hdrFs = Math.max(8.5, Math.round(fs * 0.84));
-    text('1. HUMAN SANCTUARY', W * 0.13, H * 0.048, colors.ok, 700, hdrFs, 'center', 0.94);
-    text('Live Liveness · Shared Lifespan', W * 0.13, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
+    text(compact ? '1. YOU' : '1. HUMAN SANCTUARY', W * 0.13, H * 0.048, colors.ok, 700, hdrFs, 'center', 0.94);
+    text(compact ? 'Human only' : 'Live Liveness · Shared Lifespan', W * 0.13, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
 
-    text('2. YOUR LOCAL SANDBOX', cx, H * 0.048, colors.ink, 700, hdrFs, 'center', 0.94);
-    text('6 Local Agents · Data In, Code Built Here', cx, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
+    text(compact ? '2. LOCAL SANDBOX' : '2. YOUR LOCAL SANDBOX', cx, H * 0.048, colors.ink, 700, hdrFs, 'center', 0.94);
+    text(compact ? '6 local agents' : '6 Local Agents · Data In, Code Built Here', cx, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
 
-    text('3. AGENT-ONLY STREAM', (wallX + W) / 2, H * 0.048, colors.blue, 700, hdrFs, 'center', 0.94);
-    text('Trust Streams (τ) + Distributed Audit', (wallX + W) / 2, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
+    text(compact ? '3. AGENT STREAM' : '3. AGENT-ONLY STREAM', (wallX + W) / 2, H * 0.048, colors.blue, 700, hdrFs, 'center', 0.94);
+    text(compact ? 'Trust + audit' : 'Trust Streams (τ) + Distributed Audit', (wallX + W) / 2, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
 
     // 2. Zone 1 (Human Sanctuary): YOU + Live Coupled ECG/HRV Scope + Mortal Computation Tether
     // Mortal Computation double-tether connecting YOU to your Local Sandbox
@@ -674,7 +678,7 @@
     line({ x: youX + R * 0.16, y: youY + 4 }, { x: cx - R * 0.85, y: cy + 4 }, isDuress ? colors.bad : colors.gold, 0.35, [2, 4], 1.2);
     var pulseT = (t * 0.7) % 1;
     disc(lerp({ x: youX + R * 0.16, y: youY }, { x: cx - R * 0.85, y: cy }, pulseT), 2.2, isDuress ? colors.bad : colors.ok, 0.9);
-    text('MORTAL LEASE', (youX + cx - R * 0.65) / 2, youY - 12, isDuress ? colors.bad : colors.gold, 600, Math.max(6.5, Math.round(fs * 0.68)), 'center', 0.85);
+    if (!compact) text('MORTAL LEASE', (youX + cx - R * 0.65) / 2, youY - 12, isDuress ? colors.bad : colors.gold, 600, Math.max(6.5, Math.round(fs * 0.68)), 'center', 0.85);
 
     // YOU node
     var bioR = R * 0.20 + Math.sin(t * (isDuress ? 12 : 2.8)) * 2;
@@ -684,7 +688,7 @@
     text('HUMAN ONLY', youX, youY - R * 0.25 - 4, colors.ok, 600, Math.max(6.8, Math.round(fs * 0.7)), 'center', 0.85);
 
     // Live <1mW Somatic ECG/HRV + Breath Waveform Scope inside Zone 1
-    var scopeX = 14, scopeW = W * 0.225, scopeY = H * 0.61, scopeH = H * 0.11;
+    var scopeX = compact ? 8 : 14, scopeW = W * 0.225, scopeY = H * 0.61, scopeH = H * 0.11;
     ctx.save();
     ctx.fillStyle = colors.card; ctx.globalAlpha = 0.75;
     roundRect(scopeX, scopeY - scopeH / 2, scopeW, scopeH, 6); ctx.fill();
@@ -701,8 +705,8 @@
     }
     ctx.stroke();
     ctx.restore();
-    text(isDuress ? 'HRV: 14ms (DURESS!)' : 'HRV: 54ms · <1mW PUF', scopeX + scopeW / 2, scopeY + scopeH / 2 + fs * 0.85, isDuress ? colors.bad : colors.ok, 600, Math.max(6.8, Math.round(fs * 0.72)), 'center', 0.9);
-    text('30s SRAM · 0B raw out', scopeX + scopeW / 2, scopeY + scopeH / 2 + fs * 1.75, colors.ink3, 600, Math.max(6.5, Math.round(fs * 0.66)), 'center', 0.75);
+    text(isDuress ? (compact ? 'DURESS!' : 'HRV: 14ms (DURESS!)') : (compact ? 'HRV · <1mW' : 'HRV: 54ms · <1mW PUF'), scopeX + scopeW / 2, scopeY + scopeH / 2 + fs * 0.85, isDuress ? colors.bad : colors.ok, 600, Math.max(6.8, Math.round(fs * 0.72)), 'center', 0.9);
+    text(compact ? '0B raw out' : '30s SRAM · 0B raw out', scopeX + scopeW / 2, scopeY + scopeH / 2 + fs * 1.75, colors.ink3, 600, Math.max(6.5, Math.round(fs * 0.66)), 'center', 0.75);
 
     // 3. Zone 2 (Center): Your Hardware-Enclaved Local Sandbox + 6 Narrow Agents + Sensors
     // Inner 6-agent quorum ring & sandbox spokes
@@ -716,7 +720,7 @@
     // Local Sandbox Compiler Core at (cx, cy)
     hex({ x: cx, y: cy }, R * 0.19, colors.ok, colors.card, 0.95, 1.6);
     text('SANDBOX', cx, cy - 2, colors.ok, 700, Math.max(6.8, Math.round(fs * 0.68)), 'center');
-    text('local code', cx, cy + fs * 0.65, colors.ink3, 600, Math.max(6, Math.round(fs * 0.58)), 'center');
+    if (!compact) text('local code', cx, cy + fs * 0.65, colors.ink3, 600, Math.max(6, Math.round(fs * 0.58)), 'center');
 
     // Sensors feed their narrow agent inside the enclave
     var sensors = SENSORS.concat(kept);
@@ -742,7 +746,7 @@
       disc(g, 3.2, colors.card);
       ring(g, 3.2, colors.ok, 0.85, 1.4);
     }
-    text('NON-CONTACT SILICON WALL (PUF+TPM)', wallX, botY + fs * 0.85, colors.ink3, 600, Math.max(6.8, Math.round(fs * 0.7)), 'center', 0.85);
+    text(compact ? 'SILICON WALL' : 'NON-CONTACT SILICON WALL (PUF+TPM)', wallX, botY + fs * 0.85, colors.ink3, 600, Math.max(6.8, Math.round(fs * 0.7)), 'center', 0.85);
 
     // 5. Zone 3 (Right): Agent-Only Internet & Real-Time Data-Only Ledger Stream + REA Auditors
     var laneLabels = ['τ≥.85', 'τ≥.60', 'τ≥.30'];
@@ -811,17 +815,21 @@
     // Live narrative step ticker strip below header
     var capStr = '', capA = 1;
     if (scene) { var c = captionFor(scene); capStr = c[0]; capA = c[1]; }
-    else if (reqs.length) capStr = 'data-only stream · 3 of your local agents must agree · 0 external software APIs';
-    else capStr = 'hover any zone or pick a scenario below · agents never contact other humans directly';
-    text(capStr, W / 2, H * 0.135, scene ? colors.ink : colors.ink3, 600, Math.round(fs * 0.92), 'center', capA);
+    else if (reqs.length) capStr = compact ? 'data-only stream · 3-of-6 local quorum · 0 external APIs' : 'data-only stream · 3 of your local agents must agree · 0 external software APIs';
+    else capStr = compact ? 'tap any zone or pick a scenario below' : 'hover any zone or pick a scenario below · agents never contact other humans directly';
+    text(capStr, W / 2, H * 0.135, scene ? colors.ink : colors.ink3, 600, Math.round(fs * 0.92), 'center', capA, compact ? W - 16 : undefined);
 
     // Bottom legend
-    var ly = H - fs * 1.05, lx = 14, ls = Math.max(8, Math.round(fs * 0.82));
+    var ly = H - fs * 1.05, lx = compact ? 8 : 14, ls = Math.max(8, Math.round(fs * 0.82));
+    var gapX = compact ? fs * 0.75 : fs * 1.3;
+    var legAgent = compact ? 'local agent' : 'your local agent';
+    var legAudit = compact ? 'auditor' : 'auditor agents';
+    var legQuorum = compact ? '3-of-6' : '3-of-6 approval';
     ctx.font = '600 ' + ls + 'px ' + MONO;
-    diamond({ x: lx + 3, y: ly }, 3.5, colors.ink3); text('sensor', lx + 10, ly, colors.ink3, 600, ls); lx += 10 + ctx.measureText('sensor').width + fs * 1.3;
-    disc({ x: lx + 4, y: ly }, 4, colors.card); ring({ x: lx + 4, y: ly }, 4, colors.ok, 1, 1.4); text('your local agent', lx + 12, ly, colors.ink3, 600, ls); lx += 12 + ctx.measureText('your local agent').width + fs * 1.3;
-    diamond({ x: lx + 4, y: ly }, 4.2, colors.gold); text('auditor agents', lx + 12, ly, colors.ink3, 600, ls); lx += 12 + ctx.measureText('auditor agents').width + fs * 1.3;
-    var sf = fs; fs = ls * 0.82; badge({ x: lx + 5, y: ly }, true, 1); fs = sf; text('3-of-6 approval', lx + 14, ly, colors.ink3, 600, ls);
+    diamond({ x: lx + 3, y: ly }, 3.5, colors.ink3); text('sensor', lx + 10, ly, colors.ink3, 600, ls); lx += 10 + ctx.measureText('sensor').width + gapX;
+    disc({ x: lx + 4, y: ly }, 4, colors.card); ring({ x: lx + 4, y: ly }, 4, colors.ok, 1, 1.4); text(legAgent, lx + 12, ly, colors.ink3, 600, ls); lx += 12 + ctx.measureText(legAgent).width + gapX;
+    diamond({ x: lx + 4, y: ly }, 4.2, colors.gold); text(legAudit, lx + 12, ly, colors.ink3, 600, ls); lx += 12 + ctx.measureText(legAudit).width + gapX;
+    var sf = fs; fs = ls * 0.82; badge({ x: lx + 5, y: ly }, true, 1); fs = sf; text(legQuorum, lx + 14, ly, colors.ink3, 600, ls);
   }
 
   /* ---------- situation chips ---------- */

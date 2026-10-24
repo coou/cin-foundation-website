@@ -152,7 +152,8 @@
       ctx.beginPath(); ctx.arc(cx, cy, ring.r * R, 0, TAU);
       ctx.strokeStyle = C.rule; ctx.setLineDash([3, 6]); ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
       ctx.fillStyle = C.ink3; ctx.font = (fs - 1) + 'px ' + MONO; ctx.textAlign = 'center';
-      ctx.fillText(ring.label, cx, cy - ring.r * R - 5);
+      if (W < 560) ctx.fillText(ring.label, cx, cy - ring.r * R - 5, W - 16);
+      else ctx.fillText(ring.label, cx, cy - ring.r * R - 5);
     });
     var lv = scene ? LEVEL[scene.level] : -1, reach = -2;
     if (scene) { if (phase === 'local' || phase === 'need' || phase === 'sense') reach = -1; RINGS.forEach(function (rg, ri) { if (phaseAt(phase) >= phaseAt(rg.key)) reach = Math.max(reach, ri); }); }
@@ -208,7 +209,8 @@
     }
     ctx.textAlign = 'center';
     ctx.fillStyle = C.ink3; ctx.font = '600 ' + Math.max(9, fs - 1) + 'px ' + MONO;
-    ctx.fillText('OUTSIDE AGENTS NEVER CONTACT HUMANS DIRECTLY · AGENT ↔ AGENT ONLY', cx, H - Math.max(10, fs * 0.9));
+    if (W < 560) ctx.fillText('OUTSIDE AGENTS NEVER CONTACT HUMANS DIRECTLY · AGENT ↔ AGENT ONLY', cx, H - Math.max(10, fs * 0.9), W - 16);
+    else ctx.fillText('OUTSIDE AGENTS NEVER CONTACT HUMANS DIRECTLY · AGENT ↔ AGENT ONLY', cx, H - Math.max(10, fs * 0.9));
     if (scene && phase && phase !== 'sense') {
       ctx.fillStyle = scene.harm ? C.bad : C.ink; ctx.font = '600 ' + fs + 'px ' + MONO;
       ctx.fillText(scene.chip.toLowerCase(), cx, cy + 0.27 * R);
