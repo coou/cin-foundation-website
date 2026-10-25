@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://cintnet.org/recognition">
-  <link rel="stylesheet" href="/assets/portal.css?v=7">
+  <link rel="stylesheet" href="/assets/portal.css?v=9">
 </head>
 <body>
 <header class="top">
@@ -31,11 +31,18 @@
   <h1>Recognition</h1>
   <p class="lede">We keep a record of public forecasts about AI and check them when they fall due. Here we recognise forecasts that came true, and research, products and disclosures that move us toward AI that is safe, accountable and shared.</p>
   <p class="notice" id="rstate">Loading…</p>
-  <div class="grid one" id="recognition"></div>
+  <div class="card search-card">
+    <label for="recognition-search">Search recognition
+      <input type="text" id="recognition-search" placeholder="Search by researcher, paper title, or topic…" autocomplete="off">
+    </label>
+  </div>
+  <p class="muted" id="rcount" aria-live="polite"></p>
+  <div class="filter-track" id="kind-filters" role="group" aria-label="Filter recognition by type"></div>
+  <div class="grid one" id="recognition" aria-live="polite"></div>
 </main>
 <footer class="site wrap">
   <p>The open network site of the <a href="https://collectiveintelligencenetwork.org">Collective Intelligence Network</a>. Anything you post in Ideas is public; everything you enter in Your Twin stays in your browser.</p>
 </footer>
-<script type="module" src="/assets/recognition.js?v=3"></script>
+<script type="module" src="/assets/recognition.js?v=4"></script>
 </body>
 </html>
