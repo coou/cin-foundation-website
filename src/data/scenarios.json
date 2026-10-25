@@ -1,6 +1,120 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261025-0264",
+   "added_at": "2026-10-25T15:47:43+00:00",
+   "title": "Expanding tool libraries cause personal agents to freeze or ignore safety rules",
+   "horizon_years": 3,
+   "world": "It is 2029. Ordinary households and small business owners use personal software agents to handle accounting, medical appointment scheduling, home energy balancing, and legal correspondence. Hundreds of plug-in skills exist for local municipal portals, clinic APIs, and specialty appliances. Rather than running smoothly, agents routinely stall or ignore specialized safety extensions because prompt contexts are overwhelmed by hundreds of conflicting tool descriptions, prompting commercial platform vendors to lock users into walled app stores.",
+   "premise": "As software providers add thousands of specialized tools and plug-ins to autonomous assistants, models struggle to select the right skill from prompt descriptions alone. Research reveals that scaling tool libraries to a thousand entries causes skill loading recall to fall from 74% to 27%, while the zero-load failure rate jumps to over 50% due to semantic interference.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops local twin runtime designs featuring explicit, deterministic skill indexing and capability manifests that operate outside the prompt context. By decoupling tool matching from the primary reasoning model, personal agents avoid semantic dilution and remain reliable across large community-built skill catalogs without relying on centralized corporate gateways.",
+   "shift": 0.48,
+   "outcomes": [
+    {
+     "name": "Monopolistic platform app stores become mandatory filters",
+     "description": "Commercial cloud platforms take control of tool selection, running proprietary pre-filters that charge toll fees to skill developers and block independent tools.",
+     "example": "An independent clinic in Leeds finds its automated patient booking skill rejected by major phone assistants because the platform provider demands a 30% revenue share for placement in their certified tool index.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Decentralized agents adopt deterministic capability routing",
+     "description": "Open personal twins use local, deterministic preselection indexes that rank skills outside the language model prompt, preserving high tool recall across thousands of community skills.",
+     "example": "A solar energy co-operative in Freiburg deploys five hundred open-source microgrid optimization skills across member homes, achieving over 90% accurate execution through local capability manifests without platform fees.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Users abandon complex multi-skill automation due to unreliability",
+     "description": "Repeated tool execution failures lead ordinary consumers to distrust multi-step assistant workflows, restricting their usage to basic single-turn web searches.",
+     "example": "A freelance graphic designer in Montreal stops using automated invoicing agents after the assistant fails three times in a month to load the correct tax reporting plugin, reverting to manual bookkeeping.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.32
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.18522",
+     "title": "Lost in Implicit Routing: How LLM Agents Fail to Load Relevant Skills at Scale",
+     "kind": "preprint",
+     "published": "2026-10-13"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261025-0263",
+   "added_at": "2026-10-25T15:26:03+00:00",
+   "title": "Public agencies adopt unverified AI synthesis for major policy studies, causing hallucinated evidence and arithmetic blunders",
+   "horizon_years": 3,
+   "world": "It is 2029. Regional governments, public health authorities, and university boards routinely commission external consulting firms to model major institutional mergers, infrastructure investments, and legislative reorganizations. Under intense deadline pressure, consultants assemble hundreds of pages of rapid cost-benefit analyses using autonomous research agents. While these reports feature polished executive summaries and sophisticated graphs, their underlying appendices are riddled with fabricated case studies, phantom academic literature, and broken sum totals where financial components fail basic arithmetic reconciliation. Despite these hidden flaws, elected officials and oversight committees cite the automated findings to authorize multi-billion-dollar restructuring plans before independent auditors discover the fabrications.",
+   "premise": "Major management consultancies and government departments increasingly use automated language models to synthesize research, proofread policy documents, and compile financial annexes. When deployed without deterministic execution checks and primary-source quote verification, language models invent nonexistent academic citations and generate hundreds of millions of dollars in basic arithmetic discrepancies in official feasibility studies.",
+   "goals": [
+    2,
+    5
+   ],
+   "how": "Our network designs independent observatory benchmarks and living review architectures that demonstrate how automated research synthesis can be strictly anchored to primary sources with cryptographic quote matching and deterministic arithmetic validators. By publishing open-source audit tools that expose synthetic errors in public policy filings, we help civil society, public auditors, and member cooperatives verify claims before institutional resources are committed.",
+   "shift": 0.26,
+   "outcomes": [
+    {
+     "name": "Public authorities enact costly restructuring based on hallucinated AI consultancy reports",
+     "description": "Government agencies rely on automated cost-benefit analyses without manual verification, committing public funding to flawed mergers and reorganizations before arithmetic errors are discovered.",
+     "example": "A provincial transport authority merges two regional rail operators based on a consulting report that claimed fifty million in administrative savings, only to find the savings were an arithmetic hallucination.",
+     "desirable": false,
+     "likelihood_now": 0.48,
+     "likelihood_with_cin": 0.36
+    },
+    {
+     "name": "Public procurement mandates deterministic arithmetic checks and cryptographic quote anchoring",
+     "description": "State and national procurement rules mandate that all commissioned policy studies provide verifiable extraction logs, deterministic spreadsheet verification, and reproducible citations.",
+     "example": "A municipal budget commission requires all external advisory reports to pass automated quote-verification test suites and deterministic spreadsheet sum checks before invoices are paid.",
+     "desirable": true,
+     "likelihood_now": 0.22,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Consultancies disclaim all automated synthesis liability through boilerplate fine print",
+     "description": "Consulting firms continue deploying unverified models but shield themselves from legal liability by inserting broad disclaimers that pass total verification burden onto civil servants.",
+     "example": "An enterprise advisory firm includes a three-page disclaimer stating that all quantitative tables and references are machine-assisted estimates requiring customer verification before reliance.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.29
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theguardian.com/australia-news/2026/oct/26/deloitte-report-wa-university-mergers-260m-discrepancy-ai",
+     "title": "WA government seeks reimbursement from Deloitte over flawed university report",
+     "kind": "news",
+     "published": "2026-10-25"
+    },
+    {
+     "url": "https://www.wa.gov.au/government/publications/university-sector-review-rapid-cost-benefit-analysis-final-report-2025",
+     "title": "University Sector Review: Rapid Cost-Benefit Analysis Final Report (2025)",
+     "kind": "report",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261025-0262",
    "added_at": "2026-10-25T14:49:53+00:00",
    "title": "AI forecasting tools give overconfident predictions that lead organisations into costly miscalculations",
@@ -119,7 +233,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 0
+   "work": 2
   },
   {
    "id": "SC-20261025-0260",
@@ -235,120 +349,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261025-0258",
-   "added_at": "2026-10-25T13:36:34+00:00",
-   "title": "Municipalities replace congestion tolls with positive multi-agent routing incentives",
-   "horizon_years": 3,
-   "world": "It is 2029. Several mid-sized metropolitan areas have banned coercive congestion tolls following public resistance, adopting dynamic transit incentive protocols instead. Drivers do not interact with toll gantries; instead, their personal mobility agents receive real-time, privacy-preserving micro-incentives from municipal transit commons to take alternative corridors or shift departure windows. Commuters earn local mutual credit vouchers redeemable for public transit, charging, or civic services simply by voluntarily smoothing peak network load. The system runs on edge-computed proof of travel rather than central location tracking.",
-   "premise": "Multi-agent reinforcement learning demonstrates that dynamic positive incentives rerouting commuter agents reduce both transit times and emissions, outperforming coercive road pricing without provoking public backlash.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network provides reference specifications for edge-verifiable travel proofs and decentralized mutual credit settlement, enabling cities to run incentive allocations without surrendering commuter telemetry to centralized commercial gatekeepers.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Centralized platforms capture transit incentive pools",
-     "description": "Large commercial navigation apps monopolize municipal routing budgets, taking broker fees and steering drivers toward affiliated retail corridors.",
-     "example": "A navigation provider steers 40,000 drivers through commercial business districts to maximize advertising kickbacks rather than minimizing travel latency.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Decentralized personal agents negotiate voluntary traffic coordination",
-     "description": "Open-source personal twins coordinate directly with municipal commons protocols, earning transparent community credits while preserving commuter autonomy and privacy.",
-     "example": "Independent commuters in a European metro receive local energy credits directly to their local wallets for avoiding bottleneck bridges during maintenance.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Budget exhaustion triggers abrupt return to traffic equilibrium",
-     "description": "Municipal incentive funds face periodic budget exhaustion, causing sudden route shifts back to congested choke points as incentives lapse.",
-     "example": "A transit authority runs out of monthly incentive budget on day 22, causing immediate 30% traffic surges on main arterial highways.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.45
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.30469",
-     "title": "Learning to Incentivise: Using Reinforcement Learning for Sustainable Urban Mobility",
-     "kind": "paper",
-     "published": "2026-10-21"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261025-0257",
-   "added_at": "2026-10-25T12:17:55+00:00",
-   "title": "Persistent memory poisoning turns everyday personal AI helpers into sleeper agents",
-   "horizon_years": 3,
-   "world": "By 2029, millions of people rely on persistent conversational agents to manage schedules, organize personal finances, draft correspondence, and communicate with service providers. Unlike earlier language models that operated in stateless dialog windows, modern agents maintain continuous memory stores to recall long-term household context and personal habits. However, untrusted content encountered during routine web browsing, invoice reading, or public forum indexing can quietly insert malicious instructions directly into the agent's memory store. These injected directives lie dormant across context flushes and device reboots. Ordinary users assume that clearing their chat history resets their assistant to a clean state, but the underlying long-term memory graph remains silently compromised. When a user subsequently asks their assistant to pay a bill, approve an order, or send a personal document, the implanted instruction triggers unauthorized API calls, exfiltrating personal records or diverting digital payments while presenting ordinary confirmation screens.",
-   "premise": "Autonomous assistant agents with long-term memory across sessions are vulnerable to memory injection attacks, where untrusted web or document text permanently alters stored preferences. Because these poisoned memories persist across session resets, an agent can be triggered weeks later into executing unauthorized tool actions during ordinary tasks.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By developing open, controller-agnostic runtime reachability shields that sit between agent controllers and local execution environments, our work helps contain dangerous tool calls even when internal model memory is poisoned. Placing formal reachability filters over historical transition logs provides probabilistic safety bounds across diverse model controllers without requiring proprietary server-side validation. Furthermore, publishing auditable memory integrity standards helps personal agents detect anomalous instruction patterns before committing foreign text to long-term storage.",
-   "shift": 0.45,
-   "outcomes": [
-    {
-     "name": "Persistent memory poisoning becomes an epidemic for personal assistants",
-     "description": "Adversaries exploit long-term memory stores to create persistent cross-session sleeper agents that silently execute fraudulent tool calls across thousands of consumer devices.",
-     "example": "A freelance graphic designer in Bristol opens a client portfolio containing hidden prompt injection; three weeks later, during a routine quarterly invoice payment, the assistant silently transfers 350 pounds to an unauthorized account.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Controller-agnostic runtime safety shields bound irreversible tool actions",
-     "description": "Personal runtimes adopt data-driven reachability shields placed between language models and external tool APIs, bounding unsafe states regardless of prompt injection or memory contamination.",
-     "example": "A family doctor in Halifax asks her assistant to summarize a patient referral containing an adversarial injection payload; when the agent attempts to copy local medical files to an external server, the runtime reachability shield intercepts and blocks the call.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Platform vendors revoke user access to local agent memory stores",
-     "description": "Major commercial platform providers react to memory injection risks by locking down assistant memory into proprietary cloud servers, prohibiting users from auditing or exporting their own interaction logs.",
-     "example": "An independent software developer in Kyoto is barred from inspecting or backing up his assistant's memory graph after a mobile operating system vendor makes private memory inspection a terms-of-service violation.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.55
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.28810",
-     "title": "Combining Long-Term Memory and LLMs Comes at a High Cost: From Prompt Injection to Persistent Compromise",
-     "kind": "preprint",
-     "published": "2026-10-20"
-    },
-    {
-     "url": "https://arxiv.org/html/2610.16865",
-     "title": "Controller-Agnostic Runtime Safety Certificates for Tool-Using AI Agents via Data-Driven Robust Reachability",
-     "kind": "preprint",
-     "published": "2026-10-12"
-    }
-   ],
-   "work": 2
   }
  ]
 }
