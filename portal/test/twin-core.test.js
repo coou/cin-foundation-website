@@ -7451,3 +7451,284 @@ test('summarizeIncomeProof produces clear plain language without internal jargon
   assert.ok(!sum.text.includes('ticket'));
   assert.ok(!sum.text.includes('steward'));
 });
+
+
+import {
+  ALLOWED_AUTO_PURCHASE_OUTCOMES,
+  ALLOWED_PURCHASE_REQUEST_FIELDS,
+  ALLOWED_AUTO_PURCHASE_POLICY_FIELDS,
+  DEFAULT_AUTO_PURCHASE_POLICY,
+  validatePurchaseRequest,
+  validateAutoPurchasePolicy,
+  computeAutoPurchaseCommitment,
+  verifyAutoPurchaseCommitment,
+  evaluateAutoPurchaseGate,
+  summarizeAutoPurchaseDecision
+} from '../assets/twin-core.js';
+
+test('auto-purchase constants and default policy are deeply frozen and valid', () => {
+  assert.ok(Object.isFrozen(ALLOWED_AUTO_PURCHASE_OUTCOMES));
+  assert.ok(Object.isFrozen(ALLOWED_PURCHASE_REQUEST_FIELDS));
+  assert.ok(Object.isFrozen(ALLOWED_AUTO_PURCHASE_POLICY_FIELDS));
+  assert.ok(Object.isFrozen(DEFAULT_AUTO_PURCHASE_POLICY));
+
+  assert.deepEqual([...ALLOWED_AUTO_PURCHASE_OUTCOMES], ['deny', 'confirm_first', 'auto_purchase']);
+  assert.equal(DEFAULT_AUTO_PURCHASE_POLICY.max_auto_cents, 2500);
+  assert.equal(DEFAULT_AUTO_PURCHASE_POLICY.max_confirm_cents, 25000);
+  assert.equal(DEFAULT_AUTO_PURCHASE_POLICY.require_explicit_warrant, true);
+  assert.equal(DEFAULT_AUTO_PURCHASE_POLICY.min_preference_score, 0.8);
+  assert.ok(DEFAULT_AUTO_PURCHASE_POLICY.merchant_allowlist.length > 0);
+});
+
+test('validatePurchaseRequest accepts well-formed requests and freezes output', () => {
+  const req = {
+    request_id: 'req_purchase_001',
+    agent_id: 'procurement_assistant',
+    merchant: 'Local Hardware Co-op',
+    currency: 'USD',
+    amount_cents: 1450,
+    item_description: 'Ethernet Patch Cables (Cat6)',
+    user_preference_score: 0.95,
+    has_user_warrant: true,
+    requested_at: '2026-10-25T14:30:00Z',
+    category: 'hardware'
+  };
+
+  const res = validatePurchaseRequest(req);
+  assert.equal(res.ok, true);
+  assert.ok(Object.isFrozen(res.value));
+  assert.equal(res.value.amount_cents, 1450);
+  assert.equal(res.value.merchant, 'Local Hardware Co-op');
+});
+
+test('validatePurchaseRequest rejects malformed or prototype-polluted inputs fail-closed', () => {
+  assert.equal(validatePurchaseRequest(null).ok, false);
+  assert.equal(validatePurchaseRequest([]).ok, false);
+  assert.equal(validatePurchaseRequest('not an object').ok, false);
+
+  // Prototype pollution
+  assert.equal(validatePurchaseRequest(JSON.parse('{"__proto__": {"polluted": true}}')).ok, false);
+
+  const base = {
+    request_id: 'req_purchase_001',
+    agent_id: 'procurement_assistant',
+    merchant: 'Local Hardware Co-op',
+    currency: 'USD',
+    amount_cents: 1450,
+    item_description: 'Ethernet Patch Cables',
+    user_preference_score: 0.95,
+    has_user_warrant: true,
+    requested_at: '2026-10-25T14:30:00Z'
+  };
+
+  // Unknown field
+  assert.equal(validatePurchaseRequest({ ...base, unexpected_field: 'leak' }).ok, false);
+
+  // Missing required field
+  const missing = { ...base };
+  delete missing.merchant;
+  assert.equal(validatePurchaseRequest(missing).ok, false);
+
+  // Invalid amounts
+  assert.equal(validatePurchaseRequest({ ...base, amount_cents: -500 }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, amount_cents: 0 }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, amount_cents: 12.50 }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, amount_cents: true }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, amount_cents: '1450' }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, amount_cents: Number.MAX_SAFE_INTEGER + 10 }).ok, false);
+
+  // Invalid preference score
+  assert.equal(validatePurchaseRequest({ ...base, user_preference_score: 1.5 }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, user_preference_score: -0.1 }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, user_preference_score: NaN }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, user_preference_score: true }).ok, false);
+
+  // Invalid warrant type
+  assert.equal(validatePurchaseRequest({ ...base, has_user_warrant: 'true' }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, has_user_warrant: 1 }).ok, false);
+
+  // Invalid calendar dates and malformed ISO timestamps
+  assert.equal(validatePurchaseRequest({ ...base, requested_at: '2026-02-31T12:00:00Z' }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, requested_at: '2026-10-25T99:99:99Z' }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, requested_at: '2026-10-25GARBAGE' }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, requested_at: 'invalid-date' }).ok, false);
+
+  // Invalid currencies
+  assert.equal(validatePurchaseRequest({ ...base, currency: 'US' }).ok, false);
+  assert.equal(validatePurchaseRequest({ ...base, currency: 'TOOLONG' }).ok, false);
+});
+
+test('validateAutoPurchasePolicy enforces valid boundaries fail-closed and trims allowlist', () => {
+  const validPol = validateAutoPurchasePolicy({
+    max_auto_cents: 1000,
+    max_confirm_cents: 10000,
+    merchant_allowlist: ['  Bookshop Cooperative  ', 'Local Co-op']
+  });
+  assert.equal(validPol.ok, true);
+  assert.equal(validPol.value.max_auto_cents, 1000);
+  assert.equal(validPol.value.max_confirm_cents, 10000);
+  assert.equal(validPol.value.merchant_allowlist[0], 'Bookshop Cooperative'); // trimmed
+
+  // Unknown field
+  assert.equal(validateAutoPurchasePolicy({ unknown_field: 123 }).ok, false);
+
+  // Negative limits
+  assert.equal(validateAutoPurchasePolicy({ max_auto_cents: -100 }).ok, false);
+  assert.equal(validateAutoPurchasePolicy({ max_confirm_cents: 500, max_auto_cents: 1000 }).ok, false);
+
+  // Invalid currencies
+  assert.equal(validateAutoPurchasePolicy({ allowed_currencies: [] }).ok, false);
+  assert.equal(validateAutoPurchasePolicy({ allowed_currencies: ['INVALID'] }).ok, false);
+});
+
+test('evaluateAutoPurchaseGate enforces three-valued decisions and preference != permission', () => {
+  const reqBase = {
+    request_id: 'req_test_01',
+    agent_id: 'shopping_bot',
+    merchant: 'Bookshop Cooperative',
+    currency: 'USD',
+    amount_cents: 1800, // $18.00 (within $25.00 auto limit)
+    item_description: 'Autonomous Systems Monograph',
+    user_preference_score: 0.98, // High preference fit!
+    has_user_warrant: false, // NO explicit warrant!
+    requested_at: '2026-10-25T14:00:00Z'
+  };
+
+  // Preference is NOT permission: high preference without warrant MUST confirm_first
+  const resNoWarrant = evaluateAutoPurchaseGate(reqBase);
+  assert.equal(resNoWarrant.ok, true);
+  assert.equal(resNoWarrant.decision, 'confirm_first');
+  assert.ok(resNoWarrant.reason.includes('Preference is not permission'));
+
+  // With active warrant, within auto limit -> auto_purchase
+  const resWithWarrant = evaluateAutoPurchaseGate({ ...reqBase, has_user_warrant: true });
+  assert.equal(resWithWarrant.ok, true);
+  assert.equal(resWithWarrant.decision, 'auto_purchase');
+  assert.ok(resWithWarrant.receipt.authorization_digest.length > 0);
+  assert.equal(resWithWarrant.receipt.item_description, 'Autonomous Systems Monograph');
+
+  // Amount exceeds auto limit ($35 > $25) but within confirm limit ($250) -> confirm_first
+  const resOverAuto = evaluateAutoPurchaseGate({ ...reqBase, amount_cents: 3500, has_user_warrant: true });
+  assert.equal(resOverAuto.ok, true);
+  assert.equal(resOverAuto.decision, 'confirm_first');
+  assert.ok(resOverAuto.reason.includes('exceeds automatic spend cap'));
+
+  // Amount exceeds maximum confirmation ceiling ($300 > $250) -> deny
+  const resOverConfirm = evaluateAutoPurchaseGate({ ...reqBase, amount_cents: 30000, has_user_warrant: true });
+  assert.equal(resOverConfirm.ok, true);
+  assert.equal(resOverConfirm.decision, 'deny');
+  assert.ok(resOverConfirm.reason.includes('exceeds maximum permissible transaction cap'));
+
+  // Disallowed currency -> deny
+  const resBadCurr = evaluateAutoPurchaseGate({ ...reqBase, currency: 'JPY', has_user_warrant: true });
+  assert.equal(resBadCurr.ok, true);
+  assert.equal(resBadCurr.decision, 'deny');
+  assert.ok(resBadCurr.reason.includes('not in the allowed spending currencies list'));
+
+  // Merchant allowlist filter: unlisted merchant denied
+  const policyAllowlist = {
+    ...DEFAULT_AUTO_PURCHASE_POLICY,
+    merchant_allowlist: ['Approved Vendor Co']
+  };
+  const resUnlistedMerchant = evaluateAutoPurchaseGate({ ...reqBase, has_user_warrant: true }, policyAllowlist);
+  assert.equal(resUnlistedMerchant.ok, true);
+  assert.equal(resUnlistedMerchant.decision, 'deny');
+  assert.ok(resUnlistedMerchant.reason.includes('not on your approved merchant allowlist'));
+
+  // Empty allowlist fails closed: requires confirmation instead of auto-purchasing
+  const policyEmptyAllowlist = {
+    ...DEFAULT_AUTO_PURCHASE_POLICY,
+    merchant_allowlist: []
+  };
+  const resEmptyAllowlist = evaluateAutoPurchaseGate({ ...reqBase, has_user_warrant: true }, policyEmptyAllowlist);
+  assert.equal(resEmptyAllowlist.ok, true);
+  assert.equal(resEmptyAllowlist.decision, 'confirm_first');
+  assert.ok(resEmptyAllowlist.reason.includes('No approved merchants configured on allowlist'));
+
+  // Daily budget exceeded ($40 current + $18 req > $50 limit) -> confirm_first
+  const policyTightBudget = {
+    ...DEFAULT_AUTO_PURCHASE_POLICY,
+    current_daily_spend_cents: 4000,
+    daily_spend_limit_cents: 5000
+  };
+  const resBudgetExceeded = evaluateAutoPurchaseGate({ ...reqBase, has_user_warrant: true }, policyTightBudget);
+  assert.equal(resBudgetExceeded.ok, true);
+  assert.equal(resBudgetExceeded.decision, 'confirm_first');
+  assert.ok(resBudgetExceeded.reason.includes('exceeds daily spend limit'));
+});
+
+test('computeAutoPurchaseCommitment binds item payload and verifyAutoPurchaseCommitment authenticates receipts', () => {
+  const data = {
+    request_id: 'req_123',
+    decision: 'auto_purchase',
+    amount_cents: 2000,
+    currency: 'USD',
+    merchant: 'Farm Co-op',
+    item_description: 'Organic Vegetable Basket',
+    category: 'groceries',
+    agent_id: 'agent_99',
+    has_user_warrant: true,
+    user_preference_score: 0.95,
+    timestamp: '2026-10-25T14:00:00Z'
+  };
+
+  const digest1 = computeAutoPurchaseCommitment(data);
+  const digest2 = computeAutoPurchaseCommitment(data);
+  assert.equal(digest1, digest2);
+  assert.equal(typeof digest1, 'string');
+
+  // Payload swap attack on item_description invalidates digest
+  const swappedDesc = computeAutoPurchaseCommitment({ ...data, item_description: 'Gift Card Voucher' });
+  assert.notEqual(digest1, swappedDesc);
+
+  // Payload swap attack on category invalidates digest
+  const swappedCat = computeAutoPurchaseCommitment({ ...data, category: 'gift_cards' });
+  assert.notEqual(digest1, swappedCat);
+
+  // Verification helper authenticates valid receipt
+  const receipt = { ...data, authorization_digest: digest1 };
+  const verifyValid = verifyAutoPurchaseCommitment(receipt);
+  assert.equal(verifyValid.ok, true);
+  assert.equal(verifyValid.verified, true);
+
+  // Verification helper detects tampering fail-closed
+  const tamperedReceipt = { ...data, amount_cents: 2001, authorization_digest: digest1 };
+  const verifyTampered = verifyAutoPurchaseCommitment(tamperedReceipt);
+  assert.equal(verifyTampered.ok, true);
+  assert.equal(verifyTampered.verified, false);
+  assert.ok(verifyTampered.reason.includes('mismatch'));
+});
+
+test('summarizeAutoPurchaseDecision produces plain-language summaries without internal jargon or stutter', () => {
+  const mockResult = {
+    ok: true,
+    decision: 'confirm_first',
+    reason: 'Preference is not permission. Explicit user warrant absent; interactive confirmation required before purchase execution.',
+    request: {
+      amount_cents: 1850,
+      currency: 'USD',
+      merchant: 'Bookshop Cooperative'
+    },
+    receipt: {
+      receipt_id: 'rcpt_auto_req_test'
+    }
+  };
+
+  const sum = summarizeAutoPurchaseDecision(mockResult);
+  assert.equal(sum.ok, true);
+  assert.equal(sum.decision, 'confirm_first');
+  assert.equal(sum.decision_label, 'Requires confirmation');
+  assert.equal(sum.requires_action, true);
+  assert.equal(sum.status_class, 'status-warn');
+  assert.ok(sum.text.includes('Requires confirmation: Preference is not permission'));
+  assert.ok(sum.text.includes('18.50 USD at Bookshop Cooperative'));
+
+  // Ensure no duplicate label prefix in text
+  assert.ok(!sum.text.includes('Requires confirmation: Requires confirmation'));
+
+  // Ensure no internal jargon
+  assert.ok(!sum.text.includes('tier'));
+  assert.ok(!sum.text.includes('ticket'));
+  assert.ok(!sum.text.includes('steward'));
+  assert.ok(!sum.text.includes('F1'));
+});

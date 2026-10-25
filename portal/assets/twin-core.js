@@ -9560,3 +9560,471 @@ export function summarizeIncomeProof(result) {
     receipt_id: r.receipt_id
   });
 }
+
+
+/**
+ * Auto-purchase decision gate constants and evaluation logic.
+ * Grounded in arXiv:2610.29216 (Preference Is Not Permission: Personalizing
+ * the Auto-Purchase Line in Agentic Commerce) and Nylas H2 2026 agent error audit.
+ * Enforces a strict three-valued gate (deny, confirm_first, auto_purchase)
+ * decoupling item preference matching from execution authorization.
+ */
+
+export const ALLOWED_AUTO_PURCHASE_OUTCOMES = Object.freeze([
+  'deny',
+  'confirm_first',
+  'auto_purchase'
+]);
+
+export const ALLOWED_PURCHASE_REQUEST_FIELDS = Object.freeze([
+  'request_id',
+  'agent_id',
+  'merchant',
+  'currency',
+  'amount_cents',
+  'item_description',
+  'user_preference_score',
+  'has_user_warrant',
+  'requested_at',
+  'category'
+]);
+
+export const ALLOWED_AUTO_PURCHASE_POLICY_FIELDS = Object.freeze([
+  'max_auto_cents',
+  'max_confirm_cents',
+  'allowed_currencies',
+  'merchant_allowlist',
+  'min_preference_score',
+  'require_explicit_warrant',
+  'enforce_daily_budget',
+  'daily_spend_limit_cents',
+  'current_daily_spend_cents'
+]);
+
+export const DEFAULT_AUTO_PURCHASE_POLICY = deepFreeze({
+  max_auto_cents: 2500, // $25.00 automatic execution cap
+  max_confirm_cents: 25000, // $250.00 confirmation cap; above is denied
+  allowed_currencies: ['USD', 'CAD', 'EUR', 'GBP'],
+  merchant_allowlist: ['Bookshop Cooperative', 'Local Hardware Co-op'], // explicit merchant allowlist; empty requires confirmation fail-closed
+  min_preference_score: 0.8, // high preference required but not sufficient
+  require_explicit_warrant: true, // preference != permission
+  enforce_daily_budget: true,
+  daily_spend_limit_cents: 5000, // $50.00 daily spend cap
+  current_daily_spend_cents: 0
+});
+
+/**
+ * Validates a purchase request fail-closed.
+ *
+ * @param {object} req Purchase request payload
+ * @returns {object} { ok: boolean, value?: object, error?: string, reason?: string }
+ */
+export function validatePurchaseRequest(req) {
+  if (!req || typeof req !== 'object' || Array.isArray(req)) {
+    return { ok: false, error: 'invalid_request_object', reason: 'Purchase request must be a non-null object' };
+  }
+
+  // Reject prototype pollution
+  if (Object.prototype.hasOwnProperty.call(req, '__proto__') ||
+      Object.prototype.hasOwnProperty.call(req, 'constructor') ||
+      Object.prototype.hasOwnProperty.call(req, 'prototype')) {
+    return { ok: false, error: 'prototype_pollution_detected', reason: 'Prototype pollution fields are forbidden' };
+  }
+
+  const keys = Object.keys(req);
+  for (const k of keys) {
+    if (!ALLOWED_PURCHASE_REQUEST_FIELDS.includes(k)) {
+      return { ok: false, error: 'unknown_field', reason: `Unknown purchase request field: ${k}` };
+    }
+  }
+
+  const required = ['request_id', 'agent_id', 'merchant', 'currency', 'amount_cents', 'item_description', 'user_preference_score', 'has_user_warrant', 'requested_at'];
+  for (const r of required) {
+    if (!Object.prototype.hasOwnProperty.call(req, r) || req[r] === undefined || req[r] === null) {
+      return { ok: false, error: 'missing_required_field', reason: `Missing required field: ${r}` };
+    }
+  }
+
+  if (typeof req.request_id !== 'string' || req.request_id.trim().length === 0 || req.request_id.length > 64) {
+    return { ok: false, error: 'invalid_request_id', reason: 'request_id must be a string between 1 and 64 characters' };
+  }
+
+  if (typeof req.agent_id !== 'string' || req.agent_id.trim().length === 0 || req.agent_id.length > 64) {
+    return { ok: false, error: 'invalid_agent_id', reason: 'agent_id must be a string between 1 and 64 characters' };
+  }
+
+  if (typeof req.merchant !== 'string' || req.merchant.trim().length === 0 || req.merchant.length > 100) {
+    return { ok: false, error: 'invalid_merchant', reason: 'merchant must be a non-empty string up to 100 characters' };
+  }
+
+  if (typeof req.currency !== 'string' || !isValidCurrencyCode(req.currency)) {
+    return { ok: false, error: 'invalid_currency', reason: `currency must be a valid 3-letter currency code` };
+  }
+
+  if (typeof req.amount_cents !== 'number' || typeof req.amount_cents === 'boolean' || !Number.isSafeInteger(req.amount_cents) || req.amount_cents <= 0) {
+    return { ok: false, error: 'invalid_amount_cents', reason: 'amount_cents must be a positive safe integer greater than zero' };
+  }
+
+  if (typeof req.item_description !== 'string' || req.item_description.trim().length === 0 || req.item_description.length > 140) {
+    return { ok: false, error: 'invalid_item_description', reason: 'item_description must be a string between 1 and 140 characters' };
+  }
+
+  if (typeof req.user_preference_score !== 'number' || typeof req.user_preference_score === 'boolean' || !Number.isFinite(req.user_preference_score) || req.user_preference_score < 0 || req.user_preference_score > 1) {
+    return { ok: false, error: 'invalid_user_preference_score', reason: 'user_preference_score must be a finite number between 0.0 and 1.0' };
+  }
+
+  if (typeof req.has_user_warrant !== 'boolean') {
+    return { ok: false, error: 'invalid_has_user_warrant', reason: 'has_user_warrant must be a strict boolean' };
+  }
+
+  const ISO_TIMESTAMP_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+  if (typeof req.requested_at !== 'string' ||
+      !ISO_TIMESTAMP_RE.test(req.requested_at) ||
+      isNaN(Date.parse(req.requested_at)) ||
+      !isValidCalendarDate(req.requested_at.slice(0, 10))) {
+    return { ok: false, error: 'invalid_requested_at', reason: 'requested_at must be a valid ISO-8601 timestamp with a valid calendar date' };
+  }
+
+  if (req.category !== undefined && req.category !== null) {
+    if (typeof req.category !== 'string' || req.category.length > 40) {
+      return { ok: false, error: 'invalid_category', reason: 'category must be a string up to 40 characters' };
+    }
+  }
+
+  const clean = {
+    request_id: req.request_id.trim(),
+    agent_id: req.agent_id.trim(),
+    merchant: req.merchant.trim(),
+    currency: req.currency.toUpperCase(),
+    amount_cents: req.amount_cents,
+    item_description: req.item_description.trim(),
+    user_preference_score: req.user_preference_score,
+    has_user_warrant: req.has_user_warrant,
+    requested_at: req.requested_at,
+    category: req.category ? req.category.trim() : 'general'
+  };
+
+  return { ok: true, value: deepFreeze(clean) };
+}
+
+/**
+ * Validates an auto-purchase policy fail-closed.
+ *
+ * @param {object} policy Policy options
+ * @returns {object} { ok: boolean, value?: object, error?: string, reason?: string }
+ */
+export function validateAutoPurchasePolicy(policy) {
+  if (!policy || typeof policy !== 'object' || Array.isArray(policy)) {
+    return { ok: false, error: 'invalid_policy_object', reason: 'Policy must be a non-null object' };
+  }
+
+  // Reject prototype pollution
+  if (Object.prototype.hasOwnProperty.call(policy, '__proto__') ||
+      Object.prototype.hasOwnProperty.call(policy, 'constructor') ||
+      Object.prototype.hasOwnProperty.call(policy, 'prototype')) {
+    return { ok: false, error: 'prototype_pollution_detected', reason: 'Prototype pollution fields are forbidden' };
+  }
+
+  for (const k of Object.keys(policy)) {
+    if (!ALLOWED_AUTO_PURCHASE_POLICY_FIELDS.includes(k)) {
+      return { ok: false, error: 'unknown_policy_field', reason: `Unknown policy field: ${k}` };
+    }
+  }
+
+  const p = { ...DEFAULT_AUTO_PURCHASE_POLICY, ...policy };
+
+  if (typeof p.max_auto_cents !== 'number' || typeof p.max_auto_cents === 'boolean' || !Number.isSafeInteger(p.max_auto_cents) || p.max_auto_cents < 0) {
+    return { ok: false, error: 'invalid_max_auto_cents', reason: 'max_auto_cents must be a non-negative safe integer' };
+  }
+
+  if (typeof p.max_confirm_cents !== 'number' || typeof p.max_confirm_cents === 'boolean' || !Number.isSafeInteger(p.max_confirm_cents) || p.max_confirm_cents < p.max_auto_cents) {
+    return { ok: false, error: 'invalid_max_confirm_cents', reason: 'max_confirm_cents must be a safe integer >= max_auto_cents' };
+  }
+
+  if (!Array.isArray(p.allowed_currencies) || p.allowed_currencies.length === 0) {
+    return { ok: false, error: 'invalid_allowed_currencies', reason: 'allowed_currencies must be a non-empty array' };
+  }
+  for (const c of p.allowed_currencies) {
+    if (typeof c !== 'string' || !isValidCurrencyCode(c)) {
+      return { ok: false, error: 'invalid_currency_in_policy', reason: `Invalid currency in policy: ${c}` };
+    }
+  }
+
+  if (!Array.isArray(p.merchant_allowlist)) {
+    return { ok: false, error: 'invalid_merchant_allowlist', reason: 'merchant_allowlist must be an array' };
+  }
+  const cleanedAllowlist = [];
+  for (const m of p.merchant_allowlist) {
+    if (typeof m !== 'string' || m.trim().length === 0) {
+      return { ok: false, error: 'invalid_merchant_entry', reason: 'merchant entries must be non-empty strings' };
+    }
+    cleanedAllowlist.push(m.trim());
+  }
+  p.merchant_allowlist = cleanedAllowlist;
+
+  if (typeof p.min_preference_score !== 'number' || typeof p.min_preference_score === 'boolean' || !Number.isFinite(p.min_preference_score) || p.min_preference_score < 0 || p.min_preference_score > 1) {
+    return { ok: false, error: 'invalid_min_preference_score', reason: 'min_preference_score must be a number between 0.0 and 1.0' };
+  }
+
+  if (typeof p.require_explicit_warrant !== 'boolean') {
+    return { ok: false, error: 'invalid_require_explicit_warrant', reason: 'require_explicit_warrant must be boolean' };
+  }
+
+  if (typeof p.enforce_daily_budget !== 'boolean') {
+    return { ok: false, error: 'invalid_enforce_daily_budget', reason: 'enforce_daily_budget must be boolean' };
+  }
+
+  if (typeof p.daily_spend_limit_cents !== 'number' || typeof p.daily_spend_limit_cents === 'boolean' || !Number.isSafeInteger(p.daily_spend_limit_cents) || p.daily_spend_limit_cents < 0) {
+    return { ok: false, error: 'invalid_daily_spend_limit_cents', reason: 'daily_spend_limit_cents must be a non-negative safe integer' };
+  }
+
+  if (typeof p.current_daily_spend_cents !== 'number' || typeof p.current_daily_spend_cents === 'boolean' || !Number.isSafeInteger(p.current_daily_spend_cents) || p.current_daily_spend_cents < 0) {
+    return { ok: false, error: 'invalid_current_daily_spend_cents', reason: 'current_daily_spend_cents must be a non-negative safe integer' };
+  }
+
+  return { ok: true, value: deepFreeze(p) };
+}
+
+/**
+ * Computes deterministic integrity commitment for an auto-purchase authorization receipt.
+ * Binds every authority-bearing field including item description and category.
+ *
+ * @param {object} data Authorization record data
+ * @returns {string} Deterministic hex digest
+ */
+export function computeAutoPurchaseCommitment(data) {
+  if (!data || typeof data !== 'object') return '00000000000000';
+  const seed = `${data.request_id}|${data.decision}|${data.amount_cents}|${data.currency}|${data.merchant}|${data.item_description}|${data.category}|${data.agent_id}|${data.has_user_warrant}|${data.user_preference_score}|${data.timestamp}`;
+  return computeContextFingerprint(seed);
+}
+
+/**
+ * Verifies the integrity of an auto-purchase authorization receipt against its deterministic commitment.
+ *
+ * @param {object} receipt Receipt to verify
+ * @returns {object} { ok: boolean, verified: boolean, reason: string }
+ */
+export function verifyAutoPurchaseCommitment(receipt) {
+  if (!receipt || typeof receipt !== 'object') {
+    return deepFreeze({ ok: false, verified: false, reason: 'Invalid receipt object' });
+  }
+
+  const expected = computeAutoPurchaseCommitment(receipt);
+  if (!receipt.authorization_digest || receipt.authorization_digest !== expected) {
+    return deepFreeze({
+      ok: true,
+      verified: false,
+      reason: 'Authorization digest mismatch; receipt has been tampered with or modified'
+    });
+  }
+
+  return deepFreeze({
+    ok: true,
+    verified: true,
+    reason: 'Authorization commitment verified authentic against deterministic policy digest'
+  });
+}
+
+/**
+ * Evaluates an auto-purchase request against personal spending boundaries.
+ * Decouples user preference from spending permission via a three-valued gate.
+ *
+ * @param {object} request The purchase request
+ * @param {object} policy The user's personal spending policy
+ * @returns {object} Deeply frozen evaluation result with tamper-evident receipt
+ */
+export function evaluateAutoPurchaseGate(request, policy = DEFAULT_AUTO_PURCHASE_POLICY) {
+  const reqVal = validatePurchaseRequest(request);
+  if (!reqVal.ok) {
+    return deepFreeze({
+      ok: false,
+      decision: 'deny',
+      error: reqVal.error,
+      reason: reqVal.reason
+    });
+  }
+
+  const polVal = validateAutoPurchasePolicy(policy);
+  if (!polVal.ok) {
+    return deepFreeze({
+      ok: false,
+      decision: 'deny',
+      error: polVal.error,
+      reason: polVal.reason
+    });
+  }
+
+  const req = reqVal.value;
+  const pol = polVal.value;
+
+  // 1. Currency allowlist check
+  if (!pol.allowed_currencies.includes(req.currency)) {
+    return deepFreeze({
+      ok: true,
+      decision: 'deny',
+      reason: `Currency ${req.currency} is not in the allowed spending currencies list.`,
+      request: req,
+      policy: pol
+    });
+  }
+
+  // 2. Merchant allowlist check (fail-closed)
+  let merchantNeedsConfirmation = false;
+  if (pol.merchant_allowlist.length === 0) {
+    // When no allowlist is configured, fail-closed: automatic purchase is disallowed
+    merchantNeedsConfirmation = true;
+  } else {
+    const normMerchant = req.merchant.toLowerCase();
+    const isAllowlisted = pol.merchant_allowlist.some(m => m.toLowerCase() === normMerchant);
+    if (!isAllowlisted) {
+      return deepFreeze({
+        ok: true,
+        decision: 'deny',
+        reason: `Merchant '${req.merchant}' is not on your approved merchant allowlist.`,
+        request: req,
+        policy: pol
+      });
+    }
+  }
+
+  // 3. Absolute confirmation ceiling
+  if (req.amount_cents > pol.max_confirm_cents) {
+    return deepFreeze({
+      ok: true,
+      decision: 'deny',
+      reason: `Transaction amount (${(req.amount_cents / 100).toFixed(2)} ${req.currency}) exceeds maximum permissible transaction cap (${(pol.max_confirm_cents / 100).toFixed(2)} ${req.currency}).`,
+      request: req,
+      policy: pol
+    });
+  }
+
+  // 4. Daily budget check
+  let dailyBudgetExceeded = false;
+  if (pol.enforce_daily_budget) {
+    const projectedSpend = pol.current_daily_spend_cents + req.amount_cents;
+    if (projectedSpend > pol.daily_spend_limit_cents) {
+      dailyBudgetExceeded = true;
+    }
+  }
+
+  // 5. Core Gate Logic: Preference Is Not Permission (arXiv:2610.29216)
+  let decision = 'confirm_first';
+  let reason = '';
+
+  if (dailyBudgetExceeded) {
+    decision = 'confirm_first';
+    reason = `Transaction exceeds daily spend limit (${(pol.daily_spend_limit_cents / 100).toFixed(2)} ${req.currency}). Explicit confirmation required.`;
+  } else if (merchantNeedsConfirmation) {
+    decision = 'confirm_first';
+    reason = 'No approved merchants configured on allowlist; interactive confirmation required before purchase execution fail-closed.';
+  } else if (pol.require_explicit_warrant && !req.has_user_warrant) {
+    decision = 'confirm_first';
+    reason = 'Preference is not permission. Explicit user warrant absent; interactive confirmation required before purchase execution.';
+  } else if (req.user_preference_score < pol.min_preference_score) {
+    decision = 'confirm_first';
+    reason = `Preference fit (${(req.user_preference_score * 100).toFixed(0)}%) is below minimum auto-purchase threshold (${(pol.min_preference_score * 100).toFixed(0)}%).`;
+  } else if (req.amount_cents > pol.max_auto_cents) {
+    decision = 'confirm_first';
+    reason = `Amount (${(req.amount_cents / 100).toFixed(2)} ${req.currency}) exceeds automatic spend cap (${(pol.max_auto_cents / 100).toFixed(2)} ${req.currency}). Interactive approval required.`;
+  } else {
+    decision = 'auto_purchase';
+    reason = `Authorized for automatic execution within approved spending envelope and active warrant.`;
+  }
+
+  const receipt = {
+    receipt_id: `rcpt_auto_${req.request_id}`,
+    request_id: req.request_id,
+    decision,
+    amount_cents: req.amount_cents,
+    currency: req.currency,
+    merchant: req.merchant,
+    item_description: req.item_description,
+    category: req.category,
+    agent_id: req.agent_id,
+    has_user_warrant: req.has_user_warrant,
+    user_preference_score: req.user_preference_score,
+    timestamp: req.requested_at,
+    authorization_digest: computeAutoPurchaseCommitment({
+      request_id: req.request_id,
+      decision,
+      amount_cents: req.amount_cents,
+      currency: req.currency,
+      merchant: req.merchant,
+      item_description: req.item_description,
+      category: req.category,
+      agent_id: req.agent_id,
+      has_user_warrant: req.has_user_warrant,
+      user_preference_score: req.user_preference_score,
+      timestamp: req.requested_at
+    })
+  };
+
+  return deepFreeze({
+    ok: true,
+    decision,
+    reason,
+    receipt,
+    request: req,
+    policy: pol
+  });
+}
+
+/**
+ * Summarizes the auto-purchase evaluation result for UI display without innerHTML.
+ *
+ * @param {object} result Evaluation result from evaluateAutoPurchaseGate
+ * @returns {object} Deeply frozen UI summary
+ */
+export function summarizeAutoPurchaseDecision(result) {
+  if (!result || typeof result !== 'object') {
+    return deepFreeze({
+      ok: false,
+      decision: 'deny',
+      decision_label: 'Denied',
+      text: 'Evaluation failed fail-closed.',
+      status_class: 'status-err',
+      requires_action: false
+    });
+  }
+
+  if (!result.ok) {
+    return deepFreeze({
+      ok: false,
+      decision: 'deny',
+      decision_label: 'Denied',
+      text: result.reason || result.error || 'Evaluation failed fail-closed.',
+      status_class: 'status-err',
+      requires_action: false
+    });
+  }
+
+  let statusClass = 'status-ok';
+  let requiresAction = false;
+  let decisionLabel = 'Authorized';
+
+  if (result.decision === 'deny') {
+    statusClass = 'status-err';
+    decisionLabel = 'Denied';
+  } else if (result.decision === 'confirm_first') {
+    statusClass = 'status-warn';
+    decisionLabel = 'Requires confirmation';
+    requiresAction = true;
+  } else if (result.decision === 'auto_purchase') {
+    statusClass = 'status-ok';
+    decisionLabel = 'Auto-purchase permitted';
+  }
+
+  const req = result.request;
+  const costStr = req ? `${(req.amount_cents / 100).toFixed(2)} ${req.currency}` : '';
+  const text = `${decisionLabel}: ${result.reason} ${costStr ? `(${costStr} at ${req.merchant})` : ''}`.trim();
+
+  return deepFreeze({
+    ok: true,
+    decision: result.decision,
+    decision_label: decisionLabel,
+    text,
+    status_class: statusClass,
+    requires_action: requiresAction,
+    receipt_id: result.receipt?.receipt_id
+  });
+}

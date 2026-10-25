@@ -1,4 +1,4 @@
-import { generateIncomeVerificationProof, verifyIncomeVerificationProof, summarizeIncomeProof } from './twin-core.js';
+import { generateIncomeVerificationProof, verifyIncomeVerificationProof, summarizeIncomeProof, evaluateAutoPurchaseGate, summarizeAutoPurchaseDecision } from './twin-core.js';
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=3';
 import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit, evaluateAuthorityEnvelopeAction, summarizeAuthorityEnvelopeAudit, createDelegationCommitment, evaluateDelegationTransition, summarizeDelegationLedger, createLookaheadActionPlan, simulateActionPlanLookahead, summarizeLookaheadSimulation } from './twin-core.js';
@@ -1353,3 +1353,54 @@ function renderIncomeProofInspector() {
 }
 
 renderIncomeProofInspector();
+
+
+function renderAutoPurchaseInspector() {
+  const form = document.getElementById('evaluate-auto-purchase');
+  const resultBox = document.getElementById('auto-purchase-eval-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+
+    const fd = new FormData(form);
+    const amountVal = parseFloat(fd.get('amount') || '0');
+    const amountCents = Math.round(amountVal * 100);
+    const prefVal = parseFloat(fd.get('preference') || '0.9');
+    const hasWarrant = fd.get('has_warrant') === 'true';
+    const merchant = (fd.get('merchant') || 'Acme Market').trim();
+    const itemDesc = (fd.get('item_description') || 'General goods').trim();
+    const currency = (fd.get('currency') || 'USD').trim().toUpperCase();
+
+    const req = {
+      request_id: 'req_' + Date.now().toString(36),
+      agent_id: 'shopping_assistant_01',
+      merchant,
+      currency,
+      amount_cents: amountCents,
+      item_description: itemDesc,
+      user_preference_score: prefVal,
+      has_user_warrant: hasWarrant,
+      requested_at: new Date().toISOString(),
+      category: 'shopping'
+    };
+
+    const res = evaluateAutoPurchaseGate(req);
+    const summary = summarizeAutoPurchaseDecision(res);
+
+    const p = el('p', summary.status_class);
+    p.appendChild(document.createTextNode(summary.text));
+    resultBox.appendChild(p);
+
+    if (res.ok && res.receipt) {
+      const receiptBox = el('div', 'twin-subblock');
+      receiptBox.appendChild(el('h4', 'flush', 'Deterministic authorization receipt:'));
+      const pre = el('pre', 'plain', JSON.stringify(res.receipt, null, 2));
+      receiptBox.appendChild(pre);
+      resultBox.appendChild(receiptBox);
+    }
+  };
+}
+
+renderAutoPurchaseInspector();
