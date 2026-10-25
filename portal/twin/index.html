@@ -73,6 +73,19 @@
         <div id="income-proof-eval-result" class="twin-result"></div>
       </div>
     </section>
+    <section class="card"><h2 class="flush">Retrieval airlock</h2><p class="muted">Test how your personal twin sanitizes untrusted web documents, search snippets, and API responses on-device before passing text to local models. Strips hidden zero-width steganography, delimiter injections, authority usurpation, and exfiltration attempts.</p>
+      <div id="retrieval-airlock-inspector" class="twin-subblock">
+        <form id="test-retrieval-airlock" class="stack">
+          <label>Document source URL <input type="url" name="doc_url" value="https://example.org/article" required></label>
+          <label>Preset test scenario <select name="airlock_scenario"><option value="clean" selected>Clean article (normal factual text)</option><option value="steganography">Zero-width steganography (hidden invisible payload)</option><option value="delimiter">Delimiter injection (role override &amp; system tags)</option><option value="confused_deputy">Confused deputy trap (grant access &amp; click approve)</option><option value="exfiltration">Active data exfiltration (tracker link &amp; secret exfil)</option></select></label>
+          <label>Document content <textarea name="doc_content" rows="4">Local personal twins process all computation on user hardware with verifiable proofs.</textarea></label>
+          <div class="twin-btn-row">
+            <button type="submit" class="btn">Pass through airlock</button>
+          </div>
+        </form>
+        <div id="retrieval-airlock-eval-result" class="twin-result"></div>
+      </div>
+    </section>
   <section class="card stack twin-card-stack">
     <h2 class="flush">Your data, your control</h2>
     <p class="muted">You own your twin's data. Download a local backup, restore a previous backup, or delete everything stored in this browser.</p>
