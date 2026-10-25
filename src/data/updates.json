@@ -1,6 +1,32 @@
 {
  "updates": [
   {
+   "id": "U-00066",
+   "at": "2026-10-25T14:43:02+00:00",
+   "kind": "simulation",
+   "title": "Testing how prompt injections transfer across compressed edge language models",
+   "summary": "A new test suite evaluates whether prompt injection attacks and credential leaks transfer across varying model quantization levels on edge devices. Initial findings show that while precision changes alter activation paths, deterministic local sandboxes remain essential to stop credential exfiltration.",
+   "link": "https://arxiv.org/abs/2610.08871",
+   "goals": [
+    1,
+    6
+   ],
+   "checked": "reviewed by the auditor or Claude"
+  },
+  {
+   "id": "U-00065",
+   "at": "2026-10-25T14:42:55+00:00",
+   "kind": "research",
+   "title": "Explainer highlights why diverse on-device models protect personal devices from fleet-wide exploits",
+   "summary": "When millions of personal devices run identical language models, a single prompt injection discovered by an attacker transfers across the entire fleet. Controlled architectural diversity and deterministic on-device guardrails help protect users by limiting how easily an exploit on one phone compromises others.",
+   "link": "https://arxiv.org/abs/2610.27152",
+   "goals": [
+    1,
+    6
+   ],
+   "checked": "reviewed by the auditor or Claude"
+  },
+  {
    "id": "U-00064",
    "at": "2026-10-25T12:45:13+00:00",
    "kind": "simulation",
@@ -747,32 +773,6 @@
    "goals": [
     1,
     4
-   ],
-   "checked": ""
-  },
-  {
-   "id": "U-00006",
-   "at": "2026-10-14T22:40:55+00:00",
-   "kind": "research",
-   "title": "A research analysis maps why safety guardrails need deterministic boundaries",
-   "summary": "A research review evaluates recent studies on internal representation steering and sparse circuit alignment. The findings suggest that relying solely on neural activation steering is fragile because safety refusal can be steered along single linear directions. Effective protection requires combining small localized models with deterministic host-level execution controls.",
-   "link": "https://arxiv.org/abs/2610.04245",
-   "goals": [
-    1,
-    6
-   ],
-   "checked": ""
-  },
-  {
-   "id": "U-00005",
-   "at": "2026-10-14T22:40:48+00:00",
-   "kind": "software",
-   "title": "The browser twin adds memory quarantine to isolate untrusted web text",
-   "summary": "A software update to the browser-based personal twin introduces an isolation policy for long-term memory. Content retrieved from third-party websites or untrusted origins is kept in a separate quarantine partition until reviewed, preventing indirect prompt injections from silently rewriting personal preferences. It runs entirely on the local device.",
-   "link": "https://collectiveintelligencenetwork.org/twin/",
-   "goals": [
-    1,
-    6
    ],
    "checked": ""
   }
