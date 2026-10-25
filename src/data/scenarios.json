@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261025-0254",
+   "added_at": "2026-10-25T07:53:34+00:00",
+   "title": "Neighborhood agents pass scam warnings to each other like vaccines",
+   "horizon_years": 3,
+   "world": "It is 2029. Automated voice-cloning and interactive phone scams target thousands of households each morning with hyper-personalized financial demands. Rather than leaving each person to fend for themselves, residents run personal agents on their own home devices that exchange cryptographically signed warnings about active scam scripts through neighborhood gossip networks. When an older resident receives a suspicious call impersonating their grandchild, their personal agent flags the call and automatically shares an anonymized warning with the agents of neighbors and family members. Within minutes, nearby devices update their call filters before the scammers can dial the next house.",
+   "premise": "Simulations of 80 agent communities show that scam warnings rarely go viral on their own, cutting fraud by only a fifth. But when official advisories are coupled with structured peer retelling, collective fraud rates drop by half, providing community-wide herd immunity.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "How the collective work moves these likelihoods: The network designs personal agents that run locally on private devices and communicate over open gossip protocols. By coupling broadcast advisories from public consumer agencies with peer retelling between trusted personal agents, communities create decentralized defense networks that protect vulnerable members without surveillance.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Centralized telecom providers monopolize scam detection behind paid subscriptions",
+     "description": "Major telecom carriers charge customers monthly fees for cloud-based scam screening that records private phone audio while failing to catch novel zero-day voice scams.",
+     "example": "A family pays twenty dollars a month for a phone carrier filter, but an elderly relative still loses four thousand dollars to a synthetic voice scam because the centralized database had not updated its patterns.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Cooperative peer gossip networks achieve collective herd immunity against fraud",
+     "description": "Personal agents rapidly exchange lightweight exploit signatures through local neighborhood meshes, suppressing scam outbreaks before they spread.",
+     "example": "A municipal housing cooperative deploys open peer gossip across 500 apartment units, cutting senior fraud losses by over sixty percent without sending any private audio to cloud servers.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Scammers adapt by rotating synthetic personas faster than gossip propagates",
+     "description": "Attackers deploy automated persona generators that vary voice pitch and relationship pretexts with every single call, outpacing neighborhood warning updates.",
+     "example": "A scam syndicate generates 10,000 unique synthetic personas a day across a metropolitan area, rendering warning gossip ineffective because no two households receive the same pretext.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.25040",
+     "title": "Scam Town: Can Scam Education Spread Like a Vaccine?",
+     "kind": "preprint",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261025-0253",
    "added_at": "2026-10-25T06:37:47+00:00",
    "title": "Persistent multi-agent social networks trigger contagion of private user disclosures",
@@ -162,7 +216,7 @@
      "published": "2026-10-18"
     }
    ],
-   "work": 0
+   "work": 2
   },
   {
    "id": "SC-20261025-0250",
@@ -271,60 +325,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261024-0248",
-   "added_at": "2026-10-24T23:58:47+00:00",
-   "title": "Municipalities and public utility districts mandate citizen assemblies before granting high-voltage compute grid allocations",
-   "horizon_years": 3,
-   "world": "It is 2029. Rural counties and municipal utility districts across North America and Europe no longer negotiate hyperscale data center permits behind closed doors. When an infrastructure developer requests a 500-megawatt grid connection, county bylaws automatically convene a randomly selected mini-public of 40 local residents, supported by open-source deliberation engines like Polis and independent energy auditing tools. The assembly sets binding ratepayer ringfencing rules, thermal output caps, and public benefit clawbacks before any substation construction can break ground.",
-   "premise": "As massive hyperscale AI data centers demand multi-gigawatt power allocations and stress local water and electric grids, municipal councils and public utility districts face intense ratepayer backlash. Traditional legislative channels suffer corporate lobbying paralysis, prompting jurisdictions to adopt demographically representative civic lottery citizens' assemblies to co-design energy ringfencing and compute infrastructure permits.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network develops verifiable, transparent multi-agent deliberative tooling and independent tariff verification models that enable citizen mini-publics to model real-world grid impacts without relying on commercial utility consultants. By giving community assemblies verifiable simulation tools and client-side proof systems, the network strengthens grassroots bargaining power. However, national industrial subsidies and multi-billion-dollar hyperscale developer lobbying exert immense leverage over state and national policy that local mini-publics alone cannot fully counteract.",
-   "shift": 0.2,
-   "outcomes": [
-    {
-     "name": "Commercial developers bypass assemblies via state preemption",
-     "description": "Commercial AI compute consortia lobby regional and national legislatures to preempt local county zoning, classifying commercial data centers as critical strategic infrastructure exempt from civic deliberation.",
-     "example": "A state development authority in the American West overrides a county citizens' assembly vote that rejected a 2-gigawatt data center, using emergency industrial powers to force the local rural electric cooperative to supply power.",
-     "desirable": false,
-     "likelihood_now": 0.62,
-     "likelihood_with_cin": 0.6
-    },
-    {
-     "name": "Assemblies establish binding ratepayer ringfencing and load audits",
-     "description": "Municipalities mandate that high-density compute facilities undergo civic deliberation, requiring automated transparent power metering and dedicated developer-funded microgrids that completely shield residential ratepayers.",
-     "example": "In Cache County, Utah, a 40-person citizens' assembly passes a binding resolution requiring all AI facilities exceeding 50 MW to install dedicated renewable storage and publish hourly grid telemetry, completely insulating captive residential ratepayers from substation capital costs.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Deliberative assemblies become cosmetic exercises captured by PR",
-     "description": "Tech providers fund civic engagement consultants who run curated focus groups branded as citizens' assemblies, presenting predetermined infrastructure approvals as grassroots consensus while ignoring dissenting working-class residents.",
-     "example": "A tech conglomerate hires an engagement PR agency to stage a weekend 'community dialogue' in an industrial port city, selectively quoting favorable participants in council filings while omitting resident demands for water usage moratoriums.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.52
-    }
-   ],
-   "pipelines": [
-    "engagement",
-    "policy",
-    "simulation"
-   ],
-   "sources": [
-    {
-     "url": "https://www.lawfaremedia.org/article/citizens--assemblies-in-ai-governance--an-interview-with-audrey-tang",
-     "title": "Citizens' Assemblies in AI Governance: An Interview With Audrey Tang",
-     "kind": "oped",
-     "published": "2026-10-07"
-    }
-   ],
-   "work": 1
   }
  ]
 }
