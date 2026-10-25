@@ -184,19 +184,13 @@
     var filterBtns = [].slice.call(peRoot.querySelectorAll('[data-pe-filter]'));
 
     var TIER_NAMES = [
-      'Level 0 · Everyday citizen (full privacy)',
-      'Level 1 · Local livelihood coordinator',
-      'Level 2 · Public / municipal infrastructure',
-      'Level 3 · Mass reach & capital concentration',
-      'Level 4 · High-consequence / strategic role'
+      'Everyday citizen (full personal privacy)',
+      'Local workplace or cooperative coordinator',
+      'Public utility or municipal service lead',
+      'High-reach media, platform, or enterprise role',
+      'High-consequence safety or infrastructure role'
     ];
-    var SENSOR_NAMES = {
-      somatic_ring: 'Somatic Witness Ring (<1 mW, local PUF key)',
-      work_clip: 'Open-Hardware Work Clip (<$8, local bus)',
-      ear_bci: 'Optical / Ear-Clip Neural-Intent Module',
-      basic_phone_vouched: 'Basic Phone + Free Co-op Clip & Community Vouch'
-    };
-    var V_LABELS = ['Vital thriving', 'Physical & craft effort', 'Knowledge & teaching', 'Ecological care', 'Foundation lineage'];
+    var V_LABELS = ['Health & human wellbeing', 'Hands-on skill & effort', 'Shared knowledge & teaching', 'Resource & environmental care', 'Creator & upstream attribution'];
 
     var matchFilter = function (p, f) {
       if (f === 'all') return true;
@@ -206,10 +200,6 @@
       if (f === 't12') return p.tier === 1 || p.tier === 2;
       if (f === 't34') return p.tier === 3 || p.tier === 4;
       return true;
-    };
-
-    var fmtMoney = function (n) {
-      return '$' + Math.round(n).toLocaleString('en-US');
     };
 
     var activePid = personas[0].pid;
@@ -228,38 +218,37 @@
         return '<a class="pe-ptag" href="/notes/all-principles#p' + num + '">' + label + '</a>';
       }).join(' ');
 
-      var mult = (p.cinWealthEnd / Math.max(1, p.fiatWealthEnd)).toFixed(1);
-      var wealthCompareNote = p.pid === 'P27'
-        ? 'Contributes automated robot dividend + idle-surplus demurrage into the commons while retaining high productive capital.'
-        : 'Thriving grows ' + mult + 'x compared to today’s extractive market, with all savings below $25,000 100% exempt from demurrage.';
+      var craftTitle = p.agentCraft || 'Personal agent trained on their craft (on their own device)';
+      var proofLine = p.functionalProof || 'Verified by collaborating agents testing real-world results.';
+      var outcomeTitle = p.outcomeHeadline || 'Direct royalties & saved middleman fees';
 
       detailEl.innerHTML =
         '<div class="pe-head">' +
           '<span class="label">' + p.pid + ' · ' + TIER_NAMES[p.tier] + '</span>' +
           '<h3>' + p.name + ' — ' + p.role + '</h3>' +
-          '<p class="pe-meta">' + p.location + ' (' + p.region + ') · Income decile ' + p.decile + '/10 · ' + p.family + ' · ' + p.conn + '</p>' +
+          '<p class="pe-meta">' + p.location + ' (' + p.region + ') · ' + p.family + ' · ' + p.conn + '</p>' +
         '</div>' +
         '<div class="fy-cols">' +
           '<div class="fy-box trap">' +
-            '<span class="fy-k">Today’s squeeze</span>' +
-            '<b>What holds them back now</b>' +
+            '<span class="fy-k">Today’s real-world problem</span>' +
+            '<b>What squeezes them right now</b>' +
             '<p>' + p.squeeze + '</p>' +
           '</div>' +
           '<div class="fy-box shield">' +
-            '<span class="fy-k">Personal agent &amp; sensor</span>' +
-            '<b>' + (SENSOR_NAMES[p.sensor] || p.sensor) + '</b>' +
+            '<span class="fy-k">Personal agent &amp; creator copyright</span>' +
+            '<b>' + craftTitle + '</b>' +
             '<p>' + p.agentAction + '</p>' +
           '</div>' +
           '<div class="fy-box try">' +
-            '<span class="fy-k">365-day simulated balance</span>' +
-            '<b>' + fmtMoney(p.cinWealthEnd) + ' vs. ' + fmtMoney(p.fiatWealthEnd) + ' today</b>' +
-            '<p>Starting from ' + fmtMoney(p.initialWealth) + '. ' + wealthCompareNote + '</p>' +
+            '<span class="fy-k">Functional proof &amp; practical result</span>' +
+            '<b>' + outcomeTitle + '</b>' +
+            '<p><strong>How agents verify it works:</strong> ' + proofLine + '</p>' +
           '</div>' +
         '</div>' +
         '<div class="pe-bottom">' +
-          '<div class="pe-5d"><h4>5-dimensional value profile on the shared ledger</h4>' + barsHtml + '</div>' +
-          '<div class="pe-pr"><h4>Principles their agent activates (from the 550 library)</h4><div class="pe-ptags">' + pLinks + '</div>' +
-          '<p style="margin-top:.7rem;font-size:.84rem;color:var(--ink-3)">Click any principle tag to open its critique and defense in the <a href="/notes/all-principles">550-principle library &rarr;</a></p></div>' +
+          '<div class="pe-5d"><h4>How collaborating agents value their contribution</h4>' + barsHtml + '</div>' +
+          '<div class="pe-pr"><h4>Related principles from the 550-principle library</h4><div class="pe-ptags">' + pLinks + '</div>' +
+          '<p style="margin-top:.7rem;font-size:.84rem;color:var(--ink-3)">Click any principle tag to read its plain-language explanation and critique in the <a href="/notes/all-principles">550-principle library &rarr;</a></p></div>' +
         '</div>';
     };
 
@@ -644,190 +633,190 @@
   if (emRoot) {
     var EM_SCENARIOS = {
       nurse: {
-        label: 'ER nurse shift & fatigue signal (Manila)',
+        label: 'ER nurse & safe triage workflow (Manila)',
         stages: [
           {
-            k: 'Stage 1 of 7 · Human & Lightweight Sensor (< 1 mW)',
-            title: 'Maria finishes an 8.5-hour night shift in the emergency room',
-            desc: 'Her open-hardware Somatic Witness ring senses coupled pulse-breath variability and muscle micro-vibrations on the chip. It confirms a real, uncoerced human is present (97.0% liveness), classifies 8.5 hours of high-intensity clinical care plus rising sleep debt, and overwrites the raw heartbeat waveform every 30 seconds.',
-            pkt: 'Sensor Enclave -> Human Liveness: 0.9704 | Activity: Clinical Care (8.5h) | Sleep Debt: +2.4h | Raw Biometrics Shared: 0 bytes'
+            k: 'Stage 1 of 7 · Real Person & Craft',
+            title: 'Maria finishes an 8.5-hour night shift in the emergency room and spots a dangerous handoff gap',
+            desc: 'At a busy hospital in Manila, nurses spend two hours per shift copying chart notes into corporate billing software that still misses critical medication handoffs. Maria designs a fast, 4-step bedside sepsis handoff checklist with her personal agent on her own phone.',
+            pkt: 'Local Check -> Real clinician verified | Shift: 8.5h ER care | New workflow drafted: 4-step sepsis handoff | Raw patient charts shared: 0 bytes'
           },
           {
-            k: 'Stage 2 of 7 · Personal Ledger Capture (On Your Device)',
-            title: '2-of-2 hardware signature records the shift in her private log',
-            desc: 'Her ring’s un-copyable silicon key and her phone’s security chip co-sign the event into her encrypted Personal Ledger (Level 0 air-gapped memory). No hospital administrator, insurer or cloud server can read her private log.',
-            pkt: 'Personal Ledger Append -> Hardware Co-Signature (Ring + Phone) | Event #4812: 8.5h ER Care | Recovery Flag: High'
+            k: 'Stage 2 of 7 · Personal Agent Trained on You (On Your Device)',
+            title: 'Her personal agent learns her clinical workflow locally—never uploading patient charts',
+            desc: 'Unlike a hospital cloud bot that mines staff habits to cut jobs, Maria’s personal agent runs on her own device. It helps her refine the 4-step checklist and signs her authorship into her private local record.',
+            pkt: 'Personal Agent -> Trained locally on Maria’s triage workflow | Private Log Signed | Cloud Upload: 0 bytes'
           },
           {
-            k: 'Stage 3 of 7 · Zero-Knowledge Proof to Shared Ledger',
-            title: 'Her outward agent proves the care happened—without exposing anyone',
-            desc: 'Maria’s Level-1 Personal Negotiator generates a zero-knowledge proof co-signed by the hospital co-op and treated patients’ agents. It proves 8.5 hours of verified critical care occurred without revealing a single patient chart or Maria’s private health data.',
-            pkt: 'Shared Ledger Proof -> Proof ID: 9f3a | Counterparty Attested: True | Raw Identity Leakage: 0.0%'
+            k: 'Stage 3 of 7 · Shared Attribution & Copyright Ledger',
+            title: 'Maria registers her handoff checklist under her own name and user-controlled copyright',
+            desc: 'Maria publishes the checklist blueprint to the Shared Ledger. Her individual name, timestamp, and licensing terms are cryptographically attached—so no software vendor or hospital network can strip her credit.',
+            pkt: 'Shared Ledger Attribution -> Author: Maria Santos | Asset: ER Sepsis Handoff v1.2 | Copyright: User-Controlled Reciprocal License'
           },
           {
-            k: 'Stage 4 of 7 · Bounded Agents & 4-Gate Training',
-            title: 'Agents protect her recovery and learn from 30-day thriving',
-            desc: 'The hospital’s Level-2/3 scheduling agent automatically blocks a dangerous back-to-back overtime assignment so Maria can sleep. Thirty days later, after her recovery is confirmed, the record passes the 4 quality gates to train better care-scheduling agents.',
-            pkt: 'Bounded Agent Action -> Back-to-Back Overtime Blocked | 4 Training Gates: Passed (30-Day Thriving: 94.6 / 100)'
+            k: 'Stage 4 of 7 · Task-Solver Community Collaboration',
+            title: 'A task-solver guild of 14 emergency nurses tests and adapts her protocol',
+            desc: 'Across the agent-only internet, personal agents of nurses in a clinical task-solver community test Maria’s checklist in their own wards, adding bilingual prompts while preserving every contributor’s exact share of credit.',
+            pkt: 'Task-Solver Guild -> 14 ER Nurses Collaborating | Contributors Named: 100% | External Bot Spam: Blocked'
           },
           {
-            k: 'Stage 5 of 7 · Economic Implications (5D Value & Demurrage Floor)',
-            title: 'Full 5-dimensional care pay + $0 demurrage on her savings',
-            desc: 'Instead of an extractive wage squeezed by middlemen, the Shared Ledger credits Maria across five dimensions (Vital: 9.5, Effort: 9.2, Knowledge: 4.0, Ecology: 2.5, Lineage: 3.5). Her $4,200 savings sit safely inside the $25,000 personal security floor (0% demurrage), while 8%/yr demurrage on idle billionaire/robotic hoards funds her daily universal commons dividend.',
-            pkt: '5D Economy Settlement -> Credit: +$185 shift + $23/day Commons Dividend | Savings ($4,200 <= $25,000 Floor): 0% Demurrage'
+            k: 'Stage 5 of 7 · Functional Proof (Verified in Real Use)',
+            title: 'Collaborating clinic agents verify a 38% drop in handoff omissions over 30 days',
+            desc: 'Value on the network is never decided by hype or corporate marketing. Independent clinic verifier agents check 30-day anonymised outcomes and confirm that Maria’s checklist cut shift-change medication errors by 38%.',
+            pkt: 'Functional Proof -> 30-Day Clinical Audit: -38% Handoff Errors | Verified by 3 Independent Clinic Watchers'
           },
           {
-            k: 'Stage 6 of 7 · Governance Implications (1 Voice & Power Scrutiny)',
-            title: 'Equal voice on hospital rules; full transparency from management',
-            desc: 'Because the staffing director holds Level-1 authority over livelihoods, every scheduling rule must be logged and explained to the nurses. On questions of values and safe staffing ratios, Maria’s personal agent casts one equal vote alongside every other affected worker—no wealth or hardware can buy extra weight.',
-            pkt: 'Governance Gate -> Manager Visibility: Level-1 Audited | Value Vote Weight: 1.000 (Equal Human Voice)'
+            k: 'Stage 6 of 7 · Direct Value & Equal Voice',
+            title: 'Direct licensing royalties flow to Maria and her guild—with 0% middleman cut',
+            desc: 'Every hospital co-op and clinic agent that adopts the verified checklist automatically routes royalties to Maria and her fellow contributors. And on hospital staffing rules, Maria’s agent casts one equal human vote.',
+            pkt: 'Direct Value Settlement -> +$4,600/yr Guild Royalties & Saved Wire Fees | Platform Middleman Cut: 0% | Staffing Vote: 1 Equal Voice'
           },
           {
-            k: 'Stage 7 of 7 · Ever-Morphing Principle Library & Trajectory Shift',
-            title: 'Collective fatigue signals automatically evolve the network’s principles',
-            desc: 'When 14,000 nurses’ agents report an 18% rise in night-shift exhaustion via anonymized zero-knowledge totals, the ledger and principle library morph in response: the network boosts Vital-care compensation weights by +12% and merges an orthogonal community commit tightening Principle #491 (Safe Care Staffing Bounds).',
-            pkt: 'Morphing Trajectory Commit -> Signal: 14,000 Nurses (+18% Fatigue) | Principle #491 Merged | Trajectory: +1.4 toward thriving'
+            k: 'Stage 7 of 7 · Living Principles Updated by Evidence',
+            title: 'Proven nurse-fatigue reductions update the network’s safe-staffing standards',
+            desc: 'When verified functional proofs from thousands of nurses show that 4-step local handoffs and protected rest windows cut medical errors, the network updates Principle #491 (Safe Care Staffing Bounds) for all participating clinics.',
+            pkt: 'Living Principle Update -> Evidence: -38% Errors across 14 Clinics | Principle #491 Updated & Published'
           }
         ]
       },
       farmer: {
-        label: 'Smallholder solar & maize farmer (Kenya)',
+        label: 'Independent farmer & local food co-op (Kenya)',
         stages: [
           {
-            k: 'Stage 1 of 7 · Human & Lightweight Sensor (< 1 mW)',
-            title: 'Jomo tends his agro-ecological maize plots and village solar mesh',
-            desc: 'His open-hardware work clip and soil-moisture sensors verify 7.5 hours of regenerative field labour and off-grid solar maintenance under a regional drought, with 96.4% human liveness and zero raw biometric upload.',
-            pkt: 'Sensor Enclave -> Human Liveness: 0.9640 | Activity: Regenerative Farming (7.5h) | Soil Carbon: +1.8% | Raw Biometrics: 0 bytes'
+            k: 'Stage 1 of 7 · Real Person & Craft',
+            title: 'Jomo manages his family maize plot and village solar pump during a dry spell',
+            desc: 'Commodity middlemen normally pay Jomo barely half the market price at the farm gate, while fixed-interest seed loans push families into debt whenever rains arrive late.',
+            pkt: 'Local Check -> Farmer verified offline | Plot: 4.5 acres maize & intercropped beans | Local soil & rain logged'
           },
           {
-            k: 'Stage 2 of 7 · Personal Ledger Capture (On Your Device)',
-            title: 'Offline village mesh logs his labour and soil restoration locally',
-            desc: 'Even while 2G cellular service is down, Jomo’s work clip and solar hub co-sign his daily work and soil readings into his encrypted Personal Ledger on his device.',
-            pkt: 'Personal Ledger Append -> Offline Mesh Ready | Event #1904: 7.5h Field & Solar Care | Drought Shock Index: 0.74'
+            k: 'Stage 2 of 7 · Personal Agent Trained on You (On Your Device)',
+            title: 'His personal agent learns his plot’s soil moisture and mulching timing offline',
+            desc: 'Running on a basic solar-charged phone even when mobile data is down, Jomo’s personal agent learns which mulching and drip-irrigation timings hold moisture best on his specific hillside soil.',
+            pkt: 'Personal Agent -> Offline Soil & Irrigation Model Trained Locally | Raw Farm Data Kept on Device'
           },
           {
-            k: 'Stage 3 of 7 · Zero-Knowledge Proof to Shared Ledger',
-            title: 'Three independent satellite & drone watchers co-sign the ecological gain',
-            desc: 'When connectivity returns, Jomo’s agent posts a zero-knowledge proof of crop yield and soil regeneration, cross-checked by three independent environmental watcher agents.',
-            pkt: 'Shared Ledger Proof -> Proof ID: 441b | Independent Watchers: 3/3 Agree | Middleman Cut: 0%'
+            k: 'Stage 3 of 7 · Shared Attribution & Copyright Ledger',
+            title: 'Jomo and his neighbors register their drought-timing schedule under their own names',
+            desc: 'Instead of an agribusiness giant scraping local farming data to sell back pricey advice, Jomo and his village co-op register their tested drought-planting schedule on the Shared Ledger under their own names.',
+            pkt: 'Shared Ledger Attribution -> Authors: Nakuru Growers Guild (Jomo Kiprop + 18 farmers) | Copyright: Farmer-Owned'
           },
           {
-            k: 'Stage 4 of 7 · Bounded Agents & 4-Gate Training',
-            title: 'His agent bypasses extractive middlemen and matches local food co-ops',
-            desc: 'Jomo’s Level-1 agent clears his harvest directly with three regional school-meal and household co-ops, and feeds verified drought-resilience patterns into the 4-gate agricultural training corpus.',
-            pkt: 'Bounded Agent Action -> Direct Co-op Clearing: 100% | Middleman Markup Saved: +58% to Farmer'
+            k: 'Stage 4 of 7 · Task-Solver Community Collaboration',
+            title: 'Regional growers and agronomists refine the schedule and match local food buyers',
+            desc: 'Across the agent network, Jomo’s agent connects with three local school-meal and household food cooperatives, arranging direct harvest delivery without commodity brokers.',
+            pkt: 'Task-Solver Co-op -> Direct Match: 3 School & Household Food Co-ops | Broker Markup Eliminated'
           },
           {
-            k: 'Stage 5 of 7 · Economic Implications (5D Value & Debt Risk-Sharing)',
-            title: 'Ecological & vital credits + automatic drought debt pause',
-            desc: 'Because independent sensors confirmed a regional rainfall deficit, Jomo’s seed and solar-pump obligation automatically scales down with his ability to pay (Principle #255). He earns high Vital (8.4) and Ecological (9.1) value credits with 0% demurrage on his $1,800 savings.',
-            pkt: '5D Economy Settlement -> Credit: +$142/day | Seed Debt Shock Pause: Active (-65% payment) | Demurrage: $0'
+            k: 'Stage 5 of 7 · Functional Proof (Verified in Real Use)',
+            title: 'Independent moisture logs and harvest deliveries confirm 22% higher drought yield',
+            desc: 'Collaborating co-op agents verify that plots using the guild’s schedule retained soil moisture and delivered 22% higher yield during a low-rainfall season, creating a checkable functional proof.',
+            pkt: 'Functional Proof -> Yield +22% Under Low Rain | Co-signed by 3 Independent Buyer & Sensor Watchers'
           },
           {
-            k: 'Stage 6 of 7 · Governance Implications (Watershed Commons Consent)',
-            title: '800 family farmers hold a risk-scaled veto over industrial water grabs',
-            desc: 'When an export estate requests extra river diversion during the drought (25% regional risk), the Shared Ledger requires 76.3% agreement from affected family farmers’ agents—blocking unilateral water depletion.',
-            pkt: 'Governance Gate -> River Diversion Risk: 25% | Required Quorum: 76.3% | Family Farmers Veto: Upheld'
+            k: 'Stage 6 of 7 · Direct Value & Harvest-Indexed Credit',
+            title: 'Jomo keeps the full co-op harvest price and earns royalties when other districts use the guide',
+            desc: 'Jomo earns +$3,400/yr more by selling directly to local food co-ops, receives automatic royalties from neighboring districts using his guild’s drought schedule, and his seed credit automatically adjusts during verified droughts.',
+            pkt: 'Direct Value Settlement -> +$3,400/yr Direct Co-op Income | Middleman Cut: 0% | Drought Loan Protection: Active'
           },
           {
-            k: 'Stage 7 of 7 · Ever-Morphing Principle Library & Trajectory Shift',
-            title: 'Regional drought signals morph water-sharing and debt rules across the network',
-            desc: 'As thousands of smallholder agents report shifting monsoon patterns, the ever-morphing ledger increases ecological watershed credits by +19% and merges a community commit into Principle #456 (Climate-Indexed Debt Scaling).',
-            pkt: 'Morphing Trajectory Commit -> Signal: East Africa Monsoon Shift | Principle #456 Threshold Refined'
+            k: 'Stage 7 of 7 · Living Principles Updated by Evidence',
+            title: 'Verified drought outcomes strengthen watershed and fair-credit rules',
+            desc: 'Real-world harvest proofs from smallholder guilds automatically refine Principle #456 (Weather-Indexed Farm Credit), helping more rural cooperatives adopt fair risk-sharing terms.',
+            pkt: 'Living Principle Update -> Verified Smallholder Resilience Data | Principle #456 Updated'
           }
         ]
       },
       creator: {
-        label: 'Illustrator & open-source coder (São Paulo & Lagos)',
+        label: 'Open-source coder & illustrator (São Paulo & Lagos)',
         stages: [
           {
-            k: 'Stage 1 of 7 · Human & Lightweight Sensor (< 1 mW)',
-            title: 'Camila illustrates a children’s book; Chidi patches a cryptography library',
-            desc: 'Their Somatic Witness rings verify 4 hours of focused human creative flow (96.7% human liveness), distinguishing authentic human craft from synthetic mass-generated spam.',
-            pkt: 'Sensor Enclave -> Human Liveness: 0.9666 | Activity: Deep Creative Flow (4.0h) | Origin Check: Human Verified'
+            k: 'Stage 1 of 7 · Real Person & Craft',
+            title: 'Camila illustrates original character sets; Chidi writes a fast security patch',
+            desc: 'Today, giant AI labs scrape artists’ portfolios and open-source code repositories for free—stripping off the creators’ names and selling commercial products built on their work.',
+            pkt: 'Local Check -> Human Creators Verified | Camila: 40 Original Vector Layers | Chidi: Memory-Safe Parser Patch'
           },
           {
-            k: 'Stage 2 of 7 · Personal Ledger Capture (On Your Device)',
-            title: 'Every brushstroke and code commit is hardware-signed into their personal log',
-            desc: 'Before their work ever touches the web, their local agents bind a cryptographic provenance fingerprint to the creation timestamp in their Personal Ledgers.',
-            pkt: 'Personal Ledger Append -> Provenance Hash: 88c1 | Human Authored: True | License: Open Reciprocal Lineage'
+            k: 'Stage 2 of 7 · Personal Agent Trained on You (On Your Device)',
+            title: 'Their personal agents learn their style and codebase inside a private local sandbox',
+            desc: 'Camila’s tablet agent learns her line-weight and color style locally; Chidi’s laptop agent learns his library architecture. Neither agent ever uploads their raw working files to a corporate cloud.',
+            pkt: 'Personal Agent -> Local Style & Code Helpers Trained on Device | Cloud Scraping: Blocked'
           },
           {
-            k: 'Stage 3 of 7 · Zero-Knowledge Proof to Shared Ledger',
-            title: 'Downstream AI models and companies use their building blocks',
-            desc: 'When a commercial design studio or AI lab trains an adapter or ships software incorporating Camila’s visual style or Chidi’s code, the dependency graph on the Shared Ledger records the exact lineage link.',
-            pkt: 'Shared Ledger Proof -> Lineage Edge: [Chidi Library v4, Camila Art Set] -> Downstream Model | Depth: 1..3 hops'
+            k: 'Stage 3 of 7 · Shared Attribution & Copyright Ledger',
+            title: 'Every brush pack, illustration, and code module is stamped with their name and copyright',
+            desc: 'Before sharing their work, their personal agents register a cryptographic fingerprint, their individual name, and user-controlled licensing terms on the Shared Attribution Ledger.',
+            pkt: 'Shared Ledger Attribution -> Owners: Camila Rocha & Chidi Okafor | User-Controlled Copyright & Lineage Hash Recorded'
           },
           {
-            k: 'Stage 4 of 7 · Bounded Agents & 4-Gate Training',
-            title: 'Personal agents audit downstream usage and block uncredited scraping',
-            desc: 'Independent Level-2 watcher agents verify the lineage graph across participating co-ops and open-weight labs, ensuring training runs respect compute bounds and creator attribution.',
-            pkt: 'Bounded Agent Action -> Lineage Audit: Verified by 3 Watchers | Unconsented Scraping Blocked: True'
+            k: 'Stage 4 of 7 · Task-Solver Community Collaboration',
+            title: 'An indie game and software task-solver community combines their building blocks',
+            desc: 'When a cooperative game studio or enterprise team builds an application using Camila’s art assets and Chidi’s security library, the ledger records the exact dependency graph of who contributed what.',
+            pkt: 'Task-Solver Guild -> Dependency Graph Linked: [Chidi Library v4 + Camila Art Pack] -> Studio App'
           },
           {
-            k: 'Stage 5 of 7 · Economic Implications (Automatic Lineage Royalties)',
-            title: 'Royalties flow upstream automatically—with zero lawsuits or exclusivity',
-            desc: 'Every time the downstream tool generates value, up to 15% of the value flows back up the provenance tree (halving at each step up to 5 steps) straight into Camila’s and Chidi’s wallets, without requiring them to join a corporation.',
-            pkt: '5D Economy Settlement -> Lineage Royalty (decay=0.5, depth<=5): +$118/day Passive Reciprocity | Exclusivity: None'
+            k: 'Stage 5 of 7 · Functional Proof (Verified in Real Use)',
+            title: 'Collaborating agents verify the code passes all tests and the art is authentic',
+            desc: 'Independent verifier agents confirm Chidi’s patch eliminates a real vulnerability with zero crashes across 10,000 test runs, and verify Camila’s provenance signature—proving real functional value.',
+            pkt: 'Functional Proof -> 10,000 Automated Tests Passed (0 Crashes) | Provenance Lineage: 100% Verified'
           },
           {
-            k: 'Stage 6 of 7 · Governance Implications (Open Standards & Fork Right)',
-            title: 'Creators govern the attribution standard and can fork at any time',
-            desc: 'No single platform monopoly owns the provenance directory. Creators vote equally on attribution decay rates and retain the full right to exit or fork with their entire history.',
-            pkt: 'Governance Gate -> Standard: Open Provenance Graph | Vendor Lock-In: 0% (Full Fork Right)'
+            k: 'Stage 6 of 7 · Direct Value & Automatic Royalties',
+            title: 'Royalties flow back to Camila and Chidi automatically whenever their work is used',
+            desc: 'Every time downstream apps or commercial agents use their capabilities, revenue shares settle directly to Camila and Chidi on the ledger—without lawsuits, corporate exclusivity, or 30% app-store tolls.',
+            pkt: 'Direct Value Settlement -> Camila: +$9,200/yr | Chidi: +$18,500/yr | Full Individual Name Attribution Kept'
           },
           {
-            k: 'Stage 7 of 7 · Ever-Morphing Principle Library & Trajectory Shift',
-            title: 'Decompilation attempts trigger an automatic upgrade to lineage rules',
-            desc: 'When collective signals show AI code-remixers trying to disguise copied functions by renaming variables, the ever-morphing principle library updates Principle #422 & #469 to measure semantic building-block equivalence rather than surface text.',
-            pkt: 'Morphing Trajectory Commit -> Signal: Semantic Code Remix Detected | Principle #469 Upgraded to Graph Matching'
+            k: 'Stage 7 of 7 · Living Principles Updated by Evidence',
+            title: 'Attempts to disguise copied code trigger stronger semantic attribution checks',
+            desc: 'When auditor agents spot commercial scrapers trying to rename variables to hide copied code, the community updates Principle #469 so the ledger matches underlying functional logic, not just surface filenames.',
+            pkt: 'Living Principle Update -> Functional Code-Graph Attribution Enabled | Principle #469 Hardened'
           }
         ]
       },
       oligarch: {
-        label: '50,000-robot factory billionaire (Austin / Shenzhen)',
+        label: 'Automated factory & public accountability (Austin / Shenzhen)',
         stages: [
           {
-            k: 'Stage 1 of 7 · Human & Lightweight Sensor (< 1 mW)',
-            title: 'Victor attempts to launch a 50,000-bot energy market cornering script',
-            desc: 'Victor’s own neural-earpiece proves he is 1 real human (95% liveness), but the 50,000 cloud accounts he spun up have 0% biological cardio-kinetic entropy (0.11% liveness) and fail the silicon PUF gate immediately.',
-            pkt: 'Sensor Enclave -> Commander: 1 Real Human | 50,000 Cloud Bots: Liveness=0.0011 -> Rejected at Silicon Gate'
+            k: 'Stage 1 of 7 · Real Person & Craft',
+            title: 'Victor runs an automated manufacturing fleet and wants to trade on the network',
+            desc: 'In today’s unchecked market, a large operator can spin up 50,000 cloud bots to corner regional energy supplies or use engineers’ open-source designs inside factory robots without paying them.',
+            pkt: 'Role Check -> 1 Real Executive Confirmed | 50,000 Unverified Cloud Bots Blocked at Boundary'
           },
           {
-            k: 'Stage 2 of 7 · Personal Ledger Capture (Role Visibility)',
-            title: 'Tier-3 mass-influence rules require continuous role attestation',
-            desc: 'While Victor’s private family life and health stay 100% private, his role as owner of 50,000 industrial robots and massive compute clusters carries mandatory Level-3 public role attestation.',
-            pkt: 'Role Ledger Append -> Tier: Level-3 Mass Influence | Robot Fleet: 50,000 Units | Private Family Data: Shielded'
+            k: 'Stage 2 of 7 · Role Transparency (Power Brings Visibility)',
+            title: 'His personal life stays private, while his high-impact corporate role is audited',
+            desc: 'Victor’s home, health, and family life enjoy the exact same privacy as everyone else’s. Because his industrial fleet affects thousands of households, its commercial actions run through an audited role agent.',
+            pkt: 'Role Boundary -> Personal & Family Life: 100% Private | Industrial Fleet Actions: Publicly Auditable'
           },
           {
-            k: 'Stage 3 of 7 · Zero-Knowledge Proof to Shared Ledger',
-            title: 'Multi-vendor risk checkers flag 78% regional harm on the market order',
-            desc: 'When Victor’s agent submits the regional grid-cornering order to the Shared Ledger, three independent risk-evaluating agents from different vendors flag a 78% risk of livelihood harm to 10,000 local households.',
-            pkt: 'Shared Ledger Proof -> Assessed Risk: R=0.78 | Blast Radius: 10,000 Households | Fake Bots Stripped: 50,000'
+            k: 'Stage 3 of 7 · Shared Attribution & Copyright Ledger',
+            title: 'The ledger checks which worker and creator capabilities his factory robots rely on',
+            desc: 'When Victor’s automated assembly lines use toolpaths, diagnostic modules, or open-weight adapters created by machinists and independent coders, the Shared Ledger traces those exact upstream contributors.',
+            pkt: 'Shared Ledger Attribution -> 142 Upstream Machinist & Coder Capabilities Identified in Fleet Software'
           },
           {
-            k: 'Stage 4 of 7 · Bounded Agents & Risk-Scaled Lock',
-            title: 'The 78%-risk gate requires 99.95% local resident consent—order blocked',
-            desc: 'Under the Risk-Proportional Coherence Law, a 78%-risk action requires 99.95% agreement from the real people in the blast radius plus a 44-hour cooling-off window. Only 4% approve, so the swarm order locks shut.',
-            pkt: 'Bounded Agent Action -> Required Quorum: 99.95% | Actual Real Support: 4.0% -> Blocked at Threshold Gate'
+            k: 'Stage 4 of 7 · Protection Against Unconsented Swarms',
+            title: 'An aggressive script to corner regional grid power is blocked at the consent gate',
+            desc: 'When a corporate script tries to buy up 80% of a town’s peak transformer capacity at once, independent risk-checker agents flag the harm to 10,000 households and lock the order until local residents approve.',
+            pkt: 'Risk Gate -> Town Grid Cornering Attempt Flagged (High Household Impact) -> Blocked Without Local Consent'
           },
           {
-            k: 'Stage 5 of 7 · Economic Implications (Demurrage & Robot Commons Dividend)',
-            title: 'Idle capital & robot output circulate back into the universal pool—or zero-interest loans',
-            desc: 'Victor’s first $25,000 is exempt, but his idle multimillion-dollar hoard decays at 8%/yr unless he deploys it into zero-interest community infrastructure loans. Meanwhile, his 50,000-robot fleet contributes a direct automation share into the universal commons pool.',
-            pkt: '5D Economy Settlement -> Idle Surplus Demurrage: Recycled to Commons | Zero-Interest Co-op Staking: 35% Exempt | Gini: 0.87 -> 0.58'
+            k: 'Stage 5 of 7 · Functional Proof (Verified Quality & Fair Supply Chains)',
+            title: 'Legitimate manufacturing orders clear fast when quality and safety proofs pass',
+            desc: 'When Victor’s factory delivers solar inverters and machine parts that pass independent durability and safety checks, collaborating buyer agents verify the functional proof and settle payment immediately.',
+            pkt: 'Functional Proof -> Inverter Batch Passed 3 Independent Lab Audits | Defect Rate < 0.1%'
           },
           {
-            k: 'Stage 6 of 7 · Governance Implications (No Purchased Authority)',
-            title: 'Owning 50,000 robots still equals exactly 1 human vote on values',
-            desc: 'In governance over safety floors and community values, Victor’s $5M balance and 50,000 robots grant him the exact same single voice as Maria the nurse or Jomo the farmer.',
-            pkt: 'Governance Gate -> Capital Multiplier on Values: 0.0x | Verified Human Voice Count: 1.000'
+            k: 'Stage 6 of 7 · Direct Value & Upstream Creator Reciprocity',
+            title: 'Upstream machinists and coders get paid automatically; 1 person still equals 1 vote',
+            desc: 'His factory earns honest revenue for verified hardware, automatic royalties flow to the 142 workers and engineers whose capabilities his machines use, and on community rules Victor casts one equal human vote.',
+            pkt: 'Direct Value Settlement -> Upstream Worker & Creator Royalties Paid Automatically | Governance Voice: 1 Equal Vote'
           },
           {
-            k: 'Stage 7 of 7 · Ever-Morphing Principle Library & Trajectory Shift',
-            title: 'Attempted botnet bypasses harden the network’s anti-collusion principles',
-            desc: 'Every blocked sybil or market-cornering attempt is logged as an adversarial signal, automatically updating the detector weights in Principle #205 & #524 so the entire network grows more resilient.',
-            pkt: 'Morphing Trajectory Commit -> Signal: 50k Sybil Attempt Blocked | Principle #524 Detector Weights Hardened'
+            k: 'Stage 7 of 7 · Living Principles Updated by Evidence',
+            title: 'Blocked market-manipulation attempts strengthen the network’s anti-monopoly rules',
+            desc: 'Every blocked bot-swarm or supply-cornering attempt is logged openly, allowing the collective to tighten Principle #524 so automated fleets always serve human communities rather than dominating them.',
+            pkt: 'Living Principle Update -> Anti-Cornering Safeguards Strengthened | Principle #524 Updated'
           }
         ]
       }

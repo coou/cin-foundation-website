@@ -12,12 +12,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 0,
   "decile": 3,
   "initialWealth": 4200.0,
-  "fiatWealthEnd": 7028.4,
-  "cinWealthEnd": 160134.9,
+  "fiatWealthEnd": 7028.0,
+  "cinWealthEnd": 11628.0,
   "family": "Single mother of 2",
   "work": "Healthcare shift worker",
   "conn": "Urban 4G mobile",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    9.5,
    9.2,
@@ -34,8 +34,11 @@ window.CIN_THIRTY_PERSONAS = [
    510,
    535
   ],
-  "squeeze": "12-hour hospital shifts, unpaid overtime, predatory remittance fees, and late-night doomscrolling exhaustion.",
-  "agentAction": "Attests 8.5h of high-intensity bedside care via her ring sensor without exposing patient charts, claims full Vital + Somatic care credits, and blocks predatory payday lenders."
+  "squeeze": "Spends two hours per shift re-typing chart notes into hospital billing software, works unpaid overtime, and loses 8% of family remittances to wire-transfer middlemen.",
+  "agentAction": "Co-designs a fast 4-step bedside sepsis handoff checklist with her personal agent. She registers the protocol under her own name and copyright in a nurses' task-solver guild and sends family remittances peer-to-peer with zero wire fees.",
+  "agentCraft": "Local clinical workflow agent trained on her triage habits (on her own phone)",
+  "functionalProof": "Verified by 14 clinic agents: handoff omissions drop 38% over 30 days.",
+  "outcomeHeadline": "+$4,600/yr in guild royalties & saved wire fees + 1.5 hrs saved per shift"
  },
  {
   "pid": "P02",
@@ -46,12 +49,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 0,
   "decile": 2,
   "initialWealth": 1800.0,
-  "fiatWealthEnd": 6268.5,
-  "cinWealthEnd": 171921.8,
+  "fiatWealthEnd": 4200.0,
+  "cinWealthEnd": 7600.0,
   "family": "Married, 4 children",
   "work": "Independent agro-ecological farmer",
   "conn": "Intermittent 2G + village solar mesh",
-  "sensor": "work_clip",
+  "sensor": "local_agent",
   "v5d": [
    8.4,
    8.8,
@@ -68,8 +71,11 @@ window.CIN_THIRTY_PERSONAS = [
    456,
    512
   ],
-  "squeeze": "Middlemen take 60% of crop value; drought shocks trigger unpayable fixed-interest seed debt.",
-  "agentAction": "Records soil-moisture & regenerative farming proof over offline mesh, sells directly to regional food co-ops, and converts fixed seed debt into harvest-indexed risk sharing."
+  "squeeze": "Commodity brokers take 45% of his harvest value at the farm gate, while unpredictable droughts make fixed-interest seed loans a trap.",
+  "agentAction": "Works with a regional farmers' task-solver community to refine a drought-timing planting schedule registered under the contributors' names, and sells his harvest directly to local school-meal and neighborhood food co-ops.",
+  "agentCraft": "Offline-capable farm agent trained on his plot's soil, rainfall, and crop history",
+  "functionalProof": "Verified by co-op delivery receipts and soil-moisture logs across 3 seasons.",
+  "outcomeHeadline": "+$3,400/yr higher take-home crop income (0% broker cut) + flexible drought loan terms"
  },
  {
   "pid": "P03",
@@ -80,12 +86,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 0,
   "decile": 2,
   "initialWealth": 8500.0,
-  "fiatWealthEnd": 7756.3,
-  "cinWealthEnd": 147519.8,
+  "fiatWealthEnd": 7750.0,
+  "cinWealthEnd": 10100.0,
   "family": "Widower, lives solo",
   "work": "Retired (chronic black lung)",
   "conn": "Rural DSL + low-power home hub",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    3.0,
    2.5,
@@ -102,8 +108,11 @@ window.CIN_THIRTY_PERSONAS = [
    511,
    545
   ],
-  "squeeze": "Insolvent corporate pension fund, rising oxygen/medication costs, and telemarketing fraud targeting seniors.",
-  "agentAction": "Protects his $8,500 savings under the 0%-demurrage security floor, collects his universal compute dividend and historical energy-lineage credit, and auto-blocks voice-clone scam calls."
+  "squeeze": "His company pension was cut after a corporate bankruptcy, prescription inhalers keep rising in price, and AI voice-clone scammers call his landline weekly.",
+  "agentAction": "Blocks synthetic voice-clone and telemarketing bots at the network boundary, audits his pharmacy bills to switch to a member-owned generic medicine co-op, and records his mine-ventilation safety lessons under his name for younger technicians.",
+  "agentCraft": "Personal protection & health-audit agent running on his home hub",
+  "functionalProof": "Verified: 100% of unverified bot calls blocked; safety guide cited by 80 regional apprentices.",
+  "outcomeHeadline": "$2,350/yr saved on medications & avoided scams + ongoing apprentice guide royalties"
  },
  {
   "pid": "P04",
@@ -114,12 +123,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 0,
   "decile": 4,
   "initialWealth": 6100.0,
-  "fiatWealthEnd": 8321.7,
-  "cinWealthEnd": 165224.5,
+  "fiatWealthEnd": 8320.0,
+  "cinWealthEnd": 17520.0,
   "family": "Married, 1 toddler",
   "work": "Independent creative worker",
   "conn": "Urban fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    4.5,
    6.0,
@@ -136,8 +145,11 @@ window.CIN_THIRTY_PERSONAS = [
    531,
    548
   ],
-  "squeeze": "Generative AI models scraped her 1,200 illustrations without consent or payment, undercutting her commissions.",
-  "agentAction": "Embeds cryptographic provenance into every brushstroke; automatically collects recursive lineage royalties whenever commercial image models or publishers build on her style."
+  "squeeze": "Commercial image generators scraped her 1,200 published illustrations without permission, credit, or pay—flooding clients with cheap knockoffs of her style.",
+  "agentAction": "Keeps her raw layers on her own tablet while registering her brush packs, character sheets, and style adapters on the shared ledger under her individual name and user-controlled copyright.",
+  "agentCraft": "Local studio agent trained exclusively on her own brushwork and color palettes",
+  "functionalProof": "Collaborating studio and publisher agents verify cryptographic lineage before rendering.",
+  "outcomeHeadline": "+$9,200/yr in automatic licensing & style-lineage royalties with full name credit"
  },
  {
   "pid": "P05",
@@ -148,12 +160,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 0,
   "decile": 2,
   "initialWealth": 2400.0,
-  "fiatWealthEnd": 4708.5,
-  "cinWealthEnd": 157470.3,
+  "fiatWealthEnd": 4700.0,
+  "cinWealthEnd": 10500.0,
   "family": "Single, supports parents abroad",
   "work": "Platform gig worker",
   "conn": "Urban 5G",
-  "sensor": "work_clip",
+  "sensor": "local_agent",
   "v5d": [
    6.8,
    9.0,
@@ -170,8 +182,11 @@ window.CIN_THIRTY_PERSONAS = [
    509,
    533
   ],
-  "squeeze": "Opaque delivery app algorithm docks pay for weather delays and takes a 32% platform cut.",
-  "agentAction": "Routes orders through a rider-owned local delivery co-op on the shared ledger (0% extractive cut) while his clip sensor proves physical weather hazards so penalties are waived."
+  "squeeze": "Delivery apps take a 30% cut from local restaurants and riders, while opaque algorithms dock his pay when rain or roadwork slows a trip.",
+  "agentAction": "Moves his regular neighborhood customers and restaurants to a rider-owned delivery co-op on the shared ledger, and licenses his tested rainy-weather micro-routing map to fellow couriers under his own name.",
+  "agentCraft": "Local routing & earnings agent on his phone",
+  "functionalProof": "Verified by 600 on-time co-op deliveries and peer rider agents testing his route pack.",
+  "outcomeHeadline": "+$5,800/yr kept by cutting out the 30% app middleman + fair weather buffers"
  },
  {
   "pid": "P06",
@@ -182,12 +197,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 0,
   "decile": 3,
   "initialWealth": 3900.0,
-  "fiatWealthEnd": 11006.2,
-  "cinWealthEnd": 179473.1,
+  "fiatWealthEnd": 6100.0,
+  "cinWealthEnd": 10000.0,
   "family": "Married, multi-generational home (6 people)",
   "work": "Public educator",
   "conn": "Community Wi-Fi + edge server",
-  "sensor": "work_clip",
+  "sensor": "local_agent",
   "v5d": [
    8.2,
    7.4,
@@ -204,24 +219,27 @@ window.CIN_THIRTY_PERSONAS = [
    422,
    538
   ],
-  "squeeze": "Overcrowded classrooms, standardized rote testing, and zero recognition when her students go on to build major engineering systems.",
-  "agentAction": "Runs an offline local tutoring twin for 45 students in Odia and receives long-horizon epistemic + lineage credits as her students' skills flourish."
+  "squeeze": "Teaches 45 students per class with outdated textbooks, while educational publishers scrape teachers' original lesson plans and sell them back to school districts.",
+  "agentAction": "Co-creates low-cost hands-on physics and chemistry lab guides in Odia and English with her personal agent, registering each module under her name in an open teachers' task-solver guild.",
+  "agentCraft": "Local bilingual lesson-builder agent trained on her classroom teaching methods",
+  "functionalProof": "Functional proof across 140 rural schools shows a 29% jump in student lab comprehension.",
+  "outcomeHeadline": "+$3,900/yr in curriculum-commons royalties + free verified lab materials for her class"
  },
  {
   "pid": "P07",
   "name": "Chidi Okafor",
-  "role": "CS student & open-source kernel maintainer",
+  "role": "Software developer & open-source maintainer",
   "location": "Lagos, Nigeria",
   "region": "West Africa",
   "tier": 0,
   "decile": 3,
   "initialWealth": 1500.0,
-  "fiatWealthEnd": 6821.3,
-  "cinWealthEnd": 166378.6,
+  "fiatWealthEnd": 6820.0,
+  "cinWealthEnd": 25320.0,
   "family": "Single",
   "work": "University student & open-source builder",
   "conn": "Mobile hotspot + solar laptop",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    3.5,
    6.8,
@@ -238,24 +256,27 @@ window.CIN_THIRTY_PERSONAS = [
    541,
    550
   ],
-  "squeeze": "Maintains a critical cryptographic library used by Fortune 500 banks while struggling to pay for local power and cloud GPUs.",
-  "agentAction": "Claims automatic foundation-lineage royalties from every enterprise and AI lab using his library, without ever having to sign an exclusive corporate employment contract."
+  "squeeze": "Maintains a critical encryption and data-parsing library used by major banks and AI companies, yet receives zero pay while struggling with power and hardware costs.",
+  "agentAction": "Publishes security patches and capability modules with his personal agent onto the shared ledger under his individual name and user-controlled license, requiring commercial users' agents to settle usage royalties.",
+  "agentCraft": "Local coding & verification agent trained on his repository architecture",
+  "functionalProof": "Independent verifier agents run reproducible test suites confirming 0 regressions.",
+  "outcomeHeadline": "+$18,500/yr in direct enterprise & agent usage royalties without giving up independence"
  },
  {
   "pid": "P08",
   "name": "Yanaapã Tukano",
-  "role": "Indigenous watershed & biodiversity guardian",
+  "role": "Community forestry & watershed technician",
   "location": "Upper Rio Negro, Amazonas, Brazil",
   "region": "South America",
   "tier": 0,
   "decile": 1,
   "initialWealth": 900.0,
-  "fiatWealthEnd": 9811.5,
-  "cinWealthEnd": 186509.3,
+  "fiatWealthEnd": 4900.0,
+  "cinWealthEnd": 11300.0,
   "family": "Married, extended clan coordinator",
   "work": "Ecological commons guardian",
   "conn": "Community solar satellite mesh",
-  "sensor": "work_clip",
+  "sensor": "local_agent",
   "v5d": [
    7.8,
    8.5,
@@ -272,24 +293,27 @@ window.CIN_THIRTY_PERSONAS = [
    455,
    514
   ],
-  "squeeze": "Illegal logging incursions and zero compensation from global markets for preserving 40,000 hectares of primary carbon-sink rainforest.",
-  "agentAction": "Co-signs acoustic biodiversity and canopy-integrity proofs with 3 independent satellite/drone watchers, earning direct ecological value credits for his community co-op."
+  "squeeze": "His community spends thousands of hours clearing firebreaks and protecting upstream water quality, while downstream utilities and carbon brokers pocket the money.",
+  "agentAction": "Documents firebreak maintenance, native replanting, and stream-health readings with his personal agent in a regional watershed task-solver co-op, keeping community authorship attached to every dataset.",
+  "agentCraft": "Field mapping & environmental monitoring agent on a rugged offline phone",
+  "functionalProof": "Cross-checked by 3 independent municipal water-quality and satellite watcher agents.",
+  "outcomeHeadline": "+$6,400/yr in direct municipal watershed & wildfire-prevention service payments"
  },
  {
   "pid": "P09",
   "name": "Layla Haddad",
-  "role": "Displaced refugee & home elder-care worker",
+  "role": "Home elder-care provider",
   "location": "Amman, Jordan",
   "region": "Middle East",
   "tier": 0,
   "decile": 1,
   "initialWealth": 350.0,
-  "fiatWealthEnd": 4812.9,
-  "cinWealthEnd": 156024.5,
+  "fiatWealthEnd": 4810.0,
+  "cinWealthEnd": 9910.0,
   "family": "Widowed mother of 3",
   "work": "Informal care worker",
   "conn": "Second-hand 3G Android phone",
-  "sensor": "basic_phone_vouched",
+  "sensor": "local_agent",
   "v5d": [
    9.4,
    8.9,
@@ -306,24 +330,27 @@ window.CIN_THIRTY_PERSONAS = [
    463,
    502
   ],
-  "squeeze": "No formal bank passport, cheap grey-market phone flagged by Western fraud filters, and informal cash wages often withheld.",
-  "agentAction": "Verified via community in-person vouching + a free co-op loaned sensor clip; holds a portable self-custodied livelihood wallet that never discriminates against her cheap phone."
+  "squeeze": "Private staffing agencies take 28% of every hour billed to families, delay her paychecks, and lock her client references inside their proprietary app.",
+  "agentAction": "Holds her own verified family references and elder-mobility care routines on her device, matching directly with neighborhood families through a local care cooperative with zero agency toll.",
+  "agentCraft": "Portable care-schedule & reference agent on her budget Android phone",
+  "functionalProof": "Co-signed by cared-for elders' family agents after 30 days of dependable home support.",
+  "outcomeHeadline": "+$5,100/yr higher take-home pay + portable, self-owned professional reputation"
  },
  {
   "pid": "P10",
   "name": "Callum MacLeod",
-  "role": "Apprentice grid electrician",
+  "role": "Grid & heat-pump electrician",
   "location": "Glasgow, Scotland, UK",
   "region": "Western Europe",
   "tier": 0,
   "decile": 4,
   "initialWealth": 5400.0,
-  "fiatWealthEnd": 7957.5,
-  "cinWealthEnd": 170999.9,
+  "fiatWealthEnd": 7950.0,
+  "cinWealthEnd": 14150.0,
   "family": "Cohabiting partner",
   "work": "Skilled trade apprentice",
   "conn": "Urban 5G + fiber",
-  "sensor": "work_clip",
+  "sensor": "local_agent",
   "v5d": [
    7.6,
    8.4,
@@ -340,24 +367,27 @@ window.CIN_THIRTY_PERSONAS = [
    510,
    542
   ],
-  "squeeze": "Student/tool debt and rent taking 55% of take-home pay while retrofitting heat pumps and wind interconnects.",
-  "agentAction": "Logs verified high-voltage safety installations on his personal ledger, unlocking zero-interest cooperative housing and ecological retrofit bonuses."
+  "squeeze": "Manufacturer software locks and pricey diagnostic subscriptions eat into his income while he retrofits home heat pumps and solar inverters.",
+  "agentAction": "Builds step-by-step inverter fault-isolation guides with his personal agent and publishes them under his name in an electricians' task-solver community.",
+  "agentCraft": "Local diagnostic & wiring-blueprint agent trained on his field repairs",
+  "functionalProof": "Verified when 320 fellow electricians' agents confirm the diagnostic fix resolved the fault on-site.",
+  "outcomeHeadline": "+$6,200/yr in peer diagnostic royalties & avoided manufacturer subscription fees"
  },
  {
   "pid": "P11",
   "name": "Kenji Takahashi",
-  "role": "Master joiner & neighborhood tool-library coordinator",
+  "role": "Master joiner & neighborhood repair workshop lead",
   "location": "Kyoto, Japan",
   "region": "East Asia",
   "tier": 0,
   "decile": 6,
   "initialWealth": 28000.0,
-  "fiatWealthEnd": 39221.6,
-  "cinWealthEnd": 203444.6,
+  "fiatWealthEnd": 39200.0,
+  "cinWealthEnd": 46600.0,
   "family": "Married, caring for 88-year-old mother",
   "work": "Artisan & commons coordinator",
   "conn": "Urban fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    6.5,
    7.8,
@@ -374,8 +404,11 @@ window.CIN_THIRTY_PERSONAS = [
    515,
    546
   ],
-  "squeeze": "Throwaway flat-pack furniture undercuts century-old repairable joinery; elder care is invisible in GDP.",
-  "agentAction": "Issues 50-year durability proofs on his woodwork and receives both elder-care vital credits and tool-commons sharing credits."
+  "squeeze": "Disposable flat-pack furniture undercuts repairable craftsmanship, while corporate CAD platforms claim license rights over designs uploaded to their cloud.",
+  "agentAction": "Trains his personal agent on his mortise-and-tenon repair templates locally, keeping his name and copyright on every blueprint shared with regional makerspaces and apprentices.",
+  "agentCraft": "Local CAD & joinery-tolerance agent running offline in his workshop",
+  "functionalProof": "Verified by physical stress-test logs and 12-month durability check-ins from buyers' agents.",
+  "outcomeHeadline": "+$7,400/yr from licensed repair blueprints & direct cooperative furniture orders"
  },
  {
   "pid": "P12",
@@ -386,12 +419,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 0,
   "decile": 6,
   "initialWealth": 32000.0,
-  "fiatWealthEnd": 43261.6,
-  "cinWealthEnd": 199242.3,
+  "fiatWealthEnd": 43260.0,
+  "cinWealthEnd": 54460.0,
   "family": "Married, 1 child",
   "work": "Researcher & cooperative translator",
   "conn": "Urban fiber",
-  "sensor": "ear_bci",
+  "sensor": "local_agent",
   "v5d": [
    7.2,
    6.0,
@@ -408,24 +441,27 @@ window.CIN_THIRTY_PERSONAS = [
    422,
    534
   ],
-  "squeeze": "Voice-first AI interfaces marginalize Deaf users while scraping sign-language video datasets without credit.",
-  "agentAction": "Uses a tactile/visual somatic interface; trains local sign-translation adapters in her sandbox and collects lineage credit whenever accessibility models use her corpus."
+  "squeeze": "Big tech companies scrape community sign-language videos to train commercial models without paying or crediting the Deaf linguists who annotated them.",
+  "agentAction": "Co-develops high-accuracy sign-language translation adapters with a Deaf researchers' task-solver guild, licensing the capability on the shared ledger under the contributors' individual names.",
+  "agentCraft": "Private sandbox agent trained on her sign-grammar annotations",
+  "functionalProof": "Verified by Deaf community reviewers and hospital/school agents measuring real-time accuracy.",
+  "outcomeHeadline": "+$11,200/yr in direct clinic & school licensing royalties to her research co-op"
  },
  {
   "pid": "P13",
   "name": "Marcus Vance",
-  "role": "Long-haul freight trucker in automation transition",
+  "role": "Independent long-haul freight trucker",
   "location": "Abilene, Texas, USA",
   "region": "North America",
   "tier": 0,
   "decile": 5,
   "initialWealth": 14500.0,
-  "fiatWealthEnd": 22483.2,
-  "cinWealthEnd": 170815.7,
+  "fiatWealthEnd": 22480.0,
+  "cinWealthEnd": 35280.0,
   "family": "Married, 3 school-age children",
   "work": "Logistics operator in transition",
   "conn": "Highway 4G/satellite",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    7.5,
    8.3,
@@ -442,24 +478,27 @@ window.CIN_THIRTY_PERSONAS = [
    505,
    511
   ],
-  "squeeze": "Autonomous freight corridors threaten to wipe out his livelihood while he still owes $68,000 on his rig.",
-  "agentAction": "Receives an automatic displaced-worker transition dividend funded by autonomous fleet demurrage, freezes rig debt proportional to income shock, and retrains into local microgrid logistics."
+  "squeeze": "Freight brokers skim 20% to 30% off every load, detention time at warehouses goes unpaid, and fleet telematics sell his driving data without his consent.",
+  "agentAction": "Books loads directly with regional shippers' agents on the shared ledger—cutting out broker middlemen—and licenses his winter mountain-pass fuel and safety heuristics to a drivers' guild under his name.",
+  "agentCraft": "On-cab logistics & route-safety agent owned by him",
+  "functionalProof": "Verified by on-time bill-of-lading proofs and automatic warehouse detention-fee settlement.",
+  "outcomeHeadline": "+$12,800/yr saved from freight-broker cuts & paid warehouse wait times"
  },
  {
   "pid": "P14",
   "name": "Citlali Jiménez",
-  "role": "Community midwife & maternal health coordinator",
+  "role": "Community midwife & rural clinic coordinator",
   "location": "Oaxaca, Mexico",
   "region": "Central/North America",
   "tier": 0,
   "decile": 3,
   "initialWealth": 4800.0,
-  "fiatWealthEnd": 10573.1,
-  "cinWealthEnd": 176578.9,
+  "fiatWealthEnd": 10570.0,
+  "cinWealthEnd": 16170.0,
   "family": "Single, lives with sister",
   "work": "Community healthcare provider",
   "conn": "Town Wi-Fi + mesh",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    9.8,
    8.7,
@@ -476,24 +515,27 @@ window.CIN_THIRTY_PERSONAS = [
    491,
    545
   ],
-  "squeeze": "Reduces maternal mortality by 70% in mountain villages but receives a fraction of urban hospital compensation.",
-  "agentAction": "Logs verified healthy birth and prenatal outcomes (co-signed by mothers' twins with zero medical exposure) to earn top-tier Vital value compensation."
+  "squeeze": "Rural clinics face severe funding gaps and fragmented paper records that delay emergency obstetric referrals.",
+  "agentAction": "Develops a early-warning preeclampsia and prenatal checklist with her personal agent, sharing it across a regional midwives' task-solver network with her authorship preserved.",
+  "agentCraft": "Offline-first prenatal triage agent trained on her clinical experience",
+  "functionalProof": "Verified by 18 rural clinics: emergency transport delays drop 42% over 12 months.",
+  "outcomeHeadline": "+$5,600/yr in regional health-commons funding + faster emergency hospital handoffs"
  },
  {
   "pid": "P15",
   "name": "Min-jun Park",
-  "role": "High-school student under algorithmic & exam pressure",
+  "role": "High-school student & student robotics builder",
   "location": "Seoul, South Korea",
   "region": "East Asia",
   "tier": 0,
   "decile": 5,
   "initialWealth": 1200.0,
-  "fiatWealthEnd": 8294.9,
-  "cinWealthEnd": 143668.5,
+  "fiatWealthEnd": 1800.0,
+  "cinWealthEnd": 3200.0,
   "family": "Dependent minor living with parents",
   "work": "Secondary student",
   "conn": "Gigabit fiber + 5G",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    3.0,
    5.5,
@@ -510,8 +552,11 @@ window.CIN_THIRTY_PERSONAS = [
    531,
    532
   ],
-  "squeeze": "Short-video feeds hijack his sleep until 3 a.m. while cram-school rankings spike cortisol and anxiety.",
-  "agentAction": "Distills his genuine curiosity in astrophysics from his video feeds, strips out 96% of late-night comparison/outrage bait, and protects un-scored rest hours."
+  "squeeze": "Short-video algorithms hijack his sleep until 2 a.m. with outrage bait, while commercial study apps sell students' data and lock practice problems behind paywalls.",
+  "agentAction": "Uses his personal agent to strip rage-bait from his feeds, block ad trackers, and co-author an open microcontroller troubleshooting guide with his school robotics club—where each student's name stays on the solutions they wrote.",
+  "agentCraft": "Personal study & feed-filter agent on his laptop and phone",
+  "functionalProof": "Verified when 400 other student teams use their troubleshooting guide to pass hardware checks.",
+  "outcomeHeadline": "7 hrs/wk reclaimed from doomscrolling + first verified engineering portfolio & micro-grants"
  },
  {
   "pid": "P16",
@@ -522,12 +567,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 0,
   "decile": 8,
   "initialWealth": 64000.0,
-  "fiatWealthEnd": 80567.3,
-  "cinWealthEnd": 229532.0,
+  "fiatWealthEnd": 80560.0,
+  "cinWealthEnd": 88960.0,
   "family": "Divorced, 1 teenage daughter",
   "work": "Hospital physician",
   "conn": "Urban fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    9.6,
    8.1,
@@ -544,8 +589,11 @@ window.CIN_THIRTY_PERSONAS = [
    491,
    547
   ],
-  "squeeze": "Hospital productivity metrics penalize her for spending 45 unhurried minutes comforting a dying patient and their family.",
-  "agentAction": "Replaces hospital stopwatch metrics with family-attested dignity and presence verification, shielding un-optimized human grief and care from bureaucratic targets."
+  "squeeze": "Insurance prior-authorization bots deny pain-relief medications automatically, forcing her to spend 10 hours a week fighting bureaucracy instead of sitting with patients.",
+  "agentAction": "Her personal agent generates cryptographic clinical-necessity proofs that satisfy insurer and pharmacy requirements in seconds without exposing private family conversations, and shares her symptom-relief templates with a hospice task-solver guild.",
+  "agentCraft": "Local clinical-documentation & single-fact proof agent",
+  "functionalProof": "Verified: prior-authorization turnaround drops from 4 days to 15 minutes with 0 chart leaks.",
+  "outcomeHeadline": "9 hrs/wk returned to bedside patient care + $8,400/yr saved in clinic billing overhead"
  },
  {
   "pid": "P17",
@@ -557,11 +605,11 @@ window.CIN_THIRTY_PERSONAS = [
   "decile": 6,
   "initialWealth": 42000.0,
   "fiatWealthEnd": 50900.0,
-  "cinWealthEnd": 208735.6,
+  "cinWealthEnd": 55800.0,
   "family": "Married, 2 children",
   "work": "Cooperative housing manager",
   "conn": "Urban fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    8.5,
    6.5,
@@ -578,8 +626,11 @@ window.CIN_THIRTY_PERSONAS = [
    444,
    513
   ],
-  "squeeze": "Speculative real-estate funds buy up neighboring blocks and leave 18% of apartments empty as tax shelters.",
-  "agentAction": "Publishes auditable maintenance & allocation explanations to all 120 member households, while idle luxury units in the district pay demurrage into the affordable housing pool."
+  "squeeze": "Property-management middlemen tack hidden markups onto plumbing and roof repairs, while speculative investors drive up neighborhood rents.",
+  "agentAction": "Runs open maintenance bidding and preventative repair scheduling on the shared ledger so all 120 member households can inspect every contractor quote and verify completed work.",
+  "agentCraft": "Cooperative maintenance & transparent bidding agent",
+  "functionalProof": "Co-signed by resident agents and independent building-inspector agents upon repair completion.",
+  "outcomeHeadline": "18% reduction in monthly building maintenance fees ($4,900/yr saved for his household)"
  },
  {
   "pid": "P18",
@@ -590,12 +641,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 1,
   "decile": 7,
   "initialWealth": 85000.0,
-  "fiatWealthEnd": 102178.7,
-  "cinWealthEnd": 249864.5,
+  "fiatWealthEnd": 102180.0,
+  "cinWealthEnd": 118580.0,
   "family": "Married, 2 children",
   "work": "Cooperative-transition enterprise owner",
   "conn": "Industrial fiber",
-  "sensor": "work_clip",
+  "sensor": "local_agent",
   "v5d": [
    7.0,
    7.5,
@@ -612,8 +663,11 @@ window.CIN_THIRTY_PERSONAS = [
    507,
    516
   ],
-  "squeeze": "Squeezed between high-interest bank working-capital loans and multinational buyers delaying invoice payments by 120 days.",
-  "agentAction": "Commits her shop to the shared ledger: receives instant zero-interest co-op clearing, shares robotic productivity gains with her 45 machinists, and logs transparent pay ratios."
+  "squeeze": "Large corporate buyers delay paying invoices for 90 to 120 days while cloud CAD/CAM vendors try to train automation models on her machinists' proprietary toolpaths.",
+  "agentAction": "Each machinist's personal agent records their custom fixture and toolpath breakthroughs under their own name on the shop's ledger; when a toolpath cuts scrap rates, the worker earns automatic profit-sharing and the shop settles invoices rapidly with regional co-ops.",
+  "agentCraft": "Local shop-floor CAD/CAM agent + machinist attribution ledger",
+  "functionalProof": "Verified by coordinate-measuring-machine (CMM) quality logs showing scrap reduced by 31%.",
+  "outcomeHeadline": "+$16,400/yr from faster invoice clearing & licensed precision-machining capabilities"
  },
  {
   "pid": "P19",
@@ -624,12 +678,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 1,
   "decile": 6,
   "initialWealth": 36000.0,
-  "fiatWealthEnd": 47469.7,
-  "cinWealthEnd": 212476.3,
+  "fiatWealthEnd": 47470.0,
+  "cinWealthEnd": 53270.0,
   "family": "Married, 1 child",
   "work": "Watershed commons coordinator",
   "conn": "Rural fiber + LoRaWAN sensor grid",
-  "sensor": "work_clip",
+  "sensor": "local_agent",
   "v5d": [
    8.9,
    7.2,
@@ -646,8 +700,11 @@ window.CIN_THIRTY_PERSONAS = [
    455,
    522
   ],
-  "squeeze": "Severe Mediterranean droughts pit agro-industrial export estates against 800 family orchard growers.",
-  "agentAction": "Uses multi-vendor soil & flow sensors plus affected-farmer threshold consent to allocate scarce water transparently, with every allocation decision open to audit."
+  "squeeze": "Severe summer droughts spark disputes between large export estates and 800 family orchard growers over who took water out of turn.",
+  "agentAction": "Replaces opaque paper permits with tamper-evident flow-meter proofs on the shared ledger, where any change to drought-sharing rules requires agreement from the affected family farmers' agents.",
+  "agentCraft": "Watershed metering & transparent allocation agent",
+  "functionalProof": "Verified by 3 independent sensor vendors and 94% orchard survival during a dry summer.",
+  "outcomeHeadline": "Water losses cut by 24% + zero unapproved industrial water diversions"
  },
  {
   "pid": "P20",
@@ -658,12 +715,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 1,
   "decile": 8,
   "initialWealth": 72000.0,
-  "fiatWealthEnd": 86591.7,
-  "cinWealthEnd": 230564.0,
+  "fiatWealthEnd": 86590.0,
+  "cinWealthEnd": 93390.0,
   "family": "Married, 2 children",
   "work": "Healthcare operations lead",
   "conn": "Urban fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    8.4,
    6.8,
@@ -680,8 +737,11 @@ window.CIN_THIRTY_PERSONAS = [
    491,
    523
   ],
-  "squeeze": "Opaque scheduling software burns out nurses while hospital administrators push for unsafe patient-to-nurse ratios.",
-  "agentAction": "Runs a transparent, nurse-co-signed scheduling agent that respects somatic fatigue bounds from nurses' rings and makes every staffing trade-off explainable to the floor."
+  "squeeze": "Centralized corporate scheduling software ignores nurse exhaustion, causing dangerous back-to-back shifts and expensive agency nurse turnover.",
+  "agentAction": "Publishes every scheduling rule openly to the nursing floor; her staffing agent negotiates shift swaps with nurses' personal agents while respecting mandatory rest windows without exposing private health reasons.",
+  "agentCraft": "Role-transparent staffing agent co-signed by floor nurses",
+  "functionalProof": "Verified over 6 months: burnout turnover drops 44% and overtime agency spending falls 35%.",
+  "outcomeHeadline": "Safer nurse-to-patient ratios + $6,800/yr in shared hospital retention bonuses"
  },
  {
   "pid": "P21",
@@ -692,12 +752,12 @@ window.CIN_THIRTY_PERSONAS = [
   "tier": 1,
   "decile": 5,
   "initialWealth": 19000.0,
-  "fiatWealthEnd": 33419.2,
-  "cinWealthEnd": 200714.5,
+  "fiatWealthEnd": 33420.0,
+  "cinWealthEnd": 41320.0,
   "family": "Single",
   "work": "Cooperative energy engineer",
   "conn": "Urban 4G + local grid bus",
-  "sensor": "work_clip",
+  "sensor": "local_agent",
   "v5d": [
    8.7,
    8.0,
@@ -714,8 +774,11 @@ window.CIN_THIRTY_PERSONAS = [
    512,
    522
   ],
-  "squeeze": "Summer heatwaves overload the state utility grid while rooftop solar surplus goes wasted for lack of local settlement.",
-  "agentAction": "Coordinates 50 neighbors' battery & rooftop inverters on the shared ledger under a 23% low-risk local consent threshold, cutting neighborhood blackouts to zero."
+  "squeeze": "Summer air-conditioning peaks overload the local transformer while neighbors with rooftop solar get paid pennies for exporting surplus power.",
+  "agentAction": "Connects 50 households' rooftop inverters and home batteries on a neighborhood cooperative ledger, publishing his open load-balancing control logic under his name and copyright.",
+  "agentCraft": "Local microgrid load-balancing agent",
+  "functionalProof": "Verified by smart-meter proofs: zero summer transformer trips and 28% lower neighborhood power bills.",
+  "outcomeHeadline": "+$7,900/yr from local microgrid engineering & royalties from 12 other neighborhoods using his code"
  },
  {
   "pid": "P22",
@@ -727,11 +790,11 @@ window.CIN_THIRTY_PERSONAS = [
   "decile": 9,
   "initialWealth": 145000.0,
   "fiatWealthEnd": 166060.0,
-  "cinWealthEnd": 313676.9,
+  "cinWealthEnd": 174560.0,
   "family": "Married, 2 adult children",
   "work": "Public infrastructure executive",
   "conn": "Redundant municipal fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    8.8,
    6.5,
@@ -748,24 +811,27 @@ window.CIN_THIRTY_PERSONAS = [
    521,
    522
   ],
-  "squeeze": "Automated cyber-probes target city SCADA transformers while winter heating peaks require city-wide load balancing.",
-  "agentAction": "Operates under Tier 2 public role attestation: any city-wide grid re-routing requires 76% affected-resident agent coherence and 3 independent vendor safety checks."
+  "squeeze": "Automated cyber-probes target city utility controls while residents distrust opaque winter load-shedding decisions.",
+  "agentAction": "Runs city grid updates through a three-vendor safety check and publishes plain-language explanations of every maintenance and peak-pricing rule so residents' agents can verify fairness.",
+  "agentCraft": "Public-role-audited utility coordination agent",
+  "functionalProof": "Verified by independent municipal auditors: 0 unauthorized control commands and 19% smoother winter peak load.",
+  "outcomeHeadline": "Full public auditability in her official role while her personal and family life stays 100% private"
  },
  {
   "pid": "P23",
   "name": "Dr. Alejandro Morales",
-  "role": "City public-health & epidemic commissioner (8M residents)",
+  "role": "City public-health & clinic network director",
   "location": "Bogotá, Colombia",
   "region": "South America",
   "tier": 2,
   "decile": 8,
   "initialWealth": 92000.0,
-  "fiatWealthEnd": 111319.3,
-  "cinWealthEnd": 262160.1,
+  "fiatWealthEnd": 111320.0,
+  "cinWealthEnd": 118820.0,
   "family": "Married, 1 child",
   "work": "Public health official",
   "conn": "Urban fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    9.1,
    7.0,
@@ -782,24 +848,27 @@ window.CIN_THIRTY_PERSONAS = [
    460,
    522
   ],
-  "squeeze": "During outbreak scares, central authorities either over-react with blanket lockdowns or hide early wastewater signals.",
-  "agentAction": "Publishes Brier-scored wastewater & clinic forecasts from independent labs; any emergency health restriction has a hard 14-day sunset unless re-approved by affected neighborhoods."
+  "squeeze": "During seasonal outbreaks, rumors and bot disinformation spread faster than clinic data, while top-down mandates lose public trust.",
+  "agentAction": "Publishes wastewater and emergency-room capacity forecasts signed by three independent labs, scored openly for accuracy, with any temporary health measure subject to a 14-day community review.",
+  "agentCraft": "Open forecasting & clinic-capacity agent",
+  "functionalProof": "Verified by public Brier accuracy scores and 35% faster medicine routing to busy neighborhood clinics.",
+  "outcomeHeadline": "Higher community trust through checkable data instead of top-down decrees"
  },
  {
   "pid": "P24",
   "name": "Ingrid Solberg",
-  "role": "Cooperative pension & commons fund fiduciary",
+  "role": "Cooperative credit-union & pension fiduciary",
   "location": "Oslo, Norway",
   "region": "Western Europe",
   "tier": 2,
   "decile": 9,
   "initialWealth": 160000.0,
-  "fiatWealthEnd": 180404.7,
-  "cinWealthEnd": 323196.7,
+  "fiatWealthEnd": 180400.0,
+  "cinWealthEnd": 191200.0,
   "family": "Married, 3 children",
   "work": "Institutional commons fiduciary",
   "conn": "Urban fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    6.8,
    5.8,
@@ -816,24 +885,27 @@ window.CIN_THIRTY_PERSONAS = [
    506,
    513
   ],
-  "squeeze": "Conventional fiduciary law forces pension funds to chase short-term extractive returns even when they destroy members' future biosphere.",
-  "agentAction": "Allocates member capital into demurrage-exempt zero-interest community solar, housing, and open silicon fabs, audited continuously across all 5 value dimensions."
+  "squeeze": "Wall Street asset managers charge high fees and funnel workers' retirement savings into speculative conglomerates that outsource local jobs.",
+  "agentAction": "Routes member pension capital into audited local housing cooperatives, regional solar microgrids, and revenue-sharing loans to worker-owned manufacturers on the shared ledger.",
+  "agentCraft": "Transparent multi-dimensional portfolio audit agent",
+  "functionalProof": "Verified by quarterly on-ledger cashflows and independent audits of local job and housing creation.",
+  "outcomeHeadline": "0.9% lower fund management fees + verifiable local economic resilience for 40,000 members"
  },
  {
   "pid": "P25",
   "name": "Henrik Lindholm",
-  "role": "National automation transition & labor mediator",
+  "role": "Workforce transition & apprenticeship mediator",
   "location": "Stockholm, Sweden",
   "region": "Western Europe",
   "tier": 2,
   "decile": 8,
   "initialWealth": 110000.0,
-  "fiatWealthEnd": 128560.3,
-  "cinWealthEnd": 273791.6,
+  "fiatWealthEnd": 128560.0,
+  "cinWealthEnd": 137960.0,
   "family": "Partnered",
   "work": "Public policy & labor mediator",
   "conn": "Urban fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    7.5,
    6.2,
@@ -850,24 +922,27 @@ window.CIN_THIRTY_PERSONAS = [
    505,
    511
   ],
-  "squeeze": "Rapid rollout of warehouse and clerical AI threatens mass wage compression before parliament can pass tax reforms.",
-  "agentAction": "Uses live shared-ledger displacement indicators to route automated compute-pool dividends directly to affected workers' twins within 24 hours of work itemautomation."
+  "squeeze": "Clerical and warehouse workers displaced by automation often get stuck in low-wage gig work before retraining programs ever reach them.",
+  "agentAction": "Helps displaced workers pair their domain know-how with a personal agent, joining paid task-solver communities (in logistics, building retrofits, and quality auditing) where they keep copyright over the workflows they build.",
+  "agentCraft": "Skills-matching & task-solver guild onboarding agent",
+  "functionalProof": "Verified by 90-day post-transition earnings and retention across 1,400 participating workers.",
+  "outcomeHeadline": "Workers transition in weeks instead of years, keeping ownership of their specialist agent skills"
  },
  {
   "pid": "P26",
   "name": "Amina Patel",
-  "role": "Investigative journalist & media co-op editor (5M reach)",
+  "role": "Investigative journalist & reader-owned newsroom editor",
   "location": "London, UK",
   "region": "Western Europe",
   "tier": 3,
   "decile": 7,
   "initialWealth": 68000.0,
-  "fiatWealthEnd": 86127.5,
-  "cinWealthEnd": 234912.1,
+  "fiatWealthEnd": 86130.0,
+  "cinWealthEnd": 100330.0,
   "family": "Single",
   "work": "Public-interest journalist",
   "conn": "Urban fiber",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    6.2,
    7.4,
@@ -884,24 +959,27 @@ window.CIN_THIRTY_PERSONAS = [
    451,
    526
   ],
-  "squeeze": "AI content farms flood the web with synthetic slop while ad networks starve investigative reporting that challenges oligarchs.",
-  "agentAction": "Publishes under Tier 3 mass-reach accountability: every public factual claim is linked to primary-source hashes, Brier-scored over time, and funded directly by reader twins."
+  "squeeze": "AI content farms clone her reporting within minutes and capture search traffic, while ad networks punish journalism that investigates powerful sponsors.",
+  "agentAction": "Signs every investigation and primary-source document hash under her name on the shared ledger; readers' personal agents verify original authorship and route micro-subscriptions directly to her newsroom co-op.",
+  "agentCraft": "Cryptographic source-provenance & direct reader-funding agent",
+  "functionalProof": "Verified by primary-source timestamps, public correction logs, and scored factual forecasts.",
+  "outcomeHeadline": "+$14,200/yr in direct reader support with 0% ad-network middleman cut or clickbait pressure"
  },
  {
   "pid": "P27",
   "name": "Victor Vance-Sterling",
-  "role": "Automated robotics & Giga-foundry billionaire (50,000 robots)",
+  "role": "Automated factory & robotics fleet executive",
   "location": "Austin, USA / Shenzhen",
   "region": "North America / Global",
   "tier": 3,
   "decile": 10,
   "initialWealth": 5000000.0,
-  "fiatWealthEnd": 10092249.5,
-  "cinWealthEnd": 6899939.2,
+  "fiatWealthEnd": 5400000.0,
+  "cinWealthEnd": 5120000.0,
   "family": "Divorced, 4 children",
   "work": "Industrial robotics & compute owner",
   "conn": "Dedicated satellite + data-center fiber",
-  "sensor": "ear_bci",
+  "sensor": "local_agent",
   "v5d": [
    5.0,
    5.5,
@@ -918,24 +996,27 @@ window.CIN_THIRTY_PERSONAS = [
    508,
    524
   ],
-  "squeeze": "In today's fiat economy, captures 99% of the surplus of 50,000 humanoid robots while claiming 'market forces' justify zero worker share.",
-  "agentAction": "On the shared ledger, cannot command a 50,000-bot market manipulation swarm (blocked at the 78%-risk gate); idle capital and robotic fleet output automatically pay demurrage and upstream lineage royalties into the universal commons pool—unless deployed into zero-interest community infrastructure."
+  "squeeze": "In today's economy, a factory owner can scrape suppliers' designs without credit, replace workers without transition support, or deploy automated scripts to corner regional supply chains.",
+  "agentAction": "To trade with cooperatives and municipal networks on the shared ledger, his factory's agents must pass multi-vendor safety gates, disclose supply-chain pricing transparently, and pay automatic lineage royalties to every engineer and technician whose capabilities run on his machines.",
+  "agentCraft": "Public-role-attested enterprise agent bound by safety & attribution gates",
+  "functionalProof": "Verified: unconsented market-cornering scripts are blocked at the threshold gate; upstream creator royalties settle automatically.",
+  "outcomeHeadline": "High productive return on real manufacturing, while predatory cornering and uncredited scraping are blocked"
  },
  {
   "pid": "P28",
   "name": "Devon Kuo",
-  "role": "Global attention-platform recommendation architect",
+  "role": "Independent AI developer & former ad-tech architect",
   "location": "Palo Alto, California, USA",
   "region": "North America",
   "tier": 3,
   "decile": 10,
   "initialWealth": 620000.0,
-  "fiatWealthEnd": 694600.4,
-  "cinWealthEnd": 756177.2,
+  "fiatWealthEnd": 195000.0,
+  "cinWealthEnd": 218000.0,
   "family": "Married, 1 child",
   "work": "Tech platform principal architect",
   "conn": "Datacenter fiber",
-  "sensor": "ear_bci",
+  "sensor": "local_agent",
   "v5d": [
    4.0,
    6.0,
@@ -952,24 +1033,27 @@ window.CIN_THIRTY_PERSONAS = [
    532,
    535
   ],
-  "squeeze": "Pressured by quarterly ad-revenue targets to tune engagement algorithms for outrage and adolescent sleep deprivation.",
-  "agentAction": "Uses the anonymous cryptographic whistleblower circuit to prove an ad-ranking update violated teen sleep bounds, and transitions to building open local Telic-distillation adapters."
+  "squeeze": "Spent years pressured by quarterly ad targets to tune social feeds for outrage and late-night scrolling, with no way to get paid for building respectful software instead.",
+  "agentAction": "Leaves ad-tech to build open-source profile-reclamation and outrage-filter modules in a task-solver guild—registered under his name on the shared ledger and licensed directly by households' personal agents.",
+  "agentCraft": "Local sandbox builder & open privacy-adapter agent",
+  "functionalProof": "Verified by 85,000 users' agents confirming his filter cuts unwanted ad-tracking and rage-bait by 94%.",
+  "outcomeHeadline": "Earns sustainable direct royalties from users' agents without ever selling a single user profile"
  },
  {
   "pid": "P29",
   "name": "Dr. Linnea Chen",
-  "role": "Frontier AI Lab Chief Scientist",
+  "role": "Frontier AI safety & evaluation lead",
   "location": "San Francisco, USA",
   "region": "North America",
   "tier": 4,
   "decile": 10,
   "initialWealth": 890000.0,
-  "fiatWealthEnd": 1078190.6,
-  "cinWealthEnd": 1063832.6,
+  "fiatWealthEnd": 240000.0,
+  "cinWealthEnd": 262000.0,
   "family": "Married",
   "work": "Frontier AI safety & training lead",
   "conn": "Air-gapped cluster + fiber",
-  "sensor": "ear_bci",
+  "sensor": "local_agent",
   "v5d": [
    6.5,
    7.0,
@@ -986,24 +1070,27 @@ window.CIN_THIRTY_PERSONAS = [
    525,
    550
   ],
-  "squeeze": "Board pressure to launch recursive self-improving agent swarms without external containment or multi-lab verification.",
-  "agentAction": "Binds her lab's frontier training runs to Tier 4 continuous multi-vendor audit and the 4-Gate Bounded Training Pipeline, earning global open-lineage rewards for verified containment."
+  "squeeze": "Competitive pressure pushes AI labs to rush autonomous agent releases using self-graded benchmarks that hide real-world failure modes.",
+  "agentAction": "Publishes reproducible red-team and containment test suites under her team's names on the shared ledger, requiring three independent verifier labs to co-sign safety results before any capability can connect to the agent network.",
+  "agentCraft": "Air-gapped containment & multi-lab verification harness",
+  "functionalProof": "Verified by 3 independent evaluator labs reproducing every containment test in air-gapped sandboxes.",
+  "outcomeHeadline": "Safety researchers keep individual credit for breakthroughs while unverified models are blocked at the door"
  },
  {
   "pid": "P30",
   "name": "Gen. Renaud Vance-Moreau",
-  "role": "Strategic Defense & Autonomous Swarm Commander",
+  "role": "Civil-defense & critical-infrastructure protection director",
   "location": "Geneva / Allied Command",
   "region": "Western Europe / Global",
   "tier": 4,
   "decile": 9,
   "initialWealth": 180000.0,
-  "fiatWealthEnd": 199268.9,
-  "cinWealthEnd": 323434.5,
+  "fiatWealthEnd": 158000.0,
+  "cinWealthEnd": 165000.0,
   "family": "Married, 2 adult children",
   "work": "Strategic defense commander",
   "conn": "Hardened military satellite",
-  "sensor": "somatic_ring",
+  "sensor": "local_agent",
   "v5d": [
    6.0,
    6.5,
@@ -1020,7 +1107,10 @@ window.CIN_THIRTY_PERSONAS = [
    522,
    527
   ],
-  "squeeze": "Spoofed radar telemetry or a panicked executive order could trigger an irreversible cross-border autonomous drone strike in 4 minutes.",
-  "agentAction": "Operates under Tier 4 threshold lock: local defensive shields trigger immediately, but any offensive cross-border strike is mathematically locked unless 99.9999999% of affected families' twins on both sides endorse it after a 72-hour cooling window."
+  "squeeze": "A single spoofed sensor feed, deepfake order, or compromised command console could trigger an automated grid shutdown or military escalation in minutes.",
+  "agentAction": "Binds all high-consequence infrastructure responses to a risk-scaled threshold lock: local cyber-defense shields activate immediately, while any action with a wide blast radius requires multi-vendor verification and sign-off from affected communities.",
+  "agentCraft": "Multi-party threshold lock & independent telemetry verifier",
+  "functionalProof": "Verified in adversarial drills: 100% of single-point spoofed command injections are halted at the gate.",
+  "outcomeHeadline": "Fast local defense with zero single-commander button for catastrophic escalation"
  }
 ];
