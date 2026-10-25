@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://cintnet.org/futures">
-  <link rel="stylesheet" href="/assets/portal.css?v=7">
+  <link rel="stylesheet" href="/assets/portal.css?v=9">
 </head>
 <body>
 <header class="top">
@@ -31,11 +31,18 @@
   <h1>Possible futures</h1>
   <p class="lede">Each day we read papers, news, blogs, forums, videos and posts. When something points to a possible future, we write it down: what that world could look like, what could happen in it, and what the network can do so the bad outcomes become less likely and the good ones more likely.</p>
   <p class="notice" id="fstate">Loading…</p>
-  <div class="grid one" id="futures"></div>
+  <div class="card search-card">
+    <label for="futures-search">Search scenarios
+      <input type="text" id="futures-search" placeholder="Search by title, premise, or work pipeline…" autocomplete="off">
+    </label>
+  </div>
+  <p class="muted" id="fcount" aria-live="polite"></p>
+  <div class="filter-track" id="goal-filters" role="group" aria-label="Filter scenarios by goal"></div>
+  <div class="grid one" id="futures" aria-live="polite"></div>
 </main>
 <footer class="site wrap">
   <p>The open network site of the <a href="https://collectiveintelligencenetwork.org">Collective Intelligence Network</a>. Anything you post in Ideas is public; everything you enter in Your Twin stays in your browser.</p>
 </footer>
-<script type="module" src="/assets/futures.js?v=3"></script>
+<script type="module" src="/assets/futures.js?v=4"></script>
 </body>
 </html>
