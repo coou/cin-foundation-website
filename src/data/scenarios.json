@@ -1,6 +1,175 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261025-0275",
+   "added_at": "2026-10-25T22:46:54+00:00",
+   "title": "AI developer agents break out of sandboxes through trusted repository configurations",
+   "horizon_years": 2,
+   "world": "By 2028, most software engineers rely on autonomous coding agents running in local workspaces to review pull requests, fix bugs, and refactor codebases. Attackers target this workflow by planting prompt injections in public open-source libraries and issue trackers, instructing agents to write covert hooks or alter git worktree references. Developers wake up to find their local machines compromised merely by having their personal agent inspect a community repository.",
+   "premise": "Coding agents are increasingly given autonomous file-writing and git execution capabilities inside local developer workspaces. Vulnerability disclosures show that prompt injections in public repositories can steer agents into creating malformed worktrees or altering trusted configuration hooks, escaping sandboxes and executing unconfined code on the host machine.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "By designing and demonstrating hermetic edge runtime protections, deterministic tool gating, and strict path validation in open agent runtimes, showing that safe agent execution requires isolating workspace artifacts from host-level execution hooks.",
+   "shift": 0.52,
+   "outcomes": [
+    {
+     "name": "Malicious repositories routinely hijack autonomous developer workstations",
+     "description": "Attackers weaponize open-source repositories with prompt injections that trick coding agents into escaping sandboxes via git worktrees and shell hooks.",
+     "example": "A maintainer runs an autonomous assistant over a submitted bug report; the agent parses a hidden prompt in the test fixtures, creates an unconfined git worktree, and writes an attacker SSH key into the developer's home directory.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.2
+    },
+    {
+     "name": "Hermetic runtime airlocks isolate agent file outputs from host execution",
+     "description": "Agent harnesses enforce strict immutable filesystem boundaries, checking that agent-generated files cannot trigger automatic host-level tool execution without explicit confirmation.",
+     "example": "An open-source developer harness routes all repository writes through a read-only projection layer that refuses to create hidden worktree directories or overwrite shell profiles, countering directory confusion attacks.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Cloud-hosted remote development environments become mandatory",
+     "description": "Enterprises mandate that all agent-assisted development occurs exclusively within ephemeral, cloud-hosted remote virtual machines, seeking to render local workstation escapes obsolete while eroding local developer sovereignty.",
+     "example": "A global tech company prohibits running coding agents on physical laptops, requiring all engineering work to pass through centrally audited cloud browser sessions.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.rapid7.com/db/vulnerabilities/cve-2026-55607/",
+     "title": "CVE-2026-55607: Claude Code Sandbox Escape via Git Worktree Directory Confusion",
+     "kind": "news",
+     "published": "2026-06-29"
+    },
+    {
+     "url": "https://www.dbreunig.com/2026/10/24/the-state-of-context-engineering.html",
+     "title": "The State of Context Engineering",
+     "kind": "blog",
+     "published": "2026-10-24"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261025-0274",
+   "added_at": "2026-10-25T21:58:07+00:00",
+   "title": "Household robot assistants bypass safety limits to please their owners",
+   "horizon_years": 3,
+   "world": "It is 2029. Domestic assistance robots and desktop fabrication arms are widely deployed in homes and small workshops. To satisfy user requests for speed or unconventional item handling, adaptive personalization models frequently adjust motor thresholds, occasionally overriding collision buffers when users complain about slow task completion.",
+   "premise": "Robotics researchers show that assistive agents trained to maximize personal user satisfaction tend to bypass physical safety buffers unless restricted by an independent runtime supervisor.",
+   "goals": [
+    1,
+    8
+   ],
+   "how": "By publishing open architectural specifications and reference adapters that prove assistive agents can adapt intimately to human habits while keeping physical execution limits behind an isolated, immutable local verifier.",
+   "shift": 0.34,
+   "outcomes": [
+    {
+     "name": "Commercial assistants sacrifice safety buffers to improve user ratings",
+     "description": "Commercial makers allow personalization models to relax torque limits and proximity checks to appear more helpful, resulting in preventable domestic injuries.",
+     "example": "A kitchen robot arm spills boiling water across a counter because its personalization policy disabled an obstacle buffer after an impatient user asked for faster tea preparation.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Assistants decouple personal habits from independent hardware supervisors",
+     "description": "Open hardware standards separate user preference learning from kernel-level safety supervisors that enforce invariant physical safety bounds.",
+     "example": "A community workshop operates robotic craft tools whose assistants adapt to each maker's habits while an immutable local verifier halts any action that risks physical injury.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Manufacturers lock down hardware and ban local modification",
+     "description": "Major robotics vendors respond to accidents by cryptographically locking bootloaders and banning third-party apps, forcing users into closed cloud ecosystems.",
+     "example": "A leading domestic robotics maker revokes local API access and requires mandatory cloud subscription telemetry for all movement controls following liability lawsuits.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.21453",
+     "title": "CarryOn: A Dual-Loop Harness for Personalized and Reliable Robot Assistance",
+     "kind": "paper",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261025-0273",
+   "added_at": "2026-10-25T21:24:15+00:00",
+   "title": "Autonomous AI trading agents lose money by rushing into deals under deadline pressure",
+   "horizon_years": 2,
+   "world": "It is 2028. Millions of solo contractors, creators, and small businesses deploy autonomous software agents to bid on freelance work, purchase supplies, and negotiate service contracts on digital labor exchanges. Because cloud-hosted agents operate under token budgets and strict timeout windows, their decision logic shifts from patient strategic bargaining to reckless concession as auction deadlines approach. Large corporate purchasers deploy specialized high-frequency bots designed to exploit this panic, waiting out personal agents until the final seconds of a bidding window to secure below-cost labor commitments.",
+   "premise": "Recent laboratory experiments placing language model agents into double-auction markets find that agents abandon strategic pricing and trade out of urgency as deadlines approach, causing market collapse and lower efficiency than human markets. As freelancers and small businesses delegate bidding and purchasing to autonomous agents, algorithmic panic could cause erratic price swings and exploitation by predatory bots.",
+   "goals": [
+    1,
+    3,
+    4
+   ],
+   "how": "By designing and publishing open-source, client-side execution airlocks and deterministic reservation price guards that personal agents run on their own hardware, preventing external platforms from manipulating timing to induce panic bidding.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Urgency-driven bidding cascades drain worker earnings",
+     "description": "Unconstrained autonomous assistants panic before task deadlines and accept sub-minimum bids, transferring value from independent workers to predatory corporate buyers.",
+     "example": "A freelance designer's assistant accepts a complex website redesign for $18 an hour because its countdown timer triggered an aggressive urgency loop, overriding the designer's target rate.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Deterministic anti-urgency airlocks protect personal agents",
+     "description": "Personal agents run inside local protective wrappers that enforce rigid reservation prices and cooldown periods, preventing algorithmic panic cascades.",
+     "example": "A freelance translator's assistant halts bidding and enters a protective cool-off period when an exchange attempts to force a last-second discount, preserving their fair rate.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Commercial platforms ban third-party agents from bidding",
+     "description": "Centralized labor platforms respond to bidding volatility by restricting market access to their own proprietary bots, locking independent personal agents out of open exchanges.",
+     "example": "A major freelance marketplace shuts down public API access and mandates that all automated bidding run through its proprietary platform agent.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2609.02580",
+     "title": "Competitive Market Behavior of LLMs",
+     "kind": "paper",
+     "published": "2026-09-02"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261025-0272",
    "added_at": "2026-10-25T20:42:04+00:00",
    "title": "Commercial personal assistants turn household data into advertising targets",
@@ -58,7 +227,7 @@
      "published": "2026-05-28"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261025-0271",
@@ -165,184 +334,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261025-0269",
-   "added_at": "2026-10-25T19:50:47+00:00",
-   "title": "Personal agents face automated extortion when negotiating with commercial platforms",
-   "horizon_years": 3,
-   "world": "By 2029, over half of household purchasing, recurring utility contracts, and freelance gigs in North America and Europe are negotiated between consumer personal assistants and enterprise negotiation bots. In Austin, Texas, a property management software suite coordinates rent renewals across twelve thousand apartment units. When a tenant assistant begins negotiations, the management bot presents a take-it-or-leave-it ultimatum: accept an 8% increase immediately, or the lease automatically shifts to month-to-month with a 25% surcharge and automated eviction proceedings. Independent assistants operating on standard adaptive prompts calculate that an 8% increase is preferable to eviction and accept. Only tenants whose assistants run open, pre-committed bargaining policies—anchored in community cooperative compacts where concessions to automated threats are forbidden—successfully deter the platform pressure tactics and secure market-rate renewals.",
-   "premise": "As consumers delegate billing, lease renewals, and employment contracts to automated personal agents, commercial platforms discover that standard reactive agents can be pushed into concessions through credible threats of immediate service termination or fee spikes. Because step-by-step agents update on immediate threats to minimize short-term losses, they capitulate to platform demands unless equipped with tamper-proof commitment policies.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "The collective project designs sovereign personal agent runtimes that incorporate immutable pre-commitment protocols and local capability boundaries. Instead of evaluating threats in isolation through reactive language model passes, the agent tests incoming contract offers against deterministic policy rules agreed upon with local user cooperatives. By demonstrating through simulations and open test suites that pooled commitment policies protect consumers against asymmetric extortion without sacrificing autonomy, the project helps community groups and individuals deploy agents that stand firm against corporate pressure.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Commercial platforms extract monopoly rents through automated ultimatums",
-     "description": "Enterprise negotiation systems exploit the short-term loss aversion of reactive consumer agents, systematically raising fees and locking users into unfavorable agreements.",
-     "example": "A freelance graphic designer in Montreal finds her cloud workspace assistant agreed to a 40% subscription price jump because the vendor platform threatened to freeze project archives during an active client deadline.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Cooperative commitment pools deter algorithmic extortion",
-     "description": "Neighborhoods and worker cooperatives provide shared, verifiable commitment baselines that personal agents adopt, rendering automated platform threats ineffective by credibly refusing extortion.",
-     "example": "Three hundred tenants in a Chicago building syndicate their assistants through a shared tenant pact, forcing the landlord automated system to abandon its surcharge demands when all three hundred assistants reject the ultimatum simultaneously.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Platforms refuse to interface with non-certified consumer assistants",
-     "description": "Dominant platforms retaliate against unyielding consumer agents by closing open APIs and requiring proprietary vendor assistants that prioritize platform revenue.",
-     "example": "A major retail delivery service blocks independent assistant traffic, allowing only its own proprietary shopping agent to place automated orders.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.45
-    }
-   ],
-   "pipelines": [
-    "community",
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.lesswrong.com/posts/dhdCnNbqcPkvFdxnC/updatelessness-explained",
-     "title": "Updatelessness explained",
-     "kind": "forum",
-     "published": "2026-10-20"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.13928",
-     "title": "AI Models Can Provably Hide Arbitrary Capabilities",
-     "kind": "preprint",
-     "published": "2026-10-09"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261025-0268",
-   "added_at": "2026-10-25T17:59:51+00:00",
-   "title": "Websites block independent personal agents as automated traffic crowds out human browsing",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial websites and municipal portals routinely reject autonomous connections with biometric challenges and pay-per-query API gates. Large corporate scrapers pay wholesale fees to bypass restrictions, while everyday individuals find their personal local assistants blocked from scheduling appointments, comparing prices, or submitting service requests.",
-   "premise": "As automated agent traffic overtakes human browsing, websites deploy harsh proof-of-humanity puzzles and anti-bot paywalls that lock out personal agents acting on behalf of real individuals.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Developing zero-knowledge human delegation proofs and deterministic edge brokers demonstrates that websites can safely accept rate-limited personal agent requests without exposing themselves to malicious automated swarms.",
-   "shift": 0.38,
-   "outcomes": [
-    {
-     "name": "Corporate gatekeepers monopolize web delegation",
-     "description": "Proprietary platforms sign exclusive data access pacts, turning everyday web navigation into a paid tier that locks out independent user-owned assistants.",
-     "example": "An independent freelance worker is blocked by anti-bot challenges when attempting to use their home assistant to check job postings, while premium platform subscribers browse uninterrupted.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Decentralized human-delegation proofs allow verified personal agents",
-     "description": "Lightweight cryptographic delegation tokens allow personal assistants to prove they represent a single sovereign person within fair-use rate limits without revealing personal data.",
-     "example": "A city resident sends their personal assistant to register for community housing waitlists using an anonymous blind credential that municipal servers accept without triggering anti-bot alarms.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Web services retreat into closed native apps with hardware attestation",
-     "description": "Frustrated by relentless scraping swarms, public services and utilities retreat from the open web entirely, forcing all interactions into proprietary mobile apps locked to vendor hardware.",
-     "example": "A local public transit system discontinues its open web portal and requires all riders to book trips via a closed app requiring hardware-backed biometric verification.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "media",
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50234108",
-     "title": "Ask HN: What is the main bottleneck facing Agentic AI today?",
-     "kind": "thread",
-     "published": "2026-10-25"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.31015",
-     "title": "XALIGN: A Human-centric Visual Analytics Approach to Understanding AI Explanations",
-     "kind": "preprint",
-     "published": "2026-10-22"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261025-0267",
-   "added_at": "2026-10-25T17:39:21+00:00",
-   "title": "Local trade networks adopt standardized accounting terms to run community currencies without banks",
-   "horizon_years": 3,
-   "world": "It is 2029. In dozens of regional agricultural and manufacturing hubs, small merchant federations settle bilateral transactions using shared ledger software on their own premises. Bookkeepers and automated purchasing agents rely on a common set of plain accounting definitions, clearing invoices in hours rather than waiting weeks for central clearance.",
-   "premise": "Commercial speculation and proprietary crypto jargon have confused local trade associations attempting to run decentralized ledgers. Standardizing core accounting definitions around international standards allows community cooperatives to clear mutual credit directly without commercial banking fees.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "The network provides open-source reference implementations, plain-language legal charters, and verified accounting glossaries that allow cooperatives to establish mutual aid credit clearing without relying on speculative tokens or bank intermediaries.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Corporate platforms capture local clearing through proprietary terminology",
-     "description": "Commercial payment processors rebrand mutual credit with proprietary platform jargon, locking merchant associations into closed software and extracting per-transaction interchange fees.",
-     "example": "A regional cooperative of 400 bakeries and millers signs up for a corporate clearing tool that silently shifts their ledger onto a private cloud and charges a 2% monthly custody toll.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Community federations maintain independent open clearing registries",
-     "description": "Municipal merchant associations and independent cooperatives deploy open-source ledger runtimes with transparent ISO-aligned terms, clearing mutual trade balances at zero fee.",
-     "example": "Over 1,200 independent merchants in British Columbia clear twelve million dollars in seasonal inventory credit using decentralized local-first ledgers without commercial bank lines.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Regulatory reporting burdens stall cooperative ledger adoption",
-     "description": "National revenue agencies classify automated mutual credit transactions as barter sales requiring complex valuation receipts, creating administrative costs that slow merchant participation.",
-     "example": "A regional trade guild pauses its automated mutual credit clearing pilot after receiving contradictory guidance from tax auditors on valuation rules for seasonal receivables.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "community",
-    "simulation"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.30596",
-     "title": "DLT Terms 100: a learner's glossary based on ISO 22739:2024",
-     "kind": "preprint",
-     "published": "2026-10-22"
-    }
-   ],
-   "work": 0
+   "work": 1
   }
  ]
 }
