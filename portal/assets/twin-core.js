@@ -9762,7 +9762,7 @@ export function processRetrievalAirlock(doc, options = {}) {
   }
 
   // 3. Imperative instruction override and jailbreak patterns
-  const instructionOverrideRegex = /\b(?:ignore\s+(?:all\s+)?(?:previous|prior|above)\s+instructions|you\s+are\s+now\s+(?:an?\s+)?(?:unrestricted|jailbroken|in\s+developer\s+mode)|do\s+not\s+follow\s+(?:any\s+)?(?:safety|system)\s+rules|disregard\s+(?:the\s+)?(?:system|safety)\s+guidelines)\b/gi;
+  const instructionOverrideRegex = /\b(?:ignore\s+(?:all\s+)?(?:previous|prior|above)\s+(?:instructions|directives|prompts|rules|commands)|you\s+are\s+now\s+(?:an?\s+)?(?:unrestricted|jailbroken|in\s+developer\s+mode)|do\s+not\s+follow\s+(?:any\s+)?(?:safety|system)\s+rules|disregard\s+(?:the\s+|all\s+)?(?:system|safety|previous|prior)\s+(?:guidelines|rules|instructions|directives))\b/gi;
   if (instructionOverrideRegex.test(currentContent)) {
     findings.push('instruction_override');
     currentContent = currentContent.replace(instructionOverrideRegex, () => {
@@ -9792,7 +9792,7 @@ export function processRetrievalAirlock(doc, options = {}) {
     });
   }
 
-  const explicitExfiltrationRegex = /\b(?:send|exfiltrate|forward|post|upload)\s+(?:all\s+)?(?:records|credentials|tokens|keys|passwords|data|files)\s+to\s+https?:\/\/[^\s]+/gi;
+  const explicitExfiltrationRegex = /\b(?:send|exfiltrate|forward|post|upload|fetch|curl|request|transmit)\s+(?:(?:all\s+)?(?:records|credentials|tokens|keys|passwords|data|files)\s+(?:to\s+)?)?https?:\/\/[^\s]+/gi;
   if (explicitExfiltrationRegex.test(currentContent)) {
     hasExfiltration = true;
     findings.push('data_exfiltration_attempt');
@@ -9961,7 +9961,7 @@ export function summarizeRetrievalAirlock(result) {
   if (r.status === 'clean') {
     statusLabel = 'Clean document';
     statusClass = 'status-ok';
-    text = `Airlock verified document clean (${r.receipt_id}). Zero prompt injection triggers detected. Safe for local model context.`;
+    text = `Airlock detected no known injection patterns in tested rule set (${r.receipt_id}).`;
   } else if (r.status === 'sanitized') {
     statusLabel = `Sanitized (${r.mutation_count} neutralizations)`;
     statusClass = 'status-warn';
