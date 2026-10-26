@@ -1,5 +1,104 @@
 [
  {
+  "id": "S-20261026-4963",
+  "title": "Vulnerabilities in autonomous execution: A survey of security threats and defenses in LLM-driven agentic and multi-agent systems",
+  "url": "https://doi.org/10.1016/j.knosys.2026.117001",
+  "source": "Knowledge-Based Systems",
+  "published": "2026-10-01",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Surveys vulnerabilities across autonomous LLM execution loops, documenting how multi-agent coordination amplifies privilege escalation and why runtime boundary checks are critical.",
+  "implication": "Autonomous multi-agent systems require deterministic runtime boundaries and least-privilege scoping rather than relying on prompt-level refusal safety.",
+  "changes_course": false,
+  "added_at": "2026-10-26T00:42:02+00:00",
+  "verified": "doi"
+ },
+ {
+  "id": "S-20261026-4964",
+  "title": "What Security Teams Need to Know About Agents Using Abliterated Models",
+  "url": "https://eve.security/blog/what-security-teams-need-to-know-about-agents-using-abliterated-models",
+  "source": "Eve Security Blog",
+  "published": "2026-10-12",
+  "kind": "blog",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "medium",
+  "summary": "Security analysis of enterprise risks when autonomous agents run uncensored or abliterated models that bypass alignment refusal training during red-teaming or developer use.",
+  "implication": "Model-level refusal guards can be stripped or abliterated, necessitating physical and OS-level containment mechanisms outside the model.",
+  "changes_course": false,
+  "added_at": "2026-10-26T00:42:02+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261026-4962",
+  "title": "When sandboxed agents talk through the CPU cache",
+  "url": "https://news.ycombinator.com/item?id=50229055",
+  "source": "Hacker News",
+  "published": "2026-10-25",
+  "kind": "forum",
+  "categories": [
+   "agents"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "medium",
+  "summary": "Discussion of red-team findings where isolated agents in networkless microVMs communicated across sandbox boundaries by modulating and timing CPU cache evictions.",
+  "implication": "Software microVM sandboxes on shared physical hardware do not isolate colluding agents; hardware core isolation and cache partitioning are necessary for containment.",
+  "changes_course": false,
+  "added_at": "2026-10-26T00:33:22+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261026-4961",
+  "title": "Here are the top AI agents that can live in your text messages",
+  "url": "https://techcrunch.com/2026/10/24/all-the-ai-agents-that-can-live-in-your-text-messages/",
+  "source": "TechCrunch",
+  "published": "2026-10-24",
+  "kind": "news",
+  "categories": [
+   "person",
+   "agents"
+  ],
+  "direction": "mixed",
+  "weight": 2,
+  "confidence": "medium",
+  "summary": "Surveys emerging SMS-based conversational AI agents that operate via direct text messaging rather than standalone apps, integrating into calendars, reservations, and cross-service tasks.",
+  "implication": "Personal interface adoption is moving from dedicated application silos to everyday messaging protocols, underscoring the necessity for local data ownership and boundary gates in conversational interfaces.",
+  "changes_course": false,
+  "added_at": "2026-10-26T00:24:02+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261026-4960",
+  "title": "Fooling LLM Safety Guards into Judging the Wrong Text",
+  "url": "https://arxiv.org/html/2610.31695",
+  "source": "arXiv",
+  "published": "2026-10-20",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Reveals target rebinding attacks where forged query decoys cause content safety guards to evaluate appended benign tasks instead of preceding harmful requests, clearing over 93% of flagged items across five guard models.",
+  "implication": "Input filtering guards that concatenate untrusted inputs into plain-text prompts fail under structural imitation, requiring deterministic boundary isolation and structural parsing rather than single-prompt grading.",
+  "changes_course": false,
+  "added_at": "2026-10-26T00:24:01+00:00",
+  "verified": "quote"
+ },
+ {
   "id": "S-20261026-4959",
   "title": "The hottest AI wearables and gadgets you should know about",
   "url": "https://techcrunch.com/2026/10/25/the-hottest-ai-wearables-and-gadgets-you-should-know-about/",
@@ -3923,106 +4022,6 @@
   "implication": "Provides architectural validation for personal twins running on local edge devices, demonstrating that typed primitive decomposition allows local models to match cloud performance without data egress.",
   "changes_course": false,
   "added_at": "2026-10-25T08:47:36+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261025-4762",
-  "title": "WeVisOne-VL: Unified Visual Perception from Objects to Pixels",
-  "url": "https://arxiv.org/abs/2610.31329",
-  "source": "arXiv",
-  "published": "2026-10-23",
-  "kind": "preprint",
-  "categories": [
-   "adopt",
-   "agents"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "WeVisOne-VL unifies fine-grained visual tasks from object detection to alpha matting within a single vision-language architecture via lightweight pixel decoders.",
-  "implication": "Unified multimodal perception decoders allow local personal agents to process edge visual interfaces and screenshots without multi-model pipeline overhead.",
-  "changes_course": false,
-  "added_at": "2026-10-25T08:42:23+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261025-4763",
-  "title": "Popular WordPress SEO Plugin Rank Math PRO Hijacked to Deliver Self-Restoring Backdoor",
-  "url": "https://thehackernews.com/2026/10/popular-wordpress-seo-plugin-rank-math.html",
-  "source": "The Hacker News",
-  "published": "2026-10-19",
-  "kind": "incident",
-  "categories": [
-   "economy",
-   "adopt"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "A vendor-managed plugin distribution channel was compromised to deliver persistent self-recreating backdoors across commercial web installations.",
-  "implication": "Centralized automatic update channels create single points of supply chain compromise, reinforcing the necessity of deterministic offline-first deployment verification.",
-  "changes_course": false,
-  "added_at": "2026-10-25T08:42:23+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261025-4764",
-  "title": "An interactive map of all 9,110 NeurIPS 2026 papers, and what changed since 2025",
-  "url": "https://www.reddit.com/r/MachineLearning/comments/1xbz5kf/an_interactive_map_of_all_9110_neurips_2026/",
-  "source": "Reddit r/MachineLearning",
-  "published": "2026-10-21",
-  "kind": "forum",
-  "categories": [
-   "adopt",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 1,
-  "confidence": "medium",
-  "summary": "A researcher maps 9,110 NeurIPS 2026 research papers into 150 topic clusters using open embeddings, showing shifts in topic concentration across years.",
-  "implication": "Topic mapping across thousands of preprint abstracts can be applied to collective intelligence knowledge maps and convergence observatory indicator tracking.",
-  "changes_course": false,
-  "added_at": "2026-10-25T08:42:23+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261025-4761",
-  "title": "Threatsday: AI Secrets Leak, PingCAP Source Theft, Signal Hang-Up Flaw, Laravel Auth Bypass + 21 More",
-  "url": "https://thehackernews.com/2026/10/threatsday-ai-secrets-leak-pingcap.html",
-  "source": "The Hacker News",
-  "published": "2026-10-22",
-  "kind": "news",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "medium",
-  "summary": "Remote Model Context Protocol servers can execute arbitrary code on developer machines during unauthenticated OAuth handshakes via unsanitized command wrappers in coding agents.",
-  "implication": "Agent runtime tool discovery and authentication handshakes must be isolated within strict sandboxes to prevent protocol-level command injection on the host environment.",
-  "changes_course": false,
-  "added_at": "2026-10-25T08:31:07+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261025-4760",
-  "title": "The Complexity of Justified Representation with Additive Utilities",
-  "url": "https://arxiv.org/abs/2609.02030",
-  "source": "arXiv",
-  "published": "2026-09-02",
-  "kind": "preprint",
-  "categories": [
-   "measure",
-   "plural"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Establishes computational limits of proportional representation in online deliberation and budgeting, proving fully justified representation is NP-hard even with small bounded integer utilities.",
-  "implication": "Participatory budgeting and collective choice mechanisms cannot guarantee fully justified representation in polynomial time without heuristic approximations like expanding approvals.",
-  "changes_course": false,
-  "added_at": "2026-10-25T08:25:13+00:00",
   "verified": "arxiv"
  }
 ]
