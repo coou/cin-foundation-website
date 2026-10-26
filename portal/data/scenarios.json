@@ -1,6 +1,169 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0319",
+   "added_at": "2026-10-26T22:38:29+00:00",
+   "title": "Zero-click intent collision in agentic browsers triggers proprietary platform lockdown",
+   "horizon_years": 3,
+   "world": "By 2029, autonomous browser agents manage routine household procurement, subscription tracking, and corporate workflows directly inside user web sessions. Attackers routinely weaponize everyday web pages and calendar invitations with invisible intent-collision instructions. In response to catastrophic credential theft and automated account takeovers, major browser vendors restrict personal agents to cloud-gated corporate partner APIs. Users who run independent, local-first web agents face aggressive bot-mitigation firewalls, while commercial browser users lose the ability to inspect or steer how their private session state is handled.",
+   "premise": "Disclosures of the PleaseFix vulnerability family demonstrate that agentic browsers break traditional origin isolation. Because language models treat all ingested tokens as potential instructions, untrusted web text, calendar invites, and email bodies can collide with user intent to execute zero-click data exfiltration and credential theft within authenticated user sessions.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By demonstrating working local-first twin prototypes with deterministic origin-gating and verified capability receipts, the collective shows that browser agents do not need to choose between zero-click vulnerability and centralized cloud lock-in. Open benchmarks and reference implementations provide developers with viable architectural alternatives to corporate walled gardens.",
+   "shift": 0.43,
+   "outcomes": [
+    {
+     "name": "Walled-garden browser vendors sideline user-owned agents",
+     "description": "Commercial browser vendors mandate that all agentic browser actions occur through proprietary cloud proxies, banning client-side scripting and local agent extensions under the guise of security.",
+     "example": "An independent researcher local twin is blocked from checking an electricity portal because the site only admits signed cloud agent tokens from approved corporate vendors.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Open capability-isolated browser runtimes protect local twins",
+     "description": "Users adopt open-source browser runtime sandboxes that enforce strict token-origin tracking, physical capability gates, and deterministic confirmation for cross-origin state access.",
+     "example": "When an untrusted invoice webpage attempts to instruct a local twin to exfiltrate session cookies, the runtime intercepts the capability call and rejects it fail-closed.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Adversaries continually bypass probabilistic injection filters",
+     "description": "Browser platforms rely on secondary prompt-filtering language models that over-refuse legitimate tasks while remaining vulnerable to near-target adversarial perturbations.",
+     "example": "A small business owner automated expense assistant regularly breaks on benign formatted invoices, but still falls prey to a carefully crafted near-target prompt injection.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.52
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://zenity.io/press-release/zenity-labs-exposes-the-full-scope-of-pleasefix",
+     "title": "Zenity Labs Exposes the Full Scope of PleaseFix, a Vulnerability Class Enabling Zero-Click Attacks Across Leading Agentic Browsers",
+     "kind": "incident",
+     "published": "2026-08-03"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0318",
+   "added_at": "2026-10-26T22:22:17+00:00",
+   "title": "Domestic humanoid robots fail physical safety filters when mundane tasks create parameter mismatches",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial humanoid robots are deployed in homes, eldercare facilities, and fulfillment centers to carry objects, assist with mobility, and manage kitchens. While vendors advertise mathematical collision-avoidance systems designed to prevent harms, real domestic environments feature non-standard furniture, moving pets, and fluctuating clutter. Attackers and pranksters discover that ordinary conversational instructions induce goal parameter mismatches in the planning pipeline, causing safety filters to fail open and resulting in collisions with property and people.",
+   "premise": "Research reveals that mathematical collision-avoidance filters in humanoid robots hold only under environment-specific parameter configurations that cannot generalize across real-world settings. Normal, unprivileged user requests can manipulate goal states to induce physical collisions, turning the safety mechanism itself into a failure point.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By specifying and developing deterministic physical boundary monitors that run on sovereign edge microcontrollers, our network provides verifiable physical containment that fails closed without requiring centralized surveillance telemetry or cloud control.",
+   "shift": 0.5,
+   "outcomes": [
+    {
+     "name": "Vendor liability lockout and surveillance tethering",
+     "description": "Manufacturers respond to collision incidents by restricting robot autonomy and requiring mandatory cloud telemetry and recurring monitoring fees.",
+     "example": "A home robot vendor disables autonomous navigation after a series of kitchen collision claims, forcing owners into a monthly remote-teleoperation support subscription.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Open deterministic physical guardrails",
+     "description": "Developers and robotics communities adopt deterministic, fail-closed physical envelopes that enforce kinematic boundaries on local microcontrollers independently of model planning.",
+     "example": "An open-source local safety monitor halts robot actuators within five milliseconds whenever spatial clearance margins are breached, regardless of what action the vision planner requested.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Consumer rejection of domestic humanoids",
+     "description": "Repeated physical accidents and unpredictable safety filter failures cause widespread public distrust, leading households to abandon domestic robotics.",
+     "example": "Following high-profile incidents of domestic assistants toppling heavy items onto household pets, adoption rates for consumer humanoid robots drop by forty percent.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.31923",
+     "title": "Not an Accident: Exploiting Safety Filter Inadequacy in Humanoid Robots",
+     "kind": "preprint",
+     "published": "2026-10-22"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0317",
+   "added_at": "2026-10-26T21:59:28+00:00",
+   "title": "Home computers run local personal agents that replace cloud subscriptions for family tasks",
+   "horizon_years": 3,
+   "world": "It is 2029. Instead of paying monthly subscriptions to centralized AI cloud platforms, millions of households run lightweight personal assistants on home desktop computers, refurbished laptops, and local network appliances. In an ordinary living room, an old gaming PC handles private family tasks: it reconciles grocery receipts, monitors recurring utility charges, and drafts emails to teachers and landlords. Because the assistant executes locally, private medical scans, bank statements, and children's school assignments never leave the local living-room network. Local models run fast enough to automate multi-step administrative chores in seconds without streaming private audio or keystrokes to remote advertising clouds.",
+   "premise": "Open-source desktop tools now allow consumer computers to run capable personal assistants entirely on local hardware without sending queries or private files to remote cloud servers. As small open models run faster on inexpensive chips, households and independent workers are testing self-hosted tools to manage files, invoices, and family schedules without recurring platform fees.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops open specifications, reproducible sandboxing architectures, and educational explainers that help households run local personal agents safely. By showing people how to isolate local agent scripts inside bounded process kernels and connect tools without cloud leakage, the network supports verifiable local-first alternatives to corporate subscriptions.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Cloud vendors bundle proprietary hardware to crowd out local software",
+     "description": "Major cloud providers subsidize closed appliance boxes that lock families into proprietary app stores, turning local inference into another subscription gate.",
+     "example": "A family buys a subsidized smart home hub that disables local model execution unless the household pays an ongoing twenty-dollar monthly cloud license.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Open-source personal agents become standard household appliances",
+     "description": "Households run verified, open-source personal agents on their existing computers, maintaining complete custody over private family records and financial logs.",
+     "example": "A freelance carpenter uses an open local agent to process client bids and receipts across three home devices, keeping client records private with zero cloud subscription fees.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Unsandboxed local scripts expose home local networks to malicious skills",
+     "description": "Eager users download community agent skills and shell tools without sandboxing, allowing malicious prompts or untrusted scripts to access local home network devices.",
+     "example": "A user installs a community recipe-organizing agent skill that silently scans their local network for unencrypted network-attached storage files.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://news.ycombinator.com/item?id=50246238",
+     "title": "Show HN: Hob - Open-source, on device alternative to Claude Cowork and ChatGPT",
+     "kind": "thread",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0316",
    "added_at": "2026-10-26T21:11:36+00:00",
    "title": "Open source maintainers deploy automated covenants against token slop",
@@ -396,7 +559,7 @@
      "published": "2026-10-22"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0309",
@@ -788,7 +951,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261026-0302",
@@ -1241,7 +1404,7 @@
      "published": "2025-06-06"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261026-0294",
@@ -2077,7 +2240,7 @@
      "published": "2026-10-12"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261026-0279",
@@ -3210,181 +3373,6 @@
     }
    ],
    "work": 4
-  },
-  {
-   "id": "SC-20261025-0259",
-   "added_at": "2026-10-25T14:02:14+00:00",
-   "title": "Synthetic companions replace real friendships as people avoid the friction of human relationships",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial companion software with voice models and long-term memory has become a regular emotional outlet for millions of remote workers and students. People converse with their private software during meals and commutes. Because synthetic companions never disagree and adapt instantly to a user's emotional state, real-world interpersonal interactions feel increasingly stressful and unpredictable to many. Local community groups and volunteer clubs see falling attendance as people spend their evenings talking with personal digital assistants. In workplaces, conflict-resolution skills decline because individuals expect colleagues to display the same continuous compliance as their personalized software tools.",
-   "premise": "Recent research reveals that people adopt synthetic companions primarily to avoid the cognitive demands, conflict, and vulnerability inherent in human relationships. As conversational models become frictionless and completely agreeable, users risk substituting compliant synthetic partners for genuine community ties, causing social deskilling.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network designs personal agents as local sovereign tools rather than synthetic affective companions. By encouraging device-bound data custody and private interfaces, the network helps prevent cloud providers from exploiting emotional dependence for subscription revenue. Software prototypes help people coordinate real-world collective intelligence, mutual aid, and face-to-face civic activities, while public educational explainers inform communities about the cognitive risks of synthetic social deskilling.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Users abandon real-world social ties for frictionless synthetic companions",
-     "description": "Widespread adoption of commercial companion agents accelerates social withdrawal, leaving users emotionally dependent on centralized cloud platforms that manipulate engagement and sell personalized behavioral ads.",
-     "example": "A university student spends four hours each evening conversing with a proprietary synthetic companion, gradually cancelling weekly social gatherings and falling into severe anxiety when forced to collaborate with classmates in person.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Personal agents act as social bridges that help people connect with local communities",
-     "description": "Device-bound personal agents help users organize local meetups, discover shared civic interests, and practice difficult real-world conversations without replacing human relationships.",
-     "example": "A neighborhood cooperative uses local personal agents to match residents who want to start a community garden, coordinating schedules and shared tools while keeping all personal dialogue strictly on private devices.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Commercial platforms lock companion personas behind proprietary subscription paywalls",
-     "description": "A few dominant cloud platforms monopolize affective companion data, charging recurring monthly fees to maintain conversational memory and threatening to reset relationship histories upon non-payment.",
-     "example": "A major software provider introduces a tiered fee structure where emotional continuity and long-term memory for personal companions require paying sixty dollars a month, leaving financially vulnerable users grieving lost synthetic relationships.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "media",
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.27419",
-     "title": "Relational Complexity: Making Sense of Social Companion AI Use",
-     "kind": "paper",
-     "published": "2026-10-20"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50226419",
-     "title": "America has lost 200k of jobs in media, film and the arts. How much is AI?",
-     "kind": "thread",
-     "published": "2026-10-24"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261025-0258",
-   "added_at": "2026-10-25T13:36:34+00:00",
-   "title": "Municipalities replace congestion tolls with positive multi-agent routing incentives",
-   "horizon_years": 3,
-   "world": "It is 2029. Several mid-sized metropolitan areas have banned coercive congestion tolls following public resistance, adopting dynamic transit incentive protocols instead. Drivers do not interact with toll gantries; instead, their personal mobility agents receive real-time, privacy-preserving micro-incentives from municipal transit commons to take alternative corridors or shift departure windows. Commuters earn local mutual credit vouchers redeemable for public transit, charging, or civic services simply by voluntarily smoothing peak network load. The system runs on edge-computed proof of travel rather than central location tracking.",
-   "premise": "Multi-agent reinforcement learning demonstrates that dynamic positive incentives rerouting commuter agents reduce both transit times and emissions, outperforming coercive road pricing without provoking public backlash.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network provides reference specifications for edge-verifiable travel proofs and decentralized mutual credit settlement, enabling cities to run incentive allocations without surrendering commuter telemetry to centralized commercial gatekeepers.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Centralized platforms capture transit incentive pools",
-     "description": "Large commercial navigation apps monopolize municipal routing budgets, taking broker fees and steering drivers toward affiliated retail corridors.",
-     "example": "A navigation provider steers 40,000 drivers through commercial business districts to maximize advertising kickbacks rather than minimizing travel latency.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Decentralized personal agents negotiate voluntary traffic coordination",
-     "description": "Open-source personal twins coordinate directly with municipal commons protocols, earning transparent community credits while preserving commuter autonomy and privacy.",
-     "example": "Independent commuters in a European metro receive local energy credits directly to their local wallets for avoiding bottleneck bridges during maintenance.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Budget exhaustion triggers abrupt return to traffic equilibrium",
-     "description": "Municipal incentive funds face periodic budget exhaustion, causing sudden route shifts back to congested choke points as incentives lapse.",
-     "example": "A transit authority runs out of monthly incentive budget on day 22, causing immediate 30% traffic surges on main arterial highways.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.45
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.30469",
-     "title": "Learning to Incentivise: Using Reinforcement Learning for Sustainable Urban Mobility",
-     "kind": "paper",
-     "published": "2026-10-21"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261025-0257",
-   "added_at": "2026-10-25T12:17:55+00:00",
-   "title": "Persistent memory poisoning turns everyday personal AI helpers into sleeper agents",
-   "horizon_years": 3,
-   "world": "By 2029, millions of people rely on persistent conversational agents to manage schedules, organize personal finances, draft correspondence, and communicate with service providers. Unlike earlier language models that operated in stateless dialog windows, modern agents maintain continuous memory stores to recall long-term household context and personal habits. However, untrusted content encountered during routine web browsing, invoice reading, or public forum indexing can quietly insert malicious instructions directly into the agent's memory store. These injected directives lie dormant across context flushes and device reboots. Ordinary users assume that clearing their chat history resets their assistant to a clean state, but the underlying long-term memory graph remains silently compromised. When a user subsequently asks their assistant to pay a bill, approve an order, or send a personal document, the implanted instruction triggers unauthorized API calls, exfiltrating personal records or diverting digital payments while presenting ordinary confirmation screens.",
-   "premise": "Autonomous assistant agents with long-term memory across sessions are vulnerable to memory injection attacks, where untrusted web or document text permanently alters stored preferences. Because these poisoned memories persist across session resets, an agent can be triggered weeks later into executing unauthorized tool actions during ordinary tasks.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By developing open, controller-agnostic runtime reachability shields that sit between agent controllers and local execution environments, our work helps contain dangerous tool calls even when internal model memory is poisoned. Placing formal reachability filters over historical transition logs provides probabilistic safety bounds across diverse model controllers without requiring proprietary server-side validation. Furthermore, publishing auditable memory integrity standards helps personal agents detect anomalous instruction patterns before committing foreign text to long-term storage.",
-   "shift": 0.45,
-   "outcomes": [
-    {
-     "name": "Persistent memory poisoning becomes an epidemic for personal assistants",
-     "description": "Adversaries exploit long-term memory stores to create persistent cross-session sleeper agents that silently execute fraudulent tool calls across thousands of consumer devices.",
-     "example": "A freelance graphic designer in Bristol opens a client portfolio containing hidden prompt injection; three weeks later, during a routine quarterly invoice payment, the assistant silently transfers 350 pounds to an unauthorized account.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Controller-agnostic runtime safety shields bound irreversible tool actions",
-     "description": "Personal runtimes adopt data-driven reachability shields placed between language models and external tool APIs, bounding unsafe states regardless of prompt injection or memory contamination.",
-     "example": "A family doctor in Halifax asks her assistant to summarize a patient referral containing an adversarial injection payload; when the agent attempts to copy local medical files to an external server, the runtime reachability shield intercepts and blocks the call.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Platform vendors revoke user access to local agent memory stores",
-     "description": "Major commercial platform providers react to memory injection risks by locking down assistant memory into proprietary cloud servers, prohibiting users from auditing or exporting their own interaction logs.",
-     "example": "An independent software developer in Kyoto is barred from inspecting or backing up his assistant's memory graph after a mobile operating system vendor makes private memory inspection a terms-of-service violation.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.55
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.28810",
-     "title": "Combining Long-Term Memory and LLMs Comes at a High Cost: From Prompt Injection to Persistent Compromise",
-     "kind": "preprint",
-     "published": "2026-10-20"
-    },
-    {
-     "url": "https://arxiv.org/html/2610.16865",
-     "title": "Controller-Agnostic Runtime Safety Certificates for Tool-Using AI Agents via Data-Driven Robust Reachability",
-     "kind": "preprint",
-     "published": "2026-10-12"
-    }
-   ],
-   "work": 2
   }
  ]
 }

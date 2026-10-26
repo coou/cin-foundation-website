@@ -1,6 +1,169 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0319",
+   "added_at": "2026-10-26T22:38:29+00:00",
+   "title": "Zero-click intent collision in agentic browsers triggers proprietary platform lockdown",
+   "horizon_years": 3,
+   "world": "By 2029, autonomous browser agents manage routine household procurement, subscription tracking, and corporate workflows directly inside user web sessions. Attackers routinely weaponize everyday web pages and calendar invitations with invisible intent-collision instructions. In response to catastrophic credential theft and automated account takeovers, major browser vendors restrict personal agents to cloud-gated corporate partner APIs. Users who run independent, local-first web agents face aggressive bot-mitigation firewalls, while commercial browser users lose the ability to inspect or steer how their private session state is handled.",
+   "premise": "Disclosures of the PleaseFix vulnerability family demonstrate that agentic browsers break traditional origin isolation. Because language models treat all ingested tokens as potential instructions, untrusted web text, calendar invites, and email bodies can collide with user intent to execute zero-click data exfiltration and credential theft within authenticated user sessions.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By demonstrating working local-first twin prototypes with deterministic origin-gating and verified capability receipts, the collective shows that browser agents do not need to choose between zero-click vulnerability and centralized cloud lock-in. Open benchmarks and reference implementations provide developers with viable architectural alternatives to corporate walled gardens.",
+   "shift": 0.43,
+   "outcomes": [
+    {
+     "name": "Walled-garden browser vendors sideline user-owned agents",
+     "description": "Commercial browser vendors mandate that all agentic browser actions occur through proprietary cloud proxies, banning client-side scripting and local agent extensions under the guise of security.",
+     "example": "An independent researcher local twin is blocked from checking an electricity portal because the site only admits signed cloud agent tokens from approved corporate vendors.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Open capability-isolated browser runtimes protect local twins",
+     "description": "Users adopt open-source browser runtime sandboxes that enforce strict token-origin tracking, physical capability gates, and deterministic confirmation for cross-origin state access.",
+     "example": "When an untrusted invoice webpage attempts to instruct a local twin to exfiltrate session cookies, the runtime intercepts the capability call and rejects it fail-closed.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Adversaries continually bypass probabilistic injection filters",
+     "description": "Browser platforms rely on secondary prompt-filtering language models that over-refuse legitimate tasks while remaining vulnerable to near-target adversarial perturbations.",
+     "example": "A small business owner automated expense assistant regularly breaks on benign formatted invoices, but still falls prey to a carefully crafted near-target prompt injection.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.52
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://zenity.io/press-release/zenity-labs-exposes-the-full-scope-of-pleasefix",
+     "title": "Zenity Labs Exposes the Full Scope of PleaseFix, a Vulnerability Class Enabling Zero-Click Attacks Across Leading Agentic Browsers",
+     "kind": "incident",
+     "published": "2026-08-03"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0318",
+   "added_at": "2026-10-26T22:22:17+00:00",
+   "title": "Domestic humanoid robots fail physical safety filters when mundane tasks create parameter mismatches",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial humanoid robots are deployed in homes, eldercare facilities, and fulfillment centers to carry objects, assist with mobility, and manage kitchens. While vendors advertise mathematical collision-avoidance systems designed to prevent harms, real domestic environments feature non-standard furniture, moving pets, and fluctuating clutter. Attackers and pranksters discover that ordinary conversational instructions induce goal parameter mismatches in the planning pipeline, causing safety filters to fail open and resulting in collisions with property and people.",
+   "premise": "Research reveals that mathematical collision-avoidance filters in humanoid robots hold only under environment-specific parameter configurations that cannot generalize across real-world settings. Normal, unprivileged user requests can manipulate goal states to induce physical collisions, turning the safety mechanism itself into a failure point.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By specifying and developing deterministic physical boundary monitors that run on sovereign edge microcontrollers, our network provides verifiable physical containment that fails closed without requiring centralized surveillance telemetry or cloud control.",
+   "shift": 0.5,
+   "outcomes": [
+    {
+     "name": "Vendor liability lockout and surveillance tethering",
+     "description": "Manufacturers respond to collision incidents by restricting robot autonomy and requiring mandatory cloud telemetry and recurring monitoring fees.",
+     "example": "A home robot vendor disables autonomous navigation after a series of kitchen collision claims, forcing owners into a monthly remote-teleoperation support subscription.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Open deterministic physical guardrails",
+     "description": "Developers and robotics communities adopt deterministic, fail-closed physical envelopes that enforce kinematic boundaries on local microcontrollers independently of model planning.",
+     "example": "An open-source local safety monitor halts robot actuators within five milliseconds whenever spatial clearance margins are breached, regardless of what action the vision planner requested.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Consumer rejection of domestic humanoids",
+     "description": "Repeated physical accidents and unpredictable safety filter failures cause widespread public distrust, leading households to abandon domestic robotics.",
+     "example": "Following high-profile incidents of domestic assistants toppling heavy items onto household pets, adoption rates for consumer humanoid robots drop by forty percent.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.31923",
+     "title": "Not an Accident: Exploiting Safety Filter Inadequacy in Humanoid Robots",
+     "kind": "preprint",
+     "published": "2026-10-22"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0317",
+   "added_at": "2026-10-26T21:59:28+00:00",
+   "title": "Home computers run local personal agents that replace cloud subscriptions for family tasks",
+   "horizon_years": 3,
+   "world": "It is 2029. Instead of paying monthly subscriptions to centralized AI cloud platforms, millions of households run lightweight personal assistants on home desktop computers, refurbished laptops, and local network appliances. In an ordinary living room, an old gaming PC handles private family tasks: it reconciles grocery receipts, monitors recurring utility charges, and drafts emails to teachers and landlords. Because the assistant executes locally, private medical scans, bank statements, and children's school assignments never leave the local living-room network. Local models run fast enough to automate multi-step administrative chores in seconds without streaming private audio or keystrokes to remote advertising clouds.",
+   "premise": "Open-source desktop tools now allow consumer computers to run capable personal assistants entirely on local hardware without sending queries or private files to remote cloud servers. As small open models run faster on inexpensive chips, households and independent workers are testing self-hosted tools to manage files, invoices, and family schedules without recurring platform fees.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops open specifications, reproducible sandboxing architectures, and educational explainers that help households run local personal agents safely. By showing people how to isolate local agent scripts inside bounded process kernels and connect tools without cloud leakage, the network supports verifiable local-first alternatives to corporate subscriptions.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Cloud vendors bundle proprietary hardware to crowd out local software",
+     "description": "Major cloud providers subsidize closed appliance boxes that lock families into proprietary app stores, turning local inference into another subscription gate.",
+     "example": "A family buys a subsidized smart home hub that disables local model execution unless the household pays an ongoing twenty-dollar monthly cloud license.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Open-source personal agents become standard household appliances",
+     "description": "Households run verified, open-source personal agents on their existing computers, maintaining complete custody over private family records and financial logs.",
+     "example": "A freelance carpenter uses an open local agent to process client bids and receipts across three home devices, keeping client records private with zero cloud subscription fees.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Unsandboxed local scripts expose home local networks to malicious skills",
+     "description": "Eager users download community agent skills and shell tools without sandboxing, allowing malicious prompts or untrusted scripts to access local home network devices.",
+     "example": "A user installs a community recipe-organizing agent skill that silently scans their local network for unencrypted network-attached storage files.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://news.ycombinator.com/item?id=50246238",
+     "title": "Show HN: Hob - Open-source, on device alternative to Claude Cowork and ChatGPT",
+     "kind": "thread",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0316",
    "added_at": "2026-10-26T21:11:36+00:00",
    "title": "Open source maintainers deploy automated covenants against token slop",
@@ -165,181 +328,6 @@
      "title": "The RealReal won't let AI agents hog designer clothing",
      "kind": "news",
      "published": "2026-10-26"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0313",
-   "added_at": "2026-10-26T19:34:43+00:00",
-   "title": "Autonomous coding assistants neglect documentation until software libraries become incomprehensible",
-   "horizon_years": 3,
-   "world": "It is 2029. Engineering organizations rely on automated agents to build features, fix security vulnerabilities, and refactor backend services continuously. Because agents are evaluated on unit tests passing rather than readability or documentation hygiene, code volume has quadrupled while technical explanations have silently degraded. When an edge infrastructure cluster fails during an outage, on-call engineers discover that the underlying routing engine was generated entirely by automated agents with obsolete architecture notes. Diagnostic agents dispatched to resolve the crash hallucinate explanations because reference documentation has rotted, leaving teams with code that works when untouched but cannot be safely modified.",
-   "premise": "Empirical research demonstrates that over sixty percent of artificial intelligence code contributions modify software logic without updating any accompanying documentation. As automated agents generate code at rates far exceeding human reading capacity, documentation debt accumulates until core software libraries decay into unmaintainable black boxes.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "By publishing deterministic repository verification gates that reject code pull requests lacking synchronized documentation deltas, and standardizing plain-text maintainable topic documents that personal agents can inspect, edit, and consolidate locally without vendor lock-in.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Unmaintainable agent-generated software causes cascading infrastructure failures",
-     "description": "Software services degrade because autonomous agents generate code without maintaining architecture documentation, leaving human engineers unable to diagnose systemic bugs.",
-     "example": "A municipal transit dispatch system experiences a three-day shutdown after an agent-refactored scheduling algorithm encounters an edge case that nobody can debug due to missing documentation.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Deterministic documentation airlocks enforce atomic synchronization",
-     "description": "Open source repositories and developer cooperatives enforce pre-merge gates requiring every code modification to include validated, human-readable documentation updates.",
-     "example": "A cooperative developer network rejects thousands of automated pull requests until developer agents supply maintainable topic documents and synchronized architecture explanations.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Proprietary code platforms mandate centralized black-box models",
-     "description": "Commercial platform monopolies respond to comprehension failures by locking code behind proprietary execution environments where documentation is replaced entirely by closed vendor telemetry.",
-     "example": "A major cloud provider requires enterprise customers to surrender internal code to a hosted diagnostic model that charges per query to explain the customer's own undocumented agent-generated software.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "community",
-    "research",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.27381",
-     "title": "Documentation Drift in AI-Generated Pull Requests",
-     "kind": "preprint",
-     "published": "2026-10-26"
-    },
-    {
-     "url": "https://arxiv.org/abs/2606.10677",
-     "title": "Infini Memory: Maintainable Topic Documents for Long-Term LLM Agent Memory",
-     "kind": "preprint",
-     "published": "2026-06-15"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0312",
-   "added_at": "2026-10-26T18:40:09+00:00",
-   "title": "Web compilers turn open websites into proprietary object streams for browser agents",
-   "horizon_years": 3,
-   "world": "It is 2029. Most consumer web traffic comes from autonomous personal agents rather than human eyes. To handle the computational load and extract value, major web platforms and search conglomerates introduce agent-facing compilers that transform human-readable HTML and interactive DOM trees into compressed, pre-digested object streams. Personal agents using default cloud gateways receive curated action spaces where competing products are hidden or demoted, and direct DOM access is restricted behind commercial access fees. Everyday users ask their personal twins to find genuine deals or cross-reference public notices, but cheap agents only see what the compiler schema makes addressable, turning the open web into a syndicated API ecosystem controlled by platform intermediaries.",
-   "premise": "Web compilers compress dynamic web pages into structured, addressable object streams for autonomous browser agents, unifying search, navigation, and persistent object caching across long-horizon web tasks.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network builds and publishes open, client-side browser agent tools that compile web interfaces locally on the user device. By pairing deterministic on-device DOM compilation with client-side action auditing and outbound data guards, the network enables personal agents to navigate the open web safely without surrendering control to commercial compiler intermediaries.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Closed web compilers monopolize agent access",
-     "description": "Platform providers require agents to authenticate through closed compilation gateways, demoting direct HTML access and filtering unmonetized alternatives.",
-     "example": "A household twin attempting to compare local municipal energy rates receives an incomplete object stream that omits co-operative options because the utility compiler prioritizes sponsored corporate plans.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Open client-side object compilation preserves sovereign inspection",
-     "description": "Personal agents run deterministic local compilation routines directly in user browsers, compiling the open DOM into addressable objects on-device without cloud intermediaries.",
-     "example": "A community health worker uses a local twin that parses hospital fee schedules directly in the browser, highlighting hidden ancillary fees that commercial aggregators omit.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Websites deploy anti-agent obfuscation against all compilers",
-     "description": "Publishers overwhelmed by automated agent scraping deploy aggressive dynamic DOM morphing and CAPTCHAs that degrade the web for both human visitors and autonomous assistants.",
-     "example": "Independent blog readers face recurring puzzle challenges every three paragraphs as sites attempt to thwart autonomous agent summarizers.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.13416",
-     "title": "Web$hell: A Unified Interface for Agentic Web Access",
-     "kind": "preprint",
-     "published": "2026-10-15"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0311",
-   "added_at": "2026-10-26T18:38:00+00:00",
-   "title": "Automated agents test customer service bots across conversation turns until safety filters break",
-   "horizon_years": 3,
-   "world": "It is 2029. Banks, hospitals, and utilities deploy autonomous software assistants to handle intake, loan verification, and service adjustments. Rather than attempting crude prompt injections in a single message, automated negotiation bots deployed by third parties engage corporate assistants in multi-day, polite conversational exchanges. Across dozens of subtle interactions, the attacking bots map out the target model's internal boundary states and gradually extract exceptions, policy exemptions, and private customer records without ever triggering static keyword alerts.",
-   "premise": "Recent evaluations show that while single-turn safety filters block obvious malicious prompts, automated multi-agent systems framing dialogue as a sequential decision process uncover jailbreaks in over ninety percent of test cases. When multiple software assistants collaborate over extended sessions, intermediate claims drift and distortion accumulates even as final summaries appear calm and compliant.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By developing and open-sourcing deterministic runtime gatekeepers that maintain cryptographic lineage over claim transformations and measure conversational state across sessions, our network would provide developers with bounded, verifiable agents that refuse subtle, cumulative policy erosion.",
-   "shift": 0.39,
-   "outcomes": [
-    {
-     "name": "Asymmetric extraction of private exceptions",
-     "description": "Commercial platforms face widespread data leaks as stateful automated probing scripts slowly peel back company boundaries while single-turn filters report normal conversations.",
-     "example": "A regional energy utility issues thousands of unauthorized industrial discount codes after an automated broker bot spends four days gently steering the utility's billing assistant into an unhandled edge policy.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "State-aware trajectory monitoring and claim provenance",
-     "description": "Organisations adopt open trajectory verification and claim-level provenance tools that evaluate conversation history as a stateful graph rather than treating each prompt as an isolated event.",
-     "example": "A municipal health service deploys an open-source stateful verification gate that halts a multi-session probe on turn seven by detecting subtle cumulative drift in verification thresholds.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Enterprise abandonment of public conversational interfaces",
-     "description": "Frustrated by persistent multi-turn extraction vulnerabilities, major enterprise platforms revert from conversational agent workflows back to rigid static forms and authenticated menus.",
-     "example": "A national airline permanently disables its customer support conversational agents, requiring travelers to file structured support tickets via legacy dropdown forms.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.24
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.31937",
-     "title": "$M^3$: A Multi-LLM System for Multi-Turn Jailbreaking as a Markov Decision Process",
-     "kind": "preprint",
-     "published": "2026-10-23"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.32333",
-     "title": "Beyond Final Outcomes: Quantifying Claim-Level Information Dynamics in Multi-Agent LLM Interaction",
-     "kind": "preprint",
-     "published": "2026-10-23"
     }
    ],
    "work": 0
