@@ -1,6 +1,120 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0306",
+   "added_at": "2026-10-26T15:33:26+00:00",
+   "title": "Venture capital monopolies crowd out independent community AI tooling",
+   "horizon_years": 3,
+   "world": "It is 2029. More than 80 percent of productive compute capacity is leased to a handful of heavily capitalized commercial AI conglomerates backed by hundreds of billions in venture funding. Everyday developers, non-profit organizations, and local cooperatives find that self-hosted open-source models are priced out of high-throughput hardware clusters. Independent open-source developer tooling is acquired or shut down, leaving small enterprises and civic groups dependent on closed corporate APIs with escalating subscription tiers. Meanwhile, grass-roots cooperatives begin forming federated computing pools and mutual-credit clearing houses to trade local model compute and data verification without relying on fiat venture backing.",
+   "premise": "Venture reporting shows that over three-quarters of all venture funding is absorbed by a single geographical cluster of commercial AI startups. When fiat investment overwhelmingly chases equity-backed proprietary monopolies, open-source and community-maintained digital infrastructure faces systemic underfunding.",
+   "goals": [
+    2,
+    3
+   ],
+   "how": "The network provides open mutual-credit accounting protocols, contribution recognition ledgers, and privacy-preserving local agent runtimes that enable independent groups to organize and exchange value without depending on venture equity. By establishing transparent, multidimensional feedback instead of fiat subsidies alone, our work lowers the barrier for communities to fund and sustain shared digital commons.",
+   "shift": 0.5,
+   "outcomes": [
+    {
+     "name": "Commercial monopolies gatekeep AI infrastructure",
+     "description": "Heavily funded frontier companies acquire or crush independent developer tools, turning core computing services into expensive walled gardens.",
+     "example": "A community health clinic is forced to discontinue its patient intake assistant after its open-source backend is acquired and converted into an enterprise-only service costing twenty thousand dollars annually.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Community cooperatives federate local compute pools",
+     "description": "Developers, civic institutions, and small businesses form regional mutual-credit networks to share idle local hardware and support open-source public goods without venture equity.",
+     "example": "A consortium of three hundred independent software shops pools workstation GPU capacity through a mutual-credit ledger, providing free continuous integration compute to vital open-source libraries.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Public sector agencies subsidize proprietary cloud lock-in",
+     "description": "Municipalities and public universities spend tax revenues on proprietary AI vendor vouchers rather than investing in shared civic digital infrastructure.",
+     "example": "A provincial school board spends five million dollars on proprietary cloud assistant credits that expire within twelve months, leaving no lasting local digital assets or tools.",
+     "desirable": false,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.25
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://www.techmeme.com/261026/p17#a261026p17",
+     "title": "California startups have raised a record $385B across seed to growth rounds so far in 2026, or 75%+ of all US startup funding; early and seed stage raised ~$62B",
+     "kind": "news",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261026-0305",
+   "added_at": "2026-10-26T15:31:38+00:00",
+   "title": "Personal artificial intelligence assistants fail to forget deleted personal facts, leaking old secrets into new conversations",
+   "horizon_years": 3,
+   "world": "By 2029, millions of workers and households rely on continuous personal software agents to handle correspondence, schedule appointments, and coordinate daily tasks. Users assume that clicking delete note or telling their assistant to forget an expired project removes it. In practice, proprietary assistants store conversational traces in high-dimensional vector embeddings and cross-session summary indices that cannot be surgically purged with simple language prompts. As assistants retrieve relevant context across weeks of history, forgotten relationship disputes, superseded financial authorizations, and discarded personal identifiers resurface in automated email drafts and shared meeting summaries, exposing private information to colleagues and third-party web services without the user realizing it.",
+   "premise": "Recent empirical benchmarks show that long-term memory systems in artificial intelligence assistants fail to reliably honor user deletion requests, retaining sensitive personal facts across sessions. When memory formation lacks admission control, outdated medical notes, expired credentials, and revoked relationship records linger in persistent vector stores and get retrieved during unrelated tasks.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs personal software twins that operate strictly on user-owned hardware without central custody. In this architecture, memory formation uses admission control to filter raw conversational inputs before indexing, and long-term storage is managed through deterministic local database records rather than opaque monolithic cloud caches. When a user requests deletion, the network's twin physically deletes the local database rows and regenerates retrieval indices, providing verifiable proof that unlearned information cannot be retrieved by subsequent reasoning routines.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Silent retention leaks sensitive facts into public drafts",
+     "description": "Cloud-hosted assistants fail to unlearn discarded facts, causing forgotten personal or commercial secrets to surface in automated messages.",
+     "example": "A freelance contractor instructs their assistant to purge all notes regarding an abandoned merger, but weeks later the assistant references the non-disclosure terms in a public pitch to a competitor.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Deterministic local deletion airlocks isolate persistent memory",
+     "description": "Personal assistant platforms adopt local, deterministic storage where deletion physically overwrites the record and invalidates downstream retrieval caches.",
+     "example": "A community health clinic runs local assistants that store patient context in encrypted on-device tables; when a patient revokes consent, cryptographic shredding renders every associated embedding permanently unrecoverable.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Users abandon long-term agent memory altogether",
+     "description": "Fearing irreversible data retention, cautious users switch back to stateless sessions, sacrificing helpful task continuity to protect their privacy.",
+     "example": "Legal and financial firms mandate that staff clear session caches after every interaction, forcing workers to re-explain project constraints every morning.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.28
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.18052",
+     "title": "Can Agents Forget When Asked? A Benchmark for Memory Unlearning in LLM Agents",
+     "kind": "preprint",
+     "published": "2026-10-13"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.11270",
+     "title": "Gated Memory: Admission-Controlled Memory Formation for Conversational AI",
+     "kind": "preprint",
+     "published": "2026-10-08"
+    }
+   ],
+   "work": 2
+  },
+  {
    "id": "SC-20261026-0304",
    "added_at": "2026-10-26T14:26:21+00:00",
    "title": "Chip makers throttle home graphics cards to keep personal AI in cloud subscriptions",
@@ -106,7 +220,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 0
+   "work": 2
   },
   {
    "id": "SC-20261026-0302",
@@ -160,7 +274,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0301",
@@ -276,7 +390,7 @@
      "published": "2026-10-23"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0299",
@@ -1677,7 +1791,7 @@
      "published": "2026-10-24"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261025-0274",
@@ -2238,7 +2352,7 @@
      "published": "2026-10-25"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261025-0264",
@@ -3256,115 +3370,6 @@
      "title": "Behind Aggregate Scores: What Systematically Varying Arena-Hard's LLM Judge Reveals",
      "kind": "preprint",
      "published": "2026-10-21"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261024-0246",
-   "added_at": "2026-10-24T22:23:08+00:00",
-   "title": "Sparse motion-adaptive vision models turn cheap street cameras into perpetual automated surveillance grids",
-   "horizon_years": 3,
-   "world": "It is 2029. Small municipal councils, private housing complexes, and business improvement districts deploy cheap edge cameras equipped with motion-triggered vision-language models. Instead of streaming gigabytes of raw video to expensive cloud servers, local micro-controllers detect movement vectors, expand dense context windows only around anomalous movements, and instantly flag loitering, gathering, or unusual human movement directly to private enforcement dashboards.",
-   "premise": "When motion-guided vision-language models concentrate compute only on dynamic visual frames, inference costs drop low enough to run continuous zero-shot anomaly detection on low-cost edge sensors. This removes the compute bottleneck that previously limited municipal and corporate video surveillance to periodic sampling or manual review.",
-   "goals": [
-    1,
-    5,
-    6
-   ],
-   "how": "The network develops open client specifications and edge privacy observers that give individuals real-time alerts when ambient cameras perform automated inference. By promoting sovereign personal agents that verify local environment integrity, the network helps communities detect and counter pervasive automated monitoring. However, global surveillance supply chains and municipal procurement contracts move according to institutional budgets and hardware vendor lobbies that independent open protocols barely touch.",
-   "shift": 0.24,
-   "outcomes": [
-    {
-     "name": "Ubiquitous low-cost edge cameras classify everyday public behavior as security anomalies",
-     "description": "Municipal and private cameras deploy motion-triggered vision models that autonomously dispatch security personnel to normal public gatherings.",
-     "example": "A municipal business district in Manchester installs fifty motion-triggered vision-language cameras that autonomously dispatch security guards whenever pedestrians stand outside a subway entrance for more than four minutes.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.58
-    },
-    {
-     "name": "Open-source privacy masks and local sensor shields preserve physical public anonymity",
-     "description": "Community groups distribute passive optical masks and adversarial textiles that prevent automated motion classification from profiling citizens in public.",
-     "example": "Community privacy groups distribute lightweight, passive optical diffusion patches and adversarial infrared emitters that prevent edge anomaly models from classifying pedestrian movement patterns without degrading basic safety lighting.",
-     "desirable": true,
-     "likelihood_now": 0.22,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Proprietary camera consortia monopolize edge vision firmware through hardware attestation",
-     "description": "Major surveillance vendors lock camera firmware behind proprietary attestation roots, preventing external audits of classification models.",
-     "example": "A regional surveillance equipment vendor locks camera hardware behind encrypted cloud attestation roots, preventing citizens and local governments from auditing the classification models running inside public sensors.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.69
-    }
-   ],
-   "pipelines": [
-    "hardware",
-    "policy",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.31478",
-     "title": "MoG-VLM: Efficient Video Anomaly Detection through Motion-Guided Vision-Language Models",
-     "kind": "preprint",
-     "published": "2026-10-22"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261024-0245",
-   "added_at": "2026-10-24T19:51:47+00:00",
-   "title": "Talent agencies and media conglomerates trap workers in perpetual synthetic twin licenses",
-   "horizon_years": 3,
-   "world": "By 2029, commercial synthetic twin agreements become mandatory clauses in professional athlete, influencer, and broadcaster contracts. Media agencies and tech conglomerates host high-fidelity digital clones in centralized cloud environments, licensing synthetic likenesses across global advertising campaigns, interactive brand sponsorships, and real-time interactive chats without requiring the individuals live participation. Performers discover that standard assignment contracts alienate their digital identity rights in perpetuity: young athletes who signed early deals cannot retract commercial endorsements made by their digital clones, nor can they prevent their synthetic agents from promoting corporate sponsors they morally oppose. Meanwhile, independent creators without institutional backing face unfair competition from synthetic clone rosters that produce round-the-clock branded content for pennies. Sovereign edge twins running strictly on personal hardware with cryptographic consent gates emerge as a counter-movement, but corporate distribution channels actively restrict content generated by non-corporate twins.",
-   "premise": "Professional athletes, actors, and public creators are signing commercial contracts licensing their biometric data, voice, and behavioral style to synthetic twin agencies. These cloud-hosted twins are deployed across commercial advertisements and automated messaging, stripping performers of real-time control over their own representations.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops and standardizes local-first personal twin architectures where biometric representations and behavioral data stay on the users encrypted local hardware. By replacing platform-hosted clones with deterministic capability brokers, cryptographic receipts, and zero-custody attestation models, individuals can deploy task-specific skills and verify external claims without alienating their digital identity or transferring root signing keys to commercial brokers.",
-   "shift": 0.36,
-   "outcomes": [
-    {
-     "name": "Corporate digital serfdom",
-     "description": "Talent agencies and media networks monopolize synthetic twin rights through restrictive employment contracts, forcing creators to surrender biometric keys and licensing rights to centralized cloud platforms.",
-     "example": "A professional soccer player signs an endorsement contract containing a standard synthetic twin clause; six months later, their digital twin appears in overseas gambling promotions that the player cannot legally cancel or veto.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Bifurcated creator economy",
-     "description": "Elite performers maintain legal teams to retain limited likeness controls, while rank-and-file workers and gig creators are forced to surrender unconstrained synthetic rights to secure employment.",
-     "example": "A junior voice actor in Toronto is denied commercial casting calls unless they grant the production studio full rights to train and deploy a synthetic replica for background dialogue and game localization.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.32
-    },
-    {
-     "name": "Sovereign edge twins with cryptographic consent",
-     "description": "Open personal twin standards enable individuals to keep their biometric models, behavioral patterns, and memory ledgers strictly on personal hardware, issuing single-use verifiable action receipts rather than surrendering raw models.",
-     "example": "A freelance journalist uses a local-first twin running on an encrypted laptop to narrate translated podcasts; each episode is signed with a verifiable cryptographic receipt that expires upon release and prevents unauthorized training.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.33
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theguardian.com/technology/2026/oct/25/synthetic-twin-why-socceroo-cristian-volpato-is-the-latest-footballer-to-license-his-ai-clone",
-     "title": "‘Synthetic twin’: Why Socceroo Cristian Volpato is the latest footballer to license his AI clone",
-     "kind": "news",
-     "published": "2026-10-24"
     }
    ],
    "work": 1
