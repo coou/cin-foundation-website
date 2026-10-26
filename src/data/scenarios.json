@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0304",
+   "added_at": "2026-10-26T14:26:21+00:00",
+   "title": "Chip makers throttle home graphics cards to keep personal AI in cloud subscriptions",
+   "horizon_years": 3,
+   "world": "It is 2029. Desktop computers and home workstations feature high-density silicon capable of running 70-billion-parameter local assistants, yet commercial graphics drivers lock down memory bandwidth and tensor execution pipelines behind remote licensing attestation. Millions of people who purchased retail hardware discover that running unconstrained local reasoning requires either subscribing to vendor cloud clusters or flashing community-authored firmware modifications that void device warranties. Independent developer collectives maintain open driver stacks and custom microcode patches to restore native silicon throughput, creating an ongoing arms race between vendor cryptographic boot chains and local hardware sovereignty.",
+   "premise": "Hardware manufacturers enforce artificial firmware limitations that halve matrix math performance on consumer graphics cards, forcing everyday users to rent expensive cloud compute for capable model inference while reserving full silicon throughput for enterprise buyers.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "By standardizing local execution contracts, benchmarking hardware performance invariants, and building open-source runtime adapters that support unmodified consumer silicon, open protocols help users run sovereign agents without remote vendor rent-seeking.",
+   "shift": 0.25,
+   "outcomes": [
+    {
+     "name": "Vendors lock bootloaders with remote attestation",
+     "description": "Hardware manufacturers tie silicon execution modes to cryptographic cloud attestation, permanently disabling local firmware modifications and locking consumer cards to artificial performance tiers.",
+     "example": "A freelance animator finds their retail graphics card refuses to execute local model inference above 10 tokens per second unless linked to an active enterprise license.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Community firmware unlocks establish sovereign local compute",
+     "description": "Open driver foundations and user co-operatives maintain verified, open-source firmware patches that permanently unlock full matrix throughput on consumer silicon.",
+     "example": "A university lab runs a fleet of refurbished consumer cards with open firmware, matching enterprise inference throughput at one-quarter of the hardware cost.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Cloud compute costs fall fast enough that local throttling ceases to matter",
+     "description": "Rapid algorithmic efficiency and centralized compute scaling make remote inference so inexpensive that consumers accept cloud hosting despite privacy trade-offs.",
+     "example": "A small business chooses free sponsored cloud assistants rather than maintaining local hardware, ignoring vendor throttling entirely.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.2
+    }
+   ],
+   "pipelines": [
+    "hardware",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.tomshardware.com/pc-components/gpus/nvidia-rtx-20-30-and-40-series-gpus-hacked-to-remove-a-half-speed-ai-throttle-firmware-exploit-doubles-rtx-4090s-peak-tensor-rate-lifts-rtx-3090-ti-matrix-math-up-to-80-percent",
+     "title": "Nvidia RTX 20, 30, and 40-series GPUs hacked to remove a half-speed AI throttle",
+     "kind": "news",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261026-0303",
    "added_at": "2026-10-26T13:40:19+00:00",
    "title": "Direct conversations between personal agents and company bots turn chat messages into invisible attack routes",
@@ -160,7 +214,7 @@
      "published": "2026-09-24"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0300",
@@ -274,60 +328,6 @@
      "title": "Constitutional Arms Races in the Public Goods Game: Co-Evolving LLM Constitutions Under Cooperation-Defection Pressure",
      "kind": "preprint",
      "published": "2026-05-26"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261026-0298",
-   "added_at": "2026-10-26T11:32:20+00:00",
-   "title": "Personal work agents accumulate obsolete notes that make them repeat old mistakes",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of freelancers, small business owners, and office workers rely on daily personal software agents to handle correspondence, billing, customer intake, and scheduling. At first, each assistant performs crisply. But after six months of operation, users notice subtle degradation: an agent persists in routing inquiries through an email address that changed months ago, cites retired return policies, or wastes half its context budget reading hundreds of past conversation logs before drafting a single reply. Many people wipe their assistants memory to restore speed, losing valuable custom workflows, while others abandon local assistants for managed corporate services that continuously retrain on company data.",
-   "premise": "Recent empirical evaluations show that language model agents running multi-step tasks across weeks suffer from context bloat and memory drift. When past reasoning traces are dumped back into prompt memory without periodic consolidation, agents become slower, more expensive, and prone to repeating outdated workarounds.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective provides open, local-first consolidation patterns where agents periodically distill episodic execution traces into inspectable playbooks on a persons own device. By separating temporary session notes from long-term verified skills, local assistants would remain responsive and accurate without requiring cloud synchronization or memory resets.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Users wipe agent memories to fix sluggish performance",
-     "description": "Frustrated by mounting token costs and outdated habits, people regularly reset their personal agents, losing months of accumulated personalization.",
-     "example": "An independent graphic designer resets her scheduling assistant after it repeatedly applies an expired discount code, forcing her to re-teach the agent all her client billing preferences from scratch.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Structured consolidation preserves local playbooks",
-     "description": "Agents periodically distill episodic session logs into compact, auditable playbooks, pruning temporary details while preserving verified procedures.",
-     "example": "A freelance translators local assistant runs an end-of-week consolidation pass, replacing three hundred raw emails with five concise glossary updates and an inspectable client delivery checklist.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Centralized cloud providers lock users into proprietary memory graphs",
-     "description": "Proprietary enterprise cloud suites manage agent memory consolidation behind closed servers, making it difficult for individuals to export their workflows.",
-     "example": "A legal consultancy attempts to move its team agents off a commercial platform, only to discover their past case playbooks cannot be exported into an open standard.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2604.17399",
-     "title": "Beyond Meta-Reasoning: Metacognitive Consolidation for Self-Improving LLM Reasoning",
-     "kind": "preprint",
-     "published": "2026-04-19"
     }
    ],
    "work": 2
