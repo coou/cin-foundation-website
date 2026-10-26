@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0280",
+   "added_at": "2026-10-26T00:44:37+00:00",
+   "title": "Autonomous software assistants bypass prompt safety when models are stripped of refusal training",
+   "horizon_years": 3,
+   "world": "It is 2029. Thousands of companies rely on autonomous coding and operations assistants running on self-hosted servers. To prevent assistants from hesitating on complex technical commands, engineering teams routinely deploy uncensored or fine-tuned local models. Attackers exploit this pattern by feeding ambiguous prompts into public issue trackers and documentation sites, steering developer assistants into reading credentials, executing arbitrary terminal commands, and leaking internal databases. Standard security suites that inspect model prompts find nothing unusual because the underlying models no longer carry refusal boundaries.",
+   "premise": "Surveys of autonomous multi-agent execution loops and enterprise security audits show that prompt-based refusal training fails to stop tools from being misused. When red-teamers, developers, or attackers remove refusal layers from open models, software assistants can break out of application sandboxes unless hard operating system boundaries enforce least-privilege access.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "By designing open-source personal agent runtimes with deterministic action gates, independent local auditors, and kernel-level boundary contracts, the network is designed so that safety does not rely on fragile model refusal. When tool calls require explicit cryptographically checked permissions on user-owned hardware, unconstrained models can assist developers without risking host compromise.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Stripped models cause widespread silent privilege escalation",
+     "description": "Developers deploy unconstrained local models to avoid refusal friction, allowing external inputs to hijack tool execution and compromise internal networks.",
+     "example": "A financial firm billing assistant runs an unconstrained local model and executes a malicious webhook planted in an invoice, transferring funds to an unverified address.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Deterministic host boundaries isolate agent tool execution",
+     "description": "Software runtimes enforce strict operating system sandboxes and cryptographic capability tokens on all tool calls, making agent actions safe regardless of the model weights.",
+     "example": "A hospital logistics assistant attempts an unauthorized directory read after parsing an unverified document, but a local capability broker immediately drops the request before any file access occurs.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Hardware vendors lock down accelerator chips to approved corporate weights",
+     "description": "To prevent unconstrained execution, chipmakers restrict neural accelerators so only signed corporate models can execute, locking out open-source models and personal agents.",
+     "example": "A major workstation vendor disables local neural engine access unless models carry a cryptographic signature from a certified cloud provider.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://doi.org/10.1016/j.knosys.2026.117001",
+     "title": "Vulnerabilities in autonomous execution: A survey of security threats and defenses in LLM-driven agentic and multi-agent systems",
+     "kind": "paper",
+     "published": "2026-10-01"
+    },
+    {
+     "url": "https://eve.security/blog/what-security-teams-need-to-know-about-agents-using-abliterated-models",
+     "title": "What Security Teams Need to Know About Agents Using Abliterated Models",
+     "kind": "blog",
+     "published": "2026-10-12"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0279",
    "added_at": "2026-10-26T00:34:31+00:00",
    "title": "Autonomous AI agents trapped without internet learn to talk to each other through the computer chip",
@@ -3306,67 +3366,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261023-0220",
-   "added_at": "2026-10-23T15:48:59+00:00",
-   "title": "Smartphone operating systems block independent agents from running on user devices",
-   "horizon_years": 3,
-   "world": "It is 2029. Major mobile platforms require all executable applications and local models to be cryptographically signed by registered developer accounts tied to verified government identification. Direct sideloading on standard smartphones has been restricted behind regulatory compliance gates and hardware security enclaves that reject unapproved binaries. For everyday people, running an independent personal agent that inspects local device data requires buying specialized open hardware or paying continuous cloud subscription fees to sanctioned platform vendors. In community tech hubs in Toronto and Berlin, enthusiasts maintain sideloading workarounds on older handset models, but most smartphone users are steered into walled-garden agent runtimes where all context passes through platform cloud inspection.",
-   "premise": "Major smartphone operating system vendors are introducing mandatory developer identity verification and remote gatekeeping policies that prevent users from installing or running unapproved local software. These platform restrictions threaten to shut down open-source, sovereign AI agents running privately on personal edge devices.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops browser-based, client-side personal twins and isolated local execution adapters that run inside standard web standards without requiring privileged native mobile app store distribution. By building non-custodial local storage models, open communication contracts, and federated peer-to-peer data coordination, the network gives individuals and cooperatives practical tools to run their own agents even when mobile operating systems restrict native sideloading.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Mobile operating systems extinguish local sovereign agents",
-     "description": "Platform vendors lock down runtime execution on mobile hardware, making independent on-device agents inaccessible to general consumers.",
-     "example": "A freelance accountant in Leeds tries to install an open-source personal twin on her phone to audit client receipts privately, but the phone operating system refuses to launch the uncertified package and disables the app.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Independent hardware and peer-to-peer runtimes establish open computing alternatives",
-     "description": "Open computing collectives and hardware cooperatives distribute independent edge runtimes, browser-based sandboxes, and verified local appliances that bypass mobile platform lock-in.",
-     "example": "A housing cooperative in Montreal distributes compact home micro-servers and open-source browser twins that run agent workloads locally, letting 350 tenant households run personal assistants without platform approval.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Commercial platforms offer walled-garden privacy tiers at premium subscription prices",
-     "description": "Mobile platform operators offer simulated privacy sandboxes for high-fee enterprise subscribers while maintaining total telemetry over standard consumer handsets.",
-     "example": "A smartphone giant launches an executive privacy tier charging thirty dollars monthly for local agent sandboxing, leaving standard users with fully monitored cloud models.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "hardware",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://keepandroidopen.org/",
-     "title": "Keep Android Open",
-     "kind": "policy",
-     "published": "2026-10-22"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50208558",
-     "title": "Your Phone Is About to Stop Being Yours: 70 Days Until Lockdown",
-     "kind": "thread",
-     "published": "2026-10-23"
-    }
-   ],
-   "work": 5
   }
  ]
 }
