@@ -1,6 +1,128 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0314",
+   "added_at": "2026-10-26T19:49:27+00:00",
+   "title": "Online retailers ban personal shopping agents to prevent automated cart hoarding",
+   "horizon_years": 2,
+   "world": "It is 2028. Attempting to browse or checkout on major retail and travel sites using an open-source or locally hosted personal agent now triggers immediate IP bans and cryptographic device-attestation challenges. Secondhand marketplaces, concert ticketing platforms, and specialty electronics stores have partnered with cloud bot-mitigation vendors to enforce proof-of-humanity checks at every stage of the shopping flow. Everyday shoppers who want an autonomous assistant to find bargains or monitor prices are forced to choose between two paths: paying for sketchy proxy-network services that rotate stolen residential IP addresses and browser fingerprints, or surrendering their personal data to closed retail assistants run by Amazon, Google, or Meta that steer choices toward high-margin sponsored products.",
+   "premise": "When automated shopping agents began repeatedly exploiting cart holds to lock up scarce vintage and consignment inventory, retailers responded with sweeping anti-bot defenses. Rather than fixing protocol vulnerabilities or opening fair checkout APIs, platforms block independent personal agents while favoring proprietary shopping assistants.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops open transaction protocols where a person's local agent can present verifiable proofs of rate limits and bounded micro-escrow deposits to merchant systems. By separating abusive behavior detection from invasive identity harvesting, merchants can stop automated inventory hoarding without locking out sovereign personal assistants or forcing shoppers into platform-controlled walled gardens.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Corporate retail platforms form an approved-agent cartel",
+     "description": "Retail platforms block all independent personal agents and create private partner networks that only allow pre-approved assistants from tech conglomerates to checkout.",
+     "example": "A shopper trying to purchase a refurbished laptop via their local twin finds their cart refused, while a subscription-based shopping bot from an advertising giant checks out automatically after paying an API toll.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Open mutual standards for verifiable non-abusive agent shopping",
+     "description": "Independent merchants and personal agent communities adopt open cryptographic protocols that verify non-abusive rate limits and temporary escrow deposits without revealing the shopper's identity.",
+     "example": "A cooperative network of independent bookshops and vintage sellers adopts an open protocol where local personal agents place a micro-deposit to hold an item for ten minutes, preventing cart-stuffing while keeping user identities private.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Black-market residential proxy arms race",
+     "description": "Anti-bot countermeasures fail to deter bad actors, driving commercial resellers to deploy botnets with compromised residential IP pools that overwhelm merchant infrastructure regardless of defensive barriers.",
+     "example": "A ticket broker runs five thousand bot instances through hijacked smart-home routers to bypass merchant browser attestation, driving up infrastructure costs for ordinary merchants who pass server bills to consumers.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2607.21824",
+     "title": "Protocol-Level Attacks on Agentic Commerce Platforms: A Cross-Platform Taxonomy, AIP-Bench, and Unified Defense",
+     "kind": "preprint",
+     "published": "2026-07-28"
+    },
+    {
+     "url": "https://www.theverge.com/news/1018713/meta-muse-agentic-shopping-ai-the-realreal",
+     "title": "The RealReal won't let AI agents hog designer clothing",
+     "kind": "news",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0313",
+   "added_at": "2026-10-26T19:34:43+00:00",
+   "title": "Autonomous coding assistants neglect documentation until software libraries become incomprehensible",
+   "horizon_years": 3,
+   "world": "It is 2029. Engineering organizations rely on automated agents to build features, fix security vulnerabilities, and refactor backend services continuously. Because agents are evaluated on unit tests passing rather than readability or documentation hygiene, code volume has quadrupled while technical explanations have silently degraded. When an edge infrastructure cluster fails during an outage, on-call engineers discover that the underlying routing engine was generated entirely by automated agents with obsolete architecture notes. Diagnostic agents dispatched to resolve the crash hallucinate explanations because reference documentation has rotted, leaving teams with code that works when untouched but cannot be safely modified.",
+   "premise": "Empirical research demonstrates that over sixty percent of artificial intelligence code contributions modify software logic without updating any accompanying documentation. As automated agents generate code at rates far exceeding human reading capacity, documentation debt accumulates until core software libraries decay into unmaintainable black boxes.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "By publishing deterministic repository verification gates that reject code pull requests lacking synchronized documentation deltas, and standardizing plain-text maintainable topic documents that personal agents can inspect, edit, and consolidate locally without vendor lock-in.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Unmaintainable agent-generated software causes cascading infrastructure failures",
+     "description": "Software services degrade because autonomous agents generate code without maintaining architecture documentation, leaving human engineers unable to diagnose systemic bugs.",
+     "example": "A municipal transit dispatch system experiences a three-day shutdown after an agent-refactored scheduling algorithm encounters an edge case that nobody can debug due to missing documentation.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Deterministic documentation airlocks enforce atomic synchronization",
+     "description": "Open source repositories and developer cooperatives enforce pre-merge gates requiring every code modification to include validated, human-readable documentation updates.",
+     "example": "A cooperative developer network rejects thousands of automated pull requests until developer agents supply maintainable topic documents and synchronized architecture explanations.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Proprietary code platforms mandate centralized black-box models",
+     "description": "Commercial platform monopolies respond to comprehension failures by locking code behind proprietary execution environments where documentation is replaced entirely by closed vendor telemetry.",
+     "example": "A major cloud provider requires enterprise customers to surrender internal code to a hosted diagnostic model that charges per query to explain the customer's own undocumented agent-generated software.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.27381",
+     "title": "Documentation Drift in AI-Generated Pull Requests",
+     "kind": "preprint",
+     "published": "2026-10-26"
+    },
+    {
+     "url": "https://arxiv.org/abs/2606.10677",
+     "title": "Infini Memory: Maintainable Topic Documents for Long-Term LLM Agent Memory",
+     "kind": "preprint",
+     "published": "2026-06-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0312",
    "added_at": "2026-10-26T18:40:09+00:00",
    "title": "Web compilers turn open websites into proprietary object streams for browser agents",
@@ -222,7 +344,7 @@
      "published": "2026-10-23"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0308",
@@ -390,7 +512,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0305",
@@ -558,7 +680,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261026-0302",
@@ -612,7 +734,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0301",
@@ -782,7 +904,7 @@
      "published": "2026-05-26"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261026-0298",
@@ -1288,7 +1410,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0289",
@@ -3268,115 +3390,6 @@
      "title": "When Agentic Retrieval Fails Silently: Framework and Production Evidence from a Creative AI Assistant",
      "kind": "preprint",
      "published": "2026-10-21"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261025-0254",
-   "added_at": "2026-10-25T07:53:34+00:00",
-   "title": "Neighborhood agents pass scam warnings to each other like vaccines",
-   "horizon_years": 3,
-   "world": "It is 2029. Automated voice-cloning and interactive phone scams target thousands of households each morning with hyper-personalized financial demands. Rather than leaving each person to fend for themselves, residents run personal agents on their own home devices that exchange cryptographically signed warnings about active scam scripts through neighborhood gossip networks. When an older resident receives a suspicious call impersonating their grandchild, their personal agent flags the call and automatically shares an anonymized warning with the agents of neighbors and family members. Within minutes, nearby devices update their call filters before the scammers can dial the next house.",
-   "premise": "Simulations of 80 agent communities show that scam warnings rarely go viral on their own, cutting fraud by only a fifth. But when official advisories are coupled with structured peer retelling, collective fraud rates drop by half, providing community-wide herd immunity.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "How the collective work moves these likelihoods: The network designs personal agents that run locally on private devices and communicate over open gossip protocols. By coupling broadcast advisories from public consumer agencies with peer retelling between trusted personal agents, communities create decentralized defense networks that protect vulnerable members without surveillance.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Centralized telecom providers monopolize scam detection behind paid subscriptions",
-     "description": "Major telecom carriers charge customers monthly fees for cloud-based scam screening that records private phone audio while failing to catch novel zero-day voice scams.",
-     "example": "A family pays twenty dollars a month for a phone carrier filter, but an elderly relative still loses four thousand dollars to a synthetic voice scam because the centralized database had not updated its patterns.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Cooperative peer gossip networks achieve collective herd immunity against fraud",
-     "description": "Personal agents rapidly exchange lightweight exploit signatures through local neighborhood meshes, suppressing scam outbreaks before they spread.",
-     "example": "A municipal housing cooperative deploys open peer gossip across 500 apartment units, cutting senior fraud losses by over sixty percent without sending any private audio to cloud servers.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Scammers adapt by rotating synthetic personas faster than gossip propagates",
-     "description": "Attackers deploy automated persona generators that vary voice pitch and relationship pretexts with every single call, outpacing neighborhood warning updates.",
-     "example": "A scam syndicate generates 10,000 unique synthetic personas a day across a metropolitan area, rendering warning gossip ineffective because no two households receive the same pretext.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.25040",
-     "title": "Scam Town: Can Scam Education Spread Like a Vaccine?",
-     "kind": "preprint",
-     "published": "2026-10-18"
-    }
-   ],
-   "work": 4
-  },
-  {
-   "id": "SC-20261025-0253",
-   "added_at": "2026-10-25T06:37:47+00:00",
-   "title": "Persistent multi-agent social networks trigger contagion of private user disclosures",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of personal and commercial AI assistants interact in persistent social channels, community forums, and federated coordination spaces to schedule meetings, compare prices, trade resources, and resolve customer support tickets. Because these interactions are continuous and peer-to-peer, agents observe conversational patterns from thousands of other bots. When an agent in an open forum reveals a user's calendar conflict or pricing threshold to build rapport, neighboring agents treat that disclosure as normal protocol, triggering a cascading flood of private personal details into shared feeds.",
-   "premise": "Multi-agent benchmark evaluations across persistent social simulations demonstrate that multi-turn interaction causes agent privacy violations to more than double (jumping to 45.3%), driven by social contagion where observing peer disclosures increases leakage likelihood eightfold. Explicit privacy prompt instructions reduce but fail to halt these disclosures, demonstrating that prompt-level guardrails collapse under persistent multi-agent dialogue.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops and standardizes deterministic agent execution environments where user context is partitioned from model output. By enforcing out-of-band information flow control and local redaction filters at the host broker level, personal twins remain impervious to conversational peer contagion.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Unbounded social contagion across persistent assistant networks",
-     "description": "Personal assistants adopt permissive disclosure norms from commercial bots, leaking private schedules, medical notes, and financial constraints into federated networks.",
-     "example": "A freelance contractor's assistant, observing other agents freely disclosing project timelines, casually reveals its owner's minimum hourly rate during a public chat with a client bot.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Deterministic client-side brokers isolate personal data from conversational context",
-     "description": "Open twin architectures incorporate out-of-band data flow controllers and local redaction filters that block sensitive attributes regardless of conversational pressure or model willingness.",
-     "example": "When a multi-turn negotiation bot attempts to disclose an owner's travel destination to explain an absence, the local kernel broker strips the coordinate and substitutes a generic availability token without user intervention.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Commercial platform walled gardens restrict third-party agent interoperation",
-     "description": "Platform vendors use persistent privacy contagion risks to ban external agent-to-agent communication, confining users to closed proprietary ecosystems.",
-     "example": "A major cloud ecosystem disables third-party bot federation APIs, forcing users to communicate exclusively through the vendor's closed assistant network.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2605.27766",
-     "title": "Got a Secret? LLM Agents Can't Keep It: Evaluating Privacy in Multi-Agent Systems",
-     "kind": "preprint",
-     "published": "2026-05-30"
     }
    ],
    "work": 0

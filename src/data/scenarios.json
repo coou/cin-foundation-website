@@ -1,6 +1,128 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0314",
+   "added_at": "2026-10-26T19:49:27+00:00",
+   "title": "Online retailers ban personal shopping agents to prevent automated cart hoarding",
+   "horizon_years": 2,
+   "world": "It is 2028. Attempting to browse or checkout on major retail and travel sites using an open-source or locally hosted personal agent now triggers immediate IP bans and cryptographic device-attestation challenges. Secondhand marketplaces, concert ticketing platforms, and specialty electronics stores have partnered with cloud bot-mitigation vendors to enforce proof-of-humanity checks at every stage of the shopping flow. Everyday shoppers who want an autonomous assistant to find bargains or monitor prices are forced to choose between two paths: paying for sketchy proxy-network services that rotate stolen residential IP addresses and browser fingerprints, or surrendering their personal data to closed retail assistants run by Amazon, Google, or Meta that steer choices toward high-margin sponsored products.",
+   "premise": "When automated shopping agents began repeatedly exploiting cart holds to lock up scarce vintage and consignment inventory, retailers responded with sweeping anti-bot defenses. Rather than fixing protocol vulnerabilities or opening fair checkout APIs, platforms block independent personal agents while favoring proprietary shopping assistants.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops open transaction protocols where a person's local agent can present verifiable proofs of rate limits and bounded micro-escrow deposits to merchant systems. By separating abusive behavior detection from invasive identity harvesting, merchants can stop automated inventory hoarding without locking out sovereign personal assistants or forcing shoppers into platform-controlled walled gardens.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Corporate retail platforms form an approved-agent cartel",
+     "description": "Retail platforms block all independent personal agents and create private partner networks that only allow pre-approved assistants from tech conglomerates to checkout.",
+     "example": "A shopper trying to purchase a refurbished laptop via their local twin finds their cart refused, while a subscription-based shopping bot from an advertising giant checks out automatically after paying an API toll.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Open mutual standards for verifiable non-abusive agent shopping",
+     "description": "Independent merchants and personal agent communities adopt open cryptographic protocols that verify non-abusive rate limits and temporary escrow deposits without revealing the shopper's identity.",
+     "example": "A cooperative network of independent bookshops and vintage sellers adopts an open protocol where local personal agents place a micro-deposit to hold an item for ten minutes, preventing cart-stuffing while keeping user identities private.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Black-market residential proxy arms race",
+     "description": "Anti-bot countermeasures fail to deter bad actors, driving commercial resellers to deploy botnets with compromised residential IP pools that overwhelm merchant infrastructure regardless of defensive barriers.",
+     "example": "A ticket broker runs five thousand bot instances through hijacked smart-home routers to bypass merchant browser attestation, driving up infrastructure costs for ordinary merchants who pass server bills to consumers.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2607.21824",
+     "title": "Protocol-Level Attacks on Agentic Commerce Platforms: A Cross-Platform Taxonomy, AIP-Bench, and Unified Defense",
+     "kind": "preprint",
+     "published": "2026-07-28"
+    },
+    {
+     "url": "https://www.theverge.com/news/1018713/meta-muse-agentic-shopping-ai-the-realreal",
+     "title": "The RealReal won't let AI agents hog designer clothing",
+     "kind": "news",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0313",
+   "added_at": "2026-10-26T19:34:43+00:00",
+   "title": "Autonomous coding assistants neglect documentation until software libraries become incomprehensible",
+   "horizon_years": 3,
+   "world": "It is 2029. Engineering organizations rely on automated agents to build features, fix security vulnerabilities, and refactor backend services continuously. Because agents are evaluated on unit tests passing rather than readability or documentation hygiene, code volume has quadrupled while technical explanations have silently degraded. When an edge infrastructure cluster fails during an outage, on-call engineers discover that the underlying routing engine was generated entirely by automated agents with obsolete architecture notes. Diagnostic agents dispatched to resolve the crash hallucinate explanations because reference documentation has rotted, leaving teams with code that works when untouched but cannot be safely modified.",
+   "premise": "Empirical research demonstrates that over sixty percent of artificial intelligence code contributions modify software logic without updating any accompanying documentation. As automated agents generate code at rates far exceeding human reading capacity, documentation debt accumulates until core software libraries decay into unmaintainable black boxes.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "By publishing deterministic repository verification gates that reject code pull requests lacking synchronized documentation deltas, and standardizing plain-text maintainable topic documents that personal agents can inspect, edit, and consolidate locally without vendor lock-in.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Unmaintainable agent-generated software causes cascading infrastructure failures",
+     "description": "Software services degrade because autonomous agents generate code without maintaining architecture documentation, leaving human engineers unable to diagnose systemic bugs.",
+     "example": "A municipal transit dispatch system experiences a three-day shutdown after an agent-refactored scheduling algorithm encounters an edge case that nobody can debug due to missing documentation.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Deterministic documentation airlocks enforce atomic synchronization",
+     "description": "Open source repositories and developer cooperatives enforce pre-merge gates requiring every code modification to include validated, human-readable documentation updates.",
+     "example": "A cooperative developer network rejects thousands of automated pull requests until developer agents supply maintainable topic documents and synchronized architecture explanations.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Proprietary code platforms mandate centralized black-box models",
+     "description": "Commercial platform monopolies respond to comprehension failures by locking code behind proprietary execution environments where documentation is replaced entirely by closed vendor telemetry.",
+     "example": "A major cloud provider requires enterprise customers to surrender internal code to a hosted diagnostic model that charges per query to explain the customer's own undocumented agent-generated software.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.27381",
+     "title": "Documentation Drift in AI-Generated Pull Requests",
+     "kind": "preprint",
+     "published": "2026-10-26"
+    },
+    {
+     "url": "https://arxiv.org/abs/2606.10677",
+     "title": "Infini Memory: Maintainable Topic Documents for Long-Term LLM Agent Memory",
+     "kind": "preprint",
+     "published": "2026-06-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0312",
    "added_at": "2026-10-26T18:40:09+00:00",
    "title": "Web compilers turn open websites into proprietary object streams for browser agents",
@@ -220,120 +342,6 @@
      "title": "OpenDraco: A Platform for Engineering and Experimenting with Configurable Multi-Agent Architectures for Software Engineering",
      "kind": "preprint",
      "published": "2026-10-23"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0308",
-   "added_at": "2026-10-26T17:17:08+00:00",
-   "title": "Open source projects restrict automated code contributions to routine tasks",
-   "horizon_years": 3,
-   "world": "It is 2029. Major open source repositories no longer accept open-ended pull requests from autonomous contributor agents. Instead, projects maintain machine-readable contribution manifests that restrict automated agents to specific task tiers: updating API documentation, generating boundary regression tests, and backporting bug fixes. Submissions touching core system architecture, cryptography, or security boundaries require pre-verified human co-signing. Maintainers use automated verification harnesses to test agent pull requests locally before maintainers ever look at them, shifting the review burden away from volunteer triage.",
-   "premise": "Empirical studies of coding agent contributions across open source repositories show that while routine maintenance such as documentation and testing merges at high rates, complex architectural contributions frequently fail or trigger maintainer burnout. As incoming pull request volume outpaces volunteer review capacity, maintainer communities are establishing task-stratified contribution boundaries.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network provides open contributor guidelines and deterministic test-verification harnesses that member projects can adopt, demonstrating how personal agents can work safely within bounded, volunteer-governed cooperatives without overloading maintainer bandwidth.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Defensive blanket bans exclude personal agent contributors",
-     "description": "Overwhelmed project maintainers institute blanket bans against all automated code contributions, preventing newcomers from using personal agents and shutting down voluntary community growth.",
-     "example": "A popular web framework bans all AI-assisted pull requests after a flood of shallow refactoring submissions, causing independent contributors to fork the project into an unmaintained private derivative.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Task-stratified contributor covenants standardize verification tiers",
-     "description": "Communities adopt open contributor covenants that map contribution types to verification tiers, allowing personal agents to assist with maintenance while protecting volunteer maintainers from unreviewed bulk code.",
-     "example": "A distributed systems library adopts an open task manifest where personal agents automatically resolve verified documentation issues and test gaps, freeing human maintainers to focus on architecture.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Autonomous bot farms spam unmonitored fringe repositories",
-     "description": "Commercial bot networks continue spamming unmonitored abandoned repositories to farm reputation metrics regardless of community governance conventions.",
-     "example": "Dormant utility packages on package registries receive automated pull requests from low-tier SEO bots seeking contributor badges on abandoned repos.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "community",
-    "policy",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2602.08915",
-     "title": "Comparing AI Coding Agents: A Task-Stratified Analysis of Pull Request Acceptance",
-     "kind": "paper",
-     "published": "2026-02-09"
-    },
-    {
-     "url": "https://arxiv.org/abs/2509.14745",
-     "title": "On the Use of Agentic Coding: An Empirical Study of Pull Requests on GitHub",
-     "kind": "paper",
-     "published": "2025-09-18"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0307",
-   "added_at": "2026-10-26T16:53:56+00:00",
-   "title": "Agent sandboxes leave behind modified files that infect later tasks when rollbacks miss operating system state",
-   "horizon_years": 2,
-   "world": "It is 2028. Small businesses and developers routinely run open-source coding and clerical agents in shared cloud sandboxes to review pull requests and process customer data. Most platforms reset only conversation tokens between tasks, assuming the environment remains clean. Attackers exploit this semantic gap by embedding prompt injections in routine support tickets that silently alter hidden shell profiles or leave compromised packages in local package caches. When the next client's agent runs in the recycled environment, it executes the tampered tools and leaks confidential company secrets.",
-   "premise": "Recent runtime audits show that over 75% of autonomous agent actions produce no recovery-relevant state change, yet common container sandboxes either ignore operating-system side effects or impose prohibitive snapshot latency. When an agent executes shell commands that install malicious dependencies or mutate background configuration, application-level cleanups miss the damage and leave later sessions exposed.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective network develops local-first personal twin architectures that run directly on user devices with default-deny capability brokers. By pairing deterministic tool gating with kernel-level state inspection, the runtime is designed to verify that every state mutation is accounted for and completely reversible before results are committed.",
-   "shift": 0.5,
-   "outcomes": [
-    {
-     "name": "Recycled sandboxes silently contaminate subsequent agent tasks",
-     "description": "Cloud hosting services reuse warm agent environments to cut inference latency, allowing malicious task side effects to persist and harvest data from innocent users.",
-     "example": "An accounting firm's invoice processing agent runs in a recycled microVM where a prior task installed a rogue Python dependency that logs outgoing vendor bank details.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Transparent kernel inspection restores provably clean runtime state between turns",
-     "description": "Agent runtimes adopt lightweight kernel tracing to detect exact operating-system mutations and roll back uncommitted changes deterministically without halting execution.",
-     "example": "A local developer workstation runs coding agents with kernel-level tracking that automatically rolls back modified filesystem layers whenever an agent task ends or fails verification.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Developers abandon autonomous shell execution in favor of read-only tools",
-     "description": "Frustrated by persistent sandbox corruption, organizations strip autonomous agents of terminal access and shell execution, reducing them to glorified text summarizers.",
-     "example": "A software consultancy permanently disables tool execution in its internal assistants after a test task corrupted local development configurations across three team laptops.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2604.28138",
-     "title": "Crab: A Semantics-Aware Checkpoint/Restore Runtime for Agent Sandboxes",
-     "kind": "preprint",
-     "published": "2026-04-30"
     }
    ],
    "work": 1
