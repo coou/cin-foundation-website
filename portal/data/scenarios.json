@@ -1,6 +1,120 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0294",
+   "added_at": "2026-10-26T07:57:37+00:00",
+   "title": "Automated user simulators hide assistant flaws by guessing past ambiguous requests",
+   "horizon_years": 3,
+   "world": "It is 2029. Municipal service portals, local clinic scheduling systems, and benefits intake counters rely on conversational agents to handle citizen intake. Engineering teams run continuous synthetic evaluations using simulated user personas rather than recruiting human test panels. Because the simulated users are driven by simple language prompts, they tolerate fragmented phrasing, infer missing dates, and score broken workflows as successful. In contrast, real elderly residents and stressed claimants enter ambiguous, emotional requests that the deployed assistants misroute without ever asking for clarification. Deployed systems achieve passing benchmark marks while real error queues overflow with misfiled applications.",
+   "premise": "Laboratory benchmarks evaluate conversational assistants using prompt-guided user simulators that pretend to find answers in fifty-seven percent of turns where real humans fail. At the same time, underlying language models recognize ambiguity when asked to judge it directly, yet silently guess answers rather than asking clarifying questions.",
+   "goals": [
+    4,
+    6
+   ],
+   "how": "An open network provides verifiable simulation harnesses with explicit clarification thresholds and decoupled random seeds, giving developers calibrated testbeds that measure when agents guess instead of asking.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Unchecked synthetic testing leads to silent misdirection in public services",
+     "description": "Teams ship customer and citizen bots certified by prompt-based user simulators, failing to notice that real ambiguous queries produce silent bad guesses rather than clarification.",
+     "example": "A family clinic portal misroutes thirty percent of acute pediatric symptom inquiries because synthetic user bots scored vague symptom inputs as resolved.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Open-weight simulators and explicit clarification thresholds become standard",
+     "description": "Public agencies and cooperative developer communities mandate calibrated user simulators tuned on real interaction traces and require agents to ask clarifying questions whenever query ambiguity exceeds explicit thresholds.",
+     "example": "A regional health cooperative deploys a calibrated simulator that flags unasked questions, cutting misrouted appointment requests by half.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Proprietary evaluation platforms monopolize certified simulation benchmarks",
+     "description": "Commercial enterprise evaluation vendors patent fine-tuned behavioral user simulator models, pricing open-source developers out of realistic multi-turn testing.",
+     "example": "Independent open-source twin projects cannot afford certified user simulation suites, leaving only large platform vendors with audited conversational reliability.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.28054",
+     "title": "AutoSim: A Self-Improving User Simulator for Conversational Search Evaluation",
+     "kind": "preprint",
+     "published": "2026-10-20"
+    },
+    {
+     "url": "https://arxiv.org/abs/2605.25284",
+     "title": "Knowing but Not Showing: LLMs Recognize Ambiguity but Rarely Ask Clarifying Questions",
+     "kind": "preprint",
+     "published": "2026-05-24"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0293",
+   "added_at": "2026-10-26T07:32:44+00:00",
+   "title": "Government tech grants speed up existing coders but fail to bring in new helpers",
+   "horizon_years": 3,
+   "world": "It is 2029. Major public infrastructure funds inject tens of millions of dollars into critical software libraries that run utilities, hospitals, and civil networks. While funded maintainers work longer hours pushing code updates, their contributor numbers remain flat. As artificial intelligence coding agents flood repositories with automated pull requests and bug reports, small volunteer teams burn out under heavy triage demands despite healthy bank balances.",
+   "premise": "Empirical evaluation of sovereign open-source grants shows that lump-sum capital injections accelerate code commits and pull requests from established maintainers, but do not expand the contributor base or clear unresolved issue backlogs. Without mechanisms that credit and support onboarding, public money increases the pressure on existing volunteers.",
+   "goals": [
+    2,
+    3
+   ],
+   "how": "By pairing transparent value feedback with privacy-respecting contribution ledgers, open-source communities can reward review, mentoring, and maintenance rather than raw commit volume. These multi-dimensional recognition systems are designed to make participation visible without invasive monitoring, helping communities distribute effort sustainably.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Maintainer burnout accelerates under grant obligations",
+     "description": "Grants incentivize core maintainers to produce higher commit volumes without providing administrative or onboarding relief, leading to sudden project abandonments.",
+     "example": "A cryptographic library maintainer receiving a public grant works eighty hours a week handling automated bug filings until resigning, leaving vital regional health networks without security patches.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Multidimensional contribution credit replaces cash grants",
+     "description": "Open-source ecosystems adopt decentralized value networks that reward onboarding, documentation, and review triage alongside code commits, broadening participation.",
+     "example": "A community data utility distributes peer-verified contribution credits across two hundred active triagers and mentors, cutting issue response times without burning out the founders.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Corporate consolidation of critical open-source tooling",
+     "description": "Large enterprise cloud vendors absorb underfunded critical repositories into proprietary managed services, converting public utilities into commercial products.",
+     "example": "An enterprise cloud provider hires the primary developers of an open database driver, gating future performance updates behind its proprietary cloud service.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2607.05413",
+     "title": "Measuring the Invisible: Evaluating the Impact of Public Funding on Open Source Software",
+     "kind": "preprint",
+     "published": "2026-06-16"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261026-0292",
    "added_at": "2026-10-26T06:20:03+00:00",
    "title": "Autonomous agent teams in organizations stumble over conflicting multi-source instructions",
@@ -53,7 +167,7 @@
      "published": "2026-09-04"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0291",
@@ -828,7 +942,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 0
+   "work": 4
   },
   {
    "id": "SC-20261025-0277",
@@ -888,7 +1002,7 @@
      "published": "2026-10-25"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261025-0276",
@@ -1737,7 +1851,7 @@
      "published": "2026-10-14"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261025-0261",
@@ -3097,7 +3211,7 @@
      "published": "2026-10-23"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261024-0237",
@@ -3261,117 +3375,6 @@
     }
    ],
    "work": 4
-  },
-  {
-   "id": "SC-20261024-0234",
-   "added_at": "2026-10-24T07:32:41+00:00",
-   "title": "Automated agents farm public goods rewards and extract collective funding pools",
-   "horizon_years": 3,
-   "world": "It is 2029. Most open-source foundations, municipal participatory budgeting platforms, and decentralized protocols have moved from upfront grant applications to retroactive rewards based on measured activity. However, running an autonomous agent farm costs less than fifty dollars a month. Organized groups deploy tens of thousands of lightweight agents that generate plausible pull requests, simulate complex multi-party interactions, and cross-endorse each other in community feedback rounds. In a typical funding round of ten million dollars, over seventy percent of distributions flow to accounts controlled by automated syndicates. Genuine developers who build critical tools receive tiny fractions of the pool because their real-world usage appears statistically minor compared to continuous synthetic churn. Review panels find themselves unable to manually audit the volume of activity, leading several major open-source ecosystems to suspend retroactive funding entirely or retreat to closed corporate sponsorship.",
-   "premise": "Decentralized grant and reward programs distribute hundreds of millions of dollars using naive heuristics like transaction count, wallet volume, and simple popularity votes. As autonomous agents become cheap to deploy at scale, farming operations manufacture artificial participation across thousands of pseudonymous accounts, capturing the majority of public rewards while genuine contributors are crowded out.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "The network develops decentralized contribution accounting models that avoid naive activity volume metrics. By implementing bounded cross-domain weighting, high-percentile normalization, and mutual credit settlement rings, the network is designed to allow community groups to reward verifiable value creation while structurally capping the profits of coordinated agent swarms without relying on invasive biometric identity checkpoints.",
-   "shift": 0.45,
-   "outcomes": [
-    {
-     "name": "Automated farming syndicates capture public funding rounds",
-     "description": "Syndicates running coordinated agent clusters systematically drain community grant pools, forcing ecosystems back into closed corporate patronage.",
-     "example": "An open-source graphics library maintainer receives eight hundred dollars from a five-million-dollar community pool, while forty automated accounts created three months earlier collect three million dollars.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Ecosystems adopt invasive biometric identity verification",
-     "description": "In response to agent swarms, platforms mandate biometric iris scans and government digital credentials to qualify for community rewards, excluding pseudonymous and vulnerable contributors.",
-     "example": "A decentralized developer collective requires government photo identification and biometric proofs before any programmer can receive open-source maintenance stipends.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Communities deploy bounded contribution graphs and multi-layer anomaly filters",
-     "description": "Platforms deploy cross-domain sector weighting, behavioral anomaly ensembles, and verifiable mutual credit rings that bound extractable rewards without central identity gatekeepers.",
-     "example": "A consortium of civic software projects filters out ninety-five percent of synthetic farming volume using topological interaction graphs and percentile normalization, preserving ninety percent of funds for human builders.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2607.27859",
-     "title": "ZAPs: A Reward Attribution Framework for DeFi Ecosystems with Adversarial-Robust Scoring via Parallel Anomaly Ensemble Detection",
-     "kind": "paper",
-     "published": "2026-07-30"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261024-0233",
-   "added_at": "2026-10-24T05:36:04+00:00",
-   "title": "Automated mortgage underwriting freezes out displaced workers with fixed payments",
-   "horizon_years": 4,
-   "world": "It is 2030. Accelerated software and administrative automation has displaced thousands of salaried analysts, legal assistants, and technical specialists across major metropolitan regions. Commercial banks deploy automated underwriting algorithms that ingest real-time banking feeds and instantly reject loan modifications or refinancing for any worker whose monthly income fluctuates. Displaced workers who took on large mortgages during the previous decade find their skills discounted by half, yet their monthly principal and interest obligations remain entirely fixed. Foreclosure notices surge among previously middle-class households, while automated servicing platforms automate property seizures without human review.",
-   "premise": "Recent financial machine learning across multi-decade loan panels demonstrates that borrower net cash flow, rather than asset leverage or property value, is the primary driver of loan defaults during economic shocks. As generative automation disrupts cognitive professions, fixed debt payments collide directly with sudden household income drops.",
-   "goals": [
-    3,
-    5,
-    6
-   ],
-   "how": "The network provides open specifications for personal agent income verification, allowing individuals to prove qualifying income reductions cryptographically without exposing bank transaction logs. Demonstrating in regional simulations that income-contingent contracts reduce net default losses for cooperative lenders encourages mutuals to pilot shared-responsibility mortgages, establishing a proven alternative to rigid legacy credit structures.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Rigid algorithmic underwriting triggers foreclosure waves among displaced cognitive workers",
-     "description": "Lenders rely on rigid automated underwriting algorithms that treat income volatility as disqualifying risk, refusing payment adjustments and accelerating foreclosures for displaced workers.",
-     "example": "A legal analyst in Toronto losing half their salary to automated document review software is automatically denied a mortgage renewal by their bank's credit algorithm, resulting in forced property liquidation within ninety days.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Member-owned credit unions deploy private income-contingent mortgage contracts",
-     "description": "Cooperative lenders and mutual credit unions pilot flexible mortgage obligations that automatically scale monthly obligations with verified household cash flow, sharing upside during recoveries.",
-     "example": "A regional credit union in Vancouver offers shared-responsibility mortgages where a borrower's personal agent proves income reductions via local cryptographic attestation, automatically reducing monthly payments without paperwork delays or public distress filings.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "National banking cartels lobby regulators to mandate standardized debt scoring algorithms",
-     "description": "Large legacy lenders successfully lobby federal financial authorities to mandate rigid automated debt-to-income algorithms across all regulated institutions, outlawing non-standard contingent contracts.",
-     "example": "Federal banking regulators issue underwriting rules that impose severe capital penalties on lenders offering variable-payment relief, keeping eighty percent of the mortgage market locked in legacy fixed instruments.",
-     "desirable": false,
-     "likelihood_now": 0.7,
-     "likelihood_with_cin": 0.68
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.23901",
-     "title": "Disentangling Liquidity-Constrained from Strategic Default: A Deep Learning Approach",
-     "kind": "preprint",
-     "published": "2026-09-29"
-    }
-   ],
-   "work": 2
   }
  ]
 }
