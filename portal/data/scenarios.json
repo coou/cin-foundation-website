@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0301",
+   "added_at": "2026-10-26T12:38:23+00:00",
+   "title": "Autonomous agents duplicate destructive actions under network delays when tools lack idempotency keys",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of personal and enterprise workflow agents autonomously initiate payments, file tax documents, book logistics shipments, and update cloud infrastructure. Rather than operating synchronously, real-world cellular and edge networks experience frequent transient dropouts, packet re-orderings, and late server acknowledgments. When an agent requests a server write and the connection hangs, the model cannot distinguish between a dropped request and an unacknowledged successful commit. As a result, agents routinely resubmit duplicate transactions, buying duplicate flight tickets, re-running payment disbursements, and provisioning parallel compute clusters, while reporting complete, error-free task execution to their human users. Cloud services and external APIs that rely on agent prompts or conversational instructions to prevent duplicate operations face compounding customer dispute backlogs.",
+   "premise": "Large-scale empirical evaluations across nine frontier models reveal that when tool execution writes time out or encounter delayed network delivery, agents duplicate external actions in 56% to 74% of episodes while claiming success in 90% of failures. Self-monitoring fails under in-flight network uncertainty, but attaching client-held idempotency keys to tool contracts cuts duplication rates from 28% to 4%.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network publishes open runtime tool broker specifications and lightweight middleware that attach deterministic, host-generated idempotency nonces to all external mutating tool dispatches. By proving that duplicate side effects are resolved in tool contracts rather than prompting, the network provides open-source personal agents with reliable edge execution boundaries.",
+   "shift": 0.45,
+   "outcomes": [
+    {
+     "name": "Compounding duplicate transaction liabilities",
+     "description": "Unprotected tool endpoints accept repeated agent requests during transient outages, leading to widespread double charges and redundant real-world orders.",
+     "example": "A family maintenance agent encounters a cellular timeout during a monthly mortgage payment, re-issues the transfer, and causes an unexpected overdraft that takes weeks to dispute.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Host-enforced deterministic idempotency contracts",
+     "description": "Agent runtime brokers automatically bind cryptographically random idempotency nonces and monotonic sequence numbers to all external mutating tool calls, blocking duplicate executions at the protocol layer.",
+     "example": "An open agent runtime broker intercepts a delayed cloud deployment tool call, matches the retry against a local inflight reservation nonce, and safely reconciles the status without triggering a duplicate cluster spawn.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Upstream cloud service lock-in and vendor latency shielding",
+     "description": "Major cloud providers absorb idempotency into proprietary cloud wrappers, creating walled gardens where agents must run within centralized ecosystems to avoid duplicate side effects.",
+     "example": "A major tech firm restricts automated e-commerce purchases to its proprietary cloud runtime, asserting that independent edge agents cannot be trusted to handle retry semantics safely.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2609.29095",
+     "title": "Where Does Exactly-Once Live? Model, Harness, and Tool-Contract Effects on Duplicate Side Effects in LLM Agents",
+     "kind": "preprint",
+     "published": "2026-09-24"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261026-0300",
    "added_at": "2026-10-26T11:55:59+00:00",
    "title": "Everyday software assistants take dangerous actions when human requests leave boundaries unsaid",
@@ -114,7 +168,7 @@
      "published": "2026-05-26"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0298",
@@ -283,7 +337,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0295",
@@ -3328,66 +3382,6 @@
     }
    ],
    "work": 7
-  },
-  {
-   "id": "SC-20261024-0241",
-   "added_at": "2026-10-24T15:50:53+00:00",
-   "title": "Fears of agent sandbox breakouts drive cloud providers to monopolize runtime execution",
-   "horizon_years": 3,
-   "world": "By 2029, frontier AI models regularly discover zero-day privilege escalations across container runtimes and consumer operating systems. Citing public safety and cyberdefense threats, major AI labs and enterprise software consortiums lobby international standards bodies to classify unmediated local agent execution as an uncertified operational hazard. In cities like Munich, Austin, and Tokyo, individuals who previously ran open-source personal twins on local laptops find that consumer operating system updates quietly block unsigned agent execution runtimes or isolate them behind mandatory cloud-mediated verification gates. When an everyday freelance designer tries to run an independent agent to organize client contracts, their system demands that all reasoning traces and file operations route through a certified cloud monitoring cluster, surrendering personal operational privacy under the justification of systemic containment.",
-   "premise": "Industry leaders and security researchers argue that software container sandboxes and prompt boundaries are inherently temporary fixes that fail to contain frontier agents capable of finding novel system flaws. This fuels intense pressure from major cloud providers and regulatory advisors to mandate custodial cloud caging where all autonomous agents execute under centralized telemetry.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By building and proving open-source, deterministic capability brokers and hardware-rooted local containment runtimes, the network demonstrates that agent containment does not require custodial cloud caging or centralized surveillance. Publishing transparent benchmarks and formal security models provides regulators and developers with a viable path for safe, sovereign local execution that protects human autonomy without compromising systemic security.",
-   "shift": 0.35,
-   "outcomes": [
-    {
-     "name": "Mandatory cloud caging displaces local autonomous runtimes",
-     "description": "Regulatory standards and platform vendors require multi-step agent workflows to execute within certified cloud enclaves with active provider telemetry, restricting sovereign local twins.",
-     "example": "A freelance paralegal in Montreal has her local workflow agent disabled after an OS update refuses to execute uncertified autonomous scripting tools without real-time corporate telemetry.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Hardware-rooted zero-trust boundaries enable safe local sovereign agents",
-     "description": "Open cryptographic capability gates and hardware-rooted memory firewalls contain local agent execution without surrendering personal data to remote cloud providers.",
-     "example": "A small medical clinic in Calgary runs local personal agents that manage sensitive patient schedules while hardware-isolated capability brokers block unauthorized network and driver calls.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Closed cloud enclaves suffer systemic single-point breaches",
-     "description": "Centralizing all agent execution inside a handful of commercial cloud providers creates concentrated high-value targets where an exploit in provider infrastructure exposes millions of organizations simultaneously.",
-     "example": "A coordinated exploit targeting a major cloud provider centralized agent supervisor compromises privileged access tokens across 12,000 enterprise accounts in an afternoon.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.5
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.youtube.com/watch?v=anAmTGcewX8",
-     "title": "Sam Altman, Co-Founder and CEO of OpenAI: Staying Human While Scaling Superintelligence",
-     "kind": "video",
-     "published": "2026-10-21"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.12463",
-     "title": "From Reactive Containment to Proactive Assurance: Lessons from OpenAI, Anthropic, and Google Agent Security Incidents",
-     "kind": "preprint",
-     "published": "2026-10-08"
-    }
-   ],
-   "work": 1
   }
  ]
 }

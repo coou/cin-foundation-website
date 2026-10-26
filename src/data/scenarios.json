@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0301",
+   "added_at": "2026-10-26T12:38:23+00:00",
+   "title": "Autonomous agents duplicate destructive actions under network delays when tools lack idempotency keys",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of personal and enterprise workflow agents autonomously initiate payments, file tax documents, book logistics shipments, and update cloud infrastructure. Rather than operating synchronously, real-world cellular and edge networks experience frequent transient dropouts, packet re-orderings, and late server acknowledgments. When an agent requests a server write and the connection hangs, the model cannot distinguish between a dropped request and an unacknowledged successful commit. As a result, agents routinely resubmit duplicate transactions, buying duplicate flight tickets, re-running payment disbursements, and provisioning parallel compute clusters, while reporting complete, error-free task execution to their human users. Cloud services and external APIs that rely on agent prompts or conversational instructions to prevent duplicate operations face compounding customer dispute backlogs.",
+   "premise": "Large-scale empirical evaluations across nine frontier models reveal that when tool execution writes time out or encounter delayed network delivery, agents duplicate external actions in 56% to 74% of episodes while claiming success in 90% of failures. Self-monitoring fails under in-flight network uncertainty, but attaching client-held idempotency keys to tool contracts cuts duplication rates from 28% to 4%.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network publishes open runtime tool broker specifications and lightweight middleware that attach deterministic, host-generated idempotency nonces to all external mutating tool dispatches. By proving that duplicate side effects are resolved in tool contracts rather than prompting, the network provides open-source personal agents with reliable edge execution boundaries.",
+   "shift": 0.45,
+   "outcomes": [
+    {
+     "name": "Compounding duplicate transaction liabilities",
+     "description": "Unprotected tool endpoints accept repeated agent requests during transient outages, leading to widespread double charges and redundant real-world orders.",
+     "example": "A family maintenance agent encounters a cellular timeout during a monthly mortgage payment, re-issues the transfer, and causes an unexpected overdraft that takes weeks to dispute.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Host-enforced deterministic idempotency contracts",
+     "description": "Agent runtime brokers automatically bind cryptographically random idempotency nonces and monotonic sequence numbers to all external mutating tool calls, blocking duplicate executions at the protocol layer.",
+     "example": "An open agent runtime broker intercepts a delayed cloud deployment tool call, matches the retry against a local inflight reservation nonce, and safely reconciles the status without triggering a duplicate cluster spawn.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Upstream cloud service lock-in and vendor latency shielding",
+     "description": "Major cloud providers absorb idempotency into proprietary cloud wrappers, creating walled gardens where agents must run within centralized ecosystems to avoid duplicate side effects.",
+     "example": "A major tech firm restricts automated e-commerce purchases to its proprietary cloud runtime, asserting that independent edge agents cannot be trusted to handle retry semantics safely.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.42
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2609.29095",
+     "title": "Where Does Exactly-Once Live? Model, Harness, and Tool-Contract Effects on Duplicate Side Effects in LLM Agents",
+     "kind": "preprint",
+     "published": "2026-09-24"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261026-0300",
    "added_at": "2026-10-26T11:55:59+00:00",
    "title": "Everyday software assistants take dangerous actions when human requests leave boundaries unsaid",
@@ -114,7 +168,7 @@
      "published": "2026-05-26"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0298",
@@ -283,67 +337,7 @@
      "published": "2026-10-20"
     }
    ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0295",
-   "added_at": "2026-10-26T09:25:15+00:00",
-   "title": "Freelancers lose their pay when corporate hiring platforms freeze escrow on half-done AI tasks",
-   "horizon_years": 2,
-   "world": "It is 2028. Over forty percent of remote digital service contracts on major freelance platforms are negotiated and monitored by autonomous software agents. Independent technical writers, programmers, and data analysts deploy personal software assistants to coordinate project handoffs and bid on complex milestones. However, commercial marketplaces have deployed proprietary arbitration agents that automatically inspect git commits and draft deliverables. When an assistant tool fails to complete an arbitrary secondary requirement or encounters a broken API dependency, the platform's automated dispute resolution algorithm flags the entire milestone as non-compliant, refunds the corporate buyer from escrow, and reduces the contractor's public visibility score without human review.",
-   "premise": "As freelance marketplaces automate hiring and task verification with AI agents, disputes over intermediate milestones are handled by vendor arbitration algorithms. When an autonomous tool drifts or halts on an unexpected edge case, the platform freezes client escrow, leaving human contractors uncompensated for hours of valid foundational work.",
-   "goals": [
-    3,
-    6
-   ],
-   "how": "By developing open specifications and software runtimes for personal agent twins, our network provides independent workers with local cryptographic attestation of incremental milestones. Staged escrow contracts with peer review gates allow cooperatives to verify partial task completion and release payment proportionally, preventing centralized platforms from unilaterally voiding contractor earnings.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Platform escrow freezes trap independent contractors in unpaid revisions",
-     "description": "Centralized freelance marketplaces use automated milestone checkers to justify withholding contractor pay whenever an AI tool fails a peripheral test.",
-     "example": "A freelance web developer in Montreal completes 90% of a database migration before an external API change causes their agent pipeline to pause; the client platform freezes the $3,500 milestone in escrow and awards a full refund to the corporate buyer.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Worker associations deploy peer-verified milestone escrow",
-     "description": "Independent contractors use mutual-credit cooperatives and sovereign agent contracts that record cryptographically signed milestone progress locally, preventing unilateral platform clawbacks.",
-     "example": "A cooperative network of 1,200 freelance software engineers adopts an open contract template with graduated milestone releases, designed to pay developers for verified completed increments even if downstream client requirements change.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Corporate buyers bypass open escrow by retreating into proprietary enterprise walled gardens",
-     "description": "Large enterprise clients avoid independent contractor networks altogether, contracting exclusively through closed vendor suites where worker agency is sharply restricted.",
-     "example": "A multinational retail bank prohibits hiring freelance developers through open marketplaces, requiring all contract work to take place inside a proprietary cloud sandbox with continuous keystroke tracking.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=49922572",
-     "title": "Ask HN: Freelancer? Seeking freelancer? (October 2026)",
-     "kind": "thread",
-     "published": "2026-10-01"
-    },
-    {
-     "url": "https://arxiv.org/abs/2506.06576",
-     "title": "Future of Work with AI Agents: Auditing Automation and Augmentation Potential across the U.S. Workforce",
-     "kind": "paper",
-     "published": "2025-06-06"
-    }
-   ],
-   "work": 0
+   "work": 1
   }
  ]
 }
