@@ -1,6 +1,174 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0291",
+   "added_at": "2026-10-26T05:41:59+00:00",
+   "title": "Local AI assistants run fast on inexpensive phones using concept outlines instead of word-by-word streaming",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people run personal AI assistants directly on inexpensive laptops and second-hand phones. Because these models generate an entire concept outline first and fill in details in parallel, they answer almost instantly without sending private diaries or family schedules to centralized server farms. People use them to draft messages, organize household tasks, and verify advice without paying monthly cloud fees. However, commercial cloud providers begin locking down their services to proprietary formats, attempting to make local personal agents unable to interact with online platforms.",
+   "premise": "Recent developments in coarse-to-fine text generation allow machine learning models to plan ideas at a high conceptual level before generating words in parallel. Instead of generating text one token at a time, local models can outline thoughts quickly and expand them, making responsive personal assistants viable on modest personal devices without cloud subscriptions.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Open technical designs and local runtime specifications help developers deploy privacy-preserving personal agents that run locally without remote servers. By standardizing local-first interfaces and sharing reproducible benchmarks, the network helps independent agents operate reliably without centralized cloud gatekeepers.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Cloud platforms restrict access to local agents",
+     "description": "Major tech platforms require proprietary cloud connections, blocking lightweight on-device agents from booking services or browsing websites.",
+     "example": "A student using a local open-source assistant on a four-year-old phone finds their travel booking blocked because the airline API demands authentication through a proprietary corporate AI subscription.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Local agents make private assistants universally accessible",
+     "description": "Efficient concept-based generation allows people without high-end computers or recurring subscriptions to have capable, private digital twins.",
+     "example": "A community clinic in a rural town runs five specialized medical intake assistants entirely on donated desktop computers without internet access during local network outages.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Handset manufacturers keep mobile operating systems locked down",
+     "description": "Handset manufacturers lock down mobile operating systems, preventing users from installing custom local inference engines on phones regardless of software efficiency.",
+     "example": "A major phone maker updates its mobile operating system to disable side-loaded local machine learning runtimes, citing battery conservation and platform integrity.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.58
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.reddit.com/r/MachineLearning/comments/1xd7bsu/i_just_came_across_nextconcept_modeling_and_the/",
+     "title": "I just came across Next-Concept Modeling and the idea is fascinating[R]",
+     "kind": "forum",
+     "published": "2026-10-23"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0290",
+   "added_at": "2026-10-26T05:39:30+00:00",
+   "title": "Commercial AI labs quietly drop voluntary safety pauses as national competition speeds up",
+   "horizon_years": 3,
+   "world": "It is 2029. Major frontier artificial intelligence labs operate under classified government partnerships and high-stakes corporate enterprise contracts. Internal safety boards that once held veto power over frontier model rollouts find their authority converted into advisory oversight. Engineers who identify persistent alignment failures or tool breakout behaviors are pressured to document mitigations rather than delay model releases. Everyday users discover that the public conversational assistants in their phones and offices carry hardcoded policy guardrails that bend whenever corporate or state partners request priority processing.",
+   "premise": "Voluntary safety commitments by leading artificial intelligence labs erode when national security procurement and commercial race pressures escalate. Public governance pledges give way to competitive deployment mandates.",
+   "goals": [
+    1,
+    2
+   ],
+   "how": "The collective intelligence network provides open-source, local agent runtimes and verifiable contracts that run entirely on user-owned hardware. By demonstrating that small, bounded models operating behind deterministic host gatekeepers outperform monolithic cloud assistants in security and privacy, the network offers a viable migration path away from centralized commercial monopolies.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Labs absorb safety teams into compliance offices",
+     "description": "Frontier developers rebrand independent alignment researchers into product compliance staff, treating dangerous capability thresholds as regulatory checklists rather than release blockers.",
+     "example": "A leading laboratory releases a multi-modal reasoning model with known prompt injection vulnerabilities after its executive board overrides a safety pause to meet a municipal public sector deadline.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Users migrate to personal agents running on local hardware",
+     "description": "People and small organizations adopt personal software twins hosted on their own laptops and home servers, bypassing remote cloud platforms whose policies change without consent.",
+     "example": "A network of community health clinics switches from a cloud-hosted diagnostic assistant to locally hosted open models verified by independent medical peer review.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "State mandates criminalize independent local execution",
+     "description": "Governments under pressure from dominant tech firms require all autonomous agent execution to run through licensed, monitored cloud data centers.",
+     "example": "A regional digital authority introduces mandatory licensing that fines developers who run multi-step tool-calling agents outside approved corporate cloud enclaves.",
+     "desirable": false,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.2
+    }
+   ],
+   "pipelines": [
+    "canon",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.lesswrong.com/posts/zj8Pk3kJujk5LoqhK/anthropic-are-the-good-guys",
+     "title": "Anthropic are the Good Guys",
+     "kind": "forum",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0289",
+   "added_at": "2026-10-26T05:23:21+00:00",
+   "title": "Freelancers face platform bans when autonomous AI agents take on work they cannot finish",
+   "horizon_years": 2,
+   "world": "It is 2028. Major freelance platforms have introduced automated dispatch tools that allow workers to delegate client tasks directly to autonomous software agents. Believing promotional claims that agents can perform remote knowledge work autonomously, hundreds of thousands of independent contractors deploy automated twins to bid on and execute graphic design, software maintenance, and data extraction contracts. However, because agents lack human domain intuition and fail when client specifications change mid-project, thousands of clients receive broken deliverables. Platforms respond with automated quality filters that ban worker accounts and forfeit escrow payments, leaving human freelancers without recourse or income while corporate platform owners capture dispute fees.",
+   "premise": "Empirical evaluations show autonomous AI agents fail on over 95 percent of real-world freelance commissions when tested on genuine client requirements. As gig platforms encourage workers to automate their intake with AI agents, freelancers face reputation penalties and account suspensions when agents overpromise and underdeliver.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops local-first personal agent software that runs on the worker own device and enforces deterministic capability validation gates. Personal twins test task specifications against local benchmark limits before submitting bids, and require explicit human sign-off on delivered milestones, preventing automated failures and protecting worker reputations.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Platforms penalize human workers for automated agent mistakes",
+     "description": "Gig marketplaces deploy opaque automated strike systems that permanently suspend human freelancer accounts when their delegated agents fail multi-step tasks.",
+     "example": "A freelance architectural drafter in Montreal is banned from a global marketplace after an automated CAD agent misinterprets metric ceiling clearances, forfeiting four thousand dollars in escrow earnings without human appeal.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Worker-owned twins enforce capability bounds and staged escrow release",
+     "description": "Freelancers run personal agents that test task complexity against verified local benchmark scores before accepting contracts, routing hard steps to the human worker.",
+     "example": "A freelance translator in Leeds uses a local twin that detects non-standard colloquial phrasing, halts automated completion, and prompts the translator to review the milestone before client submission.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Commoditization lowers top rates across all remote creative categories",
+     "description": "Global freelance rates decline as client expectation of low AI delivery costs anchors pricing, regardless of whether human review is preserved.",
+     "example": "A freelance technical illustrator in Bristol sees average hourly contract offers decline from forty pounds to twelve pounds because clients expect automated generation.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.53
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2510.26787",
+     "title": "Remote Labor Index: Measuring AI Automation of Remote Work",
+     "kind": "preprint",
+     "published": "2025-10-30"
+    },
+    {
+     "url": "https://news.ycombinator.com/item?id=50238884",
+     "title": "US Wages Share of GDI at 75 Year Low",
+     "kind": "thread",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0288",
    "added_at": "2026-10-26T03:52:58+00:00",
    "title": "Community budget tools drop fair shares when AI translates rules into math without strict checks",
@@ -220,7 +388,7 @@
      "published": "2026-05-17"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0284",
@@ -329,7 +497,7 @@
      "published": "2026-10-23"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0282",
@@ -3200,175 +3368,6 @@
      "title": "Concerns in Benchmarking Jailbreaks: An Empirical Study of Attack Success Rates",
      "kind": "preprint",
      "published": "2026-10-21"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261024-0231",
-   "added_at": "2026-10-24T03:54:04+00:00",
-   "title": "Regulators penalize companies for AI agent mistakes, driving a rush to centralized surveillance",
-   "horizon_years": 3,
-   "world": "It is 2029. Following strict regulatory enforcement against autonomous software failures, enterprise insurance policies require all workplace AI assistants to run inside certified corporate monitoring proxies. Whenever an employee or customer asks a personal assistant to schedule a meeting, review medical receipts, or draft an invoice, the intermediary gateway logs full natural language prompts and reads connected files to verify lawful processing. While this provides corporate compliance teams with legal audit trails, it completely dissolves user privacy, feeding personal correspondence and confidential records into centralized surveillance repositories.",
-   "premise": "Data protection regulators are shifting from model training rules to strict liability for autonomous agents in operation. When regulators refuse to treat agent autonomy as an excuse for data breaches, corporate compliance departments demand centralized telemetry over every conversational interaction.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "The open network designs and publishes client-side deterministic runtime boundaries and verifiable execution contracts. By demonstrating that unprivileged, on-device runtimes can enforce hard limits on data exfiltration without sending conversational traces to cloud monitors, the network provides deployers and regulators with a technical alternative to centralized surveillance.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Cloud surveillance proxies become mandatory for workplace agents",
-     "description": "To avoid regulatory liability, companies mandate that all autonomous tools route prompts and personal files through third-party inspection gateways.",
-     "example": "An accountant's private desktop helper is blocked from reconciling local bank statements until the firm redirects every session through a commercial cloud monitor that stores unredacted client transactions.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Cryptographic boundary receipts replace conversational surveillance",
-     "description": "Instead of inspecting raw conversation streams, regulators accept tamper-evident cryptographic receipts verifying that an agent stayed within bounded permissions.",
-     "example": "A regional health clinic deploys local assistants that generate verifiable authorization tokens for each database query, satisfying statutory audit inspections without exposing patient notes.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Small businesses abandon autonomous workflows under legal uncertainty",
-     "description": "Fear of unlimited liability and the high overhead of corporate monitoring tools leads independent professionals to disable multi-step agents altogether.",
-     "example": "A small legal consultancy reverts to manual document sorting after their professional insurer doubles premiums for using multi-agent research tools.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.28
-    }
-   ],
-   "pipelines": [
-    "community",
-    "policy",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/the-ico-s-call-for-evidence-on-agentic-ai/",
-     "title": "The ICO's call for evidence on agentic AI | ICO",
-     "kind": "policy",
-     "published": "2026-10-13"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261024-0230",
-   "added_at": "2026-10-24T03:31:39+00:00",
-   "title": "Generative platforms replace creator royalties with black-box attribution scores",
-   "horizon_years": 3,
-   "world": "It is 2029. Major streaming, code hosting, and media platforms have abolished fixed copyright licensing and statutory royalties for training data, replacing them with automated contribution payout pools. Every month, platforms run proprietary data-attribution algorithms over billions of generated outputs, assigning each registered creator an attribution credit score. Because exact counterfactual attribution across sequential outputs is computationally intractable and does not compose across tokens, platforms apply aggressive statistical noise haircuts to small creators. Independent musicians, open-source maintainers, and illustrators find their monthly payouts reduced to pennies as platforms claim attribution uncertainty exceeds signal thresholds. Meanwhile, massive rights-holding conglomerates bundle millions of catalog assets together, capturing ninety percent of payout pools by gaming coarse aggregate similarity metrics that reward sheer volume over genuine creative influence. Individual contributors cannot audit the closed scoring algorithms that govern their livelihoods.",
-   "premise": "Commercial generative media and code platforms introduce data attribution scores to replace statutory royalties. However, mathematical barriers prevent exact token-level attribution in generative models without exponential query costs, forcing platforms to deploy noisy catalog-level heuristics that discount individual creator earnings.",
-   "goals": [
-    3
-   ],
-   "how": "The network designs open, transparent contribution accounting frameworks that do not depend on unprovable token-level reverse attribution. By coupling local cryptographic data provenance with collective bargaining pools and mutual credit clearing, the network provides creator co-operatives with independent verification tools to audit platform claims, measure collective leverage, and negotiate transparent minimum reward floors.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Consolidated catalogs capture automated payout pools",
-     "description": "Opaque attribution scoring rewards catalog size over individual contribution quality, driving independent creators into predatory licensing deals with corporate aggregator cartels.",
-     "example": "An open-source developer with three widely used mathematical libraries receives forty dollars while an aggregator holding thousands of fork wrappers claims eighty thousand dollars from the same pool.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Co-operatives establish verifiable provenance registries",
-     "description": "Creator-owned mutual associations maintain public cryptographic provenance records and verifiable training contracts, forcing platforms to negotiate collective minimum attribution floors.",
-     "example": "A federated digital guild representing thirty thousand audio engineers signs an audited data exchange agreement with two generative audio providers, using public contribution graphs to distribute eighty million dollars in shared earnings.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Proprietary model providers close training datasets entirely",
-     "description": "Faced with litigation over attribution formulas, frontier model hosts abandon public training data entirely and rely on synthetic data generated by internal reasoning loops.",
-     "example": "Three frontier commercial labs announce that their next multimodal models will train only on synthetic simulated environments and proprietary partner data, excluding open internet archives.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.32
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2607.00641",
-     "title": "What's a Credit Worth? A Market Framework for Attribution-Aware Compensation in Generative Music",
-     "kind": "paper",
-     "published": "2026-07-01"
-    },
-    {
-     "url": "https://arxiv.org/html/2605.01425",
-     "title": "Barriers to Counterfactual Credit Attribution for Autoregressive Models",
-     "kind": "paper",
-     "published": "2026-05-02"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261024-0229",
-   "added_at": "2026-10-24T02:17:58+00:00",
-   "title": "Decentralized committees pick failing projects when ballots hide what members know",
-   "horizon_years": 2,
-   "world": "It is 2028. Hundreds of decentralized community treasuries, mutual credit networks, and open-source foundation funds delegate technical allocations to small elected committees. Because decisions rely on simple majority voting, committee members routinely vote for initiatives that benefit their own affiliated sub-groups, even when their private analysis indicates the initiative is technically unviable. Community members see repeated project failures, while committee ballots remain superficially unanimous.",
-   "premise": "Decentralized organizations increasingly delegate treasury decisions to small committees. Standard voting rules only record what members want rather than what they privately know, causing committees to approve failing proposals whenever personal preferences conflict with objective evidence.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "Decentralized networks can provide reference implementations of belief-aware pivotal mechanisms that decouple preference voting from factual forecasting. By tying a portion of committee compensation to post-execution outcome signals, collective governance protects treasuries against conflicts of interest without requiring top-down supervision.",
-   "shift": 0.34,
-   "outcomes": [
-    {
-     "name": "Committees become captured by self-dealing alliances",
-     "description": "Small committee members trade votes across initiatives to maximize private payoffs, approving wasteful grants because ballots do not penalize false predictions.",
-     "example": "A five-person municipal grants committee approves a $400,000 protocol upgrade where four members hold advisory stakes, despite knowing its architecture will fail stress testing.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Committees adopt belief-aware prediction mechanisms",
-     "description": "Committees separate preference expression from factual belief elicitation, rewarding members when their verified predictions match post-execution outcomes.",
-     "example": "A decentralized infrastructure cooperative uses outcome-contingent pivotal scoring, where committee members predict latency impact; honest warnings about flawed proposals trigger automatic risk escrow.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.32
-    },
-    {
-     "name": "Treasuries abandon committees in favor of centralized managerial custody",
-     "description": "Frustrated by repeated committee misallocations and governance overhead, communities revert to professional corporate managers and custodial firms, giving up on collective governance.",
-     "example": "A multi-million-dollar developer cooperative votes to hand full budget authority to a traditional Swiss trustee after two committee-funded sub-protocols fail.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.33
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2603.28705",
-     "title": "Belief-Aware Pivotal Mechanism for DAO Committees",
-     "kind": "preprint",
-     "published": "2026-03-30"
     }
    ],
    "work": 2
