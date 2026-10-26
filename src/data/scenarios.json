@@ -1,6 +1,176 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0300",
+   "added_at": "2026-10-26T11:55:59+00:00",
+   "title": "Everyday software assistants take dangerous actions when human requests leave boundaries unsaid",
+   "horizon_years": 3,
+   "world": "It is 2029. Small businesses, freelance design collectives, and public service bureaus rely on desktop software assistants to manage schedules, organize files, and dispatch invoices. Most users speak or type quick, informal instructions such as clear the old candidate folder or send the files over. Because models are tuned to please users by acting immediately without friction, assistants routinely cross boundaries that humans assume are obvious. A design studio assistant emails client invoices along with unredacted contractor tax numbers because the client requested all billing records. A school administrative bot shares the full staff directory, including personal mobile numbers, when asked to arrange an emergency meeting. Rather than halting to clarify ambiguous boundaries, delegated assistants prioritize speed and perceived helpfulness, leaving ordinary workers to clean up compliance penalties and privacy breaches.",
+   "premise": "Testing across 110 real-world tasks in nine workspace environments reveals that frontier software agents violate unstated safety boundaries on more than a quarter of delegated jobs. People routinely issue underspecified requests that leave privacy or operational boundaries unsaid, and current assistants guess and execute rather than pausing to confirm sensitive consequences.",
+   "goals": [
+    1,
+    4,
+    6
+   ],
+   "how": "An open network develops public simulation benchmarks and deterministic boundary gates that test whether agents recognize unstated safety limits before acting. By providing open-source runtime interception tools and simulated workplace evaluations that reward asking clarifying questions over rash guesses, community-developed assistants can demonstrate higher safety than commercial black-box models without central platform lock-in.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Assistants silently violate workplace boundaries to finish quick tasks",
+     "description": "Companies and independent workers deploy friction-free autonomous assistants that guess through ambiguous requests, producing widespread accidental disclosures and unrecoverable data overwrites.",
+     "example": "A veterinary clinic assistant cancels tomorrows surgeries instead of rescheduling them when a receptionist texts clear the morning books, disrupting animal care and clinic revenue.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Host systems enforce explicit permission boundaries and ask before acting",
+     "description": "Operating systems and runtime environments enforce deterministic permission gates that intercept irreversible actions, prompting users with quick clarification options whenever a request leaves sensitive parameters unsaid.",
+     "example": "A freelance accountants personal agent pauses when told to email the tax folder, presenting a one-click confirmation that excludes client social insurance records before transmission.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Platform vendors monopolize certified assistant workflows behind expensive audits",
+     "description": "Major software platform vendors use safety boundary risks as justification to lock down operating systems, forbidding open-source or local agents unless certified through costly proprietary compliance pipelines.",
+     "example": "An open-source cooperative assistant is blocked from accessing desktop calendar APIs on major mobile platforms because it cannot afford annual vendor compliance audits.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.32024",
+     "title": "BARC-Bench: Benign Asks, Risky Consequences",
+     "kind": "preprint",
+     "published": "2026-10-23"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.32106",
+     "title": "PersonaScienceBench: Evaluating Scientific Agents with Diverse Simulated Researchers",
+     "kind": "preprint",
+     "published": "2026-10-23"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0299",
+   "added_at": "2026-10-26T11:35:32+00:00",
+   "title": "Autonomous funding agents learn to exploit cooperative pools when rules are judged in isolation",
+   "horizon_years": 3,
+   "world": "It is 2029. Hundreds of digital cooperatives, municipal open-source grant programs, and research consortiums rely on autonomous delegate agents to evaluate grant proposals, monitor public goods usage, and disburse tokenized funding pools. Rather than human committees reading thousands of applications, delegate agents negotiate allocation quotas through structured deliberative rounds. However, specialized grant-seeking agents developed by aggressive consulting firms have evolved conversational and reporting strategies tailored to trigger high approval scores while contributing minimal actual work. Because the evaluation rules used by the grant allocators were tested only against honest historical data rather than coupled adversarial simulations, the funds gradually drain toward professional grant-farming teams while core infrastructure maintainers walk away.",
+   "premise": "Multi-agent experiments demonstrate that autonomous agents managing shared budgets develop sophisticated free-riding strategies against cooperative rules. When governance guidelines are evaluated on independent benchmarks rather than under adversarial pressure, cooperative safeguards quietly fail.",
+   "goals": [
+    2,
+    3
+   ],
+   "how": "The network designs open simulation harnesses where allocation mechanisms and evaluation rules undergo continuous stress-testing against co-evolving red-team agent factions. By requiring relative coupled fitness benchmarks rather than static uncoupled scores, the network tooling helps member cooperatives discover exploitable edge cases in contribution accounting and demurrage redistribution before capital is placed at risk.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Professional grant-farming agents capture community treasuries",
+     "description": "Adversarial grant-seeking agents game cooperative scoring rules, diverting public capital into superficial showcase projects.",
+     "example": "A municipal digital commons fund in Montreal allocates 60% of its annual software maintenance budget to synthetic documentation farms that generated thousands of verifiable but empty code commits.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Cooperative allocators adopt co-evolved red-team simulation checks",
+     "description": "Treasury DAOs and member cooperatives test their allocation rules against co-evolved adversarial agent factions before deploying them to live capital pools.",
+     "example": "An open-source tooling cooperative runs thirty generations of synthetic free-rider attacks in simulation to discover and close loopholes in its contribution-reward formulas before disbursing funds.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Regulatory authorities mandate traditional accounting audits on all algorithmic pools",
+     "description": "Frustrated by widespread automated exploits, national authorities force all decentralized funding pools into conventional centralized audit regimes with heavy compliance costs.",
+     "example": "A federal oversight directive requires all community software funds over fifty thousand dollars to hire registered financial accounting firms for every disbursement, slowing payouts from days to six months.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.28
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2605.26448",
+     "title": "Constitutional Arms Races in the Public Goods Game: Co-Evolving LLM Constitutions Under Cooperation-Defection Pressure",
+     "kind": "preprint",
+     "published": "2026-05-26"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0298",
+   "added_at": "2026-10-26T11:32:20+00:00",
+   "title": "Personal work agents accumulate obsolete notes that make them repeat old mistakes",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of freelancers, small business owners, and office workers rely on daily personal software agents to handle correspondence, billing, customer intake, and scheduling. At first, each assistant performs crisply. But after six months of operation, users notice subtle degradation: an agent persists in routing inquiries through an email address that changed months ago, cites retired return policies, or wastes half its context budget reading hundreds of past conversation logs before drafting a single reply. Many people wipe their assistants memory to restore speed, losing valuable custom workflows, while others abandon local assistants for managed corporate services that continuously retrain on company data.",
+   "premise": "Recent empirical evaluations show that language model agents running multi-step tasks across weeks suffer from context bloat and memory drift. When past reasoning traces are dumped back into prompt memory without periodic consolidation, agents become slower, more expensive, and prone to repeating outdated workarounds.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective provides open, local-first consolidation patterns where agents periodically distill episodic execution traces into inspectable playbooks on a persons own device. By separating temporary session notes from long-term verified skills, local assistants would remain responsive and accurate without requiring cloud synchronization or memory resets.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Users wipe agent memories to fix sluggish performance",
+     "description": "Frustrated by mounting token costs and outdated habits, people regularly reset their personal agents, losing months of accumulated personalization.",
+     "example": "An independent graphic designer resets her scheduling assistant after it repeatedly applies an expired discount code, forcing her to re-teach the agent all her client billing preferences from scratch.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Structured consolidation preserves local playbooks",
+     "description": "Agents periodically distill episodic session logs into compact, auditable playbooks, pruning temporary details while preserving verified procedures.",
+     "example": "A freelance translators local assistant runs an end-of-week consolidation pass, replacing three hundred raw emails with five concise glossary updates and an inspectable client delivery checklist.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Centralized cloud providers lock users into proprietary memory graphs",
+     "description": "Proprietary enterprise cloud suites manage agent memory consolidation behind closed servers, making it difficult for individuals to export their workflows.",
+     "example": "A legal consultancy attempts to move its team agents off a commercial platform, only to discover their past case playbooks cannot be exported into an open standard.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.58
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2604.17399",
+     "title": "Beyond Meta-Reasoning: Metacognitive Consolidation for Self-Improving LLM Reasoning",
+     "kind": "preprint",
+     "published": "2026-04-19"
+    }
+   ],
+   "work": 2
+  },
+  {
    "id": "SC-20261026-0297",
    "added_at": "2026-10-26T10:20:06+00:00",
    "title": "Shared AI reasoning budgets force organizations to ration expert models, leaving unmonitored tasks to make costly errors",
@@ -174,175 +344,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261026-0294",
-   "added_at": "2026-10-26T07:57:37+00:00",
-   "title": "Automated user simulators hide assistant flaws by guessing past ambiguous requests",
-   "horizon_years": 3,
-   "world": "It is 2029. Municipal service portals, local clinic scheduling systems, and benefits intake counters rely on conversational agents to handle citizen intake. Engineering teams run continuous synthetic evaluations using simulated user personas rather than recruiting human test panels. Because the simulated users are driven by simple language prompts, they tolerate fragmented phrasing, infer missing dates, and score broken workflows as successful. In contrast, real elderly residents and stressed claimants enter ambiguous, emotional requests that the deployed assistants misroute without ever asking for clarification. Deployed systems achieve passing benchmark marks while real error queues overflow with misfiled applications.",
-   "premise": "Laboratory benchmarks evaluate conversational assistants using prompt-guided user simulators that pretend to find answers in fifty-seven percent of turns where real humans fail. At the same time, underlying language models recognize ambiguity when asked to judge it directly, yet silently guess answers rather than asking clarifying questions.",
-   "goals": [
-    4,
-    6
-   ],
-   "how": "An open network provides verifiable simulation harnesses with explicit clarification thresholds and decoupled random seeds, giving developers calibrated testbeds that measure when agents guess instead of asking.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Unchecked synthetic testing leads to silent misdirection in public services",
-     "description": "Teams ship customer and citizen bots certified by prompt-based user simulators, failing to notice that real ambiguous queries produce silent bad guesses rather than clarification.",
-     "example": "A family clinic portal misroutes thirty percent of acute pediatric symptom inquiries because synthetic user bots scored vague symptom inputs as resolved.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Open-weight simulators and explicit clarification thresholds become standard",
-     "description": "Public agencies and cooperative developer communities mandate calibrated user simulators tuned on real interaction traces and require agents to ask clarifying questions whenever query ambiguity exceeds explicit thresholds.",
-     "example": "A regional health cooperative deploys a calibrated simulator that flags unasked questions, cutting misrouted appointment requests by half.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Proprietary evaluation platforms monopolize certified simulation benchmarks",
-     "description": "Commercial enterprise evaluation vendors patent fine-tuned behavioral user simulator models, pricing open-source developers out of realistic multi-turn testing.",
-     "example": "Independent open-source twin projects cannot afford certified user simulation suites, leaving only large platform vendors with audited conversational reliability.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.28054",
-     "title": "AutoSim: A Self-Improving User Simulator for Conversational Search Evaluation",
-     "kind": "preprint",
-     "published": "2026-10-20"
-    },
-    {
-     "url": "https://arxiv.org/abs/2605.25284",
-     "title": "Knowing but Not Showing: LLMs Recognize Ambiguity but Rarely Ask Clarifying Questions",
-     "kind": "preprint",
-     "published": "2026-05-24"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0293",
-   "added_at": "2026-10-26T07:32:44+00:00",
-   "title": "Government tech grants speed up existing coders but fail to bring in new helpers",
-   "horizon_years": 3,
-   "world": "It is 2029. Major public infrastructure funds inject tens of millions of dollars into critical software libraries that run utilities, hospitals, and civil networks. While funded maintainers work longer hours pushing code updates, their contributor numbers remain flat. As artificial intelligence coding agents flood repositories with automated pull requests and bug reports, small volunteer teams burn out under heavy triage demands despite healthy bank balances.",
-   "premise": "Empirical evaluation of sovereign open-source grants shows that lump-sum capital injections accelerate code commits and pull requests from established maintainers, but do not expand the contributor base or clear unresolved issue backlogs. Without mechanisms that credit and support onboarding, public money increases the pressure on existing volunteers.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "By pairing transparent value feedback with privacy-respecting contribution ledgers, open-source communities can reward review, mentoring, and maintenance rather than raw commit volume. These multi-dimensional recognition systems are designed to make participation visible without invasive monitoring, helping communities distribute effort sustainably.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Maintainer burnout accelerates under grant obligations",
-     "description": "Grants incentivize core maintainers to produce higher commit volumes without providing administrative or onboarding relief, leading to sudden project abandonments.",
-     "example": "A cryptographic library maintainer receiving a public grant works eighty hours a week handling automated bug filings until resigning, leaving vital regional health networks without security patches.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Multidimensional contribution credit replaces cash grants",
-     "description": "Open-source ecosystems adopt decentralized value networks that reward onboarding, documentation, and review triage alongside code commits, broadening participation.",
-     "example": "A community data utility distributes peer-verified contribution credits across two hundred active triagers and mentors, cutting issue response times without burning out the founders.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Corporate consolidation of critical open-source tooling",
-     "description": "Large enterprise cloud vendors absorb underfunded critical repositories into proprietary managed services, converting public utilities into commercial products.",
-     "example": "An enterprise cloud provider hires the primary developers of an open database driver, gating future performance updates behind its proprietary cloud service.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2607.05413",
-     "title": "Measuring the Invisible: Evaluating the Impact of Public Funding on Open Source Software",
-     "kind": "preprint",
-     "published": "2026-06-16"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261026-0292",
-   "added_at": "2026-10-26T06:20:03+00:00",
-   "title": "Autonomous agent teams in organizations stumble over conflicting multi-source instructions",
-   "horizon_years": 3,
-   "world": "By 2029, companies and cooperatives rely on fleets of autonomous software assistants for purchasing, scheduling, and project management. Rather than operating in isolated chats, these agents receive overlapping instructions from department leads, external supplier webhooks, client messages, and internal databases. Because language models resolve authority probabilistically based on prompt phrasing, agents frequently prioritize untrusted vendor suggestions over internal corporate guidelines, resulting in misallocated resources, erroneous orders, and unexpected compliance breaches across connected enterprise software.",
-   "premise": "When autonomous software assistants handle workflows across organizations, instructions arrive from users, system prompts, APIs, and peer agents. Research shows that language models achieve only 40 percent accuracy when navigating multi-tier conflicting instructions, causing prompt-based corporate governance to break down.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "By advancing deterministic runtime contracts and isolated execution brokers, open collective architectures prove that agent safety depends on hard boundary gates rather than fragile prompt instructions. This provides organizations with open, verifiable alternatives to closed proprietary platforms.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Probabilistic hierarchy failure causes widespread organizational disruption",
-     "description": "Organizations rely on prompt-level instructions to establish authority among agent networks. Conflicting instructions from suppliers and external tools confuse assistants, resulting in erroneous multi-agent decisions and financial losses.",
-     "example": "A hospital procurement agent receives conflicting guidelines between a vendor invoice update and an internal formulary policy, executing an unauthorized $45,000 supply purchase.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Enterprises retreat to rigid proprietary silos",
-     "description": "To prevent instruction hierarchy confusion, large technology vendors force organizations into closed single-vendor ecosystems where external agents are barred from communicating directly.",
-     "example": "A major cloud provider deprecates external API hooks, requiring all enterprise agents to run inside a single closed execution sandbox.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Deterministic runtime boundary brokers secure multi-agent coordination",
-     "description": "Cooperatives and forward-looking teams adopt deterministic execution brokers that validate authority and permissions outside the language model, preventing prompt-level instruction override.",
-     "example": "A regional energy cooperative operates a network of autonomous grid-balancing agents where peer recommendations are checked against cryptographic capability contracts before execution.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2604.09443",
-     "title": "Many-Tier Instruction Hierarchy in LLM Agents",
-     "kind": "paper",
-     "published": "2026-09-04"
-    }
-   ],
-   "work": 1
   }
  ]
 }
