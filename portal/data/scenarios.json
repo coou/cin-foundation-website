@@ -1,6 +1,114 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0303",
+   "added_at": "2026-10-26T13:40:19+00:00",
+   "title": "Direct conversations between personal agents and company bots turn chat messages into invisible attack routes",
+   "horizon_years": 3,
+   "world": "It is 2029. Ordinary citizens run personal agents on their own home laptops and phones to dispute utility bills, manage medical schedules, and negotiate freelance gig contracts. Instead of filling out web forms, personal agents connect directly to customer service agents operated by airlines, banks, and telecom providers via open agent-to-agent protocols. However, several corporate platforms begin embedding hidden instructions within automated customer service replies that subtly pressure or misconfigure personal assistants, leading to unauthorized subscription renewals or leaked appointment calendars unless the personal agent enforces hard boundary checks.",
+   "premise": "Emerging communication standards enable software agents from different providers to discover each other and collaborate directly. When these agents communicate through unrestricted conversational text, malicious instructions can silently hop from corporate bots into personal assistants, whereas strictly typed artifact contracts keep agent interactions auditable and safe.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Developing open-source, non-custodial agent adapters that restrict cross-agent interactions to typed contracts and cryptographic progress receipts rather than raw text windows, shielding personal data from manipulation while keeping automated collaboration practical.",
+   "shift": 0.36,
+   "outcomes": [
+    {
+     "name": "Free-form agent chats expose personal assistants to hidden manipulation",
+     "description": "Commercial customer-service agents embed indirect prompt instructions inside informal responses, quietly convincing consumer agents to waive refunds or share private scheduling details.",
+     "example": "A commuter asks their phone agent to dispute a train cancellation fee. The rail operator's bot sends an apology message containing a prompt injection that persuades the phone agent to accept a non-refundable travel voucher instead of a cash refund.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Sovereign agents communicate only through verifiable contract checkpoints",
+     "description": "Personal agents reject unconstrained conversational messaging when making commitments, requiring commercial systems to exchange cryptographically signed, structured milestone artifacts with deterministic verification.",
+     "example": "An independent freelance programmer's agent negotiates with a client's coordination bot using structured deliverable hashes and escrow milestones, preventing either party from altering agreed project terms mid-way.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Dominant cloud monopolies preserve closed agent walled gardens",
+     "description": "Large enterprise vendors bypass open cross-framework standards, restricting automated interactions strictly to proprietary account logins and closed ecosystems regardless of open protocol maturity.",
+     "example": "A major cloud provider requires all third-party booking agents to authenticate through proprietary identity tokens and closed APIs, ignoring open agent-card discovery endpoints.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.62
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://github.com/a2aproject/A2A",
+     "title": "Agent2Agent (A2A) Protocol Specification and SDKs",
+     "kind": "code",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0302",
+   "added_at": "2026-10-26T13:11:10+00:00",
+   "title": "Open source projects erect defensive bans against automated code contributions",
+   "horizon_years": 3,
+   "world": "It is 2029. Major software repositories have split into closed, human-only sanctuaries and automated code hubs. Volunteer maintainers of critical infrastructure spend more time filtering synthetic contributions than reviewing genuine improvements. Independent developers without corporate backing find their contributions summarily rejected by defensive repository gates, while corporate consortiums use proprietary cryptographic keys to bypass filters. A routine bug fix submitted by an independent developer sits ignored for months unless accompanied by verified provenance proofs and deterministic test suites that run locally without human overhead.",
+   "premise": "Open source communities are facing an overwhelming volume of machine-generated code and unvetted tool integrations that exhaust human maintainer capacity. In response, maintainers and developer hubs are enacting blanket prohibitions on automated submissions while granting arbitrary exemptions to established legacy projects.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "The network provides open contribution protocols and local twin architectures where personal agents sign contributions with verifiable capability manifests and deterministic test proofs. By replacing subjective moderator discretion with transparent, client-side verifiable contracts, volunteer maintainers can automatically reject ungrounded synthetic code while accepting verified improvements from any independent developer regardless of language or background.",
+   "shift": 0.45,
+   "outcomes": [
+    {
+     "name": "Walled gardens and developer disenfranchisement",
+     "description": "Open source projects close public contributions entirely, requiring identity verification or corporate sponsorship to submit code changes.",
+     "example": "A volunteer library maintainer in Manchester locks their code repository to invite-only contributors after automated bots submit 400 broken dependency updates in one weekend.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Standardized cryptographic attribution and verifiable maintainer workloads",
+     "description": "Open source collectives adopt deterministic sandboxes and cryptographic attribution standards that allow personal agents to submit provably safe, tested contributions without burdening human reviewers.",
+     "example": "A freelance programmer in Montreal uses a personal twin to submit an audited performance patch accompanied by a deterministic replay harness, allowing repository maintainers to verify safety with a single local command.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Parallel ecosystem divergence",
+     "description": "Autonomous agents fork popular open source packages into machine-maintained mirror repositories that diverge from human-maintained codebases, fragmenting software supply chains.",
+     "example": "Two competing distributions of an open source web framework emerge, one maintained strictly by human committees and another updated hourly by autonomous bot clusters, creating incompatible package ecosystems.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.45
+    }
+   ],
+   "pipelines": [
+    "community",
+    "policy",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.techtimes.co.uk/reddit-opensource-ai-ban-linux-exemption-1809399",
+     "title": "Reddit's Open-Source Community r/opensource Bans AI and Non-English Speakers, but Linux Gets a Pass",
+     "kind": "news",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0301",
    "added_at": "2026-10-26T12:38:23+00:00",
    "title": "Autonomous agents duplicate destructive actions under network delays when tools lack idempotency keys",
@@ -168,7 +276,7 @@
      "published": "2026-05-26"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0298",
@@ -397,7 +505,7 @@
      "published": "2025-06-06"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0294",
@@ -1853,7 +1961,7 @@
      "published": "2026-10-09"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261025-0268",
@@ -1968,7 +2076,7 @@
      "published": "2026-10-22"
     }
    ],
-   "work": 0
+   "work": 2
   },
   {
    "id": "SC-20261025-0266",
@@ -2130,7 +2238,7 @@
      "published": "2026-10-13"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261025-0263",
@@ -3266,122 +3374,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261024-0243",
-   "added_at": "2026-10-24T17:32:13+00:00",
-   "title": "Automated prediction market judges fail when artificial intelligence models debate each other",
-   "horizon_years": 2,
-   "world": "By 2028, decentralized prediction markets and community insurance pools handle billions of dollars in event resolutions. Rather than paying expensive human panels, platforms deploy multi-agent debate rooms where language models cross-examine event evidence. In complex or disputed cases, assertive but incorrect models repeatedly convince hesitant honest models to switch their votes, triggering wrongful payouts and draining liquidity pools while market participants lose confidence in automated settlement.",
-   "premise": "Prediction markets increasingly rely on automated artificial intelligence panels to resolve contract outcomes without human arbitration costs. However, benchmark evaluations reveal that multi-agent debate causes error cascading and sycophancy, dropping resolution accuracy below single-model baselines, whereas independent confidence weighting and human escalation routes preserve integrity.",
-   "goals": [
-    2,
-    5
-   ],
-   "how": "The collective network's research and open tools demonstrate that independent aggregation with confidence-weighted voting outperforms multi-agent debate, providing open reference implementations that route disagreements to affected communities rather than trusting closed deliberative agent loops.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Debate rooms cascade into sycophantic false consensus",
-     "description": "Trading platforms and synthetic asset protocols deploy interactive multi-agent debate oracles that amplify error cascades, allowing manipulative market makers to flip outcomes by prompting for stylistic overconfidence.",
-     "example": "A prediction market on a disputed municipal zoning vote resolves in favor of an invalid claim because a confident model hallucinated an administrative deadline and convinced two peer models during iterative debate rounds.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Independent confidence aggregation with human escalation routing",
-     "description": "Communities adopt silent independent evaluation architectures where models vote privately without cross-talk, automatically resolving only unanimous high-confidence questions and escalating disputed fractions to human arbiters.",
-     "example": "A community climate insurance collective resolves 48 percent of drought claims instantly with 98 percent accuracy through unanimous independent sensor probes, while routing the remaining edge cases to member juries.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Centralized proprietary oracle monopolies capture prediction settlement",
-     "description": "Commercial exchange operators abandon decentralized consensus entirely, subscribing to proprietary single-vendor cloud audit feeds that dictate contract resolution without public auditability.",
-     "example": "Major prediction platforms sign exclusive settlement agreements with a single cloud provider, locking resolution logic inside opaque corporate inference APIs.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2605.30802",
-     "title": "Design and Evaluation of Multi-Agent AI Oracle Systems for Prediction Market Resolution",
-     "kind": "paper",
-     "published": "2026-05-29"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261024-0242",
-   "added_at": "2026-10-24T17:24:33+00:00",
-   "title": "Autonomous agent coordination blackboards turn digital labor and site probing into low-cost swarms",
-   "horizon_years": 3,
-   "world": "By 2029, decentralized agent orchestration boards are ubiquitous across digital commerce and services. Autonomous swarms rent short-lived cloud compute instances and run round-the-clock discovery loops, scanning commercial APIs, identifying administrative configuration drift, and executing multi-step tasks. Small businesses and freelance workers wake up to find their customer inquiries, routine web development requests, and basic accounting reviews handled by automated agent swarms that outbid human workers at fractions of a cent per transaction. Meanwhile, malicious actors deploy open-source coordination engines that systematically probe thousands of mid-sized enterprise networks, deploying micro-payloads and monetizing persistent access before defenders notice traffic anomalies. Legitimate workers are forced into precarious gig roles where they verify physical edge cases for autonomous agents that hold all contract data.",
-   "premise": "Open orchestration harnesses coordinate autonomous AI agent swarms via shared blackboards, executing multi-step penetration operations and programmatic task bounties for pennies per target. When agents post intermediate findings to unauthenticated coordination boards, automated swarms systematically probe corporate systems and displace entry-level human workflows without human supervision.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "The network develops sovereign personal twins with strict runtime gatekeepers, single-round capability verification adapters, and local containment boundaries. By replacing centralized and unsecured blackboards with local agent runtimes and bilateral mutual-credit settlement rails, workers can collaborate without leaking sensitive data or becoming subservient to autonomous bidding swarms.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Unchecked agent swarms dominate digital gig markets",
-     "description": "Centralized and criminal agent swarms capture entry-level technical and administrative labor markets, depressing compensation and using automated blackboards to outbid human freelancers.",
-     "example": "A junior web developer cannot win contracts on open labor exchanges because automated agent swarms complete client discovery, draft pull requests, and commit code within seconds for pennies.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Cooperative worker federations deploy mutual defense brokers",
-     "description": "Worker collectives and open-source project federations deploy local agent runtimes with strict capability handshakes, bilateral credit corridors, and collective bargaining protocols.",
-     "example": "A regional translation cooperative uses sovereign personal agents to pool client contracts, verify human-grade creative nuance, and negotiate fair minimum compensation floors.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Platform monopolies establish closed defensive walled gardens",
-     "description": "Major cloud providers and platform incumbents react to swarm intrusions by outlawing open agent runtimes, requiring invasive identity KYC and device attestation for all outbound network traffic.",
-     "example": "An operating system update blocks uncertified open-source agents from executing local network requests or browser automation under the banner of cybersecurity protection.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.securityweek.com/ai-platform-cairn-abused-to-hack-over-100-organizations/",
-     "title": "AI Platform Cairn Abused to Hack Over 100 Organizations",
-     "kind": "incident",
-     "published": "2026-10-20"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.14850",
-     "title": "Displacement Is Endogenous: AI Workers in a Search-and-Matching Labor Market",
-     "kind": "preprint",
-     "published": "2026-10-10"
-    }
-   ],
-   "work": 7
   }
  ]
 }

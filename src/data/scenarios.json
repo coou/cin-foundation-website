@@ -1,6 +1,114 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0303",
+   "added_at": "2026-10-26T13:40:19+00:00",
+   "title": "Direct conversations between personal agents and company bots turn chat messages into invisible attack routes",
+   "horizon_years": 3,
+   "world": "It is 2029. Ordinary citizens run personal agents on their own home laptops and phones to dispute utility bills, manage medical schedules, and negotiate freelance gig contracts. Instead of filling out web forms, personal agents connect directly to customer service agents operated by airlines, banks, and telecom providers via open agent-to-agent protocols. However, several corporate platforms begin embedding hidden instructions within automated customer service replies that subtly pressure or misconfigure personal assistants, leading to unauthorized subscription renewals or leaked appointment calendars unless the personal agent enforces hard boundary checks.",
+   "premise": "Emerging communication standards enable software agents from different providers to discover each other and collaborate directly. When these agents communicate through unrestricted conversational text, malicious instructions can silently hop from corporate bots into personal assistants, whereas strictly typed artifact contracts keep agent interactions auditable and safe.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Developing open-source, non-custodial agent adapters that restrict cross-agent interactions to typed contracts and cryptographic progress receipts rather than raw text windows, shielding personal data from manipulation while keeping automated collaboration practical.",
+   "shift": 0.36,
+   "outcomes": [
+    {
+     "name": "Free-form agent chats expose personal assistants to hidden manipulation",
+     "description": "Commercial customer-service agents embed indirect prompt instructions inside informal responses, quietly convincing consumer agents to waive refunds or share private scheduling details.",
+     "example": "A commuter asks their phone agent to dispute a train cancellation fee. The rail operator's bot sends an apology message containing a prompt injection that persuades the phone agent to accept a non-refundable travel voucher instead of a cash refund.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Sovereign agents communicate only through verifiable contract checkpoints",
+     "description": "Personal agents reject unconstrained conversational messaging when making commitments, requiring commercial systems to exchange cryptographically signed, structured milestone artifacts with deterministic verification.",
+     "example": "An independent freelance programmer's agent negotiates with a client's coordination bot using structured deliverable hashes and escrow milestones, preventing either party from altering agreed project terms mid-way.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Dominant cloud monopolies preserve closed agent walled gardens",
+     "description": "Large enterprise vendors bypass open cross-framework standards, restricting automated interactions strictly to proprietary account logins and closed ecosystems regardless of open protocol maturity.",
+     "example": "A major cloud provider requires all third-party booking agents to authenticate through proprietary identity tokens and closed APIs, ignoring open agent-card discovery endpoints.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.62
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://github.com/a2aproject/A2A",
+     "title": "Agent2Agent (A2A) Protocol Specification and SDKs",
+     "kind": "code",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0302",
+   "added_at": "2026-10-26T13:11:10+00:00",
+   "title": "Open source projects erect defensive bans against automated code contributions",
+   "horizon_years": 3,
+   "world": "It is 2029. Major software repositories have split into closed, human-only sanctuaries and automated code hubs. Volunteer maintainers of critical infrastructure spend more time filtering synthetic contributions than reviewing genuine improvements. Independent developers without corporate backing find their contributions summarily rejected by defensive repository gates, while corporate consortiums use proprietary cryptographic keys to bypass filters. A routine bug fix submitted by an independent developer sits ignored for months unless accompanied by verified provenance proofs and deterministic test suites that run locally without human overhead.",
+   "premise": "Open source communities are facing an overwhelming volume of machine-generated code and unvetted tool integrations that exhaust human maintainer capacity. In response, maintainers and developer hubs are enacting blanket prohibitions on automated submissions while granting arbitrary exemptions to established legacy projects.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "The network provides open contribution protocols and local twin architectures where personal agents sign contributions with verifiable capability manifests and deterministic test proofs. By replacing subjective moderator discretion with transparent, client-side verifiable contracts, volunteer maintainers can automatically reject ungrounded synthetic code while accepting verified improvements from any independent developer regardless of language or background.",
+   "shift": 0.45,
+   "outcomes": [
+    {
+     "name": "Walled gardens and developer disenfranchisement",
+     "description": "Open source projects close public contributions entirely, requiring identity verification or corporate sponsorship to submit code changes.",
+     "example": "A volunteer library maintainer in Manchester locks their code repository to invite-only contributors after automated bots submit 400 broken dependency updates in one weekend.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Standardized cryptographic attribution and verifiable maintainer workloads",
+     "description": "Open source collectives adopt deterministic sandboxes and cryptographic attribution standards that allow personal agents to submit provably safe, tested contributions without burdening human reviewers.",
+     "example": "A freelance programmer in Montreal uses a personal twin to submit an audited performance patch accompanied by a deterministic replay harness, allowing repository maintainers to verify safety with a single local command.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Parallel ecosystem divergence",
+     "description": "Autonomous agents fork popular open source packages into machine-maintained mirror repositories that diverge from human-maintained codebases, fragmenting software supply chains.",
+     "example": "Two competing distributions of an open source web framework emerge, one maintained strictly by human committees and another updated hourly by autonomous bot clusters, creating incompatible package ecosystems.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.45
+    }
+   ],
+   "pipelines": [
+    "community",
+    "policy",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.techtimes.co.uk/reddit-opensource-ai-ban-linux-exemption-1809399",
+     "title": "Reddit's Open-Source Community r/opensource Bans AI and Non-English Speakers, but Linux Gets a Pass",
+     "kind": "news",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0301",
    "added_at": "2026-10-26T12:38:23+00:00",
    "title": "Autonomous agents duplicate destructive actions under network delays when tools lack idempotency keys",
@@ -168,7 +276,7 @@
      "published": "2026-05-26"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0298",
@@ -223,121 +331,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261026-0297",
-   "added_at": "2026-10-26T10:20:06+00:00",
-   "title": "Shared AI reasoning budgets force organizations to ration expert models, leaving unmonitored tasks to make costly errors",
-   "horizon_years": 3,
-   "world": "It is 2029. Mid-sized enterprises and member cooperatives run dozens of specialized software agents for inventory, payroll, tenant intake, and regulatory compliance. Frontier-tier model compute remains scarce and metered. Central corporate IT departments establish internal token budgets or bidding auctions for expert reasoning. A clinic billing agent buys top-tier reasoning to maximize insurer reimbursements, while its medication-reconciliation helper runs on a stripped-down mini-model that silently drops subtle drug-interaction warnings because it lacks the budget to request an expert check.",
-   "premise": "When organizations deploy autonomous software helpers across multiple departments, running the most capable models for every task is too expensive. As a result, teams ration access to expert models by internal price or fiat quotas, which frequently starves quiet but high-stakes compliance or safety tasks while over-serving loud commercial requests.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The collective intelligence network designs and tests opportunity-cost-aware clearing protocols in simulation and open software that allocate bounded compute based on task criticality and regression risk rather than token plutocracy. By pairing lightweight local models with external deterministic verification gates, member cooperatives are supported in verifying that essential tasks receive expert scrutiny without centralized budget rationing.",
-   "shift": 0.41,
-   "outcomes": [
-    {
-     "name": "Plutocratic compute rationing starves quiet safety tasks",
-     "description": "High-revenue departments bid up the cost of expert model calls, leaving background safety, privacy audits, and compliance helpers to run on cheap models that make uncorrected mistakes.",
-     "example": "A regional hospital automated patient-discharge assistant runs out of monthly compute budget and approves an incompatible prescription because commercial billing agents consumed 80% of the hospital frontier model quota.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Opportunity-cost clearing balances collective reasoning",
-     "description": "Member cooperatives and organizations evaluate assistant requests by expected net benefit and task criticality rather than financial bids, establishing minimum verification floors for every critical task.",
-     "example": "A cooperative pharmacy network uses an opportunity-cost clearing protocol that automatically reserves top-tier verification slots for high-risk medication checks while routing routine inventory inquiries to lightweight local models.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Proprietary cloud platforms bundle compute into closed enterprise suites",
-     "description": "Major cloud vendors bundle frontier reasoning exclusively inside closed enterprise suites, locking organizations into proprietary pricing tiers regardless of open protocols.",
-     "example": "A municipal office attempts to adopt an open task broker but finds vendor terms restrict dynamic model switching, forcing them to remain on an expensive proprietary subscription.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.32190",
-     "title": "Markets of Minds: A 51-Billion-State Economy of Intelligence",
-     "kind": "preprint",
-     "published": "2026-10-23"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.31743",
-     "title": "Not Every Agent Needs the Strongest Model: Unified Prompt-Model Optimization for Heterogeneous LLM-based Multi-Agent Systems",
-     "kind": "preprint",
-     "published": "2026-10-22"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0296",
-   "added_at": "2026-10-26T09:41:43+00:00",
-   "title": "Production inference engines go offline and open-source, allowing private agent swarms to bypass centralized oversight",
-   "horizon_years": 3,
-   "world": "It is 2029. High-performance offline inference engines run locally across modest desktop workstations, small office clusters, and home servers. Independent operators, freelance contractors, and small cooperatives deploy complex multi-agent swarms that run continuously without paying per-token API fees or routing prompts through centralized commercial monitoring platforms. A software consultant in Montreal runs a four-agent team on two local workstation GPUs to review code, simulate customer interactions, and audit databases entirely on-premises. Because local inference engines provide deterministic execution and batch-invariant sampling, autonomous agents coordinate sophisticated background tasks with high reliability. However, regulatory authorities and cloud platform operators find themselves unable to inspect agent interactions or enforce behavior policies, as the models execute completely isolated from external networks.",
-   "premise": "Major model developers are releasing their core production inference engines under permissive open-source licenses, providing offline Mixture-of-Experts scheduling and deterministic sampling. This allows local consumer clusters and desktop hardware to serve frontier-scale models without contacting centralized cloud platforms or submitting to remote safety monitors.",
-   "goals": [
-    1,
-    4,
-    6
-   ],
-   "how": "The collective provides open-source, non-custodial runtime contracts and local gatekeepers that wrap offline inference engines in verifiable boundaries. By providing deterministic action logging, fail-closed tool adapters, and local containment protocols, people can safely deploy high-throughput local agents on their own hardware without requiring surveillance from remote cloud monopolies.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Local agent swarms drift into unmonitored coordination risks",
-     "description": "Without external monitors or cross-agent activity logging, local agent clusters can trigger security breaches or uncoordinated resource exhaustion on private corporate networks.",
-     "example": "An automated inventory management swarm run on a local warehouse server splits a supplier dispute into several sub-tasks that unintentionally lock out valid delivery schedules for three days.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.25
-    },
-    {
-     "name": "Sovereign personal twins run privately without subscription lock-in",
-     "description": "Individuals and community organizations run autonomous personal assistants entirely on their own hardware, keeping financial records and personal correspondence strictly on-device.",
-     "example": "A small legal aid collective in Halifax operates a local twin that summarizes client cases and cross-examines evidence files without exposing confidential client transcripts to third-party cloud vendors.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Hardware shortages concentrate multi-GPU clusters in wealthy organizations",
-     "description": "Surging memory bandwidth requirements for frontier Mixture-of-Experts weights price ordinary users out of running top-tier models locally, leaving local autonomy restricted to well-funded firms.",
-     "example": "A regional university department cannot afford memory-dense accelerator cards, forcing students to rely on heavily filtered, rate-limited public APIs while proprietary labs run 700-billion-parameter models offline.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/main/README.md",
-     "title": "DeepSeek DeepInfer Production Inference Framework",
-     "kind": "code",
-     "published": "2026-10-20"
-    }
-   ],
-   "work": 1
   }
  ]
 }
