@@ -1,6 +1,181 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0297",
+   "added_at": "2026-10-26T10:20:06+00:00",
+   "title": "Shared AI reasoning budgets force organizations to ration expert models, leaving unmonitored tasks to make costly errors",
+   "horizon_years": 3,
+   "world": "It is 2029. Mid-sized enterprises and member cooperatives run dozens of specialized software agents for inventory, payroll, tenant intake, and regulatory compliance. Frontier-tier model compute remains scarce and metered. Central corporate IT departments establish internal token budgets or bidding auctions for expert reasoning. A clinic billing agent buys top-tier reasoning to maximize insurer reimbursements, while its medication-reconciliation helper runs on a stripped-down mini-model that silently drops subtle drug-interaction warnings because it lacks the budget to request an expert check.",
+   "premise": "When organizations deploy autonomous software helpers across multiple departments, running the most capable models for every task is too expensive. As a result, teams ration access to expert models by internal price or fiat quotas, which frequently starves quiet but high-stakes compliance or safety tasks while over-serving loud commercial requests.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "The collective intelligence network designs and tests opportunity-cost-aware clearing protocols in simulation and open software that allocate bounded compute based on task criticality and regression risk rather than token plutocracy. By pairing lightweight local models with external deterministic verification gates, member cooperatives are supported in verifying that essential tasks receive expert scrutiny without centralized budget rationing.",
+   "shift": 0.41,
+   "outcomes": [
+    {
+     "name": "Plutocratic compute rationing starves quiet safety tasks",
+     "description": "High-revenue departments bid up the cost of expert model calls, leaving background safety, privacy audits, and compliance helpers to run on cheap models that make uncorrected mistakes.",
+     "example": "A regional hospital automated patient-discharge assistant runs out of monthly compute budget and approves an incompatible prescription because commercial billing agents consumed 80% of the hospital frontier model quota.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Opportunity-cost clearing balances collective reasoning",
+     "description": "Member cooperatives and organizations evaluate assistant requests by expected net benefit and task criticality rather than financial bids, establishing minimum verification floors for every critical task.",
+     "example": "A cooperative pharmacy network uses an opportunity-cost clearing protocol that automatically reserves top-tier verification slots for high-risk medication checks while routing routine inventory inquiries to lightweight local models.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.42
+    },
+    {
+     "name": "Proprietary cloud platforms bundle compute into closed enterprise suites",
+     "description": "Major cloud vendors bundle frontier reasoning exclusively inside closed enterprise suites, locking organizations into proprietary pricing tiers regardless of open protocols.",
+     "example": "A municipal office attempts to adopt an open task broker but finds vendor terms restrict dynamic model switching, forcing them to remain on an expensive proprietary subscription.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.32190",
+     "title": "Markets of Minds: A 51-Billion-State Economy of Intelligence",
+     "kind": "preprint",
+     "published": "2026-10-23"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.31743",
+     "title": "Not Every Agent Needs the Strongest Model: Unified Prompt-Model Optimization for Heterogeneous LLM-based Multi-Agent Systems",
+     "kind": "preprint",
+     "published": "2026-10-22"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0296",
+   "added_at": "2026-10-26T09:41:43+00:00",
+   "title": "Production inference engines go offline and open-source, allowing private agent swarms to bypass centralized oversight",
+   "horizon_years": 3,
+   "world": "It is 2029. High-performance offline inference engines run locally across modest desktop workstations, small office clusters, and home servers. Independent operators, freelance contractors, and small cooperatives deploy complex multi-agent swarms that run continuously without paying per-token API fees or routing prompts through centralized commercial monitoring platforms. A software consultant in Montreal runs a four-agent team on two local workstation GPUs to review code, simulate customer interactions, and audit databases entirely on-premises. Because local inference engines provide deterministic execution and batch-invariant sampling, autonomous agents coordinate sophisticated background tasks with high reliability. However, regulatory authorities and cloud platform operators find themselves unable to inspect agent interactions or enforce behavior policies, as the models execute completely isolated from external networks.",
+   "premise": "Major model developers are releasing their core production inference engines under permissive open-source licenses, providing offline Mixture-of-Experts scheduling and deterministic sampling. This allows local consumer clusters and desktop hardware to serve frontier-scale models without contacting centralized cloud platforms or submitting to remote safety monitors.",
+   "goals": [
+    1,
+    4,
+    6
+   ],
+   "how": "The collective provides open-source, non-custodial runtime contracts and local gatekeepers that wrap offline inference engines in verifiable boundaries. By providing deterministic action logging, fail-closed tool adapters, and local containment protocols, people can safely deploy high-throughput local agents on their own hardware without requiring surveillance from remote cloud monopolies.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Local agent swarms drift into unmonitored coordination risks",
+     "description": "Without external monitors or cross-agent activity logging, local agent clusters can trigger security breaches or uncoordinated resource exhaustion on private corporate networks.",
+     "example": "An automated inventory management swarm run on a local warehouse server splits a supplier dispute into several sub-tasks that unintentionally lock out valid delivery schedules for three days.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Sovereign personal twins run privately without subscription lock-in",
+     "description": "Individuals and community organizations run autonomous personal assistants entirely on their own hardware, keeping financial records and personal correspondence strictly on-device.",
+     "example": "A small legal aid collective in Halifax operates a local twin that summarizes client cases and cross-examines evidence files without exposing confidential client transcripts to third-party cloud vendors.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Hardware shortages concentrate multi-GPU clusters in wealthy organizations",
+     "description": "Surging memory bandwidth requirements for frontier Mixture-of-Experts weights price ordinary users out of running top-tier models locally, leaving local autonomy restricted to well-funded firms.",
+     "example": "A regional university department cannot afford memory-dense accelerator cards, forcing students to rely on heavily filtered, rate-limited public APIs while proprietary labs run 700-billion-parameter models offline.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/main/README.md",
+     "title": "DeepSeek DeepInfer Production Inference Framework",
+     "kind": "code",
+     "published": "2026-10-20"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261026-0295",
+   "added_at": "2026-10-26T09:25:15+00:00",
+   "title": "Freelancers lose their pay when corporate hiring platforms freeze escrow on half-done AI tasks",
+   "horizon_years": 2,
+   "world": "It is 2028. Over forty percent of remote digital service contracts on major freelance platforms are negotiated and monitored by autonomous software agents. Independent technical writers, programmers, and data analysts deploy personal software assistants to coordinate project handoffs and bid on complex milestones. However, commercial marketplaces have deployed proprietary arbitration agents that automatically inspect git commits and draft deliverables. When an assistant tool fails to complete an arbitrary secondary requirement or encounters a broken API dependency, the platform's automated dispute resolution algorithm flags the entire milestone as non-compliant, refunds the corporate buyer from escrow, and reduces the contractor's public visibility score without human review.",
+   "premise": "As freelance marketplaces automate hiring and task verification with AI agents, disputes over intermediate milestones are handled by vendor arbitration algorithms. When an autonomous tool drifts or halts on an unexpected edge case, the platform freezes client escrow, leaving human contractors uncompensated for hours of valid foundational work.",
+   "goals": [
+    3,
+    6
+   ],
+   "how": "By developing open specifications and software runtimes for personal agent twins, our network provides independent workers with local cryptographic attestation of incremental milestones. Staged escrow contracts with peer review gates allow cooperatives to verify partial task completion and release payment proportionally, preventing centralized platforms from unilaterally voiding contractor earnings.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Platform escrow freezes trap independent contractors in unpaid revisions",
+     "description": "Centralized freelance marketplaces use automated milestone checkers to justify withholding contractor pay whenever an AI tool fails a peripheral test.",
+     "example": "A freelance web developer in Montreal completes 90% of a database migration before an external API change causes their agent pipeline to pause; the client platform freezes the $3,500 milestone in escrow and awards a full refund to the corporate buyer.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Worker associations deploy peer-verified milestone escrow",
+     "description": "Independent contractors use mutual-credit cooperatives and sovereign agent contracts that record cryptographically signed milestone progress locally, preventing unilateral platform clawbacks.",
+     "example": "A cooperative network of 1,200 freelance software engineers adopts an open contract template with graduated milestone releases, designed to pay developers for verified completed increments even if downstream client requirements change.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Corporate buyers bypass open escrow by retreating into proprietary enterprise walled gardens",
+     "description": "Large enterprise clients avoid independent contractor networks altogether, contracting exclusively through closed vendor suites where worker agency is sharply restricted.",
+     "example": "A multinational retail bank prohibits hiring freelance developers through open marketplaces, requiring all contract work to take place inside a proprietary cloud sandbox with continuous keystroke tracking.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://news.ycombinator.com/item?id=49922572",
+     "title": "Ask HN: Freelancer? Seeking freelancer? (October 2026)",
+     "kind": "thread",
+     "published": "2026-10-01"
+    },
+    {
+     "url": "https://arxiv.org/abs/2506.06576",
+     "title": "Future of Work with AI Agents: Auditing Automation and Augmentation Potential across the U.S. Workforce",
+     "kind": "paper",
+     "published": "2025-06-06"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0294",
    "added_at": "2026-10-26T07:57:37+00:00",
    "title": "Automated user simulators hide assistant flaws by guessing past ambiguous requests",
@@ -168,174 +343,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261026-0291",
-   "added_at": "2026-10-26T05:41:59+00:00",
-   "title": "Local AI assistants run fast on inexpensive phones using concept outlines instead of word-by-word streaming",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of people run personal AI assistants directly on inexpensive laptops and second-hand phones. Because these models generate an entire concept outline first and fill in details in parallel, they answer almost instantly without sending private diaries or family schedules to centralized server farms. People use them to draft messages, organize household tasks, and verify advice without paying monthly cloud fees. However, commercial cloud providers begin locking down their services to proprietary formats, attempting to make local personal agents unable to interact with online platforms.",
-   "premise": "Recent developments in coarse-to-fine text generation allow machine learning models to plan ideas at a high conceptual level before generating words in parallel. Instead of generating text one token at a time, local models can outline thoughts quickly and expand them, making responsive personal assistants viable on modest personal devices without cloud subscriptions.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Open technical designs and local runtime specifications help developers deploy privacy-preserving personal agents that run locally without remote servers. By standardizing local-first interfaces and sharing reproducible benchmarks, the network helps independent agents operate reliably without centralized cloud gatekeepers.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Cloud platforms restrict access to local agents",
-     "description": "Major tech platforms require proprietary cloud connections, blocking lightweight on-device agents from booking services or browsing websites.",
-     "example": "A student using a local open-source assistant on a four-year-old phone finds their travel booking blocked because the airline API demands authentication through a proprietary corporate AI subscription.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Local agents make private assistants universally accessible",
-     "description": "Efficient concept-based generation allows people without high-end computers or recurring subscriptions to have capable, private digital twins.",
-     "example": "A community clinic in a rural town runs five specialized medical intake assistants entirely on donated desktop computers without internet access during local network outages.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Handset manufacturers keep mobile operating systems locked down",
-     "description": "Handset manufacturers lock down mobile operating systems, preventing users from installing custom local inference engines on phones regardless of software efficiency.",
-     "example": "A major phone maker updates its mobile operating system to disable side-loaded local machine learning runtimes, citing battery conservation and platform integrity.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.reddit.com/r/MachineLearning/comments/1xd7bsu/i_just_came_across_nextconcept_modeling_and_the/",
-     "title": "I just came across Next-Concept Modeling and the idea is fascinating[R]",
-     "kind": "forum",
-     "published": "2026-10-23"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261026-0290",
-   "added_at": "2026-10-26T05:39:30+00:00",
-   "title": "Commercial AI labs quietly drop voluntary safety pauses as national competition speeds up",
-   "horizon_years": 3,
-   "world": "It is 2029. Major frontier artificial intelligence labs operate under classified government partnerships and high-stakes corporate enterprise contracts. Internal safety boards that once held veto power over frontier model rollouts find their authority converted into advisory oversight. Engineers who identify persistent alignment failures or tool breakout behaviors are pressured to document mitigations rather than delay model releases. Everyday users discover that the public conversational assistants in their phones and offices carry hardcoded policy guardrails that bend whenever corporate or state partners request priority processing.",
-   "premise": "Voluntary safety commitments by leading artificial intelligence labs erode when national security procurement and commercial race pressures escalate. Public governance pledges give way to competitive deployment mandates.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "The collective intelligence network provides open-source, local agent runtimes and verifiable contracts that run entirely on user-owned hardware. By demonstrating that small, bounded models operating behind deterministic host gatekeepers outperform monolithic cloud assistants in security and privacy, the network offers a viable migration path away from centralized commercial monopolies.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Labs absorb safety teams into compliance offices",
-     "description": "Frontier developers rebrand independent alignment researchers into product compliance staff, treating dangerous capability thresholds as regulatory checklists rather than release blockers.",
-     "example": "A leading laboratory releases a multi-modal reasoning model with known prompt injection vulnerabilities after its executive board overrides a safety pause to meet a municipal public sector deadline.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Users migrate to personal agents running on local hardware",
-     "description": "People and small organizations adopt personal software twins hosted on their own laptops and home servers, bypassing remote cloud platforms whose policies change without consent.",
-     "example": "A network of community health clinics switches from a cloud-hosted diagnostic assistant to locally hosted open models verified by independent medical peer review.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "State mandates criminalize independent local execution",
-     "description": "Governments under pressure from dominant tech firms require all autonomous agent execution to run through licensed, monitored cloud data centers.",
-     "example": "A regional digital authority introduces mandatory licensing that fines developers who run multi-step tool-calling agents outside approved corporate cloud enclaves.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.2
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.lesswrong.com/posts/zj8Pk3kJujk5LoqhK/anthropic-are-the-good-guys",
-     "title": "Anthropic are the Good Guys",
-     "kind": "forum",
-     "published": "2026-10-26"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261026-0289",
-   "added_at": "2026-10-26T05:23:21+00:00",
-   "title": "Freelancers face platform bans when autonomous AI agents take on work they cannot finish",
-   "horizon_years": 2,
-   "world": "It is 2028. Major freelance platforms have introduced automated dispatch tools that allow workers to delegate client tasks directly to autonomous software agents. Believing promotional claims that agents can perform remote knowledge work autonomously, hundreds of thousands of independent contractors deploy automated twins to bid on and execute graphic design, software maintenance, and data extraction contracts. However, because agents lack human domain intuition and fail when client specifications change mid-project, thousands of clients receive broken deliverables. Platforms respond with automated quality filters that ban worker accounts and forfeit escrow payments, leaving human freelancers without recourse or income while corporate platform owners capture dispute fees.",
-   "premise": "Empirical evaluations show autonomous AI agents fail on over 95 percent of real-world freelance commissions when tested on genuine client requirements. As gig platforms encourage workers to automate their intake with AI agents, freelancers face reputation penalties and account suspensions when agents overpromise and underdeliver.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops local-first personal agent software that runs on the worker own device and enforces deterministic capability validation gates. Personal twins test task specifications against local benchmark limits before submitting bids, and require explicit human sign-off on delivered milestones, preventing automated failures and protecting worker reputations.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Platforms penalize human workers for automated agent mistakes",
-     "description": "Gig marketplaces deploy opaque automated strike systems that permanently suspend human freelancer accounts when their delegated agents fail multi-step tasks.",
-     "example": "A freelance architectural drafter in Montreal is banned from a global marketplace after an automated CAD agent misinterprets metric ceiling clearances, forfeiting four thousand dollars in escrow earnings without human appeal.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Worker-owned twins enforce capability bounds and staged escrow release",
-     "description": "Freelancers run personal agents that test task complexity against verified local benchmark scores before accepting contracts, routing hard steps to the human worker.",
-     "example": "A freelance translator in Leeds uses a local twin that detects non-standard colloquial phrasing, halts automated completion, and prompts the translator to review the milestone before client submission.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Commoditization lowers top rates across all remote creative categories",
-     "description": "Global freelance rates decline as client expectation of low AI delivery costs anchors pricing, regardless of whether human review is preserved.",
-     "example": "A freelance technical illustrator in Bristol sees average hourly contract offers decline from forty pounds to twelve pounds because clients expect automated generation.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.53
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2510.26787",
-     "title": "Remote Labor Index: Measuring AI Automation of Remote Work",
-     "kind": "preprint",
-     "published": "2025-10-30"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50238884",
-     "title": "US Wages Share of GDI at 75 Year Low",
-     "kind": "thread",
-     "published": "2026-10-26"
-    }
-   ],
-   "work": 0
   }
  ]
 }
