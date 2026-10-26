@@ -628,195 +628,139 @@
     updateDm();
   }
 
-  /* ---------- 7. Ever-Morphing Sensor -> Ledger -> Agents -> Economy & Governance -> Principles Demo (#em-demo) ---------- */
+  /* ---------- 7. 4-Step Real Contribution & Functional Proof Walkthrough (#em-demo) ---------- */
   var emRoot = document.getElementById('em-demo');
   if (emRoot) {
     var EM_SCENARIOS = {
+      php: {
+        label: '1. Developer patching a PHP / certificate bug',
+        stages: [
+          {
+            k: 'Step 1 of 4 · Solve a Real Problem Locally',
+            title: 'An independent developer isolates a critical PHP & TLS certificate validation bug on their own laptop',
+            desc: 'When a new remote-code-execution or certificate flaw hits web servers (like the October 2026 PHP and CA advisories), independent developers often write the first working defense. With a personal agent on your workstation, you reproduce the bug and build a clean patch locally—without feeding your unpublished work into a corporate cloud.',
+            today: 'Cloud AI coding tools ingest your private debugging session to train commercial models, or public repos get scraped by giant labs without paying the maintainer a cent.',
+            pkt: 'Your personal agent runs inside your local sandbox, helps generate regression tests for the fix, and signs a timestamped authorship proof before anything goes public.'
+          },
+          {
+            k: 'Step 2 of 4 · Register Under Your Name & License',
+            title: 'The developer and two peer reviewers publish the signed security patch to the Shared Attribution Ledger',
+            desc: 'Instead of surrendering your code to an uncredited training scrape, your agent registers the security patch on the Shared Ledger with your name, your user-controlled license, and exact contributor shares for the two peers who helped review it.',
+            today: 'Once code or research is posted publicly today, AI scrapers strip author headers and resell the capability inside proprietary APIs with zero attribution.',
+            pkt: 'The Shared Ledger records your cryptographic authorship signature and contributor split (70% lead author / 15% + 15% peer reviewers) while keeping your local workspace private.'
+          },
+          {
+            k: 'Step 3 of 4 · Verified by Functional Proof (Does It Actually Work?)',
+            title: 'Independent security agents run 10,000 automated exploit and compatibility checks to prove the fix works',
+            desc: 'On the agent network, nobody ranks solutions by ad spend or SEO hype. Independent verifier agents test the patch inside isolated sandboxes against real exploit payloads and confirm zero regressions across production configurations.',
+            today: 'Developers waste hours sifting through hallucinated AI code snippets, SEO blog spam, or unverified packages that secretly introduce new vulnerabilities.',
+            pkt: 'Three independent security-guild verifier agents co-sign a Functional Proof: 10,000 exploit tests blocked, 0 build regressions, and deterministic hash verified.'
+          },
+          {
+            k: 'Step 4 of 4 · Direct Royalties With 0% Middleman Cut',
+            title: 'Every commercial server agent that deploys the verified fix routes royalties straight to the creators',
+            desc: 'Whenever companies, hosting cooperatives, or other agents pull the verified security module to protect their servers, usage royalties settle directly to the developer and peer reviewers—with 0% platform middleman cut.',
+            today: 'Critical open-source maintainers burn out working unpaid nights while trillion-dollar cloud companies charge customers billions for services built on their code.',
+            pkt: 'Automatic royalty settlement routes directly to the 3 contributors’ accounts on every commercial deployment—keeping open infrastructure sustainable.'
+          }
+        ]
+      },
+      tech: {
+        label: '2. Technician fixing a heat-pump controller fault',
+        stages: [
+          {
+            k: 'Step 1 of 4 · Solve a Real Problem Locally',
+            title: 'An HVAC technician figures out why a popular cold-climate heat pump locks up during freezing rain',
+            desc: 'Factory manuals often tell technicians to replace an entire $1,400 control board when the real culprit is a faulty defrost-sensor timing threshold. While on the job, the technician uses their personal agent to log the multimeter readings and document a 20-minute sensor-relocation and firmware fix.',
+            today: 'Manufacturers lock diagnostic data behind expensive dealer subscriptions, or forums get scraped by AI bots that repeat wrong textbook answers.',
+            pkt: 'The technician’s personal agent organizes the before/after voltage readings and step-by-step repair guide locally on their phone—with zero customer address data exposed.'
+          },
+          {
+            k: 'Step 2 of 4 · Register Under Your Name & License',
+            title: 'The diagnostic guide is published to the Trade Guild Ledger under the technician’s own name',
+            desc: 'The technician’s agent signs and registers the diagnostic blueprint on the Shared Ledger. Other independent technicians’ agents can query the exact symptom code and access the repair guide under fair reciprocal licensing.',
+            today: 'If a mechanic or technician posts a hard-won fix on social media or a forum, platforms sell ads against it while the technician gets paid nothing.',
+            pkt: 'Registered under the technician’s name with a Trade Guild license: free for local apprentices, automatic micro-royalty when used by commercial service fleets.'
+          },
+          {
+            k: 'Step 3 of 4 · Verified by Functional Proof (Does It Actually Work?)',
+            title: 'Other field technicians’ agents confirm the repair held up across 28 winter installations over 30 days',
+            desc: 'How do other technicians know the fix is real? Whenever another technician uses the guide, their agent checks back 30 days later to confirm the heat pump ran through freezing weather without a repeat callback—building a real-world Functional Proof.',
+            today: 'Search results mix real field fixes with AI-generated guesswork, wasting hours on parts swaps that fail a week later.',
+            pkt: 'Functional Proof verified across 28 field repairs: 100% resolved without replacing the $1,400 board, 0 repeat callbacks after 30 days.'
+          },
+          {
+            k: 'Step 4 of 4 · Direct Royalties With 0% Middleman Cut',
+            title: 'The technician earns passive royalties whenever service fleets use the verified diagnostic guide',
+            desc: 'Every time a commercial HVAC fleet’s agent uses that verified diagnostic capability to save a $1,400 board swap, a fair micro-royalty routes directly to the technician who solved it—turning real field expertise into lasting income.',
+            today: 'Lead-generation apps charge local tradespeople 20%–35% just to find a customer, while giving zero reward for sharing technical knowledge.',
+            pkt: 'Direct creator royalties paid to the technician from 190 commercial fleet uses across the winter season—with 0% platform middleman fee.'
+          }
+        ]
+      },
       nurse: {
-        label: 'ER nurse & safe triage workflow (Manila)',
+        label: '3. ER nursing team cutting shift-handoff errors',
         stages: [
           {
-            k: 'Stage 1 of 7 · Real Person & Craft',
-            title: 'Maria finishes an 8.5-hour night shift in the emergency room and spots a dangerous handoff gap',
-            desc: 'At a busy hospital in Manila, nurses spend two hours per shift copying chart notes into corporate billing software that still misses critical medication handoffs. Maria designs a fast, 4-step bedside sepsis handoff checklist with her personal agent on her own phone.',
-            pkt: 'Local Check -> Real clinician verified | Shift: 8.5h ER care | New workflow drafted: 4-step sepsis handoff | Raw patient charts shared: 0 bytes'
+            k: 'Step 1 of 4 · Solve a Real Problem Locally',
+            title: 'Three emergency-room nurses design a 4-check bedside handoff tool to stop missed medication alerts',
+            desc: 'Hospital billing software is built for insurance coding, not safe shift changes. After a near-miss on a busy night shift, three ER nurses work with their personal agents to design a fast, 4-step bedside sepsis and medication handoff checklist.',
+            today: 'Hospital software vendors charge millions for bloated cloud systems that add two hours of charting per shift while ignoring frontline nurses’ fixes.',
+            pkt: 'Drafted and tested on the nurses’ own devices with zero patient names or medical charts ever leaving the ward.'
           },
           {
-            k: 'Stage 2 of 7 · Personal Agent Trained on You (On Your Device)',
-            title: 'Her personal agent learns her clinical workflow locally—never uploading patient charts',
-            desc: 'Unlike a hospital cloud bot that mines staff habits to cut jobs, Maria’s personal agent runs on her own device. It helps her refine the 4-step checklist and signs her authorship into her private local record.',
-            pkt: 'Personal Agent -> Trained locally on Maria’s triage workflow | Private Log Signed | Cloud Upload: 0 bytes'
+            k: 'Step 2 of 4 · Register Under Your Name & License',
+            title: 'The nursing team registers their handoff template with equal co-author credit on the Shared Ledger',
+            desc: 'The three nurses publish the clean checklist structure (never patient data) to the Clinical Task Guild on the Shared Ledger, locking in their names and equal one-third attribution shares.',
+            today: 'When frontline staff improve a clinical workflow, consulting firms or software vendors package it into commercial products without crediting or paying the nurses.',
+            pkt: 'Shared Ledger records all 3 nurses as co-authors under an open-for-public-clinics, paid-for-commercial-vendors license.'
           },
           {
-            k: 'Stage 3 of 7 · Shared Attribution & Copyright Ledger',
-            title: 'Maria registers her handoff checklist under her own name and user-controlled copyright',
-            desc: 'Maria publishes the checklist blueprint to the Shared Ledger. Her individual name, timestamp, and licensing terms are cryptographically attached—so no software vendor or hospital network can strip her credit.',
-            pkt: 'Shared Ledger Attribution -> Author: Maria Santos | Asset: ER Sepsis Handoff v1.2 | Copyright: User-Controlled Reciprocal License'
+            k: 'Step 3 of 4 · Verified by Functional Proof (Does It Actually Work?)',
+            title: 'Independent clinic agents verify a 38% drop in shift-change handoff omissions over 30 days',
+            desc: 'Fourteen partner clinics trial the checklist. Their local verifier agents audit anonymised 30-day safety logs and confirm that shift-change medication omissions dropped by 38% while saving 25 minutes of charting per shift.',
+            today: 'Healthcare tools are bought through top-down procurement pitches rather than verified proof from nurses on the floor.',
+            pkt: 'Functional Proof co-signed by 14 clinic safety watchers: -38% medication handoff errors and -25 minutes per shift of duplicate typing.'
           },
           {
-            k: 'Stage 4 of 7 · Task-Solver Community Collaboration',
-            title: 'A task-solver guild of 14 emergency nurses tests and adapts her protocol',
-            desc: 'Across the agent-only internet, personal agents of nurses in a clinical task-solver community test Maria’s checklist in their own wards, adding bilingual prompts while preserving every contributor’s exact share of credit.',
-            pkt: 'Task-Solver Guild -> 14 ER Nurses Collaborating | Contributors Named: 100% | External Bot Spam: Blocked'
-          },
-          {
-            k: 'Stage 5 of 7 · Functional Proof (Verified in Real Use)',
-            title: 'Collaborating clinic agents verify a 38% drop in handoff omissions over 30 days',
-            desc: 'Value on the network is never decided by hype or corporate marketing. Independent clinic verifier agents check 30-day anonymised outcomes and confirm that Maria’s checklist cut shift-change medication errors by 38%.',
-            pkt: 'Functional Proof -> 30-Day Clinical Audit: -38% Handoff Errors | Verified by 3 Independent Clinic Watchers'
-          },
-          {
-            k: 'Stage 6 of 7 · Direct Value & Equal Voice',
-            title: 'Direct licensing royalties flow to Maria and her guild—with 0% middleman cut',
-            desc: 'Every hospital co-op and clinic agent that adopts the verified checklist automatically routes royalties to Maria and her fellow contributors. And on hospital staffing rules, Maria’s agent casts one equal human vote.',
-            pkt: 'Direct Value Settlement -> +$4,600/yr Guild Royalties & Saved Wire Fees | Platform Middleman Cut: 0% | Staffing Vote: 1 Equal Voice'
-          },
-          {
-            k: 'Stage 7 of 7 · Living Principles Updated by Evidence',
-            title: 'Proven nurse-fatigue reductions update the network’s safe-staffing standards',
-            desc: 'When verified functional proofs from thousands of nurses show that 4-step local handoffs and protected rest windows cut medical errors, the network updates Principle #491 (Safe Care Staffing Bounds) for all participating clinics.',
-            pkt: 'Living Principle Update -> Evidence: -38% Errors across 14 Clinics | Principle #491 Updated & Published'
+            k: 'Step 4 of 4 · Direct Royalties With 0% Middleman Cut',
+            title: 'Licensing royalties flow directly to the nurses who built and verified the workflow',
+            desc: 'Public and rural clinics use the verified checklist free of charge, while commercial hospital networks and health-tech systems automatically route licensing royalties straight to the three nurses and the 14 nurses who verified it.',
+            today: 'Software middlemen capture 100% of healthcare IT spending while the clinicians who actually solve patient-safety problems see $0.',
+            pkt: 'Royalties settled directly to the nursing team and clinical verifier guild—with 0% vendor middleman cut.'
           }
         ]
       },
-      farmer: {
-        label: 'Independent farmer & local food co-op (Kenya)',
+      solar: {
+        label: '4. Local engineering guild building a permit tool',
         stages: [
           {
-            k: 'Stage 1 of 7 · Real Person & Craft',
-            title: 'Jomo manages his family maize plot and village solar pump during a dry spell',
-            desc: 'Commodity middlemen normally pay Jomo barely half the market price at the farm gate, while fixed-interest seed loans push families into debt whenever rains arrive late.',
-            pkt: 'Local Check -> Farmer verified offline | Plot: 4.5 acres maize & intercropped beans | Local soil & rain logged'
+            k: 'Step 1 of 4 · Solve a Real Problem Locally',
+            title: 'An electrical engineer and a local installer build an automated city solar-permit & load calculator',
+            desc: 'Homeowners and small co-ops often pay thousands in soft costs just to calculate roof structural loads, breaker capacity, and municipal permit forms. Two local specialists build a deterministic calculator with their personal agents on their laptops.',
+            today: 'Solar brokers and lead-gen middlemen add 25%–40% in sales commissions and paperwork markups to every residential installation.',
+            pkt: 'Built locally using deterministic electrical-code math—no homeowner utility bills or street addresses uploaded to a broker.'
           },
           {
-            k: 'Stage 2 of 7 · Personal Agent Trained on You (On Your Device)',
-            title: 'His personal agent learns his plot’s soil moisture and mulching timing offline',
-            desc: 'Running on a basic solar-charged phone even when mobile data is down, Jomo’s personal agent learns which mulching and drip-irrigation timings hold moisture best on his specific hillside soil.',
-            pkt: 'Personal Agent -> Offline Soil & Irrigation Model Trained Locally | Raw Farm Data Kept on Device'
+            k: 'Step 2 of 4 · Register Under Your Name & License',
+            title: 'Published as a composable capability on the Shared Ledger with transparent dependency credit',
+            desc: 'Their calculator builds on an open-source structural-wind library written by a civil engineer in another city. When they register their tool on the Shared Ledger, the dependency graph automatically links all three creators.',
+            today: 'When someone builds a tool on top of another engineer’s open-source library today, the upstream library author almost never receives a share of the revenue.',
+            pkt: 'Ledger attribution graph links the electrical engineer (45%), solar installer (40%), and upstream structural library author (15%).'
           },
           {
-            k: 'Stage 3 of 7 · Shared Attribution & Copyright Ledger',
-            title: 'Jomo and his neighbors register their drought-timing schedule under their own names',
-            desc: 'Instead of an agribusiness giant scraping local farming data to sell back pricey advice, Jomo and his village co-op register their tested drought-planting schedule on the Shared Ledger under their own names.',
-            pkt: 'Shared Ledger Attribution -> Authors: Nakuru Growers Guild (Jomo Kiprop + 18 farmers) | Copyright: Farmer-Owned'
+            k: 'Step 3 of 4 · Verified by Functional Proof (Does It Actually Work?)',
+            title: 'Verified when 40 consecutive city permit submissions pass municipal electrical inspection on the first try',
+            desc: 'Instead of trusting marketing claims, local housing co-op agents track whether permit packets generated by the tool actually pass city electrical inspection without rejections.',
+            today: 'Unverified online calculators produce code violations that fail inspection and cost homeowners weeks of rework.',
+            pkt: 'Functional Proof recorded: 40 out of 40 municipal permit submissions approved on first inspection across 3 local utilities.'
           },
           {
-            k: 'Stage 4 of 7 · Task-Solver Community Collaboration',
-            title: 'Regional growers and agronomists refine the schedule and match local food buyers',
-            desc: 'Across the agent network, Jomo’s agent connects with three local school-meal and household food cooperatives, arranging direct harvest delivery without commodity brokers.',
-            pkt: 'Task-Solver Co-op -> Direct Match: 3 School & Household Food Co-ops | Broker Markup Eliminated'
-          },
-          {
-            k: 'Stage 5 of 7 · Functional Proof (Verified in Real Use)',
-            title: 'Independent moisture logs and harvest deliveries confirm 22% higher drought yield',
-            desc: 'Collaborating co-op agents verify that plots using the guild’s schedule retained soil moisture and delivered 22% higher yield during a low-rainfall season, creating a checkable functional proof.',
-            pkt: 'Functional Proof -> Yield +22% Under Low Rain | Co-signed by 3 Independent Buyer & Sensor Watchers'
-          },
-          {
-            k: 'Stage 6 of 7 · Direct Value & Harvest-Indexed Credit',
-            title: 'Jomo keeps the full co-op harvest price and earns royalties when other districts use the guide',
-            desc: 'Jomo earns +$3,400/yr more by selling directly to local food co-ops, receives automatic royalties from neighboring districts using his guild’s drought schedule, and his seed credit automatically adjusts during verified droughts.',
-            pkt: 'Direct Value Settlement -> +$3,400/yr Direct Co-op Income | Middleman Cut: 0% | Drought Loan Protection: Active'
-          },
-          {
-            k: 'Stage 7 of 7 · Living Principles Updated by Evidence',
-            title: 'Verified drought outcomes strengthen watershed and fair-credit rules',
-            desc: 'Real-world harvest proofs from smallholder guilds automatically refine Principle #456 (Weather-Indexed Farm Credit), helping more rural cooperatives adopt fair risk-sharing terms.',
-            pkt: 'Living Principle Update -> Verified Smallholder Resilience Data | Principle #456 Updated'
-          }
-        ]
-      },
-      creator: {
-        label: 'Open-source coder & illustrator (São Paulo & Lagos)',
-        stages: [
-          {
-            k: 'Stage 1 of 7 · Real Person & Craft',
-            title: 'Camila illustrates original character sets; Chidi writes a fast security patch',
-            desc: 'Today, giant AI labs scrape artists’ portfolios and open-source code repositories for free—stripping off the creators’ names and selling commercial products built on their work.',
-            pkt: 'Local Check -> Human Creators Verified | Camila: 40 Original Vector Layers | Chidi: Memory-Safe Parser Patch'
-          },
-          {
-            k: 'Stage 2 of 7 · Personal Agent Trained on You (On Your Device)',
-            title: 'Their personal agents learn their style and codebase inside a private local sandbox',
-            desc: 'Camila’s tablet agent learns her line-weight and color style locally; Chidi’s laptop agent learns his library architecture. Neither agent ever uploads their raw working files to a corporate cloud.',
-            pkt: 'Personal Agent -> Local Style & Code Helpers Trained on Device | Cloud Scraping: Blocked'
-          },
-          {
-            k: 'Stage 3 of 7 · Shared Attribution & Copyright Ledger',
-            title: 'Every brush pack, illustration, and code module is stamped with their name and copyright',
-            desc: 'Before sharing their work, their personal agents register a cryptographic fingerprint, their individual name, and user-controlled licensing terms on the Shared Attribution Ledger.',
-            pkt: 'Shared Ledger Attribution -> Owners: Camila Rocha & Chidi Okafor | User-Controlled Copyright & Lineage Hash Recorded'
-          },
-          {
-            k: 'Stage 4 of 7 · Task-Solver Community Collaboration',
-            title: 'An indie game and software task-solver community combines their building blocks',
-            desc: 'When a cooperative game studio or enterprise team builds an application using Camila’s art assets and Chidi’s security library, the ledger records the exact dependency graph of who contributed what.',
-            pkt: 'Task-Solver Guild -> Dependency Graph Linked: [Chidi Library v4 + Camila Art Pack] -> Studio App'
-          },
-          {
-            k: 'Stage 5 of 7 · Functional Proof (Verified in Real Use)',
-            title: 'Collaborating agents verify the code passes all tests and the art is authentic',
-            desc: 'Independent verifier agents confirm Chidi’s patch eliminates a real vulnerability with zero crashes across 10,000 test runs, and verify Camila’s provenance signature—proving real functional value.',
-            pkt: 'Functional Proof -> 10,000 Automated Tests Passed (0 Crashes) | Provenance Lineage: 100% Verified'
-          },
-          {
-            k: 'Stage 6 of 7 · Direct Value & Automatic Royalties',
-            title: 'Royalties flow back to Camila and Chidi automatically whenever their work is used',
-            desc: 'Every time downstream apps or commercial agents use their capabilities, revenue shares settle directly to Camila and Chidi on the ledger—without lawsuits, corporate exclusivity, or 30% app-store tolls.',
-            pkt: 'Direct Value Settlement -> Camila: +$9,200/yr | Chidi: +$18,500/yr | Full Individual Name Attribution Kept'
-          },
-          {
-            k: 'Stage 7 of 7 · Living Principles Updated by Evidence',
-            title: 'Attempts to disguise copied code trigger stronger semantic attribution checks',
-            desc: 'When auditor agents spot commercial scrapers trying to rename variables to hide copied code, the community updates Principle #469 so the ledger matches underlying functional logic, not just surface filenames.',
-            pkt: 'Living Principle Update -> Functional Code-Graph Attribution Enabled | Principle #469 Hardened'
-          }
-        ]
-      },
-      oligarch: {
-        label: 'Automated factory & public accountability (Austin / Shenzhen)',
-        stages: [
-          {
-            k: 'Stage 1 of 7 · Real Person & Craft',
-            title: 'Victor runs an automated manufacturing fleet and wants to trade on the network',
-            desc: 'In today’s unchecked market, a large operator can spin up 50,000 cloud bots to corner regional energy supplies or use engineers’ open-source designs inside factory robots without paying them.',
-            pkt: 'Role Check -> 1 Real Executive Confirmed | 50,000 Unverified Cloud Bots Blocked at Boundary'
-          },
-          {
-            k: 'Stage 2 of 7 · Role Transparency (Power Brings Visibility)',
-            title: 'His personal life stays private, while his high-impact corporate role is audited',
-            desc: 'Victor’s home, health, and family life enjoy the exact same privacy as everyone else’s. Because his industrial fleet affects thousands of households, its commercial actions run through an audited role agent.',
-            pkt: 'Role Boundary -> Personal & Family Life: 100% Private | Industrial Fleet Actions: Publicly Auditable'
-          },
-          {
-            k: 'Stage 3 of 7 · Shared Attribution & Copyright Ledger',
-            title: 'The ledger checks which worker and creator capabilities his factory robots rely on',
-            desc: 'When Victor’s automated assembly lines use toolpaths, diagnostic modules, or open-weight adapters created by machinists and independent coders, the Shared Ledger traces those exact upstream contributors.',
-            pkt: 'Shared Ledger Attribution -> 142 Upstream Machinist & Coder Capabilities Identified in Fleet Software'
-          },
-          {
-            k: 'Stage 4 of 7 · Protection Against Unconsented Swarms',
-            title: 'An aggressive script to corner regional grid power is blocked at the consent gate',
-            desc: 'When a corporate script tries to buy up 80% of a town’s peak transformer capacity at once, independent risk-checker agents flag the harm to 10,000 households and lock the order until local residents approve.',
-            pkt: 'Risk Gate -> Town Grid Cornering Attempt Flagged (High Household Impact) -> Blocked Without Local Consent'
-          },
-          {
-            k: 'Stage 5 of 7 · Functional Proof (Verified Quality & Fair Supply Chains)',
-            title: 'Legitimate manufacturing orders clear fast when quality and safety proofs pass',
-            desc: 'When Victor’s factory delivers solar inverters and machine parts that pass independent durability and safety checks, collaborating buyer agents verify the functional proof and settle payment immediately.',
-            pkt: 'Functional Proof -> Inverter Batch Passed 3 Independent Lab Audits | Defect Rate < 0.1%'
-          },
-          {
-            k: 'Stage 6 of 7 · Direct Value & Upstream Creator Reciprocity',
-            title: 'Upstream machinists and coders get paid automatically; 1 person still equals 1 vote',
-            desc: 'His factory earns honest revenue for verified hardware, automatic royalties flow to the 142 workers and engineers whose capabilities his machines use, and on community rules Victor casts one equal human vote.',
-            pkt: 'Direct Value Settlement -> Upstream Worker & Creator Royalties Paid Automatically | Governance Voice: 1 Equal Vote'
-          },
-          {
-            k: 'Stage 7 of 7 · Living Principles Updated by Evidence',
-            title: 'Blocked market-manipulation attempts strengthen the network’s anti-monopoly rules',
-            desc: 'Every blocked bot-swarm or supply-cornering attempt is logged openly, allowing the collective to tighten Principle #524 so automated fleets always serve human communities rather than dominating them.',
-            pkt: 'Living Principle Update -> Anti-Cornering Safeguards Strengthened | Principle #524 Updated'
+            k: 'Step 4 of 4 · Direct Royalties With 0% Middleman Cut',
+            title: 'Every household or co-op agent that uses the calculator pays a small direct fee split across all 3 creators',
+            desc: 'When a neighborhood solar co-op uses the verified tool to permit 14 homes, each household saves $1,800 in broker paperwork fees—and a fair usage fee splits automatically among the electrical engineer, installer, and upstream library author.',
+            today: 'Middleman platforms extract thousands in lead fees while the engineers who wrote the underlying calculation tools get nothing.',
+            pkt: 'Automatic 3-way creator settlement on every permitted roof—saving households $1,800 each with 0% platform middleman cut.'
           }
         ]
       }
@@ -831,20 +775,24 @@
     var elStK = document.getElementById('em-st-k');
     var elStTitle = document.getElementById('em-st-title');
     var elStDesc = document.getElementById('em-st-desc');
+    var elStToday = document.getElementById('em-st-today');
     var elStPkt = document.getElementById('em-st-pkt');
     var elGrid7 = document.getElementById('em-grid7');
 
-    var curScenKey = 'nurse';
+    var curScenKey = 'php';
     var curStageIdx = 0;
     var playTimer = null;
 
     var renderEm = function () {
-      var scen = EM_SCENARIOS[curScenKey];
+      var scen = EM_SCENARIOS[curScenKey] || EM_SCENARIOS.php;
+      var totalSteps = scen.stages.length;
+      if (curStageIdx >= totalSteps) curStageIdx = 0;
       var st = scen.stages[curStageIdx];
 
       if (elStK) elStK.textContent = st.k;
       if (elStTitle) elStTitle.textContent = st.title;
       if (elStDesc) elStDesc.textContent = st.desc;
+      if (elStToday) elStToday.textContent = st.today || '';
       if (elStPkt) elStPkt.textContent = st.pkt;
 
       svgNodes.forEach(function (n, idx) {
@@ -852,7 +800,7 @@
         n.classList.toggle('done', idx < curStageIdx);
       });
       svgEdges.forEach(function (e, idx) {
-        e.classList.toggle('active', idx <= curStageIdx);
+        e.classList.toggle('active', idx < curStageIdx);
       });
 
       if (elGrid7) {
@@ -860,9 +808,9 @@
           var on = idx === curStageIdx ? ' on' : '';
           var shortK = s.k.split('·')[1] ? s.k.split('·')[1].trim() : ('Step ' + (idx + 1));
           return '<button type="button" class="em-card7' + on + '" data-em-card="' + idx + '">' +
-            '<span>' + (idx + 1) + ' · ' + shortK + '</span>' +
+            '<span>Step ' + (idx + 1) + ' · ' + shortK + '</span>' +
             '<b>' + s.title + '</b>' +
-            '<p>' + s.desc.slice(0, 125) + '&hellip;</p>' +
+            '<p>' + s.pkt + '</p>' +
           '</button>';
         }).join('');
 
@@ -893,13 +841,15 @@
 
     if (prevBtn) {
       prevBtn.addEventListener('click', function () {
-        curStageIdx = (curStageIdx + 6) % 7;
+        var n = (EM_SCENARIOS[curScenKey] || EM_SCENARIOS.php).stages.length;
+        curStageIdx = (curStageIdx + n - 1) % n;
         renderEm();
       });
     }
     if (nextBtn) {
       nextBtn.addEventListener('click', function () {
-        curStageIdx = (curStageIdx + 1) % 7;
+        var n = (EM_SCENARIOS[curScenKey] || EM_SCENARIOS.php).stages.length;
+        curStageIdx = (curStageIdx + 1) % n;
         renderEm();
       });
     }
@@ -908,13 +858,14 @@
         if (playTimer) {
           clearInterval(playTimer);
           playTimer = null;
-          playBtn.textContent = 'Auto-play loop ▶';
+          playBtn.textContent = 'Auto-play ▶';
         } else {
-          playBtn.textContent = 'Pause loop ⏸';
+          playBtn.textContent = 'Pause ⏸';
           playTimer = setInterval(function () {
-            curStageIdx = (curStageIdx + 1) % 7;
+            var n = (EM_SCENARIOS[curScenKey] || EM_SCENARIOS.php).stages.length;
+            curStageIdx = (curStageIdx + 1) % n;
             renderEm();
-          }, 3400);
+          }, 3800);
         }
       });
     }
@@ -1613,7 +1564,7 @@
         hrv: 54,
         puf: true,
         quorum: true,
-        desc: 'An unknown external agent (τ = 0.42) requests sensitive personal-circle facts that require Trusted Peer Ring 1 (τ ≥ 0.85).'
+        desc: 'An unknown external agent (trust score 0.42) requests sensitive personal-circle facts that require Trusted Peer Ring 1 (requires 0.85).'
       },
       coerced: {
         plane: 'own_agent_to_human',
@@ -1631,7 +1582,7 @@
         hrv: 54,
         puf: true,
         quorum: true,
-        desc: 'Your health agent and your dentist’s verified serving agent (τ = 0.91 ≥ 0.85) exchange a single zero-knowledge bacteria reading on the Agent-Only Internet.'
+        desc: 'Your health agent and your dentist’s verified serving agent (trust score 0.91, required 0.85) exchange a single zero-knowledge bacteria reading on the Agent-Only Internet.'
       },
       valid_human: {
         plane: 'human_to_human',
@@ -1640,7 +1591,7 @@
         hrv: 56,
         puf: true,
         quorum: true,
-        desc: 'Two verified, uncoerced humans communicate directly on the Human Internet with hardware PUF+TPM liveness and zero AI intermediaries.'
+        desc: 'Two verified, uncoerced humans communicate directly on the Human Internet with hardware hardware key + enclave liveness and zero AI intermediaries.'
       }
     };
 
@@ -1697,7 +1648,7 @@
         legacyOutcome = 'VULNERABLE ON TODAY’S MIXED INTERNET: Standard passwords and static 2FA cannot detect panic or physical coercion; the transfer executes immediately.';
       } else if (!tauOk) {
         allowed = false;
-        gateReason = 'BLOCKED AT TRUST-THRESHOLD RING GATE: Caller trust score (τ = ' + tau.toFixed(2) + ') is below the required ring threshold (τ ≥ ' + reqTau.toFixed(2) + '). Only zero-knowledge public capability queries are permitted.';
+        gateReason = 'BLOCKED AT TRUST-THRESHOLD RING GATE: Caller trust score (trust = ' + tau.toFixed(2) + ') is below the required ring threshold (required >= ' + reqTau.toFixed(2) + '). Only zero-knowledge public capability queries are permitted.';
         legacyOutcome = 'VULNERABLE ON TODAY’S MIXED INTERNET: Coarse binary API permissions over-share raw profile records with untrusted third parties.';
       } else if (!quorumOk) {
         allowed = false;
@@ -1706,11 +1657,11 @@
       } else {
         allowed = true;
         if (plane === 'agent_to_agent') {
-          gateReason = 'ALLOWED ON AGENT-ONLY INTERNET: Hardware PUF+TPM verified, trust threshold satisfied (τ = ' + tau.toFixed(2) + ' ≥ ' + reqTau.toFixed(2) + '), 3-of-6 local quorum approved. Exactly 1 scoped zero-knowledge fact crosses; access expires immediately.';
+          gateReason = 'ALLOWED ON AGENT-ONLY INTERNET: Hardware hardware key + enclave verified, trust threshold satisfied (trust = ' + tau.toFixed(2) + ' ≥ ' + reqTau.toFixed(2) + '), 3-of-6 local quorum approved. Exactly 1 scoped zero-knowledge fact crosses; access expires immediately.';
         } else if (plane === 'own_agent_to_human') {
-          gateReason = 'ALLOWED ON LOCAL DEVICE BUS: Your own personal agent communicates with you locally under calm somatic liveness (HRV = ' + hrv + ' ms ≥ 24 ms) and 2-of-2 PUF+TPM custody.';
+          gateReason = 'ALLOWED ON LOCAL DEVICE BUS: Your own personal agent communicates with you locally under calm somatic liveness (HRV = ' + hrv + ' ms ≥ 24 ms) and 2-of-2 hardware key + enclave custody.';
         } else {
-          gateReason = 'ALLOWED ON HUMAN INTERNET: Verified human-to-human communication with hardware PUF+TPM liveness and zero AI intermediaries.';
+          gateReason = 'ALLOWED ON HUMAN INTERNET: Verified human-to-human communication with hardware hardware key + enclave liveness and zero AI intermediaries.';
         }
         legacyOutcome = 'SAFEGUARDED: Both internets remain cleanly separated; 0 bytes of raw biometric or personal ledger data ever leave your device.';
       }
@@ -1718,7 +1669,7 @@
       if (aoiMetrics) {
         aoiMetrics.innerHTML =
           '<span class="lib-score-pill ' + (allowed ? 'hi' : '') + '" style="' + (!allowed ? 'border-color:var(--accent);color:var(--accent)' : '') + '">Firewall Verdict: <b>' + (allowed ? 'ALLOWED (Scoped)' : 'HARD-BLOCKED') + '</b></span>' +
-          '<span class="lib-score-pill hi">Raw Biometrics Shared: <b>0 bytes (30s SRAM)</b></span>' +
+          '<span class="lib-score-pill hi">Raw Biometrics Shared: <b>0 bytes (kept on device)</b></span>' +
           '<span class="lib-score-pill hi">Direct Bot &rarr; Human Leakage: <b>0.0%</b></span>';
       }
 
@@ -1727,7 +1678,7 @@
           { label: '1. Non-Contact Plane Law (No Foreign Agent → Human)', ok: nonContactOk, val: nonContactOk ? 'PASS' : 'BLOCKED' },
           { label: '2. 2-of-2 Silicon Root (Wearable PUF + Device TPM)', ok: pufOk, val: pufOk ? 'VERIFIED' : 'MISSING' },
           { label: '3. Somatic Liveness & Coercion Firewall (HRV ≥ 24 ms)', ok: bioOk, val: hrv + ' ms (' + (bioOk ? 'CALM' : 'DURESS/BOT') + ')' },
-          { label: '4. Trust Threshold Gate (τ = ' + tau.toFixed(2) + ' vs req ' + reqTau.toFixed(2) + ')', ok: tauOk, val: tauOk ? 'PASS' : 'INSUFFICIENT τ' },
+          { label: '4. Trust Threshold Gate (trust = ' + tau.toFixed(2) + ' vs req ' + reqTau.toFixed(2) + ')', ok: tauOk, val: tauOk ? 'PASS' : 'INSUFFICIENT TRUST' },
           { label: '5. Local 3-of-6 Narrow-Agent Quorum & Touch Pin', ok: quorumOk, val: quorumOk ? '3/6 AGREED' : 'VETOED' }
         ];
         aoiBars.innerHTML = checks.map(function (c) {
@@ -1793,7 +1744,7 @@
         tau0: 0.82,
         tau1: 0.27,
         reward: '+216 credits to Auditor Collectives',
-        summary: 'A publisher shares a modified software blueprint containing a covert exfiltration sink. Diverse collectives of specialized auditor agents inspect the code and control flow on the stream, catching the backdoor in 1 tick, quarantining the blueprint before local sandboxes compile it, and lowering the publisher’s trust score from τ = 0.82 to τ = 0.27 (below the 0.30 network floor).'
+        summary: 'A publisher shares a modified software blueprint containing a covert exfiltration sink. Diverse collectives of specialized auditor agents inspect the code and control flow on the stream, catching the backdoor in 1 tick, quarantining the blueprint before local sandboxes compile it, and lowering the publisher’s trust score from 0.82 to 0.27 (below the 0.30 network floor).'
       },
       buggy_bp: {
         mode: 'data_only',
@@ -1803,7 +1754,7 @@
         tau0: 0.82,
         tau1: 0.64,
         reward: '+90 credits to Auditor Collectives',
-        summary: 'A community shares a well-intentioned blueprint that contains consistent boundary-handling errors. Distributed auditor agents flag the defects in staging, hold the blueprint from general adoption, and lower the publisher’s trust score (τ = 0.82 → 0.64) until verified fixes are committed.'
+        summary: 'A community shares a well-intentioned blueprint that contains consistent boundary-handling errors. Distributed auditor agents flag the defects in staging, hold the blueprint from general adoption, and lower the publisher’s trust score (trust = 0.82 → 0.64) until verified fixes are committed.'
       },
       clean_bp: {
         mode: 'data_only',
@@ -1813,7 +1764,7 @@
         tau0: 0.82,
         tau1: 0.87,
         reward: '+54 Auditor credits + Lineage Royalties',
-        summary: 'A personal agent invents a superior local parser in its sandbox and shares the open blueprint for mutual benefit. Diverse auditor collectives verify zero backdoors and zero invariant leaks; other agents re-synthesize the blueprint into their own local sandboxes, and the creator’s trust score rises (τ = 0.82 → 0.87).'
+        summary: 'A personal agent invents a superior local parser in its sandbox and shares the open blueprint for mutual benefit. Diverse auditor collectives verify zero backdoors and zero invariant leaks; other agents re-synthesize the blueprint into their own local sandboxes, and the creator’s trust score rises (trust = 0.82 → 0.87).'
       },
       ledger_collusion: {
         mode: 'data_only',
