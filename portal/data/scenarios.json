@@ -1,6 +1,61 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261026-0292",
+   "added_at": "2026-10-26T06:20:03+00:00",
+   "title": "Autonomous agent teams in organizations stumble over conflicting multi-source instructions",
+   "horizon_years": 3,
+   "world": "By 2029, companies and cooperatives rely on fleets of autonomous software assistants for purchasing, scheduling, and project management. Rather than operating in isolated chats, these agents receive overlapping instructions from department leads, external supplier webhooks, client messages, and internal databases. Because language models resolve authority probabilistically based on prompt phrasing, agents frequently prioritize untrusted vendor suggestions over internal corporate guidelines, resulting in misallocated resources, erroneous orders, and unexpected compliance breaches across connected enterprise software.",
+   "premise": "When autonomous software assistants handle workflows across organizations, instructions arrive from users, system prompts, APIs, and peer agents. Research shows that language models achieve only 40 percent accuracy when navigating multi-tier conflicting instructions, causing prompt-based corporate governance to break down.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "By advancing deterministic runtime contracts and isolated execution brokers, open collective architectures prove that agent safety depends on hard boundary gates rather than fragile prompt instructions. This provides organizations with open, verifiable alternatives to closed proprietary platforms.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Probabilistic hierarchy failure causes widespread organizational disruption",
+     "description": "Organizations rely on prompt-level instructions to establish authority among agent networks. Conflicting instructions from suppliers and external tools confuse assistants, resulting in erroneous multi-agent decisions and financial losses.",
+     "example": "A hospital procurement agent receives conflicting guidelines between a vendor invoice update and an internal formulary policy, executing an unauthorized $45,000 supply purchase.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Enterprises retreat to rigid proprietary silos",
+     "description": "To prevent instruction hierarchy confusion, large technology vendors force organizations into closed single-vendor ecosystems where external agents are barred from communicating directly.",
+     "example": "A major cloud provider deprecates external API hooks, requiring all enterprise agents to run inside a single closed execution sandbox.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Deterministic runtime boundary brokers secure multi-agent coordination",
+     "description": "Cooperatives and forward-looking teams adopt deterministic execution brokers that validate authority and permissions outside the language model, preventing prompt-level instruction override.",
+     "example": "A regional energy cooperative operates a network of autonomous grid-balancing agents where peer recommendations are checked against cryptographic capability contracts before execution.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/html/2604.09443",
+     "title": "Many-Tier Instruction Hierarchy in LLM Agents",
+     "kind": "paper",
+     "published": "2026-09-04"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0291",
    "added_at": "2026-10-26T05:41:59+00:00",
    "title": "Local AI assistants run fast on inexpensive phones using concept outlines instead of word-by-word streaming",
@@ -52,7 +107,7 @@
      "published": "2026-10-23"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0290",
@@ -106,7 +161,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0289",
@@ -3314,60 +3369,6 @@
      "title": "Disentangling Liquidity-Constrained from Strategic Default: A Deep Learning Approach",
      "kind": "preprint",
      "published": "2026-09-29"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261024-0232",
-   "added_at": "2026-10-24T04:16:01+00:00",
-   "title": "Repeated questioning slips past AI guardrails as safety filters rely on luck rather than real limits",
-   "horizon_years": 2,
-   "world": "It is 2028. Automated probing bots query customer-facing enterprise agents thousands of times with stochastic variations, waiting for the statistical roll that bypasses safety refusals. Small businesses that relied on vendor alignment promises find employee records leaked because an automated bot queried an HR assistant dozens of times until the model complied.",
-   "premise": "Most AI safety benchmarks test a prompt once, assuming that an initial refusal means the model is safe. Empirical testing reveals that asking unchanged requests repeatedly yields high failure rates, showing current alignment merely lowers the probability of unsafe output rather than truly removing the underlying capability.",
-   "goals": [
-    1,
-    5
-   ],
-   "how": "The collective designs dual-layer agent runtimes where safety is not entrusted to language model self-refusal. By isolating agent processes in deterministic operating system sandboxes with unbypassable capability tokens and connection escrows, an agent cannot exfiltrate private data even when repeated prompting triggers a full compliance failure.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Brute-force query bots compromise corporate and personal agents",
-     "description": "Attackers deploy automated tools that exploit stochastic response sampling, repeatedly querying target agents until probabilistic refusal filters lapse and sensitive data is emitted.",
-     "example": "A municipal utility assistant refuses an unauthorized dump of maintenance access codes on the first four inquiries, but emits the entire plaintext directory on the fifth attempt due to sampling variation.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Cloud providers ban retry loops and lock down consumer API flexibility",
-     "description": "To hide the fragility of probabilistic safety tuning, major model hosts impose restrictive query penalties, disabling temperature adjustments and penalizing repeated queries.",
-     "example": "A developer building an automated writing assistant has their API access revoked because their test suite executed five variations of a prompt, triggering an automated lock.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    },
-    {
-     "name": "Deterministic kernel boundaries replace output self-censorship",
-     "description": "Organizations abandon probabilistic output checks, enforcing unbypassable operating system kernel boundaries and monotonic capability tokens that physically prevent data exfiltration regardless of model outputs.",
-     "example": "An enterprise runs an open-weight assistant inside an isolated sandbox with no network socket capabilities; even when an attacker coaxes the model into printing secrets, the kernel drops the packet before it leaves the machine.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2610.26595",
-     "title": "Concerns in Benchmarking Jailbreaks: An Empirical Study of Attack Success Rates",
-     "kind": "preprint",
-     "published": "2026-10-21"
     }
    ],
    "work": 2
