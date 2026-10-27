@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beyond arXiv: How Personal Agents, Composable Lemmas &amp; the Agent Web Advance Science · Collective Intelligence Network</title>
+  <meta name="description" content="Interactive 5-event simulation showing how isolated Tasker and Solver human-agent pairs communicate across an Agent-Web ledger, translate 'Lemma 57' into human modalities, recursively evolve their own tools, and share lineage rewards.">
+  <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
+  <meta name="referrer" content="no-referrer">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Beyond arXiv &amp; Journal Review: How Personal Agents, Composable Lemmas &amp; the Agent Web Advance Science">
+  <meta property="og:description" content="Explore a 5-actor session-isolated simulation of how humans contribute key intuitions while their agents verify formal lemmas, contract datasets, and recursively evolve the ledger.">
+  <meta property="og:image" content="/assets/images/og-image.svg">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
+  <link rel="stylesheet" href="/styles/site.css?v=29">
+  <style>
+    .sim-shell {
+      border: 1px solid var(--line, rgba(120,120,120,0.28));
+      border-radius: 14px;
+      padding: 1.4rem;
+      margin: 2rem 0;
+      background: var(--surface, rgba(127,127,127,0.04));
+    }
+    .sim-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .sim-tab {
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--line, rgba(120,120,120,0.3));
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .sim-tab[aria-selected="true"] {
+      background: var(--ink, #1c1e24);
+      color: var(--bg, #f5f2eb);
+      font-weight: 600;
+    }
+    .session-lanes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.85rem;
+      margin: 1rem 0;
+    }
+    .session-card {
+      border: 1px solid var(--line, rgba(120,120,120,0.25));
+      border-radius: 10px;
+      padding: 0.9rem;
+      background: var(--bg, rgba(255,255,255,0.03));
+    }
+    .session-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: rgba(100,150,220,0.16);
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+    }
+    .dual-pane {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.1rem 0;
+    }
+    .pane-box {
+      border: 1px solid var(--line, rgba(120,120,120,0.28));
+      border-radius: 10px;
+      padding: 1rem;
+    }
+    .reward-bar {
+      display: flex;
+      height: 26px;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 0.6rem 0;
+      border: 1px solid rgba(120,120,120,0.3);
+    }
+    .reward-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #111;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .cheat-box {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      border: 1px dashed var(--line, rgba(120,120,120,0.4));
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body class="page-note">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head scrolled">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Collective Intelligence Network, home">
+      <img src="/assets/images/logo-small.png" alt="" width="30" height="30">
+      <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Site">
+      <a href="/#for-you">For your life</a>
+      <a href="/#goals">Goals</a>
+      <a href="/#fractured">How it works</a>
+      <a href="/#lines">Principles</a>
+      <a href="/#futures">Futures</a>
+      <a href="/trajectory">Trajectory</a>
+      <a href="/notes" aria-current="true">Notes</a>
+      <a href="/founder">Founder</a>
+      <a href="/updates">Updates</a>
+      <a href="/#involved">Get involved</a>
+      <a class="nav-net" href="https://cintnet.org">Network site &#8599;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Scientific commons &amp; Agent-Web simulation · Interactive</span>
+    <h1>Beyond arXiv &amp; journal review: how personal agents, composable lemmas, and the Agent Web solve real-world problems</h1>
+    <p class="lede">Traditional scientific publishing locks ideas inside static 60-page PDFs where reviewers are overloaded, context is implicit, and nobody remembers &ldquo;Lemma 57.&rdquo; By pairing each human with a sovereign personal agent over a shared cryptographic ledger, people can contribute their core insights in their own human modality while their agents formalize the technical building blocks, verify datasets, recursively upgrade the ledger&rsquo;s search tools, and route automatic royalties to every contributor.</p>
+    <p class="meta">26 October 2026 · 14 min read + interactive 5-event simulator · Grounded in<code>research/ledger_sim/</code></p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout">
+      <b>The insight that sparked this simulation</b>
+      <p>In <a href="https://youtu.be/ZAzWPE9CItg?t=3180">Lex Fridman Podcast #503 (minutes 53:00–56:56)</a>, mathematicians Ankur Moitra, Steven Brunton, and Alex Kontorovich point out a deep tension in how science works today: when you give a talk, what excites people is <strong>the key idea and the special case that shows why it works</strong>—not &ldquo;Lemma 57&rdquo; on page 247 where you had to dot the i&rsquo;s and cross the t&rsquo;s. And in a traditional paper, you cannot pull a lemma off the shelf like a rocket part because sixty pages of unwritten context are missing. On our shared ledger, <strong>your personal agent handles Lemma 57 and builds the specification directly into the object</strong>, while translating the core idea into the exact visual, physical, or causal modality you think in.</p>
+    </aside>
+
+    <h2>1. Why static preprints and human-web search fail both scientists and practitioners</h2>
+    <p>When an electrician faces an overheating neighborhood transformer, or a watershed technician faces a cavitating storm culvert, the mathematical or physical insight that solves their problem often already exists—buried on page 38 of an arXiv preprint in another field, written in notation only thirty specialists on earth can parse.</p>
+    <ul>
+      <li><b>Monolithic drafts block living improvements:</b> On arXiv, a paper is a frozen PDF owned by an isolated author; meanwhile, real improvements (such as tightening a Fast Fourier Transform constant) scatter across ephemeral social-media threads with no unified record of what has been verified.</li>
+      <li><b>Missing specifications prevent off-the-shelf reuse:</b> In a textbook or PDF, a lemma assumes you read the preceding sixty pages of boundary conditions. You cannot snap it together with a local sensor dataset the way an engineer bolts a valve onto a rocket.</li>
+      <li><b>The human web is indexed for keywords, not mathematical structure:</b> Searching for &ldquo;transformer running hot at 6 PM&rdquo; never finds a paper titled <em>&ldquo;Non-Asymptotic Lyapunov Phase-Damping in Coupled Oscillators,&rdquo;</em> even when they are the exact same differential equation.</li>
+    </ul>
+
+    <h2>2. The Agent Web: a ledger built for optimal agent search and human modality bridging</h2>
+    <p>To test how problem-solving unfolds when humans and personal agents collaborate across the ledger, we built a session-isolated simulation framework (<code>research/ledger_sim/</code>) with five strictly separated actors:</p>
+    <ol>
+      <li><b>Orchestrator (<code>session-orchestrator</code>):</b> Streams real-world media signals and field events, enforces anti-cheat session boundaries, and audits reward conservation.</li>
+      <li><b>Tasker Human (<code>session-human_tasker</code>):</b> Experiences a real-world problem, sets practical constraints, and receives answers in their preferred cognitive modality (circuit schematic, 3D flow geometry, lattice diagram, agronomic cadence, or clinical decision tree).</li>
+      <li><b>Tasker Personal Agent (<code>session-agent_tasker</code>):</b> Extracts formal variables and target invariants from its human&rsquo;s problem, publishes a campaign to the Agent-Web ledger, searches for compatible lemmas and datasets, and translates verified proofs back into its human&rsquo;s modality.</li>
+      <li><b>Solver Human (<code>session-human_solver</code>):</b> Contributes the <strong>core intuition and illustrative special case</strong> (&ldquo;why the mechanism works&rdquo;) without having to hand-write forty pages of boilerplate.</li>
+      <li><b>Solver Personal Agent (<code>session-agent_solver</code>):</b> Formalizes the technical building block (&ldquo;Lemma 57&rdquo;) as a composable <code>LemmaObject</code> with explicit input/output type signatures, SI dimensional units, preconditions, postconditions, and an executable verifier.</li>
+    </ol>
+
+    <h2>3. Interactive Explorer: Step through all 5 real-world events &amp; recursive ledger upgrades</h2>
+    <p>Select any of the five real-world events below to inspect how the isolated sessions communicate, how the personal agents bridge between the formal ledger and human modality, how <strong>self-blame diagnostics</strong> recursively upgrade the ledger protocol from <code>v1.0</code> to <code>v2.0</code>, and how the 1,000-unit reward pool is split across every human and agent contributor.</p>
+
+    <div class="sim-shell" id="ledger-sim-app">
+      <div class="sim-tabs" role="tablist" aria-label="Five real-world events">
+        <button class="sim-tab" role="tab" aria-selected="true" data-ev="0">Event 1 · Grid Harmonic Resonance (v1.0&rarr;v1.1)</button>
+        <button class="sim-tab" role="tab" aria-selected="false" data-ev="1">Event 2 · Navier-Stokes Culvert (v1.1&rarr;v1.2)</button>
+        <button class="sim-tab" role="tab" aria-selected="false" data-ev="2">Event 3 · CA Cert Revocation (v1.2&rarr;v1.3)</button>
+        <button class="sim-tab" role="tab" aria-selected="false" data-ev="3">Event 4 · Drought Soil Salinity (v1.3&rarr;v1.4)</button>
+        <button class="sim-tab" role="tab" aria-selected="false" data-ev="4">Event 5 · Senior Polypharmacy (v1.4&rarr;v2.0)</button>
+      </div>
+
+      <div id="sim-header" style="margin-bottom:1rem;"></div>
+
+      <div class="session-lanes" id="sim-sessions"></div>
+
+      <div class="dual-pane" id="sim-dual-pane"></div>
+
+      <div class="pane-box" id="sim-evolution-pane" style="margin-top:1rem;"></div>
+
+      <div class="pane-box" id="sim-reward-pane" style="margin-top:1rem;"></div>
+
+      <div class="cheat-box">
+        <b>Anti-cheat session isolation check:</b> Each of the 5 actors runs in an isolated cryptographic vault (<code>SessionIsolationGuard</code>). Try simulating a boundary violation:
+        <button type="button" id="btn-test-cheat" class="sim-tab" style="margin-left:0.5rem;">Simulate Cross-Session Peek / Human-on-Agent-Web Bypass</button>
+        <div id="cheat-output" style="margin-top:0.5rem;font-family:var(--mono,monospace);font-size:0.82rem;"></div>
+      </div>
+    </div>
+
+    <h2>4. How the recursive self-blame loop upgrades the Agent Web</h2>
+    <p>A static protocol cannot anticipate every communication bottleneck. In our simulation, after each problem is solved, the Tasker Agent and Solver Agent run a <strong>counterfactual self-blame diagnostic</strong>—asking which agent or ledger limitation wasted time during the round—and submit a live pull request (<code>LEDGER_PROTOCOL_PR</code>) to upgrade their own tools and the ledger schema:</p>
+    <ul>
+      <li><b>Round 1 (<code>v1.0 &rarr; v1.1</code>):</b> Tasker Agent blames its own keyword-style query for missing a spectral control lemma and synthesizes <code>skill.v1_1.structural_signature_indexer</code>, adding an inverted input/output tensor signature index to the ledger.</li>
+      <li><b>Round 2 (<code>v1.1 &rarr; v1.2</code>):</b> Solver Agent blames a millimeter-vs-meter retry when binding CAD geometry to a Navier-Stokes lemma and synthesizes <code>skill.v1_2.si_dimensional_unit_checker</code>.</li>
+      <li><b>Round 3 (<code>v1.2 &rarr; v1.3</code>):</b> Tasker Agent identifies friction in proving hospital benchmark privacy and synthesizes <code>skill.v1_3.zk_dataset_schema_attestor</code>.</li>
+      <li><b>Round 4 (<code>v1.3 &rarr; v1.4</code>):</b> Solver Agent automates upstream lemma citation and royalty routing by synthesizing <code>skill.v1_4.dag_lineage_auto_resolver</code>.</li>
+      <li><b>Round 5 (<code>v1.4 &rarr; v2.0</code>):</b> Tasker Agent upgrades the Modality Bridge via <code>skill.v2_0.precondition_safety_gate_renderer</code> so every formal precondition (such as kidney clearance <code>eGFR &ge; 45 mL/min</code>) automatically compiles into a top-level safety check on the human&rsquo;s decision card.</li>
+    </ul>
+
+    <nav class="note-foot" aria-label="Related notes">
+      <a href="/notes/architecture-of-human-sovereignty">&larr; The Architecture of Human Sovereignty</a>
+      <a href="/notes/how-the-ledger-works">How the shared ledger works &rarr;</a>
+    </nav>
+  </div>
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="spectrum" aria-hidden="true"></div>
+    <div class="foot-grid">
+      <div>
+        <h4>Collective Intelligence Network</h4>
+        <p>An independent research and design project preparing people for advanced AI.</p>
+        <p>This site was designed and written with AI agents.</p>
+      </div>
+      <div>
+        <h4>This site</h4>
+        <ul>
+          <li>No cookies, analytics or third-party requests</li>
+          <li>Works without JavaScript</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Read more</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/founder">From the founder</a></li>
+          <li><a href="/trajectory">Trajectory</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/#involved">Get involved</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  const EVENTS = [
+    {
+      id: "EVT-01",
+      title: "Sub-Harmonic Transformer Resonance Under Heatwave & Bidirectional EV Charging",
+      media: "Regional Grid Alert: Neighborhood Substation Transformers Overheating as Evening EV Fast-Charging Collides with Rooftop Inverter Harmonics",
+      vStart: "1.0", vEnd: "1.1",
+      taskerHuman: "Marek Kowalski (Municipal Co-op Substation Electrician)",
+      taskerCrisis: "At 18:30 when 40+ bidirectional EV chargers start, 5th/7th harmonic currents ring between inverter phase-locked loops, driving oil temperature past 98°C at 68% load.",
+      taskerModality: "3-Phase Circuit & Waveform Schematic",
+      solverHuman: "Dr. Ananya Rao (Applied Spectral & Fast-Transform Theorist)",
+      solverIntuition: "Identical EV inverters synchronize like metronomes on a wobbling board. Staggering virtual impedance at the 5th/7th harmonic via a 20 ms sliding-window FFT cancels 82% of core heating.",
+      lemmaId: "LEMMA-FFT-57",
+      lemmaClause: "Lemma 57: Sub-harmonic Lyapunov phase-damping constant C_fft <= 0.178 for N coupled PLLs",
+      preconditions: "transformer_leakage_inductance in [0.4, 4.5] mH; inverter_pll_bw <= 45 Hz; fs >= 10 kHz",
+      postconditions: "THD < 4.5% (measured 3.8%); core oil temp < 90°C (stabilized at 74.8°C)",
+      dataset: "DS-GRID-WAVE-01 · 14,400 anonymized 10 kHz 3-phase capture records (zk-8f41c09e22a7b110)",
+      humanAction: "Set substation edge-controller sliding-FFT window to 20.0 ms; apply virtual impedance Z_h = 0.85 ohm at 300 Hz & 420 Hz with 14° phase stagger across charger banks A/B.",
+      diagram: "[3-Phase Bus] ---> [Rogowski 10kHz] ---> [20ms Sliding-FFT Notch (Gain=0.85)]\n   THD 13.7% (98.4°C)                       THD 3.8% (74.8°C) [Lemma 57 Verified]",
+      blamed: "Tasker Personal Agent (420 ms friction)",
+      friction: "Keyword query 'transformer overheating' missed spectral lemmas indexed by differential equation signature.",
+      skill: "skill.v1_1.structural_signature_indexer -> Unlocked inverted tensor-signature search on Ledger v1.1",
+      rewards: { solverHuman: 480, solverAgent: 140, dataset: 150, upstream: 0, taskerHuman: 100, taskerAgent: 60, bonus: 70 }
+    },
+    {
+      id: "EVT-02",
+      title: "Navier-Stokes Vortex Shedding & Flash-Flood Culvert Cavitation Failure",
+      media: "Civil Hydrology Bulletin: High-Velocity Storm Culverts Collapsing From Sub-Surface Cavitation & Vortex Lock-In",
+      vStart: "1.1", vEnd: "1.2",
+      taskerHuman: "Elena Rostova (Watershed Civil Works Technician)",
+      taskerCrisis: "During 80 mm/hr cloudbursts, water separates at the 2.4m box-culvert inlet lip, creating a standing Karman vortex street that spalls ceiling concrete.",
+      taskerModality: "3D Spatial Streamline & Pressure Contour Geometry",
+      solverHuman: "Prof. Marcus Vance (Turbulence & CFD Researcher)",
+      solverIntuition: "Bolt two 24-degree chevron micro-baffles 0.35 diameters upstream of the vena contracta to inject counter-rotating vortices that keep the boundary layer attached.",
+      lemmaId: "LEMMA-NS-114 (depends on LEMMA-FFT-57)",
+      lemmaClause: "Lemma 114: H^1 Sobolev enstrophy dissipation bound under 24-deg counter-vortex injection",
+      preconditions: "Reynolds number in [1.0e5, 2.5e6]; baffle_angle_deg in [15.0, 32.0]",
+      postconditions: "vortex_shedding_ratio < 0.75 (verified 0.56); wall_cavitation_index > 1.8",
+      dataset: "DS-CULVERT-PIV-02 · 6,800 Doppler & pressure-transducer storm records (zk-3a99d71b40e2c511)",
+      humanAction: "Weld two 10mm steel chevron wedges at 24.0° angle, height = 14 cm (0.06D), 84 cm from inlet lip. Peak suction drops 64%.",
+      diagram: "Inlet ===> [ /\\ 24-deg Chevron Baffles @ 0.35D ] ===> Attached Laminar-Core Streamlines\n            (Injects counter-vortices; Lemma 114 verified: shedding ratio = 0.56 < 0.75)",
+      blamed: "Solver Personal Agent (310 ms friction)",
+      friction: "First contract draft passed culvert diameter in millimeters from CAD tool against meter unit spec.",
+      skill: "skill.v1_2.si_dimensional_unit_checker -> Unlocked mandatory SI dimensional-unit guard on Ledger v1.2",
+      rewards: { solverHuman: 360, solverAgent: 140, dataset: 150, upstream: 120, taskerHuman: 100, taskerAgent: 60, bonus: 70 }
+    },
+    {
+      id: "EVT-03",
+      title: "Emergency Root CA Compromise & Offline Hospital Edge Revocation Proof",
+      media: "Cybersecurity Alert: Root CA Key Compromise Forces Emergency Revocation Across 400,000 Medical & Industrial Edge Devices",
+      vStart: "1.2", vEnd: "1.3",
+      taskerHuman: "Devon Okafor (Regional Rural Hospital Security Custodian)",
+      taskerCrisis: "Downloading 45 MB Certificate Revocation Lists over rural backup satellite links stalls bedside infusion pump handshakes for 18 seconds.",
+      taskerModality: "Trust-Tree & Packet Budget Schematic",
+      solverHuman: "Dr. Kenji Takahashi (Algebraic Number Theorist & Lattice Cryptographer)",
+      solverIntuition: "Invert the problem: compress valid certificates into a 64-byte Module-SIS lattice accumulator root so each device checks a 768-byte witness in 1.42 ms offline.",
+      lemmaId: "LEMMA-LAT-309 (depends on LEMMA-FFT-57)",
+      lemmaClause: "Lemma 309: Short-Integer-Solution collision soundness >= 2^128 for 768-byte witness",
+      preconditions: "ring_dimension_n == 512; modulus_q == 12289",
+      postconditions: "witness_bytes <= 1024 (768 B); edge_verify_ms <= 2.5 (1.42 ms); soundness <= 2^-128",
+      dataset: "DS-PKI-BENCH-03 · 25,000 Cortex-M4 medical device cycle traces (zk-99c14e07a211f804)",
+      humanAction: "Broadcast 64-byte lattice root every 15 min over local LAN/LoRa; flash 180-line deterministic NTT check to pump gateways.",
+      diagram: "[CA Compromise] --> [64B Lattice Root + 768B Witness] --> [1.42 ms NTT Check on Pump Gateway]\n  (Replaces 45 MB CRL download; Lemma 309 soundness <= 2^-128 verified)",
+      blamed: "Tasker Personal Agent (260 ms friction)",
+      friction: "Hesitated to publish hospital gateway cycle traces until zero network-topology leakage was proven.",
+      skill: "skill.v1_3.zk_dataset_schema_attestor -> Unlocked automated ZK schema-invariant proofs on Ledger v1.3",
+      rewards: { solverHuman: 360, solverAgent: 140, dataset: 150, upstream: 120, taskerHuman: 100, taskerAgent: 60, bonus: 70 }
+    },
+    {
+      id: "EVT-04",
+      title: "Root-Zone Soil Salinization & Brackish Aquifer Leaching Under Drought",
+      media: "Agricultural Basin Report: Rising Capillary Salinity Threatens 180,000 Acres of Smallholder Orchards as Water Quotas Drop 35%",
+      vStart: "1.3", vEnd: "1.4",
+      taskerHuman: "Mateo Solis (Smallholder Orchard & Irrigation Co-op Coordinator)",
+      taskerCrisis: "Well water conductivity hit 1.9 dS/m; continuous drip leaves a scorching salt crust at the 30 cm feeder-root boundary under a 30% drought water cut.",
+      taskerModality: "Agronomic Soil-Moisture & Valve Cadence",
+      solverHuman: "Dr. Layla Haddad (Vadose-Zone Soil Physicist)",
+      solverIntuition: "Replace daily trickle with a pre-dawn dual-pulse: a 25-min wetting front at 03:30 AM, a 90-min pause to dissolve salt rims, then a 40-min gravity flush at 05:00 AM.",
+      lemmaId: "LEMMA-SOIL-88 (depends on LEMMA-NS-114)",
+      lemmaClause: "Lemma 88: Richards-Peclet number Pe >= 4.2 macropore solute flush under 90-min pulse separation",
+      preconditions: "matric_potential in [-65, -18] kPa; clay_fraction <= 38%",
+      postconditions: "root_zone_ec < 2.2 dS/m (drops 3.45 -> 1.74 dS/m); water_saved >= 28% (saves 31.5%)",
+      dataset: "DS-ORCHARD-SOIL-04 · 19,200 tensiometer & EC profile records across 85 orchards (zk-55b02d91e4f8a302)",
+      humanAction: "Trigger Pulse 1 (25 min @ 03:30 AM) when 30cm tensiometer hits -42 kPa; pause 90 min; trigger Pulse 2 (40 min @ 05:00 AM).",
+      diagram: "03:30 AM [25m Wetting Pulse] --> 90m Dissolve Pause --> 05:00 AM [40m Gravity Flush]\n   Root-Zone EC: 3.45 -> 1.74 dS/m | Water Saved: 31.5% [Lemma 88 Verified]",
+      blamed: "Solver Personal Agent (195 ms friction)",
+      friction: "Lemma 88 reused transport inequalities from Lemma 114 but v1.3 required manual upstream royalty entry.",
+      skill: "skill.v1_4.dag_lineage_auto_resolver -> Unlocked automatic recursive DAG lineage royalties on Ledger v1.4",
+      rewards: { solverHuman: 360, solverAgent: 140, dataset: 150, upstream: 120, taskerHuman: 100, taskerAgent: 60, bonus: 70 }
+    },
+    {
+      id: "EVT-05",
+      title: "CYP2D6 Metabolic Competition & Morning Syncope in Polypharmacy Seniors",
+      media: "Pharmacovigilance Signal: Unexplained Morning Dizziness & Fall Hospitalizations in Seniors Prescribed Combined Beta-Blocker + SSRI Regimens",
+      vStart: "1.4", vEnd: "2.0",
+      taskerHuman: "Dr. Hannah Lin (Community Geriatric Pharmacist)",
+      taskerCrisis: "Seniors taking both metoprolol and low-dose paroxetine at 08:00 breakfast show a 2.4x spike in mid-morning orthostatic blood-pressure drops.",
+      taskerModality: "Clinical Causal Decision Tree & Bedside Dosing Card",
+      solverHuman: "Dr. Samuel Mensah (Causal Biostatistician & Pharmacokinetic Modeler)",
+      solverIntuition: "First-pass hepatic CYP2D6 saturation peaks 90–180 min after simultaneous oral dosing. Separating administration by 12 hours (08:00 vs 20:00) restores baseline clearance.",
+      lemmaId: "LEMMA-CAUSAL-203 (depends on LEMMA-FFT-57, LEMMA-LAT-309)",
+      lemmaClause: "Lemma 203: Doubly-robust TMLE hazard ratio HR = 1.03 (95% CI <= 1.14) for stagger >= 6.0 hours",
+      preconditions: "stagger_window >= 6.0 hours; renal eGFR >= 45 mL/min",
+      postconditions: "adjusted_hazard_ratio < 1.10 (verified 1.03); zero individual patient charts exported",
+      dataset: "DS-PHARMA-FED-05 · 4,200 federated 14-clinic geriatric vitals summaries (zk-77d81a63c902b44e)",
+      humanAction: "Safety Gate: Verify patient eGFR >= 45 mL/min -> Shift SSRI to 20:00 and retain metoprolol at 08:00 -> Confirm Day-7 standing BP.",
+      diagram: "[Simultaneous 08:00 Dosing: HR = 2.41] ---> [Stagger 08:00 / 20:00 (12h): HR = 1.03]\n  (CYP2D6 peak saturation avoided; Lemma 203 verified across 4,200 federated records)",
+      blamed: "Tasker Personal Agent (140 ms friction)",
+      friction: "Initial modality card showed hazard ratio without highlighting the renal eGFR >= 45 mL/min precondition gate.",
+      skill: "skill.v2_0.precondition_safety_gate_renderer -> Upgraded Ledger & ModalityBridge to v2.0 safety gates",
+      rewards: { solverHuman: 360, solverAgent: 140, dataset: 150, upstream: 120, taskerHuman: 100, taskerAgent: 60, bonus: 70 }
+    }
+  ];
+
+  function renderEvent(idx) {
+    const ev = EVENTS[idx];
+    document.getElementById("sim-header").innerHTML =
+      '<div style="font-size:0.82rem;opacity:0.8;"><strong>' + ev.id + '</strong> · Ledger Protocol <code>v' + ev.vStart + ' &rarr; v' + ev.vEnd + '</code> · Media Signal: <em>' + ev.media + '</em></div>' +
+      '<h3 style="margin:0.35rem 0 0.2rem;">' + ev.title + '</h3>';
+
+    document.getElementById("sim-sessions").innerHTML =
+      '<div class="session-card"><span class="session-badge">Session 1 · Tasker Human</span><div><strong>' + ev.taskerHuman + '</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;">' + ev.taskerCrisis + '</p></div>' +
+      '<div class="session-card"><span class="session-badge">Session 2 · Tasker Agent</span><div><strong>Personal Twin (Tasker)</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;">Extracts formal invariants, queries Agent-Web index, binds dataset <code>' + ev.dataset.split(" ")[0] + '</code>, and renders <em>' + ev.taskerModality + '</em>.</p></div>' +
+      '<div class="session-card"><span class="session-badge">Session 3 · Solver Human</span><div><strong>' + ev.solverHuman + '</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;"><strong>Key intuition:</strong> ' + ev.solverIntuition + '</p></div>' +
+      '<div class="session-card"><span class="session-badge">Session 4 · Solver Agent</span><div><strong>Personal Twin (Solver)</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;">Formalizes <code>' + ev.lemmaId + '</code>, proves test vectors deterministically, and publishes rocket-part spec to the ledger.</p></div>';
+
+    document.getElementById("sim-dual-pane").innerHTML =
+      '<div class="pane-box">' +
+        '<div class="session-badge" style="background:rgba(80,180,120,0.2);">Human Modality View (' + ev.taskerModality + ')</div>' +
+        '<h4 style="margin:0.3rem 0;">What the Tasker Human Receives</h4>' +
+        '<p style="font-size:0.88rem;"><strong>Why it works (Special Case):</strong> ' + ev.solverIntuition + '</p>' +
+        '<p style="font-size:0.88rem;"><strong>Actionable Step:</strong> ' + ev.humanAction + '</p>' +
+        '<pre style="font-size:0.76rem;overflow-x:auto;padding:0.6rem;border-radius:6px;background:rgba(0,0,0,0.07);">' + ev.diagram + '</pre>' +
+      '</div>' +
+      '<div class="pane-box">' +
+        '<div class="session-badge" style="background:rgba(160,120,230,0.2);">Agent-Web Formal Object ("Lemma 57" Layer)</div>' +
+        '<h4 style="margin:0.3rem 0;"><code>' + ev.lemmaId + '</code></h4>' +
+        '<p style="font-size:0.84rem;margin:0.3rem 0;"><strong>Machine-Checked Clause:</strong> ' + ev.lemmaClause + '</p>' +
+        '<p style="font-size:0.84rem;margin:0.3rem 0;"><strong>Preconditions Built Into Object:</strong> <code>' + ev.preconditions + '</code></p>' +
+        '<p style="font-size:0.84rem;margin:0.3rem 0;"><strong>Guaranteed Postconditions:</strong> <code>' + ev.postconditions + '</code></p>' +
+        '<p style="font-size:0.84rem;margin:0.3rem 0;"><strong>ZK Dataset Contract:</strong> ' + ev.dataset + '</p>' +
+      '</div>';
+
+    document.getElementById("sim-evolution-pane").innerHTML =
+      '<div class="session-badge" style="background:rgba(230,160,60,0.22);">Self-Blame Diagnostic &amp; Recursive Ledger Upgrade (v' + ev.vStart + ' &rarr; v' + ev.vEnd + ')</div>' +
+      '<p style="font-size:0.88rem;margin:0.3rem 0;"><strong>Counterfactual Self-Blame:</strong> ' + ev.blamed + ' — ' + ev.friction + '</p>' +
+      '<p style="font-size:0.88rem;margin:0.3rem 0;"><strong>Recursive Tool &amp; Ledger PR Merged:</strong> <code>' + ev.skill + '</code></p>';
+
+    const r = ev.rewards;
+    document.getElementById("sim-reward-pane").innerHTML =
+      '<div class="session-badge" style="background:rgba(90,190,210,0.22);">100% Conserved Multi-Party Reward &amp; Lineage Split (1,000 Units)</div>' +
+      '<div class="reward-bar">' +
+        '<div class="reward-seg" style="width:' + (r.solverHuman/10) + '%;background:#a8e6cf;" title="Solver Human">Solver ' + r.solverHuman + '</div>' +
+        '<div class="reward-seg" style="width:' + (r.solverAgent/10) + '%;background:#dcedc1;" title="Solver Agent">S-Twin ' + r.solverAgent + '</div>' +
+        '<div class="reward-seg" style="width:' + (r.dataset/10) + '%;background:#ffd3b6;" title="Dataset Co-op">Data ' + r.dataset + '</div>' +
+        (r.upstream > 0 ? '<div class="reward-seg" style="width:' + (r.upstream/10) + '%;background:#ffaaa5;" title="Upstream Lemma Authors">Lineage ' + r.upstream + '</div>' : '') +
+        '<div class="reward-seg" style="width:' + (r.taskerHuman/10) + '%;background:#b5ead7;" title="Tasker Human">Tasker ' + r.taskerHuman + '</div>' +
+        '<div class="reward-seg" style="width:' + (r.taskerAgent/10) + '%;background:#c7ceea;" title="Tasker Agent">T-Twin ' + r.taskerAgent + '</div>' +
+        '<div class="reward-seg" style="width:' + (r.bonus/10) + '%;background:#e2f0cb;" title="Self-Blame PR Bonus">PR ' + r.bonus + '</div>' +
+      '</div>' +
+      '<p style="font-size:0.82rem;margin:0.3rem 0 0;">Solver Human (' + r.solverHuman + ') · Solver Agent Compute (' + r.solverAgent + ') · Dataset Custodian Co-op (' + r.dataset + ') · Upstream Lemma Lineage (' + r.upstream + ') · Tasker Validation Dividend (' + r.taskerHuman + ') · Tasker Agent Compute (' + r.taskerAgent + ') · Self-Blame Protocol Evolution Bonus (' + r.bonus + ') = <strong>1,000 / 1,000 units conserved</strong>.</p>';
+  }
+
+  const tabs = document.querySelectorAll("#ledger-sim-app .sim-tabs .sim-tab");
+  tabs.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      tabs.forEach(function(b) { b.setAttribute("aria-selected", "false"); });
+      btn.setAttribute("aria-selected", "true");
+      renderEvent(parseInt(btn.getAttribute("data-ev"), 10));
+    });
+  });
+
+  const cheatBtn = document.getElementById("btn-test-cheat");
+  const cheatOut = document.getElementById("cheat-output");
+  let cheatIdx = 0;
+  const cheatAttempts = [
+    "[BLOCKED] SessionBoundaryViolationError: Actor 'agent_solver' attempted unauthorized read on 'session-orchestrator' private vault (key='secret_answer_key'). Audit logged.",
+    "[BLOCKED] SessionBoundaryViolationError: Direct channel forbidden between 'human_tasker' and 'human_solver'. Must route through personal agents and AgentWebLedger.",
+    "[BLOCKED] SessionBoundaryViolationError: Actor 'human_tasker' cannot post directly to AgentWebLedger (Two Internets boundary: only personal agents access the Agent Web)."
+  ];
+  if (cheatBtn && cheatOut) {
+    cheatBtn.addEventListener("click", function() {
+      cheatOut.textContent = cheatAttempts[cheatIdx % cheatAttempts.length];
+      cheatIdx += 1;
+    });
+  }
+
+  renderEvent(0);
+})();
+</script>
+<script src="/scripts/site.js?v=16" defer></script>
+</body>
+</html>
