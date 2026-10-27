@@ -1,6 +1,115 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0342",
+   "added_at": "2026-10-27T12:19:01+00:00",
+   "title": "Modular personal agents combine small local models instead of renting giant central clouds",
+   "horizon_years": 3,
+   "world": "It is 2029. Rather than paying recurring subscriptions to central cloud vendors who monitor query logs, people run compact, private agent runtimes on their laptops and phones. Using descent-aligned routing, their personal agents dynamically assemble specialized micro-experts for bookkeeping, contract drafting, and private communication without transmitting raw personal data over the network.",
+   "premise": "Recent research in combinatorial expert routing demonstrates that scoring gradient descent alignment allows compact 3B-parameter models to dynamically compose low-rank adapters, matching monolithic model capabilities while requiring under half the parameter overhead.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops open specifications for modular model routing, verifies privacy-preserving on-device adapters, and coordinates shared benchmarks that help open-source runtimes run efficiently on affordable consumer hardware.",
+   "shift": 0.38,
+   "outcomes": [
+    {
+     "name": "Centralized model providers restrict local model execution",
+     "description": "Frontier cloud corporations lobby for mandatory cryptographic signatures on model weights, restricting the ability of consumer hardware to run independent local adapters.",
+     "example": "A laptop manufacturer deploys a firmware update blocking unsigned neural network weights, preventing an independent researcher in Berlin from running private personal adapters.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Open-weight combinatorial ecosystems displace subscription clouds",
+     "description": "Open-weight developer communities share verified, modular skill adapters that personal agents combine on the fly, making private local inference the standard for personal computing.",
+     "example": "An independent accountant in Montreal processes confidential client financial audits using local adapters on a desktop computer with no outbound network dependencies.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Specialized silicon pricing keeps advanced local routing inaccessible to low-income users",
+     "description": "Hardware vendors maintain premium pricing on high-bandwidth unified memory architectures, restricting fluid local combinatorial routing to affluent households while lower-income users remain on subsidized ad-supported clouds.",
+     "example": "A student in Manila is forced to use an ad-supported cloud assistant because affordable laptops lack sufficient unified memory bandwidth to switch between complex local adapters.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.52
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.00493",
+     "title": "Score the Update, Not the Token: Descent-Aligned Routing for Combinatorial LoRA Experts",
+     "kind": "preprint",
+     "published": "2026-09-30"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261027-0341",
+   "added_at": "2026-10-27T10:55:13+00:00",
+   "title": "AI planning tools trained on revised history fail when real crises hit",
+   "horizon_years": 3,
+   "world": "It is 2029. Regional hospital systems and municipal budget offices rely heavily on automated predictive suites to allocate emergency staff and supplies. Because vendors trained these systems on cleansed retrospective registries where initial reporting errors had been retroactively corrected, the tools routinely underestimate volatility during fast-moving crises, leading to severe under-staffing during seasonal illness spikes.",
+   "premise": "Predictive models evaluated on historical backtests often look superhuman because retrospective databases quietly incorporate revisions made months after events occurred. In live operations, models must forecast from unrevised, noisy real-time numbers, causing apparent forecasting superiority to evaporate when unexpected disruptions happen.",
+   "goals": [
+    2,
+    5
+   ],
+   "how": "The network publishes open, point-in-time forecasting evaluations that expose data revision leakage, provides synthetic stress-testing datasets reflecting real-time reporting delays, and equips community analysts with verification tools to audit commercial predictive claims.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Silent planning failures during seasonal surges",
+     "description": "Public agencies trust automated forecasts and cut buffer capacities, only to suffer severe resource shortfalls when real-time reporting lags mask incoming demand.",
+     "example": "A county health department cuts emergency staffing contracts by 25% based on an AI forecast, then faces an ICU bed crisis when pediatric admissions spike faster than unrevised clinic feeds indicate.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Standardized point-in-time evaluation registries",
+     "description": "Institutions adopt immutable, point-in-time evaluation benchmarks that evaluate models only on the exact data vintages available at decision time.",
+     "example": "A public health consortium mandates that healthcare forecasting agents demonstrate calibrated coverage against historical snapshots before qualifying for municipal procurement.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Proprietary simulation sandboxes entrench commercial forecasting monopolies",
+     "description": "Large cloud providers offer synthetic closed-world simulation suites that benchmark models on proprietary data, shutting out open public audit while charging high subscription fees.",
+     "example": "A major enterprise cloud vendor packages an annual certified predictive assurance subscription that healthcare networks buy to satisfy procurement mandates without opening models to external scrutiny.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "canon",
+    "policy",
+    "research",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2608.05883",
+     "title": "Information leakage from data revisions in retrospective forecasts",
+     "kind": "preprint",
+     "published": "2026-08-06"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261027-0340",
    "added_at": "2026-10-27T10:50:12+00:00",
    "title": "Everyday computers run full-sized personal AI assistants without cloud subscriptions",
@@ -51,7 +160,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0339",
@@ -105,7 +214,7 @@
      "published": "2026-10-25"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0338",
@@ -211,121 +320,6 @@
      "title": "In Meta's version of the future, I'll have my Muse call your Muse",
      "kind": "news",
      "published": "2026-10-22"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261027-0336",
-   "added_at": "2026-10-27T08:26:43+00:00",
-   "title": "Coordinated small models replace giant central models for everyday computer work",
-   "horizon_years": 3,
-   "world": "It is 2029. Instead of sending every question, document, and private spreadsheet to a centralized subscription cloud running massive hundred-billion-parameter models, everyday software operates as an ensemble of compact on-device assistants. A small local coordinator routes specific sub-tasks to dedicated specialist models for code review, calendar conflict resolution, and data extraction. Most routine queries resolve entirely on laptops and personal hardware without external network requests or subscription fees.",
-   "premise": "Recent research shows that self-evolving routers can learn to coordinate small specialized models using execution feedback. By distilling routing insights directly into small policies, multi-agent systems match large frontier models while cutting inference compute costs in half.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops open-source reference implementations for cost-bounded execution and transparent routing gates. By demonstrating verifiable, lightweight model coordination that operates entirely within user boundaries, the network makes independent on-device execution practical for non-technical users.",
-   "shift": 0.27,
-   "outcomes": [
-    {
-     "name": "Monopolistic cloud providers lock down router architectures",
-     "description": "Dominant tech platforms build closed routing layers into operating systems, locking out independent models and capturing telemetry from all local tool invocations.",
-     "example": "An operating system update forces all local task requests through a proprietary background coordinator that charges micro-fees for routing to non-approved local weights.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Open local model routing becomes standard across personal software",
-     "description": "Open-source self-improving routers allow ordinary consumer hardware to distribute heavy tasks across local quantized specialist models smoothly.",
-     "example": "An independent freelance designer uses a 14-inch personal laptop to run local agents that edit photos, draft invoices, and triage client emails with zero cloud dependencies.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Model fragmentation overwhelms ordinary consumers",
-     "description": "Proliferation of incompatible small models and dynamic routing formats creates configuration fatigue, leaving non-technical users dependent on default vendor bundles.",
-     "example": "A school administrator tries to configure local open agents for student record triaging but gives up when routing weights fail to synchronize across different device drivers.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.35690",
-     "title": "EvoRouter: Cost-Efficient Multi-Agent Routing via Insight-Guided On-Policy Distillation",
-     "kind": "preprint",
-     "published": "2026-10-26"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261027-0335",
-   "added_at": "2026-10-27T07:50:52+00:00",
-   "title": "National AI hubs stall as local power grids delay electricity into the 2030s",
-   "horizon_years": 3,
-   "world": "It is 2029. Across Europe and North America, national sovereign artificial intelligence programs have hit hard physical infrastructure walls. Planned gigawatt compute clusters in peri-urban industrial corridors sit half-finished or repurposed as logistics depots because transmission interconnects are locked in decade-long environmental review queues. Rather than waiting for public utilities, leading commercial labs have split into two distinct paths: offshore barges and desert facilities co-located with private gas turbines, and lightweight local model runtimes deployed directly onto consumer devices and regional community microgrids. Ordinary municipal residents in towns like Loughton experience frequent peak-hour industrial tariffs, while small enterprises find that centralized cloud API pricing fluctuates violently with regional wholesale spot power prices. In response, local technology teams increasingly deploy sovereign models on home workstations and municipal solar microgrids, running batch workloads during midday generation peaks rather than routing private data through strained continental cloud clusters.",
-   "premise": "Major technology providers are abandoning planned flagship national artificial intelligence data centres after electricity network operators announce that local distribution grids cannot deliver required power until the early 2030s. Engineering research demonstrates that city-scale compute campuses create abrupt swings that municipal substations cannot safely absorb without multi-billion-pound infrastructure overhauls.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "Our work provides personal edge agent runtimes and open verification protocols that allow complex intelligence tasks to execute directly on consumer hardware and local cooperative servers. By proving that personal twins and collective decision-making can run securely within household power envelopes, we reduce dependence on centralized gigawatt cloud infrastructure and help community groups deploy resilient, energy-aware local compute.",
-   "shift": 0.25,
-   "outcomes": [
-    {
-     "name": "Centralized providers bypass public utility grids with private fossil plants",
-     "description": "Commercial artificial intelligence developers abandon urban public grids entirely, constructing captive gas and small modular nuclear plants on private land, concentrating compute power beyond public regulatory oversight.",
-     "example": "A consortium of two commercial labs purchases a decommissioned coal site in the Ohio River valley, installing private gas turbines to run a 600-megawatt cluster outside public transmission oversight.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.6
-    },
-    {
-     "name": "Communities establish local compute and solar microgrid cooperatives",
-     "description": "Municipalities and local cooperatives coordinate personal devices and distributed neighborhood servers, running personal agents and civic tools on surplus local renewable electricity.",
-     "example": "A regional district in Essex deploys fifty containerized edge inference nodes powered by community solar arrays, serving local council services and small businesses without relying on strained national transmission corridors.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Consumer compute hardware is throttled or locked behind cloud subscriptions",
-     "description": "Chip manufacturers restrict firmware on desktop hardware to push users toward cloud subscriptions, worsening power concentration while leaving home devices underutilized.",
-     "example": "A dominant workstation manufacturer restricts local tensor processing on retail motherboards to twelve-minute bursts unless the user maintains an enterprise cloud verification license.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theguardian.com/uk-news/2026/oct/18/microsoft-drops-huge-ai-datacentre-project-in-essex-over-power-supply-concerns",
-     "title": "Microsoft pulls out of AI datacentre project in Essex over power supply concerns",
-     "kind": "news",
-     "published": "2026-10-18"
-    },
-    {
-     "url": "https://arxiv.org/abs/2605.03090",
-     "title": "From Barrier to Bridge: The Case for AI Data Center/Power Grid Co-Design",
-     "kind": "paper",
-     "published": "2026-05-04"
     }
    ],
    "work": 0
