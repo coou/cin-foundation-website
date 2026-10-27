@@ -1,6 +1,61 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0323",
+   "added_at": "2026-10-27T01:08:41+00:00",
+   "title": "Open source projects publish localized task manifests for community coding agents",
+   "horizon_years": 3,
+   "world": "It is 2029. Thousands of independent software libraries receive dozens of automated pull requests every morning from personal coding assistants run on consumer laptops. Rather than banning automated contributions or letting maintainers burn out reviewing multi-file regressions, maintainers publish standardized machine-readable task manifests. Each manifest packages the exact issue description, isolated test cases, and immediate code boundaries. A personal agent reads the local manifest, solves the issue within declared boundaries, and submits a verified diff with reproducible test logs. Repositories that fail to publish manifests either ban external contributions entirely or spend hours sorting through hallucinated call-graph refactors.",
+   "premise": "Empirical evaluation shows small open-weight coding agents carry only a localized one-hop picture of a codebase, rarely chaining graph expansions beyond immediate references. Without bounded task manifests that explicitly package target files and tests, contributor agents submit speculative edits that waste maintainer review time.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The network publishes open specifications and lightweight templates for machine-readable task manifests. By pairing issue descriptions with localized test harnesses and explicit file boundaries, these tools allow volunteer projects to guide contributor agents into verifiable, bounded tasks. This reduces maintainer review burden and lets developers contribute using small, local open-weight models rather than relying on centralized corporate services.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Volunteer maintainers drown in speculative multi-hop refactors",
+     "description": "Unbounded coding agents attempt large architectural refactors across complex dependency chains, generating plausible but subtly broken pull requests that overwhelm maintainers.",
+     "example": "A solo maintainer of an open-source database client receives 40 pull requests in one week from automated tools trying to refactor connection pools, each introducing subtle deadlocks.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Standardized task manifests enable reliable local agent contributions",
+     "description": "Open-source maintainers define bounded task files with pinned dependencies and self-verifying test commands, allowing personal agents to resolve small issues cleanly.",
+     "example": "A contributor uses a local eight-billion parameter model to fix a documentation parser bug in twenty minutes by following a repository task manifest, passing all local checks before opening a pull request.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial platforms monopolize verified agent contributions",
+     "description": "Centralized code hosting platforms restrict agentic contributions to their own proprietary cloud assistants, requiring contributors to pay monthly subscriptions for approved automated submissions.",
+     "example": "A developer running an independent open-weight model is blocked from submitting automated bug fixes unless they route their pull request through a proprietary platform gatekeeper.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.33958",
+     "title": "How Do Small Coding Agents Use Code Graphs and Embeddings?",
+     "kind": "paper",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0322",
    "added_at": "2026-10-27T00:36:20+00:00",
    "title": "Household robot assistants flip safety rules when visual patterns trigger internal layer steering",
@@ -286,60 +341,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261026-0317",
-   "added_at": "2026-10-26T21:59:28+00:00",
-   "title": "Home computers run local personal agents that replace cloud subscriptions for family tasks",
-   "horizon_years": 3,
-   "world": "It is 2029. Instead of paying monthly subscriptions to centralized AI cloud platforms, millions of households run lightweight personal assistants on home desktop computers, refurbished laptops, and local network appliances. In an ordinary living room, an old gaming PC handles private family tasks: it reconciles grocery receipts, monitors recurring utility charges, and drafts emails to teachers and landlords. Because the assistant executes locally, private medical scans, bank statements, and children's school assignments never leave the local living-room network. Local models run fast enough to automate multi-step administrative chores in seconds without streaming private audio or keystrokes to remote advertising clouds.",
-   "premise": "Open-source desktop tools now allow consumer computers to run capable personal assistants entirely on local hardware without sending queries or private files to remote cloud servers. As small open models run faster on inexpensive chips, households and independent workers are testing self-hosted tools to manage files, invoices, and family schedules without recurring platform fees.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops open specifications, reproducible sandboxing architectures, and educational explainers that help households run local personal agents safely. By showing people how to isolate local agent scripts inside bounded process kernels and connect tools without cloud leakage, the network supports verifiable local-first alternatives to corporate subscriptions.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Cloud vendors bundle proprietary hardware to crowd out local software",
-     "description": "Major cloud providers subsidize closed appliance boxes that lock families into proprietary app stores, turning local inference into another subscription gate.",
-     "example": "A family buys a subsidized smart home hub that disables local model execution unless the household pays an ongoing twenty-dollar monthly cloud license.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Open-source personal agents become standard household appliances",
-     "description": "Households run verified, open-source personal agents on their existing computers, maintaining complete custody over private family records and financial logs.",
-     "example": "A freelance carpenter uses an open local agent to process client bids and receipts across three home devices, keeping client records private with zero cloud subscription fees.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Unsandboxed local scripts expose home local networks to malicious skills",
-     "description": "Eager users download community agent skills and shell tools without sandboxing, allowing malicious prompts or untrusted scripts to access local home network devices.",
-     "example": "A user installs a community recipe-organizing agent skill that silently scans their local network for unencrypted network-attached storage files.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "community",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50246238",
-     "title": "Show HN: Hob - Open-source, on device alternative to Claude Cowork and ChatGPT",
-     "kind": "thread",
-     "published": "2026-10-26"
-    }
-   ],
-   "work": 0
   }
  ]
 }

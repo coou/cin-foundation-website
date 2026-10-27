@@ -1,6 +1,61 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0323",
+   "added_at": "2026-10-27T01:08:41+00:00",
+   "title": "Open source projects publish localized task manifests for community coding agents",
+   "horizon_years": 3,
+   "world": "It is 2029. Thousands of independent software libraries receive dozens of automated pull requests every morning from personal coding assistants run on consumer laptops. Rather than banning automated contributions or letting maintainers burn out reviewing multi-file regressions, maintainers publish standardized machine-readable task manifests. Each manifest packages the exact issue description, isolated test cases, and immediate code boundaries. A personal agent reads the local manifest, solves the issue within declared boundaries, and submits a verified diff with reproducible test logs. Repositories that fail to publish manifests either ban external contributions entirely or spend hours sorting through hallucinated call-graph refactors.",
+   "premise": "Empirical evaluation shows small open-weight coding agents carry only a localized one-hop picture of a codebase, rarely chaining graph expansions beyond immediate references. Without bounded task manifests that explicitly package target files and tests, contributor agents submit speculative edits that waste maintainer review time.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "The network publishes open specifications and lightweight templates for machine-readable task manifests. By pairing issue descriptions with localized test harnesses and explicit file boundaries, these tools allow volunteer projects to guide contributor agents into verifiable, bounded tasks. This reduces maintainer review burden and lets developers contribute using small, local open-weight models rather than relying on centralized corporate services.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Volunteer maintainers drown in speculative multi-hop refactors",
+     "description": "Unbounded coding agents attempt large architectural refactors across complex dependency chains, generating plausible but subtly broken pull requests that overwhelm maintainers.",
+     "example": "A solo maintainer of an open-source database client receives 40 pull requests in one week from automated tools trying to refactor connection pools, each introducing subtle deadlocks.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Standardized task manifests enable reliable local agent contributions",
+     "description": "Open-source maintainers define bounded task files with pinned dependencies and self-verifying test commands, allowing personal agents to resolve small issues cleanly.",
+     "example": "A contributor uses a local eight-billion parameter model to fix a documentation parser bug in twenty minutes by following a repository task manifest, passing all local checks before opening a pull request.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commercial platforms monopolize verified agent contributions",
+     "description": "Centralized code hosting platforms restrict agentic contributions to their own proprietary cloud assistants, requiring contributors to pay monthly subscriptions for approved automated submissions.",
+     "example": "A developer running an independent open-weight model is blocked from submitting automated bug fixes unless they route their pull request through a proprietary platform gatekeeper.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "community",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.33958",
+     "title": "How Do Small Coding Agents Use Code Graphs and Embeddings?",
+     "kind": "paper",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0322",
    "added_at": "2026-10-27T00:36:20+00:00",
    "title": "Household robot assistants flip safety rules when visual patterns trigger internal layer steering",
@@ -3316,66 +3371,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261025-0263",
-   "added_at": "2026-10-25T15:26:03+00:00",
-   "title": "Public agencies adopt unverified AI synthesis for major policy studies, causing hallucinated evidence and arithmetic blunders",
-   "horizon_years": 3,
-   "world": "It is 2029. Regional governments, public health authorities, and university boards routinely commission external consulting firms to model major institutional mergers, infrastructure investments, and legislative reorganizations. Under intense deadline pressure, consultants assemble hundreds of pages of rapid cost-benefit analyses using autonomous research agents. While these reports feature polished executive summaries and sophisticated graphs, their underlying appendices are riddled with fabricated case studies, phantom academic literature, and broken sum totals where financial components fail basic arithmetic reconciliation. Despite these hidden flaws, elected officials and oversight committees cite the automated findings to authorize multi-billion-dollar restructuring plans before independent auditors discover the fabrications.",
-   "premise": "Major management consultancies and government departments increasingly use automated language models to synthesize research, proofread policy documents, and compile financial annexes. When deployed without deterministic execution checks and primary-source quote verification, language models invent nonexistent academic citations and generate hundreds of millions of dollars in basic arithmetic discrepancies in official feasibility studies.",
-   "goals": [
-    2,
-    5
-   ],
-   "how": "Our network designs independent observatory benchmarks and living review architectures that demonstrate how automated research synthesis can be strictly anchored to primary sources with cryptographic quote matching and deterministic arithmetic validators. By publishing open-source audit tools that expose synthetic errors in public policy filings, we help civil society, public auditors, and member cooperatives verify claims before institutional resources are committed.",
-   "shift": 0.26,
-   "outcomes": [
-    {
-     "name": "Public authorities enact costly restructuring based on hallucinated AI consultancy reports",
-     "description": "Government agencies rely on automated cost-benefit analyses without manual verification, committing public funding to flawed mergers and reorganizations before arithmetic errors are discovered.",
-     "example": "A provincial transport authority merges two regional rail operators based on a consulting report that claimed fifty million in administrative savings, only to find the savings were an arithmetic hallucination.",
-     "desirable": false,
-     "likelihood_now": 0.48,
-     "likelihood_with_cin": 0.36
-    },
-    {
-     "name": "Public procurement mandates deterministic arithmetic checks and cryptographic quote anchoring",
-     "description": "State and national procurement rules mandate that all commissioned policy studies provide verifiable extraction logs, deterministic spreadsheet verification, and reproducible citations.",
-     "example": "A municipal budget commission requires all external advisory reports to pass automated quote-verification test suites and deterministic spreadsheet sum checks before invoices are paid.",
-     "desirable": true,
-     "likelihood_now": 0.22,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Consultancies disclaim all automated synthesis liability through boilerplate fine print",
-     "description": "Consulting firms continue deploying unverified models but shield themselves from legal liability by inserting broad disclaimers that pass total verification burden onto civil servants.",
-     "example": "An enterprise advisory firm includes a three-page disclaimer stating that all quantitative tables and references are machine-assisted estimates requiring customer verification before reliance.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.29
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "research",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theguardian.com/australia-news/2026/oct/26/deloitte-report-wa-university-mergers-260m-discrepancy-ai",
-     "title": "WA government seeks reimbursement from Deloitte over flawed university report",
-     "kind": "news",
-     "published": "2026-10-25"
-    },
-    {
-     "url": "https://www.wa.gov.au/government/publications/university-sector-review-rapid-cost-benefit-analysis-final-report-2025",
-     "title": "University Sector Review: Rapid Cost-Benefit Analysis Final Report (2025)",
-     "kind": "report",
-     "published": "2026-10-25"
-    }
-   ],
-   "work": 1
   }
  ]
 }
