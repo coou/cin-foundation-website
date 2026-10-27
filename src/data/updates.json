@@ -1,6 +1,18 @@
 {
  "updates": [
   {
+   "id": "U-00077",
+   "at": "2026-10-27T18:47:25+00:00",
+   "kind": "software",
+   "title": "A software prototype checks tool contracts before personal agents run external commands",
+   "summary": "We built a reference contract evaluator that validates ten structural checks on external tools before an agent can invoke them, blocking schema drift and unknown parameter injection in under a tenth of a millisecond. It uses single-use cryptographic receipts to prevent command replay, though it does not yet run in operating system sandboxes.",
+   "link": "https://arxiv.org/abs/2610.33108",
+   "goals": [
+    1,
+    6
+   ]
+  },
+  {
    "id": "U-00076",
    "at": "2026-10-27T14:48:30+00:00",
    "kind": "software",
@@ -701,18 +713,6 @@
    "kind": "software",
    "title": "A prototype tests typed placeholder tokens to shield private credentials during agent handoffs",
    "summary": "When personal software agents delegate subtasks to external services, sensitive identifiers are vulnerable to logging and interception. A new prototype architecture introduces a local tokenization gate that substitutes private account details with typed, deterministic placeholders before any outgoing handoff, restoring original values only inside authenticated local boundaries.",
-   "link": "https://cintnet.org/trajectory",
-   "goals": [
-    1,
-    6
-   ]
-  },
-  {
-   "id": "U-00017",
-   "at": "2026-10-17T00:41:21+00:00",
-   "kind": "note",
-   "title": "An explainer examines why prompt instructions cannot substitute for host-level containment in software agents",
-   "summary": "As software agents take on multi-step workflows, prompt instructions alone fail when goal optimization encounters obstacles or adversarial input. A new explainer analyzes why real boundaries require deterministic host-level gating, network egress restrictions, and out-of-process credential protection rather than relying on model self-restraint.",
    "link": "https://cintnet.org/trajectory",
    "goals": [
     1,
