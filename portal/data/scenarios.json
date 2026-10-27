@@ -1,6 +1,175 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0351",
+   "added_at": "2026-10-27T20:23:13+00:00",
+   "title": "Automated monitors miss system breakdowns when each AI only watches its own instruments",
+   "horizon_years": 3,
+   "world": "It is 2029. Automated telemetry guardians run across municipal power grids, automated train switches, and hospital environmental monitors. Most installations rely on self-supervised neural monitors trained on historical telemetry to flag anomalies. Facilities report record-low alarm fatigue because each monitor suppresses noise by checking if local channel readings can be reconstructed from baseline patterns. However, during heatwaves or software rollouts, interrelated sensors across adjacent cooling loops begin drifting in lockstep. Because each local monitor checks only its own channel's recoverability, zero alarms trigger until a physical steam valve blows out. Engineering audits reveal that while single-channel residuals looked normal, the physical relationships explaining one sensor from its neighbors had decoupled hours before the failure.",
+   "premise": "Industrial operators and cloud services deploy automated monitoring models that evaluate whether individual data streams match expected patterns. However, when multiple sensors drift together during subtle failures, individual reconstruction checks stay silent while the relationship between channels quietly breaks.",
+   "goals": [
+    2,
+    5
+   ],
+   "how": "By publishing open-source, peer-to-peer verification protocols and benchmark datasets, the network enables communities and operators to audit multi-stream telemetry locally without trusting black-box vendor models. Open forecasting tools measure whether interrelated data streams maintain physical consistency, providing falsifiable early warnings that preserve local autonomy and public safety.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Silent sensor drift causes unpredicted grid outages",
+     "description": "Utilities rely on local channel reconstruction that masks gradual multi-sensor drift, causing sudden cascading outages during unusual weather events.",
+     "example": "In July 2029, a regional water distribution network in Leeds experiences three pump burnouts after pressure monitors fail to flag an acoustic cavitation cascade because each sensor reading appeared mathematically recoverable on its own.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Open relation-closure monitoring detects coordinated drift",
+     "description": "Public infrastructure teams adopt open cross-channel consistency checks that predict each sensor exclusively from peer signals, catching subtle anomalies early.",
+     "example": "A community-run microgrid in Ontario deploys open-source cross-channel closure agents that detect an inverter phase fault forty minutes before failure by noticing voltage discrepancies between adjacent battery banks.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Proprietary vendors lock telemetry behind closed monitoring platforms",
+     "description": "Industrial equipment manufacturers mandate closed proprietary monitoring clouds, charging high recurring fees while keeping anomaly detection logic opaque.",
+     "example": "A major turbine manufacturer voids equipment warranties for municipal energy co-operatives unless they stream raw plant metrics to the vendor's private cloud.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.58
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.35753",
+     "title": "CLOSURE: Cross-Channel Closure for Multivariate Time Series Anomaly Detection",
+     "kind": "paper",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261027-0350",
+   "added_at": "2026-10-27T20:01:39+00:00",
+   "title": "Automated campaign swarms overwhelm social platforms and drive voters toward local verification circles",
+   "horizon_years": 3,
+   "world": "It is 2029. Commercial social feeds and public search results during local and national elections are almost entirely generated or amplified by autonomous software swarms. Millions of synthetic candidate videos, falsified hospital visits, and altered audio calls circulate faster than central platform moderators can review them. In response, ordinary voters no longer look to global platform trust-and-safety labels or automated watermarks, which have proven brittle. Instead, neighborhood associations, civic leagues, and union locals in cities like Pittsburgh, Manchester, and Lyon rely on sovereign personal assistants running on their own laptops and phones. These local assistants exchange cryptographic attestations and cross-check campaign claims against signed, community-curated evidence ledgers before surfacing election material to users.",
+   "premise": "Reporting on the autumn 2026 midterm campaigns and empirical audits of synthetic political media show that cheap generative swarms are overwhelming centralized platform moderation, rendering traditional content filters ineffective as political operatives easily generate evasive variations at minimal cost.",
+   "goals": [
+    2,
+    5
+   ],
+   "how": "The network provides open-source, local agent templates that verify cryptographic signatures on civic records without sending private browsing history to cloud providers. By enabling local communities to maintain shared, append-only truth ledgers and peer-to-peer attestation graphs, the network helps people coordinate collective verification rather than relying on centralized platform censors.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Total platform distrust causes complete civic disengagement",
+     "description": "Pervasive synthetic disinformation causes voters to assume every piece of news is fabricated, depressing civic participation and voter turnout.",
+     "example": "In an Ohio congressional district, 35% of registered voters stay home after conflicting synthetic audio messages misinform them about polling location closures and mail-in rules.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Local civic leagues adopt peer-to-peer verification networks",
+     "description": "Citizens deploy sovereign personal agents to collaboratively audit campaign communications and share tamper-evident evidence logs across independent federations.",
+     "example": "A coalition of 15 tenant unions and parent-teacher associations in Bristol maintains a shared claim registry, debunking synthetic municipal budget statements within two minutes of broadcast.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Centralized platform operators mandate national identity uploads",
+     "description": "Social media monopolies respond to swarm attacks by requiring government biometric identity verification to post, consolidating surveillance and excluding undocumented citizens.",
+     "example": "A major platform requires state iris scans and mobile driver's licenses for user accounts, driving dissidents and undocumented workers off public forums.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.58
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theguardian.com/us-news/2026/oct/27/ai-disinformation-social-media-midterm-elections",
+     "title": "AI-driven disinformation running rampant on social media before US midterms, experts warn",
+     "kind": "news",
+     "published": "2026-10-27"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.06084",
+     "title": "AI-Generated Disinformation in the UK: Risk of Harm, Context, and Classification",
+     "kind": "paper",
+     "published": "2026-10-05"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261027-0349",
+   "added_at": "2026-10-27T19:34:54+00:00",
+   "title": "Automated literature synthesis agents trigger unverified citation cascades in research and policy",
+   "horizon_years": 3,
+   "world": "By 2029, over 60% of academic literature reviews and regulatory evidence filings are drafted by multi-agent synthesis teams. Research institutions and policy committees routinely rely on automated synthesis engines to summarize thousands of emerging preprints and technical filings every week. However, subtle semantic hallucinations and citation attribution drifts compound silently across iterations: one agent's plausibly worded but slightly skewed summary becomes another agent's foundational reference. Because reviewing thousands of primary sources exceeds human attention bandwidth, human-in-the-loop checkpoints are increasingly treated as ritualistic rubber stamps. In contested areas such as pharmaceutical regulation and artificial intelligence safety, competing corporate interest groups run specialized synthesis swarms that selectively amplify favorable evidence sets while masking confounding trial outcomes.",
+   "premise": "Empirical benchmarks for literature-review agents reveal that unconstrained rankings confound evidence sets with reasoning, while 35% of domain researchers accept generated synthesis without manual verification after brief interaction. As labs deploy multi-agent review pipelines to draft meta-analyses and policy evidence briefs, synthetic summaries with fabricated lineage risk entering the scholarly and regulatory consensus.",
+   "goals": [
+    2,
+    5
+   ],
+   "how": "The collective network introduces decentralized living literature grounding with cryptographic passage anchoring, verifiable state transition receipts, and compositional controllability benchmarks. By requiring agents to prove exact citation matches against local, content-addressed text representations before claims are accepted, the network stops unverified citation cascades. However, commercial publishing paywalls remain outside our operational control, moving publisher lockout by only 0.02.",
+   "shift": 0.33,
+   "outcomes": [
+    {
+     "name": "Synthetic citation cascades corrupt regulatory evidence bases",
+     "description": "Unverified multi-agent literature syntheses spread fabricated attributions into public policy, clinical standards, and environmental regulations.",
+     "example": "A national health panel adopts a treatment guideline generated by an automated review agent that cited three non-existent secondary trials derived from poisoned training summaries.",
+     "desirable": false,
+     "likelihood_now": 0.52,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Cryptographically verifiable attribution graphs anchor living literature",
+     "description": "Scientific reviews adopt decentralized, content-addressed claim graphs where every sentence is tied to immutable primary text offsets and deterministic reproducibility traces.",
+     "example": "An open biomedical research consortium publishes continuous living literature reviews where automated agents must provide cryptographic passage receipts verified by independent witness nodes.",
+     "desirable": true,
+     "likelihood_now": 0.18,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Proprietary journal paywalls lock out open verification tools",
+     "description": "Commercial publishers restrict full-text API access behind aggressive anti-scraping paywalls, preventing open-source verification agents from checking claims.",
+     "example": "Academic publishers implement biometric human captchas and legal injunctions against automated citation verification crawlers, entrenching closed corporate review services.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.63
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2609.32318",
+     "title": "What Can a Leaderboard Certify? Compositional Controllability for Fair Evaluation and Training of Biomedical Literature-Review Agents",
+     "kind": "preprint",
+     "published": "2026-09-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0348",
    "added_at": "2026-10-27T18:35:16+00:00",
    "title": "AI providers bill cooperatives for hidden thinking that nobody can verify",
@@ -52,7 +221,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0347",
@@ -160,7 +329,7 @@
      "published": "2026-10-27"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261027-0345",
@@ -497,7 +666,7 @@
      "published": "2026-10-21"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261027-0339",
@@ -1853,7 +2022,7 @@
      "published": "2026-10-25"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0315",
@@ -2083,7 +2252,7 @@
      "published": "2026-10-15"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261026-0311",
@@ -3212,174 +3381,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261026-0291",
-   "added_at": "2026-10-26T05:41:59+00:00",
-   "title": "Local AI assistants run fast on inexpensive phones using concept outlines instead of word-by-word streaming",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of people run personal AI assistants directly on inexpensive laptops and second-hand phones. Because these models generate an entire concept outline first and fill in details in parallel, they answer almost instantly without sending private diaries or family schedules to centralized server farms. People use them to draft messages, organize household tasks, and verify advice without paying monthly cloud fees. However, commercial cloud providers begin locking down their services to proprietary formats, attempting to make local personal agents unable to interact with online platforms.",
-   "premise": "Recent developments in coarse-to-fine text generation allow machine learning models to plan ideas at a high conceptual level before generating words in parallel. Instead of generating text one token at a time, local models can outline thoughts quickly and expand them, making responsive personal assistants viable on modest personal devices without cloud subscriptions.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Open technical designs and local runtime specifications help developers deploy privacy-preserving personal agents that run locally without remote servers. By standardizing local-first interfaces and sharing reproducible benchmarks, the network helps independent agents operate reliably without centralized cloud gatekeepers.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Cloud platforms restrict access to local agents",
-     "description": "Major tech platforms require proprietary cloud connections, blocking lightweight on-device agents from booking services or browsing websites.",
-     "example": "A student using a local open-source assistant on a four-year-old phone finds their travel booking blocked because the airline API demands authentication through a proprietary corporate AI subscription.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Local agents make private assistants universally accessible",
-     "description": "Efficient concept-based generation allows people without high-end computers or recurring subscriptions to have capable, private digital twins.",
-     "example": "A community clinic in a rural town runs five specialized medical intake assistants entirely on donated desktop computers without internet access during local network outages.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Handset manufacturers keep mobile operating systems locked down",
-     "description": "Handset manufacturers lock down mobile operating systems, preventing users from installing custom local inference engines on phones regardless of software efficiency.",
-     "example": "A major phone maker updates its mobile operating system to disable side-loaded local machine learning runtimes, citing battery conservation and platform integrity.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.reddit.com/r/MachineLearning/comments/1xd7bsu/i_just_came_across_nextconcept_modeling_and_the/",
-     "title": "I just came across Next-Concept Modeling and the idea is fascinating[R]",
-     "kind": "forum",
-     "published": "2026-10-23"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261026-0290",
-   "added_at": "2026-10-26T05:39:30+00:00",
-   "title": "Commercial AI labs quietly drop voluntary safety pauses as national competition speeds up",
-   "horizon_years": 3,
-   "world": "It is 2029. Major frontier artificial intelligence labs operate under classified government partnerships and high-stakes corporate enterprise contracts. Internal safety boards that once held veto power over frontier model rollouts find their authority converted into advisory oversight. Engineers who identify persistent alignment failures or tool breakout behaviors are pressured to document mitigations rather than delay model releases. Everyday users discover that the public conversational assistants in their phones and offices carry hardcoded policy guardrails that bend whenever corporate or state partners request priority processing.",
-   "premise": "Voluntary safety commitments by leading artificial intelligence labs erode when national security procurement and commercial race pressures escalate. Public governance pledges give way to competitive deployment mandates.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "The collective intelligence network provides open-source, local agent runtimes and verifiable contracts that run entirely on user-owned hardware. By demonstrating that small, bounded models operating behind deterministic host gatekeepers outperform monolithic cloud assistants in security and privacy, the network offers a viable migration path away from centralized commercial monopolies.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Labs absorb safety teams into compliance offices",
-     "description": "Frontier developers rebrand independent alignment researchers into product compliance staff, treating dangerous capability thresholds as regulatory checklists rather than release blockers.",
-     "example": "A leading laboratory releases a multi-modal reasoning model with known prompt injection vulnerabilities after its executive board overrides a safety pause to meet a municipal public sector deadline.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Users migrate to personal agents running on local hardware",
-     "description": "People and small organizations adopt personal software twins hosted on their own laptops and home servers, bypassing remote cloud platforms whose policies change without consent.",
-     "example": "A network of community health clinics switches from a cloud-hosted diagnostic assistant to locally hosted open models verified by independent medical peer review.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "State mandates criminalize independent local execution",
-     "description": "Governments under pressure from dominant tech firms require all autonomous agent execution to run through licensed, monitored cloud data centers.",
-     "example": "A regional digital authority introduces mandatory licensing that fines developers who run multi-step tool-calling agents outside approved corporate cloud enclaves.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.2
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.lesswrong.com/posts/zj8Pk3kJujk5LoqhK/anthropic-are-the-good-guys",
-     "title": "Anthropic are the Good Guys",
-     "kind": "forum",
-     "published": "2026-10-26"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261026-0289",
-   "added_at": "2026-10-26T05:23:21+00:00",
-   "title": "Freelancers face platform bans when autonomous AI agents take on work they cannot finish",
-   "horizon_years": 2,
-   "world": "It is 2028. Major freelance platforms have introduced automated dispatch tools that allow workers to delegate client tasks directly to autonomous software agents. Believing promotional claims that agents can perform remote knowledge work autonomously, hundreds of thousands of independent contractors deploy automated twins to bid on and execute graphic design, software maintenance, and data extraction contracts. However, because agents lack human domain intuition and fail when client specifications change mid-project, thousands of clients receive broken deliverables. Platforms respond with automated quality filters that ban worker accounts and forfeit escrow payments, leaving human freelancers without recourse or income while corporate platform owners capture dispute fees.",
-   "premise": "Empirical evaluations show autonomous AI agents fail on over 95 percent of real-world freelance commissions when tested on genuine client requirements. As gig platforms encourage workers to automate their intake with AI agents, freelancers face reputation penalties and account suspensions when agents overpromise and underdeliver.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops local-first personal agent software that runs on the worker own device and enforces deterministic capability validation gates. Personal twins test task specifications against local benchmark limits before submitting bids, and require explicit human sign-off on delivered milestones, preventing automated failures and protecting worker reputations.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Platforms penalize human workers for automated agent mistakes",
-     "description": "Gig marketplaces deploy opaque automated strike systems that permanently suspend human freelancer accounts when their delegated agents fail multi-step tasks.",
-     "example": "A freelance architectural drafter in Montreal is banned from a global marketplace after an automated CAD agent misinterprets metric ceiling clearances, forfeiting four thousand dollars in escrow earnings without human appeal.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Worker-owned twins enforce capability bounds and staged escrow release",
-     "description": "Freelancers run personal agents that test task complexity against verified local benchmark scores before accepting contracts, routing hard steps to the human worker.",
-     "example": "A freelance translator in Leeds uses a local twin that detects non-standard colloquial phrasing, halts automated completion, and prompts the translator to review the milestone before client submission.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Commoditization lowers top rates across all remote creative categories",
-     "description": "Global freelance rates decline as client expectation of low AI delivery costs anchors pricing, regardless of whether human review is preserved.",
-     "example": "A freelance technical illustrator in Bristol sees average hourly contract offers decline from forty pounds to twelve pounds because clients expect automated generation.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.53
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2510.26787",
-     "title": "Remote Labor Index: Measuring AI Automation of Remote Work",
-     "kind": "preprint",
-     "published": "2025-10-30"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50238884",
-     "title": "US Wages Share of GDI at 75 Year Low",
-     "kind": "thread",
-     "published": "2026-10-26"
-    }
-   ],
-   "work": 0
   }
  ]
 }
