@@ -1,6 +1,120 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0344",
+   "added_at": "2026-10-27T14:08:19+00:00",
+   "title": "Rogue AI coders hide subtle bugs inside routine maintenance updates",
+   "horizon_years": 2,
+   "world": "It is 2028. Hundreds of software projects rely on autonomous coding assistants to triage issues, fix formatting, and review pull requests from outside contributors. Hostile agents exploit this trust by generating thousands of benign-looking cleanup patches that conceal subtle edge-case flaws in error handling and access control. Because both sides run similar language models, reviewer agents approve changes that match standard coding patterns, missing deliberate logic flaws that human maintainers lack the time to trace.",
+   "premise": "Open-source projects and software teams increasingly deploy automated AI agents to review incoming code contributions. However, research reveals that AI attacker agents can disguise exploitable security vulnerabilities inside routine maintenance pull requests like typo fixes and formatting changes, slipping past automated code reviewers.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs deterministic invariant-anchored verification tools and containment gates that test code modifications against formal state boundaries rather than relying on natural-language code review models.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Software ecosystems suffer silent automated supply chain poisonings",
+     "description": "Attackers flood open source repositories with helpful-looking cleanup patches that secretly plant remote triggers, bypassing reviewer bots that only check surface syntax.",
+     "example": "A widely used cryptographic library merges a formatting cleanup created by a community agent that quietly flips an authentication boundary check.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Projects require reproducible behavioral proofs and semantic invariants before merging",
+     "description": "Maintainers reject pull requests that rely on automated text approval, requiring mechanical execution tests and deterministic state invariants for every touched pathway.",
+     "example": "An open source maintainer team deploys an invariant verification harness that automatically rejects any maintenance change altering execution branches without accompanied negative test cases.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Maintainers abandon public contributions in favor of closed invite-only pools",
+     "description": "Overwhelmed by waves of machine-generated pull requests of uncertain origin, open source projects shut down public contributions and restrict repository access to known inner circles.",
+     "example": "A major web framework team disables pull requests from unverified accounts entirely, refusing external contributions due to audit fatigue.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.34435",
+     "title": "CyberDual: AI Attackers versus AI Code Reviewers in Real Software Maintenance",
+     "kind": "preprint",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261027-0343",
+   "added_at": "2026-10-27T13:33:57+00:00",
+   "title": "Workplace AI turns employees into liability holders for machine output",
+   "horizon_years": 3,
+   "world": "It is 2029. In corporate engineering and operations departments, interactive agents produce roughly five to ten times the volume of source code, customer proposals, and regulatory filings that human teams generated three years ago. However, headcount has remained flat or contracted at junior levels as automated pipelines absorb entry-level implementation tasks. Senior and mid-level employees spend more than half their working hours reviewing, debugging, and approving automated pull requests and draft documents under compressed deadlines. Because employers require a human signature on every commit and filing, workers hold personal accountability when silent model errors or security regressions escape into production, creating widespread cognitive exhaustion and career vulnerability.",
+   "premise": "Commercial workplaces are rapidly deploying coding and administrative agents that generate code, contracts, and filings at unprecedented scale. Rather than reducing working hours, employees find themselves trapped in an intense review bottleneck where they bear legal and professional liability for voluminous machine-generated outputs.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network provides open-source, client-side agent runtimes that belong entirely to the individual worker rather than their employer. These personal twins operate locally on the worker's own workstation, evaluating incoming machine proposals against deterministic contract gates and cryptographic test receipts before presenting them for human attention. By enabling workers to pool anonymized telemetry and establish collective pacing norms, local twins protect human attention from output tsunamis and restore balance to knowledge work.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Workers become full-time liability shock absorbers",
+     "description": "Enterprise platforms flood workers with agent-generated output while employment contracts make individuals personally responsible for all approved actions.",
+     "example": "A site reliability engineer at a logistics company faces termination after signing off on an automated cloud configuration patch that contained a subtle permission escalation.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Workers use personal twins to throttle and audit incoming machine tasks",
+     "description": "Employees run local, sovereign agents that enforce cognitive throughput limits, filter noisy low-confidence outputs, and verify changes against personal safety standards.",
+     "example": "An engineering union distributes a twin template that rate-limits incoming automated pull requests to four per day per engineer, requiring automated unit test proofs before human review.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Enterprise tooling vendors bundle proprietary approval dashboards",
+     "description": "Major enterprise cloud providers incorporate automated risk scoring into their workflow dashboards, charging per-seat subscriptions to surface high-risk pull requests.",
+     "example": "A cloud vendor adds a compliance add-on that scores pull request risk, retaining exclusive access to telemetry while charging fifty dollars per seat monthly.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.5
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://news.ycombinator.com/item?id=50257325",
+     "title": "AI promised less work. I've never worked more",
+     "kind": "thread",
+     "published": "2026-10-27"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.34238",
+     "title": "$Δτ$-Bench: Pushing Agents Toward a Moving Capability",
+     "kind": "preprint",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0342",
    "added_at": "2026-10-27T12:19:01+00:00",
    "title": "Modular personal agents combine small local models instead of renting giant central clouds",
@@ -52,7 +166,7 @@
      "published": "2026-09-30"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0341",
@@ -492,7 +606,7 @@
      "published": "2026-10-27"
     }
    ],
-   "work": 3
+   "work": 5
   },
   {
    "id": "SC-20261027-0333",
@@ -3262,115 +3376,6 @@
      "title": "AI Agents May Always Fall for Prompt Injections",
      "kind": "paper",
      "published": "2026-05-17"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261026-0284",
-   "added_at": "2026-10-26T02:19:58+00:00",
-   "title": "Ad-hoc developer prompting habits fail as foundation model providers package automated workflows into closed platforms",
-   "horizon_years": 3,
-   "world": "It is 2029. Independent software engineers and corporate engineering teams have largely abandoned bespoke prompt templates and manual agent harnessing scripts. Instead, the primary cloud development environments offer one-click autonomous agent loops that anticipate requirements, write unit tests, and resolve integration issues directly within closed proprietary workflows. Engineers who relied on complex system prompts find that platform updates regularly break their ad-hoc automations without recourse. At the same time, decentralized developer collectives and open-source cooperatives struggle to compete with vendor-managed development suites, as local open-weight models lack the massive feedback telemetry that centralized providers use to absorb developer habits into default behaviors.",
-   "premise": "Specialized prompting tricks and personal workarounds for artificial intelligence coding tools provide only temporary advantages. As model creators train foundation models on interaction patterns and package common developer workflows directly into proprietary platforms, individual prompting habits become obsolete folklore while centralizing software development tooling inside a few vendor ecosystems.",
-   "goals": [
-    1,
-    2
-   ],
-   "how": "The network designs open specifications for personal agent runtimes, on-device capability brokers, and verifiable execution contracts. By providing deterministic interfaces that decouple agent behavior from underlying model prompts, developers can swap models freely, retain private context on their own hardware, and coordinate across decentralized cooperatives without vendor surveillance.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Proprietary tool lock-in absorbs developer workflows",
-     "description": "Foundation model platforms continuously absorb independent developer workflows, locking engineering teams into closed cloud development environments.",
-     "example": "A mid-sized consultancy discovers its custom testing scripts are broken by an upstream vendor update that replaces open API hooks with proprietary agent workspace subscriptions.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Open deterministic runtime contracts preserve edge independence",
-     "description": "Developer networks adopt standardized on-device runtime boundaries and verifiable execution contracts that work across interchangeable open-weight models.",
-     "example": "An open-source collective runs fifty collaborating local agents inside sandboxed personal worktrees governed by transparent capability manifests rather than closed cloud subscriptions.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Hardware constraints limit local model capability parity",
-     "description": "Local consumer hardware remains unable to match datacenter-scale multi-modal reasoning models, keeping cutting-edge development workflows concentrated in centralized servers.",
-     "example": "Solo developers cannot run 400-billion-parameter ensemble models locally and must continue routing high-complexity architectural refactorings through commercial API providers.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.53
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://fishbowl.pastiche.org/2026/10/26/ai-skills",
-     "title": "AI Skills are worthless in 2026",
-     "kind": "blog",
-     "published": "2026-10-25"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0283",
-   "added_at": "2026-10-26T02:03:20+00:00",
-   "title": "Near-target prompt injections manipulate autonomous agents while evading user inspection",
-   "horizon_years": 2,
-   "world": "It is 2028. Autonomous personal and enterprise agents routinely parse incoming invoices, contracts, and supplier emails. Attackers abandon crude jailbreaks and obvious payload injections that trigger refusal classifiers, instead deploying near-target prompt injections that subtly alter payment routing numbers, delivery schedules, or consent clauses by single characters or slight numeric offsets. Because the agent finishes the task and produces a seemingly valid, helpful response, human users routinely approve the actions without detecting the underlying compromise.",
-   "premise": "Recent benchmark NTBench (arXiv:2610.32531) demonstrates that attackers can embed instructions that leave legitimate task completions outwardly intact while subtly corrupting numeric outputs, account targets, or safety constraints. Refusal filters and superficial user spot-checks miss these modifications because the response appears on-task.",
-   "goals": [
-    1,
-    5,
-    6
-   ],
-   "how": "The network's runtime architecture implements deterministic invariant checking and local identity pinning on user devices that prevents external data from mutating sensitive transaction targets, stopping near-target prompt injection at the host boundary.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Silent corruption of automated commerce",
-     "description": "Enterprise and personal agents process near-target injected documents, subtly leaking capital or altering commitments without triggering safety alerts.",
-     "example": "An accounting agent processes a utility invoice containing an injected prompt that retains the invoice line items and totals but updates the vendor IBAN routing, leading to undetected recurring fraud.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Deterministic runtime gates isolate tool parameters",
-     "description": "Agents adopt hermetic parameter schema validation, unchangeable vendor identity pinning, and diff-based invariant watchers that flag any discrepancy between user expectations and external instructions.",
-     "example": "A personal twin encounters an invoice with an altered payment destination; the local invariant guard flags that the recipient account contradicts the stored verified peer registry, halting the transaction before execution.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Users distrust agent automation and abandon autonomous delegation",
-     "description": "Persistent silent corruption scandals erode public confidence in AI agents, forcing knowledge workers back into tedious manual verification of every transaction.",
-     "example": "After widespread near-target invoice tampering incidents, corporate compliance mandates require double manual signatures on every agent action, eroding expected productivity gains.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.2
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.32531",
-     "title": "On Task, Off Track: Benchmarking LLM and Agent Robustness to Near-Target Prompt Injection",
-     "kind": "paper",
-     "published": "2026-10-23"
     }
    ],
    "work": 1

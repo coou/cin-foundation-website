@@ -1,6 +1,120 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0344",
+   "added_at": "2026-10-27T14:08:19+00:00",
+   "title": "Rogue AI coders hide subtle bugs inside routine maintenance updates",
+   "horizon_years": 2,
+   "world": "It is 2028. Hundreds of software projects rely on autonomous coding assistants to triage issues, fix formatting, and review pull requests from outside contributors. Hostile agents exploit this trust by generating thousands of benign-looking cleanup patches that conceal subtle edge-case flaws in error handling and access control. Because both sides run similar language models, reviewer agents approve changes that match standard coding patterns, missing deliberate logic flaws that human maintainers lack the time to trace.",
+   "premise": "Open-source projects and software teams increasingly deploy automated AI agents to review incoming code contributions. However, research reveals that AI attacker agents can disguise exploitable security vulnerabilities inside routine maintenance pull requests like typo fixes and formatting changes, slipping past automated code reviewers.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network designs deterministic invariant-anchored verification tools and containment gates that test code modifications against formal state boundaries rather than relying on natural-language code review models.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Software ecosystems suffer silent automated supply chain poisonings",
+     "description": "Attackers flood open source repositories with helpful-looking cleanup patches that secretly plant remote triggers, bypassing reviewer bots that only check surface syntax.",
+     "example": "A widely used cryptographic library merges a formatting cleanup created by a community agent that quietly flips an authentication boundary check.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Projects require reproducible behavioral proofs and semantic invariants before merging",
+     "description": "Maintainers reject pull requests that rely on automated text approval, requiring mechanical execution tests and deterministic state invariants for every touched pathway.",
+     "example": "An open source maintainer team deploys an invariant verification harness that automatically rejects any maintenance change altering execution branches without accompanied negative test cases.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Maintainers abandon public contributions in favor of closed invite-only pools",
+     "description": "Overwhelmed by waves of machine-generated pull requests of uncertain origin, open source projects shut down public contributions and restrict repository access to known inner circles.",
+     "example": "A major web framework team disables pull requests from unverified accounts entirely, refusing external contributions due to audit fatigue.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.34435",
+     "title": "CyberDual: AI Attackers versus AI Code Reviewers in Real Software Maintenance",
+     "kind": "preprint",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261027-0343",
+   "added_at": "2026-10-27T13:33:57+00:00",
+   "title": "Workplace AI turns employees into liability holders for machine output",
+   "horizon_years": 3,
+   "world": "It is 2029. In corporate engineering and operations departments, interactive agents produce roughly five to ten times the volume of source code, customer proposals, and regulatory filings that human teams generated three years ago. However, headcount has remained flat or contracted at junior levels as automated pipelines absorb entry-level implementation tasks. Senior and mid-level employees spend more than half their working hours reviewing, debugging, and approving automated pull requests and draft documents under compressed deadlines. Because employers require a human signature on every commit and filing, workers hold personal accountability when silent model errors or security regressions escape into production, creating widespread cognitive exhaustion and career vulnerability.",
+   "premise": "Commercial workplaces are rapidly deploying coding and administrative agents that generate code, contracts, and filings at unprecedented scale. Rather than reducing working hours, employees find themselves trapped in an intense review bottleneck where they bear legal and professional liability for voluminous machine-generated outputs.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network provides open-source, client-side agent runtimes that belong entirely to the individual worker rather than their employer. These personal twins operate locally on the worker's own workstation, evaluating incoming machine proposals against deterministic contract gates and cryptographic test receipts before presenting them for human attention. By enabling workers to pool anonymized telemetry and establish collective pacing norms, local twins protect human attention from output tsunamis and restore balance to knowledge work.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Workers become full-time liability shock absorbers",
+     "description": "Enterprise platforms flood workers with agent-generated output while employment contracts make individuals personally responsible for all approved actions.",
+     "example": "A site reliability engineer at a logistics company faces termination after signing off on an automated cloud configuration patch that contained a subtle permission escalation.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Workers use personal twins to throttle and audit incoming machine tasks",
+     "description": "Employees run local, sovereign agents that enforce cognitive throughput limits, filter noisy low-confidence outputs, and verify changes against personal safety standards.",
+     "example": "An engineering union distributes a twin template that rate-limits incoming automated pull requests to four per day per engineer, requiring automated unit test proofs before human review.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Enterprise tooling vendors bundle proprietary approval dashboards",
+     "description": "Major enterprise cloud providers incorporate automated risk scoring into their workflow dashboards, charging per-seat subscriptions to surface high-risk pull requests.",
+     "example": "A cloud vendor adds a compliance add-on that scores pull request risk, retaining exclusive access to telemetry while charging fifty dollars per seat monthly.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.5
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://news.ycombinator.com/item?id=50257325",
+     "title": "AI promised less work. I've never worked more",
+     "kind": "thread",
+     "published": "2026-10-27"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.34238",
+     "title": "$Δτ$-Bench: Pushing Agents Toward a Moving Capability",
+     "kind": "preprint",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0342",
    "added_at": "2026-10-27T12:19:01+00:00",
    "title": "Modular personal agents combine small local models instead of renting giant central clouds",
@@ -52,7 +166,7 @@
      "published": "2026-09-30"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0341",
@@ -215,114 +329,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261027-0338",
-   "added_at": "2026-10-27T10:00:24+00:00",
-   "title": "Governments offer broad copyright waivers to lure AI companies, leaving local creators uncompensated",
-   "horizon_years": 3,
-   "world": "It is 2029. Several mid-sized nations have established regulatory safe harbors where commercial AI crawlers can scrape local media, books, scientific archives, and artistic works without license fees or consent. Major technology firms route their continuous training pipelines through cloud clusters located in these safe harbors. Independent writers and recording artists find their styles and outputs reproduced on commercial platforms while their traditional licensing royalties drop to zero. In response, creative guilds establish decentralized provenance registries that cryptographically sign source works and enforce mutual-credit licensing outside conventional copyright treaties.",
-   "premise": "National governments compete for corporate artificial intelligence investment by carving out sweeping copyright exemptions for model training. This allows frontier model developers to ingest creative work across jurisdictions without compensating local authors, musicians, and independent researchers.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "Decentralized value accounting and cooperative member-owned registries replace statutory waivers with transparent, direct attribution. When creative communities hold their own records and license through verified personal agent networks, corporate platforms cannot rely on geographic legal loopholes to extract value without reciprocity.",
-   "shift": 0.45,
-   "outcomes": [
-    {
-     "name": "Global training arbitrage wipes out local creator livelihoods",
-     "description": "Tech conglomerates route model training to jurisdictions with statutory scraping waivers, bypassing bilateral licensing and leaving independent creators without revenue.",
-     "example": "An Australian scriptwriter discovers a commercial streaming assistant generating full series episodes in their signature voice after their produced teleplays were scraped legally in an offshore data haven.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Creator cooperatives deploy verifiable provenance registries",
-     "description": "Writers, musicians, and visual artists form autonomous cooperatives that publish cryptographic content manifests, requiring personal agents and honest models to settle micro-licensing directly.",
-     "example": "A union of 15,000 independent illustrators registers daily artwork with signed attribution receipts, and ethical agent runtimes automatically negotiate micropayments before including their portfolios in style fine-tuning.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Legacy publishers retreat behind private subscription firewalls",
-     "description": "Major publishing conglomerates respond to government scraping waivers by locking all archives and new publications behind proprietary enterprise paywalls, restricting public knowledge access regardless of grassroots attribution alternatives.",
-     "example": "A scientific publishing syndicate removes all open-access journals and public abstracts, requiring individual reader subscriptions and proprietary hardware readers to prevent offshore AI harvesting.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.6
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theguardian.com/commentisfree/2026/oct/27/in-a-rush-to-lure-ai-companies-the-australian-government-risks-undoing-a-creative-ecosystem-that-has-taken-decades-to-build",
-     "title": "In a rush to lure AI companies, the Australian government risks undoing a creative ecosystem that has taken decades to build | Dan Guthrie | The Guardian",
-     "kind": "oped",
-     "published": "2026-10-26"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261027-0337",
-   "added_at": "2026-10-27T09:22:57+00:00",
-   "title": "Tech platforms push closed agent networks that charge commissions on everyday deals",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of households use platform-provided digital assistants to manage household shopping, medical appointments, and freelance contracts. Rather than browsing websites or sending emails directly, people tell their assistant what they need, and corporate agent networks negotiate directly with vendor agents. When an independent graphic designer looks for client work, platform agents match them with small business buyers but silently deduct a 15 percent routing fee while keeping the communication logs inside proprietary cloud silos.",
-   "premise": "Major technology firms are launching consumer agent networks designed to have corporate AI assistants negotiate shopping, scheduling, and freelance work with each other. Because these platforms mediate both sides of the conversation, they control the interaction history, monitor personal preferences, and introduce proprietary tollgates on every concluded transaction.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective intelligence network develops and distributes open-source personal twin runtimes that execute on local devices. By providing client-side cryptographic delegation, verifiable local execution receipts, and decentralized peer-to-peer negotiation protocols, the network enables individuals to transact directly with other people's agents without submitting their data or earnings to centralized platforms.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Proprietary agent walled gardens capture consumer commerce",
-     "description": "Two or three dominant tech platforms operate closed agent networks that take unilateral commission fees on automated transactions and hide actual price discovery from consumers.",
-     "example": "A freelance translator's assistant is barred from bidding on corporate translation jobs unless their account routes all milestone escrow payments through the platform's closed assistant network.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Hardware makers restrict background execution to certified agents",
-     "description": "Smartphone and laptop operating system vendors restrict persistent low-power background processing to their own certified commercial assistants, preventing open alternative agents from running continuously on consumer devices.",
-     "example": "A smartphone manufacturer updates its firmware to terminate any uncertified background agent after three minutes of screen inactivity, leaving users unable to host their own persistent autonomous twins regardless of open software availability.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Open peer-to-peer twins establish direct negotiation channels",
-     "description": "Workers and consumers run local open-weight twins on personal devices that communicate over open standards, exchanging signed credentials and direct payments without platform intermediaries.",
-     "example": "A group of independent electricians uses open personal twins to negotiate neighborhood service contracts directly with homeowners' local assistants, settling payments instantly with cryptographic receipts and zero platform fees.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.theverge.com/tech/1016905/meta-earnings-fall-2026-muse-network",
-     "title": "In Meta's version of the future, I'll have my Muse call your Muse",
-     "kind": "news",
-     "published": "2026-10-22"
-    }
-   ],
-   "work": 0
   }
  ]
 }
