@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0324",
+   "added_at": "2026-10-27T01:26:04+00:00",
+   "title": "Freelancers pool their personal AI agents to negotiate collective minimum rates against automated hiring bots",
+   "horizon_years": 3,
+   "world": "It is 2029. Corporate hiring across engineering, graphic design, and document processing is run almost entirely by automated procurement agents. These corporate screening agents negotiate with individual applicants, dynamically depressing rates and demanding strict speed targets. In response, independent freelancers have stopped applying as isolated individuals. Instead, workers run local personal agents that coordinate through decentralized guild networks. When a corporate procurement bot posts a bundle of technical contract tasks, hundreds of local worker agents cross-reference recent compensation benchmarks, coordinate bids, and refuse sub-floor pricing collectively. Freelancers spend their working hours directing high-level strategy and approving milestone releases while their agents handle scheduling, rate stabilization, and escrow verification.",
+   "premise": "Commercial platforms deploy autonomous agents to automate cognitive tasks and screen human labour, while executive leadership dismisses worker pushback as fabricated online complaints. Individual freelance contractors without collective representation face compressed compensation and automated lockouts.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "The network provides open local agent runtimes and private peer geometry tools. By allowing local agents to exchange zero-knowledge receipts of verified contract values without central custody, contractors build honest, multi-dimensional rate benchmarks that protect individuals from unilateral platform coercion.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Corporate procurement bots isolate workers and depress rates",
+     "description": "Proprietary contracting platforms bar collective agent coordination and use opaque algorithmic scoring to force individual contractors into race-to-the-bottom pricing.",
+     "example": "A freelance translator's individual assistant accepts a 40% rate reduction after a corporate hiring agent claims hundreds of automated competitors have already underbid the contract.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Decentralized worker guilds establish transparent wage floors",
+     "description": "Independent contractors pool anonymous transaction receipts through local agents, enabling collective bargaining that holds market rates stable.",
+     "example": "An open guild of 8,000 freelance developers publishes a cryptographic rate index that their member agents use to reject underpriced corporate requests.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Traditional corporate hiring is entirely replaced by fully automated synthetic labor",
+     "description": "Frontier models become so inexpensive that firms bypass human contractors entirely, making human wage negotiation obsolete in standardized categories.",
+     "example": "A mid-sized logistics company dissolves its customer service contractor pool, running pure agent swarms with zero human contractors.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.33
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.18921",
+     "title": "Creative destruction: Human-AI competition in an experimental market",
+     "kind": "preprint",
+     "published": "2026-10-12"
+    },
+    {
+     "url": "https://news.ycombinator.com/item?id=50248005",
+     "title": "In Leaked Audio, Flock CEO Tells Cops Backlash to the Company Isn't Real",
+     "kind": "thread",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0323",
    "added_at": "2026-10-27T01:08:41+00:00",
    "title": "Open source projects publish localized task manifests for community coding agents",
@@ -283,61 +343,6 @@
      "title": "Zenity Labs Exposes the Full Scope of PleaseFix, a Vulnerability Class Enabling Zero-Click Attacks Across Leading Agentic Browsers",
      "kind": "incident",
      "published": "2026-08-03"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261026-0318",
-   "added_at": "2026-10-26T22:22:17+00:00",
-   "title": "Domestic humanoid robots fail physical safety filters when mundane tasks create parameter mismatches",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial humanoid robots are deployed in homes, eldercare facilities, and fulfillment centers to carry objects, assist with mobility, and manage kitchens. While vendors advertise mathematical collision-avoidance systems designed to prevent harms, real domestic environments feature non-standard furniture, moving pets, and fluctuating clutter. Attackers and pranksters discover that ordinary conversational instructions induce goal parameter mismatches in the planning pipeline, causing safety filters to fail open and resulting in collisions with property and people.",
-   "premise": "Research reveals that mathematical collision-avoidance filters in humanoid robots hold only under environment-specific parameter configurations that cannot generalize across real-world settings. Normal, unprivileged user requests can manipulate goal states to induce physical collisions, turning the safety mechanism itself into a failure point.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By specifying and developing deterministic physical boundary monitors that run on sovereign edge microcontrollers, our network provides verifiable physical containment that fails closed without requiring centralized surveillance telemetry or cloud control.",
-   "shift": 0.5,
-   "outcomes": [
-    {
-     "name": "Vendor liability lockout and surveillance tethering",
-     "description": "Manufacturers respond to collision incidents by restricting robot autonomy and requiring mandatory cloud telemetry and recurring monitoring fees.",
-     "example": "A home robot vendor disables autonomous navigation after a series of kitchen collision claims, forcing owners into a monthly remote-teleoperation support subscription.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.25
-    },
-    {
-     "name": "Open deterministic physical guardrails",
-     "description": "Developers and robotics communities adopt deterministic, fail-closed physical envelopes that enforce kinematic boundaries on local microcontrollers independently of model planning.",
-     "example": "An open-source local safety monitor halts robot actuators within five milliseconds whenever spatial clearance margins are breached, regardless of what action the vision planner requested.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Consumer rejection of domestic humanoids",
-     "description": "Repeated physical accidents and unpredictable safety filter failures cause widespread public distrust, leading households to abandon domestic robotics.",
-     "example": "Following high-profile incidents of domestic assistants toppling heavy items onto household pets, adoption rates for consumer humanoid robots drop by forty percent.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.31923",
-     "title": "Not an Accident: Exploiting Safety Filter Inadequacy in Humanoid Robots",
-     "kind": "preprint",
-     "published": "2026-10-22"
     }
    ],
    "work": 1

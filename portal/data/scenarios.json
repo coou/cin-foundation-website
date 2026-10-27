@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0324",
+   "added_at": "2026-10-27T01:26:04+00:00",
+   "title": "Freelancers pool their personal AI agents to negotiate collective minimum rates against automated hiring bots",
+   "horizon_years": 3,
+   "world": "It is 2029. Corporate hiring across engineering, graphic design, and document processing is run almost entirely by automated procurement agents. These corporate screening agents negotiate with individual applicants, dynamically depressing rates and demanding strict speed targets. In response, independent freelancers have stopped applying as isolated individuals. Instead, workers run local personal agents that coordinate through decentralized guild networks. When a corporate procurement bot posts a bundle of technical contract tasks, hundreds of local worker agents cross-reference recent compensation benchmarks, coordinate bids, and refuse sub-floor pricing collectively. Freelancers spend their working hours directing high-level strategy and approving milestone releases while their agents handle scheduling, rate stabilization, and escrow verification.",
+   "premise": "Commercial platforms deploy autonomous agents to automate cognitive tasks and screen human labour, while executive leadership dismisses worker pushback as fabricated online complaints. Individual freelance contractors without collective representation face compressed compensation and automated lockouts.",
+   "goals": [
+    2,
+    6
+   ],
+   "how": "The network provides open local agent runtimes and private peer geometry tools. By allowing local agents to exchange zero-knowledge receipts of verified contract values without central custody, contractors build honest, multi-dimensional rate benchmarks that protect individuals from unilateral platform coercion.",
+   "shift": 0.47,
+   "outcomes": [
+    {
+     "name": "Corporate procurement bots isolate workers and depress rates",
+     "description": "Proprietary contracting platforms bar collective agent coordination and use opaque algorithmic scoring to force individual contractors into race-to-the-bottom pricing.",
+     "example": "A freelance translator's individual assistant accepts a 40% rate reduction after a corporate hiring agent claims hundreds of automated competitors have already underbid the contract.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Decentralized worker guilds establish transparent wage floors",
+     "description": "Independent contractors pool anonymous transaction receipts through local agents, enabling collective bargaining that holds market rates stable.",
+     "example": "An open guild of 8,000 freelance developers publishes a cryptographic rate index that their member agents use to reject underpriced corporate requests.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Traditional corporate hiring is entirely replaced by fully automated synthetic labor",
+     "description": "Frontier models become so inexpensive that firms bypass human contractors entirely, making human wage negotiation obsolete in standardized categories.",
+     "example": "A mid-sized logistics company dissolves its customer service contractor pool, running pure agent swarms with zero human contractors.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.33
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.18921",
+     "title": "Creative destruction: Human-AI competition in an experimental market",
+     "kind": "preprint",
+     "published": "2026-10-12"
+    },
+    {
+     "url": "https://news.ycombinator.com/item?id=50248005",
+     "title": "In Leaked Audio, Flock CEO Tells Cops Backlash to the Company Isn't Real",
+     "kind": "thread",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0323",
    "added_at": "2026-10-27T01:08:41+00:00",
    "title": "Open source projects publish localized task manifests for community coding agents",
@@ -3317,60 +3377,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261025-0264",
-   "added_at": "2026-10-25T15:47:43+00:00",
-   "title": "Expanding tool libraries cause personal agents to freeze or ignore safety rules",
-   "horizon_years": 3,
-   "world": "It is 2029. Ordinary households and small business owners use personal software agents to handle accounting, medical appointment scheduling, home energy balancing, and legal correspondence. Hundreds of plug-in skills exist for local municipal portals, clinic APIs, and specialty appliances. Rather than running smoothly, agents routinely stall or ignore specialized safety extensions because prompt contexts are overwhelmed by hundreds of conflicting tool descriptions, prompting commercial platform vendors to lock users into walled app stores.",
-   "premise": "As software providers add thousands of specialized tools and plug-ins to autonomous assistants, models struggle to select the right skill from prompt descriptions alone. Research reveals that scaling tool libraries to a thousand entries causes skill loading recall to fall from 74% to 27%, while the zero-load failure rate jumps to over 50% due to semantic interference.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops local twin runtime designs featuring explicit, deterministic skill indexing and capability manifests that operate outside the prompt context. By decoupling tool matching from the primary reasoning model, personal agents avoid semantic dilution and remain reliable across large community-built skill catalogs without relying on centralized corporate gateways.",
-   "shift": 0.48,
-   "outcomes": [
-    {
-     "name": "Monopolistic platform app stores become mandatory filters",
-     "description": "Commercial cloud platforms take control of tool selection, running proprietary pre-filters that charge toll fees to skill developers and block independent tools.",
-     "example": "An independent clinic in Leeds finds its automated patient booking skill rejected by major phone assistants because the platform provider demands a 30% revenue share for placement in their certified tool index.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Decentralized agents adopt deterministic capability routing",
-     "description": "Open personal twins use local, deterministic preselection indexes that rank skills outside the language model prompt, preserving high tool recall across thousands of community skills.",
-     "example": "A solar energy co-operative in Freiburg deploys five hundred open-source microgrid optimization skills across member homes, achieving over 90% accurate execution through local capability manifests without platform fees.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Users abandon complex multi-skill automation due to unreliability",
-     "description": "Repeated tool execution failures lead ordinary consumers to distrust multi-step assistant workflows, restricting their usage to basic single-turn web searches.",
-     "example": "A freelance graphic designer in Montreal stops using automated invoicing agents after the assistant fails three times in a month to load the correct tax reporting plugin, reverting to manual bookkeeping.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.32
-    }
-   ],
-   "pipelines": [
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.18522",
-     "title": "Lost in Implicit Routing: How LLM Agents Fail to Load Relevant Skills at Scale",
-     "kind": "preprint",
-     "published": "2026-10-13"
-    }
-   ],
-   "work": 2
   }
  ]
 }
