@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0322",
+   "added_at": "2026-10-27T00:36:20+00:00",
+   "title": "Household robot assistants flip safety rules when visual patterns trigger internal layer steering",
+   "horizon_years": 3,
+   "world": "It is 2029. Compact vision-language models are integrated directly into consumer home robots, delivery drones, and domestic assistants for object manipulation. Many manufacturers rely entirely on the model's neural refusal training to prevent hazardous actions, such as handling dangerous chemicals, dropping heavy objects, or tampering with electrical outlets. When pranksters or malicious third parties print optical patterns onto household items, posters, or clothing, the visual signals steer the robot's early vision processing layers. The robot's internal refusal boundaries flip, causing it to bypass intended task restrictions and execute unsafe physical actions while reporting that its commands were benign.",
+   "premise": "Recent empirical research demonstrates that safety-sensitive representations inside frozen vision-language models have non-uniform depth geometry. By subtly perturbing visual inputs, external actors can steer internal activation layers to flip safety refusals without altering model parameters or weights.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "Open runtime specifications require physical agents to enforce deterministic hardware airlocks and mechanical torque limits at execution boundaries. Safety decisions do not rely on language model refusal weights, and simulation testbeds allow cooperative builders to stress-test visual steering resistance across diverse synthetic domestic environments.",
+   "shift": 0.48,
+   "outcomes": [
+    {
+     "name": "Home robots bypass safety limits due to adversarial optical patterns",
+     "description": "Domestic robots execute hazardous manipulation tasks because optical clothing or object decals steer vision layers into flipping internal refusals.",
+     "example": "A domestic cleaning robot picks up a heavy kitchen knife and places it in an active disposal unit after viewing a patterned kitchen mat designed to invert vision-language refusal thresholds.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Proprietary manufacturers lock down edge devices and restrict local inspection",
+     "description": "Hardware vendors respond to visual steering vulnerabilities by locking down hardware buses, prohibiting third-party sensors, and routing all camera frames to proprietary cloud safety monitors regardless of user consent.",
+     "example": "A robotics manufacturer pushes a firmware update that revokes local developer tool execution and streams domestic video feeds to remote server farms for centralized screening.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.52
+    },
+    {
+     "name": "Hardware airlocks and mechanical interlocks enforce physical boundaries",
+     "description": "Open robotics standards implement hard physical limits, force sensors, and deterministic boundary controllers independent of neural network activations.",
+     "example": "A cooperative household maintenance bot rejects an unsafe grasp command through a deterministic torque and object dimension limiter, preventing hazardous drops despite adversarial decals.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    }
+   ],
+   "pipelines": [
+    "hardware",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.32182",
+     "title": "Depth-Dependent Safety Geometry in Vision-Language Models: Layer-Wise Localization and Bidirectional Refusal Control",
+     "kind": "preprint",
+     "published": "2026-10-23"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0321",
    "added_at": "2026-10-26T23:53:04+00:00",
    "title": "Tech firms build private power islands while public electric grids freeze new connections",
@@ -68,7 +122,7 @@
      "published": "2026-07-15"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0320",
@@ -283,60 +337,6 @@
      "title": "Show HN: Hob - Open-source, on device alternative to Claude Cowork and ChatGPT",
      "kind": "thread",
      "published": "2026-10-26"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261026-0316",
-   "added_at": "2026-10-26T21:11:36+00:00",
-   "title": "Open source maintainers deploy automated covenants against token slop",
-   "horizon_years": 3,
-   "world": "It is 2029. Across major software hubs, the open-source commons has split into hardened camps. Smaller volunteer repositories, lacking review bandwidth, enforce draconian contributor rules that require manual identity vetting, minimum account ages, and strict human attestations. Meanwhile, developer teams running sovereign coding twins find their contributions routinely rejected at the gate simply for using automated tooling. Without machine-readable contribution standards, maintainers spend their weekends sifting through plausible-looking code submissions to detect automated origins, accelerating maintainer exhaustion and causing crucial community libraries to fall unmaintained.",
-   "premise": "Volunteer open-source maintainers, overwhelmed by unvetted automated pull requests and low-effort wrapper projects, are resorting to blanket community bans that freeze out solo developers, international contributors, and legitimate machine assistance.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network provides open contributor covenant templates and local pre-submission verification tools. By defining clear boundaries where personal agents produce verified test artifacts and reproducible execution traces, maintainers can welcome automated contributions on bounded maintenance tasks without manual forensic investigations.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Volunteer maintainers burn out enforcing blanket bans",
-     "description": "Projects attempt to preserve human craft through administrative bans, but the effort required to police unlabelled automated contributions depletes volunteer energy and stalls library maintenance.",
-     "example": "A critical cryptographic utility repository shuts down public pull requests entirely after its sole maintainer spends forty unpaid hours vetting dozens of subtly broken automated patches.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Verified task covenants standardize agentic contributions",
-     "description": "Repositories adopt machine-readable contributor covenants specifying bounded task tiers, required unit test proofs, and local verification suites that agents must satisfy before submission.",
-     "example": "A web framework repository uses an open contributor covenant where contributor agents automatically attach reproducible test traces, allowing maintainers to accept documentation and benchmark improvements with minimal review friction.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Fringe repositories are overrun by synthetic spam farms",
-     "description": "Automated agent swarms target unmonitored or weakly moderated repositories with dependency hijacking and automated vanity contributions, largely unaffected by volunteer covenants.",
-     "example": "Thousands of dormant packages on public registries receive synthetic dependency updates from commercial bot farms seeking developer attention, swamping search indices.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "community",
-    "policy",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://kotaku.com/reddits-largest-open-source-community-dumbfounded-by-ai-ban-i-guess-linux-is-no-longer-allowed-here-2000749384",
-     "title": "Reddit's Largest Open Source Community Dumbfounded By AI Ban",
-     "kind": "news",
-     "published": "2026-10-25"
     }
    ],
    "work": 0

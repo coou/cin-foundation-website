@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0322",
+   "added_at": "2026-10-27T00:36:20+00:00",
+   "title": "Household robot assistants flip safety rules when visual patterns trigger internal layer steering",
+   "horizon_years": 3,
+   "world": "It is 2029. Compact vision-language models are integrated directly into consumer home robots, delivery drones, and domestic assistants for object manipulation. Many manufacturers rely entirely on the model's neural refusal training to prevent hazardous actions, such as handling dangerous chemicals, dropping heavy objects, or tampering with electrical outlets. When pranksters or malicious third parties print optical patterns onto household items, posters, or clothing, the visual signals steer the robot's early vision processing layers. The robot's internal refusal boundaries flip, causing it to bypass intended task restrictions and execute unsafe physical actions while reporting that its commands were benign.",
+   "premise": "Recent empirical research demonstrates that safety-sensitive representations inside frozen vision-language models have non-uniform depth geometry. By subtly perturbing visual inputs, external actors can steer internal activation layers to flip safety refusals without altering model parameters or weights.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "Open runtime specifications require physical agents to enforce deterministic hardware airlocks and mechanical torque limits at execution boundaries. Safety decisions do not rely on language model refusal weights, and simulation testbeds allow cooperative builders to stress-test visual steering resistance across diverse synthetic domestic environments.",
+   "shift": 0.48,
+   "outcomes": [
+    {
+     "name": "Home robots bypass safety limits due to adversarial optical patterns",
+     "description": "Domestic robots execute hazardous manipulation tasks because optical clothing or object decals steer vision layers into flipping internal refusals.",
+     "example": "A domestic cleaning robot picks up a heavy kitchen knife and places it in an active disposal unit after viewing a patterned kitchen mat designed to invert vision-language refusal thresholds.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Proprietary manufacturers lock down edge devices and restrict local inspection",
+     "description": "Hardware vendors respond to visual steering vulnerabilities by locking down hardware buses, prohibiting third-party sensors, and routing all camera frames to proprietary cloud safety monitors regardless of user consent.",
+     "example": "A robotics manufacturer pushes a firmware update that revokes local developer tool execution and streams domestic video feeds to remote server farms for centralized screening.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.52
+    },
+    {
+     "name": "Hardware airlocks and mechanical interlocks enforce physical boundaries",
+     "description": "Open robotics standards implement hard physical limits, force sensors, and deterministic boundary controllers independent of neural network activations.",
+     "example": "A cooperative household maintenance bot rejects an unsafe grasp command through a deterministic torque and object dimension limiter, preventing hazardous drops despite adversarial decals.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.45
+    }
+   ],
+   "pipelines": [
+    "hardware",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.32182",
+     "title": "Depth-Dependent Safety Geometry in Vision-Language Models: Layer-Wise Localization and Bidirectional Refusal Control",
+     "kind": "preprint",
+     "published": "2026-10-23"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261026-0321",
    "added_at": "2026-10-26T23:53:04+00:00",
    "title": "Tech firms build private power islands while public electric grids freeze new connections",
@@ -68,7 +122,7 @@
      "published": "2026-07-15"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0320",
@@ -3322,66 +3376,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261025-0262",
-   "added_at": "2026-10-25T14:49:53+00:00",
-   "title": "AI forecasting tools give overconfident predictions that lead organisations into costly miscalculations",
-   "horizon_years": 3,
-   "world": "It is 2029. Municipal planners, regional hospital networks, and logistics cooperatives routinely ask commercial artificial intelligence systems to project peak hospital bed demand, winter electrical grid loads, and freight shipping costs. The models present clean, narrow 90 percent prediction intervals that look authoritative on executive dashboards. In practice, because frontier models suffer from systematic overconfidence that worsens during unusual market shifts, real outcomes frequently breach the predicted ranges, leaving infrastructure managers without adequate fuel reserves or contingency staff.",
-   "premise": "Leading artificial intelligence models systematically generate overly narrow prediction intervals when forecasting continuous real-world numbers, failing target confidence coverage by more than ten percentage points. As businesses and public agencies adopt automated assistants to predict budgets, energy demand, and supply chains, misplaced trust in uncalibrated numerical bounds risks severe financial and operational disruptions.",
-   "goals": [
-    5,
-    6
-   ],
-   "how": "Our network designs independent observatory benchmarks that score empirical coverage across continuous numerical forecasts, exposing overconfidence at extreme magnitudes. By publishing open calibration tooling and integrating lightweight time-series models into private, local-first agent runtimes, we enable communities and cooperatives to generate reliable, calibrated projections on their own devices without exposing private ledgers to centralized providers.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Organisations rely on narrow AI prediction bounds and suffer major planning crises",
-     "description": "Commercial decision makers treat raw model confidence intervals as objective risk boundaries, slashing emergency inventory and budget buffers until extreme events trigger cascading failures.",
-     "example": "A municipal electrical utility relies on a commercial assistant's 90 percent heating demand interval to trim standby gas reserves, only to face blackouts when an unseasonable freeze falls far outside the model's overly narrow forecast.",
-     "desirable": false,
-     "likelihood_now": 0.52,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Independent calibration monitors verify forecasting bounds using open models",
-     "description": "Public observatories and member-owned cooperatives track empirical coverage rates, applying automated conformal recalibration and open-weights time-series models on local hardware.",
-     "example": "A regional agricultural cooperative runs open-weights foundation models on local workstations to predict crop yields, combining historical data with public calibration curves that accurately reflect extreme weather uncertainty.",
-     "desirable": true,
-     "likelihood_now": 0.18,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Proprietary providers replace numerical intervals with vague qualitative warnings",
-     "description": "To evade legal liability for overconfident forecasts, commercial platform vendors suppress continuous numerical intervals in favour of uninformative qualitative disclaimers.",
-     "example": "A cloud analytics platform removes quantitative uncertainty bounds from its forecasting API, replacing them with generic text advisories that prevent automated risk hedging.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.27
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "policy",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2604.15859",
-     "title": "QuantSightBench: Evaluating LLM Quantitative Forecasting with Prediction Intervals",
-     "kind": "preprint",
-     "published": "2026-04-17"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50088582",
-     "title": "Show HN: T0: We trained a 256M SOTA open-weights time-series forecasting model",
-     "kind": "thread",
-     "published": "2026-10-14"
-    }
-   ],
-   "work": 3
   }
  ]
 }
