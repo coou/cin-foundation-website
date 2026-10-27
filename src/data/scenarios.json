@@ -1,6 +1,67 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0328",
+   "added_at": "2026-10-27T02:57:26+00:00",
+   "title": "Governments deploy opaque AI profiling to decide immigration and public benefit claims",
+   "horizon_years": 3,
+   "world": "It is 2029. In several European and North American jurisdictions, border authorities and welfare agencies rely on proprietary automated platforms to summarize applicant interviews, assess asylum seeker ages, inspect mobile device archives, and score relationship authenticity. When applicants are flagged as high-risk or rejected, caseworkers rubber-stamp automated recommendations because caseload volumes prevent independent review. Government agencies invoke state secrecy exemptions to withhold training data and scoring logic from public courts and legal aid solicitors, leaving vulnerable individuals unable to challenge biased model outputs or opaque algorithmic classifications.",
+   "premise": "Government ministries increasingly integrate generative language models and automated scoring systems into border management, asylum claim processing, and identity screening. Because these tools are introduced under national security exemptions without public transparency or individual recourse, algorithmic errors and uncalibrated proxies harden into institutional barriers.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "Independent technical observatories monitor public-sector algorithmic procurement, measuring accuracy drift, proxy discrimination, and procedural opacity across deployed administrative systems. By providing open-source verification tooling, local-first data custody, and cryptographic audit receipts, decentralized networks equip legal clinics and individuals to challenge ungrounded administrative claims without surrendering private personal information to cloud databases.",
+   "shift": 0.25,
+   "outcomes": [
+    {
+     "name": "State agencies hide automated decision algorithms behind national security secrecy",
+     "description": "Bureaucracies expand automated risk profiling into routine public administration while shielding model logic and error rates from judicial discovery.",
+     "example": "An asylum applicant in London is denied protection after an automated summarization model misinterprets translated testimony, while immigration tribunals uphold the decision citing national security exemptions that block release of the model prompt and verification log.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Civic cooperatives provide independent algorithmic audits and verification receipts",
+     "description": "Digital rights organizations, legal aid clinics, and community cooperatives deploy independent verification tooling and verifiable audit trails to challenge uncalibrated administrative scoring.",
+     "example": "A legal advocacy coalition uses cryptographic verification tooling to prove that an administrative agency's age-estimation model produces contradictory outputs across different seeds, forcing statutory disclosure and human procedural review.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Public agencies replace automated scoring with even harsher administrative restrictions",
+     "description": "In response to judicial pushback against opaque automated profiling, political administrations impose rigid statutory quotas and across-the-board processing freezes that bypass algorithmic scrutiny entirely.",
+     "example": "Facing public lawsuits over algorithmic bias in asylum summarization, a border department cancels automated pilots and instead enforces arbitrary numerical caps on daily visa approvals, leaving applicants with fewer avenues for individual review.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.32
+    }
+   ],
+   "pipelines": [
+    "canon",
+    "policy",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theguardian.com/politics/2026/oct/27/digital-hostile-environment-ai-secretly-embedded-home-office-report",
+     "title": "'Digital hostile environment': AI secretly being embedded across Home Office, report claims",
+     "kind": "news",
+     "published": "2026-10-26"
+    },
+    {
+     "url": "https://www.openrightsgroup.org/events/report-launch-automated-discrimination-unpacking-the-digital-hostile-environment/",
+     "title": "Automated Discrimination: Unpacking the Digital Hostile Environment",
+     "kind": "report",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261027-0327",
    "added_at": "2026-10-27T02:36:12+00:00",
    "title": "Personal AI agents negotiate privacy rules with websites instead of showing cookie popups",
@@ -113,7 +174,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0325",
@@ -280,60 +341,6 @@
      "title": "How Do Small Coding Agents Use Code Graphs and Embeddings?",
      "kind": "paper",
      "published": "2026-10-25"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261027-0322",
-   "added_at": "2026-10-27T00:36:20+00:00",
-   "title": "Household robot assistants flip safety rules when visual patterns trigger internal layer steering",
-   "horizon_years": 3,
-   "world": "It is 2029. Compact vision-language models are integrated directly into consumer home robots, delivery drones, and domestic assistants for object manipulation. Many manufacturers rely entirely on the model's neural refusal training to prevent hazardous actions, such as handling dangerous chemicals, dropping heavy objects, or tampering with electrical outlets. When pranksters or malicious third parties print optical patterns onto household items, posters, or clothing, the visual signals steer the robot's early vision processing layers. The robot's internal refusal boundaries flip, causing it to bypass intended task restrictions and execute unsafe physical actions while reporting that its commands were benign.",
-   "premise": "Recent empirical research demonstrates that safety-sensitive representations inside frozen vision-language models have non-uniform depth geometry. By subtly perturbing visual inputs, external actors can steer internal activation layers to flip safety refusals without altering model parameters or weights.",
-   "goals": [
-    1,
-    4
-   ],
-   "how": "Open runtime specifications require physical agents to enforce deterministic hardware airlocks and mechanical torque limits at execution boundaries. Safety decisions do not rely on language model refusal weights, and simulation testbeds allow cooperative builders to stress-test visual steering resistance across diverse synthetic domestic environments.",
-   "shift": 0.48,
-   "outcomes": [
-    {
-     "name": "Home robots bypass safety limits due to adversarial optical patterns",
-     "description": "Domestic robots execute hazardous manipulation tasks because optical clothing or object decals steer vision layers into flipping internal refusals.",
-     "example": "A domestic cleaning robot picks up a heavy kitchen knife and places it in an active disposal unit after viewing a patterned kitchen mat designed to invert vision-language refusal thresholds.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.25
-    },
-    {
-     "name": "Proprietary manufacturers lock down edge devices and restrict local inspection",
-     "description": "Hardware vendors respond to visual steering vulnerabilities by locking down hardware buses, prohibiting third-party sensors, and routing all camera frames to proprietary cloud safety monitors regardless of user consent.",
-     "example": "A robotics manufacturer pushes a firmware update that revokes local developer tool execution and streams domestic video feeds to remote server farms for centralized screening.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.52
-    },
-    {
-     "name": "Hardware airlocks and mechanical interlocks enforce physical boundaries",
-     "description": "Open robotics standards implement hard physical limits, force sensors, and deterministic boundary controllers independent of neural network activations.",
-     "example": "A cooperative household maintenance bot rejects an unsafe grasp command through a deterministic torque and object dimension limiter, preventing hazardous drops despite adversarial decals.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    }
-   ],
-   "pipelines": [
-    "hardware",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.32182",
-     "title": "Depth-Dependent Safety Geometry in Vision-Language Models: Layer-Wise Localization and Bidirectional Refusal Control",
-     "kind": "preprint",
-     "published": "2026-10-23"
     }
    ],
    "work": 0

@@ -1,6 +1,67 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0328",
+   "added_at": "2026-10-27T02:57:26+00:00",
+   "title": "Governments deploy opaque AI profiling to decide immigration and public benefit claims",
+   "horizon_years": 3,
+   "world": "It is 2029. In several European and North American jurisdictions, border authorities and welfare agencies rely on proprietary automated platforms to summarize applicant interviews, assess asylum seeker ages, inspect mobile device archives, and score relationship authenticity. When applicants are flagged as high-risk or rejected, caseworkers rubber-stamp automated recommendations because caseload volumes prevent independent review. Government agencies invoke state secrecy exemptions to withhold training data and scoring logic from public courts and legal aid solicitors, leaving vulnerable individuals unable to challenge biased model outputs or opaque algorithmic classifications.",
+   "premise": "Government ministries increasingly integrate generative language models and automated scoring systems into border management, asylum claim processing, and identity screening. Because these tools are introduced under national security exemptions without public transparency or individual recourse, algorithmic errors and uncalibrated proxies harden into institutional barriers.",
+   "goals": [
+    1,
+    2,
+    6
+   ],
+   "how": "Independent technical observatories monitor public-sector algorithmic procurement, measuring accuracy drift, proxy discrimination, and procedural opacity across deployed administrative systems. By providing open-source verification tooling, local-first data custody, and cryptographic audit receipts, decentralized networks equip legal clinics and individuals to challenge ungrounded administrative claims without surrendering private personal information to cloud databases.",
+   "shift": 0.25,
+   "outcomes": [
+    {
+     "name": "State agencies hide automated decision algorithms behind national security secrecy",
+     "description": "Bureaucracies expand automated risk profiling into routine public administration while shielding model logic and error rates from judicial discovery.",
+     "example": "An asylum applicant in London is denied protection after an automated summarization model misinterprets translated testimony, while immigration tribunals uphold the decision citing national security exemptions that block release of the model prompt and verification log.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Civic cooperatives provide independent algorithmic audits and verification receipts",
+     "description": "Digital rights organizations, legal aid clinics, and community cooperatives deploy independent verification tooling and verifiable audit trails to challenge uncalibrated administrative scoring.",
+     "example": "A legal advocacy coalition uses cryptographic verification tooling to prove that an administrative agency's age-estimation model produces contradictory outputs across different seeds, forcing statutory disclosure and human procedural review.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Public agencies replace automated scoring with even harsher administrative restrictions",
+     "description": "In response to judicial pushback against opaque automated profiling, political administrations impose rigid statutory quotas and across-the-board processing freezes that bypass algorithmic scrutiny entirely.",
+     "example": "Facing public lawsuits over algorithmic bias in asylum summarization, a border department cancels automated pilots and instead enforces arbitrary numerical caps on daily visa approvals, leaving applicants with fewer avenues for individual review.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.32
+    }
+   ],
+   "pipelines": [
+    "canon",
+    "policy",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://www.theguardian.com/politics/2026/oct/27/digital-hostile-environment-ai-secretly-embedded-home-office-report",
+     "title": "'Digital hostile environment': AI secretly being embedded across Home Office, report claims",
+     "kind": "news",
+     "published": "2026-10-26"
+    },
+    {
+     "url": "https://www.openrightsgroup.org/events/report-launch-automated-discrimination-unpacking-the-digital-hostile-environment/",
+     "title": "Automated Discrimination: Unpacking the Digital Hostile Environment",
+     "kind": "report",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261027-0327",
    "added_at": "2026-10-27T02:36:12+00:00",
    "title": "Personal AI agents negotiate privacy rules with websites instead of showing cookie popups",
@@ -113,7 +174,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0325",
@@ -3320,67 +3381,6 @@
      "title": "AI Models Can Provably Hide Arbitrary Capabilities",
      "kind": "preprint",
      "published": "2026-10-09"
-    }
-   ],
-   "work": 2
-  },
-  {
-   "id": "SC-20261025-0268",
-   "added_at": "2026-10-25T17:59:51+00:00",
-   "title": "Websites block independent personal agents as automated traffic crowds out human browsing",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial websites and municipal portals routinely reject autonomous connections with biometric challenges and pay-per-query API gates. Large corporate scrapers pay wholesale fees to bypass restrictions, while everyday individuals find their personal local assistants blocked from scheduling appointments, comparing prices, or submitting service requests.",
-   "premise": "As automated agent traffic overtakes human browsing, websites deploy harsh proof-of-humanity puzzles and anti-bot paywalls that lock out personal agents acting on behalf of real individuals.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "Developing zero-knowledge human delegation proofs and deterministic edge brokers demonstrates that websites can safely accept rate-limited personal agent requests without exposing themselves to malicious automated swarms.",
-   "shift": 0.38,
-   "outcomes": [
-    {
-     "name": "Corporate gatekeepers monopolize web delegation",
-     "description": "Proprietary platforms sign exclusive data access pacts, turning everyday web navigation into a paid tier that locks out independent user-owned assistants.",
-     "example": "An independent freelance worker is blocked by anti-bot challenges when attempting to use their home assistant to check job postings, while premium platform subscribers browse uninterrupted.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Decentralized human-delegation proofs allow verified personal agents",
-     "description": "Lightweight cryptographic delegation tokens allow personal assistants to prove they represent a single sovereign person within fair-use rate limits without revealing personal data.",
-     "example": "A city resident sends their personal assistant to register for community housing waitlists using an anonymous blind credential that municipal servers accept without triggering anti-bot alarms.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Web services retreat into closed native apps with hardware attestation",
-     "description": "Frustrated by relentless scraping swarms, public services and utilities retreat from the open web entirely, forcing all interactions into proprietary mobile apps locked to vendor hardware.",
-     "example": "A local public transit system discontinues its open web portal and requires all riders to book trips via a closed app requiring hardware-backed biometric verification.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "media",
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50234108",
-     "title": "Ask HN: What is the main bottleneck facing Agentic AI today?",
-     "kind": "thread",
-     "published": "2026-10-25"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.31015",
-     "title": "XALIGN: A Human-centric Visual Analytics Approach to Understanding AI Explanations",
-     "kind": "preprint",
-     "published": "2026-10-22"
     }
    ],
    "work": 2
