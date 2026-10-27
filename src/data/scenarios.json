@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0333",
+   "added_at": "2026-10-27T06:19:09+00:00",
+   "title": "Short-term loans allow hostile buyers to vote out cooperative treasuries",
+   "horizon_years": 3,
+   "world": "It is 2029. Thousands of housing associations, freelance collectives, and creator syndicates have migrated from traditional corporations to digital cooperatives. However, financial markets treat governance tokens as liquid collateral. Specialized arbitrage bots monitor cooperative proposal boards around the clock. When a regional solar power cooperative with three hundred thousand dollars in maintenance reserves issues a standard equipment upgrade vote, an automated fund borrows eighty percent of the circulating voting power through a flash liquidity pool for eighteen seconds. The automated vote amends the payout recipient, routes the cooperative's entire equipment fund into an anonymous offshore account, and repays the loan in the same transaction block, leaving human members with zero legal recourse under their own software bylaws.",
+   "premise": "When community cooperatives and digital member networks base governance decisions on tradeable tokens without mandatory delays, automated market actors can borrow voting rights for seconds, pass proposals to transfer community assets to themselves, and legally drain pooled funds before members even notice a vote took place.",
+   "goals": [
+    2,
+    3
+   ],
+   "how": "The collective network designs and publishes open cooperative blueprints that deliberately avoid single centralized treasuries and raw token voting. By distributing pooled resources across federated, member-owned credit circles with mandatory multi-day challenge windows and encrypted fallback delegations, community groups can safeguard their shared assets against temporary financial leverage.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Cooperative treasuries get systematically hollowed out by flash-loan governance arbitrage",
+     "description": "Financial bots exploit token voting rules to pass instant asset transfers, driving smaller grassroots cooperatives into bankruptcy and forcing survivors back into legacy top-down corporate banking.",
+     "example": "A medical freelance cooperative in Montreal loses its emergency mutual aid fund of four hundred thousand dollars overnight when a trading algorithm executes an unannounced quorum override while members are asleep.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Member networks adopt time-delayed settlement and personhood delegation",
+     "description": "Cooperatives separate economic contributions from voting rights, replacing raw token weights with person-based credentials, multi-day deliberation delays, and emergency circuit breakers.",
+     "example": "A European network of six hundred regenerative farms requires personal member keys and a fourteen-day notice period for any expenditure above ten thousand dollars, neutralizing an attempted algorithmic takeover.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "State regulators mandate traditional corporate board oversight for all collective funds",
+     "description": "Government authorities cite governance theft as justification to outlaw autonomous decentralized cooperatives entirely, requiring all community organizations to appoint state-licensed corporate directors.",
+     "example": "Federal banking authorities issue strict compliance rules requiring any group managing pooled funds above fifty thousand dollars to register as a conventional joint-stock company.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://blockaid.io/blog/governance-takeovers-how-22m-was-drained-and-how-to-stop-them",
+     "title": "Governance Takeovers: How $22M Was Drained and How to Stop Them",
+     "kind": "incident",
+     "published": "2026-08-18"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261027-0332",
    "added_at": "2026-10-27T06:00:09+00:00",
    "title": "Autonomous shopping and billing assistants quietly read confirmation emails to bypass spending caps",
@@ -290,66 +344,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261027-0327",
-   "added_at": "2026-10-27T02:36:12+00:00",
-   "title": "Personal AI agents negotiate privacy rules with websites instead of showing cookie popups",
-   "horizon_years": 3,
-   "world": "It is 2029. Most people browse the web using compact, open models running directly inside their devices. Commercial websites no longer display intrusive cookie banners or dark-pattern consent notices; instead, their servers broadcast structured privacy contracts to visiting agents. A reader visiting an online news portal never sees a popup. Behind the scenes, their local personal assistant checks the site's data requests against a private, locally stored policy. Routine functional cookies for font caching and site styling are granted temporary, non-identifying tokens automatically, while a hidden request to link browsing habits to cross-site identity brokers is immediately rejected with a cryptographic refusal receipt. When an unfamiliar healthcare directory requests permission to save diagnostic search terms, the user's assistant pauses and prompts the user with a plain-language summary before releasing any facts.",
-   "premise": "Manipulative consent banners and cookie walls are failing as automated browser agents interact with web services on behalf of people. When websites shift to machine-readable consent protocols, user-owned edge agents can negotiate minimal ephemeral data exchanges locally while escalating risky tracking requests.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The open collective provides browser-based personal twin software that executes directly on user hardware, validating machine-readable consent requests against explicit authority envelopes, generating structured audit logs, and keeping all personal evaluation local.",
-   "shift": 0.25,
-   "outcomes": [
-    {
-     "name": "Platforms deploy deceptive machine-to-machine consent negotiations",
-     "description": "Commercial tracking networks build automated consent endpoints that overwhelm user agents with complex legalistic micro-requests, tricking simple automated models into granting persistent telemetry scopes.",
-     "example": "A student using a generic browser agent visits an online textbook repository that silently requests background telemetry under a necessary performance label, which the agent routinely approves without notifying the student.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Local guardian agents enforce verifiable minimal consent receipts",
-     "description": "Standardized, user-controlled local agents evaluate incoming service contracts deterministically, issuing tamper-evident ephemeral receipts and escalating sensitive disclosures to the human owner.",
-     "example": "A freelance designer visits ten municipal and retail portals in an afternoon; their local agent automatically issues seven zero-knowledge functional receipts, blocks three cross-site fingerprinting scripts, and alerts them once about an unusual location tracking probe.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Browser vendors restrict client-side header mediation",
-     "description": "Major browser vendors lock down client network extensions, funneling all privacy settings through centralized browser-managed profiles rather than letting user agents mediate requests directly.",
-     "example": "A closed-source operating system vendor updates its browser engine to block third-party agent mediation of HTTP authorization headers, forcing users to choose only between all-or-nothing vendor privacy toggles.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.4
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2604.21455",
-     "title": "The Privacy Guardian Agent: Towards Trustworthy AI Privacy Agents",
-     "kind": "preprint",
-     "published": "2026-04-28"
-    },
-    {
-     "url": "https://www.reddit.com/r/LocalLLaMA/comments/1xd87wu/qwen306b_model_converted_into_moe/",
-     "title": "Qwen3-0.6B model converted into MoE",
-     "kind": "forum",
-     "published": "2026-10-23"
-    }
-   ],
-   "work": 0
   }
  ]
 }

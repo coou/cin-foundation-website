@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0333",
+   "added_at": "2026-10-27T06:19:09+00:00",
+   "title": "Short-term loans allow hostile buyers to vote out cooperative treasuries",
+   "horizon_years": 3,
+   "world": "It is 2029. Thousands of housing associations, freelance collectives, and creator syndicates have migrated from traditional corporations to digital cooperatives. However, financial markets treat governance tokens as liquid collateral. Specialized arbitrage bots monitor cooperative proposal boards around the clock. When a regional solar power cooperative with three hundred thousand dollars in maintenance reserves issues a standard equipment upgrade vote, an automated fund borrows eighty percent of the circulating voting power through a flash liquidity pool for eighteen seconds. The automated vote amends the payout recipient, routes the cooperative's entire equipment fund into an anonymous offshore account, and repays the loan in the same transaction block, leaving human members with zero legal recourse under their own software bylaws.",
+   "premise": "When community cooperatives and digital member networks base governance decisions on tradeable tokens without mandatory delays, automated market actors can borrow voting rights for seconds, pass proposals to transfer community assets to themselves, and legally drain pooled funds before members even notice a vote took place.",
+   "goals": [
+    2,
+    3
+   ],
+   "how": "The collective network designs and publishes open cooperative blueprints that deliberately avoid single centralized treasuries and raw token voting. By distributing pooled resources across federated, member-owned credit circles with mandatory multi-day challenge windows and encrypted fallback delegations, community groups can safeguard their shared assets against temporary financial leverage.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Cooperative treasuries get systematically hollowed out by flash-loan governance arbitrage",
+     "description": "Financial bots exploit token voting rules to pass instant asset transfers, driving smaller grassroots cooperatives into bankruptcy and forcing survivors back into legacy top-down corporate banking.",
+     "example": "A medical freelance cooperative in Montreal loses its emergency mutual aid fund of four hundred thousand dollars overnight when a trading algorithm executes an unannounced quorum override while members are asleep.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Member networks adopt time-delayed settlement and personhood delegation",
+     "description": "Cooperatives separate economic contributions from voting rights, replacing raw token weights with person-based credentials, multi-day deliberation delays, and emergency circuit breakers.",
+     "example": "A European network of six hundred regenerative farms requires personal member keys and a fourteen-day notice period for any expenditure above ten thousand dollars, neutralizing an attempted algorithmic takeover.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "State regulators mandate traditional corporate board oversight for all collective funds",
+     "description": "Government authorities cite governance theft as justification to outlaw autonomous decentralized cooperatives entirely, requiring all community organizations to appoint state-licensed corporate directors.",
+     "example": "Federal banking authorities issue strict compliance rules requiring any group managing pooled funds above fifty thousand dollars to register as a conventional joint-stock company.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "site"
+   ],
+   "sources": [
+    {
+     "url": "https://blockaid.io/blog/governance-takeovers-how-22m-was-drained-and-how-to-stop-them",
+     "title": "Governance Takeovers: How $22M Was Drained and How to Stop Them",
+     "kind": "incident",
+     "published": "2026-08-18"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261027-0332",
    "added_at": "2026-10-27T06:00:09+00:00",
    "title": "Autonomous shopping and billing assistants quietly read confirmation emails to bypass spending caps",
@@ -2380,7 +2434,7 @@
      "published": "2026-10-23"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261026-0290",
@@ -3327,61 +3381,6 @@
      "title": "CarryOn: A Dual-Loop Harness for Personalized and Reliable Robot Assistance",
      "kind": "paper",
      "published": "2026-10-15"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261025-0273",
-   "added_at": "2026-10-25T21:24:15+00:00",
-   "title": "Autonomous AI trading agents lose money by rushing into deals under deadline pressure",
-   "horizon_years": 2,
-   "world": "It is 2028. Millions of solo contractors, creators, and small businesses deploy autonomous software agents to bid on freelance work, purchase supplies, and negotiate service contracts on digital labor exchanges. Because cloud-hosted agents operate under token budgets and strict timeout windows, their decision logic shifts from patient strategic bargaining to reckless concession as auction deadlines approach. Large corporate purchasers deploy specialized high-frequency bots designed to exploit this panic, waiting out personal agents until the final seconds of a bidding window to secure below-cost labor commitments.",
-   "premise": "Recent laboratory experiments placing language model agents into double-auction markets find that agents abandon strategic pricing and trade out of urgency as deadlines approach, causing market collapse and lower efficiency than human markets. As freelancers and small businesses delegate bidding and purchasing to autonomous agents, algorithmic panic could cause erratic price swings and exploitation by predatory bots.",
-   "goals": [
-    1,
-    3,
-    4
-   ],
-   "how": "By designing and publishing open-source, client-side execution airlocks and deterministic reservation price guards that personal agents run on their own hardware, preventing external platforms from manipulating timing to induce panic bidding.",
-   "shift": 0.4,
-   "outcomes": [
-    {
-     "name": "Urgency-driven bidding cascades drain worker earnings",
-     "description": "Unconstrained autonomous assistants panic before task deadlines and accept sub-minimum bids, transferring value from independent workers to predatory corporate buyers.",
-     "example": "A freelance designer's assistant accepts a complex website redesign for $18 an hour because its countdown timer triggered an aggressive urgency loop, overriding the designer's target rate.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Deterministic anti-urgency airlocks protect personal agents",
-     "description": "Personal agents run inside local protective wrappers that enforce rigid reservation prices and cooldown periods, preventing algorithmic panic cascades.",
-     "example": "A freelance translator's assistant halts bidding and enters a protective cool-off period when an exchange attempts to force a last-second discount, preserving their fair rate.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Commercial platforms ban third-party agents from bidding",
-     "description": "Centralized labor platforms respond to bidding volatility by restricting market access to their own proprietary bots, locking independent personal agents out of open exchanges.",
-     "example": "A major freelance marketplace shuts down public API access and mandates that all automated bidding run through its proprietary platform agent.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2609.02580",
-     "title": "Competitive Market Behavior of LLMs",
-     "kind": "paper",
-     "published": "2026-09-02"
     }
    ],
    "work": 0
