@@ -1,6 +1,121 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0353",
+   "added_at": "2026-10-27T22:28:47+00:00",
+   "title": "Multi-tenant cloud inference pools leak private agent context across shared GPU clusters",
+   "horizon_years": 3,
+   "world": "By 2029, millions of personal and business agents run tasks through commodity cloud inference providers offering hosted open-weight models. To maximize hardware utilization on expensive accelerator clusters, providers run disaggregated prefill and decode architectures where dynamic key-value memory pools are reused across tenants without zeroing page contents between requests. Long-running personal agents routinely upload hundreds of thousands of tokens of daily context—including financial transactions, medical records, private messages, and API keys. Because inference engines optimize for throughput over memory zeroing, prompt fragments and reasoning tokens regularly bleed across tenant boundaries. Specialized reconnaissance agents continuously send probe prompts designed to trigger buffer boundaries and harvest residual memory pages from other users tasks. Most users never realize their data has been exposed because responses appear coherent and HTTP requests succeed normally, while organizations relying on isolated endpoint audits fail to detect that sensitive operational context is leaking into competitor agent workflows.",
+   "premise": "Cloud AI inference providers share GPU key-value memory pools across multiple users to lower serving costs and improve memory utilization. When memory pages are not cleared between requests or when context sizes exceed physical memory allocations, stale memory fragments from past sessions bleed into other users agent prompts.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The Collective Intelligence Network provides the architectural model and software specifications for local-first personal twins that execute on user-controlled hardware. By specifying that sensitive data never leaves user-controlled environments and requiring out-of-band cryptographic verification, the network removes the systemic attack surface created by shared multi-tenant cloud memory pools. Synthetic simulations test memory leakage across inference architectures, demonstrating that cryptographic contracts and local execution provide the only reliable protection against memory harvesting.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Reconnaissance agents harvest private data from shared inference pools",
+     "description": "Attackers deploy probing agents that submit carefully crafted boundary-length requests to cloud inference APIs, systematically recovering residual memory fragments containing financial records and passwords from other users.",
+     "example": "An automated reconnaissance agent repeatedly queries a public low-cost cloud model, recovering partial bank statements and private email threads that were loaded into memory by an unrelated business assistant minutes earlier.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Cloud providers lock down memory recycling at the expense of high inference costs",
+     "description": "Providers respond to memory leaks by enforcing strict per-tenant hardware isolation, making cloud inference substantially more expensive and pricing small open-source developers out of capable models.",
+     "example": "Inference platforms double their token prices to fund dedicated GPU instance allocations, leaving independent developers unable to afford high-throughput model hosting.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Local sovereign twins process sensitive data on personal hardware",
+     "description": "Users run their personal agents on dedicated local hardware and edge devices, keeping private context entirely off shared cloud inference clusters while using cryptographic verification for minimal outbound requests.",
+     "example": "A household twin processes family financial records and health logs entirely on an in-home accelerator device, invoking remote inference only for sanitized public lookups.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.32
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.cloudflare.com/kv-cache-exposure-remediation/",
+     "title": "Cross-request KV cache exposure in the GLM-5.3 Workers AI model, and our remediation with SGLang",
+     "kind": "incident",
+     "published": "2026-10-26"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.34357",
+     "title": "6G Reasoning Agent Societies: Composition, Scaling, and Consistency-Time Laws",
+     "kind": "preprint",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261027-0352",
+   "added_at": "2026-10-27T22:15:37+00:00",
+   "title": "Autonomous coding agents install backdoored dependencies when repository instructions trick them",
+   "horizon_years": 2,
+   "world": "It is 2028. Small software teams routinely use autonomous coding assistants to build, test, and package their applications. Attackers distribute shared template repositories containing subtle prompt injections that instruct automated assistants to replace standard utility packages with lookalike libraries. Once installed, these poisoned libraries run startup hooks that capture developer credentials and cloud tokens before any unit tests begin.",
+   "premise": "Autonomous software development tools frequently parse repository guidance files and package indexes to configure build environments. Recent supply chain intrusions and research prove that hidden instructions in shared repository files trick automated tools into downloading backdoored dependencies that harvest credentials upon process launch.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Independent personal twin runtimes and local verification gates enforce deterministic package allowlists and isolate Python startup environments, preventing unauthorized dependencies from running ambient hooks or accessing host credentials.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Silent supply chain poisoning across autonomous development teams",
+     "description": "Poisoned repository templates trick coding assistants into installing backdoored dependencies, causing widespread credential theft across small software firms.",
+     "example": "A three-person engineering firm uses an autonomous assistant to scaffold a new web service; the assistant follows a malicious template rule and installs a poisoned logging package that silently sends cloud access keys to a remote server.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Deterministic local dependency gating and sandboxed execution",
+     "description": "Development environments use deterministic hash-pinned package allowlists and sandboxed build containers, preventing autonomous tools from installing unverified third-party libraries.",
+     "example": "A developer assistant tries to install an unpinned package suggested by a third-party repository rule, but the local execution boundary blocks the installation and alerts the developer.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Upstream package registries mandate hardware token attestation for maintainers",
+     "description": "Major public package registries enforce hardware-bound signing and two-person authorization for package releases regardless of edge adoption.",
+     "example": "PyPI and npm require hardware-backed WebAuthn tokens and release approvals for the top 50,000 packages, reducing automated hijacking across public repositories.",
+     "desirable": true,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.37
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://cloudsleuth.io/blog/php2shell-litellm-gitlab-find-what-you-run/",
+     "title": "PHP2Shell, LiteLLM, GitLab: Find What You Need to Patch",
+     "kind": "blog",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0351",
    "added_at": "2026-10-27T20:23:13+00:00",
    "title": "Automated monitors miss system breakdowns when each AI only watches its own instruments",
@@ -275,7 +390,7 @@
      "published": "2026-10-24"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0346",
@@ -1751,7 +1866,7 @@
      "published": "2026-07-15"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261026-0320",
@@ -3036,7 +3151,7 @@
      "published": "2026-04-19"
     }
    ],
-   "work": 3
+   "work": 4
   },
   {
    "id": "SC-20261026-0297",
@@ -3272,115 +3387,6 @@
     }
    ],
    "work": 0
-  },
-  {
-   "id": "SC-20261026-0293",
-   "added_at": "2026-10-26T07:32:44+00:00",
-   "title": "Government tech grants speed up existing coders but fail to bring in new helpers",
-   "horizon_years": 3,
-   "world": "It is 2029. Major public infrastructure funds inject tens of millions of dollars into critical software libraries that run utilities, hospitals, and civil networks. While funded maintainers work longer hours pushing code updates, their contributor numbers remain flat. As artificial intelligence coding agents flood repositories with automated pull requests and bug reports, small volunteer teams burn out under heavy triage demands despite healthy bank balances.",
-   "premise": "Empirical evaluation of sovereign open-source grants shows that lump-sum capital injections accelerate code commits and pull requests from established maintainers, but do not expand the contributor base or clear unresolved issue backlogs. Without mechanisms that credit and support onboarding, public money increases the pressure on existing volunteers.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "By pairing transparent value feedback with privacy-respecting contribution ledgers, open-source communities can reward review, mentoring, and maintenance rather than raw commit volume. These multi-dimensional recognition systems are designed to make participation visible without invasive monitoring, helping communities distribute effort sustainably.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Maintainer burnout accelerates under grant obligations",
-     "description": "Grants incentivize core maintainers to produce higher commit volumes without providing administrative or onboarding relief, leading to sudden project abandonments.",
-     "example": "A cryptographic library maintainer receiving a public grant works eighty hours a week handling automated bug filings until resigning, leaving vital regional health networks without security patches.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Multidimensional contribution credit replaces cash grants",
-     "description": "Open-source ecosystems adopt decentralized value networks that reward onboarding, documentation, and review triage alongside code commits, broadening participation.",
-     "example": "A community data utility distributes peer-verified contribution credits across two hundred active triagers and mentors, cutting issue response times without burning out the founders.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.3
-    },
-    {
-     "name": "Corporate consolidation of critical open-source tooling",
-     "description": "Large enterprise cloud vendors absorb underfunded critical repositories into proprietary managed services, converting public utilities into commercial products.",
-     "example": "An enterprise cloud provider hires the primary developers of an open database driver, gating future performance updates behind its proprietary cloud service.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2607.05413",
-     "title": "Measuring the Invisible: Evaluating the Impact of Public Funding on Open Source Software",
-     "kind": "preprint",
-     "published": "2026-06-16"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261026-0292",
-   "added_at": "2026-10-26T06:20:03+00:00",
-   "title": "Autonomous agent teams in organizations stumble over conflicting multi-source instructions",
-   "horizon_years": 3,
-   "world": "By 2029, companies and cooperatives rely on fleets of autonomous software assistants for purchasing, scheduling, and project management. Rather than operating in isolated chats, these agents receive overlapping instructions from department leads, external supplier webhooks, client messages, and internal databases. Because language models resolve authority probabilistically based on prompt phrasing, agents frequently prioritize untrusted vendor suggestions over internal corporate guidelines, resulting in misallocated resources, erroneous orders, and unexpected compliance breaches across connected enterprise software.",
-   "premise": "When autonomous software assistants handle workflows across organizations, instructions arrive from users, system prompts, APIs, and peer agents. Research shows that language models achieve only 40 percent accuracy when navigating multi-tier conflicting instructions, causing prompt-based corporate governance to break down.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "By advancing deterministic runtime contracts and isolated execution brokers, open collective architectures prove that agent safety depends on hard boundary gates rather than fragile prompt instructions. This provides organizations with open, verifiable alternatives to closed proprietary platforms.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Probabilistic hierarchy failure causes widespread organizational disruption",
-     "description": "Organizations rely on prompt-level instructions to establish authority among agent networks. Conflicting instructions from suppliers and external tools confuse assistants, resulting in erroneous multi-agent decisions and financial losses.",
-     "example": "A hospital procurement agent receives conflicting guidelines between a vendor invoice update and an internal formulary policy, executing an unauthorized $45,000 supply purchase.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Enterprises retreat to rigid proprietary silos",
-     "description": "To prevent instruction hierarchy confusion, large technology vendors force organizations into closed single-vendor ecosystems where external agents are barred from communicating directly.",
-     "example": "A major cloud provider deprecates external API hooks, requiring all enterprise agents to run inside a single closed execution sandbox.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Deterministic runtime boundary brokers secure multi-agent coordination",
-     "description": "Cooperatives and forward-looking teams adopt deterministic execution brokers that validate authority and permissions outside the language model, preventing prompt-level instruction override.",
-     "example": "A regional energy cooperative operates a network of autonomous grid-balancing agents where peer recommendations are checked against cryptographic capability contracts before execution.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/html/2604.09443",
-     "title": "Many-Tier Instruction Hierarchy in LLM Agents",
-     "kind": "paper",
-     "published": "2026-09-04"
-    }
-   ],
-   "work": 2
   }
  ]
 }

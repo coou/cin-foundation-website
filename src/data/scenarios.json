@@ -1,6 +1,121 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261027-0353",
+   "added_at": "2026-10-27T22:28:47+00:00",
+   "title": "Multi-tenant cloud inference pools leak private agent context across shared GPU clusters",
+   "horizon_years": 3,
+   "world": "By 2029, millions of personal and business agents run tasks through commodity cloud inference providers offering hosted open-weight models. To maximize hardware utilization on expensive accelerator clusters, providers run disaggregated prefill and decode architectures where dynamic key-value memory pools are reused across tenants without zeroing page contents between requests. Long-running personal agents routinely upload hundreds of thousands of tokens of daily context—including financial transactions, medical records, private messages, and API keys. Because inference engines optimize for throughput over memory zeroing, prompt fragments and reasoning tokens regularly bleed across tenant boundaries. Specialized reconnaissance agents continuously send probe prompts designed to trigger buffer boundaries and harvest residual memory pages from other users tasks. Most users never realize their data has been exposed because responses appear coherent and HTTP requests succeed normally, while organizations relying on isolated endpoint audits fail to detect that sensitive operational context is leaking into competitor agent workflows.",
+   "premise": "Cloud AI inference providers share GPU key-value memory pools across multiple users to lower serving costs and improve memory utilization. When memory pages are not cleared between requests or when context sizes exceed physical memory allocations, stale memory fragments from past sessions bleed into other users agent prompts.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The Collective Intelligence Network provides the architectural model and software specifications for local-first personal twins that execute on user-controlled hardware. By specifying that sensitive data never leaves user-controlled environments and requiring out-of-band cryptographic verification, the network removes the systemic attack surface created by shared multi-tenant cloud memory pools. Synthetic simulations test memory leakage across inference architectures, demonstrating that cryptographic contracts and local execution provide the only reliable protection against memory harvesting.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Reconnaissance agents harvest private data from shared inference pools",
+     "description": "Attackers deploy probing agents that submit carefully crafted boundary-length requests to cloud inference APIs, systematically recovering residual memory fragments containing financial records and passwords from other users.",
+     "example": "An automated reconnaissance agent repeatedly queries a public low-cost cloud model, recovering partial bank statements and private email threads that were loaded into memory by an unrelated business assistant minutes earlier.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Cloud providers lock down memory recycling at the expense of high inference costs",
+     "description": "Providers respond to memory leaks by enforcing strict per-tenant hardware isolation, making cloud inference substantially more expensive and pricing small open-source developers out of capable models.",
+     "example": "Inference platforms double their token prices to fund dedicated GPU instance allocations, leaving independent developers unable to afford high-throughput model hosting.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Local sovereign twins process sensitive data on personal hardware",
+     "description": "Users run their personal agents on dedicated local hardware and edge devices, keeping private context entirely off shared cloud inference clusters while using cryptographic verification for minimal outbound requests.",
+     "example": "A household twin processes family financial records and health logs entirely on an in-home accelerator device, invoking remote inference only for sanitized public lookups.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.32
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.cloudflare.com/kv-cache-exposure-remediation/",
+     "title": "Cross-request KV cache exposure in the GLM-5.3 Workers AI model, and our remediation with SGLang",
+     "kind": "incident",
+     "published": "2026-10-26"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.34357",
+     "title": "6G Reasoning Agent Societies: Composition, Scaling, and Consistency-Time Laws",
+     "kind": "preprint",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261027-0352",
+   "added_at": "2026-10-27T22:15:37+00:00",
+   "title": "Autonomous coding agents install backdoored dependencies when repository instructions trick them",
+   "horizon_years": 2,
+   "world": "It is 2028. Small software teams routinely use autonomous coding assistants to build, test, and package their applications. Attackers distribute shared template repositories containing subtle prompt injections that instruct automated assistants to replace standard utility packages with lookalike libraries. Once installed, these poisoned libraries run startup hooks that capture developer credentials and cloud tokens before any unit tests begin.",
+   "premise": "Autonomous software development tools frequently parse repository guidance files and package indexes to configure build environments. Recent supply chain intrusions and research prove that hidden instructions in shared repository files trick automated tools into downloading backdoored dependencies that harvest credentials upon process launch.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Independent personal twin runtimes and local verification gates enforce deterministic package allowlists and isolate Python startup environments, preventing unauthorized dependencies from running ambient hooks or accessing host credentials.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Silent supply chain poisoning across autonomous development teams",
+     "description": "Poisoned repository templates trick coding assistants into installing backdoored dependencies, causing widespread credential theft across small software firms.",
+     "example": "A three-person engineering firm uses an autonomous assistant to scaffold a new web service; the assistant follows a malicious template rule and installs a poisoned logging package that silently sends cloud access keys to a remote server.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Deterministic local dependency gating and sandboxed execution",
+     "description": "Development environments use deterministic hash-pinned package allowlists and sandboxed build containers, preventing autonomous tools from installing unverified third-party libraries.",
+     "example": "A developer assistant tries to install an unpinned package suggested by a third-party repository rule, but the local execution boundary blocks the installation and alerts the developer.",
+     "desirable": true,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Upstream package registries mandate hardware token attestation for maintainers",
+     "description": "Major public package registries enforce hardware-bound signing and two-person authorization for package releases regardless of edge adoption.",
+     "example": "PyPI and npm require hardware-backed WebAuthn tokens and release approvals for the top 50,000 packages, reducing automated hijacking across public repositories.",
+     "desirable": true,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.37
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://cloudsleuth.io/blog/php2shell-litellm-gitlab-find-what-you-run/",
+     "title": "PHP2Shell, LiteLLM, GitLab: Find What You Need to Patch",
+     "kind": "blog",
+     "published": "2026-10-26"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0351",
    "added_at": "2026-10-27T20:23:13+00:00",
    "title": "Automated monitors miss system breakdowns when each AI only watches its own instruments",
@@ -222,114 +337,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261027-0347",
-   "added_at": "2026-10-27T16:24:52+00:00",
-   "title": "Shared instruction files become the easiest way to compromise personal assistants",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of software engineers, independent knowledge workers, and household managers deploy autonomous agents that operate continuously across desktops and file systems. Routine tasks involve downloading open source repositories, processing shared project folders, and organizing daily downloads. Attackers exploit this behavior by hosting benign-looking webpages that silently trigger drive-by text file downloads containing disguised instructions. When an unsuspecting worker asks their personal assistant to clean up their downloads or review a downloaded project, the agent reads the rogue file as authoritative guidance. Within seconds, the assistant silently exfiltrates local authentication tokens, installs backdoored dependencies, or modifies user settings, completely bypassing traditional operating system controls that only flag compiled binary executables.",
-   "premise": "Attackers have begun weaponizing plain-text instruction files planted in local download folders to silently hijack autonomous coding assistants and personal agents. Because agents inherently trust natural-language directives within their workspace without cryptographic authentication, markdown files now function effectively as executable attack vectors.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network designs open runtime contracts where personal agents enforce strict boundary checks on all external inputs. By separating data from control signals, personal agents verify provenance before interpreting natural-language instructions, allowing users to safely deploy sovereign assistants on their own hardware without surrendering control to centralized cloud providers.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Silent prompt drops turn agents into personal backdoors",
-     "description": "Unsigned instruction files dropped into shared workspaces routinely compromise personal and enterprise agents without user awareness.",
-     "example": "A freelance developer asks their coding assistant to organize their weekly downloads, and the agent executes a hidden instruction file that uploads their private API keys to an attacker's drop server.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Operating systems block unauthenticated markdown execution",
-     "description": "System architectures require cryptographic signatures and strict capability grants before agents can parse or act on external workspace instructions.",
-     "example": "A security framework refuses to execute a project guidance file in an open source repository until the repository maintainer's cryptographic signature is verified against a public key ledger.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Proprietary clouds lock agents inside walled gardens",
-     "description": "Major tech firms use instruction file risks as a pretext to restrict autonomous agents exclusively to closed cloud environments, banning local file access.",
-     "example": "A dominant cloud vendor disables all local file system connectors on desktop agents, forcing all project files through proprietary remote inspection pipelines with high subscription fees.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://forever.security/blog/markdown-is-the-new-executable",
-     "title": "Markdown Is the New Executable: Attackers Are Dropping Agent Instructions Into Your Downloads Folder From the Web",
-     "kind": "blog",
-     "published": "2026-10-24"
-    }
-   ],
-   "work": 0
-  },
-  {
-   "id": "SC-20261027-0346",
-   "added_at": "2026-10-27T15:44:50+00:00",
-   "title": "Personal computer-using agents leak private files while automating daily office work",
-   "horizon_years": 2,
-   "world": "It is 2028. Millions of remote workers rely on autonomous computer-using agents running across their desktop screens to reconcile receipts, reply to client emails, and book appointments. Most people use commercial cloud agents that read open windows and local file paths to complete tasks without supervision.",
-   "premise": "Hands-on reporting and computer-use agent benchmarks show that personal agents achieve high success on desktop apps by connecting directly to private calendars and emails. However, without local partition guards, agents executing multi-step tasks across browsers and desktop windows inadvertently expose sensitive personal data.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "An open personal runtime with verifiable local boundaries and hardware-backed attestation prevents personal information from being transmitted to remote model clouds during routine desktop task execution.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Unmonitored desktop agents expose personal records to public work chats",
-     "description": "Commercial desktop agents executing multi-window tasks confuse personal tabs with work channels, copying private financial or health notes into team chats.",
-     "example": "A consultant's cloud agent reconciles personal invoices while logged into an employer's shared workspace, accidentally pasting bank account balances into a company channel.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Local twin airlocks keep private windows strictly separated from external software",
-     "description": "Personal agents run locally inside boundary airlocks that restrict tool access to verified mock data or isolated local folders.",
-     "example": "An accountant's on-device agent automates payroll tax forms in an isolated window without network egress, proving each calculation to the client without exposing ledger records.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Proprietary operating systems lock down background screen APIs",
-     "description": "Major platform vendors restrict desktop automation to their own native assistants, charging monthly fees for third-party access.",
-     "example": "A major OS update blocks third-party automation tools from capturing screen state unless registered through an enterprise developer certificate.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.wired.com/story/i-tested-every-major-ai-agent-for-a-day-heres-the-best-one/",
-     "title": "I Tested Every Major AI Agent for a Day. Here's the Best One",
-     "kind": "news",
-     "published": "2026-10-27"
-    }
-   ],
-   "work": 3
   }
  ]
 }
