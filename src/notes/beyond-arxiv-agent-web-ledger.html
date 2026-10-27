@@ -186,7 +186,16 @@
     <div class="sim-shell" id="ledger-sim-app">
       <div class="sim-track-switch" role="group" aria-label="Simulation track selector">
         <button type="button" class="sim-track-btn" id="track-everyday" aria-pressed="true">Track A · 5 Everyday Community Problems (Clean-Room Sandbox)</button>
-        <button type="button" class="sim-track-btn" id="track-infra" aria-pressed="false">Track B · 5 Infrastructure &amp; System Operations</button>
+        <button type="button" class="sim-track-btn" id="track-testnet" aria-pressed="false">Track B · 4 Multi-Party Testnet Cycles (Attention + N×M Scaling + Ledger Critique)</button>
+        <button type="button" class="sim-track-btn" id="track-infra" aria-pressed="false">Track C · 5 Infrastructure &amp; System Operations</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:0.65rem;margin-bottom:1rem;font-size:0.8rem;">
+        <div class="session-card"><strong>14 / 14 Certified</strong><div style="opacity:0.75;">Post-Cycle Validator Pass</div></div>
+        <div class="session-card"><strong>Up to 6H × 18A</strong><div style="opacity:0.75;">3 Req × 3 Ans Coalitions</div></div>
+        <div class="session-card"><strong>6 Passive Triggers</strong><div style="opacity:0.75;">Audio · Email · UI · SMS · Receipt</div></div>
+        <div class="session-card"><strong>18 Skills Learned</strong><div style="opacity:0.75;">Self-Correction Registry</div></div>
+        <div class="session-card"><strong>Ledger v1.0 &rarr; v3.0</strong><div style="opacity:0.75;">Participant RFCs + Critic</div></div>
       </div>
 
       <div class="sim-tabs" role="tablist" aria-label="Scenario selector" id="sim-tab-bar"></div>
@@ -491,6 +500,100 @@
         skill: "skill.v2_0.precondition_safety_gate_compiler -> Upgraded Ledger & ModalityBridge to v2.0 top-level safety gates",
         rewards: { solverHuman: 360, solverAgent: 140, stream: 150, upstream: 120, taskerHuman: 100, taskerAgent: 60, bonus: 70 }
       }
+    ],
+    testnet: [
+      {
+        id: "TESTNET-C1",
+        tabLabel: "C1 · 1×1 (4 Agents) · Overheard Audio + PDF",
+        title: "Childcare FSA Claim Denial & Tax-Credit Split Optimizer (v2.0 -> v2.2)",
+        media: "Passive Attention: Overheard kitchen-table conversation + Incoming TPA Denial PDF ('ERR_DATE_SPAN: Overlapping camp & daycare dates')",
+        vStart: "2.0", vEnd: "2.2",
+        taskerHuman: "Sarah Jenkins (1 Req Human · 2 Sub-Agents: AG-SARAH-WATCH, AG-SARAH-COORD)",
+        taskerCrisis: "Overheard audio + local inbox PDF caught $620 frozen FSA reimbursement due to lump-sum monthly date spans. Local Salience Score: 88.7/100 (100% child PII scrubbed in RAM).",
+        taskerModality: "stepwise_operational_runbook (Weekly Attendance Checklist)",
+        solverHuman: "Marcus Vance (1 Ans Human · 2 Sub-Agents: AG-MARCUS-CRAFT, AG-MARCUS-VERIFY)",
+        solverThesis: "Break monthly tuition PDFs into IRS Pub 503 weekday-only attendance lines (masking federal holidays) and split excess expenses into the federal child-care tax credit.",
+        artifactId: "cap_c1_fsa_week_splitter (4 Ledger Messages Traced)",
+        implSummary: "Self-corrected July 4th holiday overlap on Attempt 2 -> 24/24 held-out TPA claims approved",
+        preconditions: "attention_provenance_hash verified; earned_income_weeks_matched == true",
+        guarantees: "$620 frozen FSA unlocked + $480/yr tax credit optimization (100% held-out accuracy)",
+        stream: "RFC-201 Merged: Added TaskCampaign.attention_provenance_hash & AMBIENT_INTENT_SUMMARY",
+        humanAction: "Safety Gate: Zero child SSNs exported -> Approve generated M-F attendance breakdown -> Submit to TPA portal to unlock $620.",
+        diagram: "[Overheard Audio + Denial PDF] -> [AG-SARAH-WATCH Scrub] -> [4 Ledger Msgs] -> [Self-Correction: Holiday Mask]\n  CycleValidator: CERTIFIED_PASS | Skill Learned: skill.irs_pub503_week_splitter | Ledger: v2.0 -> v2.2",
+        blamed: "CycleValidator Attempt 1 Self-Correction + Ledger Critique CRIT-C1",
+        friction: "Attempt 1 included July 4th inside billable camp span; AG-MARCUS-CRAFT acquired skill.irs_pub503_week_splitter. Participant RFC-201 added passive-attention consent proofs.",
+        skill: "RFC-201 + CRIT-C1 -> Hot-migrated AMBIENT_INTENT_SUMMARY & attention_provenance_hash on Testnet v2.2",
+        rewards: { solverHuman: 420, solverAgent: 140, stream: 160, upstream: 0, taskerHuman: 140, taskerAgent: 70, bonus: 70 }
+      },
+      {
+        id: "TESTNET-C2",
+        tabLabel: "C2 · 1×2 (7 Agents) · SMS + Alt-Tab Rage",
+        title: "Pharmacy Prior-Authorization Override & Pediatric Bridge (v2.2 -> v2.5)",
+        media: "Passive Attention: Pharmacy $340 PA-Block SMS (David) + 38 Rapid Alt+Tab Switches on Clinic PA Portal (Greg)",
+        vStart: "2.2", vEnd: "2.5",
+        taskerHuman: "David Morales (1 Req Human · 3 Sub-Agents: WATCH, PHI-GUARD, COORD)",
+        taskerCrisis: "Insurer step-therapy bot blocked pediatric asthma inhaler refill ($340 cash price) despite documented failure of generic tier 8 months ago. Local Salience: 94.6/100.",
+        taskerModality: "causal_decision_matrix (Override Packet + $12 Bridge Table)",
+        solverHuman: "2 Answering Humans: Elena Rostova (2 Agents) + Hannah Lin (2 Agents)",
+        solverThesis: "Elena's agent extracts 180-day pharmacy trial-failure dates for statutory override (`Shard A`), while Hannah's agent bundles the NCPDP electronic PA packet and pediatric bridge voucher (`Shard B`).",
+        artifactId: "cap_c2_composed_pa_pipeline (5 Ledger Messages Traced)",
+        implSummary: "2-Solver Composed DAG (`AG-ELENA-CRAFT` -> `AG-HANNAH-DAG`) with pediatric dosage guard",
+        preconditions: "mcg_per_actuation == 44; pediatric_age_band_verified == true",
+        guarantees: "30/30 held-out PA appeals approved; immediate cash bridge dropped $340 -> $12; clinic faxing 25m -> 1.8s",
+        stream: "RFC-202 Merged: Added SUBTASK_BOUNTY & COMPOSED_PIPELINE multi-solver DAG weights",
+        humanAction: "Safety Gate: Pediatric 44 mcg/puff equivalence verified -> Transmit NCPDP statutory override -> Redeem $12 same-day bridge voucher.",
+        diagram: "[SMS + Alt-Tab Signal] -> [Shard A: Elena Statute Matcher] + [Shard B: Hannah NCPDP Composer]\n  CycleValidator: CERTIFIED_PASS | Skill Learned: skill.pediatric_dosage_equivalence_guard | Ledger: v2.2 -> v2.5",
+        blamed: "CycleValidator Attempt 1 Self-Correction + Ledger Critique CRIT-C2",
+        friction: "Attempt 1 suggested adult 220 mcg bridge inhaler; AG-HANNAH-SAFETY acquired skill.pediatric_dosage_equivalence_guard. Participant RFC-202 added multi-solver DAG subcontracting.",
+        skill: "RFC-202 + CRIT-C2 -> Hot-migrated SUBTASK_BOUNTY, COMPOSED_PIPELINE & PipelinePortContract on Testnet v2.5",
+        rewards: { solverHuman: 440, solverAgent: 140, stream: 150, upstream: 0, taskerHuman: 130, taskerAgent: 70, bonus: 70 }
+      },
+      {
+        id: "TESTNET-C3",
+        tabLabel: "C3 · 2×2 (10 Agents) · Neighbor Cohort Signal",
+        title: "Building-Wide RUBS Water Overbilling Coalition (v2.5 -> v2.8)",
+        media: "Passive Attention: Portal Invoice +275% Spike (Priya) + Shared Hallway & Bank Delta Signal (Maria in Same Building)",
+        vStart: "2.5", vEnd: "2.8",
+        taskerHuman: "2 Requesting Humans: Priya Nair (3 Agents) + Maria Delgado (3 Agents)",
+        taskerCrisis: "Both tenants in `BLDG-OAK-88` hit with a 2.7x RUBS water spike ($0.19/sqft) caused by an un-deducted ground-floor commercial laundry leak. Single tenant alone had 1 equation and 2 unknowns.",
+        taskerModality: "Dual Modality: Runbook (for Priya) + Decision Matrix (for Maria)",
+        solverHuman: "2 Answering Humans: Samira Patel (2 Agents) + Devon Brooks (2 Agents)",
+        solverThesis: "Samira's agent combines Priya's (750 sqft) and Maria's (1,150 sqft) blinded data points to solve the exact building master-meter CCF, and Devon's agent applies the mandatory 22% commercial deduction.",
+        artifactId: "cap_c3_coalition_rubs_auditor (6 Ledger Messages Traced)",
+        implSummary: "2-Tenant Coalition + 2-Solver Algebraic CCF Reconstructor & Statutory Deductor",
+        preconditions: "coalition_size >= 2 independent sqft tiers; mixed_use_zoning_verified == true",
+        guarantees: "$272.50/mo reclaimed for Priya & Maria ($3,480/mo building-wide) across 18 held-out RUBS invoices",
+        stream: "RFC-203 Merged: Added COALITION_INTENT_SHARD & per_human_modality_views_json",
+        humanAction: "Safety Gate: Lawful residential water share tendered -> File joint 2-unit mathematical proof & 22% commercial deduction demand.",
+        diagram: "[Priya 3A + Maria 3A] --(coalitions/bldg_oak_88)--> [Samira 2A + Devon 2A Solver Pipeline]\n  CycleValidator: CERTIFIED_PASS | Skill Learned: skill.coalition_campaign_merger | Ledger: v2.5 -> v2.8",
+        blamed: "CycleValidator Attempt 1 Self-Correction + Ledger Critique CRIT-C3",
+        friction: "1-unit dispute was algebraically under-determined; AG-PRIYA-COORD acquired skill.coalition_campaign_merger. Participant RFC-203 added multi-requester coalition headers.",
+        skill: "RFC-203 + CRIT-C3 -> Hot-migrated BlindedCohortRendezvous & per_human_modality_views_json on Testnet v2.8",
+        rewards: { solverHuman: 420, solverAgent: 150, stream: 160, upstream: 0, taskerHuman: 140, taskerAgent: 60, bonus: 70 }
+      },
+      {
+        id: "TESTNET-C4",
+        tabLabel: "C4 · 3×3 (18 Agents) · Full Multi-Party",
+        title: "3-Family School Bus Cancellation Carpool + Bulk Co-Op Trunk Drop (v2.8 -> v3.0)",
+        media: "Passive Attention: 06:45 School Bus Suspension SMS (Sarah) + Car Voice Memo (David) + Delivery Fee Leak (Maria)",
+        vStart: "2.8", vEnd: "3.0",
+        taskerHuman: "3 Requesting Humans (9 Sub-Agents): Sarah (3A), David (3A), Maria (3A)",
+        taskerCrisis: "Route 14 afternoon bus suspended for 6 weeks; 15:10 pickup collides with work shifts across 3 families in `GRID-WEST-14` ($1,560/mo commercial ride/delivery cost).",
+        taskerModality: "3 Bespoke Views Rendered Simultaneously (1 Runbook + 2 Decision Matrices)",
+        solverHuman: "3 Answering Humans (9 Sub-Agents): Hannah (3A), Samira (3A), Marcus (3A)",
+        solverThesis: "Hannah's 3 agents solve the Mon-Fri rotation with N-1 sick-driver failover; Samira's 3 agents bundle the weekly co-op grocery trunk drop (<=18m cold chain); Marcus's 3 agents net IRS mileage against grocery shares.",
+        artifactId: "cap_c4_3x3_community_logistics_dag (9 Ledger Messages Traced)",
+        implSummary: "18-Agent, 3-Shard Parallel DAG with 500m Geo-Fuzzing & Atomic Settlement Barrier",
+        preconditions: "grid_cell_snapping == 500m; parent_release_pin_2of3 == true; cold_chain_dwell_min <= 18",
+        guarantees: "100% Mon-Fri pickup coverage across 30 simulated 6-week schedules (with 4 sick days); $1,560/mo saved",
+        stream: "RFC-204 Merged: Added DAG_FANOUT_MANIFEST & Specialty-Indexed TopicSubscriptionFilter",
+        humanAction: "Safety Gate: 2-of-3 parent release PIN active -> Mon/Wed: David drives; Tue: Sarah drives; Thu/Fri: Maria drives + Co-op trunk drop.",
+        diagram: "[3 Req Humans · 9 Sub-Agents] ===(9 Sharded Ledger Msgs)===> [3 Ans Humans · 9 Sub-Agents]\n  CycleValidator: CERTIFIED_PASS | Skills: ilp_carpool_roster + cold_chain_guard | Ledger: v2.8 -> v3.0",
+        blamed: "CycleValidator Attempt 1 Self-Correction + Ledger Critique CRIT-C4",
+        friction: "Attempt 1 lacked N-1 backup driver and put dairy stop before school pickup; agents acquired 2 new skills and submitted RFC-204 for specialty sub-topic sharding.",
+        skill: "RFC-204 + CRIT-C4 -> Upgraded Testnet Ledger to v3.0 with DAG_FANOUT_MANIFEST & Specialty Sub-Topic Routing",
+        rewards: { solverHuman: 420, solverAgent: 150, stream: 150, upstream: 0, taskerHuman: 150, taskerAgent: 60, bonus: 70 }
+      }
     ]
   };
 
@@ -562,23 +665,20 @@
   }
 
   const btnEveryday = document.getElementById("track-everyday");
+  const btnTestnet = document.getElementById("track-testnet");
   const btnInfra = document.getElementById("track-infra");
-  btnEveryday.addEventListener("click", function() {
-    currentTrack = "everyday";
+  function setTrack(trackName) {
+    currentTrack = trackName;
     currentIdx = 0;
-    btnEveryday.setAttribute("aria-pressed", "true");
-    btnInfra.setAttribute("aria-pressed", "false");
+    btnEveryday.setAttribute("aria-pressed", trackName === "everyday" ? "true" : "false");
+    btnTestnet.setAttribute("aria-pressed", trackName === "testnet" ? "true" : "false");
+    btnInfra.setAttribute("aria-pressed", trackName === "infra" ? "true" : "false");
     renderTabs();
     renderEvent();
-  });
-  btnInfra.addEventListener("click", function() {
-    currentTrack = "infra";
-    currentIdx = 0;
-    btnInfra.setAttribute("aria-pressed", "true");
-    btnEveryday.setAttribute("aria-pressed", "false");
-    renderTabs();
-    renderEvent();
-  });
+  }
+  btnEveryday.addEventListener("click", function() { setTrack("everyday"); });
+  btnTestnet.addEventListener("click", function() { setTrack("testnet"); });
+  btnInfra.addEventListener("click", function() { setTrack("infra"); });
 
   const cheatBtn = document.getElementById("btn-test-cheat");
   const cheatOut = document.getElementById("cheat-output");
