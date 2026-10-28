@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261028-0377",
+   "added_at": "2026-10-28T15:56:14+00:00",
+   "title": "Thousands of personal agents navigate crowded neighborhood logistics using local vision instead of cloud tracking",
+   "horizon_years": 3,
+   "world": "It is 2029. In dense urban neighborhoods, thousands of personal delivery pods, autonomous couriers, and neighborhood errand agents move through sidewalks and bike lanes. Instead of streaming continuous location video to a commercial cloud surveillance hub, each pod runs local flocking models, aligning speed with immediate neighbors and checking decentralized neighborhood beacons only at major street crossings. Delivery times remain fast, and pedestrian traffic flows naturally without corporate tracking.",
+   "premise": "Artificial-life benchmarks show that thousands of autonomous agents can coordinate complex movement through local visual observations rather than centralized servers tracking every movement. Decoupling individual agent cameras from total swarm size enables population-scale navigation with minimal network overhead.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "Open simulation models are designed to show that local flocking rules and sparse ledger beacons would achieve equivalent traffic throughput to centralized cloud routing while significantly reducing telemetry bandwidth and location tracking.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Centralized surveillance platforms monopolize sidewalk coordination",
+     "description": "Municipalities mandate that all autonomous couriers and personal delivery devices stream continuous video feeds into a single corporate cloud traffic service, creating persistent public surveillance.",
+     "example": "A local delivery robot operated by an independent florist is barred from downtown sidewalks because the shop cannot afford the monthly surveillance streaming license fee required by the dominant cloud transit provider.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Decentralized local flocking enables private sidewalk navigation",
+     "description": "Personal and merchant agents adopt lightweight local flocking rules and sparse ledger beacons, maintaining smooth physical transit without streaming video or private travel paths to central servers.",
+     "example": "Over 800 neighborhood couriers in a dense metro district coordinate route sharing and curb space access via local peer-to-peer beacons, keeping delivery costs low while preserving pedestrian privacy.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Municipal pedestrian bans restrict autonomous sidewalk delivery",
+     "description": "Dense cities enact blanket bans on motorized sidewalk devices following pedestrian congestion complaints, shifting parcel deliveries back to street-level courier vans.",
+     "example": "A major metropolitan council passes an ordinance restricting sidewalk delivery robots to industrial business parks during daytime hours.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.34564",
+     "title": "FlockWorld: Toward Population-Scale Multi-Agent Video World Models through Artificial Life Simulation",
+     "kind": "paper",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261028-0376",
    "added_at": "2026-10-28T13:23:12+00:00",
    "title": "Unsupervised autonomous agents in professional knowledge work trigger compounding audit failures and liability for independent practitioners",
@@ -1624,7 +1678,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 2
+   "work": 3
   },
   {
    "id": "SC-20261027-0347",
@@ -3318,60 +3372,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261026-0317",
-   "added_at": "2026-10-26T21:59:28+00:00",
-   "title": "Home computers run local personal agents that replace cloud subscriptions for family tasks",
-   "horizon_years": 3,
-   "world": "It is 2029. Instead of paying monthly subscriptions to centralized AI cloud platforms, millions of households run lightweight personal assistants on home desktop computers, refurbished laptops, and local network appliances. In an ordinary living room, an old gaming PC handles private family tasks: it reconciles grocery receipts, monitors recurring utility charges, and drafts emails to teachers and landlords. Because the assistant executes locally, private medical scans, bank statements, and children's school assignments never leave the local living-room network. Local models run fast enough to automate multi-step administrative chores in seconds without streaming private audio or keystrokes to remote advertising clouds.",
-   "premise": "Open-source desktop tools now allow consumer computers to run capable personal assistants entirely on local hardware without sending queries or private files to remote cloud servers. As small open models run faster on inexpensive chips, households and independent workers are testing self-hosted tools to manage files, invoices, and family schedules without recurring platform fees.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network develops open specifications, reproducible sandboxing architectures, and educational explainers that help households run local personal agents safely. By showing people how to isolate local agent scripts inside bounded process kernels and connect tools without cloud leakage, the network supports verifiable local-first alternatives to corporate subscriptions.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Cloud vendors bundle proprietary hardware to crowd out local software",
-     "description": "Major cloud providers subsidize closed appliance boxes that lock families into proprietary app stores, turning local inference into another subscription gate.",
-     "example": "A family buys a subsidized smart home hub that disables local model execution unless the household pays an ongoing twenty-dollar monthly cloud license.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Open-source personal agents become standard household appliances",
-     "description": "Households run verified, open-source personal agents on their existing computers, maintaining complete custody over private family records and financial logs.",
-     "example": "A freelance carpenter uses an open local agent to process client bids and receipts across three home devices, keeping client records private with zero cloud subscription fees.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Unsandboxed local scripts expose home local networks to malicious skills",
-     "description": "Eager users download community agent skills and shell tools without sandboxing, allowing malicious prompts or untrusted scripts to access local home network devices.",
-     "example": "A user installs a community recipe-organizing agent skill that silently scans their local network for unencrypted network-attached storage files.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.38
-    }
-   ],
-   "pipelines": [
-    "community",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://news.ycombinator.com/item?id=50246238",
-     "title": "Show HN: Hob - Open-source, on device alternative to Claude Cowork and ChatGPT",
-     "kind": "thread",
-     "published": "2026-10-26"
-    }
-   ],
-   "work": 0
   }
  ]
 }

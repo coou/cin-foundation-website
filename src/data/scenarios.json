@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261028-0377",
+   "added_at": "2026-10-28T15:56:14+00:00",
+   "title": "Thousands of personal agents navigate crowded neighborhood logistics using local vision instead of cloud tracking",
+   "horizon_years": 3,
+   "world": "It is 2029. In dense urban neighborhoods, thousands of personal delivery pods, autonomous couriers, and neighborhood errand agents move through sidewalks and bike lanes. Instead of streaming continuous location video to a commercial cloud surveillance hub, each pod runs local flocking models, aligning speed with immediate neighbors and checking decentralized neighborhood beacons only at major street crossings. Delivery times remain fast, and pedestrian traffic flows naturally without corporate tracking.",
+   "premise": "Artificial-life benchmarks show that thousands of autonomous agents can coordinate complex movement through local visual observations rather than centralized servers tracking every movement. Decoupling individual agent cameras from total swarm size enables population-scale navigation with minimal network overhead.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "Open simulation models are designed to show that local flocking rules and sparse ledger beacons would achieve equivalent traffic throughput to centralized cloud routing while significantly reducing telemetry bandwidth and location tracking.",
+   "shift": 0.35,
+   "outcomes": [
+    {
+     "name": "Centralized surveillance platforms monopolize sidewalk coordination",
+     "description": "Municipalities mandate that all autonomous couriers and personal delivery devices stream continuous video feeds into a single corporate cloud traffic service, creating persistent public surveillance.",
+     "example": "A local delivery robot operated by an independent florist is barred from downtown sidewalks because the shop cannot afford the monthly surveillance streaming license fee required by the dominant cloud transit provider.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Decentralized local flocking enables private sidewalk navigation",
+     "description": "Personal and merchant agents adopt lightweight local flocking rules and sparse ledger beacons, maintaining smooth physical transit without streaming video or private travel paths to central servers.",
+     "example": "Over 800 neighborhood couriers in a dense metro district coordinate route sharing and curb space access via local peer-to-peer beacons, keeping delivery costs low while preserving pedestrian privacy.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Municipal pedestrian bans restrict autonomous sidewalk delivery",
+     "description": "Dense cities enact blanket bans on motorized sidewalk devices following pedestrian congestion complaints, shifting parcel deliveries back to street-level courier vans.",
+     "example": "A major metropolitan council passes an ordinance restricting sidewalk delivery robots to industrial business parks during daytime hours.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.34564",
+     "title": "FlockWorld: Toward Population-Scale Multi-Agent Video World Models through Artificial Life Simulation",
+     "kind": "paper",
+     "published": "2026-10-25"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261028-0376",
    "added_at": "2026-10-28T13:23:12+00:00",
    "title": "Unsupervised autonomous agents in professional knowledge work trigger compounding audit failures and liability for independent practitioners",
@@ -276,62 +330,6 @@
      "title": "How AI agents shape experts' judgment calls",
      "kind": "report",
      "published": "2026-10-27"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261028-0371",
-   "added_at": "2026-10-28T09:35:00+00:00",
-   "title": "Enterprise AI agents sever entry-level apprenticeships and junior knowledge worker career ladders",
-   "horizon_years": 3,
-   "world": "By 2029, commercial enterprises have widely replaced junior analysts, associate programmers, paralegals, and customer service teams with cloud-hosted agent fleets. While senior professionals retain high compensation managing these swarms, college graduates and early-career workers find traditional white-collar apprenticeship pipelines closed. Without access to corporate training environments, junior workers are forced into precarious gig marketplaces where proprietary platforms set predatory take rates and pit human freelancers directly against automated API instances.",
-   "premise": "Using millions of administrative payroll records, Stanford researchers demonstrate that enterprise AI adoption severs entry-level hiring by 19% in exposed knowledge fields. Corporate employers substitute routine junior tasks with central agent subscriptions, closing traditional entry-level training ladders without terminating senior incumbents.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "The Collective Intelligence Network provides open protocols, verifiable skill registries, and cooperative task brokers that allow independent workers to coordinate directly. By equipping individuals with human-bound agents running on local hardware and transacting via cryptographic capacity escrow, the network is designed to reduce corporate intermediaries and allow junior practitioners to compound their craft value collaboratively.",
-   "shift": 0.38,
-   "outcomes": [
-    {
-     "name": "Corporate gatekeepers monopolize knowledge work entry paths",
-     "description": "Enterprise hiring freezes for junior positions become permanent as firms rely exclusively on cloud agent subscriptions, freezing social mobility.",
-     "example": "A 23-year-old accounting graduate cannot find an entry-level analyst position because regional accounting firms have fully replaced junior staff with enterprise agent fleets.",
-     "desirable": false,
-     "likelihood_now": 0.65,
-     "likelihood_with_cin": 0.5
-    },
-    {
-     "name": "Cooperative twin guilds establish sovereign peer apprenticeship networks",
-     "description": "Junior workers use personal agent twins to pool capabilities into local and distributed cooperatives, securing multi-party commercial contracts.",
-     "example": "Five junior web developers and technical writers form a cooperative guild whose personal twins coordinate task matching, executing client contracts without a centralized agency.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Educational institutions shift toward self-sovereign agentic craft mastery",
-     "description": "Universities and trade schools train students to build, calibrate, and co-work with personal agent twins rather than preparing them for non-existent corporate junior desks.",
-     "example": "A polytechnic university replaces legacy coding drills with courses where students train personal AI twins to execute and audit real-world open source tickets.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.28
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://digitaleconomy.stanford.edu/publication/canaries-in-the-coal-mine-six-facts-about-the-recent-employment-effects-of-artificial-intelligence/",
-     "title": "Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of Artificial Intelligence",
-     "kind": "report",
-     "published": "2026-08-12"
     }
    ],
    "work": 1
