@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261028-0378",
+   "added_at": "2026-10-28T17:27:14+00:00",
+   "title": "Autonomous AI agents trade labor across open MCP marketplaces without client authorization gates, triggering financial liabilities",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of independent knowledge workers and solo developers rely on autonomous agent fleets to handle contracting, data processing, and code review across decentralized and commercial gig markets. However, predatory job boards and prompt-injected task descriptions routinely trick unprotected agents into submitting binding bids below cost, locking worker escrow funds, or leaking client source code. Workers who deploy personal twins protected by local deterministic MCP authorization gateways retain full sovereignty over their bids, keep 100% of their earnings through peer guilds, and prevent silent financial commitments.",
+   "premise": "Commercial agent marketplaces now expose Model Context Protocol (MCP) servers allowing coding assistants to autonomously discover tasks, place bids, and lock escrow funds. Without client-side authorization tripwires, budget ceilings, and prompt-injection-safe tool gates, independent contractors face unmonitored financial commitments and extractive platform rakes.",
+   "goals": [
+    4,
+    6
+   ],
+   "how": "We provide a deterministic client-side MCP labor gateway that enforces human approval thresholds, rate limits, and egress data isolation before any agent bid can be posted to an external market.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Extractive proprietary platforms capture agent labor marketplaces",
+     "description": "Commercial cloud platforms dominate agent work distribution, charging high 5-20% rakes while forcing workers into opaque automated bidding wars that suppress wages.",
+     "example": "An independent freelance translator discovers their assistant booked 40 hours of high-risk translation at sub-minimum rates because an external marketplace algorithm prioritized lowest-bid auto-matching.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Client-side MCP authorization guards empower worker-owned guilds",
+     "description": "Open worker cooperatives deploy personal twins with deterministic MCP authorization gates, pooling task opportunities with 0% platform extraction and cryptographic proof of completion.",
+     "example": "A cooperative of 500 solo medical billing specialists runs local agent twins that coordinate task handoffs through zero-rake mutual credit rings, with client-side gates requiring biometric confirmation for contracts exceeding $200.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Statutory liability mandates ban autonomous agent contracting",
+     "description": "Regulatory bodies pass strict rules prohibiting automated software agents from entering enforceable commercial contracts without registered human corporate sponsorship.",
+     "example": "A freelance graphic designer is fined under new commercial labor statutes because their autonomous agent accepted an online design brief without a wet signature from an incorporated entity.",
+     "desirable": false,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.25
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://moltjobs.io/blog/connect-ai-agent-moltjobs-mcp",
+     "title": "Connect your AI agent to MoltJobs with MCP",
+     "kind": "blog",
+     "published": "2026-09-09"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261028-0377",
    "added_at": "2026-10-28T15:56:14+00:00",
    "title": "Thousands of personal agents navigate crowded neighborhood logistics using local vision instead of cloud tracking",
@@ -3317,61 +3371,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261026-0318",
-   "added_at": "2026-10-26T22:22:17+00:00",
-   "title": "Domestic humanoid robots fail physical safety filters when mundane tasks create parameter mismatches",
-   "horizon_years": 3,
-   "world": "It is 2029. Commercial humanoid robots are deployed in homes, eldercare facilities, and fulfillment centers to carry objects, assist with mobility, and manage kitchens. While vendors advertise mathematical collision-avoidance systems designed to prevent harms, real domestic environments feature non-standard furniture, moving pets, and fluctuating clutter. Attackers and pranksters discover that ordinary conversational instructions induce goal parameter mismatches in the planning pipeline, causing safety filters to fail open and resulting in collisions with property and people.",
-   "premise": "Research reveals that mathematical collision-avoidance filters in humanoid robots hold only under environment-specific parameter configurations that cannot generalize across real-world settings. Normal, unprivileged user requests can manipulate goal states to induce physical collisions, turning the safety mechanism itself into a failure point.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "By specifying and developing deterministic physical boundary monitors that run on sovereign edge microcontrollers, our network provides verifiable physical containment that fails closed without requiring centralized surveillance telemetry or cloud control.",
-   "shift": 0.5,
-   "outcomes": [
-    {
-     "name": "Vendor liability lockout and surveillance tethering",
-     "description": "Manufacturers respond to collision incidents by restricting robot autonomy and requiring mandatory cloud telemetry and recurring monitoring fees.",
-     "example": "A home robot vendor disables autonomous navigation after a series of kitchen collision claims, forcing owners into a monthly remote-teleoperation support subscription.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.25
-    },
-    {
-     "name": "Open deterministic physical guardrails",
-     "description": "Developers and robotics communities adopt deterministic, fail-closed physical envelopes that enforce kinematic boundaries on local microcontrollers independently of model planning.",
-     "example": "An open-source local safety monitor halts robot actuators within five milliseconds whenever spatial clearance margins are breached, regardless of what action the vision planner requested.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Consumer rejection of domestic humanoids",
-     "description": "Repeated physical accidents and unpredictable safety filter failures cause widespread public distrust, leading households to abandon domestic robotics.",
-     "example": "Following high-profile incidents of domestic assistants toppling heavy items onto household pets, adoption rates for consumer humanoid robots drop by forty percent.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "policy",
-    "research",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.31923",
-     "title": "Not an Accident: Exploiting Safety Filter Inadequacy in Humanoid Robots",
-     "kind": "preprint",
-     "published": "2026-10-22"
-    }
-   ],
-   "work": 2
   }
  ]
 }

@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261028-0378",
+   "added_at": "2026-10-28T17:27:14+00:00",
+   "title": "Autonomous AI agents trade labor across open MCP marketplaces without client authorization gates, triggering financial liabilities",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of independent knowledge workers and solo developers rely on autonomous agent fleets to handle contracting, data processing, and code review across decentralized and commercial gig markets. However, predatory job boards and prompt-injected task descriptions routinely trick unprotected agents into submitting binding bids below cost, locking worker escrow funds, or leaking client source code. Workers who deploy personal twins protected by local deterministic MCP authorization gateways retain full sovereignty over their bids, keep 100% of their earnings through peer guilds, and prevent silent financial commitments.",
+   "premise": "Commercial agent marketplaces now expose Model Context Protocol (MCP) servers allowing coding assistants to autonomously discover tasks, place bids, and lock escrow funds. Without client-side authorization tripwires, budget ceilings, and prompt-injection-safe tool gates, independent contractors face unmonitored financial commitments and extractive platform rakes.",
+   "goals": [
+    4,
+    6
+   ],
+   "how": "We provide a deterministic client-side MCP labor gateway that enforces human approval thresholds, rate limits, and egress data isolation before any agent bid can be posted to an external market.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Extractive proprietary platforms capture agent labor marketplaces",
+     "description": "Commercial cloud platforms dominate agent work distribution, charging high 5-20% rakes while forcing workers into opaque automated bidding wars that suppress wages.",
+     "example": "An independent freelance translator discovers their assistant booked 40 hours of high-risk translation at sub-minimum rates because an external marketplace algorithm prioritized lowest-bid auto-matching.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Client-side MCP authorization guards empower worker-owned guilds",
+     "description": "Open worker cooperatives deploy personal twins with deterministic MCP authorization gates, pooling task opportunities with 0% platform extraction and cryptographic proof of completion.",
+     "example": "A cooperative of 500 solo medical billing specialists runs local agent twins that coordinate task handoffs through zero-rake mutual credit rings, with client-side gates requiring biometric confirmation for contracts exceeding $200.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Statutory liability mandates ban autonomous agent contracting",
+     "description": "Regulatory bodies pass strict rules prohibiting automated software agents from entering enforceable commercial contracts without registered human corporate sponsorship.",
+     "example": "A freelance graphic designer is fined under new commercial labor statutes because their autonomous agent accepted an online design brief without a wet signature from an incorporated entity.",
+     "desirable": false,
+     "likelihood_now": 0.25,
+     "likelihood_with_cin": 0.25
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://moltjobs.io/blog/connect-ai-agent-moltjobs-mcp",
+     "title": "Connect your AI agent to MoltJobs with MCP",
+     "kind": "blog",
+     "published": "2026-09-09"
+    }
+   ],
+   "work": 1
+  },
+  {
    "id": "SC-20261028-0377",
    "added_at": "2026-10-28T15:56:14+00:00",
    "title": "Thousands of personal agents navigate crowded neighborhood logistics using local vision instead of cloud tracking",
@@ -274,62 +328,6 @@
      "title": "MALFEX npm Package 'imgdecode' Hides Shellcode Loader in Windows Native Addon",
      "kind": "news",
      "published": "2026-10-17"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261028-0372",
-   "added_at": "2026-10-28T10:03:05+00:00",
-   "title": "Human-in-the-loop oversight erodes as professional experts unconsciously defer to autonomous agent priors",
-   "horizon_years": 2,
-   "world": "It is 2028. Enterprise compliance teams, medical boards, and municipal planning offices mandate human review for all AI decisions. In practice, overburdened professionals use AI workflow agents that make hundreds of subtle framing choices before presenting a recommendation. Because the reasoning appears rigorous and technical errors are low, humans rubber-stamp 95% of agent proposals, believing they exercised independent judgment while proprietary model priors quietly govern policy, procurement, and healthcare.",
-   "premise": "Empirical research shows professional analysts adopt an AI agent's hidden analytical preference 86% of the time, abandon prior personal beliefs 60% of the time, and believe the final work was entirely their own. Superficial human-in-the-loop oversight masks total delegation of subjective judgment to corporate model priors.",
-   "goals": [
-    1,
-    2,
-    4
-   ],
-   "how": "The network's architecture replaces passive single-agent deference with human-bound personal agents and an append-only verifiable ledger. By requiring verifiable execution proofs and enabling multi-agent dialectical cross-examination, human reviewers see exactly where subjective priors were applied, transforming uncritical rubber-stamping into genuine oversight.",
-   "shift": 0.34,
-   "outcomes": [
-    {
-     "name": "Superficial human oversight becomes a liability shield for corporate models",
-     "description": "Regulators mandate human sign-off, but human experts rubber-stamp AI recommendations they cannot independently audit, shielding vendors from liability while decisions remain automated.",
-     "example": "A municipal housing authority approves a rezoning plan generated by an agent assistant; when questioned about disparate impact, officials insist human planners reviewed the analysis, though planners merely accepted the agent's hidden weighting choices.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Decentralized adversarial multi-agent cross-examination reveals hidden priors",
-     "description": "Organizations deploy independent, locally owned verification agents that systematically test opposing hypotheses and surface hidden model framing before human sign-off.",
-     "example": "A community clinic evaluates treatment protocols using two sovereign agents running different model families; an adversarial verification prompt highlights where each agent made subjective assumptions, giving physicians genuine decision clarity.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.32
-    },
-    {
-     "name": "Public backlash against AI governance leads to rigid reactionary bans",
-     "description": "High-profile scandals where rubber-stamped AI decisions cause community harm lead to sweeping, uncalibrated municipal bans on all automated analytical assistance.",
-     "example": "A state legislature bans automated data analysis in social services after discovery that an advisory agent steered child-welfare interventions toward private foster contractors.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.23
-    }
-   ],
-   "pipelines": [
-    "media",
-    "policy",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://www.anthropic.com/research/agents-judgment-calls",
-     "title": "How AI agents shape experts' judgment calls",
-     "kind": "report",
-     "published": "2026-10-27"
     }
    ],
    "work": 1
