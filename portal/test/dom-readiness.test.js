@@ -189,3 +189,54 @@ test('summarizeSettledState produces plain language UI summary without internal 
   assert.equal(errorSummary.ok, false);
   assert.equal(errorSummary.status_class, 'status-err');
 });
+
+
+test('twin-core.js ensures out-of-order mutation arrays fail closed cleanly (Revision 2)', async () => {
+  // 1. evaluateSettledState fails closed on out-of-order array
+  const outOfOrder = [
+    { at_ms: 100, target: 'div', type: 'childList' },
+    { at_ms: 20, target: 'div', type: 'childList' }
+  ];
+  const r1 = evaluateSettledState(outOfOrder);
+  assert.equal(r1.ok, false);
+  assert.equal(r1.status, 'error');
+  assert.equal(r1.diagnostics, 'out_of_order_events');
+  assert.ok(r1.reason.includes('monotonically non-decreasing'));
+
+  // 2. evaluateSettledState fails closed on event timestamp before as_of_start_ms
+  const pastEvent = [
+    { at_ms: 20, target: 'div', type: 'childList' }
+  ];
+  const r2 = evaluateSettledState(pastEvent, { as_of_start_ms: 50 });
+  assert.equal(r2.ok, false);
+  assert.equal(r2.status, 'error');
+  assert.equal(r2.diagnostics, 'out_of_order_events');
+
+  // 3. benchmarkActuationSequence fails closed if any step has out-of-order mutations
+  const stepsWithOutOfOrder = [
+    { step_name: 'Valid step', mutations: [{ at_ms: 10, target: 'input', type: 'attributes' }] },
+    { step_name: 'Corrupted step', mutations: outOfOrder }
+  ];
+  const benchResult = benchmarkActuationSequence(stepsWithOutOfOrder);
+  assert.equal(benchResult.ok, false);
+  assert.equal(benchResult.meets_target_reduction, false);
+  assert.equal(benchResult.diagnostics, 'out_of_order_events');
+  assert.ok(benchResult.reason.includes('Corrupted step'));
+
+  // 4. waitForSettledState fails closed when adapter yields out-of-order events
+  const badAdapter = {
+    simulateEvents() {
+      return outOfOrder;
+    }
+  };
+  const waitResult = await waitForSettledState(badAdapter);
+  assert.equal(waitResult.ok, false);
+  assert.equal(waitResult.status, 'error');
+  assert.equal(waitResult.diagnostics, 'out_of_order_events');
+
+  // 5. waitForSettledState fails closed on invalid target
+  const nullTargetResult = await waitForSettledState(null);
+  assert.equal(nullTargetResult.ok, false);
+  assert.equal(nullTargetResult.status, 'error');
+  assert.equal(nullTargetResult.diagnostics, 'invalid_target');
+});

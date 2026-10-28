@@ -9685,7 +9685,9 @@ export function evaluateSettledState(mutationTimeline, options = {}) {
   }
 
   // Validate all timeline events
-  let lastTimestamp = 0;
+  let lastTimestamp = (typeof options.as_of_start_ms === 'number' && Number.isFinite(options.as_of_start_ms) && options.as_of_start_ms >= 0)
+    ? options.as_of_start_ms
+    : 0;
   for (let i = 0; i < mutationTimeline.length; i++) {
     const ev = mutationTimeline[i];
     if (ev === null || typeof ev !== 'object' || Array.isArray(ev)) {
@@ -9805,6 +9807,40 @@ export function evaluateSettledState(mutationTimeline, options = {}) {
  * @returns {Promise<object>} Promise resolving to deeply frozen settled metrics
  */
 export async function waitForSettledState(targetOrAdapter, options = {}) {
+  // Fail closed immediately on missing or invalid target
+  if (!targetOrAdapter || (typeof targetOrAdapter.simulateEvents !== 'function' && typeof targetOrAdapter.nodeType !== 'number')) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'targetOrAdapter must be a valid DOM node or simulation adapter with simulateEvents()',
+      diagnostics: 'invalid_target'
+    });
+  }
+
+  // Test adapter mode (deterministic unit testing without DOM mocks)
+  if (typeof targetOrAdapter.simulateEvents === 'function') {
+    let timeline;
+    try {
+      timeline = targetOrAdapter.simulateEvents();
+    } catch (err) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: 0,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `simulateEvents failed: ${err.message}`,
+        diagnostics: 'adapter_simulation_failed'
+      });
+    }
+    return evaluateSettledState(timeline, options);
+  }
+
   const quietWindow = (options && typeof options.quiet_window_ms === 'number' && options.quiet_window_ms > 0)
     ? options.quiet_window_ms
     : DEFAULT_DOM_READINESS_CONFIG.quiet_window_ms;
@@ -9815,12 +9851,6 @@ export async function waitForSettledState(targetOrAdapter, options = {}) {
   const startTime = (options && typeof options.as_of_start_ms === 'number')
     ? options.as_of_start_ms
     : (typeof performance !== 'undefined' ? performance.now() : Date.now());
-
-  // Test adapter mode (deterministic unit testing without DOM mocks)
-  if (targetOrAdapter && typeof targetOrAdapter.simulateEvents === 'function') {
-    const timeline = targetOrAdapter.simulateEvents();
-    return evaluateSettledState(timeline, options);
-  }
 
   // Browser MutationObserver mode
   return new Promise((resolve) => {
@@ -9927,8 +9957,50 @@ export function benchmarkActuationSequence(actionSteps, options = {}) {
 
   for (let i = 0; i < actionSteps.length; i++) {
     const step = actionSteps[i];
-    const mutations = (step && Array.isArray(step.mutations)) ? step.mutations : [];
+    if (!step || typeof step !== 'object' || Array.isArray(step)) {
+      return deepFreeze({
+        ok: false,
+        step_count: actionSteps.length,
+        total_baseline_ms: 0,
+        total_adaptive_ms: 0,
+        time_saved_ms: 0,
+        reduction_percent: 0,
+        meets_target_reduction: false,
+        reason: `Step at index ${i} must be a plain object`,
+        diagnostics: 'invalid_step_structure'
+      });
+    }
+
+    if (step.mutations !== undefined && !Array.isArray(step.mutations)) {
+      return deepFreeze({
+        ok: false,
+        step_count: actionSteps.length,
+        total_baseline_ms: 0,
+        total_adaptive_ms: 0,
+        time_saved_ms: 0,
+        reduction_percent: 0,
+        meets_target_reduction: false,
+        reason: `Step ${i + 1} (${step.step_name || 'unnamed'}) mutations must be an array if provided`,
+        diagnostics: 'invalid_step_mutations'
+      });
+    }
+
+    const mutations = Array.isArray(step.mutations) ? step.mutations : [];
     const evaluation = evaluateSettledState(mutations, options);
+
+    if (!evaluation.ok) {
+      return deepFreeze({
+        ok: false,
+        step_count: actionSteps.length,
+        total_baseline_ms: 0,
+        total_adaptive_ms: 0,
+        time_saved_ms: 0,
+        reduction_percent: 0,
+        meets_target_reduction: false,
+        reason: `Step ${i + 1} (${step?.step_name || 'unnamed'}) failed settled state evaluation: ${evaluation.reason}`,
+        diagnostics: evaluation.diagnostics || 'step_evaluation_failed'
+      });
+    }
 
     totalBaseline += baselineWait;
     totalAdaptive += evaluation.elapsed_ms;

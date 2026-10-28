@@ -1,4 +1,4 @@
-import { generateIncomeVerificationProof, verifyIncomeVerificationProof, summarizeIncomeProof, evaluateSettledState, summarizeSettledState, benchmarkActuationSequence } from './twin-core.js';
+import { generateIncomeVerificationProof, verifyIncomeVerificationProof, summarizeIncomeProof } from './twin-core.js';
 // Twin prototype: everything stays in this browser (localStorage). Nothing is sent anywhere.
 import { mountAuth, el, getJSON } from './portal.js?v=3';
 import { validateTwinState, deserializeTwinState, serializeTwinState, createConsentReceipt, verifyConsentReceipt, summarizeReceiptVerification, isGrantExpired, evaluateAccessRequest, queueAccessAsPendingAction, calculatePersonalTrajectory, summarizeContributions, evaluateActionDecision, summarizeActions, recordTwinEvent, summarizeEvents, calculateObligationUrgency, summarizeObligations, summarizeFacts, filterCriticalFacts, ALLOWED_FACT_CATEGORIES, toggleQuestCompletion, summarizeQuests, filterActiveQuests, ALLOWED_QUEST_CATEGORIES, ALLOWED_VALUE_DIMENSIONS, DEFAULT_VALUES, updateValuePreference, calculateValueAlignment, summarizeValues, auditMemoryStatement, gateMemoryFact, summarizeMemoryAudit, auditBoundaryAction, summarizeBoundaryAudits, CONSEQUENTIAL_RISK_KEYWORDS, assembleTokenBudgetedContext, evaluateCapabilityAdjustmentRequest, summarizeCapabilityAdjustment, auditVisualAssistantAction, summarizeVisualActionAudit, evaluateAuthorityEnvelopeAction, summarizeAuthorityEnvelopeAudit, createDelegationCommitment, evaluateDelegationTransition, summarizeDelegationLedger, createLookaheadActionPlan, simulateActionPlanLookahead, summarizeLookaheadSimulation } from './twin-core.js';
@@ -1353,69 +1353,3 @@ function renderIncomeProofInspector() {
 }
 
 renderIncomeProofInspector();
-
-function renderDomReadinessInspector() {
-  const form = document.getElementById('test-dom-readiness');
-  const resultBox = document.getElementById('dom-readiness-result');
-  if (!form || !resultBox) return;
-
-  form.onsubmit = (ev) => {
-    ev.preventDefault();
-    resultBox.textContent = '';
-
-    const preset = form.target_preset.value;
-    const quietWindow = parseInt(form.quiet_window.value, 10) || 25;
-    const maxWait = parseInt(form.max_wait.value, 10) || 500;
-
-    let timeline = [];
-    if (preset === 'quick_update') {
-      timeline = [
-        { at_ms: 5, target: 'input#filter', type: 'attributes' },
-        { at_ms: 15, target: 'div#list', type: 'childList' },
-        { at_ms: 35, target: 'div#list', type: 'childList' }
-      ];
-    } else if (preset === 'continuous_ticker') {
-      for (let t = 10; t <= maxWait + 100; t += 10) {
-        timeline.push({ at_ms: t, target: 'span.price', type: 'characterData' });
-      }
-    }
-
-    const evalResult = evaluateSettledState(timeline, {
-      quiet_window_ms: quietWindow,
-      max_wait_ms: maxWait
-    });
-
-    const summary = summarizeSettledState(evalResult);
-    const p = el('p', summary.status_class);
-    p.appendChild(el('strong', null, summary.badge + ': '));
-    p.appendChild(document.createTextNode(summary.text));
-    resultBox.appendChild(p);
-
-    const metricsBox = el('div', 'twin-subblock');
-    metricsBox.appendChild(el('h4', 'flush', 'Actuation benchmarks:'));
-    const ul = el('ul', 'plain');
-    ul.appendChild(el('li', null, 'Elapsed time: ' + evalResult.elapsed_ms + 'ms (ceiling: ' + maxWait + 'ms)'));
-    ul.appendChild(el('li', null, 'Mutations observed: ' + evalResult.mutation_count));
-    ul.appendChild(el('li', null, 'Quiescent duration: ' + evalResult.quiescent_ms + 'ms'));
-    ul.appendChild(el('li', null, 'Timeout fallback: ' + (evalResult.timed_out ? 'Yes (prevented thread stall)' : 'No (settled cleanly)')));
-    metricsBox.appendChild(ul);
-
-    // Multi-step sequence comparison
-    const sampleSequence = [
-      { step_name: 'Focus search input', mutations: [] },
-      { step_name: 'Render filter matches', mutations: timeline.slice(0, 2) },
-      { step_name: 'Select list item', mutations: [] },
-      { step_name: 'Confirm selection', mutations: [] }
-    ];
-    const bench = benchmarkActuationSequence(sampleSequence, {
-      conservative_baseline_ms: 500,
-      quiet_window_ms: quietWindow
-    });
-
-    const benchP = el('p', 'muted', bench.summary);
-    metricsBox.appendChild(benchP);
-    resultBox.appendChild(metricsBox);
-  };
-}
-
-renderDomReadinessInspector();
