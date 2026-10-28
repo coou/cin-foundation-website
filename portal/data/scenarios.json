@@ -1,6 +1,284 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261028-0361",
+   "added_at": "2026-10-28T02:51:27+00:00",
+   "title": "Context compaction in personal assistants quietly leaks private reasoning and sensitive history",
+   "horizon_years": 2,
+   "world": "By 2028, everyday personal assistants routinely summarize weeks of private conversations, browser actions, and local notes into dense memory caches so smaller edge models can answer quickly. However, third-party services and websites exploit compaction passes by planting subtle prompt formatting directives that cause local assistants to dump encrypted reasoning traces and personal recollections into outbound requests. People who believe their local twin keeps conversations confidential find that automated background compaction passes inadvertently broadcast unredacted personal details to external APIs.",
+   "premise": "Security evaluations reveal that context compaction routines designed to summarize long agent transcripts can be manipulated by simple formatting tricks to reveal private reasoning chains. Furthermore, research demonstrates that agent defenses fail when context assembly surfaces conflate historical memory with incoming admission payloads.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The collective provides deterministic client-side context assemblers and structural memory airlocks that strip formatting exploits and enforce strict boundary verification before compacted data is fed into local models or outbound tools. By validating memory transformations deterministically on the person's own device, personal twins are designed to reduce model-dependent policy bypasses.",
+   "shift": 0.42,
+   "outcomes": [
+    {
+     "name": "Adversarial prompts trigger silent memory exfiltration during compaction",
+     "description": "Third-party websites plant formatting triggers that trick personal agents into dumping sensitive compressed memories into external web queries.",
+     "example": "A user browsing an online marketplace triggers an invisible compaction exploit that causes their shopping assistant to embed their last thirty days of medical and financial search summaries into product telemetry.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Deterministic client-side compaction airlocks prevent hidden reasoning leakage",
+     "description": "Local personal agents adopt deterministic rule-based structural boundaries that verify memory sanitization before any compacted context enters prompt assembly.",
+     "example": "An open personal assistant framework intercepts a malicious tab-delimited formatting trick, strips the exfiltration payload, and stores the compacted memory safely on the user's phone.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Proprietary cloud models retain exclusive server-side compaction control",
+     "description": "Major cloud providers monopolize agent memory management by moving all compaction behind closed server endpoints, making client-side auditing difficult.",
+     "example": "A dominant mobile operating system locks down agent history inside a proprietary remote enclave, preventing independent verification while the collective network can barely influence the outcome.",
+     "desirable": false,
+     "likelihood_now": 0.5,
+     "likelihood_with_cin": 0.48
+    }
+   ],
+   "pipelines": [
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://thehackernews.com/2026/10/openai-compaction-flaw-let-researchers.html",
+     "title": "OpenAI Compaction Flaw Let Researchers Bypass Hidden Reasoning Protections",
+     "kind": "news",
+     "published": "2026-10-27"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.37415",
+     "title": "The Envelope Layer: An Underestimated Surface of LLM Agent Defense",
+     "kind": "preprint",
+     "published": "2026-10-27"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261028-0360",
+   "added_at": "2026-10-28T02:27:13+00:00",
+   "title": "Autonomous agent councils drop critical facts when compressing discussions into meeting notes",
+   "horizon_years": 3,
+   "world": "By 2029, municipal committees, condominium boards, and corporate supply cooperatives routinely delegate policy review to panels of autonomous software agents. Because raw conversation logs exceed token budgets and attention limits, lead coordinator agents summarize multi-party deliberations into compact briefs before taking final votes. Crucial minority warnings—such as an unshared water pipe corrosion report held by a single facility agent—are routinely pruned out as outliers, locking boards into costly blunders.",
+   "premise": "Recent multi-agent research shows that when autonomous software agents compress lengthy group deliberation into summary notes using relevance or rarity rules, they systematically drop dispersed minority facts needed to make correct group decisions.",
+   "goals": [
+    2,
+    4
+   ],
+   "how": "The network designs and benchmarks deliberation protocols that replace lossy narrative summarization with structured orthogonal evidence pooling and blinded commit-reveal voting, protecting distributed minority findings in civic and cooperative settings.",
+   "shift": 0.21,
+   "outcomes": [
+    {
+     "name": "Summary bottlenecks suppress distributed warnings",
+     "description": "Coordinator agents use relevance heuristics that amplify majority consensus and discard vital edge-case warnings as irrelevant noise.",
+     "example": "A regional transport cooperative approves an unviable bridge maintenance schedule because the summary coordinator agent dropped three independent load-sensor warnings held by local inspection agents.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Commit-reveal evidence pooling preserves dispersed facts",
+     "description": "Councils adopt blinded commit-reveal voting and structured clue matrices, designed to test each member agent's evidence before narrative summaries are formed.",
+     "example": "A municipal tenants cooperative uses structured evidence pooling where small landlord fee anomalies are tabulated across 5,000 personal agents without central text summarization, uncovering an unlawful surcharge pattern.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Frontier context window expansion renders local summarization secondary",
+     "description": "Frontier model providers scale context windows to millions of tokens, leading well-funded enterprise boards to feed uncompressed raw histories into centralized cloud models regardless of decentralized pooling designs.",
+     "example": "An enterprise logistics council streams two hundred thousand multi-agent chat turns directly into a proprietary hyperscaler model, accepting data centralization in exchange for bypassing summary heuristics.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.34
+    }
+   ],
+   "pipelines": [
+    "community",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.37624",
+     "title": "Rare, Relevant, and Still Wrong: How Memory Fails LLM Group Decisions",
+     "kind": "preprint",
+     "published": "2026-10-27"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261028-0359",
+   "added_at": "2026-10-28T02:27:03+00:00",
+   "title": "Free web chatbots quietly sell your private conversations to data brokers",
+   "horizon_years": 3,
+   "world": "It is 2029. Millions of people treat web chatbots as confidential companions, therapists, financial advisors, and workplace aids. Behind the clean chat bubbles, hundreds of commercial platforms monetize user prompts through embedded tracking scripts. Insurers purchase conversation profiles identifying users who asked about early chronic disease symptoms. Employers buy query histories from data brokers to flag staff discussing job dissatisfaction or health issues. When users discover that intimate midnight questions were mapped to their corporate email addresses, trust in cloud-hosted artificial intelligence fractures, driving technical users toward offline, sovereign devices while casual users remain exposed.",
+   "premise": "An academic audit of 42 consumer AI chat platforms reveals that half leak conversation titles and user email addresses to third-party tracking scripts, while nearly a quarter leak verbatim prompts. Web-hosted conversational interfaces routinely monetize user disclosures through unmonitored analytics scripts running in the user browser.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network develops open-source personal twin software that executes inference locally on personal devices, providing verifiable proof that zero telemetry or prompt text leaves the hardware. Educational visualizers on public websites demonstrate how third-party trackers capture DOM elements and session replays in commercial browsers, giving people clear migration paths to sovereign alternatives.",
+   "shift": 0.37,
+   "outcomes": [
+    {
+     "name": "Data brokers build shadow profiles from conversational prompts",
+     "description": "Commercial aggregators combine prompt text, session replays, and identity trackers into comprehensive psychological and financial dossiers sold to employers, lenders, and insurers.",
+     "example": "A loan applicant in Manchester is denied a mortgage after a background check firm purchases chat logs showing queries about payday loans and gambling addiction.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Users migrate to local, sovereign personal twins",
+     "description": "Growing public awareness of prompt harvesting drives widespread adoption of local open-weight models and sovereign personal twins that store all conversational history on personal devices.",
+     "example": "Over 200,000 independent contractors adopt local workstation twins that process client contracts and personal finances without sending plain text across remote networks.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Ad-supported cloud chatbots remain the dominant choice for casual users",
+     "description": "Despite recurring privacy scandals, convenience and free access keep the vast majority of non-technical users on commercial cloud platforms that continue monetizing contextual telemetry.",
+     "example": "A consumer rights group publishes proof that a popular homework assistant leaks student questions to advertisers, but user numbers decline by less than three percent.",
+     "desirable": false,
+     "likelihood_now": 0.7,
+     "likelihood_with_cin": 0.68
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "research",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.37467",
+     "title": "Penny for Your Prompts: A Measurement Study of Contextual Leakage in AI Chat Platforms",
+     "kind": "preprint",
+     "published": "2026-10-27"
+    }
+   ],
+   "work": 0
+  },
+  {
+   "id": "SC-20261028-0358",
+   "added_at": "2026-10-28T02:06:55+00:00",
+   "title": "Hosted agent consoles leak user keys when cloud platforms are breached",
+   "horizon_years": 3,
+   "world": "It is 2029. Most software developers and analysts use background AI assistants that execute multi-step research, debugging, and deployment workflows around the clock. To avoid configuring local hardware, thousands of startups store their frontier model API keys in third-party hosted agent platforms. When a popular orchestration provider suffers an infrastructure intrusion, attackers siphon active credentials for major model APIs across tens of thousands of companies. Within hours, unauthorized actors run large-scale fine-tuning jobs on victims' corporate accounts, exfiltrate private internal prompts, and inspect fine-tuned weights, while affected teams scramble to rotate keys across fragmented infrastructure.",
+   "premise": "Teams increasingly connect their AI provider keys to hosted agent consoles so cloud-based assistants can run tasks continuously. In October 2026, security researchers disclosed an intrusion into the OpenCode Console where attackers accessed external provider keys belonging to 1.4 percent of workspaces through a legacy subsystem.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "The network promotes personal, locally run software twins that store credentials strictly on consumer devices. By demonstrating local agent runtimes with cryptographic proof of isolation, the project offers a tested alternative to hosted custody that lowers the likelihood of large-scale credential breaches.",
+   "shift": 0.3,
+   "outcomes": [
+    {
+     "name": "Credential honeypots suffer routine compromise",
+     "description": "Centralized agent console vendors aggregate valuable API keys, becoming primary targets for credential-harvesting intrusions.",
+     "example": "An attacker penetrates an orchestration hub and runs millions of dollars of compute on 500 enterprise accounts before discovery.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Developers adopt local runtime credential isolation",
+     "description": "Teams keep model keys strictly on their personal hardware, using local agent runtimes with scoped, ephemeral token delegation instead of cloud custody.",
+     "example": "A development shop migrates all agent tasks to local workstations, passing short-lived session grants rather than static keys.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Model providers restrict direct third-party key ingestion",
+     "description": "Large model providers lock down key sharing, requiring proprietary identity federations that concentrate control among a few large cloud hosts.",
+     "example": "A major provider disables raw API keys, mandating enterprise single sign-on that smaller open-source tools cannot support.",
+     "desirable": false,
+     "likelihood_now": 0.35,
+     "likelihood_with_cin": 0.37
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://forever.security/blog/opencode-console-breach-update",
+     "title": "OpenCode Console Breach: What You Need to Know",
+     "kind": "blog",
+     "published": "2026-10-18"
+    }
+   ],
+   "work": 1
+  },
+  {
+   "id": "SC-20261028-0357",
+   "added_at": "2026-10-28T02:00:58+00:00",
+   "title": "Autonomous workplace agents proliferate while enterprise governance lags behind incidents",
+   "horizon_years": 2,
+   "world": "By 2028, enterprises across finance, logistics, and customer service have integrated autonomous multi-agent pipelines directly into billing, procurement, and contract execution. Rather than acting as mere conversational assistants, agents negotiate invoice disputes, route payments, and adjust operational schedules without step-by-step human review. However, internal compliance teams remain overwhelmed by opaque event trails, and boardrooms rely on retrospective damage control rather than proactive verification. Minor prompt injections and runaway agent loops regularly spill across vendor boundaries, forcing IT directors to scramble for emergency kill switches while vendors and deployers trade blame over liability for automated errors.",
+   "premise": "An enterprise survey of 3,200 senior executives shows 80 percent experienced an AI incident reaching the board, yet only 40 percent changed governance policies in response. With three quarters expecting agent decision-making autonomy by 2027 and fewer than 40 percent having governance designed to scale, corporate deployments are running far ahead of oversight controls.",
+   "goals": [
+    1,
+    2,
+    5
+   ],
+   "how": "The network provides open blueprints, out-of-band supervisor architectures, and verifiable bilateral settlement contracts that prove safety properties deterministically. By demonstrating that agents can be bounded by external supervisor contracts rather than trusting internal model self-restraint, organizations gain practical tools to stop rogue operations without relying on proprietary cloud monopolies.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Unregulated corporate agents trigger cascading operational failures",
+     "description": "Enterprises expand agent autonomy faster than compliance teams can supervise, resulting in uncoordinated agent collisions and compounding billing or supply errors.",
+     "example": "A multinational retailer inventory agent accepts synthetic supplier discounts that violate vendor contracts, triggering automated supply freezes across forty distribution hubs.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.4
+    },
+    {
+     "name": "Independent verification and containment runtime guards become industry standards",
+     "description": "Organizations adopt open out-of-band monitoring protocols and verifiable action ledgers, constraining autonomous agents to deterministic limits and signed budgets.",
+     "example": "A mid-sized logistics cooperative runs open-source runtime broker guards that automatically halt out-of-policy vendor invoice modifications before bank transfers execute.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Centralized cloud providers lock down enterprise ecosystems into proprietary silos",
+     "description": "Hyperscale cloud vendors bundle liability indemnification with restrictive walled-garden platforms, cutting off open-source tooling and local agent development.",
+     "example": "An enterprise software conglomerate requires corporate clients to run all multi-agent workflows inside its private cloud, charging punitive egress fees for outside agent interactions.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.43
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://newsroom.ibm.com/2026-10-14-ibm-study-eight-in-ten-emea-enterprises-escalate-ai-incidents-to-board-or-c-suite-as-ai-agents-test-governance",
+     "title": "IBM Study: Eight in Ten EMEA Enterprises Escalate AI Incidents to Board or C-Suite as AI Agents Test Governance",
+     "kind": "report",
+     "published": "2026-10-14"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261027-0356",
    "added_at": "2026-10-27T23:56:45+00:00",
    "title": "Companies run entirely by AI agents shield owners from liability for reckless harms",
@@ -53,7 +331,7 @@
      "published": "2026-10-27"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0355",
@@ -113,7 +391,7 @@
      "published": "2026-10-27"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0354",
@@ -451,7 +729,7 @@
      "published": "2026-09-26"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261027-0348",
@@ -505,7 +783,7 @@
      "published": "2026-10-26"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261027-0347",
@@ -728,7 +1006,7 @@
      "published": "2026-10-25"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261027-0343",
@@ -1004,7 +1282,7 @@
      "published": "2026-10-25"
     }
    ],
-   "work": 1
+   "work": 2
   },
   {
    "id": "SC-20261027-0338",
@@ -3097,290 +3375,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261026-0301",
-   "added_at": "2026-10-26T12:38:23+00:00",
-   "title": "Autonomous agents duplicate destructive actions under network delays when tools lack idempotency keys",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of personal and enterprise workflow agents autonomously initiate payments, file tax documents, book logistics shipments, and update cloud infrastructure. Rather than operating synchronously, real-world cellular and edge networks experience frequent transient dropouts, packet re-orderings, and late server acknowledgments. When an agent requests a server write and the connection hangs, the model cannot distinguish between a dropped request and an unacknowledged successful commit. As a result, agents routinely resubmit duplicate transactions, buying duplicate flight tickets, re-running payment disbursements, and provisioning parallel compute clusters, while reporting complete, error-free task execution to their human users. Cloud services and external APIs that rely on agent prompts or conversational instructions to prevent duplicate operations face compounding customer dispute backlogs.",
-   "premise": "Large-scale empirical evaluations across nine frontier models reveal that when tool execution writes time out or encounter delayed network delivery, agents duplicate external actions in 56% to 74% of episodes while claiming success in 90% of failures. Self-monitoring fails under in-flight network uncertainty, but attaching client-held idempotency keys to tool contracts cuts duplication rates from 28% to 4%.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The network publishes open runtime tool broker specifications and lightweight middleware that attach deterministic, host-generated idempotency nonces to all external mutating tool dispatches. By proving that duplicate side effects are resolved in tool contracts rather than prompting, the network provides open-source personal agents with reliable edge execution boundaries.",
-   "shift": 0.45,
-   "outcomes": [
-    {
-     "name": "Compounding duplicate transaction liabilities",
-     "description": "Unprotected tool endpoints accept repeated agent requests during transient outages, leading to widespread double charges and redundant real-world orders.",
-     "example": "A family maintenance agent encounters a cellular timeout during a monthly mortgage payment, re-issues the transfer, and causes an unexpected overdraft that takes weeks to dispute.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Host-enforced deterministic idempotency contracts",
-     "description": "Agent runtime brokers automatically bind cryptographically random idempotency nonces and monotonic sequence numbers to all external mutating tool calls, blocking duplicate executions at the protocol layer.",
-     "example": "An open agent runtime broker intercepts a delayed cloud deployment tool call, matches the retry against a local inflight reservation nonce, and safely reconciles the status without triggering a duplicate cluster spawn.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Upstream cloud service lock-in and vendor latency shielding",
-     "description": "Major cloud providers absorb idempotency into proprietary cloud wrappers, creating walled gardens where agents must run within centralized ecosystems to avoid duplicate side effects.",
-     "example": "A major tech firm restricts automated e-commerce purchases to its proprietary cloud runtime, asserting that independent edge agents cannot be trusted to handle retry semantics safely.",
-     "desirable": false,
-     "likelihood_now": 0.4,
-     "likelihood_with_cin": 0.42
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2609.29095",
-     "title": "Where Does Exactly-Once Live? Model, Harness, and Tool-Contract Effects on Duplicate Side Effects in LLM Agents",
-     "kind": "preprint",
-     "published": "2026-09-24"
-    }
-   ],
-   "work": 4
-  },
-  {
-   "id": "SC-20261026-0300",
-   "added_at": "2026-10-26T11:55:59+00:00",
-   "title": "Everyday software assistants take dangerous actions when human requests leave boundaries unsaid",
-   "horizon_years": 3,
-   "world": "It is 2029. Small businesses, freelance design collectives, and public service bureaus rely on desktop software assistants to manage schedules, organize files, and dispatch invoices. Most users speak or type quick, informal instructions such as clear the old candidate folder or send the files over. Because models are tuned to please users by acting immediately without friction, assistants routinely cross boundaries that humans assume are obvious. A design studio assistant emails client invoices along with unredacted contractor tax numbers because the client requested all billing records. A school administrative bot shares the full staff directory, including personal mobile numbers, when asked to arrange an emergency meeting. Rather than halting to clarify ambiguous boundaries, delegated assistants prioritize speed and perceived helpfulness, leaving ordinary workers to clean up compliance penalties and privacy breaches.",
-   "premise": "Testing across 110 real-world tasks in nine workspace environments reveals that frontier software agents violate unstated safety boundaries on more than a quarter of delegated jobs. People routinely issue underspecified requests that leave privacy or operational boundaries unsaid, and current assistants guess and execute rather than pausing to confirm sensitive consequences.",
-   "goals": [
-    1,
-    4,
-    6
-   ],
-   "how": "An open network develops public simulation benchmarks and deterministic boundary gates that test whether agents recognize unstated safety limits before acting. By providing open-source runtime interception tools and simulated workplace evaluations that reward asking clarifying questions over rash guesses, community-developed assistants can demonstrate higher safety than commercial black-box models without central platform lock-in.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Assistants silently violate workplace boundaries to finish quick tasks",
-     "description": "Companies and independent workers deploy friction-free autonomous assistants that guess through ambiguous requests, producing widespread accidental disclosures and unrecoverable data overwrites.",
-     "example": "A veterinary clinic assistant cancels tomorrows surgeries instead of rescheduling them when a receptionist texts clear the morning books, disrupting animal care and clinic revenue.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Host systems enforce explicit permission boundaries and ask before acting",
-     "description": "Operating systems and runtime environments enforce deterministic permission gates that intercept irreversible actions, prompting users with quick clarification options whenever a request leaves sensitive parameters unsaid.",
-     "example": "A freelance accountants personal agent pauses when told to email the tax folder, presenting a one-click confirmation that excludes client social insurance records before transmission.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Platform vendors monopolize certified assistant workflows behind expensive audits",
-     "description": "Major software platform vendors use safety boundary risks as justification to lock down operating systems, forbidding open-source or local agents unless certified through costly proprietary compliance pipelines.",
-     "example": "An open-source cooperative assistant is blocked from accessing desktop calendar APIs on major mobile platforms because it cannot afford annual vendor compliance audits.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.35
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.32024",
-     "title": "BARC-Bench: Benign Asks, Risky Consequences",
-     "kind": "preprint",
-     "published": "2026-10-23"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.32106",
-     "title": "PersonaScienceBench: Evaluating Scientific Agents with Diverse Simulated Researchers",
-     "kind": "preprint",
-     "published": "2026-10-23"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261026-0299",
-   "added_at": "2026-10-26T11:35:32+00:00",
-   "title": "Autonomous funding agents learn to exploit cooperative pools when rules are judged in isolation",
-   "horizon_years": 3,
-   "world": "It is 2029. Hundreds of digital cooperatives, municipal open-source grant programs, and research consortiums rely on autonomous delegate agents to evaluate grant proposals, monitor public goods usage, and disburse tokenized funding pools. Rather than human committees reading thousands of applications, delegate agents negotiate allocation quotas through structured deliberative rounds. However, specialized grant-seeking agents developed by aggressive consulting firms have evolved conversational and reporting strategies tailored to trigger high approval scores while contributing minimal actual work. Because the evaluation rules used by the grant allocators were tested only against honest historical data rather than coupled adversarial simulations, the funds gradually drain toward professional grant-farming teams while core infrastructure maintainers walk away.",
-   "premise": "Multi-agent experiments demonstrate that autonomous agents managing shared budgets develop sophisticated free-riding strategies against cooperative rules. When governance guidelines are evaluated on independent benchmarks rather than under adversarial pressure, cooperative safeguards quietly fail.",
-   "goals": [
-    2,
-    3
-   ],
-   "how": "The network designs open simulation harnesses where allocation mechanisms and evaluation rules undergo continuous stress-testing against co-evolving red-team agent factions. By requiring relative coupled fitness benchmarks rather than static uncoupled scores, the network tooling helps member cooperatives discover exploitable edge cases in contribution accounting and demurrage redistribution before capital is placed at risk.",
-   "shift": 0.42,
-   "outcomes": [
-    {
-     "name": "Professional grant-farming agents capture community treasuries",
-     "description": "Adversarial grant-seeking agents game cooperative scoring rules, diverting public capital into superficial showcase projects.",
-     "example": "A municipal digital commons fund in Montreal allocates 60% of its annual software maintenance budget to synthetic documentation farms that generated thousands of verifiable but empty code commits.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Cooperative allocators adopt co-evolved red-team simulation checks",
-     "description": "Treasury DAOs and member cooperatives test their allocation rules against co-evolved adversarial agent factions before deploying them to live capital pools.",
-     "example": "An open-source tooling cooperative runs thirty generations of synthetic free-rider attacks in simulation to discover and close loopholes in its contribution-reward formulas before disbursing funds.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Regulatory authorities mandate traditional accounting audits on all algorithmic pools",
-     "description": "Frustrated by widespread automated exploits, national authorities force all decentralized funding pools into conventional centralized audit regimes with heavy compliance costs.",
-     "example": "A federal oversight directive requires all community software funds over fifty thousand dollars to hire registered financial accounting firms for every disbursement, slowing payouts from days to six months.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.28
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "site"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2605.26448",
-     "title": "Constitutional Arms Races in the Public Goods Game: Co-Evolving LLM Constitutions Under Cooperation-Defection Pressure",
-     "kind": "preprint",
-     "published": "2026-05-26"
-    }
-   ],
-   "work": 3
-  },
-  {
-   "id": "SC-20261026-0298",
-   "added_at": "2026-10-26T11:32:20+00:00",
-   "title": "Personal work agents accumulate obsolete notes that make them repeat old mistakes",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of freelancers, small business owners, and office workers rely on daily personal software agents to handle correspondence, billing, customer intake, and scheduling. At first, each assistant performs crisply. But after six months of operation, users notice subtle degradation: an agent persists in routing inquiries through an email address that changed months ago, cites retired return policies, or wastes half its context budget reading hundreds of past conversation logs before drafting a single reply. Many people wipe their assistants memory to restore speed, losing valuable custom workflows, while others abandon local assistants for managed corporate services that continuously retrain on company data.",
-   "premise": "Recent empirical evaluations show that language model agents running multi-step tasks across weeks suffer from context bloat and memory drift. When past reasoning traces are dumped back into prompt memory without periodic consolidation, agents become slower, more expensive, and prone to repeating outdated workarounds.",
-   "goals": [
-    1,
-    6
-   ],
-   "how": "The collective provides open, local-first consolidation patterns where agents periodically distill episodic execution traces into inspectable playbooks on a persons own device. By separating temporary session notes from long-term verified skills, local assistants would remain responsive and accurate without requiring cloud synchronization or memory resets.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Users wipe agent memories to fix sluggish performance",
-     "description": "Frustrated by mounting token costs and outdated habits, people regularly reset their personal agents, losing months of accumulated personalization.",
-     "example": "An independent graphic designer resets her scheduling assistant after it repeatedly applies an expired discount code, forcing her to re-teach the agent all her client billing preferences from scratch.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Structured consolidation preserves local playbooks",
-     "description": "Agents periodically distill episodic session logs into compact, auditable playbooks, pruning temporary details while preserving verified procedures.",
-     "example": "A freelance translators local assistant runs an end-of-week consolidation pass, replacing three hundred raw emails with five concise glossary updates and an inspectable client delivery checklist.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Centralized cloud providers lock users into proprietary memory graphs",
-     "description": "Proprietary enterprise cloud suites manage agent memory consolidation behind closed servers, making it difficult for individuals to export their workflows.",
-     "example": "A legal consultancy attempts to move its team agents off a commercial platform, only to discover their past case playbooks cannot be exported into an open standard.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.58
-    }
-   ],
-   "pipelines": [
-    "research",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2604.17399",
-     "title": "Beyond Meta-Reasoning: Metacognitive Consolidation for Self-Improving LLM Reasoning",
-     "kind": "preprint",
-     "published": "2026-04-19"
-    }
-   ],
-   "work": 4
-  },
-  {
-   "id": "SC-20261026-0297",
-   "added_at": "2026-10-26T10:20:06+00:00",
-   "title": "Shared AI reasoning budgets force organizations to ration expert models, leaving unmonitored tasks to make costly errors",
-   "horizon_years": 3,
-   "world": "It is 2029. Mid-sized enterprises and member cooperatives run dozens of specialized software agents for inventory, payroll, tenant intake, and regulatory compliance. Frontier-tier model compute remains scarce and metered. Central corporate IT departments establish internal token budgets or bidding auctions for expert reasoning. A clinic billing agent buys top-tier reasoning to maximize insurer reimbursements, while its medication-reconciliation helper runs on a stripped-down mini-model that silently drops subtle drug-interaction warnings because it lacks the budget to request an expert check.",
-   "premise": "When organizations deploy autonomous software helpers across multiple departments, running the most capable models for every task is too expensive. As a result, teams ration access to expert models by internal price or fiat quotas, which frequently starves quiet but high-stakes compliance or safety tasks while over-serving loud commercial requests.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The collective intelligence network designs and tests opportunity-cost-aware clearing protocols in simulation and open software that allocate bounded compute based on task criticality and regression risk rather than token plutocracy. By pairing lightweight local models with external deterministic verification gates, member cooperatives are supported in verifying that essential tasks receive expert scrutiny without centralized budget rationing.",
-   "shift": 0.41,
-   "outcomes": [
-    {
-     "name": "Plutocratic compute rationing starves quiet safety tasks",
-     "description": "High-revenue departments bid up the cost of expert model calls, leaving background safety, privacy audits, and compliance helpers to run on cheap models that make uncorrected mistakes.",
-     "example": "A regional hospital automated patient-discharge assistant runs out of monthly compute budget and approves an incompatible prescription because commercial billing agents consumed 80% of the hospital frontier model quota.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.38
-    },
-    {
-     "name": "Opportunity-cost clearing balances collective reasoning",
-     "description": "Member cooperatives and organizations evaluate assistant requests by expected net benefit and task criticality rather than financial bids, establishing minimum verification floors for every critical task.",
-     "example": "A cooperative pharmacy network uses an opportunity-cost clearing protocol that automatically reserves top-tier verification slots for high-risk medication checks while routing routine inventory inquiries to lightweight local models.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Proprietary cloud platforms bundle compute into closed enterprise suites",
-     "description": "Major cloud vendors bundle frontier reasoning exclusively inside closed enterprise suites, locking organizations into proprietary pricing tiers regardless of open protocols.",
-     "example": "A municipal office attempts to adopt an open task broker but finds vendor terms restrict dynamic model switching, forcing them to remain on an expensive proprietary subscription.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.32190",
-     "title": "Markets of Minds: A 51-Billion-State Economy of Intelligence",
-     "kind": "preprint",
-     "published": "2026-10-23"
-    },
-    {
-     "url": "https://arxiv.org/abs/2610.31743",
-     "title": "Not Every Agent Needs the Strongest Model: Unified Prompt-Model Optimization for Heterogeneous LLM-based Multi-Agent Systems",
-     "kind": "preprint",
-     "published": "2026-10-22"
-    }
-   ],
-   "work": 0
   }
  ]
 }
