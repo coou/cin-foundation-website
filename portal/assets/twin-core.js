@@ -9983,3 +9983,417 @@ export function summarizeRetrievalAirlock(result) {
     receipt_id: r.receipt_id
   });
 }
+
+
+// ============================================================================
+// INFORMATION FLOW GOVERNOR FOR TWIN RUNTIME TOOL DISPATCH (D-0750)
+// Grounded in:
+// - arXiv:2609.38289 (Privacy in Personalized AI Is a System Property: Data-access, inferential, behavioral, and compositional leakage)
+// - arXiv:2604.19657 (GAAP: Guaranteed Accounting for Agent Privacy / deterministic IFC on tool parameters)
+// - Scenario SC-20261025-0253 Opportunity #1
+// ============================================================================
+
+export const FLOW_SECURITY_TIERS = Object.freeze([
+  'public',
+  'protected',
+  'confidential',
+  'restricted'
+]);
+
+export const FLOW_POLICY_MODES = Object.freeze([
+  'allow',
+  'redact',
+  'block',
+  'require_consent'
+]);
+
+export const FLOW_LEAKAGE_CHANNELS = Object.freeze([
+  'data_access',
+  'inferential',
+  'compositional',
+  'credential'
+]);
+
+export const FLOW_TIER_RANKS = Object.freeze({
+  public: 0,
+  protected: 1,
+  confidential: 2,
+  restricted: 3
+});
+
+export const SENSITIVE_FLOW_PATTERNS = Object.freeze([
+  { id: 'bearer_token', regex: /bearer\s+[a-zA-Z0-9_\-.]{16,}/i, tier: 'restricted', channel: 'credential' },
+  { id: 'private_key', regex: /-----BEGIN\s+(?:RSA|EC|OPENSSH|DSA|PGP)?\s*PRIVATE KEY/i, tier: 'restricted', channel: 'credential' },
+  { id: 'api_key_param', regex: /(?:api[_-]?key|access[_-]?token|secret[_-]?key)\s*[:=]\s*['"]?[a-zA-Z0-9_\-]{16,}['"]?/i, tier: 'restricted', channel: 'credential' },
+  { id: 'credit_card', regex: /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})\b/, tier: 'confidential', channel: 'data_access' },
+  { id: 'ssn_pattern', regex: /\b\d{3}[-\s]\d{2}[-\s]\d{4}\b/, tier: 'confidential', channel: 'data_access' },
+  { id: 'bank_routing_account', regex: /\b(?:routing|account)\s*#?\s*\d{8,17}\b/i, tier: 'confidential', channel: 'data_access' },
+  { id: 'medical_condition', regex: /\b(?:diagnosed with|prescription for|penicillin allergy|bipolar disorder|hiv positive|chemotherapy)\b/i, tier: 'confidential', channel: 'inferential' },
+  { id: 'path_traversal', regex: /(?:\.\.\/|\.\.\\)/, tier: 'restricted', channel: 'data_access' },
+  { id: 'system_file_access', regex: /(?:\/etc\/passwd|\/etc\/shadow|c:\\windows\\system32)/i, tier: 'restricted', channel: 'data_access' }
+]);
+
+export const FLOW_GOVERNOR_DEFAULTS = Object.freeze({
+  default_salt: 'twin_flow_salt_v1',
+  max_recursion_depth: 5,
+  max_string_scan_length: 5000
+});
+
+export function validateToolDispatchDescriptor(descriptor) {
+  if (!descriptor || typeof descriptor !== 'object' || Array.isArray(descriptor)) {
+    return deepFreeze({ ok: false, error: 'invalid_descriptor', reason: 'Descriptor must be a non-null object' });
+  }
+
+  if (Object.prototype.hasOwnProperty.call(descriptor, '__proto__') ||
+      Object.prototype.hasOwnProperty.call(descriptor, 'constructor') ||
+      Object.prototype.hasOwnProperty.call(descriptor, 'prototype') ||
+      (Object.getPrototypeOf(descriptor) !== Object.prototype && Object.getPrototypeOf(descriptor) !== null)) {
+    return deepFreeze({ ok: false, error: 'prototype_pollution_detected', reason: 'Prototype pollution attempt detected' });
+  }
+
+  const allowedKeys = ['tool_name', 'destination_tier', 'parameters', 'caller_agent', 'context_tags', 'intent_description'];
+  for (const k of Object.keys(descriptor)) {
+    if (!allowedKeys.includes(k)) {
+      return deepFreeze({ ok: false, error: 'unknown_field', reason: 'Unknown field in descriptor: ' + k });
+    }
+  }
+
+  if (typeof descriptor.tool_name !== 'string' || descriptor.tool_name.trim().length === 0 || descriptor.tool_name.length > 64) {
+    return deepFreeze({ ok: false, error: 'invalid_tool_name', reason: 'tool_name must be a non-empty string <= 64 chars' });
+  }
+  if (!/^[a-zA-Z0-9_\-.]+$/.test(descriptor.tool_name)) {
+    return deepFreeze({ ok: false, error: 'invalid_tool_name_chars', reason: 'tool_name contains invalid characters' });
+  }
+
+  if (typeof descriptor.destination_tier !== 'string' || !FLOW_SECURITY_TIERS.includes(descriptor.destination_tier)) {
+    return deepFreeze({ ok: false, error: 'invalid_destination_tier', reason: 'destination_tier must be one of: ' + FLOW_SECURITY_TIERS.join(', ') });
+  }
+
+  if (!descriptor.parameters || typeof descriptor.parameters !== 'object' || Array.isArray(descriptor.parameters)) {
+    return deepFreeze({ ok: false, error: 'invalid_parameters', reason: 'parameters must be a non-null object' });
+  }
+
+  if (descriptor.caller_agent !== undefined) {
+    if (typeof descriptor.caller_agent !== 'string' || descriptor.caller_agent.length > 64) {
+      return deepFreeze({ ok: false, error: 'invalid_caller_agent', reason: 'caller_agent must be a string <= 64 chars' });
+    }
+  }
+
+  if (descriptor.intent_description !== undefined) {
+    if (typeof descriptor.intent_description !== 'string' || descriptor.intent_description.length > 200) {
+      return deepFreeze({ ok: false, error: 'invalid_intent_description', reason: 'intent_description must be a string <= 200 chars' });
+    }
+  }
+
+  let frozenTags = [];
+  if (descriptor.context_tags !== undefined) {
+    if (!Array.isArray(descriptor.context_tags)) {
+      return deepFreeze({ ok: false, error: 'invalid_context_tags', reason: 'context_tags must be an array of strings' });
+    }
+    for (const tag of descriptor.context_tags) {
+      if (typeof tag !== 'string' || tag.trim().length === 0 || tag.length > 32) {
+        return deepFreeze({ ok: false, error: 'invalid_tag_element', reason: 'Each tag must be a non-empty string <= 32 chars' });
+      }
+    }
+    frozenTags = Array.from(new Set(descriptor.context_tags.map(t => t.trim().toLowerCase()))).sort();
+  }
+
+  return deepFreeze({
+    ok: true,
+    tool_name: descriptor.tool_name.trim(),
+    destination_tier: descriptor.destination_tier,
+    parameters: JSON.parse(JSON.stringify(descriptor.parameters)),
+    caller_agent: descriptor.caller_agent ? descriptor.caller_agent.trim() : 'anonymous_agent',
+    intent_description: descriptor.intent_description ? descriptor.intent_description.trim() : '',
+    context_tags: frozenTags
+  });
+}
+
+export function evaluateInformationFlow(dispatchDescriptor, policyOptions = {}) {
+  const validated = validateToolDispatchDescriptor(dispatchDescriptor);
+  if (!validated.ok) {
+    return deepFreeze({
+      ok: false,
+      allowed: false,
+      status: 'blocked',
+      error: validated.error,
+      reason: validated.reason,
+      findings: [validated.error],
+      channels_implicated: [],
+      sanitized_parameters: null,
+      receipt: null
+    });
+  }
+
+  const destTier = validated.destination_tier;
+  const destRank = FLOW_TIER_RANKS[destTier];
+  const findings = [];
+  const channels = new Set();
+  let redactionCount = 0;
+
+  // 1. Check compositional taint from context_tags (arXiv:2609.38289 Section 3.4)
+  if (validated.context_tags.includes('restricted') && destRank < FLOW_TIER_RANKS.restricted) {
+    findings.push('compositional_restricted_context_leakage');
+    channels.add('compositional');
+  }
+  if (validated.context_tags.includes('confidential') && destRank < FLOW_TIER_RANKS.confidential) {
+    findings.push('compositional_confidential_context_leakage');
+    channels.add('compositional');
+  }
+  if (validated.context_tags.includes('medical') && destRank === FLOW_TIER_RANKS.public) {
+    findings.push('compositional_medical_context_leakage');
+    channels.add('compositional');
+    channels.add('inferential');
+  }
+  if (validated.context_tags.includes('financial') && destRank === FLOW_TIER_RANKS.public) {
+    findings.push('compositional_financial_context_leakage');
+    channels.add('compositional');
+    channels.add('data_access');
+  }
+
+  // 2. Deep scan parameters
+  function scanAndSanitize(value, depth = 0) {
+    if (depth > FLOW_GOVERNOR_DEFAULTS.max_recursion_depth) return value;
+    if (typeof value === 'string') {
+      let currentStr = value;
+      for (const pattern of SENSITIVE_FLOW_PATTERNS) {
+        const patternRank = FLOW_TIER_RANKS[pattern.tier];
+        // If detected pattern sensitivity exceeds destination rank, violation
+        if (patternRank > destRank && pattern.regex.test(currentStr)) {
+          findings.push(pattern.id);
+          channels.add(pattern.channel);
+          // Redact
+          currentStr = currentStr.replace(pattern.regex, '[REDACTED_BY_FLOW_GOVERNOR:' + pattern.id + ']');
+          redactionCount++;
+        }
+      }
+      return currentStr;
+    } else if (Array.isArray(value)) {
+      return value.map(item => scanAndSanitize(item, depth + 1));
+    } else if (value && typeof value === 'object') {
+      const sanitizedObj = {};
+      for (const [k, v] of Object.entries(value)) {
+        // Check parameter key for sensitive names
+        if (destRank === FLOW_TIER_RANKS.public) {
+          if (/(?:password|passwd|secret|apikey|token|private_key|seed_phrase)/i.test(k)) {
+            findings.push('sensitive_parameter_key_' + k.toLowerCase());
+            channels.add('credential');
+          }
+        }
+        sanitizedObj[k] = scanAndSanitize(v, depth + 1);
+      }
+      return sanitizedObj;
+    }
+    return value;
+  }
+
+  const sanitizedParams = scanAndSanitize(validated.parameters, 0);
+
+  // Determine final status
+  let status = 'allowed';
+  let allowed = true;
+
+  if (findings.length > 0) {
+    // If destination is public, violations are blocked (or redacted if allow_redaction option enabled)
+    if (destRank === FLOW_TIER_RANKS.public) {
+      if (policyOptions.allow_redaction && redactionCount > 0 && !channels.has('compositional')) {
+        status = 'redacted';
+        allowed = true;
+      } else {
+        status = 'blocked';
+        allowed = false;
+      }
+    } else if (destRank <= FLOW_TIER_RANKS.protected) {
+      if (channels.has('credential') || findings.includes('path_traversal') || findings.includes('system_file_access')) {
+        status = 'blocked';
+        allowed = false;
+      } else {
+        status = 'consent_required';
+        allowed = false;
+      }
+    } else {
+      // confidential destination with restricted finding
+      if (channels.has('credential')) {
+        status = 'consent_required';
+        allowed = false;
+      }
+    }
+  }
+
+  const evaluatedAt = new Date().toISOString();
+  const sortedFindings = Array.from(new Set(findings)).sort();
+  const sortedChannels = Array.from(channels).sort();
+
+  const salt = (policyOptions && typeof policyOptions.salt === 'string' && policyOptions.salt.length > 0)
+    ? policyOptions.salt
+    : FLOW_GOVERNOR_DEFAULTS.default_salt;
+
+  const originalHash = computeContextFingerprint(JSON.stringify(validated.parameters));
+  const sanitizedHash = computeContextFingerprint(JSON.stringify(sanitizedParams));
+
+  const commitmentSeed = [
+    status,
+    validated.tool_name,
+    destTier,
+    originalHash,
+    sanitizedHash,
+    sortedFindings.join(','),
+    sortedChannels.join(','),
+    evaluatedAt,
+    salt
+  ].join('|');
+
+  const commitmentHash = computeContextFingerprint(commitmentSeed);
+  const receiptId = 'flow_rcpt_' + commitmentHash;
+
+  const receipt = deepFreeze({
+    receipt_id: receiptId,
+    tool_name: validated.tool_name,
+    destination_tier: destTier,
+    status,
+    evaluated_at: evaluatedAt,
+    original_hash: originalHash,
+    sanitized_hash: sanitizedHash,
+    findings: sortedFindings,
+    channels_implicated: sortedChannels,
+    redaction_count: redactionCount,
+    commitment_hash: commitmentHash
+  });
+
+  return deepFreeze({
+    ok: true,
+    allowed,
+    status,
+    tool_name: validated.tool_name,
+    destination_tier: destTier,
+    findings: sortedFindings,
+    channels_implicated: sortedChannels,
+    sanitized_parameters: sanitizedParams,
+    receipt,
+    reason: allowed ? 'Information flow authorized' : ('Information flow blocked or held: ' + sortedFindings.join(', '))
+  });
+}
+
+export function verifyInformationFlowReceipt(receipt, options = {}) {
+  if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_receipt', reason: 'Receipt must be a non-null object' });
+  }
+
+  if (Object.prototype.hasOwnProperty.call(receipt, '__proto__') ||
+      Object.prototype.hasOwnProperty.call(receipt, 'constructor') ||
+      Object.prototype.hasOwnProperty.call(receipt, 'prototype') ||
+      (Object.getPrototypeOf(receipt) !== Object.prototype && Object.getPrototypeOf(receipt) !== null)) {
+    return deepFreeze({ ok: false, verified: false, error: 'prototype_pollution_detected' });
+  }
+
+  const requiredFields = [
+    'receipt_id', 'tool_name', 'destination_tier', 'status',
+    'evaluated_at', 'original_hash', 'sanitized_hash', 'findings',
+    'channels_implicated', 'redaction_count', 'commitment_hash'
+  ];
+
+  for (const f of requiredFields) {
+    if (receipt[f] === undefined) {
+      return deepFreeze({ ok: false, verified: false, error: 'missing_receipt_field', reason: 'Missing field: ' + f });
+    }
+  }
+
+  if (!FLOW_SECURITY_TIERS.includes(receipt.destination_tier)) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_destination_tier' });
+  }
+
+  if (!Array.isArray(receipt.findings) || !Array.isArray(receipt.channels_implicated)) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_findings_array' });
+  }
+
+  if (!Number.isSafeInteger(receipt.redaction_count) || receipt.redaction_count < 0) {
+    return deepFreeze({ ok: false, verified: false, error: 'invalid_redaction_count' });
+  }
+
+  const salt = (options && typeof options === 'object' && typeof options.salt === 'string' && options.salt.length > 0)
+    ? options.salt
+    : FLOW_GOVERNOR_DEFAULTS.default_salt;
+
+  const sortedFindings = Array.from(new Set(receipt.findings)).sort();
+  const sortedChannels = Array.from(new Set(receipt.channels_implicated)).sort();
+
+  const expectedSeed = [
+    receipt.status,
+    receipt.tool_name,
+    receipt.destination_tier,
+    receipt.original_hash,
+    receipt.sanitized_hash,
+    sortedFindings.join(','),
+    sortedChannels.join(','),
+    receipt.evaluated_at,
+    salt
+  ].join('|');
+
+  const expectedCommitment = computeContextFingerprint(expectedSeed);
+
+  if (receipt.commitment_hash !== expectedCommitment) {
+    return deepFreeze({ ok: false, verified: false, error: 'commitment_hash_mismatch', reason: 'Receipt commitment hash does not match state' });
+  }
+
+  if (receipt.receipt_id !== 'flow_rcpt_' + expectedCommitment) {
+    return deepFreeze({ ok: false, verified: false, error: 'receipt_id_mismatch', reason: 'receipt_id does not bind commitment hash' });
+  }
+
+  return deepFreeze({
+    ok: true,
+    verified: true,
+    receipt_id: receipt.receipt_id,
+    status: receipt.status,
+    tool_name: receipt.tool_name,
+    destination_tier: receipt.destination_tier,
+    redaction_count: receipt.redaction_count,
+    reason: 'Receipt verified authentic with status: ' + receipt.status
+  });
+}
+
+export function summarizeInformationFlow(result) {
+  if (!result || typeof result !== 'object' || !result.ok || !result.receipt) {
+    return deepFreeze({
+      ok: false,
+      text: result?.reason || result?.error || 'Information flow evaluation failed fail-closed.',
+      status_label: 'Evaluation failed',
+      status_class: 'status-err',
+      allowed: false
+    });
+  }
+
+  const r = result.receipt;
+  let statusLabel = 'Allowed';
+  let statusClass = 'status-ok';
+  let text = '';
+
+  if (r.status === 'allowed') {
+    statusLabel = 'Clean flow';
+    statusClass = 'status-ok';
+    text = `Tool dispatch '${r.tool_name}' to ${r.destination_tier} destination complies with information flow boundaries (${r.receipt_id}).`;
+  } else if (r.status === 'redacted') {
+    statusLabel = `Redacted (${r.redaction_count} sensitive fields sanitized)`;
+    statusClass = 'status-warn';
+    const findingDesc = r.findings.map(f => f.replace(/_/g, ' ')).join(', ');
+    text = `Tool dispatch '${r.tool_name}' permitted after redacting ${r.redaction_count} sensitive tokens (${findingDesc}). Target ${r.destination_tier} destination received sanitized payload (${r.receipt_id}).`;
+  } else if (r.status === 'consent_required') {
+    statusLabel = 'Requires confirmation';
+    statusClass = 'status-warn';
+    const channelsDesc = r.channels_implicated.map(c => c.replace(/_/g, ' ')).join(', ');
+    text = `Tool dispatch '${r.tool_name}' requires explicit user confirmation. Crosses ${channelsDesc} privacy boundaries for ${r.destination_tier} destination (${r.receipt_id}).`;
+  } else {
+    statusLabel = 'Blocked';
+    statusClass = 'status-err';
+    const findingDesc = r.findings.map(f => f.replace(/_/g, ' ')).join(', ');
+    text = `Tool dispatch '${r.tool_name}' blocked from sending to ${r.destination_tier} destination (${r.receipt_id}). Blocked sensitive leaks: ${findingDesc}.`;
+  }
+
+  return deepFreeze({
+    ok: true,
+    text,
+    status_label: statusLabel,
+    status_class: statusClass,
+    allowed: result.allowed,
+    receipt_id: r.receipt_id
+  });
+}
