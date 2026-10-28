@@ -177,8 +177,8 @@
   FLEET.forEach(function (f, i) { f.feeds.forEach(function (name, j) { SENSORS.push({ k: i, a: f.a + (j ? 0.22 : -0.22), r: 0.88, name: name }); }); });
 
   // Routine questions on the data-only stream: [question, answer, agent, who asks].
-  var ASK = [['Over 18?', 'yes (ZK)', 0, 'a shop’s agent'], ['Insured?', 'yes (ZK)', 1, 'a clinic’s agent'], ['Income ok?', 'yes (ZK)', 2, 'a benefits agent'],
-    ['Lease valid?', 'yes (ZK)', 3, 'a utility’s agent'], ['Local resident?', 'yes (ZK)', 4, 'a library’s agent'], ['Licensed?', 'yes (ZK)', 5, 'an employer’s agent']];
+  var ASK = [['Over 18?', 'yes (verified)', 0, 'a shop’s agent'], ['Insured?', 'yes (verified)', 1, 'a clinic’s agent'], ['Income ok?', 'yes (verified)', 2, 'a benefits agent'],
+    ['Lease valid?', 'yes (verified)', 3, 'a utility’s agent'], ['Local resident?', 'yes (verified)', 4, 'a library’s agent'], ['Licensed?', 'yes (verified)', 5, 'an employer’s agent']];
   var GRAB = [['Full ID scan', 0, 'an ad network'], ['Medical chart', 1, 'a data broker'], ['All bank logs', 2, 'a lending bot'],
     ['Contact list', 3, 'a scraper'], ['GPS history', 4, 'a tracking bot'], ['Work dossier', 5, 'a recruiter bot']];
 
@@ -523,7 +523,7 @@
     roundRect(pos.x - z, pos.y - z, z * 2, z * 2, 4); ctx.fill(); ctx.globalAlpha = 1;
     if (fade > 0.05) {
       ctx.globalAlpha = fade;
-      label(def.tag + (def.tau ? ' (τ=' + def.tau + ')' : ''), pos.x, pos.y - z - fs * 1.35, def.fake ? colors.bad : colors.ink, colors.card, 'center');
+      label(def.tag, pos.x, pos.y - z - fs * 1.35, def.fake ? colors.bad : colors.ink, colors.card, 'center');
       ctx.globalAlpha = 1;
     }
 
@@ -552,11 +552,11 @@
       }
     }
 
-    // 1 pure ZK fact crosses the firewall gate; pure data stream returns and is synthesized in your Local Sandbox
+    // 1 verified fact crosses the firewall gate; pure data stream returns and is synthesized in your Local Sandbox
     if (!no && d > 8.0 && d < 9.6) {
       var pk = along([hp, gp, pos], ease((d - 8.0) / 1.3));
       disc(pk, 4.5, colors.ok);
-      label('ZK proof: ' + def.out, pk.x, pk.y + fs * 1.9, colors.ok, colors.card, 'center');
+      label('verified fact: ' + def.out, pk.x, pk.y + fs * 1.9, colors.ok, colors.card, 'center');
     }
     if (!no && d > 9.6 && d < 11.2) {
       var rk = along([pos, gp, { x: cx, y: cy }], ease((d - 9.6) / 1.3));
@@ -670,7 +670,7 @@
     text(compact ? '6 local agents' : '6 Local Agents · Data In, Code Built Here', cx, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
 
     text(compact ? '3. AGENT STREAM' : '3. AGENT-ONLY STREAM', (wallX + W) / 2, H * 0.048, colors.blue, 700, hdrFs, 'center', 0.94);
-    text(compact ? 'Trust + audit' : 'Trust Streams (τ) + Distributed Audit', (wallX + W) / 2, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
+    text(compact ? 'Trust + audit' : 'Agent-to-Agent Streams + Shared Audit', (wallX + W) / 2, H * 0.084, colors.ink3, 600, Math.max(7.5, hdrFs - 1), 'center', 0.8);
 
     // 2. Zone 1 (Human Sanctuary): YOU + Live Coupled ECG/HRV Scope + Mortal Computation Tether
     // Mortal Computation double-tether connecting YOU to your Local Sandbox
@@ -678,7 +678,7 @@
     line({ x: youX + R * 0.16, y: youY + 4 }, { x: cx - R * 0.85, y: cy + 4 }, isDuress ? colors.bad : colors.gold, 0.35, [2, 4], 1.2);
     var pulseT = (t * 0.7) % 1;
     disc(lerp({ x: youX + R * 0.16, y: youY }, { x: cx - R * 0.85, y: cy }, pulseT), 2.2, isDuress ? colors.bad : colors.ok, 0.9);
-    if (!compact) text('MORTAL LEASE', (youX + cx - R * 0.65) / 2, youY - 12, isDuress ? colors.bad : colors.gold, 600, Math.max(6.5, Math.round(fs * 0.68)), 'center', 0.85);
+    if (!compact) text('SHARED LIFESPAN', (youX + cx - R * 0.65) / 2, youY - 12, isDuress ? colors.bad : colors.gold, 600, Math.max(6.5, Math.round(fs * 0.68)), 'center', 0.85);
 
     // YOU node
     var bioR = R * 0.20 + Math.sin(t * (isDuress ? 12 : 2.8)) * 2;
@@ -705,8 +705,8 @@
     }
     ctx.stroke();
     ctx.restore();
-    text(isDuress ? (compact ? 'DURESS!' : 'HRV: 14ms (DURESS!)') : (compact ? 'HRV · <1mW' : 'HRV: 54ms · <1mW PUF'), scopeX + scopeW / 2, scopeY + scopeH / 2 + fs * 0.85, isDuress ? colors.bad : colors.ok, 600, Math.max(6.8, Math.round(fs * 0.72)), 'center', 0.9);
-    text(compact ? '0B raw out' : '30s SRAM · 0B raw out', scopeX + scopeW / 2, scopeY + scopeH / 2 + fs * 1.75, colors.ink3, 600, Math.max(6.5, Math.round(fs * 0.66)), 'center', 0.75);
+    text(isDuress ? (compact ? 'DURESS!' : 'Acute stress (DURESS!)') : (compact ? 'Calm pulse' : 'Calm pulse · local check'), scopeX + scopeW / 2, scopeY + scopeH / 2 + fs * 0.85, isDuress ? colors.bad : colors.ok, 600, Math.max(6.8, Math.round(fs * 0.72)), 'center', 0.9);
+    text(compact ? '0B raw out' : 'Stays on device · 0B raw out', scopeX + scopeW / 2, scopeY + scopeH / 2 + fs * 1.75, colors.ink3, 600, Math.max(6.5, Math.round(fs * 0.66)), 'center', 0.75);
 
     // 3. Zone 2 (Center): Your Hardware-Enclaved Local Sandbox + 6 Narrow Agents + Sensors
     // Inner 6-agent quorum ring & sandbox spokes
@@ -746,10 +746,10 @@
       disc(g, 3.2, colors.card);
       ring(g, 3.2, colors.ok, 0.85, 1.4);
     }
-    text(compact ? 'SILICON WALL' : 'NON-CONTACT SILICON WALL (PUF+TPM)', wallX, botY + fs * 0.85, colors.ink3, 600, Math.max(6.8, Math.round(fs * 0.7)), 'center', 0.85);
+    text(compact ? 'FIREWALL' : 'PROTECTION BOUNDARY (NO BOTS IN)', wallX, botY + fs * 0.85, colors.ink3, 600, Math.max(6.8, Math.round(fs * 0.7)), 'center', 0.85);
 
     // 5. Zone 3 (Right): Agent-Only Internet & Real-Time Data-Only Ledger Stream + REA Auditors
-    var laneLabels = ['τ≥.85', 'τ≥.60', 'τ≥.30'];
+    var laneLabels = ['trusted', 'guilds', 'public'];
     for (var lI = 0; lI < 3; lI++) {
       var lx = wallX + (W - wallX) * (0.24 + lI * 0.28);
       line({ x: lx, y: topY + 14 }, { x: lx, y: botY - 14 }, colors.blue, 0.18, [2, 6], 1);
