@@ -14,7 +14,215 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=29">
+  <link rel="stylesheet" href="/styles/site.css?v=30">
+  <style>
+    .dpop-sim-shell {
+      border: 1px solid var(--rule, #d8d2c4);
+      border-radius: var(--radius, 14px);
+      padding: 1.4rem;
+      margin: 2.2rem 0;
+      background: var(--card, #fbf9f4);
+    }
+    .dpop-header {
+      margin-bottom: 1.2rem;
+    }
+    .dpop-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ok, #1f6f68);
+      margin-bottom: 0.4rem;
+    }
+    .dpop-header h3 {
+      margin: 0.2rem 0 0.5rem;
+      font-size: 1.25rem;
+      font-family: var(--serif);
+      color: var(--ink, #17181c);
+    }
+    .dpop-sub {
+      font-size: 0.92rem;
+      color: var(--ink-2, #44464d);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .dpop-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule, #d8d2c4);
+    }
+    .dpop-btn {
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--rule, #d8d2c4);
+      background: var(--paper, #f5f2eb);
+      color: var(--ink, #17181c);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .dpop-btn:hover {
+      background: var(--paper-2, #ece7dc);
+    }
+    .dpop-btn-primary {
+      background: var(--ink, #17181c);
+      color: var(--paper, #f5f2eb);
+      border-color: var(--ink, #17181c);
+      font-weight: 600;
+    }
+    .dpop-btn-primary:hover {
+      background: var(--ink-2, #44464d);
+    }
+    .dpop-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    @media (max-width: 640px) {
+      .dpop-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .dpop-card {
+      border: 1px solid var(--rule, #d8d2c4);
+      border-radius: 10px;
+      padding: 1.1rem;
+      background: var(--paper, #f5f2eb);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .dpop-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--rule, #d8d2c4);
+      padding-bottom: 0.6rem;
+    }
+    .dpop-card-header h4 {
+      margin: 0;
+      font-size: 0.96rem;
+      color: var(--ink, #17181c);
+    }
+    .dpop-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-neutral {
+      background: var(--paper-2, #ece7dc);
+      color: var(--ink-3, #6d6f76);
+    }
+    .badge-warning {
+      background: #fdf3d8;
+      color: #925c04;
+    }
+    .badge-danger {
+      background: #fde8e4;
+      color: var(--accent, #c8402a);
+    }
+    .badge-success {
+      background: #e2f4f1;
+      color: var(--ok, #1f6f68);
+    }
+    @media (prefers-color-scheme: dark) {
+      .badge-warning {
+        background: #3b2a08;
+        color: #f7ca5d;
+      }
+      .badge-danger {
+        background: #3c1914;
+        color: #fca595;
+      }
+      .badge-success {
+        background: #113330;
+        color: #7ce3d6;
+      }
+    }
+    .dpop-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .dpop-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .dpop-label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--ink-3, #6d6f76);
+      letter-spacing: 0.03em;
+    }
+    .dpop-field code {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      background: var(--card, #fbf9f4);
+      padding: 0.25rem 0.45rem;
+      border-radius: 5px;
+      border: 1px solid var(--rule, #d8d2c4);
+      word-break: break-all;
+    }
+    .dpop-val {
+      font-size: 0.86rem;
+      color: var(--ink-2, #44464d);
+      font-weight: 500;
+    }
+    .dpop-desc {
+      font-size: 0.86rem;
+      color: var(--ink-2, #44464d);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .dpop-log-box {
+      border: 1px solid var(--rule, #d8d2c4);
+      border-radius: 8px;
+      background: var(--paper-2, #ece7dc);
+      overflow: hidden;
+    }
+    .dpop-log-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--ink-3, #6d6f76);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--rule, #d8d2c4);
+    }
+    .dpop-log-status {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--ok, #1f6f68);
+    }
+    .dpop-log-body {
+      margin: 0;
+      padding: 0.85rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: var(--ink, #17181c);
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 240px;
+      overflow-y: auto;
+    }
+  </style>
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -100,6 +308,76 @@
       <li><b>Observable training.</b> Training runs are logged and inspectable, so that sudden jumps in capability, or signs that a model is learning to hide what it can do, are seen while there is still time to stop.</li>
     </ul>
 
+    <h2>Cryptographic containment: binding authority to client keys</h2>
+    <p>Containment boundaries fail if an authorization token can be copied out of an agent's memory or logs and reused by an attacker. In traditional web systems, access tokens are &ldquo;bearer tokens&rdquo;: whoever bears the token has the authority. If a contained model or a network attacker extracts a bearer token, they can replay it anywhere.</p>
+    <p>To eliminate token replay without requiring stateful shared secrets, agent-to-agent boundaries use <strong>Demonstrating Proof-of-Possession</strong> (DPoP, <a href="https://www.rfc-editor.org/rfc/rfc9449" rel="noopener noreferrer">IETF RFC 9449</a>). Under DPoP, every access token is cryptographically bound to a private key kept inside the personal agent's hardware enclave. Every outgoing request signs a fresh proof header containing the target endpoint, HTTP method, and timestamp. If a token is intercepted, an adversary cannot replay it because they do not hold the enclave's private key.</p>
+
+    <section id="dpop-demo" class="dpop-sim-shell" aria-label="Interactive demonstration of DPoP proof-of-possession token replay defense">
+      <div class="dpop-header">
+        <span class="dpop-tag">Interactive Boundary Simulator</span>
+        <h3>Bearer Token Replay vs. DPoP Proof-of-Possession</h3>
+        <p class="dpop-sub">Compare what happens when an attacker intercepts an agent's access token and attempts to replay it against protected infrastructure.</p>
+      </div>
+
+      <div class="dpop-controls">
+        <button type="button" class="dpop-btn dpop-btn-primary" id="btn-simulate-attack">Simulate Interception Attack</button>
+        <button type="button" class="dpop-btn" id="btn-simulate-bearer">Simulate Bearer Only</button>
+        <button type="button" class="dpop-btn" id="btn-reset-demo">Reset Simulation</button>
+      </div>
+
+      <div class="dpop-grid">
+        <div class="dpop-card" id="card-bearer">
+          <div class="dpop-card-header">
+            <h4>1. Legacy Bearer Token</h4>
+            <span class="dpop-badge badge-warning" id="badge-bearer">Awaiting Test</span>
+          </div>
+          <div class="dpop-card-body">
+            <div class="dpop-field">
+              <span class="dpop-label">Token Format</span>
+              <code>Bearer eyJhbGciOi...</code>
+            </div>
+            <div class="dpop-field">
+              <span class="dpop-label">Client Key Binding</span>
+              <span class="dpop-val">None (Possession = Authority)</span>
+            </div>
+            <div class="dpop-field">
+              <span class="dpop-label">Interception Outcome</span>
+              <p class="dpop-desc" id="desc-bearer">Click &ldquo;Simulate Interception Attack&rdquo; to observe whether a stolen token can be replayed.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dpop-card" id="card-dpop">
+          <div class="dpop-card-header">
+            <h4>2. DPoP Proof-of-Possession (RFC 9449)</h4>
+            <span class="dpop-badge badge-neutral" id="badge-dpop">Awaiting Test</span>
+          </div>
+          <div class="dpop-card-body">
+            <div class="dpop-field">
+              <span class="dpop-label">Token Format</span>
+              <code>DPoP eyJhbGciOi...</code>
+            </div>
+            <div class="dpop-field">
+              <span class="dpop-label">Client Key Binding</span>
+              <span class="dpop-val">Hardware Enclave Key (SHA-256 Thumbprint)</span>
+            </div>
+            <div class="dpop-field">
+              <span class="dpop-label">Interception Outcome</span>
+              <p class="dpop-desc" id="desc-dpop">Click &ldquo;Simulate Interception Attack&rdquo; to observe how the receiver verifies cryptographic possession.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dpop-log-box" aria-live="polite">
+        <div class="dpop-log-head">
+          <span>Boundary Verification Telemetry</span>
+          <span class="dpop-log-status" id="dpop-log-status">Idle</span>
+        </div>
+        <pre class="dpop-log-body" id="dpop-log-body">Ready. Select an action above to test token replay resistance.</pre>
+      </div>
+    </section>
+
     <h2>How containment fits with personal agents</h2>
     <p>Containment is one half of our approach to AI safety. The other half is <a href="/notes/fractured-alignment">fractured alignment</a>: instead of one giant mind that everyone talks to, many smaller agents, each working for one person and limited in what it can do.</p>
     <p>The two fit together. The most capable models stay contained, and reach the human world only through layers of smaller agents that check their work. A person's own agent decides what of that work is useful to its person and shows it to them. No contained model gets a direct line to millions of people, their accounts or their devices.</p>
@@ -164,6 +442,89 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=10" defer></script>
+<script>
+(function() {
+  const btnAttack = document.getElementById("btn-simulate-attack");
+  const btnBearer = document.getElementById("btn-simulate-bearer");
+  const btnReset = document.getElementById("btn-reset-demo");
+  const badgeBearer = document.getElementById("badge-bearer");
+  const badgeDpop = document.getElementById("badge-dpop");
+  const descBearer = document.getElementById("desc-bearer");
+  const descDpop = document.getElementById("desc-dpop");
+  const logStatus = document.getElementById("dpop-log-status");
+  const logBody = document.getElementById("dpop-log-body");
+
+  if (!btnAttack || !btnBearer || !btnReset) return;
+
+  function runAttack(simulateDpop) {
+    // 1. Bearer Token Replay
+    badgeBearer.textContent = "EXPLOITED";
+    badgeBearer.className = "dpop-badge badge-danger";
+    descBearer.textContent = "Attacker extracted the bearer token from logs and replayed it from an untrusted client. Protected endpoint granted full access (HTTP 200 OK) because bearer tokens cannot verify caller identity.";
+
+    if (simulateDpop) {
+      // 2. DPoP Proof-of-Possession Defense
+      badgeDpop.textContent = "FAIL-CLOSED";
+      badgeDpop.className = "dpop-badge badge-success";
+      descDpop.textContent = "Attacker extracted the DPoP token and attempted to replay it. Receiver rejected the request (HTTP 401 Unauthorized: INVALID_DPOP_PROOF) because the attacker does not hold the hardware enclave's private key.";
+
+      logStatus.textContent = "DEFENDED (RFC 9449)";
+      logStatus.style.color = "var(--ok, #1f6f68)";
+      logBody.textContent = [
+        "[INTERCEPTION DETECTED] Adversary extracted active token strings from compromised memory.",
+        "",
+        "--- STEP 1: BEARER TOKEN REPLAY ---",
+        "-> POST /api/v1/tools/execute HTTP/1.1",
+        "-> Host: sovereign-agent.local",
+        "-> Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "<- HTTP/1.1 200 OK",
+        "   Result: EXPLOITED. Receiver has no binding to verify key possession.",
+        "",
+        "--- STEP 2: DPoP PROOF-OF-POSSESSION REPLAY (RFC 9449) ---",
+        "-> POST /api/v1/tools/execute HTTP/1.1",
+        "-> Host: sovereign-agent.local",
+        "-> Authorization: DPoP eyJhbGciOiJSUzI1NiIsInR5cCI6ImRwb3Arand0In0...",
+        "-> DPoP: eyJ0eXAiOiJkcG9wK2p3dCIsImFsZyI6IkVTMjU2In0... (forged/missing signature)",
+        "<- HTTP/1.1 401 Unauthorized",
+        "   Header: WWW-Authenticate: DPoP error=\"invalid_dpop_proof\", error_description=\"Thumbprint mismatch. Enclave signature verification failed.\"",
+        "   Result: FAIL-CLOSED DEFENSE. Token cannot be replayed without enclave private key."
+      ].join("\n");
+    } else {
+      badgeDpop.textContent = "Awaiting Test";
+      badgeDpop.className = "dpop-badge badge-neutral";
+      descDpop.textContent = "DPoP test pending. Click \"Simulate Interception Attack\" to test proof-of-possession defense.";
+
+      logStatus.textContent = "BEARER EXPLOITED";
+      logStatus.style.color = "var(--accent, #c8402a)";
+      logBody.textContent = [
+        "[BEARER ONLY REPLAY]",
+        "-> POST /api/v1/tools/execute HTTP/1.1",
+        "-> Authorization: Bearer eyJhbGciOiJIUzI1Ni...",
+        "<- HTTP/1.1 200 OK (Access Granted)",
+        "   Vulnerability: Anyone holding the token exercises full authority."
+      ].join("\n");
+    }
+  }
+
+  function resetDemo() {
+    badgeBearer.textContent = "Awaiting Test";
+    badgeBearer.className = "dpop-badge badge-warning";
+    descBearer.textContent = "Click \"Simulate Interception Attack\" to observe whether a stolen token can be replayed.";
+
+    badgeDpop.textContent = "Awaiting Test";
+    badgeDpop.className = "dpop-badge badge-neutral";
+    descDpop.textContent = "Click \"Simulate Interception Attack\" to observe how the receiver verifies cryptographic possession.";
+
+    logStatus.textContent = "Idle";
+    logStatus.style.color = "";
+    logBody.textContent = "Ready. Select an action above to test token replay resistance.";
+  }
+
+  btnAttack.addEventListener("click", function() { runAttack(true); });
+  btnBearer.addEventListener("click", function() { runAttack(false); });
+  btnReset.addEventListener("click", resetDemo);
+})();
+</script>
+<script src="/scripts/site.js?v=11" defer></script>
 </body>
 </html>
