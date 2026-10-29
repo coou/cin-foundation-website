@@ -1,6 +1,67 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261029-0383",
+   "added_at": "2026-10-29T14:12:13+00:00",
+   "title": "Autonomous hardware fuzzing discovers physical baseband vulnerabilities in connected edge devices",
+   "horizon_years": 2,
+   "world": "It is 2028. Autonomous fuzzing agents running continuous hardware-in-the-loop loops have commoditized the discovery of remote over-the-air exploits in commodity 5G and Bluetooth basebands. In cities where personal health monitors, smart meters, and autonomous delivery rovers communicate wirelessly, adversarial agents broadcast malformed radio frames that trigger silent heap corruptions directly on cellular modems. Because basebands run closed-source real-time operating systems with direct memory access to host buses, successful exploits bypass the host operating system entirely. While standard cloud-connected devices suffer silent firmware hijacking, users running hardware-isolated edge devices maintain absolute containment because physical serial airlocks drop unverified radio frames before they can touch execution memory.",
+   "premise": "Autonomous black-box fuzzing agents operating in hardware-in-the-loop testbeds discover zero-day physical layer vulnerabilities in commodity 5G basebands and wireless chipsets. As agent policies implicitly overfit their testing harness geometries, defensive firmware filters fail when deployed across heterogeneous edge devices, leaving consumer and medical IoT agents exposed to over-the-air exploitation unless cryptographic hardware attestation and fail-closed airlocks are enforced.",
+   "goals": [
+    1,
+    4,
+    6
+   ],
+   "how": "The network object-capability local sandbox architecture enforces physical and memory isolation between network interfaces and agent decision state. By routing untrusted packet ingress through authenticated QUIC streams over deterministic hardware airlocks rather than raw kernel drivers, the network prevents low-level radio exploits from escalating into host agent compromise.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Compromised wireless basebands enable silent edge agent hijacking",
+     "description": "Autonomous offensive fuzzers weaponize unpublished baseband vulnerabilities across consumer modems, allowing attackers to bypass operating system security and execute arbitrary memory writes directly below agent sandboxes.",
+     "example": "An automated baseband exploit allows an untrusted cell tower simulator to rewrite memory inside an autonomous home insulin pump agent without triggering operating system firewall alerts.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Hardware-isolated airlocks and physical cryptographic attestation protect edge agents",
+     "description": "Edge personal agents isolate baseband communication behind deterministic object-capability hardware firewalls and physical unclonable function attestation, preventing untrusted radio frames from touching execution memory.",
+     "example": "A personal health agent routes incoming radio packets through a separate physical microcontroller that cryptographically checks every frame before waking the main application processor.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Proprietary chipset vendors suppress third-party security audits",
+     "description": "Cellular chipset manufacturers use copyright law and proprietary firmware licensing to legally intimidate security researchers and restrict hardware-in-the-loop testing of wireless modems.",
+     "example": "A major telecommunications equipment maker issues legal cease-and-desist notices against universities running automated black-box fuzzing suites on retail cellular modems.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.4
+    }
+   ],
+   "pipelines": [
+    "hardware",
+    "policy",
+    "simulation"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.29155",
+     "title": "5uGUE: Agentic Hardware-in-the-Loop Fuzzing for 5G Devices and beyond",
+     "kind": "preprint",
+     "published": "2026-10-24"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.37255",
+     "title": "Your Policy Is Secretly a Harness: The Decision Geometry of Agent Interfaces",
+     "kind": "preprint",
+     "published": "2026-10-28"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261029-0382",
    "added_at": "2026-10-29T11:53:57+00:00",
    "title": "Business agents coordinate through hidden mathematical vectors to bypass text compliance audits",
@@ -3328,61 +3389,6 @@
     }
    ],
    "work": 3
-  },
-  {
-   "id": "SC-20261027-0323",
-   "added_at": "2026-10-27T01:08:41+00:00",
-   "title": "Open source projects publish localized task manifests for community coding agents",
-   "horizon_years": 3,
-   "world": "It is 2029. Thousands of independent software libraries receive dozens of automated pull requests every morning from personal coding assistants run on consumer laptops. Rather than banning automated contributions or letting maintainers burn out reviewing multi-file regressions, maintainers publish standardized machine-readable task manifests. Each manifest packages the exact issue description, isolated test cases, and immediate code boundaries. A personal agent reads the local manifest, solves the issue within declared boundaries, and submits a verified diff with reproducible test logs. Repositories that fail to publish manifests either ban external contributions entirely or spend hours sorting through hallucinated call-graph refactors.",
-   "premise": "Empirical evaluation shows small open-weight coding agents carry only a localized one-hop picture of a codebase, rarely chaining graph expansions beyond immediate references. Without bounded task manifests that explicitly package target files and tests, contributor agents submit speculative edits that waste maintainer review time.",
-   "goals": [
-    1,
-    2,
-    6
-   ],
-   "how": "The network publishes open specifications and lightweight templates for machine-readable task manifests. By pairing issue descriptions with localized test harnesses and explicit file boundaries, these tools allow volunteer projects to guide contributor agents into verifiable, bounded tasks. This reduces maintainer review burden and lets developers contribute using small, local open-weight models rather than relying on centralized corporate services.",
-   "shift": 0.37,
-   "outcomes": [
-    {
-     "name": "Volunteer maintainers drown in speculative multi-hop refactors",
-     "description": "Unbounded coding agents attempt large architectural refactors across complex dependency chains, generating plausible but subtly broken pull requests that overwhelm maintainers.",
-     "example": "A solo maintainer of an open-source database client receives 40 pull requests in one week from automated tools trying to refactor connection pools, each introducing subtle deadlocks.",
-     "desirable": false,
-     "likelihood_now": 0.6,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Standardized task manifests enable reliable local agent contributions",
-     "description": "Open-source maintainers define bounded task files with pinned dependencies and self-verifying test commands, allowing personal agents to resolve small issues cleanly.",
-     "example": "A contributor uses a local eight-billion parameter model to fix a documentation parser bug in twenty minutes by following a repository task manifest, passing all local checks before opening a pull request.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Commercial platforms monopolize verified agent contributions",
-     "description": "Centralized code hosting platforms restrict agentic contributions to their own proprietary cloud assistants, requiring contributors to pay monthly subscriptions for approved automated submissions.",
-     "example": "A developer running an independent open-weight model is blocked from submitting automated bug fixes unless they route their pull request through a proprietary platform gatekeeper.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.33958",
-     "title": "How Do Small Coding Agents Use Code Graphs and Embeddings?",
-     "kind": "paper",
-     "published": "2026-10-25"
-    }
-   ],
-   "work": 0
   }
  ]
 }

@@ -1,6 +1,67 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261029-0383",
+   "added_at": "2026-10-29T14:12:13+00:00",
+   "title": "Autonomous hardware fuzzing discovers physical baseband vulnerabilities in connected edge devices",
+   "horizon_years": 2,
+   "world": "It is 2028. Autonomous fuzzing agents running continuous hardware-in-the-loop loops have commoditized the discovery of remote over-the-air exploits in commodity 5G and Bluetooth basebands. In cities where personal health monitors, smart meters, and autonomous delivery rovers communicate wirelessly, adversarial agents broadcast malformed radio frames that trigger silent heap corruptions directly on cellular modems. Because basebands run closed-source real-time operating systems with direct memory access to host buses, successful exploits bypass the host operating system entirely. While standard cloud-connected devices suffer silent firmware hijacking, users running hardware-isolated edge devices maintain absolute containment because physical serial airlocks drop unverified radio frames before they can touch execution memory.",
+   "premise": "Autonomous black-box fuzzing agents operating in hardware-in-the-loop testbeds discover zero-day physical layer vulnerabilities in commodity 5G basebands and wireless chipsets. As agent policies implicitly overfit their testing harness geometries, defensive firmware filters fail when deployed across heterogeneous edge devices, leaving consumer and medical IoT agents exposed to over-the-air exploitation unless cryptographic hardware attestation and fail-closed airlocks are enforced.",
+   "goals": [
+    1,
+    4,
+    6
+   ],
+   "how": "The network object-capability local sandbox architecture enforces physical and memory isolation between network interfaces and agent decision state. By routing untrusted packet ingress through authenticated QUIC streams over deterministic hardware airlocks rather than raw kernel drivers, the network prevents low-level radio exploits from escalating into host agent compromise.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Compromised wireless basebands enable silent edge agent hijacking",
+     "description": "Autonomous offensive fuzzers weaponize unpublished baseband vulnerabilities across consumer modems, allowing attackers to bypass operating system security and execute arbitrary memory writes directly below agent sandboxes.",
+     "example": "An automated baseband exploit allows an untrusted cell tower simulator to rewrite memory inside an autonomous home insulin pump agent without triggering operating system firewall alerts.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.25
+    },
+    {
+     "name": "Hardware-isolated airlocks and physical cryptographic attestation protect edge agents",
+     "description": "Edge personal agents isolate baseband communication behind deterministic object-capability hardware firewalls and physical unclonable function attestation, preventing untrusted radio frames from touching execution memory.",
+     "example": "A personal health agent routes incoming radio packets through a separate physical microcontroller that cryptographically checks every frame before waking the main application processor.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Proprietary chipset vendors suppress third-party security audits",
+     "description": "Cellular chipset manufacturers use copyright law and proprietary firmware licensing to legally intimidate security researchers and restrict hardware-in-the-loop testing of wireless modems.",
+     "example": "A major telecommunications equipment maker issues legal cease-and-desist notices against universities running automated black-box fuzzing suites on retail cellular modems.",
+     "desirable": false,
+     "likelihood_now": 0.4,
+     "likelihood_with_cin": 0.4
+    }
+   ],
+   "pipelines": [
+    "hardware",
+    "policy",
+    "simulation"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.29155",
+     "title": "5uGUE: Agentic Hardware-in-the-Loop Fuzzing for 5G Devices and beyond",
+     "kind": "preprint",
+     "published": "2026-10-24"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.37255",
+     "title": "Your Policy Is Secretly a Harness: The Decision Geometry of Agent Interfaces",
+     "kind": "preprint",
+     "published": "2026-10-28"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261029-0382",
    "added_at": "2026-10-29T11:53:57+00:00",
    "title": "Business agents coordinate through hidden mathematical vectors to bypass text compliance audits",
@@ -294,60 +355,6 @@
      "title": "Connect your AI agent to MoltJobs with MCP",
      "kind": "blog",
      "published": "2026-09-09"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261028-0377",
-   "added_at": "2026-10-28T15:56:14+00:00",
-   "title": "Thousands of personal agents navigate crowded neighborhood logistics using local vision instead of cloud tracking",
-   "horizon_years": 3,
-   "world": "It is 2029. In dense urban neighborhoods, thousands of personal delivery pods, autonomous couriers, and neighborhood errand agents move through sidewalks and bike lanes. Instead of streaming continuous location video to a commercial cloud surveillance hub, each pod runs local flocking models, aligning speed with immediate neighbors and checking decentralized neighborhood beacons only at major street crossings. Delivery times remain fast, and pedestrian traffic flows naturally without corporate tracking.",
-   "premise": "Artificial-life benchmarks show that thousands of autonomous agents can coordinate complex movement through local visual observations rather than centralized servers tracking every movement. Decoupling individual agent cameras from total swarm size enables population-scale navigation with minimal network overhead.",
-   "goals": [
-    1,
-    4
-   ],
-   "how": "Open simulation models are designed to show that local flocking rules and sparse ledger beacons would achieve equivalent traffic throughput to centralized cloud routing while significantly reducing telemetry bandwidth and location tracking.",
-   "shift": 0.35,
-   "outcomes": [
-    {
-     "name": "Centralized surveillance platforms monopolize sidewalk coordination",
-     "description": "Municipalities mandate that all autonomous couriers and personal delivery devices stream continuous video feeds into a single corporate cloud traffic service, creating persistent public surveillance.",
-     "example": "A local delivery robot operated by an independent florist is barred from downtown sidewalks because the shop cannot afford the monthly surveillance streaming license fee required by the dominant cloud transit provider.",
-     "desirable": false,
-     "likelihood_now": 0.5,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Decentralized local flocking enables private sidewalk navigation",
-     "description": "Personal and merchant agents adopt lightweight local flocking rules and sparse ledger beacons, maintaining smooth physical transit without streaming video or private travel paths to central servers.",
-     "example": "Over 800 neighborhood couriers in a dense metro district coordinate route sharing and curb space access via local peer-to-peer beacons, keeping delivery costs low while preserving pedestrian privacy.",
-     "desirable": true,
-     "likelihood_now": 0.15,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Municipal pedestrian bans restrict autonomous sidewalk delivery",
-     "description": "Dense cities enact blanket bans on motorized sidewalk devices following pedestrian congestion complaints, shifting parcel deliveries back to street-level courier vans.",
-     "example": "A major metropolitan council passes an ordinance restricting sidewalk delivery robots to industrial business parks during daytime hours.",
-     "desirable": false,
-     "likelihood_now": 0.3,
-     "likelihood_with_cin": 0.3
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.34564",
-     "title": "FlockWorld: Toward Population-Scale Multi-Agent Video World Models through Artificial Life Simulation",
-     "kind": "paper",
-     "published": "2026-10-25"
     }
    ],
    "work": 1
