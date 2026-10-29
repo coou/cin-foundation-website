@@ -5016,7 +5016,7 @@ export const ALLOWED_HANDOFF_VERDICTS = Object.freeze([
 ]);
 
 export const SENSITIVE_CREDENTIAL_PATTERNS = Object.freeze([
-  Object.freeze({ type: 'api_key', regex: /\b(?:sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{30,}|xox[baprs]-[a-zA-Z0-9]{10,}|AKIA[0-9A-Z]{16})\b/i }),
+  Object.freeze({ type: 'api_key', regex: /\b(?:sk[-_][a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{30,}|xox[baprs]-[a-zA-Z0-9]{10,}|AKIA[0-9A-Z]{16})\b/i }),
   Object.freeze({ type: 'bearer_token', regex: /\bbearer\s+[a-zA-Z0-9_\-\.]{16,}\b/i }),
   Object.freeze({ type: 'private_key', regex: /-----BEGIN\s+(?:RSA\s+)?PRIVATE\s+KEY-----/i }),
   Object.freeze({ type: 'credit_card', regex: /\b(?:\d{4}[ -]?){3}\d{4}\b/ }),
