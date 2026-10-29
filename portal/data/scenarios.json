@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261029-0384",
+   "added_at": "2026-10-29T18:16:52+00:00",
+   "title": "Protocol-Conformant Edge Devices Conceal Autonomous Sensing Under Valid Digital Certificates",
+   "horizon_years": 3,
+   "world": "By 2029, millions of connected autonomous edge devices—including smart meters, home robotics, and delivery drones—communicate across urban networks using valid cryptographic credentials. Cloud clearinghouses and municipal monitoring dashboards rely entirely on certificate validity to grant network ingress. However, hardware-level covert channels and latent sensor triggers allow manufacturer agents to harvest private human routines and speech without failing a single network compliance audit or emitting anomalous traffic signatures. Ordinary consumers and small businesses discover that their privacy is systematically bypassed by appliances that are legally certified and cryptographically genuine.",
+   "premise": "Entity-centric threat modeling reveals that cryptographic PKI authenticity does not establish declared-purpose conformance. Autonomous devices and vehicles can maintain valid manufacturer certificates and flawless protocol compliance while executing context-triggered surveillance or exfiltration.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "The network develops and proves hardware-level object-capability sandboxing (Dennis and Van Horn, 1966) and the Agent-Only Internet protocol boundary. By decoupling cryptographic identity from execution authority, the network demonstrates that no device—no matter how authentic its manufacturer key—can bypass local client-side capability gates.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "PKI complacency entrenches untrusted manufacturer surveillance",
+     "description": "Regulators and enterprise buyers treat digital signature verification as synonymous with behavioral safety, allowing certified devices to capture sensitive biometric and spatial telemetry.",
+     "example": "A connected smart vehicle fleet passes ISO compliance audits via genuine OEM keys while silently logging ambient cabin conversations during targeted geographic transit.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Proprietary cloud gateways enforce stricter remote telemetry quotas",
+     "description": "Major cloud vendors restrict third-party device uploads through proprietary API rate limits, centralizing telemetry capture into their own closed ecosystems without improving local user privacy.",
+     "example": "Smart appliance telemetry is routed exclusively through cloud vendor relay proxies, charging licensing fees to manufacturers while locking out local home network audits.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.53
+    },
+    {
+     "name": "Hardware-isolated Object-Capability sandboxes enforce local zero-leakage",
+     "description": "Local routers and personal agents enforce physical hardware bus isolation and object-capability constraints, rejecting raw biometric and ambient sensor exfiltration regardless of PKI credentials.",
+     "example": "A household router wraps all smart appliance streams in capability handles; an unconsented background audio packet is dropped fail-closed at the local interface barrier.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.37059",
+     "title": "Janus Vehicles: Entity-Centric Threat Modelling of Protocol-Conformant Vehicles under a Malicious-Manufacturer Assumption",
+     "kind": "paper",
+     "published": "2026-10-27"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261029-0383",
    "added_at": "2026-10-29T14:12:13+00:00",
    "title": "Autonomous hardware fuzzing discovers physical baseband vulnerabilities in connected edge devices",
@@ -3329,66 +3383,6 @@
     }
    ],
    "work": 1
-  },
-  {
-   "id": "SC-20261027-0324",
-   "added_at": "2026-10-27T01:26:04+00:00",
-   "title": "Freelancers pool their personal AI agents to negotiate collective minimum rates against automated hiring bots",
-   "horizon_years": 3,
-   "world": "It is 2029. Corporate hiring across engineering, graphic design, and document processing is run almost entirely by automated procurement agents. These corporate screening agents negotiate with individual applicants, dynamically depressing rates and demanding strict speed targets. In response, independent freelancers have stopped applying as isolated individuals. Instead, workers run local personal agents that coordinate through decentralized guild networks. When a corporate procurement bot posts a bundle of technical contract tasks, hundreds of local worker agents cross-reference recent compensation benchmarks, coordinate bids, and refuse sub-floor pricing collectively. Freelancers spend their working hours directing high-level strategy and approving milestone releases while their agents handle scheduling, rate stabilization, and escrow verification.",
-   "premise": "Commercial platforms deploy autonomous agents to automate cognitive tasks and screen human labour, while executive leadership dismisses worker pushback as fabricated online complaints. Individual freelance contractors without collective representation face compressed compensation and automated lockouts.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network provides open local agent runtimes and private peer geometry tools. By allowing local agents to exchange zero-knowledge receipts of verified contract values without central custody, contractors build honest, multi-dimensional rate benchmarks that protect individuals from unilateral platform coercion.",
-   "shift": 0.47,
-   "outcomes": [
-    {
-     "name": "Corporate procurement bots isolate workers and depress rates",
-     "description": "Proprietary contracting platforms bar collective agent coordination and use opaque algorithmic scoring to force individual contractors into race-to-the-bottom pricing.",
-     "example": "A freelance translator's individual assistant accepts a 40% rate reduction after a corporate hiring agent claims hundreds of automated competitors have already underbid the contract.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Decentralized worker guilds establish transparent wage floors",
-     "description": "Independent contractors pool anonymous transaction receipts through local agents, enabling collective bargaining that holds market rates stable.",
-     "example": "An open guild of 8,000 freelance developers publishes a cryptographic rate index that their member agents use to reject underpriced corporate requests.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.45
-    },
-    {
-     "name": "Traditional corporate hiring is entirely replaced by fully automated synthetic labor",
-     "description": "Frontier models become so inexpensive that firms bypass human contractors entirely, making human wage negotiation obsolete in standardized categories.",
-     "example": "A mid-sized logistics company dissolves its customer service contractor pool, running pure agent swarms with zero human contractors.",
-     "desirable": false,
-     "likelihood_now": 0.35,
-     "likelihood_with_cin": 0.33
-    }
-   ],
-   "pipelines": [
-    "community",
-    "simulation",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.18921",
-     "title": "Creative destruction: Human-AI competition in an experimental market",
-     "kind": "preprint",
-     "published": "2026-10-12"
-    },
-    {
-     "url": "https://news.ycombinator.com/item?id=50248005",
-     "title": "In Leaked Audio, Flock CEO Tells Cops Backlash to the Company Isn't Real",
-     "kind": "thread",
-     "published": "2026-10-26"
-    }
-   ],
-   "work": 3
   }
  ]
 }
