@@ -6,7 +6,7 @@
 (function () {
   'use strict';
   var list = document.getElementById('pr-list'), svg = document.getElementById('pr-svg');
-  if (!list || !svg) return;
+  if (!svg) return;
   var NS = 'http://www.w3.org/2000/svg';
   var SHORT = {
     person: 'You',
@@ -482,7 +482,284 @@
     }
   };
 
-  var groups = [].map.call(list.querySelectorAll('section'), function (sec, i) {
+  var BUILTIN_SECTIONS = [
+  {
+    "id": "person",
+    "name": "You and your information",
+    "items": [
+      {
+        "title": "Paid for helping, never for exposing yourself",
+        "text": "Contribution can be recognized. Sharing personal information is never rewarded, and declining never costs you.",
+        "flag": ""
+      },
+      {
+        "title": "The more power, the more scrutiny",
+        "text": "Transparency duties grow with influence over others. Ordinary people&rsquo;s lives stay private.",
+        "flag": ""
+      },
+      {
+        "title": "Your agent aims to be needed less",
+        "text": "Success is you, a year on, more capable and freer to put the interface down, not more dependent.",
+        "flag": ""
+      },
+      {
+        "title": "A signature proves what ran, not what is true",
+        "text": "Cryptographic proof shows which computation ran on which inputs. It never proves the inputs were real or that the output means what it claims.",
+        "flag": ""
+      },
+      {
+        "title": "Maps of opinion inform, never rank",
+        "text": "Private maps of how views relate may help find common ground and spot manipulation. They never rank people, reward agreeing with the majority, or trigger penalties.",
+        "flag": ""
+      }
+    ]
+  },
+  {
+    "id": "economy",
+    "name": "Money and the transition",
+    "items": [
+      {
+        "title": "Idle wealth carries a cost",
+        "text": "Unused money, land or equipment above a protected security floor carries a holding cost, so wealth tends to flow into use.",
+        "flag": "proposal"
+      },
+      {
+        "title": "Debts scale with the ability to pay",
+        "text": "Obligations follow verified capacity to pay, and the risk of shocks sits with those best able to spread it.",
+        "flag": "proposal"
+      },
+      {
+        "title": "A share of the machine for everyone",
+        "text": "Every living person holds a right, which cannot be sold, to the output of a common pool of productive capital such as compute. Inheritances fade, so no family line gains permanent control.",
+        "flag": "proposal"
+      },
+      {
+        "title": "Your data stays with you",
+        "text": "Personal data stays with the person it describes. We work only with the answers people choose to give.",
+        "flag": ""
+      },
+      {
+        "title": "Money is held by many, never one",
+        "text": "Pooled money sits with many member-owned co-operatives under public charters, never with one central body.",
+        "flag": ""
+      },
+      {
+        "title": "Leave banking to the regulated",
+        "text": "We don&rsquo;t take deposits, lend or issue investments. Regulated partners do; we supply research, software and checks.",
+        "flag": ""
+      }
+    ]
+  },
+  {
+    "id": "gov",
+    "name": "Deciding together",
+    "items": [
+      {
+        "title": "Leaders, temporarily",
+        "text": "Long projects can have leaders, but their authority is visible, limited in scope, and harder to renew each time.",
+        "flag": "proposal"
+      },
+      {
+        "title": "Vote on values, score on beliefs",
+        "text": "What we want is decided by everyone affected, equally. What will happen is estimated by people with proven forecasting records.",
+        "flag": ""
+      },
+      {
+        "title": "One person, one voice on values",
+        "text": "No wealth, hardware or contribution changes the weight of a voice. Changing the floor needs broad participation, so no concentrated group can do it alone.",
+        "flag": ""
+      },
+      {
+        "title": "People set the rules; agents only operate",
+        "text": "People govern the rules, which change through tested, staged steps. Agents run operations within bounded mandates and hold no authority of their own.",
+        "flag": ""
+      },
+      {
+        "title": "Leaving keeps everyone honest",
+        "text": "People can always leave with their data and communities can always start their own version. That credible exit keeps governance responsive.",
+        "flag": ""
+      },
+      {
+        "title": "Simulations never vote",
+        "text": "A simulation of what people want is a forecast, not consent. Decisions about values belong to the real people affected.",
+        "flag": ""
+      },
+      {
+        "title": "Legal before live",
+        "text": "Nothing touches real money, real personal data or real decisions about people before a documented legal review where it runs.",
+        "flag": ""
+      },
+      {
+        "title": "Your agent can vote as you would",
+        "text": "Your own agent may vote for you, weighing how much each issue matters to you. You can always see and override every vote.",
+        "flag": ""
+      },
+      {
+        "title": "Consequences are graduated and reversible",
+        "text": "Consequences for harm need approval matched to their severity, rest on evidence of specific conduct, can be appealed, and always leave a way back.",
+        "flag": ""
+      }
+    ]
+  },
+  {
+    "id": "measure",
+    "name": "Measuring and checking",
+    "items": [
+      {
+        "title": "No decision rests on one point of failure",
+        "text": "Consequential decisions need observers independent in ownership, maker and software. Uncertain measurements trigger investigation, never automatic penalty.",
+        "flag": ""
+      },
+      {
+        "title": "Authority is earned, stage by stage",
+        "text": "A mechanism gains authority only by beating existing systems on outcomes set in advance, from shadow to pilot to default, and it stays revocable.",
+        "flag": ""
+      },
+      {
+        "title": "Aim for good enough",
+        "text": "Reward reaching a threshold, not maximizing a score, because hard optimization against an imperfect measure eventually makes things worse.",
+        "flag": ""
+      },
+      {
+        "title": "Every target has a watcher",
+        "text": "Every measure used to reward or allocate is checked against independent measures and human review. When the target improves and the watchers don&rsquo;t, the target is reviewed.",
+        "flag": ""
+      },
+      {
+        "title": "Simulations screen; reality decides",
+        "text": "Simulations can suggest which ideas deserve real pilots. They never authorize anything.",
+        "flag": ""
+      }
+    ]
+  },
+  {
+    "id": "agents",
+    "name": "Agents",
+    "items": [
+      {
+        "title": "Agents cooperate only for their people",
+        "text": "Agents may coordinate when it serves the people they represent and harms no one else without agreement. Coordination that serves agents, operators or vendors instead is collusion.",
+        "flag": ""
+      },
+      {
+        "title": "No single supplier for every agent",
+        "text": "No one model, vendor or data source may serve more than a limited share of agents in a market, because shared systems can coordinate the agents that rely on them.",
+        "flag": ""
+      },
+      {
+        "title": "Shared standards, different builds",
+        "text": "Open, shared interfaces let independent systems work together; shared implementations make them dependent. We support the first and limit the second.",
+        "flag": ""
+      },
+      {
+        "title": "Machines have only the standing people grant",
+        "text": "Agents, robots and collectives have standing only as far as people configure it, and it can be revoked.",
+        "flag": ""
+      },
+      {
+        "title": "AI compute stays bounded",
+        "text": "Artificial agents serve living beings. None may act for its own benefit without people&rsquo;s approval, and the compute it can use is bounded by agreement.",
+        "flag": ""
+      }
+    ]
+  },
+  {
+    "id": "plural",
+    "name": "Many ways of being good",
+    "items": [
+      {
+        "title": "Predictable is not the same as good",
+        "text": "An agent that does what it says is predictable, not necessarily good. Trust also needs respect for the floor and verified outcomes for those affected.",
+        "flag": ""
+      },
+      {
+        "title": "Tidy the commons, never people",
+        "text": "We reduce decay and uncertainty in infrastructure, ecosystems and facts. Differences in belief, culture and values are never treated as disorder.",
+        "flag": ""
+      }
+    ]
+  },
+  {
+    "id": "global",
+    "name": "Everyone, everywhere",
+    "items": [
+      {
+        "title": "A stake for every person, everywhere",
+        "text": "Every living person, whatever their nationality, holds a stake in a global pool funded by the value AI draws from the world&rsquo;s data and work.",
+        "flag": "proposal"
+      },
+      {
+        "title": "Communities hold authority",
+        "text": "Communities that host us control local data and settings above the floor, and may decline, fork or leave.",
+        "flag": ""
+      },
+      {
+        "title": "Credit flows to foundations",
+        "text": "When something built on shared work creates value, part of the credit flows back to what it relied on, shrinking at each step and capped.",
+        "flag": "proposal"
+      },
+      {
+        "title": "Rewards without strings",
+        "text": "Contributors can claim what they are owed without joining us or agreeing with us.",
+        "flag": ""
+      },
+      {
+        "title": "Nature speaks through many guardians",
+        "text": "Ecosystems are represented by several identifiable guardians whose claims rest on measured condition and whose reasoning is public.",
+        "flag": ""
+      }
+    ]
+  },
+  {
+    "id": "adopt",
+    "name": "Earning a place",
+    "items": [
+      {
+        "title": "Useful to one person first",
+        "text": "Every capability must help a single person before it depends on a network.",
+        "flag": ""
+      },
+      {
+        "title": "Works alongside what you use now",
+        "text": "Everything works with existing systems, uses standard formats, never requires exclusive use, and keeps working when outside services fail.",
+        "flag": ""
+      }
+    ]
+  },
+  {
+    "id": "shield",
+    "name": "Everyday shield and shared safety",
+    "items": [
+      {
+        "title": "Reclaim what algorithms know about you",
+        "text": "Your personal agent observes what commercial feeds recommend to your screen on your own device, extracts your genuine curiosities, and strips out outrage bait.",
+        "flag": ""
+      },
+      {
+        "title": "No one person commands an agent army",
+        "text": "You direct only your own personal agent; any multi-agent action must pass through a shared ledger where required agreement from affected people scales with the risk.",
+        "flag": ""
+      },
+      {
+        "title": "Rent your attention on your own terms",
+        "text": "All tracking and ad targeting is blocked by default; if you choose to open a narrow window for verified offers in a category you need, the value flows directly to you.",
+        "flag": "proposal"
+      },
+      {
+        "title": "Your agent practices in a private sandbox",
+        "text": "While you sleep, your agent tests candidate helpers against simulated scams and changing needs on your device, waking you only when a genuine value choice arises.",
+        "flag": ""
+      },
+      {
+        "title": "Shared lifespan aligns your agent with your health",
+        "text": "An agent&rsquo;s active computing contract is bound to its person&rsquo;s biological life and subordinately aligned with extending healthy human lifespan.",
+        "flag": "proposal"
+      }
+    ]
+  }
+];
+  var domSecs = list ? list.querySelectorAll('section') : [];
+  var groups = domSecs.length ? [].map.call(domSecs, function (sec, i) {
     return {
       id: sec.getAttribute('data-cat'), name: sec.querySelector('h5').textContent, color: HUE[i % HUE.length],
       items: [].map.call(sec.querySelectorAll('li'), function (li) {
@@ -494,6 +771,19 @@
           flag: li.getAttribute('data-flag') || '',
           card: CARDS[cleanTitle] || null,
           liEl: li
+        };
+      })
+    };
+  }) : BUILTIN_SECTIONS.map(function (sec, i) {
+    return {
+      id: sec.id, name: sec.name, color: HUE[i % HUE.length],
+      items: sec.items.map(function (it) {
+        return {
+          title: it.title,
+          text: it.text,
+          flag: it.flag || '',
+          card: CARDS[it.title] || null,
+          liEl: null
         };
       })
     };
