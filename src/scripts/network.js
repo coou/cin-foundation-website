@@ -685,8 +685,46 @@
   var inFrame = cv.parentElement && cv.parentElement.previousElementSibling ? document.querySelector('.boundary-frame:not(.nw-frame):not(.split-frame)') : null;
   var inScenes = document.getElementById('bd-scenes'), inSide = document.getElementById('bd-side');
   var nwFrame = document.getElementById('nw-frame'), nwSide = document.getElementById('nw-side');
-  var splitFrame = document.getElementById('split-frame');
+  var splitFrame = document.getElementById('split-frame'), splitSide = document.getElementById('split-side');
+  var pktFrame = document.getElementById('pkt-frame');
+  var bdCap = document.getElementById('bd-cap'), nwCap = document.getElementById('nw-cap'), splitCap = document.getElementById('split-cap');
   var running = false, raf = 0, active = false;
+
+  var PKT_SPECS = {
+    cap: {
+      title: 'IETF RFC 9000 QUIC Stream 0x04 · CBOR/JSON Envelope',
+      json: '{\n  "envelope_type": "OCAP_SELECTIVE_PREDICATE_V4",\n  "transport": "IETF_QUIC_RFC9000_0RTT",\n  "hardware_attestation": {\n    "sram_puf_challenge_hash": "0x8f3a...c91e",\n    "tpm_enclave_quote": "VERIFIED_LOCAL_SANDBOX",\n    "somatic_coercion_check": "CALM_AUTONOMIC_PASS"\n  },\n  "capability_grant": {\n    "wasm_module_sha256": "e3b0c44298fc1c149afbf4c8996fb924",\n    "quorum_approvals": ["agent_health", "agent_money", "agent_id"],\n    "ephemeral_one_time_gate": true\n  },\n  "payload_predicate": {\n    "claim": "cms_ncci_fair_settlement_eligible",\n    "verified_boolean": true,\n    "raw_personal_files_exposed": 0\n  }\n}',
+      html: '<div class="pkt-step"><span>1. Purpose in the Architecture</span><p>Replaces ambient cloud API tokens and cookies with a one-time, hardware-attested capability certificate (<a href="https://dl.acm.org/doi/10.1145/365230.365252" target="_blank" rel="noopener">Dennis &amp; Van Horn, 1966</a>) over IETF QUIC (<a href="https://datatracker.ietf.org/doc/html/rfc9000" target="_blank" rel="noopener">RFC 9000</a>).</p></div><div class="pkt-step"><span>2. How Local Sandbox Agents Use It</span><p>Your 6 narrow local agents evaluate the outside request against your private files inside WebAssembly memory. When 3-of-6 local agents + your consent approve, only the boolean predicate crosses the firewall.</p></div><div class="pkt-step"><span>3. Security &amp; Privacy Guarantee</span><p>Raw medical charts, bank CSVs, and location logs have zero outbound network capability handles in the sandbox runtime. Once the single fact is returned, the ephemeral QUIC stream ID is burned.</p></div>'
+    },
+    pcc: {
+      title: 'Proof-Carrying Code Receipt (Necula, POPL 1997)',
+      json: '{\n  "envelope_type": "PROOF_CARRYING_CODE_RECEIPT_V4",\n  "capability_id": "cap_cve_2026_109618_php_patch",\n  "author_lineage": {\n    "lead_creator_did": "did:cin:p03_marek_gdansk",\n    "guild_coauthors": ["did:cin:sec_guild_eu"],\n    "royalty_split": { "lead": 0.70, "guild": 0.15, "verifiers": 0.15 }\n  },\n  "formal_verification": {\n    "type_memory_safety_proof": "PASS_DETERMINISTIC_WASM",\n    "regression_suite_merkle_root": "0x4d91...b802",\n    "independent_peer_verifiers": 5,\n    "thirty_day_outcome_survival": 0.994\n  }\n}',
+      html: '<div class="pkt-step"><span>1. Purpose in the Architecture</span><p>Proves mathematically and empirically that a contributed software patch, clinical checklist, or engineering tool satisfies safety invariants and passes held-out regression tests (<a href="https://dl.acm.org/doi/10.1145/263699.263712" target="_blank" rel="noopener">Necula, 1997</a>).</p></div><div class="pkt-step"><span>2. How Local Sandbox Agents Use It</span><p>Before your local sandbox ingests any external capability blueprint, it checks the attached Proof-Carrying Code receipt and k-of-n independent auditor signatures.</p></div><div class="pkt-step"><span>3. Zero-Middleman Creator Royalties</span><p>Discovery on the shared ledger is ranked strictly by verified functional proof—never ad spend—and automatically routes 85% of royalties to the human creators and 15% to independent verifiers.</p></div>'
+    },
+    lora: {
+      title: 'Continuous Latent & TIES-LoRA Weight Delta (Data Shapley)',
+      json: '{\n  "envelope_type": "LATENT_LORA_CONSENSUS_DELTA_V4",\n  "base_model_family": "open_weights_8b_q4_km",\n  "adapter_spec": {\n    "method": "TIES_MERGING_LORA_R16",\n    "non_zero_density": 0.20,\n    "sign_consensus": "WEISZFELD_L1_GEOMETRIC_MEDIAN"\n  },\n  "data_shapley_attribution": {\n    "marginal_accuracy_gain_pct": 18.4,\n    "monte_carlo_permutations": 512,\n    "floor_projection_check": "PASS_ALL_19_COMMITMENTS"\n  }\n}',
+      html: '<div class="pkt-step"><span>1. Purpose in the Architecture</span><p>Routes compact preference LoRA weight deltas (<a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">Hu et al., 2022</a>; <a href="https://arxiv.org/abs/2306.01708" target="_blank" rel="noopener">Yadav et al., 2023</a>) and continuous latent state vectors (<a href="https://arxiv.org/abs/2412.06769" target="_blank" rel="noopener">Hao et al., 2024</a>) without sharing raw personal transcripts.</p></div><div class="pkt-step"><span>2. Byzantine-Resilient Aggregation</span><p>Community shards merge specialist adapters via Weiszfeld L1 geometric median (50% Byzantine fault tolerance) and orthogonal subspace projection while enforcing all 19 floor commitments.</p></div><div class="pkt-step"><span>3. Data Shapley Valuation</span><p>Monte Carlo Data Shapley (<a href="https://arxiv.org/abs/1904.02868" target="_blank" rel="noopener">Ghorbani &amp; Zou, ICML 2019</a>) measures each contributor’s exact marginal accuracy gain on sandbox benchmarks to settle ongoing micro-royalties.</p></div>'
+    }
+  };
+
+  if (pktFrame) {
+    var pktBtns = [].slice.call(pktFrame.querySelectorAll('[data-pkt-mode]'));
+    var pktTitle = document.getElementById('pkt-wire-title');
+    var pktJson = document.getElementById('pkt-json');
+    var pktExplain = document.getElementById('pkt-explain');
+    pktBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var m = b.getAttribute('data-pkt-mode');
+        var spec = PKT_SPECS[m];
+        if (!spec) return;
+        pktBtns.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        if (pktTitle) pktTitle.textContent = spec.title;
+        if (pktJson) pktJson.textContent = spec.json;
+        if (pktExplain) pktExplain.innerHTML = spec.html;
+      });
+    });
+  }
 
   function loop(now) { frame(now); if (running) raf = requestAnimationFrame(loop); }
   function start() {
@@ -701,7 +739,8 @@
   function showTab(which) {
     var out = which === 'out';
     var split = which === 'split';
-    var isIn = !out && !split;
+    var pkt = which === 'pkt';
+    var isIn = !out && !split && !pkt;
     active = out;
     if (inFrame) inFrame.hidden = !isIn;
     if (inScenes) inScenes.hidden = !isIn;
@@ -710,6 +749,11 @@
     if (sceneBar) sceneBar.hidden = !out;
     if (nwSide) nwSide.hidden = !out;
     if (splitFrame) splitFrame.hidden = !split;
+    if (splitSide) splitSide.hidden = !split;
+    if (pktFrame) pktFrame.hidden = !pkt;
+    if (bdCap) bdCap.hidden = !isIn;
+    if (nwCap) nwCap.hidden = !out;
+    if (splitCap) splitCap.hidden = !(split || pkt);
     if (tabs) [].forEach.call(tabs.querySelectorAll('[role="tab"]'), function (t) {
       t.setAttribute('aria-selected', String(t.dataset.tab === which));
     });

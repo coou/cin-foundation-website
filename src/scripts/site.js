@@ -1078,3 +1078,193 @@
   var onTheme = function () { readColors(); if (reduce) frame(still); };
   if (mq.addEventListener) mq.addEventListener('change', onTheme); else if (mq.addListener) mq.addListener(onTheme);
 })();
+/* ==========================================================================
+   ?v=45 GLOBAL COMMAND PALETTE (Ctrl+K / Cmd+K) & BLUEPRINT SECTION TOC BAR
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  // 1. Automatic Section Jump Bar (.note-toc-bar) on all 29 /notes/*.html Blueprint Pages
+  var noteArticle = document.querySelector('article.note');
+  var noteHead = noteArticle && noteArticle.querySelector('.note-head');
+  if (noteArticle && noteHead && !noteArticle.querySelector('.note-toc-bar')) {
+    var headings = [].slice.call(noteArticle.querySelectorAll('h2'));
+    if (headings.length >= 2) {
+      var tocBar = document.createElement('nav');
+      tocBar.className = 'note-toc-bar';
+      tocBar.setAttribute('aria-label', 'In this blueprint');
+      var labelSpan = document.createElement('span');
+      labelSpan.className = 'ntb-k';
+      labelSpan.textContent = 'In this blueprint:';
+      tocBar.appendChild(labelSpan);
+      var listDiv = document.createElement('div');
+      listDiv.className = 'ntb-links';
+      headings.forEach(function (h, idx) {
+        if (!h.id) {
+          var slug = (h.textContent || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          h.id = slug || ('sec-' + (idx + 1));
+        }
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        var cleanTxt = (h.textContent || '').replace(/^\s*\d+[\.\)]\s*/, '').trim();
+        a.textContent = (idx + 1) + '. ' + (cleanTxt.length > 42 ? cleanTxt.slice(0, 40) + '…' : cleanTxt);
+        listDiv.appendChild(a);
+      });
+      tocBar.appendChild(listDiv);
+      noteHead.insertAdjacentElement('afterend', tocBar);
+    }
+  }
+
+  // 2. Global Quick-Jump & Blueprint Command Palette (Ctrl+K / Cmd+K / Floating Pill)
+  if (document.getElementById('cmd-dlg')) return;
+
+  var ITEMS = [
+    { cat: 'Interactive Workbenches', title: '1. Live 3-Zone Sovereign Boundary & Firewall Canvas', sub: 'Inspect local sandbox, 6 narrow agents, and non-contact firewall', href: '/#architecture' },
+    { cat: 'Interactive Workbenches', title: '2. Cryptographic Wire-Protocol & Data Model Inspector', sub: 'OCap-QUIC Stream 0x04, Necula PCC receipts & TIES-LoRA deltas', href: '/#architecture', tab: 'pkt' },
+    { cat: 'Interactive Workbenches', title: '3. Zero-Middleman Savings & Royalties Calculator', sub: 'CMS NCCI hospital audit, PSI buyer co-op & Data Shapley royalties', href: '/#wedge-calc' },
+    { cat: 'Interactive Workbenches', title: '4. 4-Step Proof-Carrying Code & Attribution Pipeline', sub: 'Interactive trace from local problem to direct creator royalty', href: '/#em-demo' },
+    { cat: 'Interactive Workbenches', title: '5. 30-Persona Global Network Simulation', sub: 'Trace 30 real households, clinics, and creators across the network', href: '/#pe-root' },
+    { cat: 'Interactive Workbenches', title: '6. Risk-Scaled Multi-Agent Quorum & Deliberation Lock', sub: 'Byzantine quorum scaling & hardware enclave lock simulator', href: '/#swarm-lock' },
+    { cat: 'Interactive Workbenches', title: '7. Eight Non-Negotiable Architectural Invariants', sub: 'Hardware identity, mortal computation, and sovereign containment', href: '/#goals' },
+    { cat: 'Interactive Workbenches', title: '8. Sub-mW Edge Silicon & Pre-ADC Hardware Map', sub: 'Energy-per-inference vs. raw biometric containment across 5 classes', href: '/#hw' },
+    { cat: 'Interactive Workbenches', title: '9. Power-Proportionate Cryptographic Auditability', sub: '5-tier privacy vs. public accountability staircase (T0 to T4)', href: '/#power-vis' },
+    { cat: 'Interactive Workbenches', title: '10. Interactive 44-Principle Wheel & Protocol Specs', sub: 'Inspect every principle with its formal cryptographic mechanism', href: '/#lines' },
+    { cat: 'Interactive Workbenches', title: '11. 6-Stage AI Capability Trajectory & Delphi Debate', sub: 'METR horizon forecast, 3-persona Delphi debate & futures cone', href: '/#foresight-atlas' },
+    { cat: 'Interactive Workbenches', title: '12. Global Tail-Risk & Safeguard Simulator', sub: 'Test how the 8 architectural safeguards compress global tail risks', href: '/#risk-lab' },
+    { cat: 'Core Pages', title: 'Technical Blueprints Library (All 29 Papers)', sub: 'Filterable index of all 29 architectural specifications and notes', href: '/notes' },
+    { cat: 'Core Pages', title: 'Live Hourly Signal Stream & Trajectory Page', sub: '5,936 monitored sources, capability curves, and 2027-2030 scenarios', href: '/trajectory' },
+    { cat: 'Core Pages', title: 'From the Founder: Lived Experience to Protocol Matrix', sub: 'Why we are building the two internets and how to get involved', href: '/founder' },
+    { cat: 'Core Pages', title: 'Live Build Log & Recent Architectural Shipments', sub: 'Chronological engineering updates and research publications', href: '/updates' },
+    { cat: 'Key Blueprints', title: 'Blueprint: The Agent-Only Internet, Biometrics & Hardware', sub: 'IETF RFC 9000 QUIC, hardware personhood & pre-ADC affective shield', href: '/notes/agent-only-internet-biometrics-hardware' },
+    { cat: 'Key Blueprints', title: 'Blueprint: Beyond arXiv — The Agent-Web & Weight Ledger', sub: 'Proof-Carrying Code (Necula 1997), Data Shapley & TIES-Merging', href: '/notes/beyond-arxiv-agent-web-ledger' },
+    { cat: 'Key Blueprints', title: 'Blueprint: Voluntary Institutional & Market Transition', sub: 'CMS NCCI medical billing audits & Private Set Intersection co-ops', href: '/notes/voluntary-institutional-transition' },
+    { cat: 'Key Blueprints', title: 'Blueprint: Human-Bound Personal Agents & Local Privacy', sub: 'On-device LoRA adapters, craft attribution & zero cloud telemetry', href: '/notes/personal-agents' },
+    { cat: 'Key Blueprints', title: 'Blueprint: Mortal Computation & Shared Lifespan', sub: 'Hardware-enforced biological coupling and anti-coercion locks', href: '/notes/mortal-computation' },
+    { cat: 'Key Blueprints', title: 'Blueprint: All 44 Architectural Principles in Full', sub: 'Complete reference specification of all 44 network principles', href: '/notes/all-principles' }
+  ];
+
+  var trigger = document.createElement('button');
+  trigger.type = 'button';
+  trigger.id = 'cmd-trigger';
+  trigger.className = 'cmd-trigger';
+  trigger.setAttribute('aria-label', 'Quick Jump & Search across all simulators and blueprints (Ctrl+K)');
+  trigger.innerHTML = '<span class="cmd-ic">&#8981;</span><span>Quick Jump</span><kbd>&#8984;K</kbd>';
+  document.body.appendChild(trigger);
+
+  var dlg = document.createElement('dialog');
+  dlg.id = 'cmd-dlg';
+  dlg.className = 'cmd-dlg';
+  dlg.setAttribute('aria-label', 'Quick Jump and Search');
+  dlg.innerHTML =
+    '<div class="cmd-box">' +
+      '<div class="cmd-top">' +
+        '<input type="search" id="cmd-input" class="cmd-input" placeholder="Jump to any simulator, protocol spec, or blueprint (e.g. QUIC, Shapley, Quorum, Hospital)..." autocomplete="off">' +
+        '<button type="button" class="cmd-close" id="cmd-close">ESC</button>' +
+      '</div>' +
+      '<div class="cmd-list" id="cmd-list" role="listbox"></div>' +
+      '<div class="cmd-foot"><span><b>&#8593;&#8595;</b> to navigate · <b>Enter</b> to jump · <b>ESC</b> to close</span><span>12 Simulators · 29 Blueprints</span></div>' +
+    '</div>';
+  document.body.appendChild(dlg);
+
+  var input = dlg.querySelector('#cmd-input');
+  var listEl = dlg.querySelector('#cmd-list');
+  var closeBtn = dlg.querySelector('#cmd-close');
+  var activeIdx = 0;
+  var filtered = ITEMS.slice();
+
+  function renderList(q) {
+    var needle = (q || '').toLowerCase().trim();
+    filtered = ITEMS.filter(function (it) {
+      if (!needle) return true;
+      return (it.title + ' ' + it.sub + ' ' + it.cat).toLowerCase().indexOf(needle) !== -1;
+    });
+    activeIdx = 0;
+    if (!filtered.length) {
+      listEl.innerHTML = '<div class="cmd-empty">No matching simulator or blueprint. Try "QUIC", "Shapley", "Quorum", or "Blueprint".</div>';
+      return;
+    }
+    var html = '';
+    var lastCat = '';
+    filtered.forEach(function (it, i) {
+      if (it.cat !== lastCat) {
+        lastCat = it.cat;
+        html += '<div class="cmd-cat">' + it.cat + '</div>';
+      }
+      html +=
+        '<a href="' + it.href + '" class="cmd-item' + (i === activeIdx ? ' active' : '') + '" data-idx="' + i + '">' +
+          '<div><b>' + it.title + '</b><small>' + it.sub + '</small></div>' +
+          '<span class="cmd-arr">&rarr;</span>' +
+        '</a>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  function openCmd() {
+    renderList('');
+    input.value = '';
+    if (typeof dlg.showModal === 'function') dlg.showModal();
+    else dlg.setAttribute('open', '');
+    setTimeout(function () { input.focus(); }, 20);
+  }
+
+  function closeCmd() {
+    if (typeof dlg.close === 'function' && dlg.open) dlg.close();
+    else dlg.removeAttribute('open');
+  }
+
+  function selectItem(it) {
+    if (!it) return;
+    closeCmd();
+    if (it.tab) {
+      var tBtn = document.querySelector('#bd-tabs [data-tab="' + it.tab + '"]');
+      if (tBtn) tBtn.click();
+    }
+    var link = document.createElement('a');
+    link.href = it.href;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  trigger.addEventListener('click', openCmd);
+  closeBtn.addEventListener('click', closeCmd);
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) closeCmd(); });
+
+  input.addEventListener('input', function () { renderList(input.value); });
+  input.addEventListener('keydown', function (e) {
+    var items = listEl.querySelectorAll('.cmd-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (items.length) {
+        activeIdx = (activeIdx + 1) % items.length;
+        [].forEach.call(items, function (el, idx) { el.classList.toggle('active', idx === activeIdx); });
+        if (items[activeIdx].scrollIntoView) items[activeIdx].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (items.length) {
+        activeIdx = (activeIdx - 1 + items.length) % items.length;
+        [].forEach.call(items, function (el, idx) { el.classList.toggle('active', idx === activeIdx); });
+        if (items[activeIdx].scrollIntoView) items[activeIdx].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'Enter' && filtered[activeIdx]) {
+      e.preventDefault();
+      selectItem(filtered[activeIdx]);
+    }
+  });
+
+  listEl.addEventListener('click', function (e) {
+    var a = e.target.closest('.cmd-item');
+    if (!a) return;
+    e.preventDefault();
+    var idx = Number(a.getAttribute('data-idx') || 0);
+    selectItem(filtered[idx]);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (dlg.open) closeCmd(); else openCmd();
+    }
+  });
+})();

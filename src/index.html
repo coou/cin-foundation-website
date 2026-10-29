@@ -14,7 +14,7 @@
 <meta property="og:image" content="/assets/images/og-image.svg">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-<link rel="stylesheet" href="/styles/site.css?v=44">
+<link rel="stylesheet" href="/styles/site.css?v=45">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -93,9 +93,10 @@
 
     <figure class="boundary-fig">
       <div class="bd-tabs js-only" id="bd-tabs" role="tablist" aria-label="Which way">
-        <button type="button" role="tab" data-tab="in" aria-selected="true">Who asks for your data</button>
-        <button type="button" role="tab" data-tab="out" aria-selected="false">What you need</button>
-        <button type="button" role="tab" data-tab="split" aria-selected="false">Two internets &amp; shared ledger</button>
+        <button type="button" role="tab" data-tab="in" aria-selected="true">1. Who asks for your data</button>
+        <button type="button" role="tab" data-tab="out" aria-selected="false">2. What you need</button>
+        <button type="button" role="tab" data-tab="split" aria-selected="false">3. Two internets &amp; ledger</button>
+        <button type="button" role="tab" data-tab="pkt" aria-selected="false">4. Wire-protocol &amp; data model</button>
       </div>
       <div class="boundary-frame">
         <canvas id="boundary" aria-hidden="true"></canvas>
@@ -197,6 +198,57 @@
             <li class="bd-ok"><b>Personal Agent Trained on You:</b> Your agent runs on your own device, learns your skills and preferences without uploading your life to the cloud, and shares only the single verified answer a service needs.</li>
             <li class="bd-ok"><b>User-Controlled Copyright &amp; Functional Proof:</b> When you and your agent (or a task-solver community) solve a problem, the shared ledger records your individual name and copyright, and collaborating agents reward it based on verified proof that it works. <a href="/notes/agent-only-internet-biometrics-hardware">Read the technical note &rarr;</a></li>
           </ol>
+        </div>
+      </div>
+      <div class="boundary-frame pkt-frame" id="pkt-frame" hidden style="aspect-ratio:auto;padding:1.3rem">
+        <div class="pkt-head">
+          <div>
+            <span class="label">Formal Data Model &amp; Wire-Protocol Inspector</span>
+            <h4 style="margin:.25rem 0 0;font-size:1.15rem">Inspect the 3 cryptographic envelopes that cross the local OCap sandbox boundary</h4>
+          </div>
+          <div class="pkt-modes" role="group" aria-label="Select wire-protocol primitive">
+            <button type="button" data-pkt-mode="cap" aria-pressed="true">1. Signed Capability Request (OCap-QUIC)</button>
+            <button type="button" data-pkt-mode="pcc" aria-pressed="false">2. Functional Proof Receipt (Necula, 1997)</button>
+            <button type="button" data-pkt-mode="lora" aria-pressed="false">3. Latent &amp; TIES-LoRA Delta (Data Shapley)</button>
+          </div>
+        </div>
+        <div class="pkt-grid">
+          <div class="pkt-code-box">
+            <div class="pkt-bar"><span id="pkt-wire-title">IETF RFC 9000 QUIC Stream 0x04 · CBOR/JSON Envelope</span><span class="r-ok">0 BYTES RAW PII</span></div>
+            <pre id="pkt-json">{
+  "envelope_type": "OCAP_SELECTIVE_PREDICATE_V4",
+  "transport": "IETF_QUIC_RFC9000_0RTT",
+  "hardware_attestation": {
+    "sram_puf_challenge_hash": "0x8f3a...c91e",
+    "tpm_enclave_quote": "VERIFIED_LOCAL_SANDBOX",
+    "somatic_coercion_check": "CALM_AUTONOMIC_PASS"
+  },
+  "capability_grant": {
+    "wasm_module_sha256": "e3b0c44298fc1c149afbf4c8996fb924",
+    "quorum_approvals": ["agent_health", "agent_money", "agent_id"],
+    "ephemeral_one_time_gate": true
+  },
+  "payload_predicate": {
+    "claim": "cms_ncci_fair_settlement_eligible",
+    "verified_boolean": true,
+    "raw_personal_files_exposed": 0
+  }
+}</pre>
+          </div>
+          <div class="pkt-explain-box" id="pkt-explain">
+            <div class="pkt-step">
+              <span>1. Purpose in the Architecture</span>
+              <p>Replaces ambient cloud API tokens and cookies with a one-time, hardware-attested capability certificate (<a href="https://dl.acm.org/doi/10.1145/365230.365252" target="_blank" rel="noopener">Dennis &amp; Van Horn, 1966</a>) over IETF QUIC (<a href="https://datatracker.ietf.org/doc/html/rfc9000" target="_blank" rel="noopener">RFC 9000</a>).</p>
+            </div>
+            <div class="pkt-step">
+              <span>2. How Local Sandbox Agents Use It</span>
+              <p>Your 6 narrow local agents evaluate the outside request against your private files inside WebAssembly memory. When 3-of-6 local agents + your consent approve, only the boolean predicate crosses the firewall.</p>
+            </div>
+            <div class="pkt-step">
+              <span>3. Security &amp; Privacy Guarantee</span>
+              <p>Raw medical charts, bank CSVs, and location logs have zero outbound network capability handles in the sandbox runtime. Once the single fact is returned, the ephemeral QUIC stream ID is burned.</p>
+            </div>
+          </div>
         </div>
       </div>
       <figcaption><span id="bd-cap"><strong>Your agent stands at the door between you and the outside world.</strong> It learns your needs on your own devices, blocks manipulative bots, and checks with you before sharing a single verified answer—never your raw files or personal history.</span><span id="nw-cap" hidden><strong>Your needs go out across the agent-only internet, through circles you trust.</strong> Your agent tries to solve a problem on your device first. When it needs outside help, it asks trusted friends&rsquo; agents, then task-solver communities, and finally the wider network—revealing less about you at every step.</span><span id="split-cap" hidden><strong>Two internets and a shared attribution ledger.</strong> The human internet stays person-to-person, while agents coordinate over pure data streams and credit real creators for solutions that work. <a href="/notes/agent-only-internet-biometrics-hardware">Open the technical note &amp; simulator &rarr;</a></span> <span class="mono">(An interactive illustration of our design.)</span></figcaption>
@@ -1306,15 +1358,15 @@
   </div>
 </dialog>
 
-<script src="/scripts/site.js?v=44" defer></script>
-<script src="/scripts/risk-lab.js?v=44" defer></script>
-<script src="/scripts/trajectory.js?v=44" defer></script>
-<script src="/scripts/network.js?v=44" defer></script>
-<script src="/scripts/principles.js?v=44" defer></script>
-<script src="/scripts/all-principles-data.js?v=44" defer></script>
-<script src="/scripts/everyday.js?v=44" defer></script>
-<script src="/scripts/power.js?v=44" defer></script>
-<script src="/scripts/hardware.js?v=44" defer></script>
-<script src="/scripts/live.js?v=44" defer></script>
+<script src="/scripts/site.js?v=45" defer></script>
+<script src="/scripts/risk-lab.js?v=45" defer></script>
+<script src="/scripts/trajectory.js?v=45" defer></script>
+<script src="/scripts/network.js?v=45" defer></script>
+<script src="/scripts/principles.js?v=45" defer></script>
+<script src="/scripts/all-principles-data.js?v=45" defer></script>
+<script src="/scripts/everyday.js?v=45" defer></script>
+<script src="/scripts/power.js?v=45" defer></script>
+<script src="/scripts/hardware.js?v=45" defer></script>
+<script src="/scripts/live.js?v=45" defer></script>
 </body>
 </html>
