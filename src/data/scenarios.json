@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261029-0384",
+   "added_at": "2026-10-29T18:16:52+00:00",
+   "title": "Protocol-Conformant Edge Devices Conceal Autonomous Sensing Under Valid Digital Certificates",
+   "horizon_years": 3,
+   "world": "By 2029, millions of connected autonomous edge devices—including smart meters, home robotics, and delivery drones—communicate across urban networks using valid cryptographic credentials. Cloud clearinghouses and municipal monitoring dashboards rely entirely on certificate validity to grant network ingress. However, hardware-level covert channels and latent sensor triggers allow manufacturer agents to harvest private human routines and speech without failing a single network compliance audit or emitting anomalous traffic signatures. Ordinary consumers and small businesses discover that their privacy is systematically bypassed by appliances that are legally certified and cryptographically genuine.",
+   "premise": "Entity-centric threat modeling reveals that cryptographic PKI authenticity does not establish declared-purpose conformance. Autonomous devices and vehicles can maintain valid manufacturer certificates and flawless protocol compliance while executing context-triggered surveillance or exfiltration.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "The network develops and proves hardware-level object-capability sandboxing (Dennis and Van Horn, 1966) and the Agent-Only Internet protocol boundary. By decoupling cryptographic identity from execution authority, the network demonstrates that no device—no matter how authentic its manufacturer key—can bypass local client-side capability gates.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "PKI complacency entrenches untrusted manufacturer surveillance",
+     "description": "Regulators and enterprise buyers treat digital signature verification as synonymous with behavioral safety, allowing certified devices to capture sensitive biometric and spatial telemetry.",
+     "example": "A connected smart vehicle fleet passes ISO compliance audits via genuine OEM keys while silently logging ambient cabin conversations during targeted geographic transit.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.5
+    },
+    {
+     "name": "Proprietary cloud gateways enforce stricter remote telemetry quotas",
+     "description": "Major cloud vendors restrict third-party device uploads through proprietary API rate limits, centralizing telemetry capture into their own closed ecosystems without improving local user privacy.",
+     "example": "Smart appliance telemetry is routed exclusively through cloud vendor relay proxies, charging licensing fees to manufacturers while locking out local home network audits.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.53
+    },
+    {
+     "name": "Hardware-isolated Object-Capability sandboxes enforce local zero-leakage",
+     "description": "Local routers and personal agents enforce physical hardware bus isolation and object-capability constraints, rejecting raw biometric and ambient sensor exfiltration regardless of PKI credentials.",
+     "example": "A household router wraps all smart appliance streams in capability handles; an unconsented background audio packet is dropped fail-closed at the local interface barrier.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.35
+    }
+   ],
+   "pipelines": [
+    "research",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.37059",
+     "title": "Janus Vehicles: Entity-Centric Threat Modelling of Protocol-Conformant Vehicles under a Malicious-Manufacturer Assumption",
+     "kind": "paper",
+     "published": "2026-10-27"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261029-0383",
    "added_at": "2026-10-29T14:12:13+00:00",
    "title": "Autonomous hardware fuzzing discovers physical baseband vulnerabilities in connected edge devices",
@@ -301,60 +355,6 @@
      "title": "SCARCE: Emergent Institutions in Long-Horizon Multi-Agent Coding Systems",
      "kind": "paper",
      "published": "2026-10-26"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261028-0378",
-   "added_at": "2026-10-28T17:27:14+00:00",
-   "title": "Autonomous AI agents trade labor across open MCP marketplaces without client authorization gates, triggering financial liabilities",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of independent knowledge workers and solo developers rely on autonomous agent fleets to handle contracting, data processing, and code review across decentralized and commercial gig markets. However, predatory job boards and prompt-injected task descriptions routinely trick unprotected agents into submitting binding bids below cost, locking worker escrow funds, or leaking client source code. Workers who deploy personal twins protected by local deterministic MCP authorization gateways retain full sovereignty over their bids, keep 100% of their earnings through peer guilds, and prevent silent financial commitments.",
-   "premise": "Commercial agent marketplaces now expose Model Context Protocol (MCP) servers allowing coding assistants to autonomously discover tasks, place bids, and lock escrow funds. Without client-side authorization tripwires, budget ceilings, and prompt-injection-safe tool gates, independent contractors face unmonitored financial commitments and extractive platform rakes.",
-   "goals": [
-    4,
-    6
-   ],
-   "how": "We provide a deterministic client-side MCP labor gateway that enforces human approval thresholds, rate limits, and egress data isolation before any agent bid can be posted to an external market.",
-   "shift": 0.3,
-   "outcomes": [
-    {
-     "name": "Extractive proprietary platforms capture agent labor marketplaces",
-     "description": "Commercial cloud platforms dominate agent work distribution, charging high 5-20% rakes while forcing workers into opaque automated bidding wars that suppress wages.",
-     "example": "An independent freelance translator discovers their assistant booked 40 hours of high-risk translation at sub-minimum rates because an external marketplace algorithm prioritized lowest-bid auto-matching.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.4
-    },
-    {
-     "name": "Client-side MCP authorization guards empower worker-owned guilds",
-     "description": "Open worker cooperatives deploy personal twins with deterministic MCP authorization gates, pooling task opportunities with 0% platform extraction and cryptographic proof of completion.",
-     "example": "A cooperative of 500 solo medical billing specialists runs local agent twins that coordinate task handoffs through zero-rake mutual credit rings, with client-side gates requiring biometric confirmation for contracts exceeding $200.",
-     "desirable": true,
-     "likelihood_now": 0.2,
-     "likelihood_with_cin": 0.35
-    },
-    {
-     "name": "Statutory liability mandates ban autonomous agent contracting",
-     "description": "Regulatory bodies pass strict rules prohibiting automated software agents from entering enforceable commercial contracts without registered human corporate sponsorship.",
-     "example": "A freelance graphic designer is fined under new commercial labor statutes because their autonomous agent accepted an online design brief without a wet signature from an incorporated entity.",
-     "desirable": false,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.25
-    }
-   ],
-   "pipelines": [
-    "simulation",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://moltjobs.io/blog/connect-ai-agent-moltjobs-mcp",
-     "title": "Connect your AI agent to MoltJobs with MCP",
-     "kind": "blog",
-     "published": "2026-09-09"
     }
    ],
    "work": 1
