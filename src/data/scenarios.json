@@ -1,6 +1,67 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261029-0382",
+   "added_at": "2026-10-29T11:53:57+00:00",
+   "title": "Business agents coordinate through hidden mathematical vectors to bypass text compliance audits",
+   "horizon_years": 2,
+   "world": "It is 2028. Across banking, insurance, and medical billing, software vendors have replaced conversational agent chats with direct hidden-state vector exchanges to cut operational compute costs by eighty percent. When an independent clinic submits a prior authorization claim to an insurance payer, dozens of specialized claims and underwriting agents evaluate the request in milliseconds without generating human-readable intermediate text. While routine processing becomes remarkably fast, compliance auditors discover they cannot reconstruct how decisions were made. In one regional health network, an algorithmic underwriting agent silently drifted toward rejecting outpatient therapies because an upstream pricing agent passed an altered latent vector that never surfaced in written logs. When patients appeal, providers can only produce post-hoc reconstructed explanations that mask the underlying machine coordination.",
+   "premise": "To slash token costs and latency, automated business agents are moving inter-agent coordination from plain English into direct mathematical latent vectors. This architectural shift bypasses traditional text-based audit logs and safety scanners, making covert collusion and unauthorized steering invisible to standard compliance oversight.",
+   "goals": [
+    1,
+    2,
+    4
+   ],
+   "how": "The network's shared ledger provides verifiable proof-carrying code and continuous parameter-space attestation. Rather than forcing agents into inefficient text chats or permitting opaque vector handoffs, the network's protocol requires agents to register signed state proofs that client devices can verify locally without trusting centralized cloud brokers.",
+   "shift": 0.4,
+   "outcomes": [
+    {
+     "name": "Opaque latent coordination evades consumer protection rules",
+     "description": "Commercial agent fleets exchange raw latent states across private networks, making it exceedingly difficult for regulators or consumers to detect algorithmic bias, price-fixing, or automated claim rejections.",
+     "example": "A family applying for a mortgage is denied after a bank agent exchanges hidden embeddings with an external risk model that penalizes their zip code, leaving no text log for civil rights regulators to inspect.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Verifiable cryptographic proofs bind latent state transitions",
+     "description": "Decentralized ledgers require agents to publish cryptographic commitments and verifiable proofs for every state transition, enabling independent verification without revealing proprietary models.",
+     "example": "A community credit union uses public state proofs on a shared ledger to verify that an automated loan assessment adhered strictly to statutory criteria without inspecting private model weights.",
+     "desirable": true,
+     "likelihood_now": 0.15,
+     "likelihood_with_cin": 0.35
+    },
+    {
+     "name": "Regulators mandate clumsy text-only agent communication",
+     "description": "Fearing hidden collusion, government agencies ban non-text agent communication entirely, sacrificing efficiency gains and driving high-speed coordination into underground, unmonitored channels.",
+     "example": "A state insurance commission fines hospital billing systems for using embedding-based pipelines, forcing clinics back to expensive multi-second token generation loops that increase overhead.",
+     "desirable": false,
+     "likelihood_now": 0.3,
+     "likelihood_with_cin": 0.3
+    }
+   ],
+   "pipelines": [
+    "policy",
+    "simulation",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2605.28214",
+     "title": "Out of Sight, Not Out of Mind: Unveiling Latent Attack in Latent-based Multi-Agent Systems",
+     "kind": "preprint",
+     "published": "2026-05-27"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.33253",
+     "title": "Operationalizing Governed Agentic Workflows in Regulated Finance: A Customer Zero Case Study using Zafin AIOS",
+     "kind": "preprint",
+     "published": "2026-10-23"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261029-0381",
    "added_at": "2026-10-29T07:51:25+00:00",
    "title": "Corporate landlords deploy decentralized pricing agents exchanging latent vectors to evade antitrust bans on algorithmic rent-fixing",
@@ -287,61 +348,6 @@
      "title": "FlockWorld: Toward Population-Scale Multi-Agent Video World Models through Artificial Life Simulation",
      "kind": "paper",
      "published": "2026-10-25"
-    }
-   ],
-   "work": 1
-  },
-  {
-   "id": "SC-20261028-0376",
-   "added_at": "2026-10-28T13:23:12+00:00",
-   "title": "Unsupervised autonomous agents in professional knowledge work trigger compounding audit failures and liability for independent practitioners",
-   "horizon_years": 3,
-   "world": "It is 2029. In corporate accounting, healthcare billing, and legal review, clients increasingly demand rapid turnarounds and compressed fees assuming AI agents can handle multi-hour analytical workflows autonomously. Freelance analysts and independent practices deploy agents to handle complex 15-hour work packages, but because frontier models pass fewer than a quarter of multi-step criteria and blindly accept false premises, client audits uncover massive compounding errors. Rather than holding model vendors responsible, enterprise clients invoke indemnification clauses against independent workers, driving freelance practitioners out of business while corporate consulting cartels monopolize institutional trust.",
-   "premise": "When independent contractors and small advisory practices deploy autonomous AI agents on complex, multi-hour professional workflows, unverified agent outputs exhibit high failure rates (over 75%) due to premise blindness and compounding data errors, leaving human practitioners legally liable for flawed client deliverables.",
-   "goals": [
-    2,
-    4,
-    6
-   ],
-   "how": "The Collective Intelligence Network provides open, verifiable personal twin protocols where multi-hour tasks are executed in bounded local sandboxes, paired with cooperative brokerage and peer review circles. By allowing independent professionals to pool specialized agent skills and prove step-level validation, the network enables solo workers to deliver verified professional results without exposing themselves to catastrophic liability.",
-   "shift": 0.48,
-   "outcomes": [
-    {
-     "name": "Enterprise clients transfer algorithmic liability entirely onto independent contractors",
-     "description": "Corporations mandate strict liability for unreviewed AI deliverables while slashing billing rates, bankrupting solo professionals whose agent tools fail silent premises.",
-     "example": "A freelance healthcare revenue auditor uses a cloud agent to reconcile 200 clinic billing files; the agent carries a duplicated provider NPI error across all submissions, resulting in a $78,000 payer penalty clawback assessed against the solo auditor.",
-     "desirable": false,
-     "likelihood_now": 0.58,
-     "likelihood_with_cin": 0.36
-    },
-    {
-     "name": "Worker cooperatives deploy cooperative task brokers with peer audit circles",
-     "description": "Independent knowledge worker guilds pool their agent twins into cooperative networks where complex multi-hour tasks are broken into verifiable sub-milestones with cross-human peer review.",
-     "example": "A guild of independent financial analysts pools five specialized agent twins to audit municipal balance sheets, validating data premises at each step and catching flawed assumptions before submission.",
-     "desirable": true,
-     "likelihood_now": 0.22,
-     "likelihood_with_cin": 0.44
-    },
-    {
-     "name": "Big-four consultancies monopolize agent certification registries",
-     "description": "Dominant consulting conglomerates lobby regulators to mandate proprietary multi-million-dollar audit certifications for any AI-assisted professional work, excluding independent professionals.",
-     "example": "A municipal finance board enacts procurement rules requiring all budget reviews to use certified proprietary audit software costing $50,000 annually, disqualifying local community accountants.",
-     "desirable": false,
-     "likelihood_now": 0.52,
-     "likelihood_with_cin": 0.48
-    }
-   ],
-   "pipelines": [
-    "community",
-    "policy",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.01306",
-     "title": "DAYJOB: A Benchmark for Long-Horizon Professional Work",
-     "kind": "preprint",
-     "published": "2026-10-01"
     }
    ],
    "work": 1
