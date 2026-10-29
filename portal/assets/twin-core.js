@@ -10397,3 +10397,525 @@ export function summarizeInformationFlow(result) {
     receipt_id: r.receipt_id
   });
 }
+
+// ============================================================================
+// DOM-READINESS & ADAPTIVE SETTLED STATE DETECTOR (D-0732 / arXiv:2610.32482)
+// ============================================================================
+
+export const DEFAULT_DOM_READINESS_CONFIG = Object.freeze({
+  quiet_window_ms: 25,
+  max_wait_ms: 500,
+  target_settle_threshold_ms: 50,
+  conservative_baseline_ms: 500
+});
+
+export const ALLOWED_DOM_READINESS_STATUSES = Object.freeze([
+  'settled',
+  'timeout_fallback',
+  'immediate_ready',
+  'error'
+]);
+
+export const ALLOWED_SETTLED_METRICS_FIELDS = Object.freeze([
+  'status',
+  'elapsed_ms',
+  'mutation_count',
+  'quiescent_ms',
+  'timed_out',
+  'reason',
+  'diagnostics'
+]);
+
+/**
+ * Deterministically evaluates whether a stream of DOM mutation events has reached
+ * a settled, quiescent state without arbitrary conservative waiting delays.
+ * Grounded in empirical measurement from WaitLens (arXiv:2610.32482).
+ *
+ * @param {Array<object>} mutationTimeline Ordered array of mutation events { at_ms, target, type }
+ * @param {object} [options={}] Configuration options
+ * @returns {object} Deeply frozen settled metrics evaluation
+ */
+export function evaluateSettledState(mutationTimeline, options = {}) {
+  if (!Array.isArray(mutationTimeline)) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'mutationTimeline must be an array of mutation objects',
+      diagnostics: 'validation_failure'
+    });
+  }
+
+  if (options === null || typeof options !== 'object' || Array.isArray(options)) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'options must be a plain object',
+      diagnostics: 'validation_failure'
+    });
+  }
+
+  const allowedOptions = new Set([
+    'quiet_window_ms',
+    'max_wait_ms',
+    'target_settle_threshold_ms',
+    'conservative_baseline_ms',
+    'as_of_start_ms'
+  ]);
+  for (const k of Object.keys(options)) {
+    if (!allowedOptions.has(k)) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: 0,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `Unknown option: ${k}`,
+        diagnostics: 'unknown_option'
+      });
+    }
+  }
+
+  const quietWindow = options.quiet_window_ms !== undefined
+    ? options.quiet_window_ms
+    : DEFAULT_DOM_READINESS_CONFIG.quiet_window_ms;
+  const maxWait = options.max_wait_ms !== undefined
+    ? options.max_wait_ms
+    : DEFAULT_DOM_READINESS_CONFIG.max_wait_ms;
+  const targetThreshold = options.target_settle_threshold_ms !== undefined
+    ? options.target_settle_threshold_ms
+    : DEFAULT_DOM_READINESS_CONFIG.target_settle_threshold_ms;
+
+  if (typeof quietWindow !== 'number' || !Number.isFinite(quietWindow) || quietWindow <= 0) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'quiet_window_ms must be a positive finite number',
+      diagnostics: 'invalid_quiet_window'
+    });
+  }
+
+  if (typeof maxWait !== 'number' || !Number.isFinite(maxWait) || maxWait <= quietWindow) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'max_wait_ms must be a finite number greater than quiet_window_ms',
+      diagnostics: 'invalid_max_wait'
+    });
+  }
+
+  // Validate all timeline events
+  let lastTimestamp = (typeof options.as_of_start_ms === 'number' && Number.isFinite(options.as_of_start_ms) && options.as_of_start_ms >= 0)
+    ? options.as_of_start_ms
+    : 0;
+  for (let i = 0; i < mutationTimeline.length; i++) {
+    const ev = mutationTimeline[i];
+    if (ev === null || typeof ev !== 'object' || Array.isArray(ev)) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: i,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `Mutation event at index ${i} must be a plain object`,
+        diagnostics: 'invalid_event_structure'
+      });
+    }
+
+    if (typeof ev.at_ms !== 'number' || !Number.isFinite(ev.at_ms) || ev.at_ms < 0) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: i,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `Mutation event at index ${i} must have non-negative finite at_ms`,
+        diagnostics: 'invalid_event_timestamp'
+      });
+    }
+
+    if (ev.at_ms < lastTimestamp) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: i,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `Timeline events must be monotonically non-decreasing (${ev.at_ms} < ${lastTimestamp})`,
+        diagnostics: 'out_of_order_events'
+      });
+    }
+    lastTimestamp = ev.at_ms;
+  }
+
+  // Case 1: Non-mutating UI target -> immediate readiness within quiet window
+  if (mutationTimeline.length === 0) {
+    const elapsed = Math.min(quietWindow, targetThreshold);
+    return deepFreeze({
+      ok: true,
+      status: 'immediate_ready',
+      elapsed_ms: elapsed,
+      mutation_count: 0,
+      quiescent_ms: elapsed,
+      timed_out: false,
+      reason: `Target element remained quiet; settled in ${elapsed}ms (<= ${targetThreshold}ms threshold)`,
+      diagnostics: 'zero_mutations'
+    });
+  }
+
+  // Case 2: Process mutations and identify first quiescent window
+  let settleTime = null;
+  for (let i = 0; i < mutationTimeline.length - 1; i++) {
+    const current = mutationTimeline[i];
+    const next = mutationTimeline[i + 1];
+    const gap = next.at_ms - current.at_ms;
+
+    if (gap >= quietWindow) {
+      const candidateSettle = current.at_ms + quietWindow;
+      if (candidateSettle <= maxWait) {
+        settleTime = candidateSettle;
+        break;
+      }
+    }
+  }
+
+  if (settleTime === null) {
+    const lastEvent = mutationTimeline[mutationTimeline.length - 1];
+    const candidateSettle = lastEvent.at_ms + quietWindow;
+    if (candidateSettle <= maxWait) {
+      settleTime = candidateSettle;
+    }
+  }
+
+  // Case 3: If settled within max_wait_ms
+  if (settleTime !== null && settleTime <= maxWait) {
+    return deepFreeze({
+      ok: true,
+      status: 'settled',
+      elapsed_ms: settleTime,
+      mutation_count: mutationTimeline.length,
+      quiescent_ms: quietWindow,
+      timed_out: false,
+      reason: `DOM mutations ceased; settled after ${settleTime}ms with ${mutationTimeline.length} observed mutations`,
+      diagnostics: 'quiescent_window_satisfied'
+    });
+  }
+
+  // Case 4: Fallback timeout exceeded fail-closed
+  return deepFreeze({
+    ok: true,
+    status: 'timeout_fallback',
+    elapsed_ms: maxWait,
+    mutation_count: mutationTimeline.length,
+    quiescent_ms: 0,
+    timed_out: true,
+    reason: `DOM did not reach quiescent state within ${maxWait}ms ceiling; safe fallback triggered without blocking`,
+    diagnostics: 'max_wait_exceeded'
+  });
+}
+
+/**
+ * Asynchronous adaptive DOM readiness detector for interactive client actuation.
+ * Observes DOM mutations on the target and resolves as soon as mutations stop for quiet_window_ms,
+ * or immediately resolves within 50ms if no mutations occur. Fails closed on max_wait_ms timeout.
+ *
+ * @param {object|Element} targetOrAdapter DOM Element or test adapter object with observe/disconnect
+ * @param {object} [options={}] Configuration parameters
+ * @returns {Promise<object>} Promise resolving to deeply frozen settled metrics
+ */
+export async function waitForSettledState(targetOrAdapter, options = {}) {
+  // Fail closed immediately on missing or invalid target
+  if (!targetOrAdapter || (typeof targetOrAdapter.simulateEvents !== 'function' && typeof targetOrAdapter.nodeType !== 'number')) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'targetOrAdapter must be a valid DOM node or simulation adapter with simulateEvents()',
+      diagnostics: 'invalid_target'
+    });
+  }
+
+  // Test adapter mode (deterministic unit testing without DOM mocks)
+  if (typeof targetOrAdapter.simulateEvents === 'function') {
+    let timeline;
+    try {
+      timeline = targetOrAdapter.simulateEvents();
+    } catch (err) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: 0,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `simulateEvents failed: ${err.message}`,
+        diagnostics: 'adapter_simulation_failed'
+      });
+    }
+    return evaluateSettledState(timeline, options);
+  }
+
+  const quietWindow = (options && typeof options.quiet_window_ms === 'number' && options.quiet_window_ms > 0)
+    ? options.quiet_window_ms
+    : DEFAULT_DOM_READINESS_CONFIG.quiet_window_ms;
+  const maxWait = (options && typeof options.max_wait_ms === 'number' && options.max_wait_ms > quietWindow)
+    ? options.max_wait_ms
+    : DEFAULT_DOM_READINESS_CONFIG.max_wait_ms;
+
+  const startTime = (options && typeof options.as_of_start_ms === 'number')
+    ? options.as_of_start_ms
+    : (typeof performance !== 'undefined' ? performance.now() : Date.now());
+
+  // Browser MutationObserver mode
+  return new Promise((resolve) => {
+    let mutationCount = 0;
+    let quietTimer = null;
+    let maxWaitTimer = null;
+    let observer = null;
+    let resolved = false;
+
+    const cleanup = () => {
+      if (quietTimer) clearTimeout(quietTimer);
+      if (maxWaitTimer) clearTimeout(maxWaitTimer);
+      if (observer && typeof observer.disconnect === 'function') {
+        try { observer.disconnect(); } catch (_) {}
+      }
+    };
+
+    const finish = (status, timedOut, reason, diagnostics) => {
+      if (resolved) return;
+      resolved = true;
+      cleanup();
+      const nowTime = typeof performance !== 'undefined' ? performance.now() : Date.now();
+      const elapsed = Math.max(1, Math.round(nowTime - startTime));
+      resolve(deepFreeze({
+        ok: true,
+        status,
+        elapsed_ms: elapsed,
+        mutation_count: mutationCount,
+        quiescent_ms: timedOut ? 0 : quietWindow,
+        timed_out: timedOut,
+        reason,
+        diagnostics
+      }));
+    };
+
+    // If MutationObserver is available in environment
+    if (typeof MutationObserver !== 'undefined' && targetOrAdapter && typeof targetOrAdapter.nodeType === 'number') {
+      try {
+        observer = new MutationObserver((mutations) => {
+          mutationCount += mutations.length;
+          if (quietTimer) clearTimeout(quietTimer);
+          quietTimer = setTimeout(() => {
+            finish('settled', false, `DOM mutations settled (${mutationCount} mutations observed)`, 'quiescent_window_satisfied');
+          }, quietWindow);
+        });
+
+        observer.observe(targetOrAdapter, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          characterData: true
+        });
+      } catch (err) {
+        finish('error', false, `Failed to initialize MutationObserver: ${err.message}`, 'observer_init_failed');
+        return;
+      }
+    }
+
+    // Safety timeout ceiling
+    maxWaitTimer = setTimeout(() => {
+      finish('timeout_fallback', true, `Max wait time of ${maxWait}ms elapsed; proceeding with safe fallback`, 'max_wait_exceeded');
+    }, maxWait);
+
+    // Initial quiet timer (triggers immediate_ready if zero mutations occur)
+    quietTimer = setTimeout(() => {
+      if (mutationCount === 0) {
+        finish('immediate_ready', false, `Target element was immediately quiet; settled in ${quietWindow}ms`, 'zero_mutations');
+      } else {
+        finish('settled', false, `DOM mutations settled (${mutationCount} mutations observed)`, 'quiescent_window_satisfied');
+      }
+    }, quietWindow);
+  });
+}
+
+/**
+ * Benchmarks an action sequence comparing conservative fixed delays vs adaptive settled state waiting.
+ * Grounded in WaitLens empirical findings (arXiv:2610.32482).
+ *
+ * @param {Array<object>} actionSteps Array of step objects { step_name, mutations: Array<object> }
+ * @param {object} [options={}] Benchmark options
+ * @returns {object} Deeply frozen benchmark metrics summary
+ */
+export function benchmarkActuationSequence(actionSteps, options = {}) {
+  if (!Array.isArray(actionSteps) || actionSteps.length === 0) {
+    return deepFreeze({
+      ok: false,
+      step_count: 0,
+      total_baseline_ms: 0,
+      total_adaptive_ms: 0,
+      time_saved_ms: 0,
+      reduction_percent: 0,
+      meets_target_reduction: false,
+      reason: 'actionSteps must be a non-empty array'
+    });
+  }
+
+  const baselineWait = (options && typeof options.conservative_baseline_ms === 'number' && options.conservative_baseline_ms > 0)
+    ? options.conservative_baseline_ms
+    : DEFAULT_DOM_READINESS_CONFIG.conservative_baseline_ms;
+
+  let totalBaseline = 0;
+  let totalAdaptive = 0;
+  const stepResults = [];
+
+  for (let i = 0; i < actionSteps.length; i++) {
+    const step = actionSteps[i];
+    if (!step || typeof step !== 'object' || Array.isArray(step)) {
+      return deepFreeze({
+        ok: false,
+        step_count: actionSteps.length,
+        total_baseline_ms: 0,
+        total_adaptive_ms: 0,
+        time_saved_ms: 0,
+        reduction_percent: 0,
+        meets_target_reduction: false,
+        reason: `Step at index ${i} must be a plain object`,
+        diagnostics: 'invalid_step_structure'
+      });
+    }
+
+    if (step.mutations !== undefined && !Array.isArray(step.mutations)) {
+      return deepFreeze({
+        ok: false,
+        step_count: actionSteps.length,
+        total_baseline_ms: 0,
+        total_adaptive_ms: 0,
+        time_saved_ms: 0,
+        reduction_percent: 0,
+        meets_target_reduction: false,
+        reason: `Step ${i + 1} (${step.step_name || 'unnamed'}) mutations must be an array if provided`,
+        diagnostics: 'invalid_step_mutations'
+      });
+    }
+
+    const mutations = Array.isArray(step.mutations) ? step.mutations : [];
+    const evaluation = evaluateSettledState(mutations, options);
+
+    if (!evaluation.ok) {
+      return deepFreeze({
+        ok: false,
+        step_count: actionSteps.length,
+        total_baseline_ms: 0,
+        total_adaptive_ms: 0,
+        time_saved_ms: 0,
+        reduction_percent: 0,
+        meets_target_reduction: false,
+        reason: `Step ${i + 1} (${step?.step_name || 'unnamed'}) failed settled state evaluation: ${evaluation.reason}`,
+        diagnostics: evaluation.diagnostics || 'step_evaluation_failed'
+      });
+    }
+
+    totalBaseline += baselineWait;
+    totalAdaptive += evaluation.elapsed_ms;
+
+    stepResults.push({
+      step_index: i + 1,
+      step_name: step?.step_name || `Step ${i + 1}`,
+      baseline_ms: baselineWait,
+      adaptive_ms: evaluation.elapsed_ms,
+      status: evaluation.status,
+      mutations: evaluation.mutation_count
+    });
+  }
+
+  const timeSaved = Math.max(0, totalBaseline - totalAdaptive);
+  const reductionPct = totalBaseline > 0
+    ? Math.round(((timeSaved / totalBaseline) * 100) * 10) / 10
+    : 0;
+
+  return deepFreeze({
+    ok: true,
+    step_count: actionSteps.length,
+    total_baseline_ms: totalBaseline,
+    total_adaptive_ms: totalAdaptive,
+    time_saved_ms: timeSaved,
+    reduction_percent: reductionPct,
+    meets_target_reduction: reductionPct >= 80.0,
+    steps: Object.freeze(stepResults),
+    summary: `Executed ${actionSteps.length} actuation steps: saved ${timeSaved}ms (${reductionPct}% reduction vs conservative ${baselineWait}ms waits)`
+  });
+}
+
+/**
+ * Summarizes settled state detection results for UI display without innerHTML.
+ *
+ * @param {object} result Evaluation result from evaluateSettledState or waitForSettledState
+ * @returns {object} Deeply frozen display summary { ok, text, status_class, badge }
+ */
+export function summarizeSettledState(result) {
+  if (!result || typeof result !== 'object' || !result.ok) {
+    return deepFreeze({
+      ok: false,
+      text: result?.reason || 'DOM state readiness evaluation failed fail-closed.',
+      status_class: 'status-err',
+      badge: 'Readiness Error'
+    });
+  }
+
+  if (result.status === 'immediate_ready') {
+    return deepFreeze({
+      ok: true,
+      text: `UI target was immediately ready (${result.elapsed_ms}ms, 0 mutations). Zero wait delay added.`,
+      status_class: 'status-ok',
+      badge: 'Immediate Ready'
+    });
+  }
+
+  if (result.status === 'settled') {
+    return deepFreeze({
+      ok: true,
+      text: `DOM quiesced in ${result.elapsed_ms}ms after ${result.mutation_count} mutations. Fully settled.`,
+      status_class: 'status-ok',
+      badge: 'Settled'
+    });
+  }
+
+  if (result.status === 'timeout_fallback') {
+    return deepFreeze({
+      ok: true,
+      text: `DOM activity reached ${result.elapsed_ms}ms safety limit; continued safely without blocking the UI.`,
+      status_class: 'status-warn',
+      badge: 'Safety Fallback'
+    });
+  }
+
+  return deepFreeze({
+    ok: true,
+    text: result.reason || 'Readiness evaluated.',
+    status_class: 'status-ok',
+    badge: 'Ready'
+  });
+}
