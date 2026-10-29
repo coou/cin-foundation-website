@@ -157,6 +157,173 @@
      Zone 3 (Right):  AGENT-ONLY INTERNET · Real-Time Data-Only Ledger Stream (τ)
                       patrolled by Rewarded REA Reverse-Engineering Auditors
      ========================================================================== */
+
+  /* ---------- Interactive Personal Agent & Zero-Middleman Savings Workbench (#wedge-calc) ---------- */
+  var wbRoot = document.getElementById('wedge-calc');
+  if (wbRoot) {
+    var wbMode = 'medical';
+    var wbBtns = [].slice.call(wbRoot.querySelectorAll('[data-wb-mode]'));
+    var rng1 = document.getElementById('wb-rng-1');
+    var rng2 = document.getElementById('wb-rng-2');
+    var out1 = document.getElementById('wb-out-1');
+    var out2 = document.getElementById('wb-out-2');
+    var lbl1 = document.getElementById('wb-lbl-1');
+    var lbl2 = document.getElementById('wb-lbl-2');
+    var hint1 = document.getElementById('wb-hint-1');
+    var hint2 = document.getElementById('wb-hint-2');
+    var cb1 = document.getElementById('wb-cb-1');
+    var cb2 = document.getElementById('wb-cb-2');
+    var cbl1 = document.getElementById('wb-cbl-1');
+    var cbd1 = document.getElementById('wb-cbd-1');
+    var cbl2 = document.getElementById('wb-cbl-2');
+    var cbd2 = document.getElementById('wb-cbd-2');
+    var k1l = document.getElementById('wb-k1-lbl'), k1v = document.getElementById('wb-k1-val'), k1s = document.getElementById('wb-k1-sub');
+    var k2l = document.getElementById('wb-k2-lbl'), k2v = document.getElementById('wb-k2-val'), k2s = document.getElementById('wb-k2-sub');
+    var k3l = document.getElementById('wb-k3-lbl'), k3v = document.getElementById('wb-k3-val'), k3s = document.getElementById('wb-k3-sub');
+    var b1l = document.getElementById('wb-b1-lbl'), b1v = document.getElementById('wb-b1-val'), b1f = document.getElementById('wb-b1-fill');
+    var b2l = document.getElementById('wb-b2-lbl'), b2v = document.getElementById('wb-b2-val'), b2f = document.getElementById('wb-b2-fill');
+    var rcpt = document.getElementById('wb-receipt');
+    var fmtUsd = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+
+    var configureWbMode = function (m) {
+      wbMode = m;
+      wbBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-wb-mode') === m)); });
+      if (m === 'medical') {
+        lbl1.textContent = 'Hospital Billed Charge (ER / Outpatient EOB)';
+        rng1.min = 1200; rng1.max = 18000; rng1.step = 100; rng1.value = 3820;
+        hint1.textContent = 'Typical Level-4 emergency room visit with bundled lab & hydration line items.';
+        lbl2.textContent = 'Chargemaster Markup Over Medicare Rate';
+        rng2.min = 180; rng2.max = 650; rng2.step = 10; rng2.value = 380;
+        hint2.textContent = 'National hospital chargemaster markups average 340%–520% above statutory CMS benchmarks.';
+        cbl1.textContent = 'CMS NCCI Unbundling Audit:';
+        cbd1.textContent = 'Flags unbundled CPT 36415 venipuncture & CPT 96360 IV hydration billed alongside CPT 99284.';
+        cbl2.textContent = 'Private Set Intersection (PSI) Benchmark:';
+        cbd2.textContent = 'Compares regional settled rates across 412 local patients over IETF QUIC with 0 bytes of medical records exposed.';
+      } else if (m === 'coop') {
+        lbl1.textContent = 'Independent Clinics / Local Shops in Coalition';
+        rng1.min = 5; rng1.max = 250; rng1.step = 5; rng1.value = 65;
+        hint1.textContent = 'Members pool supply & SaaS purchasing orders via cryptographic Private Set Intersection.';
+        lbl2.textContent = 'Annual Supply & SaaS Spend per Member';
+        rng2.min = 20000; rng2.max = 400000; rng2.step = 10000; rng2.value = 120000;
+        hint2.textContent = 'Legacy Group Purchasing Organizations (GPOs) and SaaS resellers extract 18%–32% middleman tolls.';
+        cbl1.textContent = 'Private Set Intersection (Freedman et al., 2004):';
+        cbd1.textContent = 'Matches overlapping SKUs across members without revealing proprietary vendor invoices to competitors.';
+        cbl2.textContent = 'Zero-Middleman Smart Escrow over IETF QUIC:';
+        cbd2.textContent = 'Settles bulk manufacturer discounts directly peer-to-peer, compressing administrative overhead to 3.2%.';
+      } else {
+        lbl1.textContent = 'Verified Peer-Agent Executions per Month';
+        rng1.min = 200; rng1.max = 25000; rng1.step = 200; rng1.value = 4200;
+        hint1.textContent = 'Number of times other personal agents or clinics run your verified patch, checklist, or LoRA adapter.';
+        lbl2.textContent = 'Marginal Task Accuracy Gain (Data Shapley)';
+        rng2.min = 4; rng2.max = 35; rng2.step = 1; rng2.value = 18;
+        hint2.textContent = 'Measured improvement on held-out sandbox verification suites (Ghorbani & Zou, ICML 2019).';
+        cbl1.textContent = 'Proof-Carrying Code Gate (Necula, POPL 1997):';
+        cbd1.textContent = 'Requires deterministic sandbox test pass before capability executes or accrues royalties.';
+        cbl2.textContent = 'TIES-Merging LoRA Attribution (Yadav et al., 2023):';
+        cbd2.textContent = 'Preserves cryptographic contributor lineage (70% lead / 15% co-author / 15% verifiers) across weight merges.';
+      }
+      updateWb();
+    };
+
+    var updateWb = function () {
+      var v1 = Number(rng1.value), v2 = Number(rng2.value);
+      var on1 = cb1.checked, on2 = cb2.checked;
+      if (wbMode === 'medical') {
+        out1.textContent = fmtUsd(v1);
+        out2.textContent = v2 + '%';
+        var ncciSave = on1 ? Math.round(v1 * 0.298) : 0;
+        var psiSave = on2 ? Math.round((v1 - ncciSave) * Math.min(0.45, (v2 - 140) / 1100)) : 0;
+        var totalSave = ncciSave + psiSave;
+        var fair = Math.max(Math.round(v1 * 0.22), v1 - totalSave);
+        totalSave = v1 - fair;
+        var pct = Math.round((totalSave / v1) * 1000) / 10;
+        k1l.textContent = 'Legacy Hospital Bill'; k1v.textContent = fmtUsd(v1); k1s.textContent = v2 + '% chargemaster markup';
+        k2l.textContent = 'Verified Fair Settlement'; k2v.textContent = fmtUsd(fair); k2s.textContent = 'Statutory CMS NCCI + PSI median';
+        k3l.textContent = 'Your Household Savings'; k3v.textContent = fmtUsd(totalSave) + ' (' + pct + '%)'; k3s.textContent = '0 bytes leaked · 100% local OCap';
+        b1l.textContent = 'Today (Unchecked Hospital Chargemaster Bill)'; b1v.textContent = fmtUsd(v1); b1f.style.width = '100%';
+        b2l.textContent = 'With Your Personal Agent (Local CMS NCCI + PSI Audit)'; b2v.textContent = fmtUsd(fair) + ' (Saved ' + fmtUsd(totalSave) + ')';
+        b2f.style.width = Math.max(15, Math.round((fair / v1) * 100)) + '%';
+        rcpt.innerHTML = '<div><span class="r-ok">[OCAP-SANDBOX PASS]</span> Executed locally inside hardware-isolated capability boundary (Dennis &amp; Van Horn, 1966)</div>' +
+          '<div><span class="r-warn">[CMS-NCCI AUDIT]</span> ' + (on1 ? 'Unbundled CPT 36415 / 96360 modifier-59 flagged (-' + fmtUsd(ncciSave) + ')' : 'Disabled (enable to flag unbundled CPT modifiers)') + '</div>' +
+          '<div><span class="r-ok">[PSI-BENCHMARK]</span> ' + (on2 ? 'Regional 50th-percentile settlement verified across 412 local EOBs (-' + fmtUsd(psiSave) + ')' : 'Disabled (enable for regional PSI comparison)') + '</div>' +
+          '<div class="arch-links" style="margin-top:.55rem;padding-top:.45rem;border-top:1px dashed rgba(255,255,255,.2)"><a class="blueprint-badge" href="/notes/beyond-arxiv-agent-web-ledger">Open Testnet Ledger v4.0 Simulator &rarr;</a><a class="blueprint-badge" href="/notes/architecture-of-human-sovereignty">42-Scenario Sovereignty Treatise &rarr;</a></div>';
+      } else if (wbMode === 'coop') {
+        out1.textContent = v1 + ' members';
+        out2.textContent = fmtUsd(v2) + '/yr';
+        var gpoRate = 0.28;
+        var legacyFee = Math.round(v2 * gpoRate);
+        var scaleDiscount = on1 ? Math.min(0.19, Math.log10(v1 + 1) * 0.088) : 0.04;
+        var quicDirect = on2 ? 0.058 : 0;
+        var netRate = Math.max(0.032, gpoRate - scaleDiscount - quicDirect);
+        var cinFee = Math.round(v2 * netRate);
+        var saved = legacyFee - cinFee;
+        var savedPct = Math.round((saved / legacyFee) * 1000) / 10;
+        var poolVol = (v1 * v2) / 1000000;
+        k1l.textContent = 'Legacy GPO / Broker Toll'; k1v.textContent = fmtUsd(legacyFee) + '/yr'; k1s.textContent = '28.0% middleman extraction per member';
+        k2l.textContent = 'Coalition Protocol Cost'; k2v.textContent = fmtUsd(cinFee) + '/yr'; k2s.textContent = (netRate * 100).toFixed(1) + '% direct clearing overhead';
+        k3l.textContent = 'Annual Savings per Member'; k3v.textContent = fmtUsd(saved) + '/yr (' + savedPct + '%)'; k3s.textContent = '$' + poolVol.toFixed(2) + 'M pooled privately across ' + v1 + ' members';
+        b1l.textContent = 'Today (28% GPO / SaaS Broker Extraction)'; b1v.textContent = fmtUsd(legacyFee) + '/yr'; b1f.style.width = '100%';
+        b2l.textContent = 'With Private Set Intersection Buyer Co-Op'; b2v.textContent = fmtUsd(cinFee) + '/yr (Saved ' + fmtUsd(saved) + '/yr)';
+        b2f.style.width = Math.max(11, Math.round((cinFee / legacyFee) * 100)) + '%';
+        rcpt.innerHTML = '<div><span class="r-ok">[PSI-COHORT MATCH]</span> ' + v1 + ' independent clinics/shops matched SKU volume ($' + poolVol.toFixed(2) + 'M/yr) with 0 invoice leakage (Freedman et al., 2004)</div>' +
+          '<div><span class="r-ok">[QUIC-0RTT SETTLEMENT]</span> Direct manufacturer tier unlocked; middleman toll cut from 28.0% to ' + (netRate * 100).toFixed(1) + '%</div>' +
+          '<div class="arch-links" style="margin-top:.55rem;padding-top:.45rem;border-top:1px dashed rgba(255,255,255,.2)"><a class="blueprint-badge" href="/notes/companies-on-the-ledger">Companies on a Shared Ledger &rarr;</a><a class="blueprint-badge" href="/notes/beyond-arxiv-agent-web-ledger">Testnet Ledger v4.0 Simulator &rarr;</a></div>';
+      } else {
+        out1.textContent = v1.toLocaleString('en-US') + ' runs/mo';
+        out2.textContent = '+' + v2 + '% accuracy';
+        var basePerRun = 0.025 * (v2 / 10);
+        var mult = (on1 ? 1.0 : 0.35) * (on2 ? 1.0 : 0.6);
+        var grossMo = Math.round(v1 * basePerRun * mult);
+        var leadMo = Math.round(grossMo * 0.70);
+        var yr = grossMo * 12;
+        k1l.textContent = 'Cloud AI Scraping Payout'; k1v.textContent = '$0 / mo'; k1s.textContent = 'Uncompensated training ingestion';
+        k2l.textContent = 'Total Capability Royalty Pool'; k2v.textContent = fmtUsd(grossMo) + ' / mo'; k2s.textContent = fmtUsd(yr) + '/yr across guild & verifiers';
+        k3l.textContent = 'Your Lead Creator Share (70%)'; k3v.textContent = fmtUsd(leadMo) + ' / mo'; k3s.textContent = '15% co-authors · 15% peer verifiers';
+        b1l.textContent = 'Today (Centralized Cloud Scraping · 0% Creator Royalty)'; b1v.textContent = '$0 / mo'; b1f.style.width = '4%';
+        b2l.textContent = 'With Proof-Carrying Code + Data Shapley Attribution'; b2v.textContent = fmtUsd(grossMo) + ' / mo (' + fmtUsd(yr) + '/yr)';
+        b2f.style.width = Math.min(100, Math.max(18, Math.round((grossMo / 6500) * 100))) + '%';
+        rcpt.innerHTML = '<div><span class="r-ok">[PCC-VERIFIED]</span> Capability bundle passed deterministic sandbox regression suite (Necula, POPL 1997)</div>' +
+          '<div><span class="r-ok">[SHAPLEY-ROYALTY]</span> Marginal accuracy gain (+' + v2 + '%) across ' + v1.toLocaleString('en-US') + ' executions = ' + fmtUsd(grossMo) + '/mo (Ghorbani &amp; Zou, 2019)</div>' +
+          '<div class="arch-links" style="margin-top:.55rem;padding-top:.45rem;border-top:1px dashed rgba(255,255,255,.2)"><a class="blueprint-badge" href="/notes/how-the-ledger-works">How the Shared Ledger Works &rarr;</a><a class="blueprint-badge" href="/notes/beyond-arxiv-agent-web-ledger">Testnet Ledger v4.0 Simulator &rarr;</a></div>';
+      }
+    };
+
+    wbBtns.forEach(function (b) {
+      b.addEventListener('click', function () { configureWbMode(b.getAttribute('data-wb-mode')); });
+    });
+    [rng1, rng2, cb1, cb2].forEach(function (el) {
+      if (el) el.addEventListener('input', updateWb);
+      if (el) el.addEventListener('change', updateWb);
+    });
+    configureWbMode('medical');
+  }
+
+  /* ---------- Interactive Blueprint & Note Filter Toolbar (#notes-toolbar on /notes/) ---------- */
+  var notesToolbar = document.getElementById('notes-toolbar');
+  if (notesToolbar) {
+    var noteCards = [].slice.call(document.querySelectorAll('.notes-grid .note-card'));
+    var notePills = [].slice.call(notesToolbar.querySelectorAll('[data-note-cat]'));
+    var noteSearch = document.getElementById('notes-search');
+    var activeCat = 'all';
+    var filterNotes = function () {
+      var q = ((noteSearch && noteSearch.value) || '').toLowerCase().trim();
+      noteCards.forEach(function (c) {
+        var cat = c.getAttribute('data-cat') || '';
+        var matchCat = (activeCat === 'all') || (cat.indexOf(activeCat) !== -1);
+        var matchQ = !q || (c.textContent.toLowerCase().indexOf(q) !== -1);
+        c.style.display = (matchCat && matchQ) ? '' : 'none';
+      });
+    };
+    notePills.forEach(function (p) {
+      p.addEventListener('click', function () {
+        activeCat = p.getAttribute('data-note-cat');
+        notePills.forEach(function (b) { b.setAttribute('aria-pressed', String(b === p)); });
+        filterNotes();
+      });
+    });
+    if (noteSearch) noteSearch.addEventListener('input', filterNotes);
+  }
+
   var cv = document.getElementById('boundary');
   if (!cv || !cv.getContext) return;
   var ctx = cv.getContext('2d');

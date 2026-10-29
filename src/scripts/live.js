@@ -30,13 +30,37 @@
       host.textContent = '';
       if (!list.length) { host.appendChild(el('li', 'muted', 'The first updates are being written.')); return; }
       list.slice(0, cfg[1]).forEach(function (u) {
-        var li = el('li');
+        var li = el('li'); li.setAttribute('data-kind', u.kind || 'update');
         var meta = el('span', 'upd-meta', (KIND[u.kind] || 'Update') + ' · ' + day(u.at) + (u.checked && cfg[1] > 5 ? ' · ' + u.checked : ''));
         var title = u.link ? link(u.link, u.title) : el('b', null, u.title);
         li.appendChild(meta); li.appendChild(title);
         if (cfg[1] > 5) li.appendChild(el('p', null, u.summary));
         host.appendChild(li);
       });
+      if (cfg[0] === 'upd-list') {
+        var utb = document.getElementById('upd-toolbar');
+        var uSearch = document.getElementById('upd-search');
+        var uCat = 'all';
+        var applyUpdFilter = function () {
+          var q = ((uSearch && uSearch.value) || '').toLowerCase().trim();
+          [].forEach.call(host.children, function (li) {
+            var k = (li.getAttribute('data-kind') || '').toLowerCase();
+            var matchCat = (uCat === 'all') || (k === uCat) || (uCat === 'community' && (k === 'community' || k === 'policy'));
+            var matchQ = !q || (li.textContent.toLowerCase().indexOf(q) !== -1);
+            li.style.display = (matchCat && matchQ) ? '' : 'none';
+          });
+        };
+        if (utb) {
+          [].forEach.call(utb.querySelectorAll('[data-upd-cat]'), function (b) {
+            b.addEventListener('click', function () {
+              uCat = b.getAttribute('data-upd-cat');
+              [].forEach.call(utb.querySelectorAll('[data-upd-cat]'), function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+              applyUpdFilter();
+            });
+          });
+        }
+        if (uSearch) uSearch.addEventListener('input', applyUpdFilter);
+      }
     }).catch(function () { /* keep the fallback text */ });
   });
 
