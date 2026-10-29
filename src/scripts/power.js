@@ -17,7 +17,7 @@
   function y(h) { return BASE - (BASE - TOP) * h; }
   function el(name, attrs, parent) { var e = document.createElementNS(NS, name); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
 
-  svg.setAttribute('viewBox', '0 0 640 300');
+  svg.setAttribute('viewBox', '0 -20 640 320');
   // the staircase: what may be asked, by reach
   var d = 'M' + x(LO) + ' ' + BASE;
   TIER_AT.forEach(function (at, i) { d += ' L' + x(at) + ' ' + (i ? y(TIER_H[i - 1]) : BASE) + ' L' + x(at) + ' ' + y(TIER_H[i]); });
@@ -26,19 +26,20 @@
   var clip = el('clipPath', { id: 'pv-clip' }, el('defs', {}, svg));
   var clipRect = el('rect', { x: X0, y: 0, width: 0, height: 300 }, clip);
   el('path', { d: d, class: 'pv-stair-on', 'clip-path': 'url(#pv-clip)' }, svg);
-  ['Everyone', 'Livelihoods', 'Institutions', 'Mass influence', 'Could harm everyone'].forEach(function (t, i) {
+  ['T0 · ZK Predicate', 'T1 · Livelihood Log', 'T2 · Public Audit', 'T3 · Brier Record', 'T4 · Enclave Quorum'].forEach(function (t, i) {
     var nx = i < 4 ? x(TIER_AT[i + 1]) : x(HI);
+    el('line', { x1: x(TIER_AT[i]), y1: y(TIER_H[i]), x2: X1, y2: y(TIER_H[i]), class: 'pv-axis', 'stroke-dasharray': '3 4', opacity: '0.35' }, svg);
     var tx = el('text', { x: (x(TIER_AT[i]) + nx) / 2, y: y(TIER_H[i]) + 15, class: 'pv-tlab', 'text-anchor': 'middle' }, svg);
     tx.textContent = t;
   });
   // axis
   el('line', { x1: X0, y1: BASE, x2: X1, y2: BASE, class: 'pv-axis' }, svg);
-  [[1, '10'], [3, '1,000'], [5, '100,000'], [7, '10 million'], [9, '1 billion']].forEach(function (tk) {
+  [[1, '10¹ (Household)'], [3, '10³ (Firm)'], [5, '10⁵ (City)'], [7, '10⁷ (National)'], [9, '10⁹ (Global AI)']].forEach(function (tk) {
     el('line', { x1: x(tk[0]), y1: BASE, x2: x(tk[0]), y2: BASE + 5, class: 'pv-axis' }, svg);
     var t = el('text', { x: x(tk[0]), y: BASE + 19, class: 'pv-tick', 'text-anchor': 'middle' }, svg); t.textContent = tk[1];
   });
-  var axl = el('text', { x: X1, y: BASE + 40, class: 'pv-tick', 'text-anchor': 'end' }, svg); axl.textContent = 'people their decisions reach →';
-  var yl = el('text', { x: X0, y: TOP - 18, class: 'pv-tick' }, svg); yl.textContent = 'what the network may ask to see ↑';
+  var axl = el('text', { x: X1, y: BASE + 40, class: 'pv-tick', 'text-anchor': 'end' }, svg); axl.textContent = 'Blast radius: people affected by role decisions (log₁₀ scale) →';
+  var yl = el('text', { x: X0, y: TOP - 18, class: 'pv-tick' }, svg); yl.textContent = 'Cryptographic auditability & attestation duty ↑';
   // a dot for every role on the axis
   var marks = btns.map(function (b, i) {
     var lx = x(+b.dataset.reach);
@@ -76,5 +77,5 @@
     rings.forEach(function (r, k) { r.classList.toggle('on', k < tier); });
   }
   btns.forEach(function (b, i) { b.setAttribute('aria-pressed', 'false'); b.addEventListener('click', function () { pick(i); }); });
-  pick(0);
+  pick(btns.length - 1);
 })();

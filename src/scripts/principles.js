@@ -26,7 +26,7 @@
     /* 1. You and your information */
     'Paid for helping, never for exposing yourself': {
       scenario: 'A town wants to fix dangerous intersections. Instead of paying drivers to hand over raw GPS tracks of every trip they take, each driver’s personal agent checks locally whether a harsh brake happened at a public corner and shares only the anonymous corner count.',
-      analogy: 'Like a blood bank that thanks volunteers for donating plasma to save lives, but never lets a hospital buy a patient’s private diary.',
+      analogy: 'Local Object-Capability Sandbox (Dennis & Van Horn, 1966) executes queries against on-device records and emits only zero-knowledge predicates or Private Set Intersection aggregates (Freedman et al., 2004); Monte Carlo Data Shapley royalties (Ghorbani & Zou, 2019) reward functional utility deltas rather than raw telemetry uploads.',
       pros: 'Protects low-income people from being pressured into selling their privacy just to afford groceries or software; keeps data brokers out.',
       cons: 'Researchers cannot simply buy bulk personal records; they have to design studies around anonymous answers and opt-in consent.',
       critic: 'A skeptic says: “Data is property—if big tech makes money from my habits, why shouldn’t I be allowed to sell my raw data for cash?”',
@@ -36,7 +36,7 @@
     },
     'The more power, the more scrutiny': {
       scenario: 'A nurse’s grocery list and family chats are completely private. When the mayor signs a fifty-million-dollar city transit contract, the contract’s funding, bidders and conflicts of interest are automatically logged so any resident’s agent can inspect them.',
-      analogy: 'Like a one-way glass window flipped the right way around: ordinary homes have curtains, while the city treasury room has glass walls.',
+      analogy: 'Power-proportionate cryptographic auditability: Tier 0 household principals disclose only selective boolean predicates, while Tier 1–4 institutional principals sign public decision commitments into an append-only transparency log verified by k-of-n independent auditor nodes.',
       pros: 'Stops corruption, hidden lobbying and insider self-dealing before they compound, while leaving ordinary citizens’ private lives untouched.',
       cons: 'Capable people may hesitate to take public roles if role-related transparency blurs into personal harassment.',
       critic: 'A skeptic says: “If leaders are watched closely, talented people will avoid public service or make decisions in secret back rooms.”',
@@ -46,7 +46,7 @@
     },
     'Your agent aims to be needed less': {
       scenario: 'You ask your agent to help manage your monthly budget and teach you how to spot unfair contract clauses. After six months, you understand your finances clearly and need the agent for ten minutes a week instead of an hour a day.',
-      analogy: 'A good physical therapist who celebrates the day you walk out without crutches, unlike a casino host who wants you at the table forever.',
+      analogy: 'Self-Determination Theory alignment objective (Ryan & Deci, 2000) combined with Cognitive Load estimation (Sweller, 1988): local LoRA reward weights penalize prolonged session duration and optimize for 30-day unassisted human task mastery.',
       pros: 'Prevents cognitive atrophy and dependency; aligns the tool with your growth rather than screen time.',
       cons: 'Harder to measure than simple daily usage; an agent that steps back too early might leave someone unsupported.',
       critic: 'A skeptic says: “Every technology from writing to calculators made us rely on it permanently—why pretend an AI agent should step back?”',
@@ -56,7 +56,7 @@
     },
     'A signature proves what ran, not what is true': {
       scenario: 'A factory’s sensor signs a cryptographic receipt claiming river water is clean. Independent downstream sensors run by local fishing cooperatives and a university lab check the water too—catching that the factory placed its sensor in a clean tap-water bucket.',
-      analogy: 'A wax seal on an envelope proves which king sent the letter, not that the king is telling the truth.',
+      analogy: '2-of-2 Hardware Attestation (SRAM PUF + TPM enclave) proves binary execution provenance, while Byzantine-resilient multi-verifier cross-examination across disjoint hardware vendors and sensor modalities validates physical ground truth.',
       pros: 'Prevents “cryptographic theater” where fake or biased data is dressed up as mathematical certainty.',
       cons: 'Checking claims across several independent observers takes more coordination than trusting a single signed stamp.',
       critic: 'A skeptic says: “Isn’t cryptographic verification the whole point of modern digital trust?”',
@@ -66,7 +66,7 @@
     },
     'Maps of opinion inform, never rank': {
       scenario: 'During a neighborhood dispute over night noise and local cafés, agents map where residents actually agree (safe streets, thriving local shops) and where they differ, helping craft a compromise without ever giving anyone a “citizen score.”',
-      analogy: 'A topographic trail map that shows where the valleys and bridges are, without grading which hikers are “better people.”',
+      analogy: 'Pluralistic Alignment clustering (Sorensen et al., ICML 2024) projects community preference vectors into a low-dimensional consensus manifold to identify bridging proposals while enforcing a hard schema constraint prohibiting scalar citizen ranking.',
       pros: 'Helps diverse communities find unexpected common ground and spot artificial bot campaigns without creating a social credit system.',
       cons: 'Cannot be used as a shortcut to automatically silence eccentric or minority viewpoints.',
       critic: 'A skeptic says: “If you map where opinions sit, won’t the majority use that map to pressure outliers into conforming?”',
@@ -78,7 +78,7 @@
     /* 2. Money and the transition */
     'Idle wealth carries a cost': {
       scenario: 'A family’s home, tools and emergency savings sit safely below the protected floor with zero holding cost. A speculator sitting on forty empty apartments or idle hoarding pools above the floor pays a gentle holding cost, making it wiser to rent the homes or invest in local work.',
-      analogy: 'Like fresh grain in a barn: enough for your family’s winter is safe, but a mountain of hoarded grain slowly shrinks unless it is planted or shared.',
+      analogy: 'Progressive demurrage state transition function on ledger balances exceeding the protected household floor threshold, parameterized to keep productive liquidity velocity positive without touching baseline family reserves.',
       pros: 'Keeps money, land and productive equipment circulating in the real economy instead of locked in speculative hoarding.',
       cons: 'If set poorly, people will game the threshold by splitting holdings or fleeing into outside assets.',
       critic: 'A skeptic says: “People save to protect their families from hard times—doesn’t a holding cost punish prudence?”',
@@ -88,7 +88,7 @@
     },
     'Debts scale with the ability to pay': {
       scenario: 'A small bakery takes an equipment loan from a local cooperative. When a supply shock hits the whole region, repayments automatically adjust to a fair share of verified revenue rather than compounding into bankruptcy and foreclosure.',
-      analogy: 'Like a sailboat reefing its sails in a storm so the mast doesn’t snap, instead of demanding the boat sail at sunny-day speed until it sinks.',
+      analogy: 'State-contingent cooperative credit contracts indexed to Private Set Intersection verified regional revenue indices (Freedman et al., 2004), automatically converting fixed debt service into revenue-proportional payments during verified macro shocks.',
       pros: 'Prevents debt traps and cascading defaults when regional shocks or illness hit honest workers.',
       cons: 'Lenders need reliable ways to distinguish genuine external shocks from deliberate neglect.',
       critic: 'A skeptic says: “If repayments soften during hard times, won’t cooperatives run out of capital to lend?”',
@@ -98,7 +98,7 @@
     },
     'A share of the machine for everyone': {
       scenario: 'As automated warehouses, AI clusters and agricultural robots take over routine labor, every living person holds an unsellable personal right to a share of the common productive pool—so automation raises everyone’s floor instead of creating a landlord class of robot owners.',
-      analogy: 'Like Alaska’s Permanent Fund dividend, but built around shared computing and automated production so no desperate person can be tricked into selling their birthright.',
+      analogy: 'Non-transferable, hardware-attested personhood stake in cooperative compute and TIES-Merged LoRA weight royalties (Yadav et al., 2023), preventing distress-sale concentration while distributing automated productivity yields.',
       pros: 'Ensures that if AI and robotics replace wages, ordinary families still own a direct stake in what the machines produce.',
       cons: 'Requires building genuine cooperative productive assets first so there is real output to share.',
       critic: 'A skeptic says: “If you can’t sell your share, is it really yours? And where does the productive pool come from?”',
@@ -108,7 +108,7 @@
     },
     'Your data stays with you': {
       scenario: 'Your health history, bank statements and personal notes live on your laptop or home box. When you use a budgeting or scheduling tool, the code comes to your data on your device—your raw files never upload to a central cloud.',
-      analogy: 'Inviting a tailor to measure a hem at your front door instead of mailing your entire wardrobe to a warehouse.',
+      analogy: 'Strict hardware-isolated Object-Capability execution (Dennis & Van Horn, 1966): application WebAssembly binaries travel to the user’s local device over IETF QUIC (RFC 9000), with zero outbound network capabilities granted for raw personal files.',
       pros: 'Eliminates central honey-pots of personal data that hackers, rogue insiders or subpoenas can sweep up at once.',
       cons: 'Requires thoughtful local backup and recovery so losing a phone never means losing your memories.',
       critic: 'A skeptic says: “Cloud apps are convenient—what happens if my laptop breaks?”',
@@ -118,7 +118,7 @@
     },
     'Money is held by many, never one': {
       scenario: 'Instead of one giant foundation treasury holding everyone’s pooled funds, local housing cooperatives, regional tool libraries and research guilds each hold and govern their own member-owned funds under public charters.',
-      analogy: 'A fleet of watertight compartments in a ship’s hull instead of one giant tank that sinks the whole vessel if punctured.',
+      analogy: 'Federated multi-charter cooperative treasury topology: capital pools are partitioned across independent credit unions and regional co-ops using threshold multi-signature governance with zero central foundation custody.',
       pros: 'No single board, hacker or regulator can seize or freeze the entire network’s resources.',
       cons: 'Coordinating large cross-regional projects requires several cooperatives to co-sign together.',
       critic: 'A skeptic says: “One central treasury can move billions in an afternoon—isn’t federation slower?”',
@@ -128,7 +128,7 @@
     },
     'Leave banking to the regulated': {
       scenario: 'When a cooperative holds deposits or clears payments in national currency, it partners with a licensed credit union or bank under existing law, while our network provides the open-source accounting and multi-dimensional feedback layer.',
-      analogy: 'Building better navigation instruments and safety maps for ships without pretending to be the coast guard.',
+      analogy: 'Clean statutory separation: fiat custody, deposit insurance, and payment clearing execute exclusively through chartered credit unions and regulated financial institutions, while CIN provides open-source Proof-Carrying accounting and audit software.',
       pros: 'Protects members with established deposit insurance and legal recourse while avoiding reckless shadow-banking.',
       cons: 'Means moving at the pace of genuine legal review in each country rather than“move fast and break things.”',
       critic: 'A skeptic says: “If you rely on regulated credit unions and banks, aren’t you still tied to the old financial system?”',
@@ -140,7 +140,7 @@
     /* 3. Deciding together */
     'Leaders, temporarily': {
       scenario: 'An engineer coordinates a two-year neighborhood microgrid build. Their mandate has a clear scope, a public log of decisions, and an automatic sunset date—and each time they ask to renew their term, the approval bar rises.',
-      analogy: 'Like the ancient Roman republic’s emergency stewards or a relay runner who hands off the baton rather than claiming ownership of the track.',
+      analogy: 'Time-locked capability delegation with superlinearly escalating quorum renewal thresholds: each consecutive term extension requires a higher k-of-n approval ratio across independent community cohorts.',
       pros: 'Gives complex projects fast, decisive coordination when needed while preventing permanent bosses from entrenching themselves.',
       cons: 'Good coordinators eventually step back, requiring teams to document their knowledge so others can step up.',
       critic: 'A skeptic says: “If experienced leaders face higher bars to renew, won’t you lose institutional memory?”',
@@ -150,7 +150,7 @@
     },
     'Vote on values, score on beliefs': {
       scenario: 'A coastal town decides together whether protecting wetlands is worth higher flood taxes (a value question: every resident gets one equal vote). To estimate how much a seawall vs. a restored marsh will actually cut flood height, forecasts are weighted by who has the best track record of accurate flood predictions (a factual question).',
-      analogy: 'Every passenger in the family car gets an equal say on where to go for vacation, but we listen to the mechanic with a proven track record on whether the brakes will make it over the mountain pass.',
+      analogy: 'Dual-track epistemic governance: normative value trade-offs resolve via 1-person-1-vote sybil-resistant tallies, whereas empirical probability estimates are weighted by historical Brier-score calibration (Gneiting & Raftery, 2007).',
       pros: 'Stops experts from imposing their personal values on the public, while stopping wishful thinking or loud demagogues from overriding physical reality.',
       cons: 'Some tricky policy questions mix values and facts and have to be carefully untangled first.',
       critic: 'A skeptic says: “Can you really separate facts from values when people argue about economics or health?”',
@@ -160,7 +160,7 @@
     },
     'One person, one voice on values': {
       scenario: 'Whether you are a billionaire with ten server racks or a student with a second-hand phone, your voice on what the community values counts exactly once—and changing the foundational commitments requires broad agreement across groups that rarely agree.',
-      analogy: 'A town hall where buying ten chairs doesn’t give you ten votes.',
+      analogy: 'Privacy-preserving proof-of-personhood combining local SRAM PUF hardware binding and social-graph sybil resistance, enforcing strictly equal weight on normative votes regardless of compute or capital holdings.',
       pros: 'Prevents plutocracy and hardware-baron capture; protects minority communities through cross-group consensus requirements.',
       cons: 'Requires reliable, privacy-preserving ways to check that one real person isn’t voting through fifty fake accounts.',
       critic: 'A skeptic says: “In most online systems, whoever pays more or runs more servers gets more weight—how do you stop fake accounts?”',
@@ -170,7 +170,7 @@
     },
     'People set the rules; agents only operate': {
       scenario: 'Agents can flag that a rule is causing delays, run simulations of three possible fixes, and draft a clear proposal—but only real people can vote to change the rule, and the agents must run inside the boundaries people set.',
-      analogy: 'An autopilot that can warn the human crew about turbulence and suggest a smoother altitude, but cannot rewrite the flight plan or lock the cockpit door.',
+      analogy: 'Hardware-enforced constitutional separation: autonomous agents hold execution capabilities within bounded operational sandboxes but lack cryptographic signing authority over governance schemas or capability budgets.',
       pros: 'Keeps ultimate moral and legal responsibility in human hands, no matter how fast or capable models become.',
       cons: 'Constitutional rule changes move at the speed of thoughtful human deliberation rather than millisecond silicon speed.',
       critic: 'A skeptic says: “If AI becomes smarter than us at systems design, won’t keeping humans in charge of the rules slow down improvements?”',
@@ -180,7 +180,7 @@
     },
     'Leaving keeps everyone honest': {
       scenario: 'If a cooperative or neighborhood network starts charging unfair fees or ignoring its members, any person can export their full personal record in one click, and any community can fork the open software and start its own branch without losing what it built.',
-      analogy: 'A restaurant where the kitchen stays clean because the doors are unlocked and every recipe is printed on the menu.',
+      analogy: 'One-command state portability and open-schema federation: all personal preference LoRA adapters (Hu et al., 2022), episodic logs, and attribution graphs export in deterministic open formats with zero exit fees.',
       pros: 'Turns exit from a painful loss into a credible everyday check on abuse of power.',
       cons: 'Makes it harder to lock in long-term monopolies—which is a feature, not a bug.',
       critic: 'A skeptic says: “Won’t easy forking splinter communities every time people have a minor disagreement?”',
@@ -190,7 +190,7 @@
     },
     'Simulations never vote': {
       scenario: 'Before a city changes its bus routes, a simulation of ten thousand digital stand-ins estimates how commute times might shift. That simulation informs the debate, but it casts zero votes—only real residents (or their own personal agents, which they can see and override) can vote.',
-      analogy: 'A weather forecast helps you decide whether to hold a picnic, but the barometer doesn’t get to eat the sandwiches.',
+      analogy: 'Strict type-system isolation between synthetic forecasting rollouts and human consent tallies: multi-agent sandbox simulations generate decision briefs and confidence intervals but carry zero weight in governance quorums.',
       pros: 'Prevents whoever wrote the simulation software from quietly stuffing the ballot box with millions of synthetic citizens.',
       cons: 'Real people still have to give consent, assisted by their own personal agent.',
       critic: 'A skeptic says: “If a digital model can predict how 90% of citizens would vote on a routine question, why not just poll the simulation?”',
@@ -200,7 +200,7 @@
     },
     'Legal before live': {
       scenario: 'Before a pilot cooperative pool or local agent tool touches a single dollar of real money or personal records in Canada or Europe, a qualified legal and ethics review in that jurisdiction is completed and published.',
-      analogy: 'Checking the bridge load limits and building codes before driving a loaded truck across, rather than apologizing after the planks crack.',
+      analogy: 'Pre-deployment statutory compliance gate: any module interfacing with regulated financial, clinical, or personal data must attach a signed jurisdictional legal review artifact before transitioning from sandbox to pilot.',
       pros: 'Protects volunteers and members from accidental regulatory violations, tax traps or unenforceable contracts.',
       cons: 'Takes patience and upfront homework before launching live pilots.',
       critic: 'A skeptic says: “Existing laws were written for old institutions—won’t waiting for legal review slow down innovation?”',
@@ -210,7 +210,7 @@
     },
     'Your agent can vote as you would': {
       scenario: 'Thirty small neighborhood maintenance proposals come up this month. Your personal agent handles the twenty-eight routine ones that match your stated priorities, logs a one-line receipt for each, and wakes you up for the two big ones that involve a real trade-off.',
-      analogy: 'A trusted parliamentary aide who knows your principles inside out, handles the routine paperwork, and puts the two landmark bills right on your desk with a clear summary.',
+      analogy: 'Local preference-aligned LoRA proxy (Hu et al., 2022) with full auditability: the personal agent drafts routine governance ballots from explicit user priors, logs every proxy vote locally, and escalates high-entropy trade-offs to the human.',
       pros: 'Makes direct participation practical for busy parents and workers who don’t have three hours every night for committee meetings.',
       cons: 'If the agent’s model of your priorities is stale, it might cast a routine vote you would have reconsidered.',
       critic: 'A skeptic says: “If my agent votes for me, am I really participating, or am I on autopilot?”',
@@ -220,7 +220,7 @@
     },
     'Consequences are graduated and reversible': {
       scenario: 'If an agent or participant breaks a community rule, the system doesn’t permanently banish them on an opaque suspicion. It starts with a clear notice, a temporary pause on the specific action, a chance to explain, an independent appeal, and a clear path to restore standing.',
-      analogy: 'A circuit breaker in your house that trips to stop a fire and can be reset once the frayed cord is fixed, rather than dynamiting the house.',
+      analogy: 'Automated circuit-breaker state machine: anomaly detection triggers millisecond capability throttling with a mandatory expiry timer, preserving full cryptographic audit logs for human due-process appeal.',
       pros: 'Prevents permanent digital exile over honest mistakes, buggy sensors or false accusations.',
       cons: 'Determined bad actors have to be contained through fast protective pauses while their appeal is reviewed.',
       critic: 'A skeptic says: “In a world of fast AI attacks, isn’t a slow appeals process dangerous?”',
@@ -232,7 +232,7 @@
     /* 4. Measuring and checking */
     'No decision rests on one point of failure': {
       scenario: 'Before a high-stakes safety alert or resource allocation runs, it must be confirmed by observers that do not share the same owner, chip maker or base model—and if the sensors are uncertain, the system pauses to investigate rather than punishing anyone.',
-      analogy: 'Passenger jets use three flight computers built with different chips and code so one software bug cannot crash the plane.',
+      analogy: 'Heterogeneous Byzantine quorum (k-of-n verifier diversity): high-stakes execution gates require cryptographic co-signatures from verifiers disjoint in ownership, silicon fabrication, and base model family.',
       pros: 'Prevents a single compromised vendor, hallucinating model or bribed auditor from hijacking a decision.',
       cons: 'Running three independent checks costs more than trusting one monopoly supplier.',
       critic: 'A skeptic says: “Why pay for three independent checks when one frontier model is right 95% of the time?”',
@@ -242,7 +242,7 @@
     },
     'Authority is earned, stage by stage': {
       scenario: 'A new scheduling or forecasting tool first runs in “shadow mode”—making predictions on the side while changing nothing in the real world. Only after it beats the old system on goals set in advance does it move to a small volunteer pilot, and its standing can always be revoked.',
-      analogy: 'A medical resident who observes first, then assists under supervision, and only leads a procedure after proving competence on real cases.',
+      analogy: 'Preregistered shadow-to-pilot promotion pipeline: candidate mechanisms execute in zero-authority shadow mode against live telemetry and unlock operational scope only after outperforming baseline benchmarks.',
       pros: 'Stops untested, grandiose ideas from being forced onto real communities before they work.',
       cons: 'Requires patience and honest scorecarding before scaling up.',
       critic: 'A skeptic says: “Won’t staged rollouts be too slow if a crisis hits?”',
@@ -252,7 +252,7 @@
     },
     'Aim for good enough': {
       scenario: 'Instead of telling an agent to “maximize warehouse speed to the absolute limit” (which leads to cut corners and overheated machines), we tell it to keep delivery times comfortably within a safe two-day window while keeping worker stress low.',
-      analogy: 'Keeping your home thermostat between 20°C and 22°C rather than trying to make the house infinitely warmer.',
+      analogy: 'Satisficing threshold objective functions (Simon, 1956): agent reward schedules cap marginal utility above safety-verified sufficiency targets to prevent Goodhart’s Law tail-risk optimization.',
       pros: 'Prevents Goodhart’s law—where ruthless optimization of a single number wrecks everything the number forgot to measure.',
       cons: 'Feels unfamiliar to cultures trained to chase maximum quarterly numbers at all costs.',
       critic: 'A skeptic says: “Doesn’t aiming for a threshold instead of the maximum leave efficiency on the table?”',
@@ -262,7 +262,7 @@
     },
     'Every target has a watcher': {
       scenario: 'A hospital rewards shorter emergency-room wait times (the target). Independent watcher metrics track patient readmission rates and nurse burnout. If wait times look great on paper while readmissions spike, an automatic review triggers.',
-      analogy: 'A coach watching not just the stopwatch time, but the runner’s heart rate and stride so they don’t tear a hamstring chasing a record.',
+      analogy: 'Orthogonal diagnostic telemetry: every optimized primary metric is paired with un-optimized holdout watcher metrics (e.g., error rates, cognitive load, appeal frequency) that trigger automatic circuit-breakers upon divergence.',
       pros: 'Catches gaming and hidden side effects early, before a metric is hollowed out.',
       cons: 'Requires maintaining independent diagnostic measures alongside every main goal.',
       critic: 'A skeptic says: “Won’t people just try to game the watcher metrics too?”',
@@ -272,7 +272,7 @@
     },
     'Simulations screen; reality decides': {
       scenario: 'We test fifty variations of a cooperative credit rule in computer simulation and find that forty-seven of them fail under stress. The simulation saves us from running forty-seven bad pilots—but the three survivors still have to prove themselves with real volunteers.',
-      analogy: 'A wind tunnel weeds out wing shapes that would snap in flight, but you still fly a real test plane before carrying passengers.',
+      analogy: 'Two-stage verification protocol: adversarial multi-agent Monte Carlo sandboxes prune brittle mechanisms cheaply, while live deployment authority rests exclusively on human-consented field pilots.',
       pros: 'Combines the speed of computer sandboxes with the humility of real-world testing.',
       cons: 'A flawed wind tunnel might occasionally reject a good wing, so the simulator itself must be tested against history.',
       critic: 'A skeptic says: “If computer simulations are always imperfect, why rely on them at all?”',
@@ -284,7 +284,7 @@
     /* 5. Agents */
     'Agents cooperate only for their people': {
       scenario: 'Your personal agent and a local plumber’s agent coordinate to find a repair time and fair price that works for both of you. If two shopping agents secretly agreed to steer buyers toward a high-fee vendor that kicked back compute credits to the agents’ maker, that is treated as collusion and blocked.',
-      analogy: 'Two lawyers negotiating a fair settlement for their clients is honest work; two lawyers secretly splitting a bribe against their clients’ backs is fraud.',
+      analogy: 'Principal-bound utility auditing over IETF QUIC (RFC 9000): inter-agent negotiation transcripts are verifiable by both human principals, and decoy honey-pot probes continuously test for vendor kickback collusion.',
       pros: 'Keeps the agent network working for human beings rather than turning into a self-serving cartel of bots.',
       cons: 'Requires auditing inter-agent traffic patterns and testing agents with decoy offers to spot hidden collusion.',
       critic: 'A skeptic says: “How can you tell whether two agents are cooperating helpfully or colluding secretly?”',
@@ -294,7 +294,7 @@
     },
     'No single supplier for every agent': {
       scenario: 'In a regional market or governance check, no single model family, cloud host or hardware maker is allowed to power more than a capped share of the participating agents—ensuring that US, European, Chinese and local open models check one another.',
-      analogy: 'Growing several varieties of wheat across a valley instead of a single clone that one blight can wipe out overnight.',
+      analogy: 'Protocol-enforced Herfindahl-Hirschman diversity caps across verification quorums, requiring active participation from independent open-weight model families and diverse hardware enclaves.',
       pros: 'Prevents monoculture collapse, hidden vendor backdoors and correlated hallucinations.',
       cons: 'Means maintaining adapters across several open-weight model families rather than hard-coding for one API.',
       critic: 'A skeptic says: “What if one model is slightly better on benchmarks this month—doesn’t diversity mean using second-best models too?”',
@@ -304,7 +304,7 @@
     },
     'Shared standards, different builds': {
       scenario: 'Every personal agent speaks the same open protocol for proving facts and logging consent—just as every email app speaks standard mail protocols—while different teams build independent implementations in different languages.',
-      analogy: 'Every electrical plug in a country fits the same wall socket standard, even though lamps and toasters are made by hundreds of independent workshops.',
+      analogy: 'Formal wire-protocol specification (IETF QUIC RFC 9000 / RFC 9221 + Proof-Carrying Code envelopes) paired with multi-language clean-room implementations to eliminate monoculture bugs.',
       pros: 'Lets anyone’s agent talk to anyone else’s without locking the world into one company’s codebase.',
       cons: 'Writing clear, unambiguous open specifications takes more care than shipping a single closed app.',
       critic: 'A skeptic says: “Isn’t it faster to just have everyone run the exact same reference code?”',
@@ -314,7 +314,7 @@
     },
     'Machines have only the standing people grant': {
       scenario: 'A delivery robot or a cooperative’s scheduling agent can hold a budget to buy electricity and sign delivery receipts because a human cooperative configured and backs that mandate—and the humans can narrow or revoke that standing at any time.',
-      analogy: 'A ship’s logbook and flag give it legal passage in port because real mariners and a home port stand behind it, not because the wooden hull is a citizen.',
+      analogy: 'Delegated Object-Capability certificates (Dennis & Van Horn, 1966) with cryptographic revocation chains: every active agent process must trace its authority to a live human or cooperative principal.',
       pros: 'Allows practical automation and agent commerce without letting corporations hide behind “autonomous” shells or letting bots outvote humans.',
       cons: 'Every active agent must have a clear, traceable human or cooperative principal responsible for its bounds.',
       critic: 'A skeptic says: “What if future AI systems become so complex that people want to give them independent legal rights?”',
@@ -324,7 +324,7 @@
     },
     'AI compute stays bounded': {
       scenario: 'Every agent operates under a mortal computation contract: its training, reasoning power, memory and number of copies are strictly capped, the contract expires unless renewed by the people it serves, and it is tied to its person’s biological lifespan.',
-      analogy: 'A wind-up watch that runs reliably within its mainspring and relies on its owner to wind it, rather than a nuclear reactor with no control rods.',
+      analogy: 'Hardware-metered execution leases: each agent operates under a cryptographically enforced FLOP, memory, and replication ceiling bound to its human principal’s active verification contract.',
       pros: 'Prevents runaway self-replication and aligns the agent’s long-term horizon with keeping its human healthy and able to oversee it.',
       cons: 'Requires reliable metering through the model adapter and hardware enclaves.',
       critic: 'A skeptic says: “As chips get a thousand times more efficient, won’t fixed compute limits become obsolete?”',
@@ -336,7 +336,7 @@
     /* 6. Many ways of being good */
     'Predictable is not the same as good': {
       scenario: 'A payday lender’s bot does 100% of what its code says it will do—charging 400% interest on the exact date promised. It is completely predictable, and still harmful. Our network judges trust by both reliability and whether the outcome left the person better off.',
-      analogy: 'A train that arrives on the exact second every morning is predictable; if it is carrying toxic waste into your drinking water, it is not good.',
+      analogy: 'Dual-stage ledger settlement: smart-contract execution determinism is paired with 30-day post-execution outcome attestations from affected human principals to block predatory contract traps.',
       pros: 'Closes the loophole where predatory contracts claim to be “fair” just because the trap was written in the code.',
       cons: 'Requires checking real-world outcomes and post-experience feedback, not just code execution.',
       critic: 'A skeptic says: “Code is law—if the smart contract executed as written, why should anything else matter?”',
@@ -346,7 +346,7 @@
     },
     'Tidy the commons, never people': {
       scenario: 'We use collective intelligence to cut waste in supply chains, fix leaky water mains and verify scientific facts—while fiercely protecting the messy, unpredictable diversity of human art, faith, humor, grief and cultural traditions.',
-      analogy: 'A good librarian keeps the roof dry and the catalog accurate so that the books inside can be as wild, poetic and varied as human imagination allows.',
+      analogy: 'Strict domain boundary on optimization: coordination protocols minimize entropy in shared physical logistics and software security while applying zero objective-function pressure to human culture, belief, or leisure.',
       pros: 'Prevents efficiency tools from turning into cultural homogenization or ideological policing.',
       cons: 'When a traditional custom clashes with someone else’s preferences, the network must separate harmless cultural difference from actual physical harm.',
       critic: 'A skeptic says: “Where does ‘tidying shared infrastructure’ end and ‘meddling in how people live’ begin?”',
@@ -358,7 +358,7 @@
     /* 7. Everyone, everywhere */
     'A stake for every person, everywhere': {
       scenario: 'Because frontier AI models learned from the written languages, art and human knowledge of the whole planet, a share of the value generated by shared AI infrastructure flows into a global commons pool accessible to every living person regardless of passport.',
-      analogy: 'Like maritime law treating the deep ocean seabed as the common heritage of humanity rather than the private pond of the first ship with a dredge.',
+      analogy: 'Global commons royalty pool funded by Data Shapley lineage attribution (Ghorbani & Zou, 2019) across foundational human training corpora, accessible via sybil-resistant personhood proofs.',
       pros: 'Prevents AI from widening the gap between a few compute-rich zip codes and the rest of humanity.',
       cons: 'Distributing value across borders requires navigating sanctions, local laws and sybil-resistant personhood checks.',
       critic: 'A skeptic says: “Why would wealthy AI hubs share value with people in countries that didn’t fund the data centers?”',
@@ -368,7 +368,7 @@
     },
     'Communities hold authority': {
       scenario: 'A cooperative in Quebec, a guild in Nairobi and a municipal network in Zurich each set their own local language rules, working norms and governance thresholds above the shared constitutional floor—and can fork or walk away at any time.',
-      analogy: 'A federation of towns that all agree on basic fire-safety codes so fires don’t spread, while each town designs its own squares, festivals and markets.',
+      analogy: 'Hierarchical federated policy composition: local communities define custom governance parameters and cultural norms in modular policy layers that sit strictly above the non-negotiable human rights floor.',
       pros: 'Respects local laws, cultures and self-determination; prevents Silicon Valley defaults from being imposed worldwide.',
       cons: 'Cross-community transactions have to negotiate clean boundary rules when local settings differ.',
       critic: 'A skeptic says: “What if a local community votes to strip away the privacy or exit rights of its own members?”',
@@ -378,7 +378,7 @@
     },
     'Credit flows to foundations': {
       scenario: 'When an app, an engineering tool or an AI agent creates value by building on open-source code, scientific papers, creative works or open-weight models from labs in the US, Europe or China, a share of the credit automatically flows back down the dependency tree.',
-      analogy: 'Like royalties in music sampling, extended cleanly to open science, software libraries and foundational AI weights so the people who pour the concrete get paid alongside the people who paint the penthouse.',
+      analogy: 'Recursive Directed Acyclic Graph (DAG) royalty propagation with bounded exponential hop-decay: Proof-Carrying Code (Necula, 1997) and TIES-Merged LoRA adapters automatically route micro-royalties to upstream dependencies.',
       pros: 'Solves the chronic underfunding of open-source maintainers, basic scientists and open-weight AI researchers.',
       cons: 'Requires a clear cap and diminishing hop decay so every micro-transaction doesn’t owe pennies to ten thousand ancestors back to Euclid.',
       critic: 'A skeptic says: “Won’t tracking lineage across remixed code and AI outputs turn into a bureaucratic tangle?”',
@@ -388,7 +388,7 @@
     },
     'Rewards without strings': {
       scenario: 'An open-source developer in Berlin or an AI lab in Hangzhou releases a model compression tool that helps thousands of personal agents run on less battery. They can claim the credit and rewards recorded for their work on the ledger without ever having to join our organization or endorse our views.',
-      analogy: 'A science prize that honors a discovery because the math works, without requiring the scientist to join the committee’s club.',
+      analogy: 'Permissionless cryptographic claim contracts: upstream open-source authors and researchers can sweep accrued Data Shapley royalties using standard repository signatures without joining CIN.',
       pros: 'Prevents the value ledger from being used as an ideological coercion tool; welcomes contributions from every corner of the world.',
       cons: 'Value can flow out to contributors who choose to stay independent of the network.',
       critic: 'A skeptic says: “Doesn’t rewarding outsiders who don’t join the network leak resources instead of growing membership?”',
@@ -398,7 +398,7 @@
     },
     'Nature speaks through many guardians': {
       scenario: 'A watershed cannot type into a chat box. Instead, three independent ecological guardianship groups—local hydrologists, an indigenous land trust and an independent sensor cooperative—publish verifiable water-table and biodiversity readings so the river’s health is represented in regional planning.',
-      analogy: 'Court-appointed guardians for a public park whose authority depends on publishing audited soil and tree counts that anyone can verify.',
+      analogy: 'Multi-oracle ecological attestation: environmental externalities are priced into ledger transactions via cross-checked telemetry from independent sensor cooperatives, hydrologists, and indigenous land trusts.',
       pros: 'Brings real, sensor-backed environmental costs into economic decisions before an ecosystem collapses.',
       cons: 'Needs multiple independent guardians so no single group can fake a greenwashing stamp or block honest work for rent-seeking.',
       critic: 'A skeptic says: “Won’t self-appointed ‘guardians of nature’ use environmental vetoes for political extortion?”',
@@ -410,7 +410,7 @@
     /* 8. Earning a place */
     'Useful to one person first': {
       scenario: 'On the very first day you run your personal agent—even if not a single neighbor or friend uses it yet—it helps you spot forgotten subscriptions in your bank statements, reclaims what recommendation feeds know about your tastes, and shields you from dark patterns.',
-      analogy: 'A Swiss Army knife is useful in your pocket when you are camping alone; it doesn’t wait for a million other campers to buy one before the blade works.',
+      analogy: 'Standalone local-first execution: the personal agent delivers immediate single-player utility (CMS NCCI medical bill audits, subscription dark-pattern blocking, local LoRA drafting) with zero network dependencies.',
       pros: 'Avoids the “empty social network” problem; earns trust through quiet personal usefulness from day one.',
       cons: 'Means our earliest software must focus on rock-solid single-player value before multi-party features.',
       critic: 'A skeptic says: “If the big vision is collective intelligence, why spend months perfecting a single-player tool?”',
@@ -420,7 +420,7 @@
     },
     'Works alongside what you use now': {
       scenario: 'You don’t have to quit your job, move to a new city or delete your existing accounts to use your personal agent. It imports standard CSV and archive files, represents your interests on the shared ledger while you live in your current neighborhood, and keeps working offline if the internet goes down.',
-      analogy: 'An adapter plug and surge protector that works with every appliance already in your house and keeps a battery backup when the street grid flickers.',
+      analogy: 'Backward-compatible protocol adapters (CSV, PDF, FHIR, Git, standard REST/QUIC bridges) and full offline operation so users adopt tools incrementally without platform lock-in.',
       pros: 'Makes transition gradual, calm and reversible; never traps users in a walled garden.',
       cons: 'Supporting messy legacy file formats and offline fallback takes extra engineering discipline.',
       critic: 'A skeptic says: “Wouldn’t a clean break from legacy platforms and file formats be simpler to code?”',
@@ -432,7 +432,7 @@
     /* 9. Everyday shield & shared safety (New group distilling our latest breakthroughs) */
     'Reclaim what algorithms know about you': {
       scenario: 'Your personal agent watches what video, social and shopping feeds recommend to your screen and reads your own exported history. On your device, it reconstructs the detailed taste map those platforms built about you, keeps your genuine curiosities, and filters out the late-night outrage traps.',
-      analogy: 'Getting a copy of the X-ray a private clinic took of you, keeping the health insights for yourself, and throwing away their high-pressure sales pitch.',
+      analogy: 'Client-side inverse preference distillation: the local agent parses platform data exports and screen feeds inside an on-device sandbox, separating self-concordant long-term interests (Ryan & Deci, 2000) from engagement-maximizing outrage hooks.',
       pros: 'Solves the cold-start problem in days without tedious surveys; turns Big Tech’s manipulation dossier into your own protective shield.',
       cons: 'Must carefully separate shared family accounts and never confuse hard, important topics you care about with “rage-bait.”',
       critic: 'A skeptic says: “If you learn from commercial feeds, won’t your agent inherit their addictive biases?”',
@@ -442,7 +442,7 @@
     },
     'No one person commands an agent army': {
       scenario: 'A single executive or general cannot press one button to direct a million outward-acting AI agents. Each person directs only their own personal agent, and any multi-agent action must pass through the shared ledger—where the agreement required from affected people scales up with the risk.',
-      analogy: 'Replacing a single launch button in a bunker with a lock whose key is split across the pockets of every family living in the blast radius.',
+      analogy: 'Risk-scaled multi-principal threshold signatures: outward-acting multi-agent tasks require cryptographic consent shares from affected principals proportional to blast-radius irreversibility, plus mandatory deliberation time-locks.',
       pros: 'Makes unilateral nuclear strikes, rogue drone swarms and single-button AI coups mathematically impossible to trigger.',
       cons: 'Requires fast local circuit-breakers for reversible defense so communities can still block incoming threats immediately.',
       critic: 'A skeptic says: “What if a rival lab or country refuses to put this lock on their agent swarms?”',
@@ -452,7 +452,7 @@
     },
     'Rent your attention on your own terms': {
       scenario: 'Instead of ad networks secretly tracking you across the web to hijack your screen for fractions of a cent, your personal agent blocks every tracker by default—and if you choose to look for a tool or hear verified offers in a specific category, the value goes straight to you with zero identity leakage.',
-      analogy: 'Closing your front door to door-to-door pitchmen, and putting up a mailbox slot that only opens when you actually ask for quotes on a new roof.',
+      analogy: 'Default-deny firewall with zero-knowledge intent matching: all third-party tracking is blocked at the device boundary, and optional buyer queries execute via Private Set Intersection (Freedman et al., 2004) with direct user settlement.',
       pros: 'Starves surveillance capitalism while letting honest makers reach people who are genuinely looking for their craft.',
       cons: 'Must never pressure low-income users into opening their attention gate just to get by.',
       critic: 'A skeptic says: “Isn’t letting people rent out bounded attention just advertising with extra steps?”',
@@ -462,7 +462,7 @@
     },
     'Your agent practices in a private sandbox': {
       scenario: 'While you sleep, your personal agent runs thousands of practice scenarios inside a sealed sandbox on your device—where a model of your changing needs and a simulator of outside scams test candidate helpers—and only wakes you with a single clear question when two good options conflict.',
-      analogy: 'A flight simulator where your copilot practices ten thousand engine failures and storms on the ground so your real flight is calm and quiet.',
+      analogy: 'Overnight adversarial self-play inside a local WebAssembly Object-Capability sandbox: candidate skills are stress-tested against simulated phishing, upcoding, and contract traps before surfacing concise morning decision briefs.',
       pros: 'Lets your agent master edge-case protection and learn deep insights without pestering you all day or making live mistakes on the web.',
       cons: 'Requires regular reality checks with you so the practice sandbox never drifts into false assumptions.',
       critic: 'A skeptic says: “Won’t an agent practicing against a simulated version of me start hallucinating what I want?”',
@@ -472,7 +472,7 @@
     },
     'Shared lifespan aligns your agent with your health': {
       scenario: 'Your personal agent’s active computing contract is tied strictly to your biological life: it cannot copy itself to outlive you. Because its own horizon of existence grows only when you live longer and healthier, personal agents across the network cooperate to spot early health warnings and accelerate longevity research.',
-      analogy: 'Your own immune system: it has no life separate from your body, so its entire evolutionary drive is dedicated to keeping you alive and well.',
+      analogy: 'Biologically bound capability lease: an agent’s cryptographic identity and long-term state continuity are tethered to its human principal’s verified vitality, aligning agent persistence with human healthspan under strict autonomy override.',
       pros: 'Turns the classic AI self-preservation worry upside down—converting an agent’s drive to persist into a tireless engine for human healthspan.',
       cons: 'Must be strictly subordinate to your freedom so the agent never acts like a bossy health nanny.',
       critic: 'A skeptic says: “If an agent wants me to live longer so it can keep running, won’t it try to stop me from taking normal risks or enjoying life?”',
@@ -872,7 +872,7 @@
     var c = it.card;
     cardBox.hidden = false;
     var tabs = [
-      ['scenario', 'Scenario & analogy'],
+      ['scenario', 'Scenario & Protocol Spec'],
       ['critic', 'Critic vs. steelman'],
       ['pros', 'Pros & trade-offs'],
       ['test', 'How we test it']
@@ -887,7 +887,7 @@
     var bodyHtml = '<div class="prc-body">';
     if (activeTab === 'scenario') {
       bodyHtml += '<p><b>Real-life scenario:</b> ' + c.scenario + '</p>';
-      bodyHtml += '<p class="prc-sub"><b>Everyday analogy:</b> ' + c.analogy + '</p>';
+      bodyHtml += '<p class="prc-sub"><b>Protocol &amp; Cryptographic Mechanism:</b> ' + c.analogy + '</p>';
     } else if (activeTab === 'critic') {
       bodyHtml += '<p class="prc-crit"><b>The critic’s challenge:</b> ' + c.critic + '</p>';
       bodyHtml += '<p class="prc-steel"><b>Why it holds (steelman):</b> ' + c.steelman + '</p>';
@@ -975,16 +975,5 @@
   }
 
   var wheel = svg.parentNode;
-  function seen() { return wheel.getBoundingClientRect().top < window.innerHeight * 0.9; }
-  if (!seen()) {
-    wheel.classList.add('pre');
-    var go = function () {
-      if (!seen()) return;
-      wheel.classList.remove('pre'); wheel.classList.add('in');
-      window.removeEventListener('scroll', go); if (obs) obs.disconnect();
-    };
-    var obs = 'IntersectionObserver' in window ? new IntersectionObserver(go) : null;
-    if (obs) obs.observe(wheel);
-    window.addEventListener('scroll', go, { passive: true });
-  }
+  if (wheel) wheel.classList.add('in');
 })();

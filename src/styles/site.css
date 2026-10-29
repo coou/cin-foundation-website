@@ -2479,3 +2479,170 @@ a.cite-badge:hover {
 
 /* Ensure zero dim/invisible flash when scrolling fast or jumping via hash links */
 .reveal { opacity: 1 !important; transform: none !important; }
+
+
+/* ==========================================================================
+   ?v=44 HIGH-DENSITY INTERACTIVE STUDIO SWITCHERS & COMPACT MATRIX LAYOUTS
+   ========================================================================== */
+.studio-switcher {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+  gap: .65rem;
+  margin: 1.4rem 0 1.65rem;
+  padding: .5rem;
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  border-radius: 16px;
+}
+.studio-switcher button {
+  display: flex;
+  align-items: flex-start;
+  gap: .7rem;
+  text-align: left;
+  padding: .75rem .9rem;
+  border-radius: 11px;
+  border: 1.5px solid transparent;
+  background: var(--paper);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: all .18s ease;
+}
+.studio-switcher button:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.studio-switcher button[aria-selected="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .14);
+}
+.studio-switcher .st-num {
+  font: 700 .72rem/1 var(--mono);
+  padding: .32rem .42rem;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: .08rem;
+}
+.studio-switcher button[aria-selected="true"] .st-num {
+  background: var(--accent);
+  color: #fff;
+}
+.studio-switcher .st-txt {
+  display: grid;
+  gap: .18rem;
+}
+.studio-switcher .st-txt b {
+  font-size: .88rem;
+  line-height: 1.25;
+  color: inherit;
+}
+.studio-switcher .st-txt small {
+  font: 500 .72rem/1.25 var(--mono);
+  opacity: .78;
+}
+.studio-pane[hidden] {
+  display: none !important;
+}
+html.no-js .studio-pane[hidden] {
+  display: block !important;
+}
+
+/* Formal Cryptographic Quorum & Deliberation Lock Formula Bar in #swarm-lock */
+.sl-formula-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
+  gap: .6rem;
+  margin: 0 0 1.25rem;
+  padding: .75rem .95rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--ok);
+  border-radius: 12px;
+}
+.sl-formula-bar > div {
+  display: grid;
+  gap: .15rem;
+}
+.sl-formula-bar span {
+  font: 600 .66rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-3);
+}
+.sl-formula-bar code {
+  font: 700 .82rem/1.3 var(--mono);
+  color: var(--ink);
+  background: none;
+  padding: 0;
+}
+
+/* Hide redundant 4-step static card dump inside #em-demo when interactive SVG is active */
+html:not(.no-js) #em-demo #em-grid7 {
+  display: none;
+}
+
+/* Compact 2-Column Matrix for the 8 Architectural Invariants (#goals) on Desktop */
+@media (min-width: 860px) {
+  .goals {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .9rem 1.15rem;
+  }
+  .goal {
+    grid-template-columns: 3.1rem 1fr;
+    gap: .85rem;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--card);
+    align-items: start;
+  }
+  .goal:first-child {
+    border-top: 1px solid var(--rule);
+  }
+  .g-num {
+    font-size: 1.65rem;
+  }
+  .g-body h3 {
+    font-size: 1.08rem;
+    margin-bottom: .35rem;
+  }
+  .g-body p {
+    font-size: .88rem;
+    line-height: 1.5;
+  }
+}
+
+/* Compact 2-Column Matrix for the 10 Primary-Source Incidents (.ws-line) on Desktop */
+@media (min-width: 900px) {
+  .ws-line {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .85rem 1.15rem;
+    padding-left: 0;
+    border-left: none;
+  }
+  .ws-line li {
+    padding: .95rem 1.1rem;
+    border: 1px solid var(--rule);
+    border-left: 3.5px solid var(--ink-3);
+    border-radius: 12px;
+    background: var(--bg);
+    margin: 0;
+  }
+  .ws-line li.t-inc {
+    border-left-color: var(--accent);
+  }
+  .ws-line li.t-res {
+    border-left-color: var(--blue);
+  }
+  .ws-line li.t-pol {
+    border-left-color: var(--gold);
+  }
+  .ws-line li::before {
+    display: none;
+  }
+}

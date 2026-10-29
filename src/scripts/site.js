@@ -24,6 +24,37 @@
   }
 
   /* ---------- reliable #top & section hash navigation (compensates for sticky header & async layout shifts) ---------- */
+  /* ---------- Interactive Studio Switchers (#for-you, #fractured, #signals) ---------- */
+  function activateStudioPane(pane) {
+    if (!pane || !pane.id) return;
+    var sec = pane.closest('section') || pane.parentNode;
+    var sw = sec.querySelector('.studio-switcher');
+    var panes = [].slice.call(sec.querySelectorAll('.studio-pane'));
+    panes.forEach(function (p) {
+      var on = p === pane;
+      p.hidden = !on;
+      if (on) {
+        p.classList.add('in');
+        p.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+      }
+    });
+    if (sw) {
+      [].forEach.call(sw.querySelectorAll('[data-studio-target]'), function (btn) {
+        btn.setAttribute('aria-selected', String(btn.getAttribute('data-studio-target') === pane.id));
+      });
+    }
+    setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 20);
+  }
+
+  document.querySelectorAll('.studio-switcher').forEach(function (sw) {
+    sw.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-studio-target]');
+      if (!btn) return;
+      var targetPane = document.getElementById(btn.getAttribute('data-studio-target'));
+      if (targetPane) activateStudioPane(targetPane);
+    });
+  });
+
   var hashLockId = null, hashLockUntil = 0;
   function scrollToHashTarget(id, smooth) {
     if (!id || id === 'top') {
@@ -33,6 +64,10 @@
     }
     var target = document.getElementById(id);
     if (!target) return false;
+    var parentPane = target.closest('.studio-pane');
+    if (parentPane && parentPane.hidden) {
+      activateStudioPane(parentPane);
+    }
     // Reveal any unrevealed elements inside or on the target immediately so translateY(14px) doesn't offset it
     target.classList.add('in');
     target.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
