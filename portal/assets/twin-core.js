@@ -10919,3 +10919,445 @@ export function summarizeSettledState(result) {
     badge: 'Ready'
   });
 }
+
+
+/* =========================================================================
+   EDGE-CLOUD COLLABORATION AND PRIVACY EXPOSURE BROKER (arXiv:2610.17816)
+   ========================================================================= */
+
+export const ALLOWED_COLLABORATION_TARGETS = Object.freeze(['LOCAL_EDGE', 'EXTERNAL_CLOUD']);
+
+export const ALLOWED_PRIVACY_SENSITIVITY_TIERS = Object.freeze([
+  'TIER1_PUBLIC',
+  'TIER2_INTERNAL',
+  'TIER3_SENSITIVE_PERSONAL',
+  'TIER4_CRITICAL_CREDENTIAL'
+]);
+
+export const ALLOWED_COLLABORATION_STEP_FIELDS = Object.freeze([
+  'step_id',
+  'task_id',
+  'subtask_description',
+  'execution_target',
+  'estimated_local_confidence',
+  'privacy_sensitivity_tier',
+  'contains_pii',
+  'local_tokens_allocated',
+  'cloud_tokens_allocated',
+  'timestamp_utc'
+]);
+
+export const ALLOWED_COLLABORATION_OPTIONS_FIELDS = Object.freeze([
+  'max_privacy_exposure_budget',
+  'min_edge_confidence_for_local',
+  'hard_fail_on_critical_pii',
+  'max_execution_steps',
+  'as_of_time'
+]);
+
+export const COLLABORATION_DEFAULTS = Object.freeze({
+  max_privacy_exposure_budget: 0.35,
+  min_edge_confidence_for_local: 0.65,
+  hard_fail_on_critical_pii: true,
+  max_execution_steps: 50
+});
+
+export const ALLOWED_COLLABORATION_RECEIPT_FIELDS = Object.freeze([
+  'receipt_id',
+  'commitment_hash',
+  'issued_at',
+  'task_id',
+  'total_steps',
+  'local_steps_count',
+  'cloud_steps_count',
+  'total_local_tokens',
+  'total_cloud_tokens',
+  'privacy_exposure_score',
+  'edge_sovereignty_ratio',
+  'status'
+]);
+
+const FORBIDDEN_COLLABORATION_PROTOTYPE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+const ALLOWED_COLLABORATION_STEP_SET = new Set(ALLOWED_COLLABORATION_STEP_FIELDS);
+const ALLOWED_COLLABORATION_OPTIONS_SET = new Set(ALLOWED_COLLABORATION_OPTIONS_FIELDS);
+const ALLOWED_COLLABORATION_RECEIPT_SET = new Set(ALLOWED_COLLABORATION_RECEIPT_FIELDS);
+
+/**
+ * Validates a single collaboration step descriptor fail-closed.
+ *
+ * @param {object} step Raw step candidate
+ * @returns {object} { ok: true, value: frozenStep } or { ok: false, error: string, reason: string }
+ */
+export function validateCollaborationStepDescriptor(step) {
+  if (!step || typeof step !== 'object' || Array.isArray(step)) {
+    return { ok: false, error: 'INVALID_STEP', reason: 'Collaboration step must be a non-null object.' };
+  }
+
+  for (const key of Object.getOwnPropertyNames(step)) {
+    if (FORBIDDEN_COLLABORATION_PROTOTYPE_KEYS.has(key)) {
+      return { ok: false, error: 'PROTOTYPE_POLLUTION', reason: `Forbidden prototype key detected: ${key}` };
+    }
+    if (!ALLOWED_COLLABORATION_STEP_SET.has(key)) {
+      return { ok: false, error: 'UNRECOGNIZED_FIELD', reason: `Unrecognized field in collaboration step: ${key}` };
+    }
+  }
+
+  for (const requiredKey of ALLOWED_COLLABORATION_STEP_FIELDS) {
+    if (!(requiredKey in step)) {
+      return { ok: false, error: 'MISSING_REQUIRED_FIELD', reason: `Missing required field: ${requiredKey}` };
+    }
+  }
+
+  if (typeof step.step_id !== 'string' || !step.step_id.trim()) {
+    return { ok: false, error: 'INVALID_STEP_ID', reason: 'step_id must be a non-empty string.' };
+  }
+
+  if (typeof step.task_id !== 'string' || !step.task_id.trim()) {
+    return { ok: false, error: 'INVALID_TASK_ID', reason: 'task_id must be a non-empty string.' };
+  }
+
+  if (typeof step.subtask_description !== 'string' || !step.subtask_description.trim()) {
+    return { ok: false, error: 'INVALID_SUBTASK_DESCRIPTION', reason: 'subtask_description must be a non-empty string.' };
+  }
+
+  if (!ALLOWED_COLLABORATION_TARGETS.includes(step.execution_target)) {
+    return { ok: false, error: 'INVALID_EXECUTION_TARGET', reason: `execution_target must be one of: ${ALLOWED_COLLABORATION_TARGETS.join(', ')}` };
+  }
+
+  if (!ALLOWED_PRIVACY_SENSITIVITY_TIERS.includes(step.privacy_sensitivity_tier)) {
+    return { ok: false, error: 'INVALID_SENSITIVITY_TIER', reason: `privacy_sensitivity_tier must be one of: ${ALLOWED_PRIVACY_SENSITIVITY_TIERS.join(', ')}` };
+  }
+
+  if (typeof step.estimated_local_confidence !== 'number' || typeof step.estimated_local_confidence === 'boolean' ||
+      Number.isNaN(step.estimated_local_confidence) || !Number.isFinite(step.estimated_local_confidence) ||
+      step.estimated_local_confidence < 0.0 || step.estimated_local_confidence > 1.0) {
+    return { ok: false, error: 'INVALID_CONFIDENCE', reason: 'estimated_local_confidence must be a finite number in [0.0, 1.0].' };
+  }
+
+  if (typeof step.contains_pii !== 'boolean') {
+    return { ok: false, error: 'INVALID_CONTAINS_PII', reason: 'contains_pii must be a boolean.' };
+  }
+
+  for (const tokenField of ['local_tokens_allocated', 'cloud_tokens_allocated']) {
+    const val = step[tokenField];
+    if (typeof val !== 'number' || typeof val === 'boolean' || Number.isNaN(val) || !Number.isFinite(val) ||
+        !Number.isInteger(val) || val < 0) {
+      return { ok: false, error: 'INVALID_TOKENS', reason: `${tokenField} must be a non-negative integer.` };
+    }
+  }
+
+  if (!isValidIsoDateTime(step.timestamp_utc)) {
+    return { ok: false, error: 'INVALID_TIMESTAMP', reason: 'timestamp_utc must be a valid ISO-8601 calendar date and time.' };
+  }
+
+  return { ok: true, value: deepFreeze({ ...step }) };
+}
+
+/**
+ * Computes deterministic privacy exposure score for a single step.
+ *
+ * @param {object} step Validated step descriptor
+ * @returns {number} Score in [0.0, 1.0]
+ */
+export function calculateStepPrivacyExposure(step) {
+  const isCloud = step.execution_target === 'EXTERNAL_CLOUD';
+  if (step.privacy_sensitivity_tier === 'TIER1_PUBLIC') {
+    return 0.0;
+  }
+  if (step.privacy_sensitivity_tier === 'TIER2_INTERNAL') {
+    return isCloud ? 0.15 : 0.02;
+  }
+  if (step.privacy_sensitivity_tier === 'TIER3_SENSITIVE_PERSONAL') {
+    if (isCloud) {
+      return step.contains_pii ? 0.85 : 0.50;
+    }
+    return step.contains_pii ? 0.10 : 0.05;
+  }
+  if (step.privacy_sensitivity_tier === 'TIER4_CRITICAL_CREDENTIAL') {
+    return isCloud ? 1.00 : 0.15;
+  }
+  return 1.00;
+}
+
+/**
+ * Evaluates an edge-cloud collaboration task execution plan fail-closed (arXiv:2610.17816).
+ *
+ * @param {Array<object>} steps Array of collaboration step descriptors
+ * @param {object} options Evaluation options
+ * @returns {object} Deeply frozen result with admission decision or failure reason and receipt
+ */
+export function evaluateEdgeCloudExecution(steps, options = {}) {
+  if (!Array.isArray(steps) || steps.length === 0) {
+    return deepFreeze({ ok: false, error: 'EMPTY_STEPS', reason: 'Steps must be a non-empty array of step descriptors.' });
+  }
+
+  if (options && typeof options === 'object') {
+    for (const optKey of Object.getOwnPropertyNames(options)) {
+      if (FORBIDDEN_COLLABORATION_PROTOTYPE_KEYS.has(optKey)) {
+        return deepFreeze({ ok: false, error: 'PROTOTYPE_POLLUTION', reason: `Forbidden prototype key: ${optKey}` });
+      }
+      if (!ALLOWED_COLLABORATION_OPTIONS_SET.has(optKey)) {
+        return deepFreeze({ ok: false, error: 'UNRECOGNIZED_OPTION', reason: `Unrecognized option: ${optKey}` });
+      }
+    }
+  }
+
+  const maxExposureBudget = typeof options.max_privacy_exposure_budget === 'number' &&
+    !Number.isNaN(options.max_privacy_exposure_budget) && Number.isFinite(options.max_privacy_exposure_budget) &&
+    typeof options.max_privacy_exposure_budget !== 'boolean'
+      ? options.max_privacy_exposure_budget
+      : COLLABORATION_DEFAULTS.max_privacy_exposure_budget;
+
+  const minEdgeConfidence = typeof options.min_edge_confidence_for_local === 'number' &&
+    !Number.isNaN(options.min_edge_confidence_for_local) && Number.isFinite(options.min_edge_confidence_for_local) &&
+    typeof options.min_edge_confidence_for_local !== 'boolean'
+      ? options.min_edge_confidence_for_local
+      : COLLABORATION_DEFAULTS.min_edge_confidence_for_local;
+
+  const hardFailCritical = typeof options.hard_fail_on_critical_pii === 'boolean'
+    ? options.hard_fail_on_critical_pii
+    : COLLABORATION_DEFAULTS.hard_fail_on_critical_pii;
+
+  const maxSteps = typeof options.max_execution_steps === 'number' &&
+    !Number.isNaN(options.max_execution_steps) && Number.isFinite(options.max_execution_steps) &&
+    typeof options.max_execution_steps !== 'boolean'
+      ? options.max_execution_steps
+      : COLLABORATION_DEFAULTS.max_execution_steps;
+
+  if (steps.length > maxSteps) {
+    return deepFreeze({ ok: false, error: 'EXCESSIVE_STEPS', reason: `Execution plan contains ${steps.length} steps, exceeding maximum of ${maxSteps}.` });
+  }
+
+  const validatedSteps = [];
+  const taskId = steps[0]?.task_id;
+
+  for (let i = 0; i < steps.length; i++) {
+    const rawStep = steps[i];
+    const valRes = validateCollaborationStepDescriptor(rawStep);
+    if (!valRes.ok) {
+      return deepFreeze({ ok: false, error: valRes.error, reason: `Step ${i} validation failure: ${valRes.reason}` });
+    }
+    if (valRes.value.task_id !== taskId) {
+      return deepFreeze({ ok: false, error: 'INCONSISTENT_TASK_ID', reason: `Inconsistent task_id at step ${i}: expected ${taskId}, got ${valRes.value.task_id}` });
+    }
+    validatedSteps.push(valRes.value);
+  }
+
+  let localCount = 0;
+  let cloudCount = 0;
+  let totalLocalTokens = 0;
+  let totalCloudTokens = 0;
+  let totalExposure = 0.0;
+  const processedSteps = [];
+
+  for (const step of validatedSteps) {
+    let effectiveTarget = step.execution_target;
+
+    // Hard fail on critical credentials destined for cloud
+    if (step.privacy_sensitivity_tier === 'TIER4_CRITICAL_CREDENTIAL' && step.execution_target === 'EXTERNAL_CLOUD') {
+      return deepFreeze({
+        ok: false,
+        error: 'CRITICAL_CREDENTIAL_OFFLOAD_BLOCKED',
+        reason: `Step ${step.step_id} contains critical credentials and cannot be offloaded to external cloud.`
+      });
+    }
+
+    // Hard fail on unconsented PII destined for cloud
+    if (hardFailCritical && step.contains_pii && step.execution_target === 'EXTERNAL_CLOUD') {
+      return deepFreeze({
+        ok: false,
+        error: 'UNCONSENTED_PII_OFFLOAD_BLOCKED',
+        reason: `Step ${step.step_id} contains personal identifiable information (PII) and cannot be dispatched to cloud.`
+      });
+    }
+
+    // Edge Sovereignty Principle (arXiv:2610.17816): If edge capability meets threshold, default strictly to local edge
+    if (step.execution_target === 'EXTERNAL_CLOUD' && step.estimated_local_confidence >= minEdgeConfidence) {
+      effectiveTarget = 'LOCAL_EDGE';
+    }
+
+    const effectiveStep = {
+      ...step,
+      effective_target: effectiveTarget,
+      overridden_to_local: effectiveTarget !== step.execution_target
+    };
+
+    const stepExposure = calculateStepPrivacyExposure({
+      ...effectiveStep,
+      execution_target: effectiveTarget
+    });
+
+    totalExposure += stepExposure;
+    if (effectiveTarget === 'LOCAL_EDGE') {
+      localCount++;
+      totalLocalTokens += step.local_tokens_allocated + step.cloud_tokens_allocated;
+    } else {
+      cloudCount++;
+      totalCloudTokens += step.cloud_tokens_allocated;
+      totalLocalTokens += step.local_tokens_allocated;
+    }
+
+    processedSteps.push(effectiveStep);
+  }
+
+  const normalizedExposure = Number((totalExposure / validatedSteps.length).toFixed(4));
+
+  if (normalizedExposure > maxExposureBudget) {
+    return deepFreeze({
+      ok: false,
+      error: 'EXPOSURE_BUDGET_EXCEEDED',
+      reason: `Cumulative privacy exposure (${normalizedExposure}) exceeds allowable budget (${maxExposureBudget}).`
+    });
+  }
+
+  const asOfTime = options.as_of_time || new Date().toISOString();
+  const commitmentData = `${taskId}|${validatedSteps.length}|${localCount}|${cloudCount}|${totalLocalTokens}|${totalCloudTokens}|${normalizedExposure.toFixed(4)}`;
+  const commitmentHash = computeContextFingerprint(commitmentData);
+
+  const receipt = deepFreeze({
+    receipt_id: `collab-rcpt-${commitmentHash.slice(0, 16)}`,
+    commitment_hash: commitmentHash,
+    issued_at: asOfTime,
+    task_id: taskId,
+    total_steps: validatedSteps.length,
+    local_steps_count: localCount,
+    cloud_steps_count: cloudCount,
+    total_local_tokens: totalLocalTokens,
+    total_cloud_tokens: totalCloudTokens,
+    privacy_exposure_score: normalizedExposure,
+    edge_sovereignty_ratio: Number((localCount / validatedSteps.length).toFixed(4)),
+    status: 'admitted'
+  });
+
+  return deepFreeze({
+    ok: true,
+    status: 'admitted',
+    task_id: taskId,
+    receipt,
+    processed_steps: processedSteps,
+    total_steps: validatedSteps.length,
+    local_steps_count: localCount,
+    cloud_steps_count: cloudCount,
+    total_local_tokens: totalLocalTokens,
+    total_cloud_tokens: totalCloudTokens,
+    privacy_exposure_score: normalizedExposure,
+    edge_sovereignty_ratio: receipt.edge_sovereignty_ratio
+  });
+}
+
+/**
+ * Cryptographically verifies an edge-cloud collaboration execution receipt.
+ *
+ * @param {object} receipt Receipt candidate
+ * @param {object} options Verification options
+ * @returns {object} { ok: true, verified: true, receipt } or { ok: false, verified: false, reason: string }
+ */
+export function verifyCollaborationReceipt(receipt, options = {}) {
+  if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Receipt must be a non-null object.' });
+  }
+
+  for (const key of Object.getOwnPropertyNames(receipt)) {
+    if (FORBIDDEN_COLLABORATION_PROTOTYPE_KEYS.has(key)) {
+      return deepFreeze({ ok: false, verified: false, reason: `Forbidden prototype key: ${key}` });
+    }
+    if (!ALLOWED_COLLABORATION_RECEIPT_SET.has(key)) {
+      return deepFreeze({ ok: false, verified: false, reason: `Unrecognized receipt field: ${key}` });
+    }
+  }
+
+  for (const requiredKey of ALLOWED_COLLABORATION_RECEIPT_FIELDS) {
+    if (!(requiredKey in receipt)) {
+      return deepFreeze({ ok: false, verified: false, reason: `Missing required receipt field: ${requiredKey}` });
+    }
+  }
+
+  if (typeof receipt.receipt_id !== 'string' || !receipt.receipt_id.startsWith('collab-rcpt-')) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Invalid receipt_id format.' });
+  }
+
+  if (typeof receipt.commitment_hash !== 'string' || receipt.commitment_hash.length < 8) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Invalid commitment_hash format.' });
+  }
+
+  if (!isValidIsoDateTime(receipt.issued_at)) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Invalid issued_at timestamp.' });
+  }
+
+  if (typeof receipt.task_id !== 'string' || !receipt.task_id.trim()) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Invalid task_id.' });
+  }
+
+  for (const countField of ['total_steps', 'local_steps_count', 'cloud_steps_count', 'total_local_tokens', 'total_cloud_tokens']) {
+    const val = receipt[countField];
+    if (typeof val !== 'number' || typeof val === 'boolean' || Number.isNaN(val) || !Number.isFinite(val) ||
+        !Number.isInteger(val) || val < 0) {
+      return deepFreeze({ ok: false, verified: false, reason: `${countField} must be a non-negative integer.` });
+    }
+  }
+
+  if (receipt.local_steps_count + receipt.cloud_steps_count !== receipt.total_steps) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Sum of local and cloud steps does not equal total_steps.' });
+  }
+
+  for (const ratioField of ['privacy_exposure_score', 'edge_sovereignty_ratio']) {
+    const val = receipt[ratioField];
+    if (typeof val !== 'number' || typeof val === 'boolean' || Number.isNaN(val) || !Number.isFinite(val) ||
+        val < 0.0 || val > 1.0) {
+      return deepFreeze({ ok: false, verified: false, reason: `${ratioField} must be a finite float in [0.0, 1.0].` });
+    }
+  }
+
+  if (receipt.status !== 'admitted') {
+    return deepFreeze({ ok: false, verified: false, reason: `Receipt status must be admitted, got: ${receipt.status}` });
+  }
+
+  const expectedCommitment = `${receipt.task_id}|${receipt.total_steps}|${receipt.local_steps_count}|${receipt.cloud_steps_count}|${receipt.total_local_tokens}|${receipt.total_cloud_tokens}|${receipt.privacy_exposure_score.toFixed(4)}`;
+  const recomputedHash = computeContextFingerprint(expectedCommitment);
+
+  if (recomputedHash !== receipt.commitment_hash) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Cryptographic commitment hash mismatch: receipt data was modified.' });
+  }
+
+  if (receipt.receipt_id !== `collab-rcpt-${recomputedHash.slice(0, 16)}`) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Receipt ID does not match commitment hash digest.' });
+  }
+
+  return deepFreeze({ ok: true, verified: true, receipt });
+}
+
+/**
+ * Generates user-facing plain language summary of collaboration execution without internal jargon.
+ *
+ * @param {object} result Execution or verification result
+ * @returns {object} { ok, text, status_class, badge }
+ */
+export function summarizeCollaborationExecution(result) {
+  if (!result || typeof result !== 'object') {
+    return deepFreeze({
+      ok: false,
+      text: 'Execution evaluation could not be processed.',
+      status_class: 'status-err',
+      badge: 'Evaluation Error'
+    });
+  }
+
+  if (!result.ok) {
+    return deepFreeze({
+      ok: false,
+      text: result.reason || 'Collaboration execution rejected by safety broker.',
+      status_class: 'status-err',
+      badge: 'Execution Blocked'
+    });
+  }
+
+  const localPct = Math.round((result.edge_sovereignty_ratio || 0) * 100);
+  const exposurePct = ((result.privacy_exposure_score || 0) * 100).toFixed(1);
+
+  return deepFreeze({
+    ok: true,
+    text: `Task executed with ${localPct}% on-device processing. Privacy exposure remained strictly limited to ${exposurePct}%, and sensitive personal data was kept confidential.`,
+    status_class: 'status-ok',
+    badge: localPct === 100 ? '100% On-Device' : 'Edge-Governed'
+  });
+}
