@@ -8287,6 +8287,18 @@ test('verifyCollaborationReceipt authenticates valid receipts and detects tamper
   // Tampering: modify receipt_id
   const tampered4 = { ...receipt, receipt_id: 'collab-rcpt-fake' };
   assert.equal(verifyCollaborationReceipt(tampered4).ok, false);
+
+  // Tampering: modify edge_sovereignty_ratio (LS-debc57, LS-5b08e8)
+  const tampered5 = { ...receipt, edge_sovereignty_ratio: 0.5 };
+  const res5 = verifyCollaborationReceipt(tampered5);
+  assert.equal(res5.ok, false);
+  assert.equal(res5.verified, false);
+
+  // Tampering: modify issued_at timestamp (LS-debc57, LS-5b08e8)
+  const tampered6 = { ...receipt, issued_at: '2026-10-29T15:00:00Z' };
+  const res6 = verifyCollaborationReceipt(tampered6);
+  assert.equal(res6.ok, false);
+  assert.equal(res6.verified, false);
 });
 
 test('summarizeCollaborationExecution produces clear plain language without internal jargon', () => {

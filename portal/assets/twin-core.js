@@ -11211,7 +11211,8 @@ export function evaluateEdgeCloudExecution(steps, options = {}) {
   }
 
   const asOfTime = options.as_of_time || new Date().toISOString();
-  const commitmentData = `${taskId}|${validatedSteps.length}|${localCount}|${cloudCount}|${totalLocalTokens}|${totalCloudTokens}|${normalizedExposure.toFixed(4)}`;
+  const edgeSovereigntyRatio = Number((localCount / validatedSteps.length).toFixed(4));
+  const commitmentData = `${taskId}|${validatedSteps.length}|${localCount}|${cloudCount}|${totalLocalTokens}|${totalCloudTokens}|${normalizedExposure.toFixed(4)}|${edgeSovereigntyRatio.toFixed(4)}|${asOfTime}`;
   const commitmentHash = computeContextFingerprint(commitmentData);
 
   const receipt = deepFreeze({
@@ -11225,7 +11226,7 @@ export function evaluateEdgeCloudExecution(steps, options = {}) {
     total_local_tokens: totalLocalTokens,
     total_cloud_tokens: totalCloudTokens,
     privacy_exposure_score: normalizedExposure,
-    edge_sovereignty_ratio: Number((localCount / validatedSteps.length).toFixed(4)),
+    edge_sovereignty_ratio: edgeSovereigntyRatio,
     status: 'admitted'
   });
 
@@ -11308,11 +11309,16 @@ export function verifyCollaborationReceipt(receipt, options = {}) {
     }
   }
 
+  const expectedRatio = Number((receipt.local_steps_count / (receipt.total_steps || 1)).toFixed(4));
+  if (receipt.edge_sovereignty_ratio !== expectedRatio) {
+    return deepFreeze({ ok: false, verified: false, reason: 'edge_sovereignty_ratio does not match calculated local step ratio.' });
+  }
+
   if (receipt.status !== 'admitted') {
     return deepFreeze({ ok: false, verified: false, reason: `Receipt status must be admitted, got: ${receipt.status}` });
   }
 
-  const expectedCommitment = `${receipt.task_id}|${receipt.total_steps}|${receipt.local_steps_count}|${receipt.cloud_steps_count}|${receipt.total_local_tokens}|${receipt.total_cloud_tokens}|${receipt.privacy_exposure_score.toFixed(4)}`;
+  const expectedCommitment = `${receipt.task_id}|${receipt.total_steps}|${receipt.local_steps_count}|${receipt.cloud_steps_count}|${receipt.total_local_tokens}|${receipt.total_cloud_tokens}|${receipt.privacy_exposure_score.toFixed(4)}|${receipt.edge_sovereignty_ratio.toFixed(4)}|${receipt.issued_at}`;
   const recomputedHash = computeContextFingerprint(expectedCommitment);
 
   if (recomputedHash !== receipt.commitment_hash) {
