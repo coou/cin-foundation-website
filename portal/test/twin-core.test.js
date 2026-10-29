@@ -168,6 +168,18 @@ import {
   processRetrievalAirlock,
   verifyRetrievalAirlockReceipt,
   summarizeRetrievalAirlock,
+
+  ALLOWED_COLLABORATION_TARGETS,
+  ALLOWED_PRIVACY_SENSITIVITY_TIERS,
+  ALLOWED_COLLABORATION_STEP_FIELDS,
+  ALLOWED_COLLABORATION_OPTIONS_FIELDS,
+  COLLABORATION_DEFAULTS,
+  ALLOWED_COLLABORATION_RECEIPT_FIELDS,
+  validateCollaborationStepDescriptor,
+  calculateStepPrivacyExposure,
+  evaluateEdgeCloudExecution,
+  verifyCollaborationReceipt,
+  summarizeCollaborationExecution,
 } from '../assets/twin-core.js';
 
 // Fake key for redaction tests, built at runtime so the repository secret check does not flag it.
@@ -7989,4 +8001,338 @@ test('summarizeInformationFlow produces clear plain language without internal ja
     assert.equal(cleanSummary.text.includes(jargon), false);
     assert.equal(blockedSummary.text.includes(jargon), false);
   }
+});
+
+
+/* =========================================================================
+   EDGE-CLOUD COLLABORATION AND PRIVACY EXPOSURE BROKER TESTS (arXiv:2610.17816)
+   ========================================================================= */
+
+test('collaboration constants are deeply frozen and valid', () => {
+  assert.ok(Array.isArray(ALLOWED_COLLABORATION_TARGETS));
+  assert.ok(ALLOWED_COLLABORATION_TARGETS.includes('LOCAL_EDGE'));
+  assert.ok(ALLOWED_COLLABORATION_TARGETS.includes('EXTERNAL_CLOUD'));
+  assert.throws(() => { ALLOWED_COLLABORATION_TARGETS.push('INVALID'); });
+
+  assert.ok(Array.isArray(ALLOWED_PRIVACY_SENSITIVITY_TIERS));
+  assert.ok(ALLOWED_PRIVACY_SENSITIVITY_TIERS.includes('TIER1_PUBLIC'));
+  assert.ok(ALLOWED_PRIVACY_SENSITIVITY_TIERS.includes('TIER4_CRITICAL_CREDENTIAL'));
+  assert.throws(() => { ALLOWED_PRIVACY_SENSITIVITY_TIERS.push('INVALID'); });
+
+  assert.equal(COLLABORATION_DEFAULTS.max_privacy_exposure_budget, 0.35);
+  assert.equal(COLLABORATION_DEFAULTS.min_edge_confidence_for_local, 0.65);
+  assert.equal(COLLABORATION_DEFAULTS.hard_fail_on_critical_pii, true);
+  assert.throws(() => { COLLABORATION_DEFAULTS.new_prop = 123; });
+});
+
+test('validateCollaborationStepDescriptor accepts well-formed step and freezes output', () => {
+  const validStep = {
+    step_id: 'step-001',
+    task_id: 'task-clinic-prior-auth',
+    subtask_description: 'Audit CMS NCCI unbundling rules against patient line items locally.',
+    execution_target: 'LOCAL_EDGE',
+    estimated_local_confidence: 0.92,
+    privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL',
+    contains_pii: false,
+    local_tokens_allocated: 450,
+    cloud_tokens_allocated: 0,
+    timestamp_utc: '2026-10-29T14:30:00Z'
+  };
+
+  const res = validateCollaborationStepDescriptor(validStep);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.step_id, 'step-001');
+  assert.throws(() => { res.value.step_id = 'mutated'; });
+});
+
+test('validateCollaborationStepDescriptor fails closed on malformed, invalid, or prototype-polluted inputs', () => {
+  assert.equal(validateCollaborationStepDescriptor(null).ok, false);
+  assert.equal(validateCollaborationStepDescriptor([]).ok, false);
+  assert.equal(validateCollaborationStepDescriptor('not-an-object').ok, false);
+
+  // Prototype pollution attempt
+  const polluted = JSON.parse('{"__proto__": {"admin": true}, "step_id": "s1"}');
+  assert.equal(validateCollaborationStepDescriptor(polluted).ok, false);
+
+  const baseStep = {
+    step_id: 'step-002',
+    task_id: 'task-audit',
+    subtask_description: 'Subtask description.',
+    execution_target: 'LOCAL_EDGE',
+    estimated_local_confidence: 0.8,
+    privacy_sensitivity_tier: 'TIER2_INTERNAL',
+    contains_pii: false,
+    local_tokens_allocated: 100,
+    cloud_tokens_allocated: 0,
+    timestamp_utc: '2026-10-29T14:00:00Z'
+  };
+
+  // Missing required field
+  const missingField = { ...baseStep };
+  delete missingField.subtask_description;
+  assert.equal(validateCollaborationStepDescriptor(missingField).ok, false);
+
+  // Unrecognized field
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, unknown_extra: 123 }).ok, false);
+
+  // Non-numeric, boolean, NaN, and Inf confidence
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: true }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: NaN }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: Infinity }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: 1.5 }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: -0.1 }).ok, false);
+
+  // Invalid tokens (float, negative, boolean)
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, local_tokens_allocated: 12.5 }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, local_tokens_allocated: -50 }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, local_tokens_allocated: true }).ok, false);
+
+  // Impossible calendar dates
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, timestamp_utc: '2026-02-30T12:00:00Z' }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, timestamp_utc: 'invalid-time' }).ok, false);
+});
+
+test('calculateStepPrivacyExposure computes deterministic scores across tiers', () => {
+  const step = {
+    privacy_sensitivity_tier: 'TIER1_PUBLIC',
+    execution_target: 'LOCAL_EDGE',
+    contains_pii: false
+  };
+
+  assert.equal(calculateStepPrivacyExposure(step), 0.0);
+  assert.equal(calculateStepPrivacyExposure({ ...step, execution_target: 'EXTERNAL_CLOUD' }), 0.0);
+
+  // Internal
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER2_INTERNAL' }), 0.02);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER2_INTERNAL', execution_target: 'EXTERNAL_CLOUD' }), 0.15);
+
+  // Sensitive Personal
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL' }), 0.05);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL', contains_pii: true }), 0.10);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL', execution_target: 'EXTERNAL_CLOUD' }), 0.50);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL', contains_pii: true, execution_target: 'EXTERNAL_CLOUD' }), 0.85);
+
+  // Critical
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER4_CRITICAL_CREDENTIAL' }), 0.15);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER4_CRITICAL_CREDENTIAL', execution_target: 'EXTERNAL_CLOUD' }), 1.00);
+});
+
+test('evaluateEdgeCloudExecution admits benign local-only plan with 100% on-device sovereignty', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-local-1',
+      subtask_description: 'Parse clinical document on local device.',
+      execution_target: 'LOCAL_EDGE',
+      estimated_local_confidence: 0.95,
+      privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL',
+      contains_pii: false,
+      local_tokens_allocated: 500,
+      cloud_tokens_allocated: 0,
+      timestamp_utc: '2026-10-29T14:00:00Z'
+    },
+    {
+      step_id: 's2',
+      task_id: 'task-local-1',
+      subtask_description: 'Verify CPT bundling rules in local SQLite.',
+      execution_target: 'LOCAL_EDGE',
+      estimated_local_confidence: 0.88,
+      privacy_sensitivity_tier: 'TIER2_INTERNAL',
+      contains_pii: false,
+      local_tokens_allocated: 300,
+      cloud_tokens_allocated: 0,
+      timestamp_utc: '2026-10-29T14:01:00Z'
+    }
+  ];
+
+  const res = evaluateEdgeCloudExecution(steps, { as_of_time: '2026-10-29T14:05:00Z' });
+  assert.equal(res.ok, true);
+  assert.equal(res.status, 'admitted');
+  assert.equal(res.local_steps_count, 2);
+  assert.equal(res.cloud_steps_count, 0);
+  assert.equal(res.edge_sovereignty_ratio, 1.0);
+  assert.equal(res.receipt.status, 'admitted');
+  assert.ok(res.receipt.receipt_id.startsWith('collab-rcpt-'));
+});
+
+test('evaluateEdgeCloudExecution enforces Edge Sovereignty Principle (arXiv:2610.17816)', () => {
+  // Cloud requested, but local confidence is 0.75 >= 0.65 threshold
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-sovereign-override',
+      subtask_description: 'Draft procedural appeal argument.',
+      execution_target: 'EXTERNAL_CLOUD',
+      estimated_local_confidence: 0.75, // exceeds default 0.65 threshold
+      privacy_sensitivity_tier: 'TIER2_INTERNAL',
+      contains_pii: false,
+      local_tokens_allocated: 0,
+      cloud_tokens_allocated: 800,
+      timestamp_utc: '2026-10-29T14:10:00Z'
+    }
+  ];
+
+  const res = evaluateEdgeCloudExecution(steps);
+  assert.equal(res.ok, true);
+  assert.equal(res.local_steps_count, 1); // steered to local edge!
+  assert.equal(res.cloud_steps_count, 0);
+  assert.equal(res.processed_steps[0].overridden_to_local, true);
+  assert.equal(res.edge_sovereignty_ratio, 1.0);
+});
+
+test('evaluateEdgeCloudExecution blocks cloud offloading containing critical credentials fail-closed', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-leak-attempt',
+      subtask_description: 'Export private database encryption key to cloud.',
+      execution_target: 'EXTERNAL_CLOUD',
+      estimated_local_confidence: 0.20,
+      privacy_sensitivity_tier: 'TIER4_CRITICAL_CREDENTIAL',
+      contains_pii: false,
+      local_tokens_allocated: 0,
+      cloud_tokens_allocated: 200,
+      timestamp_utc: '2026-10-29T14:15:00Z'
+    }
+  ];
+
+  const res = evaluateEdgeCloudExecution(steps);
+  assert.equal(res.ok, false);
+  assert.equal(res.error, 'CRITICAL_CREDENTIAL_OFFLOAD_BLOCKED');
+  assert.ok(res.reason.includes('contains critical credentials'));
+});
+
+test('evaluateEdgeCloudExecution blocks cloud offloading with unconsented PII fail-closed', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-pii-leak',
+      subtask_description: 'Send patient identification and social security number to cloud.',
+      execution_target: 'EXTERNAL_CLOUD',
+      estimated_local_confidence: 0.40,
+      privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL',
+      contains_pii: true, // PII present!
+      local_tokens_allocated: 0,
+      cloud_tokens_allocated: 600,
+      timestamp_utc: '2026-10-29T14:20:00Z'
+    }
+  ];
+
+  const res = evaluateEdgeCloudExecution(steps);
+  assert.equal(res.ok, false);
+  assert.equal(res.error, 'UNCONSENTED_PII_OFFLOAD_BLOCKED');
+  assert.ok(res.reason.includes('contains personal identifiable information'));
+});
+
+test('evaluateEdgeCloudExecution rejects plans that exceed privacy exposure budget', () => {
+  // Low confidence forces cloud execution, pushing cumulative exposure past 0.20 budget
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-budget-exhaust',
+      subtask_description: 'Complex financial reasoning via external model.',
+      execution_target: 'EXTERNAL_CLOUD',
+      estimated_local_confidence: 0.30,
+      privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL',
+      contains_pii: false,
+      local_tokens_allocated: 0,
+      cloud_tokens_allocated: 1200,
+      timestamp_utc: '2026-10-29T14:25:00Z'
+    }
+  ];
+
+  // Cloud sensitive personal exposure is 0.50, exceeding budget of 0.20
+  const res = evaluateEdgeCloudExecution(steps, { max_privacy_exposure_budget: 0.20 });
+  assert.equal(res.ok, false);
+  assert.equal(res.error, 'EXPOSURE_BUDGET_EXCEEDED');
+  assert.ok(res.reason.includes('exceeds allowable budget'));
+});
+
+test('verifyCollaborationReceipt authenticates valid receipts and detects tampering fail-closed', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-valid-rcpt',
+      subtask_description: 'Benign public research search.',
+      execution_target: 'LOCAL_EDGE',
+      estimated_local_confidence: 0.90,
+      privacy_sensitivity_tier: 'TIER1_PUBLIC',
+      contains_pii: false,
+      local_tokens_allocated: 200,
+      cloud_tokens_allocated: 0,
+      timestamp_utc: '2026-10-29T14:28:00Z'
+    }
+  ];
+
+  const execRes = evaluateEdgeCloudExecution(steps, { as_of_time: '2026-10-29T14:30:00Z' });
+  assert.equal(execRes.ok, true);
+
+  const receipt = execRes.receipt;
+  const verifyRes = verifyCollaborationReceipt(receipt);
+  assert.equal(verifyRes.ok, true);
+  assert.equal(verifyRes.verified, true);
+
+  // Tampering: modify total_steps
+  const tampered1 = { ...receipt, total_steps: 99 };
+  assert.equal(verifyCollaborationReceipt(tampered1).ok, false);
+
+  // Tampering: modify local_tokens
+  const tampered2 = { ...receipt, total_local_tokens: 99999 };
+  assert.equal(verifyCollaborationReceipt(tampered2).ok, false);
+
+  // Tampering: modify commitment_hash
+  const tampered3 = { ...receipt, commitment_hash: 'forged_hash_12345' };
+  assert.equal(verifyCollaborationReceipt(tampered3).ok, false);
+
+  // Tampering: modify receipt_id
+  const tampered4 = { ...receipt, receipt_id: 'collab-rcpt-fake' };
+  assert.equal(verifyCollaborationReceipt(tampered4).ok, false);
+
+  // Tampering: modify edge_sovereignty_ratio (LS-debc57, LS-5b08e8)
+  const tampered5 = { ...receipt, edge_sovereignty_ratio: 0.5 };
+  const res5 = verifyCollaborationReceipt(tampered5);
+  assert.equal(res5.ok, false);
+  assert.equal(res5.verified, false);
+
+  // Tampering: modify issued_at timestamp (LS-debc57, LS-5b08e8)
+  const tampered6 = { ...receipt, issued_at: '2026-10-29T15:00:00Z' };
+  const res6 = verifyCollaborationReceipt(tampered6);
+  assert.equal(res6.ok, false);
+  assert.equal(res6.verified, false);
+});
+
+test('summarizeCollaborationExecution produces clear plain language without internal jargon', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-summary-test',
+      subtask_description: 'Evaluate healthcare claims locally.',
+      execution_target: 'LOCAL_EDGE',
+      estimated_local_confidence: 0.95,
+      privacy_sensitivity_tier: 'TIER2_INTERNAL',
+      contains_pii: false,
+      local_tokens_allocated: 350,
+      cloud_tokens_allocated: 0,
+      timestamp_utc: '2026-10-29T14:32:00Z'
+    }
+  ];
+
+  const execRes = evaluateEdgeCloudExecution(steps);
+  const summary = summarizeCollaborationExecution(execRes);
+  assert.equal(summary.ok, true);
+  assert.equal(summary.status_class, 'status-ok');
+  assert.equal(summary.badge, '100% On-Device');
+  assert.ok(summary.text.includes('100% on-device processing'));
+  assert.ok(summary.text.includes('kept confidential'));
+
+  // Assert zero internal jargon or formula codes
+  for (const jargon of ['ticket', 'D-', 'T1', 'T2', 'spec', 'floor right', 'F1', 'F2', '§']) {
+    assert.equal(summary.text.includes(jargon), false);
+  }
+
+  // Blocked summary
+  const blockedSummary = summarizeCollaborationExecution({ ok: false, reason: 'Exposure budget exceeded.' });
+  assert.equal(blockedSummary.ok, false);
+  assert.equal(blockedSummary.status_class, 'status-err');
+  assert.equal(blockedSummary.badge, 'Execution Blocked');
 });
