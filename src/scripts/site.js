@@ -11,7 +11,7 @@
   var onScroll = function () { if (head) head.classList.toggle('scrolled', window.scrollY > 8); };
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
-  var btn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');
+  var btn = document.querySelector('.menu-btn'), nav = document.getElementById('nav') || document.getElementById('site-nav') || document.querySelector('.nav');
   if (btn && nav) {
     btn.addEventListener('click', function () {
       var open = nav.classList.toggle('open');
@@ -102,7 +102,7 @@
 
   if ('IntersectionObserver' in window) {
     var links = {};
-    nav.querySelectorAll('a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    if (nav) nav.querySelectorAll('a').forEach(function (a) { var h = a.getAttribute('href') || ''; if (h.charAt(0) === '#') links[h.slice(1)] = a; });
     var secObs = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         var a = links[en.target.id];
