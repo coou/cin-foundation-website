@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=42">
+  <link rel="stylesheet" href="/styles/site.css?v=43">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -184,6 +184,96 @@
     <p>In <a href="https://arxiv.org/abs/2610.28315" rel="noopener noreferrer">a 2026 study with simulated users</a>, researchers found that an assistant with memory carried its guesses forward and the guesses that went uncorrected became recorded facts. People cannot easily get out of this on their own: correcting a guess reveals the true answer, and wrong guesses left in place become entrenched. Of the guards the study compared, instructing the assistant not to state or presuppose personal attributes worked best, bringing leakage back to about the level of an assistant without memory.</p>
     <p>A personal agent is designed to flip this dynamic: <strong>conversational silence is never consent, and an unconfirmed guess must never become an established fact</strong>. In the architecture we want to build, anything an agent infers on its own stays strictly quarantined on your device. We design it so an unconfirmed guess cannot be passed to outside services or treated as confirmed truth, and if an assistant needs to know something personal to help you, it is instructed to ask plainly rather than presupposing attributes in silence.</p>
 
+    <h3>How your agent remembers and forgets: discrete codebooks vs. continuous vector search</h3>
+    <p>When commercial cloud assistants store memories about you, they encode them as continuous floating-point vectors in shared vector databases or fine-tune them into model weights. This creates a severe hidden flaw: your private details become smeared across thousands of non-interpretable latent dimensions. If you later ask the assistant to &ldquo;forget my allergy&rdquo; or &ldquo;erase my former address,&rdquo; true unlearning is mathematically impossible to verify. The concept&rsquo;s semantic traces linger in adjacent vector clusters and attention weights.</p>
+    <p>In our architecture, personal agents use <strong>discrete semantic codebooks and typed slot tables</strong> running strictly on your own hardware. Each personal fact, boundary, and credential occupies an isolated, explicit slot. When you decide to forget something, the local sandbox executes a deterministic zero-fill overwrite of that exact slot and generates a verifiable deletion proof. No residual latent representation remains to leak into future inferences.</p>
+
+    <figure class="memory-demo" id="memory-demo">
+      <h3>Compare memory architectures: what happens when you ask to forget?</h3>
+      <p class="memory-desc">This is an illustration of the design. Compare how commercial cloud assistants handle memory deletion using continuous vector search against an on-device personal agent using discrete codebook slots. Select an everyday scenario and toggle between modes.</p>
+
+      <div class="memory-scenarios" id="mem-scenarios">
+        <button type="button" class="mem-btn" aria-pressed="true">Medical constraint (Allergy test)</button>
+        <button type="button" class="mem-btn" aria-pressed="false">Previous home address</button>
+        <button type="button" class="mem-btn" aria-pressed="false">Past workplace &amp; employer</button>
+        <button type="button" class="mem-btn" aria-pressed="false">Payment &amp; card credential</button>
+      </div>
+
+      <div class="mem-toggle-wrap">
+        <span id="mem-mode-label">Discrete Codebook Memory Active (On-device isolated slots with verifiable zero-fill)</span>
+        <button type="button" class="mem-toggle-btn" id="mem-toggle-btn">Switch to continuous vector search</button>
+      </div>
+
+      <div class="mem-panel">
+        <div class="mem-row">
+          <span class="mem-label">What you asked</span>
+          <span class="mem-val" id="mem-user-request">&ldquo;Forget my penicillin allergy test from last month&mdash;it was a false positive, and I do not want it biasing future prescription reviews.&rdquo;</span>
+        </div>
+        <div class="mem-row">
+          <span class="mem-label">Storage model</span>
+          <span class="mem-val" id="mem-storage">Discrete codebook slot (<code>Slot[0x14]</code> typed as <code>medical_constraint</code>) on your phone</span>
+        </div>
+        <div class="mem-row">
+          <span class="mem-label">Deletion method</span>
+          <span class="mem-val" id="mem-deletion">Deterministic cryptographic zero-fill overwrite (<code>Slot[0x14] -&gt; 0x00...00</code>)</span>
+        </div>
+        <div class="mem-row">
+          <span class="mem-label">Erasure check</span>
+          <span class="mem-val"><span class="mem-badge ok" id="mem-badge">Verifiable zero-fill proof</span></span>
+        </div>
+        <div class="mem-row">
+          <span class="mem-label">Verification</span>
+          <span class="mem-val" id="mem-verify">Cryptographically verified: slot hash changes deterministically to null; 0 bytes and 0 latent vectors remain.</span>
+        </div>
+        <div class="mem-row">
+          <span class="mem-label">Residual guarantee</span>
+          <span class="mem-val" id="mem-guarantee">True deletion: isolated memory slot physically wiped with zero latent bleeding into other memories.</span>
+        </div>
+      </div>
+
+      <div class="mem-table-wrap mem-fallback-table">
+      <table class="mem-table">
+        <caption>Summary comparison: continuous vector search vs. discrete codebook memory</caption>
+        <thead>
+          <tr>
+            <th scope="col">Personal scenario</th>
+            <th scope="col">Continuous vector search (cloud assistant)</th>
+            <th scope="col">Discrete codebook memory (CIN personal agent)</th>
+            <th scope="col">Verification guarantee</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Medical allergy constraint</td>
+            <td>Soft tombstone; latent traces linger in adjacent clusters</td>
+            <td>Deterministic cryptographic zero-fill overwrite</td>
+            <td>Verifiable zero-fill proof (0 bytes residue)</td>
+          </tr>
+          <tr>
+            <td>Previous home address</td>
+            <td>Filtered query mask; coordinates stay in vector graph</td>
+            <td>Physical zero-fill overwrite of location slot</td>
+            <td>Signed proof of empty slot</td>
+          </tr>
+          <tr>
+            <td>Past workplace &amp; employer</td>
+            <td>Latent associations steer salary &amp; completion models</td>
+            <td>Isolated slot key purge with key invalidation</td>
+            <td>Zero cross-talk into future tasks</td>
+          </tr>
+          <tr>
+            <td>Payment &amp; card credential</td>
+            <td>Cached in session logs until cloud log rotation</td>
+            <td>Immediate silicon-level revocation and zero-fill</td>
+            <td>Hardware-enforced instant expiration</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <figcaption>Try different scenarios to see how discrete on-device memory slots guarantee mathematically verifiable forgetting with zero latent residue.</figcaption>
+    </figure>
+
     <h2>Consequences for the agent, not for you</h2>
     <p>A loyal agent is only as good as the reason it stays loyal. Promises in a terms-of-service page are not enough. We want the agent itself to carry the cost of failure. We call this mortal computation, borrowing a term from biology-inspired AI research, where <a href="https://arxiv.org/abs/2311.09589" rel="noopener noreferrer">mortal computation</a> describes intelligence that is tied to a body that can wear out. Our use is an adaptation, and in plain words it means three things:</p>
     <ul>
@@ -261,7 +351,8 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=42" defer></script>
-<script src="/scripts/envelope.js?v=42" defer></script>
+<script src="/scripts/site.js?v=43" defer></script>
+<script src="/scripts/envelope.js?v=43" defer></script>
+<script src="/scripts/memory-demo.js?v=43" defer></script>
 </body>
 </html>
