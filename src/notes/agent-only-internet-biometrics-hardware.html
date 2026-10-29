@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=29">
+  <link rel="stylesheet" href="/styles/site.css?v=42">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -26,16 +26,15 @@
       <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
     </a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
-    <nav class="nav" id="nav" aria-label="Site">
-      <a href="/#for-you">For your life</a>
-      <a href="/#goals">Goals</a>
-      <a href="/#fractured">How it works</a>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="/#architecture">Architecture</a>
+      <a href="/#for-you">For You</a>
+      <a href="/notes" aria-current="true">Blueprints</a>
       <a href="/#lines">Principles</a>
-      <a href="/#futures">Futures</a>
       <a href="/trajectory">Trajectory</a>
-      <a href="/notes" aria-current="true">Notes</a>
-      <a href="/#involved">Get involved</a>
-      <a class="nav-net" href="https://cintnet.org">Network site &#8599;</a>
+      <a href="/founder">Founder</a>
+      <a href="/#involved">Status</a>
+      <a class="nav-net" href="https://cintnet.org" target="_blank" rel="noopener">Network site &#8599;</a>
     </nav>
   </div>
 </header>
@@ -348,7 +347,7 @@
          ================================================================ -->
     <h2>6. In-Sensor Computing &amp; The Two-Tier Local Ledger: Privacy Enforced at the Speed of Light</h2>
     <p>How can your personal agents sense what you need in the physical world without ever storing a raw camera frame or audio recording that could be stolen? The answer is emerging in a new class of silicon hardware known as <strong>in-sensor computing</strong> (including all-optical diffractive deep neural networks, or D&sup2;NNs), where a classification model is physically etched directly <em>on top of</em> or <em>into</em> an active pixel sensor.</p>
-    <p>In a conventional camera, light is first converted into a full digital picture in memory (about 6.2 megabytes per frame at 1080p, or 186 megabytes per second of raw video) before a processor inspects it. Even when software promises to delete the image afterward, a raw picture briefly existed in memory. In-sensor computing changes the physics: incoming light is classified at the speed of light <em>before or during</em> conversion into a digital signal, so <strong>no raw image frame ever enters digital memory (`0 bytes` in RAM)</strong>. Only the symbolic result—such as <em>&ldquo;posture: fall detected&rdquo;</em> or <em>&ldquo;pulse: calm&rdquo;</em>—leaves the sensor readout wire.</p>
+    <p>In a conventional camera, light is first converted into a full digital picture in memory (about 6.2 megabytes per frame at 1080p, or 186 megabytes per second of raw video) before a processor inspects it. Even when software promises to delete the image afterward, a raw picture briefly existed in memory. In-sensor computing changes the physics: incoming light is classified at the speed of light <em>before or during</em> conversion into a digital signal, so <strong>no raw image frame ever enters digital memory (<code>0 bytes</code> in RAM)</strong>. Only the symbolic result—such as <em>&ldquo;posture: fall detected&rdquo;</em> or <em>&ldquo;pulse: calm&rdquo;</em>—leaves the sensor readout wire.</p>
 
     <div class="lib-card" style="margin:1.2rem 0">
       <h3 style="margin-top:0">Three Hardware Approaches to Sensor-Etched Classification</h3>
@@ -421,7 +420,7 @@
     <p>When active sensors classify events in picoseconds or nanoseconds and your six personal agents coordinate throughout the day, they can easily generate <strong>tens of thousands of symbolic events per day</strong>. Reaching out to the global <strong>Collective Ledger</strong> on every single action would choke network bandwidth, add hundreds of milliseconds of delay, and expose a continuous trail of timing metadata.</p>
     <p>Instead, advances in high-bandwidth computing allow a <strong>two-tier ledger architecture</strong>:</p>
     <ul>
-      <li><strong>Tier 1 — Your High-Speed Local Ledger (Cloud Personal Enclave Today &rarr; On-Person Body-Area Network Tomorrow):</strong> Over <strong>99% of daily actions</strong>—sensor readings, local budget checks, home automation, and coordination among your own specialist agents—are computed and recorded on your private, high-bandwidth <strong>Local Ledger</strong>. Today, this high-speed network can run inside a hardware-isolated personal cloud enclave paired with your devices (`~6.4 ms` latency); as high-bandwidth on-person silicon matures, the entire fabric moves physically onto your body (`~0.28 ms` latency).</li>
+      <li><strong>Tier 1 — Your High-Speed Local Ledger (Cloud Personal Enclave Today &rarr; On-Person Body-Area Network Tomorrow):</strong> Over <strong>99% of daily actions</strong>—sensor readings, local budget checks, home automation, and coordination among your own specialist agents—are computed and recorded on your private, high-bandwidth <strong>Local Ledger</strong>. Today, this high-speed network can run inside a hardware-isolated personal cloud enclave paired with your devices (<code>~6.4 ms</code> latency); as high-bandwidth on-person silicon matures, the entire fabric moves physically onto your body (<code>~0.28 ms</code> latency).</li>
       <li><strong>Tier 2 — The Collective Ledger (Sparse Batch Settlement):</strong> Your Local Ledger only reaches out to the shared Collective Ledger <strong>sparsely and asynchronously</strong>—publishing compressed zero-knowledge proofs when you transact across trust boundaries or committing hourly principle-realignment medians. This cuts collective network bandwidth by <strong>over 99.7%</strong> while keeping your everyday life instantaneous and private.</li>
     </ul>
 
@@ -505,7 +504,7 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=14" defer></script>
-<script src="/scripts/everyday.js?v=9" defer></script>
+<script src="/scripts/site.js?v=42" defer></script>
+<script src="/scripts/everyday.js?v=42" defer></script>
 </body>
 </html>

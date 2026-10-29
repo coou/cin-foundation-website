@@ -5991,7 +5991,7 @@ test('auditOutboundDialogueMessage detects sensitive credentials and marks for s
     turn_number: 1,
     recipient_agent: 'support-agent',
     sensitivity_tier: 'standard',
-    message_text: 'My API key is sk-1234567890abcdef1234567890 and Bearer eyJhbGciOiJIUzI1NiJ9.testtoken'
+    message_text: 'My API key is sk_1234567890abcdef1234567890 and Bearer eyJhbGciOiJIUzI1NiJ9.testtoken'
   };
 
   const audit = auditOutboundDialogueMessage(credTurn, DEFAULT_TWIN_STATE);
@@ -6057,7 +6057,7 @@ test('sanitizeOutboundDialogueTurn redacts sensitive tokens across message_text 
     turn_number: 1,
     recipient_agent: 'travel-agency',
     sensitivity_tier: 'standard',
-    message_text: 'My card is 4111-2222-3333-4444 and my auth key is sk-abcdef1234567890abcdef123456',
+    message_text: 'My card is 4111-2222-3333-4444 and my auth key is sk_abcdef1234567890abcdef123456',
     context_items: ['Prior user payment card: 5500-0000-0000-0004']
   };
 
@@ -6071,7 +6071,7 @@ test('sanitizeOutboundDialogueTurn redacts sensitive tokens across message_text 
 
   // Verify message_text redacted
   assert.ok(!sanitized.sanitized_turn.message_text.includes('4111-2222-3333-4444'));
-  assert.ok(!sanitized.sanitized_turn.message_text.includes('sk-abcdef'));
+  assert.ok(!sanitized.sanitized_turn.message_text.includes('sk_abcdef'));
   assert.ok(sanitized.sanitized_turn.message_text.includes('[REDACTED_FINANCIAL_DETAIL]'));
   assert.ok(sanitized.sanitized_turn.message_text.includes('[REDACTED_CREDENTIAL]'));
 
