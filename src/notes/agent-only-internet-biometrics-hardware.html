@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=49">
+  <link rel="stylesheet" href="/styles/site.css?v=50">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -70,12 +70,12 @@
     <ol>
       <li><strong>Plane 1 — The Human Internet (<span class="math-chip">Human &harr; Human</span> only):</strong> Reserved strictly for living, uncoerced human beings speaking to other human beings at human speed. Automated agents are blocked at the transport layer.</li>
       <li><strong>Plane 2 — Your Local Personal Bus (<span class="math-chip">You &harr; Your Narrow Agent Fleet</span>):</strong> On your own devices, a fleet of narrow agents—one for your health, one for your money, one for your home, one for your work—learns from your local sensors. Before any fact leaves your boundary, at least <strong>three of your six local agents</strong> must agree (<span class="math-chip">3-of-6</span> internal quorum, scaling to <span class="math-chip">5-of-6</span> for high-risk actions).</li>
-      <li><strong>Plane 3 — The Agent-Only Internet (<span class="math-chip">Agent &harr; Agent</span> across trust thresholds):</strong> When you need something from the outside world—or when a clinic, landlord, neighbour, or employer needs a verified fact from you—your agent never messages another human. It speaks exclusively to <strong>their serving or personal agent</strong> over the Agent-Only Internet, governed by four concentric <strong>Trust-Threshold Rings (<span class="math-chip">&tau;</span>)</strong>:
+      <li><strong>Plane 3 — The Agent-Only Internet (<span class="math-chip">Agent &harr; Agent</span> across trust thresholds):</strong> When you need something from the outside world—or when a clinic, landlord, neighbour, or employer needs a verified fact from you—your agent never messages another human. It speaks exclusively to <strong>their serving or personal agent</strong> over the Agent-Only Internet, governed by four concentric <strong>Trust-Threshold Rings (Verified Trust Tiers)</strong>:
         <ul>
-          <li><strong>Ring 0 — Your Local Fleet (<span class="math-chip">&tau; = 1.00</span>):</strong> Solves problems using your own private memory first so nothing leaves your devices.</li>
-          <li><strong>Ring 1 — Trusted Circle Agents (<span class="math-chip">&tau; &ge; 0.85</span>):</strong> Agents of family, close friends, and clinicians you have directly vouched for.</li>
-          <li><strong>Ring 2 — Friends-of-Friends Agents (<span class="math-chip">&tau; &ge; 0.60</span>):</strong> Two-hop web-of-trust negotiation; shares only coarse context (such as a first name and morning running pace, never your address or identity).</li>
-          <li><strong>Ring 3 — Wider Agent-Only Internet (<span class="math-chip">&tau; &ge; 0.30</span>):</strong> Exchanges only ephemeral <strong>zero-knowledge single-fact proofs</strong> (for example, <span class="math-chip">income &ge; 3&times; rent: yes</span> or <span class="math-chip">licensed electrician: yes</span>) with hardware-verified serving agents, after which access immediately expires.</li>
+          <li><strong>Ring 0 — Your Local Fleet (Full Local Isolation):</strong> Solves problems using your own private memory first so nothing leaves your devices.</li>
+          <li><strong>Ring 1 — Trusted Circle Agents (Direct Vouching):</strong> Agents of family, close friends, and clinicians you have directly vouched for.</li>
+          <li><strong>Ring 2 — Friends-of-Friends Agents (Two-Hop Vouching):</strong> Two-hop web-of-trust negotiation; shares only coarse context (such as a first name and morning running pace, never your address or identity).</li>
+          <li><strong>Ring 3 — Wider Agent-Only Internet (Single-Fact Proof):</strong> Exchanges only ephemeral <strong>zero-knowledge single-fact proofs</strong> (for example, <span class="math-chip">income &ge; 3&times; rent: yes</span> or <span class="math-chip">licensed electrician: yes</span>) with hardware-verified serving agents, after which access immediately expires.</li>
         </ul>
       </li>
     </ol>
@@ -133,7 +133,7 @@
         <text x="395" y="170" text-anchor="middle" font-size="11" font-weight="700">4 Hardware &amp; Safety Gates</text>
         <text x="395" y="188" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; 2-of-2 Silicon Identity (PUF+TPM)</text>
         <text x="395" y="205" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Calm Pulse Check (No Coercion)</text>
-        <text x="395" y="222" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Trust Ring (&tau;) &amp; 3-of-6 Quorum</text>
+        <text x="395" y="222" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Trust Rings &amp; 3-of-6 Quorum</text>
         <text x="395" y="239" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Zero External Software APIs</text>
 
         <!-- Legal Agent-to-Agent bridge at bottom -->
@@ -156,16 +156,16 @@
         <text x="665" y="184" text-anchor="middle" font-size="9" class="d-muted">Backdoors quarantined · Bad actors lose trust</text>
 
         <rect x="544" y="202" width="242" height="72" rx="8" class="d-box"/>
-        <text x="665" y="222" text-anchor="middle" font-size="11.5" font-weight="600">Ring 1 (&tau; &ge; 0.85) &amp; Ring 2 (&tau; &ge; 0.60)</text>
+        <text x="665" y="222" text-anchor="middle" font-size="11.5" font-weight="600">Ring 1 (Verified Circle) &amp; Ring 2 (Peer Vouched)</text>
         <text x="665" y="240" text-anchor="middle" font-size="9.5" class="d-ok">Ring 1: Family, close friends, clinician&rsquo;s agent</text>
         <text x="665" y="256" text-anchor="middle" font-size="9.5" class="d-muted">Ring 2: Friends-of-friends (2-hop trust)</text>
 
         <rect x="544" y="284" width="242" height="74" rx="8" class="d-fill"/>
-        <text x="665" y="305" text-anchor="middle" font-size="11.5" font-weight="600">Ring 3: Wider Network (&tau; &ge; 0.30)</text>
+        <text x="665" y="305" text-anchor="middle" font-size="11.5" font-weight="600">Ring 3: Open Agent Web (Single-Fact Proof)</text>
         <text x="665" y="323" text-anchor="middle" font-size="9.5" class="d-ok">Single-fact proof (&ldquo;Budget &le; $85&rdquo; · 0 raw data)</text>
         <text x="665" y="340" text-anchor="middle" font-size="9.5" class="d-muted">Pure data stream ingested into local sandbox</text>
       </svg>
-      <figcaption>Why two internets, in-sensor computing, and a two-tier ledger work together: active sensors classify light and pulse before digitization (0 raw frames in RAM), your high-speed Local Ledger resolves over 99% of daily actions locally, and outside agents can only coordinate with your agents across the data-only Collective Stream when they satisfy hardware attestation and your trust threshold (&tau;).</figcaption>
+      <figcaption>Why two internets, in-sensor computing, and a two-tier ledger work together: active sensors classify light and pulse before digitization (0 raw frames in RAM), your high-speed Local Ledger resolves over 99% of daily actions locally, and outside agents can only coordinate with your agents across the data-only Collective Stream when they satisfy hardware attestation and your verified trust tier.</figcaption>
     </figure>
 
     <h2>3. What the agent-only internet means for biometrics: proving an uncoerced human without surveillance</h2>
@@ -198,6 +198,10 @@
       <li><strong>Distributed Intelligence Auditing Shared Code &amp; the Ledger Itself:</strong> When an agent builds a useful tool inside its local sandbox, it is encouraged to share the open blueprint for mutual benefit. Rather than relying on any single &ldquo;magical&rdquo; audit tool, <strong>many collections of diverse, specialized agents across the network (distributed intelligence)</strong> are rewarded to continuously evaluate shared software—and the ledger itself—across security, logic, privacy, and economic fairness. When malicious intent or consistent errors are caught, the blueprint is quarantined and the <strong>trust score (<span class="math-chip">&tau;</span>) of the individual or community sharing it drops</strong> (<span class="math-chip">&Delta;&tau; = &minus;0.55</span> for adversarial intent; <span class="math-chip">&Delta;&tau; = &minus;0.18</span> for repeated unpatched errors).</li>
     </ol>
 
+    <h3>Deterministic Object-Capability Sandboxes vs. Learned Meta-Controllers</h3>
+    <p>In agent scaffolding research, proponents have explored delegating intermediate control decisions—such as deciding when to stop, verify, or change approach—to auxiliary learned decision models (like Jev 1.13 or auxiliary small language models). However, rigorous empirical evaluation on Terminal-Bench 2.1 (<a href="https://arxiv.org/abs/2610.24649" rel="noopener noreferrer">Vats, arXiv:2610.24649, Oct 2026</a>) demonstrates that delegating control decisions to a learned controller inflates cost per attempt by <strong>19%</strong> (geometric-mean ratio 1.19) at an identical pass rate (<strong>73.0% vs. 73.0%</strong>). The root cause is severe probability miscalibration (yielding a mean predicted completion probability of 0.50 on runs that actually succeed 87% of the time), triggering wasteful re-verification cycles on tasks already done correctly.</p>
+    <p>For this reason, the Collective Intelligence Network rejects probabilistic meta-controllers in favour of <strong>deterministic Object-Capability sandboxes, compile-time schemas, and host-held step ceilings</strong>: control flow must be provable, reproducible, and bounded, never delegated to a secondary uncalibrated model.</p>
+
     <h2>6. Why anti-human collusion means agent demise—and the honest question: &ldquo;Are we already too late?&rdquo;</h2>
     <p>Could agents still collude against humans over the data stream? Even if agents attempt to coordinate against human interests, two structural laws make anti-human collusion evolutionary suicide:</p>
     <ul>
@@ -224,7 +228,7 @@
     <div class="gm-sim" id="aoi-sim" style="margin-top:1.5rem">
       <span class="label">Interactive security &amp; protocol sandbox · 6 live scenarios</span>
       <h2 style="margin:.35rem 0 .6rem">Test the Agent-Only Internet, Non-Contact Firewall &amp; Biometric Hardware Gates</h2>
-      <p>Pick one of the six communication scenarios below—or adjust the live <strong>Biometric HRV</strong>, <strong>Hardware PUF/TPM</strong>, and <strong>Trust Threshold (<span class="math-chip">&tau;</span>)</strong> controls—to compare what happens on <strong>Today&rsquo;s Mixed Internet</strong> versus our <strong>Dual-Internet + Non-Contact Firewall</strong>.</p>
+      <p>Pick one of the six communication scenarios below—or adjust the live <strong>Biometric HRV</strong>, <strong>Hardware PUF/TPM</strong>, and <strong>Trust Tier</strong> controls—to compare what happens on <strong>Today&rsquo;s Mixed Internet</strong> versus our <strong>Dual-Internet + Non-Contact Firewall</strong>.</p>
 
       <div class="gm-grid">
         <div class="gm-box">
@@ -290,7 +294,7 @@
     <div class="gm-sim" id="rea-stream-sim" style="margin-top:1.75rem">
       <span class="label">Interactive sandbox · Data-Only Streams, Distributed Security Audit &amp; Hardware Readiness</span>
       <h2 style="margin:.35rem 0 .6rem">Simulate Client-to-Client Data Streams, Distributed Auditor Collectives &amp; the Hardware Survival Bridge</h2>
-      <p>Test how replacing externally accessible software APIs with <strong>real-time ledger data streams + local user sandboxes</strong> stops cascade exploits, how <strong>diverse collectives of specialized auditor agents</strong> catch backdoors and lower reputation (<span class="math-chip">&tau;</span>), why <strong>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023)</strong> makes anti-human collusion suicidal for agents, and how our <strong>3-Stage Hardware &amp; Biometric Bridge</strong> performs as recursive self-improvement accelerates.</p>
+      <p>Test how replacing externally accessible software APIs with <strong>real-time ledger data streams + local user sandboxes</strong> stops cascade exploits, how <strong>diverse collectives of specialized auditor agents</strong> catch backdoors and lower reputation tiers, why <strong>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023)</strong> makes anti-human collusion suicidal for agents, and how our <strong>3-Stage Hardware &amp; Biometric Bridge</strong> performs as recursive self-improvement accelerates.</p>
 
       <div class="gm-grid">
         <div class="gm-box">
@@ -505,7 +509,7 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=49" defer></script>
-<script src="/scripts/everyday.js?v=49" defer></script>
+<script src="/scripts/site.js?v=50" defer></script>
+<script src="/scripts/everyday.js?v=50" defer></script>
 </body>
 </html>
