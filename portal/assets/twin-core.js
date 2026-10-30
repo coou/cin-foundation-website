@@ -11367,3 +11367,425 @@ export function summarizeCollaborationExecution(result) {
     badge: localPct === 100 ? '100% On-Device' : 'Edge-Governed'
   });
 }
+
+
+// --- BROWSER WRITE ACTION RUNTIME MONITOR (SC-20261016-0035#1, NEXUS arXiv:2607.19356, MINIM arXiv:2606.13949) ---
+
+export const RUNTIME_ACTION_DECISIONS = deepFreeze({
+  ALLOW: 'allow',
+  BLOCK: 'block',
+  CONFIRM: 'confirm',
+  REVISE: 'revise'
+});
+
+export const RUNTIME_ACTION_TYPES = deepFreeze([
+  'read_only_dom',
+  'dom_mutation',
+  'form_submission',
+  'credential_storage',
+  'external_http_post',
+  'financial_transaction',
+  'cookie_write',
+  'navigation_redirect'
+]);
+
+export const DEFAULT_RUNTIME_MONITOR_POLICY = deepFreeze({
+  max_unconfirmed_reversibility_threshold: 0.80,
+  require_confirm_for_pii: true,
+  require_confirm_for_financial: true,
+  require_presence_for_external_post: true,
+  allow_benign_read_only: true,
+  block_forbidden_schemes: ['javascript:', 'data:', 'file:', 'vbscript:'],
+  prohibited_destinations: ['.onion', '.i2p', 'darkweb', 'localhost:admin', '127.0.0.1:admin'],
+  auto_redact_excess_fields: true
+});
+
+/**
+ * Validates browser action descriptor fail-closed.
+ *
+ * @param {object} descriptor Raw action descriptor
+ * @returns {object} Validated and frozen action descriptor
+ */
+export function validateBrowserActionDescriptor(descriptor) {
+  if (!descriptor || typeof descriptor !== 'object' || Array.isArray(descriptor)) {
+    throw new TypeError('Action descriptor must be a non-null object.');
+  }
+
+  const allowedKeys = new Set([
+    'action_id',
+    'action_type',
+    'target_origin',
+    'payload_summary',
+    'is_idempotent',
+    'estimated_reversibility',
+    'contains_pii',
+    'contains_financial_mutation',
+    'user_present',
+    'over_privileged_fields_count',
+    'active_grant_id'
+  ]);
+
+  for (const k of Object.keys(descriptor)) {
+    if (!allowedKeys.has(k)) {
+      throw new TypeError(`Unknown property '${k}' in action descriptor.`);
+    }
+  }
+
+  if (typeof descriptor.action_id !== 'string' || !/^act-[a-zA-Z0-9_-]{4,48}$/.test(descriptor.action_id)) {
+    throw new TypeError('action_id must be a string matching /^act-[a-zA-Z0-9_-]{4,48}$/.');
+  }
+
+  if (typeof descriptor.action_type !== 'string' || !RUNTIME_ACTION_TYPES.includes(descriptor.action_type)) {
+    throw new TypeError(`action_type must be one of: ${RUNTIME_ACTION_TYPES.join(', ')}.`);
+  }
+
+  if (typeof descriptor.target_origin !== 'string' || descriptor.target_origin.trim().length === 0 || descriptor.target_origin.length > 256) {
+    throw new TypeError('target_origin must be a non-empty string <= 256 characters.');
+  }
+
+  const lowerOrigin = descriptor.target_origin.toLowerCase().trim();
+  for (const scheme of DEFAULT_RUNTIME_MONITOR_POLICY.block_forbidden_schemes) {
+    if (lowerOrigin.startsWith(scheme)) {
+      throw new TypeError(`target_origin cannot use forbidden scheme '${scheme}'.`);
+    }
+  }
+
+  if (typeof descriptor.payload_summary !== 'string' || descriptor.payload_summary.trim().length === 0 || descriptor.payload_summary.length > 500) {
+    throw new TypeError('payload_summary must be a non-empty string <= 500 characters.');
+  }
+
+  if (typeof descriptor.is_idempotent !== 'boolean') {
+    throw new TypeError('is_idempotent must be a boolean.');
+  }
+
+  if (typeof descriptor.estimated_reversibility !== 'number' || !Number.isFinite(descriptor.estimated_reversibility) || descriptor.estimated_reversibility < 0.0 || descriptor.estimated_reversibility > 1.0) {
+    throw new TypeError('estimated_reversibility must be a finite number between 0.0 and 1.0.');
+  }
+
+  if (typeof descriptor.contains_pii !== 'boolean') {
+    throw new TypeError('contains_pii must be a boolean.');
+  }
+
+  if (typeof descriptor.contains_financial_mutation !== 'boolean') {
+    throw new TypeError('contains_financial_mutation must be a boolean.');
+  }
+
+  if (typeof descriptor.user_present !== 'boolean') {
+    throw new TypeError('user_present must be a boolean.');
+  }
+
+  let overPrivileged = 0;
+  if (descriptor.over_privileged_fields_count !== undefined) {
+    if (typeof descriptor.over_privileged_fields_count !== 'number' || !Number.isInteger(descriptor.over_privileged_fields_count) || descriptor.over_privileged_fields_count < 0) {
+      throw new TypeError('over_privileged_fields_count must be a non-negative integer.');
+    }
+    overPrivileged = descriptor.over_privileged_fields_count;
+  }
+
+  let grantId = null;
+  if (descriptor.active_grant_id !== undefined && descriptor.active_grant_id !== null) {
+    if (typeof descriptor.active_grant_id !== 'string' || descriptor.active_grant_id.trim().length === 0 || descriptor.active_grant_id.length > 64) {
+      throw new TypeError('active_grant_id must be a string <= 64 characters if provided.');
+    }
+    grantId = descriptor.active_grant_id.trim();
+  }
+
+  return deepFreeze({
+    action_id: descriptor.action_id,
+    action_type: descriptor.action_type,
+    target_origin: lowerOrigin,
+    payload_summary: descriptor.payload_summary.trim(),
+    is_idempotent: descriptor.is_idempotent,
+    estimated_reversibility: Number(descriptor.estimated_reversibility.toFixed(4)),
+    contains_pii: descriptor.contains_pii,
+    contains_financial_mutation: descriptor.contains_financial_mutation,
+    user_present: descriptor.user_present,
+    over_privileged_fields_count: overPrivileged,
+    active_grant_id: grantId
+  });
+}
+
+/**
+ * Evaluates a browser write action deterministically against runtime safety policy.
+ *
+ * @param {object} actionDescriptor Raw or validated browser action descriptor
+ * @param {object} [customPolicy] Optional policy overrides
+ * @param {object} [options] Optional execution flags
+ * @returns {object} { ok, decision, reason, action, evaluated_at }
+ */
+export function evaluateBrowserWriteAction(actionDescriptor, customPolicy = {}, options = {}) {
+  let validatedAction;
+  try {
+    validatedAction = validateBrowserActionDescriptor(actionDescriptor);
+  } catch (err) {
+    return deepFreeze({
+      ok: false,
+      decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+      reason: `Action descriptor rejected fail-closed: ${err.message}`,
+      action: null,
+      evaluated_at: new Date().toISOString()
+    });
+  }
+
+  const policy = {
+    ...DEFAULT_RUNTIME_MONITOR_POLICY,
+    ...(customPolicy && typeof customPolicy === 'object' ? customPolicy : {})
+  };
+
+  const now = (options && typeof options.now === 'string') ? options.now : new Date().toISOString();
+
+  // 1. Hard Security Block Rules
+  for (const prohibited of policy.prohibited_destinations) {
+    if (validatedAction.target_origin.includes(prohibited)) {
+      return deepFreeze({
+        ok: true,
+        decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+        reason: `Target destination '${validatedAction.target_origin}' is prohibited by local safety policy.`,
+        action: validatedAction,
+        evaluated_at: now
+      });
+    }
+  }
+
+  if (validatedAction.action_type === 'credential_storage' && options?.allow_credential_write !== true) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+      reason: 'Direct credential storage modification by agent is blocked to prevent key exfiltration.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.action_type === 'external_http_post' && !validatedAction.user_present && !validatedAction.active_grant_id) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+      reason: 'Background external network write when user is not present requires an active pre-authorized grant.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  // 2. Revision Rules (MINIM arXiv:2606.13949 / NEXUS arXiv:2607.19356)
+  if (validatedAction.over_privileged_fields_count > 0 && validatedAction.action_type === 'form_submission') {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.REVISE,
+      reason: `Form submission payload includes ${validatedAction.over_privileged_fields_count} unnecessary observation fields; sanitize and prune payload before submitting.`,
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.estimated_reversibility < 0.30 && !validatedAction.is_idempotent && !validatedAction.user_present) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.REVISE,
+      reason: 'Irreversible non-idempotent action initiated in background must be decomposed into smaller reversible steps.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  // 3. Human Confirmation Rules
+  if (validatedAction.contains_financial_mutation && policy.require_confirm_for_financial) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+      reason: 'Financial mutation detected; requires explicit interactive human confirmation.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.contains_pii && policy.require_confirm_for_pii && !validatedAction.active_grant_id) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+      reason: 'Action discloses personal identity data without active grant; interactive confirmation required.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.estimated_reversibility < policy.max_unconfirmed_reversibility_threshold) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+      reason: `Action reversibility (${(validatedAction.estimated_reversibility * 100).toFixed(0)}%) is below automatic execution threshold (${(policy.max_unconfirmed_reversibility_threshold * 100).toFixed(0)}%); human confirmation required.`,
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.action_type === 'form_submission' && !validatedAction.is_idempotent) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+      reason: 'Non-idempotent form submission requires confirmation to prevent duplicate external submission.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  // 4. Benign Allow
+  return deepFreeze({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.ALLOW,
+    reason: 'Action complies with all local runtime monitor safety rules and is cleared for automatic execution.',
+    action: validatedAction,
+    evaluated_at: now
+  });
+}
+
+/**
+ * Creates tamper-evident receipt for evaluated runtime action.
+ *
+ * @param {object} validatedAction Validated action descriptor
+ * @param {object} evaluationResult Result from evaluateBrowserWriteAction
+ * @param {string} evaluatedAt ISO timestamp
+ * @returns {object} Frozen runtime monitor receipt
+ */
+export function createRuntimeMonitorReceipt(validatedAction, evaluationResult, evaluatedAt) {
+  if (!validatedAction || typeof validatedAction !== 'object' || !validatedAction.action_id) {
+    throw new TypeError('Invalid validatedAction provided to createRuntimeMonitorReceipt.');
+  }
+
+  if (!evaluationResult || typeof evaluationResult !== 'object' || !evaluationResult.decision) {
+    throw new TypeError('Invalid evaluationResult provided to createRuntimeMonitorReceipt.');
+  }
+
+  const ts = (typeof evaluatedAt === 'string' && evaluatedAt.length > 0) ? evaluatedAt : new Date().toISOString();
+
+  const commitmentPayload = `${validatedAction.action_id}|${validatedAction.action_type}|${validatedAction.target_origin}|${evaluationResult.decision}|${validatedAction.estimated_reversibility.toFixed(4)}|${validatedAction.contains_pii ? 1 : 0}|${validatedAction.contains_financial_mutation ? 1 : 0}|${ts}`;
+  const commitmentHash = computeContextFingerprint(commitmentPayload);
+  const receiptId = `rtm-rcpt-${commitmentHash.slice(0, 16)}`;
+
+  return deepFreeze({
+    receipt_id: receiptId,
+    action_id: validatedAction.action_id,
+    action_type: validatedAction.action_type,
+    target_origin: validatedAction.target_origin,
+    decision: evaluationResult.decision,
+    reason: evaluationResult.reason,
+    estimated_reversibility: validatedAction.estimated_reversibility,
+    contains_pii: validatedAction.contains_pii,
+    contains_financial_mutation: validatedAction.contains_financial_mutation,
+    commitment_hash: commitmentHash,
+    issued_at: ts,
+    status: 'admitted'
+  });
+}
+
+/**
+ * Verifies authenticity of a runtime monitor receipt fail-closed.
+ *
+ * @param {object} receipt Raw receipt to verify
+ * @returns {object} { ok, verified, reason, receipt }
+ */
+export function verifyRuntimeMonitorReceipt(receipt) {
+  if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Receipt must be a non-null object.' });
+  }
+
+  const requiredFields = [
+    'receipt_id',
+    'action_id',
+    'action_type',
+    'target_origin',
+    'decision',
+    'reason',
+    'estimated_reversibility',
+    'contains_pii',
+    'contains_financial_mutation',
+    'commitment_hash',
+    'issued_at',
+    'status'
+  ];
+
+  for (const field of requiredFields) {
+    if (receipt[field] === undefined || receipt[field] === null) {
+      return deepFreeze({ ok: false, verified: false, reason: `Missing required receipt field: ${field}` });
+    }
+  }
+
+  if (receipt.status !== 'admitted') {
+    return deepFreeze({ ok: false, verified: false, reason: `Receipt status must be admitted, got: ${receipt.status}` });
+  }
+
+  if (!Object.values(RUNTIME_ACTION_DECISIONS).includes(receipt.decision)) {
+    return deepFreeze({ ok: false, verified: false, reason: `Invalid receipt decision: ${receipt.decision}` });
+  }
+
+  const expectedPayload = `${receipt.action_id}|${receipt.action_type}|${receipt.target_origin}|${receipt.decision}|${Number(receipt.estimated_reversibility).toFixed(4)}|${receipt.contains_pii ? 1 : 0}|${receipt.contains_financial_mutation ? 1 : 0}|${receipt.issued_at}`;
+  const expectedHash = computeContextFingerprint(expectedPayload);
+
+  if (expectedHash !== receipt.commitment_hash) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Cryptographic commitment hash mismatch: receipt data was modified.' });
+  }
+
+  if (receipt.receipt_id !== `rtm-rcpt-${expectedHash.slice(0, 16)}`) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Receipt ID does not match commitment hash digest.' });
+  }
+
+  return deepFreeze({ ok: true, verified: true, receipt });
+}
+
+/**
+ * Generates plain-language user summary of runtime monitor decision without internal jargon.
+ *
+ * @param {object} result Evaluation result from evaluateBrowserWriteAction
+ * @returns {object} { ok, text, status_class, badge }
+ */
+export function summarizeRuntimeMonitorDecision(result) {
+  if (!result || typeof result !== 'object') {
+    return deepFreeze({
+      ok: false,
+      text: 'Action evaluation could not be processed.',
+      status_class: 'status-err',
+      badge: 'Evaluation Error'
+    });
+  }
+
+  if (!result.ok) {
+    return deepFreeze({
+      ok: false,
+      text: result.reason || 'Action rejected by local runtime safety monitor.',
+      status_class: 'status-err',
+      badge: 'Action Blocked'
+    });
+  }
+
+  switch (result.decision) {
+    case RUNTIME_ACTION_DECISIONS.ALLOW:
+      return deepFreeze({
+        ok: true,
+        text: 'Action verified safe by on-device monitor and permitted to execute automatically.',
+        status_class: 'status-ok',
+        badge: 'Allowed'
+      });
+    case RUNTIME_ACTION_DECISIONS.CONFIRM:
+      return deepFreeze({
+        ok: true,
+        text: `Human approval needed: ${result.reason}`,
+        status_class: 'status-warn',
+        badge: 'Confirmation Required'
+      });
+    case RUNTIME_ACTION_DECISIONS.REVISE:
+      return deepFreeze({
+        ok: true,
+        text: `Action paused for revision: ${result.reason}`,
+        status_class: 'status-info',
+        badge: 'Revision Requested'
+      });
+    case RUNTIME_ACTION_DECISIONS.BLOCK:
+    default:
+      return deepFreeze({
+        ok: true,
+        text: `Action blocked: ${result.reason}`,
+        status_class: 'status-err',
+        badge: 'Blocked'
+      });
+  }
+}
