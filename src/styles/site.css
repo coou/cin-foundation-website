@@ -3790,3 +3790,476 @@ select, select option {
   padding-top: 0;
   border-top: none;
 }
+
+
+/* ==========================================================================
+   ?v=50 VISUAL-FIRST ALARM STRIP (.alarm-kpi-strip), 7-LENS WORLD MATRIX
+   (#world-matrix), COMPACT PROGRESS BARS (.st-prog) & PROVENANCE DRAWERS
+   ========================================================================== */
+
+/* 1. Hero 4-KPI Visual Alarm & Co-Intelligence Strip */
+.alarm-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 1rem 0 1.05rem;
+  text-align: left;
+}
+@media (max-width: 960px) {
+  .alarm-kpi-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 540px) {
+  .alarm-kpi-strip {
+    grid-template-columns: 1fr;
+  }
+}
+.ak-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3.5px solid var(--ok);
+  border-radius: 13px;
+  padding: .75rem .9rem;
+  display: grid;
+  gap: .2rem;
+  align-content: start;
+  box-shadow: 0 12px 26px -22px rgba(0, 0, 0, .28);
+}
+.ak-card.bad {
+  border-top-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, var(--card));
+}
+.ak-card.warn {
+  border-top-color: var(--gold);
+  background: color-mix(in srgb, var(--gold) 5%, var(--card));
+}
+.ak-card.ok {
+  border-top-color: var(--ok);
+  background: color-mix(in srgb, var(--ok) 6%, var(--card));
+}
+.ak-card.blue {
+  border-top-color: var(--blue);
+  background: color-mix(in srgb, var(--blue) 6%, var(--card));
+}
+.ak-tag {
+  font: 700 .64rem/1.15 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-3);
+}
+.ak-card.bad .ak-tag { color: var(--accent); }
+.ak-card.warn .ak-tag { color: var(--gold); }
+.ak-card.ok .ak-tag { color: var(--ok); }
+.ak-card.blue .ak-tag { color: var(--blue); }
+.ak-card b {
+  font: 700 clamp(1.25rem, 1.8vw, 1.55rem)/1.1 var(--serif);
+  color: var(--ink);
+}
+.ak-card small {
+  font-size: .75rem;
+  line-height: 1.35;
+  color: var(--ink-2);
+}
+.ak-card small a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* 2. Compact 3-Pillar Top Row (.arch-top + .arch-pill) */
+.arch-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .4rem;
+  margin-bottom: .28rem;
+}
+.arch-top .arch-k {
+  margin-bottom: 0;
+}
+.arch-pill {
+  font: 700 .64rem/1 var(--mono);
+  padding: .22rem .48rem;
+  border-radius: 99px;
+  border: 1px solid var(--rule);
+  white-space: nowrap;
+}
+.arch-pill.ok {
+  background: color-mix(in srgb, var(--ok) 15%, var(--paper));
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 35%, var(--rule));
+}
+.arch-pill.gold {
+  background: color-mix(in srgb, var(--gold) 15%, var(--paper));
+  color: var(--gold);
+  border-color: color-mix(in srgb, var(--gold) 35%, var(--rule));
+}
+.arch-pill.blue {
+  background: color-mix(in srgb, var(--blue) 15%, var(--paper));
+  color: var(--blue);
+  border-color: color-mix(in srgb, var(--blue) 35%, var(--rule));
+}
+
+/* 3. Centerpiece 7-Lens Visual Comparison Atlas (#world-matrix) */
+.world-matrix {
+  padding: clamp(2.4rem, 4.5vw, 3.8rem) 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.wm-tabs {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: .5rem;
+  margin: 1.25rem 0 1.35rem;
+  padding: .45rem;
+  background: var(--card);
+  border: 1.5px solid var(--rule);
+  border-radius: 16px;
+}
+@media (max-width: 1120px) {
+  .wm-tabs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 680px) {
+  .wm-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.wm-tabs button {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  text-align: left;
+  padding: .62rem .68rem;
+  border-radius: 11px;
+  border: 1.5px solid transparent;
+  background: var(--paper);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: all .16s ease;
+}
+.wm-tabs button:hover {
+  border-color: var(--ok);
+  color: var(--ink);
+}
+.wm-tabs button[aria-selected="true"] {
+  background: color-mix(in srgb, var(--ok) 20%, var(--paper));
+  color: var(--ink);
+  border-color: var(--ok);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
+}
+.wm-num {
+  font: 700 .66rem/1 var(--mono);
+  padding: .24rem .34rem;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--ok) 16%, transparent);
+  color: var(--ok);
+  flex-shrink: 0;
+  margin-top: .06rem;
+}
+.wm-tabs button[aria-selected="true"] .wm-num {
+  background: var(--ok);
+  color: #fff;
+}
+.wm-tab-txt {
+  display: grid;
+  gap: .12rem;
+  min-width: 0;
+}
+.wm-tab-txt b {
+  font: 700 .76rem/1.2 var(--sans);
+  color: inherit;
+}
+.wm-tab-txt small {
+  font: 500 .63rem/1.2 var(--mono);
+  opacity: .82;
+}
+
+.wm-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.38fr) minmax(320px, .92fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+@media (max-width: 980px) {
+  .wm-stage {
+    grid-template-columns: 1fr;
+  }
+}
+.wm-visual-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3.5px solid var(--ok);
+  border-radius: 18px;
+  padding: 1.15rem 1.25rem;
+  display: grid;
+  gap: .9rem;
+  align-content: space-between;
+  box-shadow: 0 22px 44px -32px rgba(0, 0, 0, .32);
+}
+.wm-vc-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: .75rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid var(--rule);
+}
+.wm-k {
+  display: block;
+  font: 700 .68rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ok);
+  margin-bottom: .2rem;
+}
+.wm-vc-top h3 {
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  line-height: 1.2;
+  margin: 0;
+  color: var(--ink);
+}
+.wm-cites {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+.wm-svg-wrap {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: .65rem;
+  overflow: hidden;
+}
+.wm-svg-wrap svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.wm-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .6rem;
+}
+@media (max-width: 600px) {
+  .wm-kpis {
+    grid-template-columns: 1fr;
+  }
+}
+.wm-kpi {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ok);
+  border-radius: 10px;
+  padding: .55rem .75rem;
+  display: grid;
+  gap: .14rem;
+}
+.wm-kpi span {
+  font: 600 .65rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ink-3);
+}
+.wm-kpi b {
+  font: 700 .84rem/1.25 var(--mono);
+  color: var(--ink);
+}
+
+.wm-scorecard {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3.5px solid var(--accent);
+  border-radius: 18px;
+  padding: 1.15rem 1.25rem;
+  display: grid;
+  gap: .9rem;
+  align-content: space-between;
+  box-shadow: 0 22px 44px -32px rgba(0, 0, 0, .32);
+}
+.wm-sc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  padding-bottom: .65rem;
+  border-bottom: 1px solid var(--rule);
+}
+.wm-sc-k {
+  font: 700 .68rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-2);
+}
+.wm-legend {
+  display: flex;
+  gap: .75rem;
+  font: 600 .7rem/1 var(--mono);
+  color: var(--ink-2);
+}
+.wm-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: .32rem;
+}
+.wm-legend .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  display: inline-block;
+}
+.wm-legend .dot.bad { background: var(--accent); }
+.wm-legend .dot.ok { background: var(--ok); }
+
+.wm-bars {
+  display: grid;
+  gap: .55rem;
+}
+.wm-bar-item {
+  display: grid;
+  gap: .24rem;
+}
+.wm-bar-lbl {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .5rem;
+  font-size: .78rem;
+  color: var(--ink-2);
+}
+.wm-bar-lbl b {
+  font: 700 .75rem/1 var(--mono);
+  color: var(--ink);
+}
+.wm-bar-dual {
+  display: grid;
+  gap: 3px;
+  background: var(--paper);
+  padding: 4px;
+  border-radius: 7px;
+  border: 1px solid var(--rule);
+}
+.wm-bar-dual i {
+  display: block;
+  height: 6px;
+  border-radius: 4px;
+  transition: width .28s ease;
+}
+.wm-bar-dual i.b-bad { background: var(--accent); }
+.wm-bar-dual i.b-ok { background: var(--ok); }
+
+.wm-cards {
+  display: grid;
+  gap: .55rem;
+}
+.wm-callout {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 3.5px solid var(--ok);
+  border-radius: 10px;
+  padding: .6rem .8rem;
+  display: grid;
+  gap: .16rem;
+}
+.wm-callout.bad { border-left-color: var(--accent); }
+.wm-callout.warn { border-left-color: var(--gold); }
+.wm-callout.ok { border-left-color: var(--ok); }
+.wm-callout span {
+  font: 700 .64rem/1.15 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-3);
+}
+.wm-callout.bad span { color: var(--accent); }
+.wm-callout.warn span { color: var(--gold); }
+.wm-callout.ok span { color: var(--ok); }
+.wm-callout p {
+  margin: 0;
+  font-size: .8rem;
+  line-height: 1.42;
+  color: var(--ink-2);
+}
+.wm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  padding-top: .5rem;
+  border-top: 1px solid var(--rule);
+}
+.wm-actions .btn {
+  padding: .52rem .9rem;
+  font-size: .8rem;
+}
+
+/* 4. Visual Progress Bars in #involved (.st-prog) */
+.st-prog {
+  position: relative;
+  height: 1.35rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: .35rem 0 .45rem;
+  display: flex;
+  align-items: center;
+}
+.st-prog i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: color-mix(in srgb, var(--ok) 28%, transparent);
+  border-right: 2px solid var(--ok);
+}
+.st-prog.warn i {
+  background: color-mix(in srgb, var(--gold) 28%, transparent);
+  border-right-color: var(--gold);
+}
+.st-prog.blue i {
+  background: color-mix(in srgb, var(--blue) 28%, transparent);
+  border-right-color: var(--blue);
+}
+.st-prog span {
+  position: relative;
+  z-index: 1;
+  padding-left: .65rem;
+  font: 700 .68rem/1 var(--mono);
+  color: var(--ink);
+}
+
+/* 5. Collapsible Provenance Drawers (.prov-drawer) & Incident Takeaway Pills (.ws-takeaway) */
+.prov-drawer {
+  border-top: 1px dashed var(--rule);
+  padding-top: .45rem;
+}
+.prov-drawer summary {
+  font: 600 .74rem/1.2 var(--mono);
+  color: var(--ok);
+  cursor: pointer;
+  user-select: none;
+}
+.prov-drawer summary:hover {
+  color: var(--accent);
+}
+.prov-drawer .prov-chain {
+  margin-top: .45rem;
+}
+div.ws-takeaway {
+  margin-top: .45rem;
+  padding: .45rem .65rem;
+  background: var(--card);
+  border-left: 3px solid var(--ok);
+  border-radius: 7px;
+  font-size: .79rem;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+div.ws-takeaway b {
+  color: var(--ok);
+  font-family: var(--mono);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}

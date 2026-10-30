@@ -1,5 +1,5 @@
 // Network home: live trajectory, interactive workbench map, agent fleet pulse, featured scenarios, and latest ideas.
-import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=12';
+import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=13';
 import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 mountAuth(() => {});
@@ -243,3 +243,137 @@ backend().then(async (b) => {
     renderUpdatesFallback(host);
   }
 });
+
+
+// 6. Interactive 7-Lens World Standing vs. CIN Co-Intelligence Studio (#portal-world-matrix)
+const PWM_DATA = {
+  labs: {
+    k: 'Lens 01 of 07 · Incentive & Reward Architecture',
+    title: 'SOTA Model AI Labs vs. CIN Decentralized Co-Intelligence',
+    badge: 'Data Shapley + PCC',
+    bars: [
+      ['Creator & Worker Value Share', '12% vs. 95%', 12, 95],
+      ['Human / AI Boundary Isolation', '15% vs. 98%', 15, 98],
+      ['Philanthropic Recirculation', '18% vs. 92%', 18, 92]
+    ],
+    stand: 'Frontier labs scrape public craft for $0 and rent cloud tokens back to maximize shareholder equity.',
+    gap: 'Competitive cloud AI replaces human workers and floods human communities with persuasive bot swarms.',
+    cin: 'Local LoRA training, Two-Internet isolation, and Data Shapley royalties reward human cooperation.'
+  },
+  safety: {
+    k: 'Lens 02 of 07 · Co-Intelligence vs. Competitive Extinction',
+    title: 'AI Safety Spectrum: Humanity’s Last Resort Before a Hard Pause',
+    badge: 'Execution Lease',
+    bars: [
+      ['Co-Existence Without Global Treaty Lock', '22% vs. 94%', 22, 94],
+      ['Biological Human Agency Protection', '14% vs. 97%', 14, 97],
+      ['1-to-1 Human Control (0 Bot Swarms)', '10% vs. 100%', 10, 100]
+    ],
+    stand: 'Eval labs (METR, Redwood, AISI) provide vital diagnostics while pause advocates seek global treaties.',
+    gap: 'Biological humans (~40 bits/s, millennial evolution) lose in direct competitive intelligence against ASI swarms.',
+    cin: 'CIN builds the last viable barrier before a Hard Pause: Two Internets, execution leases, and 1:1 human control.'
+  },
+  gov: {
+    k: 'Lens 03 of 07 · Public Governance & Post-Labor Stability',
+    title: 'Government Institutions vs. Real-Time Cryptographic Civic Locks',
+    badge: 'NIST AIMS Tenet 7',
+    bars: [
+      ['Response Speed vs. 4.5-Mo Doubling', '14% vs. 96%', 14, 96],
+      ['Post-Labor Fiscal Stability', '19% vs. 91%', 19, 91],
+      ['Resistance to Lobby Capture', '21% vs. 95%', 21, 95]
+    ],
+    stand: 'Legislatures take 24–60 months to pass statutes while automation erodes the human payroll tax base.',
+    gap: 'Regulatory capture favors $1T cloud monopolies while agencies lack real-time runtime verification.',
+    cin: '<10 ms hardware quorum gates (Φ(R)), Tiers 0–4 ZK auditability, and 5D demurrage stabilize public economies.'
+  },
+  research: {
+    k: 'Lens 04 of 07 · Universities & Independent Research',
+    title: 'Public Research: From Compute Starvation to Perpetual Shapley Endowments',
+    badge: 'SPRA 95.3% + 15% Lineage',
+    bars: [
+      ['Downstream Royalty Return to Labs', '2% vs. 92%', 2, 92],
+      ['Context Efficiency (SPRA 95.3%)', '18% vs. 95%', 18, 95],
+      ['Independence from Big-Tech Grants', '15% vs. 94%', 15, 94]
+    ],
+    stand: 'Universities invent core AI architectures on public grants, but closed labs capture 100% of commercial value.',
+    gap: 'Public labs face 1,000:1 GPU starvation, faculty drain, and grant competition against frontier models.',
+    cin: 'Beyond-arXiv Proof-Carrying Blueprints, SPRA compilation, and 15% upstream Data Shapley royalties fund public science.'
+  },
+  enterprise: {
+    k: 'Lens 05 of 07 · Private Enterprise, Clinics & SMBs',
+    title: 'Private Enterprise: Cloud API Tenant vs. Cryptographic PSI Coalition',
+    badge: 'Freedman (2004) PSI',
+    bars: [
+      ['Trade-Secret & Data Sovereignty', '16% vs. 100%', 16, 100],
+      ['Wholesale Margin Retained (0% Toll)', '60% vs. 98%', 60, 98],
+      ['Protection vs. Vertical Oligopoly', '18% vs. 95%', 18, 95]
+    ],
+    stand: 'Businesses rent conglomerate AI wrappers while paying 15%–40% tolls to GPOs, clearinghouses, and SaaS brokers.',
+    gap: 'Streaming proprietary workflows into cloud APIs trains the conglomerate to vertically disintermediate you.',
+    cin: 'On-premise Wasm OCap sandboxes + Private Set Intersection (PSI) buyer coalitions beat oligopoly unit economics.'
+  },
+  humanity: {
+    k: 'Lens 06 of 07 · Global Adoption & The Unprepared Non-Digital Majority',
+    title: 'The Intelligence Gambit: Shielding 60%+ Non-Digital Labor & Resource Trade',
+    badge: '$8 Liveness + 5D Value',
+    bars: [
+      ['Zero-Prompt Voice & Sensor Access', '15% vs. 95%', 15, 95],
+      ['Fair Valuation of Physical Craft (5D)', '11% vs. 93%', 11, 93],
+      ['Protection of Producer Trade Terms', '14% vs. 91%', 14, 91]
+    ],
+    stand: '60%+ of global labor trades physical work, farming, and raw resources in an already unequal global market.',
+    gap: 'Automated buyer cartels use frontier AI as an unleveraged gambit to depress physical commodity and labor prices.',
+    cin: '$8 Pre-ADC liveness sensors, offline voice twins, PSI producer co-ops, and 5D value accounting restore trade parity.'
+  },
+  pair: {
+    k: 'Lens 07 of 07 · Unit Economics & The Only Uncopyable AI Moat',
+    title: 'Economy of “Pair Intelligence”: Why Centralized AI Labs Bleed Billions',
+    badge: '1-to-1 Pair Moat',
+    bars: [
+      ['Defensible Moat vs. Open Weights', '15% vs. 97%', 15, 97],
+      ['Unit Economics ($0 Local vs. -$10B)', '18% vs. 96%', 18, 96],
+      ['User Ownership of 10-Yr Memory', '8% vs. 100%', 8, 100]
+    ],
+    stand: 'Centralized AI companies lose $5B–$15B/yr because $100B closed training runs are distilled into open weights in 90 days.',
+    gap: 'Raw cloud token inference commoditizes toward $0 electricity cost—leaving closed API labs with zero durable moat.',
+    cin: 'The only uncopyable moat is Pair Intelligence: your lived physical craft + 10-year private memory + local LoRA twin.'
+  }
+};
+
+const pwmTabs = document.getElementById('pwm-tabs');
+if (pwmTabs) {
+  pwmTabs.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-pwm]');
+    if (!btn) return;
+    const key = btn.getAttribute('data-pwm');
+    const d = PWM_DATA[key];
+    if (!d) return;
+    pwmTabs.querySelectorAll('[data-pwm]').forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
+    document.getElementById('pwm-k').textContent = d.k;
+    document.getElementById('pwm-title').textContent = d.title;
+    document.getElementById('pwm-badge').textContent = d.badge;
+    document.querySelectorAll('#pwm-svg-box [data-pwm-svg]').forEach((svg) => {
+      svg.hidden = svg.getAttribute('data-pwm-svg') !== key;
+    });
+    document.getElementById('pwm-stand').textContent = d.stand;
+    document.getElementById('pwm-gap').textContent = d.gap;
+    document.getElementById('pwm-cin').textContent = d.cin;
+    const barsHost = document.getElementById('pwm-bars');
+    if (barsHost) {
+      barsHost.textContent = '';
+      d.bars.forEach((b) => {
+        const row = el('div', 'pwm-bar-row');
+        const top = el('div', 'pwm-bar-top');
+        top.append(el('span', null, b[0]), el('b', null, b[1]));
+        const dual = el('div', 'pwm-dual');
+        const iBad = el('i', 'bad');
+        iBad.style.width = b[2] + '%';
+        const iOk = el('i', 'ok');
+        iOk.style.width = b[3] + '%';
+        dual.append(iBad, iOk);
+        row.append(top, dual);
+        barsHost.appendChild(row);
+      });
+    }
+  });
+}

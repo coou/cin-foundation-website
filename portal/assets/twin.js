@@ -1,5 +1,5 @@
 // Twin prototype & 5-Studio Workbench: everything stays in this browser (localStorage). Nothing is sent anywhere.
-import { mountAuth, el, svgEl, getJSON } from './portal.js?v=12';
+import { mountAuth, el, svgEl, getJSON } from './portal.js?v=13';
 import {
   validateTwinState,
   deserializeTwinState,

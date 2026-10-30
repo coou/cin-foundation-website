@@ -1448,6 +1448,7 @@
   if (document.getElementById('cmd-dlg')) return;
 
   var ITEMS = [
+    { cat: 'Interactive Workbenches', title: '0. 7-Lens World Standing vs. CIN Co-Intelligence Atlas', sub: 'Compare SOTA AI Labs, Safety Labs, Governments, Universities, Enterprise & Pair Moat', href: '/#world-matrix' },
     { cat: 'Interactive Workbenches', title: '1. Live 3-Zone Sovereign Boundary & Firewall Canvas', sub: 'Inspect local sandbox, 6 narrow agents, and non-contact firewall', href: '/#architecture' },
     { cat: 'Interactive Workbenches', title: '2. Cryptographic Wire-Protocol & Data Model Inspector', sub: 'OCap-QUIC Stream 0x04, Necula PCC receipts & TIES-LoRA deltas', href: '/#architecture', tab: 'pkt' },
     { cat: 'Interactive Workbenches', title: '3. Zero-Middleman Savings & Royalties Calculator', sub: 'CMS NCCI hospital audit, PSI buyer co-op & Data Shapley royalties', href: '/#wedge-calc' },
@@ -1596,4 +1597,469 @@
       if (dlg.open) closeCmd(); else openCmd();
     }
   });
+})();
+
+
+// ==========================================================================
+// ?v=50 7-LENS VISUAL COMPARISON ATLAS CONTROLLER (#world-matrix)
+// ==========================================================================
+(function () {
+  var wmTabs = document.getElementById('wm-tabs');
+  if (!wmTabs) return;
+
+  var kEl = document.getElementById('wm-k');
+  var titleEl = document.getElementById('wm-title');
+  var citesEl = document.getElementById('wm-cites');
+  var svgWrap = document.getElementById('wm-svg-wrap');
+  var kpisEl = document.getElementById('wm-kpis');
+  var barsEl = document.getElementById('wm-bars');
+  var standEl = document.getElementById('wm-c-stand');
+  var gapEl = document.getElementById('wm-c-gap');
+  var cinEl = document.getElementById('wm-c-cin');
+  var simLink = document.getElementById('wm-sim-link');
+
+  var LENSES = {
+    labs: {
+      k: 'Lens 01 of 07 · Incentive & Reward Architecture (Profit vs. Cooperation)',
+      title: 'SOTA Model AI Labs vs. CIN Decentralized Co-Intelligence',
+      cites: ['[Necula, POPL 1997]', '[Ghorbani & Zou, ICML 2019]', '[Hu et al., LoRA 2022]'],
+      simHref: '#wedge-calc',
+      simText: 'Test Creator Royalties in Calculator ↓',
+      kpis: [
+        ['Creator / Human Royalty Share', '0% vs. 95% (Data Shapley)'],
+        ['Training & Data Custody', 'Central Cloud vs. Local OCap'],
+        ['Reward Objective', 'Equity Rent vs. Verified Proof']
+      ],
+      bars: [
+        ['Creator & Worker Value Retention', '12% vs. 95%', 12, 95],
+        ['Human / AI Boundary Isolation', '15% vs. 98%', 15, 98],
+        ['Philanthropic & Commons Recirculation', '18% vs. 92%', 18, 92],
+        ['Cryptographic Swarm Containment', '20% vs. 96%', 20, 96]
+      ],
+      stand: 'Frontier labs race to scale centralized models, harvesting public code and craft for free while renting intelligence back via API subscriptions.',
+      gap: 'Shareholder valuation demands replacing human labor and locking users into proprietary cloud wrappers—turning AI into competitive displacement.',
+      cin: 'Decentralized local LoRA training, strict Human/AI network isolation, and Data Shapley royalties reward verified cooperation and fund a universal floor.',
+      svg:
+        '<svg viewBox="0 0 760 340" role="img" aria-label="Visual comparison between SOTA Model AI Labs profit extraction loop and CIN cooperative Proof-Carrying Code and Data Shapley reward loop">' +
+          '<defs>' +
+            '<marker id="wm-arr-bad" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ef6a52"/></marker>' +
+            '<marker id="wm-arr-ok" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4fb3a8"/></marker>' +
+          '</defs>' +
+          '<rect x="16" y="16" width="352" height="308" rx="14" fill="rgba(239,106,82,0.06)" stroke="#ef6a52" stroke-width="1.8"/>' +
+          '<text x="34" y="44" font-size="11.5" font-weight="700" font-family="monospace" fill="#ef6a52">SOTA AI LABS · SHAREHOLDER PROFIT LOOP</text>' +
+          '<text x="34" y="64" font-size="11" fill="currentColor" opacity="0.75">OpenAI · Anthropic · Google · Meta · xAI</text>' +
+          '<rect x="34" y="82" width="316" height="54" rx="9" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="48" y="104" font-size="12" font-weight="700" fill="#ef6a52">1. Uncompensated Public Scrape ($0 Paid)</text>' +
+          '<text x="48" y="123" font-size="10.5" fill="#e9e6de" opacity="0.85">Ingests global code, papers &amp; craft into closed $100B clusters</text>' +
+          '<path d="M192,136 L192,156" stroke="#ef6a52" stroke-width="2" marker-end="url(#wm-arr-bad)"/>' +
+          '<rect x="34" y="158" width="316" height="54" rx="9" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="48" y="180" font-size="12" font-weight="700" fill="#ef6a52">2. Centralized API Rent &amp; Lock-In</text>' +
+          '<text x="48" y="199" font-size="10.5" fill="#e9e6de" opacity="0.85">Rents intelligence back via cloud tokens; 0% creator lineage</text>' +
+          '<path d="M192,212 L192,232" stroke="#ef6a52" stroke-width="2" marker-end="url(#wm-arr-bad)"/>' +
+          '<rect x="34" y="234" width="316" height="70" rx="9" fill="rgba(239,106,82,0.14)" stroke="#ef6a52" stroke-width="1.5"/>' +
+          '<text x="48" y="256" font-size="12" font-weight="700" fill="#ef6a52">3. Competitive Displacement &amp; Tail Risk</text>' +
+          '<text x="48" y="275" font-size="10.5" fill="#e9e6de">Replaces human labor for equity valuation; bots flood the open</text>' +
+          '<text x="48" y="292" font-size="10.5" fill="#e9e6de">web while safety remains a voluntary corporate pledge.</text>' +
+          '<rect x="392" y="16" width="352" height="308" rx="14" fill="rgba(79,179,168,0.07)" stroke="#4fb3a8" stroke-width="1.8"/>' +
+          '<text x="410" y="44" font-size="11.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN WORLD · COOPERATIVE PROOF &amp; ROYALTY LOOP</text>' +
+          '<text x="410" y="64" font-size="11" fill="currentColor" opacity="0.75">Decentralized LoRA · Two Internets · Philanthropic Commons</text>' +
+          '<rect x="410" y="82" width="316" height="54" rx="9" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="424" y="104" font-size="12" font-weight="700" fill="#4fb3a8">1. On-Device Personal LoRA + Airlock</text>' +
+          '<text x="424" y="123" font-size="10.5" fill="#e9e6de" opacity="0.85">Trains privately on your silicon; 0 bytes raw PII uploaded</text>' +
+          '<path d="M568,136 L568,156" stroke="#4fb3a8" stroke-width="2" marker-end="url(#wm-arr-ok)"/>' +
+          '<rect x="410" y="158" width="316" height="54" rx="9" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="424" y="180" font-size="12" font-weight="700" fill="#4fb3a8">2. Proof-Carrying Code + TIES-LoRA Merge</text>' +
+          '<text x="424" y="199" font-size="10.5" fill="#e9e6de" opacity="0.85">Peers verify functional proof in Wasm sandboxes before merge</text>' +
+          '<path d="M568,212 L568,232" stroke="#4fb3a8" stroke-width="2" marker-end="url(#wm-arr-ok)"/>' +
+          '<rect x="410" y="234" width="316" height="70" rx="9" fill="rgba(79,179,168,0.15)" stroke="#4fb3a8" stroke-width="1.5"/>' +
+          '<text x="424" y="256" font-size="12" font-weight="700" fill="#4fb3a8">3. 85% / 10% / 5% Shapley Royalty + Commons</text>' +
+          '<text x="424" y="275" font-size="10.5" fill="#e9e6de">85% direct to solver, 10% upstream lineage, 5% verifiers +</text>' +
+          '<text x="424" y="292" font-size="10.5" fill="#e5a93c">broad philanthropic floor ($25k exempt + demurrage recirculation).</text>' +
+        '</svg>'
+    },
+    safety: {
+      k: 'Lens 02 of 07 · Co-Intelligence vs. Competitive Extinction (The Safety Gradient)',
+      title: 'AI Safety Spectrum: Why CIN Is Humanity’s Last Resort Before a Hard Pause',
+      cites: ['[Ororbia & Friston, 2023]', '[METR & Redwood, 2026]', '[Dennis & Van Horn, 1966]'],
+      simHref: '#swarm-lock',
+      simText: 'Test Risk-Scaled Quorum Lock ↓',
+      kpis: [
+        ['Strategic Position', 'Last Resort Before Hard Pause'],
+        ['Biological Protection', 'Two-Internet Airlock + 1:1 Bond'],
+        ['Compute Containment', 'Mortal Computation Lease']
+      ],
+      bars: [
+        ['Co-Existence Without Global Treaty Lock', '22% vs. 94%', 22, 94],
+        ['Protection of Biological Human Agency', '14% vs. 97%', 14, 97],
+        ['Runtime Enforcement (Beyond Eval Pledges)', '28% vs. 96%', 28, 96],
+        ['1-to-1 Human-Bound Control (0 Swarms)', '10% vs. 100%', 10, 100]
+      ],
+      stand: 'Eval labs (METR, Redwood, Apollo, AISI) provide crucial diagnostics and red-teaming, while pause advocates call for global treaties.',
+      gap: 'Human biology (~40 bits/s, millennial evolution) cannot survive direct competitive intelligence against unbound ASI swarms on a shared internet.',
+      cin: 'Before hitting a global pause button, CIN builds a hard barrier between intelligences, mortal computation leases, and 1-to-1 human-bound co-intelligence.',
+      svg:
+        '<svg viewBox="0 0 760 340" role="img" aria-label="4-Zone AI Safety Gradient showing CIN as the last viable co-existence architecture before a Hard Pause">' +
+          '<text x="20" y="30" font-size="11.5" font-weight="700" font-family="monospace" fill="currentColor">THE GLOBAL AI SAFETY &amp; CO-EXISTENCE SPECTRUM (4 ZONES)</text>' +
+          '<rect x="16" y="44" width="168" height="146" rx="11" fill="rgba(239,106,82,0.08)" stroke="#ef6a52" stroke-width="1.5"/>' +
+          '<text x="28" y="66" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">ZONE 1 · ACCELERATION</text>' +
+          '<text x="28" y="86" font-size="11.5" font-weight="700" fill="currentColor">Unbound Competition</text>' +
+          '<text x="28" y="106" font-size="10" fill="currentColor" opacity="0.8">• ASI swarms on open web</text>' +
+          '<text x="28" y="124" font-size="10" fill="currentColor" opacity="0.8">• 1-commander bot armies</text>' +
+          '<text x="28" y="142" font-size="10" fill="currentColor" opacity="0.8">• Biological minds (~40b/s)</text>' +
+          '<text x="28" y="160" font-size="10" fill="#ef6a52" font-weight="700">  displaced &amp; outpaced</text>' +
+
+          '<rect x="194" y="44" width="168" height="146" rx="11" fill="rgba(229,169,60,0.08)" stroke="#e5a93c" stroke-width="1.5"/>' +
+          '<text x="206" y="66" font-size="10.5" font-weight="700" font-family="monospace" fill="#e5a93c">ZONE 2 · EVAL LABS</text>' +
+          '<text x="206" y="86" font-size="11.5" font-weight="700" fill="currentColor">METR · Redwood · AISI</text>' +
+          '<text x="206" y="106" font-size="10" fill="currentColor" opacity="0.8">• Vital capability audits</text>' +
+          '<text x="206" y="124" font-size="10" fill="currentColor" opacity="0.8">• Forensic breakout logs</text>' +
+          '<text x="206" y="142" font-size="10" fill="currentColor" opacity="0.8">• Interpretability probes</text>' +
+          '<text x="206" y="160" font-size="10" fill="#e5a93c" font-weight="700">  Diagnostic, not a barrier</text>' +
+
+          '<rect x="372" y="38" width="204" height="158" rx="12" fill="rgba(79,179,168,0.16)" stroke="#4fb3a8" stroke-width="2.6"/>' +
+          '<rect x="384" y="47" width="180" height="20" rx="5" fill="#4fb3a8"/>' +
+          '<text x="474" y="61" text-anchor="middle" font-size="9.5" font-weight="700" font-family="monospace" fill="#111317">CIN · LAST RESORT BEFORE PAUSE</text>' +
+          '<text x="386" y="86" font-size="12" font-weight="700" fill="#4fb3a8">Co-Intelligence Barrier</text>' +
+          '<text x="386" y="106" font-size="10" fill="currentColor">✓ Two-Internet Airlock (0 Bots)</text>' +
+          '<text x="386" y="124" font-size="10" fill="currentColor">✓ 1-to-1 Human-Bound AI Control</text>' +
+          '<text x="386" y="142" font-size="10" fill="currentColor">✓ Mortal Computation Leases</text>' +
+          '<text x="386" y="160" font-size="10" fill="currentColor">✓ Quorum Gate Φ(R)=1−(1−R)⁵</text>' +
+          '<text x="386" y="179" font-size="10" font-weight="700" fill="#e5a93c">Symbiosis over Competition</text>' +
+
+          '<rect x="586" y="44" width="158" height="146" rx="11" fill="rgba(93,162,213,0.08)" stroke="#5da2d5" stroke-width="1.5"/>' +
+          '<text x="598" y="66" font-size="10.5" font-weight="700" font-family="monospace" fill="#5da2d5">ZONE 4 · HARD PAUSE</text>' +
+          '<text x="598" y="86" font-size="11.5" font-weight="700" fill="currentColor">Global Moratorium</text>' +
+          '<text x="598" y="106" font-size="10" fill="currentColor" opacity="0.8">• GPU cluster shutdowns</text>' +
+          '<text x="598" y="124" font-size="10" fill="currentColor" opacity="0.8">• International treaty</text>' +
+          '<text x="598" y="142" font-size="10" fill="currentColor" opacity="0.8">• Required if Zone 3</text>' +
+          '<text x="598" y="160" font-size="10" fill="#5da2d5" font-weight="700">  barriers are rejected</text>' +
+
+          '<rect x="16" y="208" width="728" height="116" rx="12" fill="#161920" stroke="#2c2f37" stroke-width="1.4"/>' +
+          '<text x="34" y="232" font-size="11" font-weight="700" font-family="monospace" fill="#e5a93c">WHY BIOLOGICAL HUMANS NEED CO-INTELLIGENCE, NOT COMPETITION</text>' +
+          '<line x1="40" y1="298" x2="430" y2="298" stroke="#8c8f96" stroke-width="1" stroke-dasharray="4 3"/>' +
+          '<text x="440" y="302" font-size="10" font-family="monospace" fill="#8c8f96">Human Biological Ceiling (~40 bits/s · Millennial Evolution)</text>' +
+          '<path d="M40,295 Q180,290 280,255 T420,224" fill="none" stroke="#ef6a52" stroke-width="2.5"/>' +
+          '<text x="150" y="248" font-size="10" font-weight="700" fill="#ef6a52">Unbound ASI Swarm (10⁸× faster → Fatal Mismatch)</text>' +
+          '<path d="M40,295 Q200,282 420,268" fill="none" stroke="#4fb3a8" stroke-width="2.5"/>' +
+          '<text x="440" y="270" font-size="10.5" font-weight="700" fill="#4fb3a8">1-to-1 Mortal Pair Intelligence (Bounded &amp; Loyal to You)</text>' +
+        '</svg>'
+    },
+    gov: {
+      k: 'Lens 03 of 07 · Public Governance, Safety & Post-Labor Fiscal Stability',
+      title: 'Government Institutions vs. CIN Real-Time Cryptographic Civic Locks',
+      cites: ['[NIST AIMS Tenet 7]', '[RFC 9449 DPoP]', '[Weiszfeld, 1937]'],
+      simHref: '#power-vis',
+      simText: 'Inspect Power-Proportionate Auditability ↓',
+      kpis: [
+        ['Governance Latency', '24–60 Months vs. <10 ms Gate'],
+        ['Tax & Fiscal Base', 'Eroding Payroll vs. 5D Demurrage'],
+        ['Elite Accountability', 'Lobby Capture vs. Tiers 0–4 ZK']
+      ],
+      bars: [
+        ['Response Speed vs. 4.5-Month AI Doubling', '14% vs. 96%', 14, 96],
+        ['Post-Labor Economic & Tax Stability', '19% vs. 91%', 19, 91],
+        ['Resistance to Oligarch / Lobby Capture', '21% vs. 95%', 21, 95],
+        ['Citizen Privacy with Public Auditability', '24% vs. 97%', 24, 97]
+      ],
+      stand: 'Governments pass static statutes 3–5 years after AI capabilities ship, while relying on human payroll taxes that automation rapidly erodes.',
+      gap: 'Centralized agencies face lobbying capture by $1T labs and cannot verify million-agent cloud compliance without mass citizen surveillance.',
+      cin: 'Hardware-enforced quorum gates (Φ(R)), power-proportionate auditability (Tiers 0–4), and 5D demurrage circulation stabilize economies in real time.',
+      svg:
+        '<svg viewBox="0 0 760 340" role="img" aria-label="Comparison of Government statutory lag and tax erosion versus CIN real-time silicon quorum gates and 5D circulation">' +
+          '<rect x="16" y="16" width="728" height="142" rx="13" fill="rgba(239,106,82,0.06)" stroke="#ef6a52" stroke-width="1.6"/>' +
+          '<text x="34" y="42" font-size="11.5" font-weight="700" font-family="monospace" fill="#ef6a52">TODAY: LEGACY GOVERNMENT STRUCTURE UNDER AI ACCELERATION</text>' +
+          '<rect x="34" y="56" width="220" height="84" rx="9" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="48" y="78" font-size="11.5" font-weight="700" fill="#ef6a52">1. Statutory Lag (3–5 Yrs)</text>' +
+          '<text x="48" y="98" font-size="10" fill="#e9e6de">AI doubles every 4.5 mos;</text>' +
+          '<text x="48" y="114" font-size="10" fill="#e9e6de">8x–64x gap before laws pass</text>' +
+          '<rect x="270" y="56" width="220" height="84" rx="9" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="284" y="78" font-size="11.5" font-weight="700" fill="#ef6a52">2. Payroll Tax Erosion</text>' +
+          '<text x="284" y="98" font-size="10" fill="#e9e6de">80% of state revenue taxes</text>' +
+          '<text x="284" y="114" font-size="10" fill="#e9e6de">human labor replaced by bots</text>' +
+          '<rect x="506" y="56" width="220" height="84" rx="9" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="520" y="78" font-size="11.5" font-weight="700" fill="#ef6a52">3. Regulatory Capture</text>' +
+          '<text x="520" y="98" font-size="10" fill="#e9e6de">Compliance moats favor</text>' +
+          '<text x="520" y="114" font-size="10" fill="#e9e6de">giant cloud oligopolies</text>' +
+
+          '<rect x="16" y="178" width="728" height="146" rx="13" fill="rgba(79,179,168,0.07)" stroke="#4fb3a8" stroke-width="1.8"/>' +
+          '<text x="34" y="204" font-size="11.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN CIVIC ARCHITECTURE: REAL-TIME SILICON GATES &amp; ECONOMIC STABILITY</text>' +
+          '<rect x="34" y="218" width="220" height="88" rx="9" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="48" y="240" font-size="11.5" font-weight="700" fill="#4fb3a8">1. &lt;10 ms Quorum Gate</text>' +
+          '<text x="48" y="260" font-size="10" fill="#e9e6de">NIST AIMS Tenet 7 + Φ(R)</text>' +
+          '<text x="48" y="276" font-size="10" fill="#e9e6de">blocks swarm harm at runtime</text>' +
+          '<rect x="270" y="218" width="220" height="88" rx="9" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="284" y="240" font-size="11.5" font-weight="700" fill="#4fb3a8">2. 5D Demurrage Commons</text>' +
+          '<text x="284" y="260" font-size="10" fill="#e9e6de">$25k household floor exempt;</text>' +
+          '<text x="284" y="276" font-size="10" fill="#e9e6de">idle hoards auto-recirculate</text>' +
+          '<rect x="506" y="218" width="220" height="88" rx="9" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="520" y="240" font-size="11.5" font-weight="700" fill="#4fb3a8">3. Tiers 0–4 Auditability</text>' +
+          '<text x="520" y="260" font-size="10" fill="#e9e6de">Citizens stay 100% private;</text>' +
+          '<text x="520" y="276" font-size="10" fill="#e9e6de">public power carries ZK logs</text>' +
+        '</svg>'
+    },
+    research: {
+      k: 'Lens 04 of 07 · Universities, Public Research & Perpetual Lineage Funding',
+      title: 'Public Research Institutions: From Compute Starvation to Data Shapley Endowments',
+      cites: ['[Leng et al., SPRA 2026]', '[Shapley, 1953]', '[Yadav et al., 2023]'],
+      simHref: '#spra-studio',
+      simText: 'Inspect SPRA 95.3% Token Compiler ↓',
+      kpis: [
+        ['Upstream Academic Royalty', '0% Today vs. 15% Perpetual'],
+        ['Literature Context Cost', '5,500 tok vs. 260 tok (SPRA)'],
+        ['Compute Requirement', '$100M Cluster vs. Peer LoRA']
+      ],
+      bars: [
+        ['Downstream Royalty Return to Universities', '2% vs. 92%', 2, 92],
+        ['Compute & Context Efficiency (SPRA 95.3%)', '18% vs. 95%', 18, 95],
+        ['Reproducible Proof-Carrying Verification', '25% vs. 98%', 25, 98],
+        ['Independence from Big-Tech Cloud Grants', '15% vs. 94%', 15, 94]
+      ],
+      stand: 'Universities originate core breakthroughs (Transformers, Diffusion, LoRA) on public grants, but commercial labs capture 100% of downstream revenue.',
+      gap: 'Academic groups face compute starvation, faculty brain drain, and grant agencies overwhelmed by synthetic AI proposals.',
+      cin: 'Beyond-arXiv Proof-Carrying Blueprints, 95.3% token-saving SPRA schemas, and 15% perpetual Data Shapley lineage royalties sustain public labs.',
+      svg:
+        '<svg viewBox="0 0 760 340" role="img" aria-label="Comparison of university compute starvation versus CIN perpetual Data Shapley academic endowment">' +
+          '<rect x="16" y="16" width="728" height="138" rx="13" fill="rgba(239,106,82,0.06)" stroke="#ef6a52" stroke-width="1.6"/>' +
+          '<text x="34" y="42" font-size="11.5" font-weight="700" font-family="monospace" fill="#ef6a52">BROKEN ACADEMIC PIPELINE: PUBLIC DISCOVERY → PRIVATE MONOPOLY</text>' +
+          '<rect x="34" y="58" width="205" height="76" rx="8" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="46" y="80" font-size="11" font-weight="700" fill="#e9e6de">University Lab Breakthrough</text>' +
+          '<text x="46" y="98" font-size="9.8" fill="#8c8f96">Publishes static PDF on arXiv</text>' +
+          '<text x="46" y="114" font-size="9.8" fill="#ef6a52">$0 downstream royalty hook</text>' +
+          '<path d="M239,96 L273,96" stroke="#ef6a52" stroke-width="2"/>' +
+          '<rect x="275" y="58" width="210" height="76" rx="8" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="287" y="80" font-size="11" font-weight="700" fill="#ef6a52">Frontier Lab Absorbs &amp; Closes</text>' +
+          '<text x="287" y="98" font-size="9.8" fill="#8c8f96">1,000:1 GPU monopoly poaches</text>' +
+          '<text x="287" y="114" font-size="9.8" fill="#8c8f96">faculty &amp; locks weights</text>' +
+          '<path d="M485,96 L519,96" stroke="#ef6a52" stroke-width="2"/>' +
+          '<rect x="521" y="58" width="205" height="76" rx="8" fill="rgba(239,106,82,0.14)" stroke="#ef6a52" stroke-width="1.4"/>' +
+          '<text x="533" y="80" font-size="11" font-weight="700" fill="#ef6a52">Grant &amp; Compute Starvation</text>' +
+          '<text x="533" y="98" font-size="9.8" fill="#e9e6de">Public labs beg for cloud</text>' +
+          '<text x="533" y="114" font-size="9.8" fill="#e9e6de">credits to rent their own ideas</text>' +
+
+          '<rect x="16" y="174" width="728" height="150" rx="13" fill="rgba(79,179,168,0.08)" stroke="#4fb3a8" stroke-width="1.8"/>' +
+          '<text x="34" y="200" font-size="11.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN BEYOND-ARXIV LEDGER: PERPETUAL SHAPLEY ENDOWMENT FOR PUBLIC SCIENCE</text>' +
+          '<rect x="34" y="216" width="205" height="86" rx="8" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="46" y="238" font-size="11" font-weight="700" fill="#4fb3a8">1. SPRA + PCC Blueprint</text>' +
+          '<text x="46" y="256" font-size="9.8" fill="#e9e6de">260-token schema (95.3% saved)</text>' +
+          '<text x="46" y="272" font-size="9.8" fill="#e9e6de">+ deterministic Wasm proof</text>' +
+          '<text x="46" y="288" font-size="9.8" fill="#4fb3a8">Cryptographic lineage hash</text>' +
+          '<path d="M239,259 L273,259" stroke="#4fb3a8" stroke-width="2"/>' +
+          '<rect x="275" y="216" width="210" height="86" rx="8" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="287" y="238" font-size="11" font-weight="700" fill="#4fb3a8">2. Federated TIES-LoRA Grid</text>' +
+          '<text x="287" y="256" font-size="9.8" fill="#e9e6de">Universities co-train 18 MB</text>' +
+          '<text x="287" y="272" font-size="9.8" fill="#e9e6de">specialist adapters across</text>' +
+          '<text x="287" y="288" font-size="9.8" fill="#4fb3a8">peer nodes without $1B cluster</text>' +
+          '<path d="M485,259 L519,259" stroke="#4fb3a8" stroke-width="2"/>' +
+          '<rect x="521" y="216" width="205" height="86" rx="8" fill="rgba(79,179,168,0.16)" stroke="#4fb3a8" stroke-width="1.5"/>' +
+          '<text x="533" y="238" font-size="11" font-weight="700" fill="#e5a93c">3. 15% Upstream Royalty</text>' +
+          '<text x="533" y="256" font-size="9.8" fill="#e9e6de">Every downstream agent task</text>' +
+          '<text x="533" y="272" font-size="9.8" fill="#e9e6de">routes Data Shapley royalties</text>' +
+          '<text x="533" y="288" font-size="9.8" fill="#e5a93c">back to the originating lab</text>' +
+        '</svg>'
+    },
+    enterprise: {
+      k: 'Lens 05 of 07 · Private Enterprise, Clinics & Small Business Coalitions',
+      title: 'Private Enterprise: Cloud API Tenant vs. Cryptographic PSI Coalition',
+      cites: ['[Freedman et al., EUROCRYPT 2004]', '[Coase, 1937]', '[Yadav et al., 2023]'],
+      simHref: '#wedge-calc',
+      simText: 'Test Small Business PSI Co-Op Savings ↓',
+      kpis: [
+        ['Middleman / GPO Toll', '15%–40% Extracted vs. 0%'],
+        ['Trade-Secret Exposure', 'Streamed to Cloud vs. 0 Bytes'],
+        ['Competitive Moat', 'Disintermediated vs. PSI Co-Op']
+      ],
+      bars: [
+        ['Trade-Secret & Customer Data Sovereignty', '16% vs. 100%', 16, 100],
+        ['Wholesale Margin Retained (0% GPO Toll)', '60% vs. 98%', 60, 98],
+        ['Shared Specialist AI Without IP Leakage', '14% vs. 94%', 14, 94],
+        ['Protection Against Vertical Oligopolies', '18% vs. 95%', 18, 95]
+      ],
+      stand: 'Enterprises and independent clinics rent centralized AI wrappers while paying 15%–40% tolls to GPOs, clearinghouses, and SaaS platforms.',
+      gap: 'Streaming proprietary workflows into conglomerate APIs trains the conglomerate to vertically disintermediate the enterprise.',
+      cin: 'Local OCap sandboxes keep trade secrets on-premise while Private Set Intersection (PSI) buyer co-ops and TIES-LoRA out-compete oligopolies.',
+      svg:
+        '<svg viewBox="0 0 760 340" role="img" aria-label="Comparison between Enterprise Cloud API Tenant losing trade secrets and margin versus CIN Local OCap Sandbox and PSI Coalition">' +
+          '<rect x="16" y="16" width="352" height="308" rx="14" fill="rgba(239,106,82,0.06)" stroke="#ef6a52" stroke-width="1.8"/>' +
+          '<text x="34" y="44" font-size="11.5" font-weight="700" font-family="monospace" fill="#ef6a52">STAGNANT ENTERPRISE · CLOUD API TENANT</text>' +
+          '<rect x="34" y="64" width="316" height="72" rx="9" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="48" y="88" font-size="11.5" font-weight="700" fill="#ef6a52">1. Trade Secrets Streamed to Cloud API</text>' +
+          '<text x="48" y="108" font-size="10" fill="#e9e6de">Prompts &amp; customer records flow into</text>' +
+          '<text x="48" y="124" font-size="10" fill="#e9e6de">conglomerate servers via SaaS wrappers</text>' +
+          '<rect x="34" y="150" width="316" height="72" rx="9" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="48" y="174" font-size="11.5" font-weight="700" fill="#ef6a52">2. 15%–40% Middleman &amp; GPO Tolls</text>' +
+          '<text x="48" y="194" font-size="10" fill="#e9e6de">Fragmented clinics &amp; shops overpay</text>' +
+          '<text x="48" y="210" font-size="10" fill="#e9e6de">clearinghouses &amp; supply chain brokers</text>' +
+          '<rect x="34" y="236" width="316" height="70" rx="9" fill="rgba(239,106,82,0.14)" stroke="#ef6a52" stroke-width="1.5"/>' +
+          '<text x="48" y="260" font-size="11.5" font-weight="700" fill="#ef6a52">3. Vertical Disintermediation</text>' +
+          '<text x="48" y="280" font-size="10" fill="#e9e6de">AI conglomerate uses your domain data</text>' +
+          '<text x="48" y="296" font-size="10" fill="#e9e6de">to launch a direct competing service</text>' +
+
+          '<rect x="392" y="16" width="352" height="308" rx="14" fill="rgba(79,179,168,0.07)" stroke="#4fb3a8" stroke-width="1.8"/>' +
+          '<text x="410" y="44" font-size="11.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN ENTERPRISE · OCAP + PSI COALITION</text>' +
+          '<rect x="410" y="64" width="316" height="72" rx="9" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="424" y="88" font-size="11.5" font-weight="700" fill="#4fb3a8">1. On-Premise Wasm OCap Sandbox</text>' +
+          '<text x="424" y="108" font-size="10" fill="#e9e6de">0 bytes of proprietary ERP, clinical, or</text>' +
+          '<text x="424" y="124" font-size="10" fill="#e9e6de">pricing files ever leave local hardware</text>' +
+          '<rect x="410" y="150" width="316" height="72" rx="9" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="424" y="174" font-size="11.5" font-weight="700" fill="#4fb3a8">2. Private Set Intersection (PSI) GPO</text>' +
+          '<text x="424" y="194" font-size="10" fill="#e9e6de">500 independent businesses pool SKU demand</text>' +
+          '<text x="424" y="210" font-size="10" fill="#e9e6de">cryptographically for 22%–34% wholesale cuts</text>' +
+          '<rect x="410" y="236" width="316" height="70" rx="9" fill="rgba(79,179,168,0.16)" stroke="#4fb3a8" stroke-width="1.5"/>' +
+          '<text x="424" y="260" font-size="11.5" font-weight="700" fill="#4fb3a8">3. Guild TIES-LoRA Co-Adaptation</text>' +
+          '<text x="424" y="280" font-size="10" fill="#e9e6de">Merge verified industry adapters without</text>' +
+          '<text x="424" y="296" font-size="10" fill="#e5a93c">exposing client lists—beating giant monopolies</text>' +
+        '</svg>'
+    },
+    humanity: {
+      k: 'Lens 06 of 07 · Global Human Adoption & The Unprepared Non-Digital Majority',
+      title: 'The Intelligence Gambit: Protecting the Non-Digital World’s Labor & Resource Trade',
+      cites: ['[Datta et al., 2022]', '[Freedman et al., 2004]', '[Ostrom, 1990]'],
+      simHref: '#pe-root',
+      simText: 'Explore 30 Global Lives Across 6 Continents ↓',
+      kpis: [
+        ['Global Labor Exposed', '60%+ Physical & Resource Trade'],
+        ['Hardware Entry Cost', '<$8 Pre-ADC Somatic + 8GB Phone'],
+        ['Economic Accounting', '5D Vector (Care, Craft, Ecology)']
+      ],
+      bars: [
+        ['Zero-Prompt Accessibility (Voice + Somatic)', '15% vs. 95%', 15, 95],
+        ['Fair Valuation of Physical Craft & Care (5D)', '11% vs. 93%', 11, 93],
+        ['Protection of Non-Digital Producer Terms', '14% vs. 91%', 14, 91],
+        ['Offline / Low-Bandwidth Device Sovereignty', '20% vs. 96%', 20, 96]
+      ],
+      stand: 'Over 60% of humanity trades physical labor, agriculture, and raw resources in an already unequal global economy with minimal digital cushion.',
+      gap: 'Automated AI commodity cartels weaponize asymmetric intelligence to depress physical labor and resource prices before non-digital regions adapt.',
+      cin: 'Zero-prompt voice + $8 somatic witness hardware, PSI producer cooperatives, and 5D value accounting give every physical worker immediate parity.',
+      svg:
+        '<svg viewBox="0 0 760 340" role="img" aria-label="Visual comparison of the Intelligence Gambit squeezing non-digital labor versus CIN Somatic Witness and 5D Producer Parity">' +
+          '<rect x="16" y="16" width="352" height="308" rx="14" fill="rgba(239,106,82,0.06)" stroke="#ef6a52" stroke-width="1.8"/>' +
+          '<text x="34" y="44" font-size="11.5" font-weight="700" font-family="monospace" fill="#ef6a52">THE UNLEVERAGED INTELLIGENCE GAMBIT</text>' +
+          '<text x="34" y="64" font-size="10.5" fill="currentColor" opacity="0.8">Asymmetric AI Cartels vs. Unprepared Physical Labor</text>' +
+          '<rect x="34" y="82" width="316" height="66" rx="9" fill="#161920" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="48" y="104" font-size="11.5" font-weight="700" fill="#ef6a52">Automated Buyer Cartels (Global North)</text>' +
+          '<text x="48" y="122" font-size="10" fill="#e9e6de">AI supply-chain bots predict harvest &amp; mine</text>' +
+          '<text x="48" y="138" font-size="10" fill="#e9e6de">surpluses to force fire-sale commodity prices</text>' +
+          '<path d="M192,150 L192,172" stroke="#ef6a52" stroke-width="2.2"/>' +
+          '<rect x="34" y="174" width="316" height="128" rx="9" fill="rgba(239,106,82,0.14)" stroke="#ef6a52" stroke-width="1.5"/>' +
+          '<text x="48" y="198" font-size="11.5" font-weight="700" fill="#ef6a52">60%+ Non-Digital Majority Unshielded</text>' +
+          '<text x="48" y="218" font-size="10" fill="#e9e6de">• Smallholder farmers, trades, care &amp; extraction</text>' +
+          '<text x="48" y="236" font-size="10" fill="#e9e6de">• Zero prompt-engineering or cloud GPU access</text>' +
+          '<text x="48" y="254" font-size="10" fill="#e9e6de">• Physical labor devalued while digital rent</text>' +
+          '<text x="48" y="272" font-size="10" font-weight="700" fill="#ef6a52">  extracts 30%–50% of local trade surplus</text>' +
+
+          '<rect x="392" y="16" width="352" height="308" rx="14" fill="rgba(79,179,168,0.07)" stroke="#4fb3a8" stroke-width="1.8"/>' +
+          '<text x="410" y="44" font-size="11.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN PARITY · SOMATIC WITNESS &amp; 5D CO-OPS</text>' +
+          '<text x="410" y="64" font-size="10.5" fill="currentColor" opacity="0.8">Zero-Prompt Hardware + Producer Floor Protection</text>' +
+          '<rect x="410" y="82" width="316" height="66" rx="9" fill="#161920" stroke="#4fb3a8" stroke-width="1.2"/>' +
+          '<text x="424" y="104" font-size="11.5" font-weight="700" fill="#4fb3a8">1. $8 Pre-ADC Somatic Sensor + Offline Voice</text>' +
+          '<text x="424" y="122" font-size="10" fill="#e9e6de">Attests physical craft &amp; effort automatically;</text>' +
+          '<text x="424" y="138" font-size="10" fill="#e9e6de">4-bit local agent runs offline in native dialect</text>' +
+          '<path d="M568,150 L568,172" stroke="#4fb3a8" stroke-width="2.2"/>' +
+          '<rect x="410" y="174" width="316" height="128" rx="9" fill="rgba(79,179,168,0.16)" stroke="#4fb3a8" stroke-width="1.5"/>' +
+          '<text x="424" y="198" font-size="11.5" font-weight="700" fill="#4fb3a8">2. PSI Producer Co-Ops &amp; 5D Value Ledger</text>' +
+          '<text x="424" y="218" font-size="10" fill="#e9e6de">• Farmers &amp; artisans pool supply via PSI to</text>' +
+          '<text x="424" y="236" font-size="10" fill="#e9e6de">  block algorithmic price-dumping</text>' +
+          '<text x="424" y="254" font-size="10" fill="#e9e6de">• 5D Ledger prices Care, Craft &amp; Ecology</text>' +
+          '<text x="424" y="272" font-size="10" font-weight="700" fill="#e5a93c">  alongside code (+38% direct household income)</text>' +
+        '</svg>'
+    },
+    pair: {
+      k: 'Lens 07 of 07 · Unit Economics & The Only Uncopyable AI Moat',
+      title: 'Economy of “Pair Intelligence”: Why Centralized AI Labs Are Unprofitable',
+      cites: ['[Hu et al., LoRA 2022]', '[Yadav et al., 2023]', '[Ghorbani & Zou, 2019]'],
+      simHref: 'https://cintnet.org/twin',
+      simText: 'Open Interactive Pair-Intelligence Twin ↗',
+      kpis: [
+        ['Cloud AI Annual Burn', '-$5B to -$15B / yr (No Moat)'],
+        ['Open-Weight Catch-Up Lag', '60–90 Days via Distillation'],
+        ['True Uncopyable Moat', '1-to-1 Human + Local LoRA Pair']
+      ],
+      bars: [
+        ['Long-Term Defensible Moat vs. Open Weights', '15% vs. 97%', 15, 97],
+        ['Unit Economics ($0 Local vs. -$10B Cloud)', '18% vs. 96%', 18, 96],
+        ['Tacit Human Craft & Somatic Context Depth', '12% vs. 98%', 12, 98],
+        ['User Ownership of Compounding Memory', '8% vs. 100%', 8, 100]
+      ],
+      stand: 'Frontier AI companies lose $5B–$15B a year because $100B closed training runs are distilled into open weights within 90 days, driving raw token prices toward $0.',
+      gap: 'Raw foundation-model intelligence is a rapidly depreciating commodity with zero durable moat against open-source frontier weights.',
+      cin: 'The only uncopyable moat is Pair Intelligence: the 1-to-1 co-adapted bond between your lived physical craft, private 10-year memory vault, and local LoRA adapter.',
+      svg:
+        '<svg viewBox="0 0 760 340" role="img" aria-label="Two-curve chart showing centralized cloud AI moat collapsing toward zero while 1-to-1 Pair Intelligence compounds over time">' +
+          '<rect x="16" y="16" width="728" height="308" rx="14" fill="#161920" stroke="#2c2f37" stroke-width="1.6"/>' +
+          '<text x="36" y="44" font-size="11.5" font-weight="700" font-family="monospace" fill="#e9e6de">ECONOMIC MOAT &amp; UNIT VALUE OVER TIME (2024 → 2030)</text>' +
+          '<line x1="60" y1="275" x2="710" y2="275" stroke="#8c8f96" stroke-width="1.2"/>' +
+          '<line x1="60" y1="68" x2="60" y2="275" stroke="#8c8f96" stroke-width="1.2"/>' +
+          '<text x="60" y="296" font-size="10" font-family="monospace" fill="#8c8f96">Year 1 (frontier launch)</text>' +
+          '<text x="340" y="296" font-size="10" font-family="monospace" fill="#8c8f96">Year 2 (90-day open distillation)</text>' +
+          '<text x="615" y="296" font-size="10" font-family="monospace" fill="#8c8f96">Year 5 (compounding pair)</text>' +
+
+          '<path d="M65,86 Q210,195 390,248 T700,266" fill="none" stroke="#ef6a52" stroke-width="3.2"/>' +
+          '<rect x="82" y="72" width="290" height="52" rx="8" fill="rgba(239,106,82,0.14)" stroke="#ef6a52" stroke-width="1.2"/>' +
+          '<text x="94" y="92" font-size="11" font-weight="700" fill="#ef6a52">Centralized Cloud AI Moat → Collapses to $0</text>' +
+          '<text x="94" y="110" font-size="9.8" fill="#e9e6de">$100B capex commoditized in 90 days by open weights</text>' +
+
+          '<path d="M65,245 Q260,210 450,140 T700,74" fill="none" stroke="#4fb3a8" stroke-width="3.5"/>' +
+          '<rect x="396" y="66" width="308" height="72" rx="8" fill="rgba(79,179,168,0.16)" stroke="#4fb3a8" stroke-width="1.5"/>' +
+          '<text x="410" y="88" font-size="11.5" font-weight="700" fill="#4fb3a8">1-to-1 “Pair Intelligence” Moat (Uncopyable)</text>' +
+          '<text x="410" y="106" font-size="9.8" fill="#e9e6de">Open-weight base + 10-yr private memory + somatic</text>' +
+          '<text x="410" y="122" font-size="9.8" fill="#e5a93c">intuition + local LoRA craft ($0 cloud burn)</text>' +
+
+          '<circle cx="700" cy="74" r="5" fill="#4fb3a8"/>' +
+          '<circle cx="700" cy="266" r="5" fill="#ef6a52"/>' +
+        '</svg>'
+    }
+  };
+
+  function selectLens(key) {
+    var d = LENSES[key];
+    if (!d) return;
+
+    [].forEach.call(wmTabs.querySelectorAll('[data-wm-lens]'), function (btn) {
+      btn.setAttribute('aria-selected', String(btn.getAttribute('data-wm-lens') === key));
+    });
+
+    if (kEl) kEl.textContent = d.k;
+    if (titleEl) titleEl.textContent = d.title;
+    if (citesEl) {
+      citesEl.innerHTML = d.cites.map(function (c) {
+        return '<span class="cite-badge">' + c + '</span>';
+      }).join('');
+    }
+    if (svgWrap) svgWrap.innerHTML = d.svg;
+    if (kpisEl) {
+      kpisEl.innerHTML = d.kpis.map(function (kp) {
+        return '<div class="wm-kpi"><span>' + kp[0] + '</span><b>' + kp[1] + '</b></div>';
+      }).join('');
+    }
+    if (barsEl) {
+      barsEl.innerHTML = d.bars.map(function (b) {
+        return (
+          '<div class="wm-bar-item">' +
+            '<div class="wm-bar-lbl"><span>' + b[0] + '</span><b>' + b[1] + '</b></div>' +
+            '<div class="wm-bar-dual">' +
+              '<i class="b-bad" style="width:' + b[2] + '%"></i>' +
+              '<i class="b-ok" style="width:' + b[3] + '%"></i>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+    if (standEl) standEl.textContent = d.stand;
+    if (gapEl) gapEl.textContent = d.gap;
+    if (cinEl) cinEl.textContent = d.cin;
+    if (simLink) {
+      simLink.href = d.simHref;
+      simLink.textContent = d.simText;
+    }
+  }
+
+  wmTabs.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-wm-lens]');
+    if (!btn) return;
+    selectLens(btn.getAttribute('data-wm-lens'));
+  });
+  var urlLens = (location.search.match(/[?&]lens=([a-z]+)/) || [])[1];
+  if (urlLens && LENSES[urlLens]) {
+    selectLens(urlLens);
+  }
 })();

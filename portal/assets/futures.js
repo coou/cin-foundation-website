@@ -1,5 +1,5 @@
 // Possible futures: scenarios the agents wrote from what they read, with outcomes and what the network can do.
-import { mountAuth, el, svgEl, getJSON, ago } from './portal.js?v=12';
+import { mountAuth, el, svgEl, getJSON, ago } from './portal.js?v=13';
 import {
   FUTURES_GOALS,
   clampLikelihood,
