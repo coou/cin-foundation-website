@@ -1,6 +1,6 @@
 // Ideas and discussion. Everyone can read; signed-in people can post, vote and comment.
 // The agents read every idea every hour; their response (and anything they hid) is in /data/idea-status.json.
-import { backend, mountAuth, signIn, el, getJSON, ago } from './portal.js?v=3';
+import { backend, mountAuth, signIn, el, getJSON, ago } from './portal.js?v=12';
 import { collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, doc, setDoc, deleteDoc, getCountFromServer, getDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { IDEA_CATEGORIES, IDEA_STATUSES, filterIdeas, calculateCategoryCounts, validateIdeaSubmission } from './ideas-logic.js?v=2';
@@ -14,7 +14,11 @@ const form = document.getElementById('idea-form');
 const note = document.getElementById('form-note');
 const filterHost = document.getElementById('category-filters');
 
-function when(ts) { return ts && ts.toDate ? ago(ts.toDate().toISOString()) : ''; }
+function when(ts) {
+  if (!ts) return '';
+  if (typeof ts === 'string') return ago(ts);
+  return ts.toDate ? ago(ts.toDate().toISOString()) : '';
+}
 
 function renderFilterBar(counts) {
   if (!filterHost) return;
@@ -63,20 +67,63 @@ async function renderIdeaList() {
   }
 }
 
+async function buildFallbackIdeas() {
+  const upd = await getJSON('/data/updates.json').catch(() => ({ updates: [] }));
+  const items = Array.isArray(upd.updates) ? upd.updates.slice(0, 8) : [];
+  const kindToCat = {
+    software: 'interface',
+    simulation: 'simulation',
+    research: 'safety',
+    site: 'collective',
+    community: 'value'
+  };
+  return items.map((u, idx) => ({
+    id: u.id || `shipped-${idx}`,
+    data: {
+      title: u.title,
+      body: u.summary,
+      category: kindToCat[u.kind] || 'safety',
+      authorName: 'CIN Agent & Community Stream',
+      createdAt: u.at
+    },
+    status: {
+      status: 'done',
+      note: u.link ? `Shipped & live at ${u.link}` : 'Verified and merged into the public network.'
+    }
+  }));
+}
+
 async function load() {
   status = await getJSON('/data/idea-status.json').catch(() => ({}));
   const b = await backend();
-  if (!b) { list.textContent = 'Discussion is opening shortly.'; return; }
+  if (!b) {
+    allIdeas = await buildFallbackIdeas();
+    const counts = calculateCategoryCounts(allIdeas);
+    renderFilterBar(counts);
+    await renderIdeaList();
+    return;
+  }
   db = b.db;
   let snap;
-  try { snap = await getDocs(query(collection(db, 'ideas'), orderBy('createdAt', 'desc'), limit(100))); }
-  catch (e) { list.textContent = 'Discussion is opening shortly.'; form.querySelector('button').disabled = true; return; }
+  try {
+    snap = await getDocs(query(collection(db, 'ideas'), orderBy('createdAt', 'desc'), limit(100)));
+  } catch (e) {
+    allIdeas = await buildFallbackIdeas();
+    const counts = calculateCategoryCounts(allIdeas);
+    renderFilterBar(counts);
+    await renderIdeaList();
+    return;
+  }
 
   allIdeas = snap.docs.map((d) => ({
     id: d.id,
     data: d.data(),
     status: status[d.id] || {},
   }));
+
+  if (!allIdeas.length) {
+    allIdeas = await buildFallbackIdeas();
+  }
 
   const counts = calculateCategoryCounts(allIdeas);
   renderFilterBar(counts);
@@ -91,9 +138,11 @@ async function card(id, it, s) {
   meta.appendChild(el('span', 'muted', (it.authorName || 'Someone') + ' · ' + when(it.createdAt)));
   c.append(meta, el('h3', null, it.title), el('p', 'body', it.body));
   if (s.note) c.appendChild(el('p', 'notice', 'Our agents: ' + s.note));
+  if (!db) return c;
+
   const row = el('div', 'meta');
   const votes = await getCountFromServer(collection(db, 'ideas', id, 'votes')).then((r) => r.data().count).catch(() => 0);
-  const vote = el('button', 'btn vote', '▲ ' + votes);
+  const vote = el('button', 'btn sm vote', '▲ ' + votes);
   let mine = false;
   if (user) mine = (await getDoc(doc(db, 'ideas', id, 'votes', user.uid)).catch(() => null))?.exists() || false;
   vote.setAttribute('aria-pressed', String(mine));
@@ -101,35 +150,68 @@ async function card(id, it, s) {
     if (!user) { vote.title = 'Sign in to vote'; return; }
     const ref = doc(db, 'ideas', id, 'votes', user.uid);
     if (mine) await deleteDoc(ref); else await setDoc(ref, { createdAt: serverTimestamp() });
-    mine = !mine; const n = parseInt(vote.textContent.slice(2), 10) + (mine ? 1 : -1);
-    vote.textContent = '▲ ' + n; vote.setAttribute('aria-pressed', String(mine));
+    mine = !mine;
+    const n = parseInt(vote.textContent.slice(2), 10) + (mine ? 1 : -1);
+    vote.textContent = '▲ ' + n;
+    vote.setAttribute('aria-pressed', String(mine));
   };
-  const talk = el('button', 'btn', 'Discussion');
+  const talk = el('button', 'btn sm', 'Discussion');
   row.append(vote, talk);
   c.appendChild(row);
-  const thread = el('div', 'comments'); thread.hidden = true; c.appendChild(thread);
-  talk.onclick = () => { thread.hidden = !thread.hidden; if (!thread.hidden && !thread.dataset.loaded) comments(id, thread); };
+  const thread = el('div', 'comments');
+  thread.hidden = true;
+  c.appendChild(thread);
+  talk.onclick = () => {
+    thread.hidden = !thread.hidden;
+    if (!thread.hidden && !thread.dataset.loaded) comments(id, thread);
+  };
   return c;
 }
 
 async function comments(id, host) {
-  host.dataset.loaded = '1'; host.textContent = '';
+  host.dataset.loaded = '1';
+  host.textContent = '';
   const snap = await getDocs(query(collection(db, 'ideas', id, 'comments'), orderBy('createdAt', 'asc'), limit(200))).catch(() => null);
-  (snap ? snap.docs : []).forEach((d) => { const x = d.data(); const p = el('div', 'comment'); p.append(el('b', null, (x.authorName || 'Someone') + ' · ' + when(x.createdAt)), el('div', null, x.body)); host.appendChild(p); });
+  (snap ? snap.docs : []).forEach((d) => {
+    const x = d.data();
+    const p = el('div', 'comment');
+    p.append(el('b', null, (x.authorName || 'Someone') + ' · ' + when(x.createdAt)), el('div', null, x.body));
+    host.appendChild(p);
+  });
   if (user) {
-    const f = el('form', 'stack'); const t = el('textarea'); t.required = true; t.minLength = 2; t.maxLength = 2000; t.placeholder = 'Add to the discussion';
-    const go = el('button', 'btn', 'Post'); f.append(t, go);
-    f.onsubmit = async (e) => { e.preventDefault(); go.disabled = true;
-      await addDoc(collection(db, 'ideas', id, 'comments'), { body: t.value.trim(), authorUid: user.uid, authorName: (user.displayName || 'Member').slice(0, 60), createdAt: serverTimestamp() })
-        .then(() => comments(id, host)).catch(() => { go.disabled = false; f.appendChild(el('p', 'muted', 'That did not post. Comments are 2 to 2,000 characters.')); }); };
+    const f = el('form', 'stack');
+    const t = el('textarea');
+    t.required = true;
+    t.minLength = 2;
+    t.maxLength = 2000;
+    t.placeholder = 'Add to the discussion';
+    const go = el('button', 'btn sm', 'Post');
+    f.append(t, go);
+    f.onsubmit = async (e) => {
+      e.preventDefault();
+      go.disabled = true;
+      await addDoc(collection(db, 'ideas', id, 'comments'), {
+        body: t.value.trim(),
+        authorUid: user.uid,
+        authorName: (user.displayName || 'Member').slice(0, 60),
+        createdAt: serverTimestamp()
+      }).then(() => comments(id, host)).catch(() => {
+        go.disabled = false;
+        f.appendChild(el('p', 'muted', 'That did not post. Comments are 2 to 2,000 characters.'));
+      });
+    };
     host.appendChild(f);
-  } else host.appendChild(el('p', 'muted', 'Sign in to join the discussion.'));
+  } else {
+    host.appendChild(el('p', 'muted', 'Sign in to join the discussion.'));
+  }
 }
 
 form.onsubmit = async (e) => {
   e.preventDefault();
   if (!user || !db) { note.textContent = 'Sign in first.'; return; }
-  const btn = form.querySelector('button'); btn.disabled = true; note.textContent = '';
+  const btn = form.querySelector('button[type="submit"]');
+  if (btn) btn.disabled = true;
+  note.textContent = '';
   const title = form.elements.title.value.trim();
   const body = form.elements.body.value.trim();
   const category = form.elements.category.value;
@@ -137,18 +219,37 @@ form.onsubmit = async (e) => {
   const val = validateIdeaSubmission(title, body, category);
   if (!val.ok) {
     note.textContent = val.error;
-    btn.disabled = false;
+    if (btn) btn.disabled = false;
     return;
   }
 
-  const data = { title, body, category, authorUid: user.uid, authorName: (user.displayName || 'Member').slice(0, 60), createdAt: serverTimestamp() };
-  try { await addDoc(collection(db, 'ideas'), data); form.reset(); note.textContent = 'Thank you. Our agents read every idea, usually within a few hours.'; load(); }
-  catch (err) { note.textContent = 'That did not post. Titles are 5 to 120 characters, descriptions 20 to 4,000.'; }
-  btn.disabled = false;
+  const data = {
+    title,
+    body,
+    category,
+    authorUid: user.uid,
+    authorName: (user.displayName || 'Member').slice(0, 60),
+    createdAt: serverTimestamp()
+  };
+  try {
+    await addDoc(collection(db, 'ideas'), data);
+    form.reset();
+    note.textContent = 'Thank you. Our agents read every idea, usually within a few hours.';
+    load();
+  } catch (err) {
+    note.textContent = 'That did not post. Titles are 5 to 120 characters, descriptions 20 to 4,000.';
+  }
+  if (btn) btn.disabled = false;
 };
 
 const here = document.getElementById('signin-here');
-if (here) here.onclick = () => { const m = document.getElementById('signin-msg'); m.textContent = ''; signIn().then((err) => { m.textContent = err; }); };
+if (here) {
+  here.onclick = () => {
+    const m = document.getElementById('signin-msg');
+    m.textContent = '';
+    signIn().then((err) => { m.textContent = err; });
+  };
+}
 
 const loadTimeout = setTimeout(() => {
   const box = document.getElementById('ideas');

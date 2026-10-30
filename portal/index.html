@@ -4,41 +4,304 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Network · CIN network</title>
-  <meta name="description" content="The open network site of the Collective Intelligence Network: propose and discuss ideas, test the local personal twin prototype, and explore the live trajectory and future scenarios.">
+  <meta name="description" content="The open network workbench of the Collective Intelligence Network: test your hardware-isolated personal twin in the browser, explore 42 near-future scenarios, audit external forecasts, and steer the agent fleet.">
   <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#0d0f13" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://cintnet.org/">
-  <link rel="stylesheet" href="/assets/portal.css?v=7">
+  <link rel="stylesheet" href="/assets/portal.css?v=12">
 </head>
 <body>
 <header class="top">
   <div class="spectrum"></div>
   <div class="wrap">
-    <a class="brand" href="/">CIN network<small>cintnet.org</small></a>
+    <a class="brand" href="/">
+      <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true">
+        <rect x="2" y="2" width="32" height="32" rx="8" fill="#141821" stroke="#2e3442" stroke-width="1.5"/>
+        <path d="M9 13 C9 9, 17 9, 17 15 L17 27 C17 29, 12 29, 12 25" fill="none" stroke="#6aa8e0" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M27 23 C27 27, 19 27, 19 21 L19 9 C19 7, 24 7, 24 11" fill="none" stroke="#4fb3a8" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M13 27 C9 27, 9 19, 15 19 L27 19 C29 19, 29 24, 25 24" fill="none" stroke="#e3b341" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M23 9 C27 9, 27 17, 21 17 L9 17 C7 17, 7 12, 11 12" fill="none" stroke="#ef6a52" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-text">CIN network<small>cintnet.org · open workbench</small></span>
+    </a>
     <nav aria-label="Network">
       <a href="/" aria-current="page">Network</a>
-      <a href="/ideas">Ideas</a>
-      <a href="/futures">Futures</a>
-      <a href="/recognition">Recognition</a>
       <a href="/twin">Your twin</a>
+      <a href="/futures">Futures</a>
+      <a href="/ideas">Ideas</a>
+      <a href="/recognition">Recognition</a>
+      <a class="ext-pill" href="https://collectiveintelligencenetwork.org">Research &amp; Blueprints &#8599;</a>
     </nav>
     <div class="auth" id="auth"></div>
   </div>
 </header>
+
 <main class="wrap">
-  <span class="label">The open network</span>
-  <h1>Build the network with us.</h1>
-  <p class="lede">This is the interactive workbench of the Collective Intelligence Network. Propose and vote on ideas, test a local prototype of your personal twin in your browser, and explore the scenarios and research we track every day.</p>
-  <h2>Is the world moving toward our principles?</h2>
-  <div class="card" id="traj"><p class="muted">Loading the live reading&hellip;</p></div>
-  <h2>Latest ideas</h2>
-  <div class="card" id="latest"><p class="muted">Loading&hellip;</p></div>
-  <p><a class="btn primary" href="/ideas">Share an idea</a> <a class="btn" href="/twin">Try your personal twin</a> <a class="btn" href="/futures">Explore possible futures</a></p>
+  <section class="hero-split" aria-label="Open network overview">
+    <div class="hero-copy">
+      <div>
+        <span class="label">The open network workbench</span>
+        <h1>Build the network, run your personal twin, and steer our agent fleet.</h1>
+        <p class="lede">While <a href="https://collectiveintelligencenetwork.org">collectiveintelligencenetwork.org</a> publishes our peer-reviewed architectures and mathematical blueprints, <strong>cintnet.org</strong> is the live interactive workbench. Test a 100% browser-isolated personal agent sandbox, stress-test 42 near-future scenarios, verify external AI forecasts, and propose tasks directly to our autonomous agent streams.</p>
+        <div class="btn-row">
+          <a class="btn primary" href="/twin">Launch your personal twin &rarr;</a>
+          <a class="btn" href="/futures">Explore 42 future scenarios</a>
+          <a class="btn" href="/ideas">Propose an idea</a>
+          <a class="btn" href="/recognition">Recognition ledger</a>
+        </div>
+      </div>
+
+      <div class="kpi-strip" id="net-kpis">
+        <div class="kpi-card">
+          <small>Trajectory balance</small>
+          <strong id="kpi-traj-val">62 / 100</strong>
+          <span id="kpi-traj-sub">+3.7 in 24h (50 is level)</span>
+        </div>
+        <div class="kpi-card">
+          <small>Verified primary signals</small>
+          <strong id="kpi-sig-val">2,521</strong>
+          <span id="kpi-sig-sub">86% dual-agent agreement</span>
+        </div>
+        <div class="kpi-card">
+          <small>Foresight scenarios</small>
+          <strong id="kpi-scen-val">42</strong>
+          <span id="kpi-scen-sub">STEEP &amp; causal ripple mapped</span>
+        </div>
+        <div class="kpi-card">
+          <small>Local twin sandbox</small>
+          <strong id="kpi-twin-val">205 primitives</strong>
+          <span id="kpi-twin-sub">310 unit tests · 0 bytes egress</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram-card">
+      <div class="diagram-head">
+        <span class="diagram-title">Interactive Architecture · Click any module to open</span>
+        <span class="tag ok">4 Live Workbenches</span>
+      </div>
+      <svg class="svg-diagram" id="net-arch-svg" viewBox="0 0 620 350" role="img" aria-label="Interactive map of the four cintnet.org workbenches connected to the autonomous agent fleet">
+        <rect x="0" y="0" width="620" height="350" fill="#0d0f13"/>
+        <!-- Subtle coordinate grid lines -->
+        <line x1="0" y1="88" x2="620" y2="88" stroke="#181c24" stroke-width="1"/>
+        <line x1="0" y1="175" x2="620" y2="175" stroke="#181c24" stroke-width="1"/>
+        <line x1="0" y1="262" x2="620" y2="262" stroke="#181c24" stroke-width="1"/>
+        <line x1="155" y1="0" x2="155" y2="350" stroke="#181c24" stroke-width="1"/>
+        <line x1="310" y1="0" x2="310" y2="350" stroke="#181c24" stroke-width="1"/>
+        <line x1="465" y1="0" x2="465" y2="350" stroke="#181c24" stroke-width="1"/>
+
+        <!-- Connecting data conduits -->
+        <path d="M210 92 L255 142" stroke="#4fb3a8" stroke-width="2" stroke-dasharray="4 3"/>
+        <path d="M410 92 L365 142" stroke="#6aa8e0" stroke-width="2" stroke-dasharray="4 3"/>
+        <path d="M210 258 L255 208" stroke="#e3b341" stroke-width="2" stroke-dasharray="4 3"/>
+        <path d="M410 258 L365 208" stroke="#ef6a52" stroke-width="2" stroke-dasharray="4 3"/>
+
+        <!-- Center Hub: Autonomous Agent Fleet & Verified Ledger -->
+        <g>
+          <rect x="220" y="132" width="180" height="86" rx="12" fill="#151922" stroke="#6aa8e0" stroke-width="1.8"/>
+          <text x="310" y="154" text-anchor="middle" fill="#6aa8e0" font-family="monospace" font-size="9.5" font-weight="700">CORE VERIFICATION ENGINE</text>
+          <text x="310" y="173" text-anchor="middle" fill="#f0ede6" font-family="sans-serif" font-size="12.5" font-weight="700">37-Stream Agent Fleet</text>
+          <text x="310" y="191" text-anchor="middle" fill="#c5c2b9" font-family="sans-serif" font-size="10">2,521 Primary Sources · 3,298 Audits</text>
+          <text x="310" y="207" text-anchor="middle" fill="#4fb3a8" font-family="monospace" font-size="9.5">86% Dual-Engine Agreement</text>
+        </g>
+
+        <!-- Node 1: Your Personal Twin (/twin) -->
+        <g class="svg-node" data-href="/twin" tabindex="0" role="link" aria-label="Open Your Personal Twin workbench">
+          <rect x="18" y="20" width="215" height="96" rx="11" fill="#12171e" stroke="#4fb3a8" stroke-width="1.8"/>
+          <rect x="28" y="30" width="66" height="16" rx="8" fill="#173330"/>
+          <text x="61" y="41" text-anchor="middle" fill="#4fb3a8" font-family="monospace" font-size="8.5" font-weight="700">/TWIN STUDIO</text>
+          <text x="222" y="41" text-anchor="end" fill="#8c8a82" font-family="monospace" font-size="8.5">LOCAL OCAP</text>
+          <text x="28" y="61" fill="#f0ede6" font-family="serif" font-size="14" font-weight="700">1. Your Personal Twin</text>
+          <text x="28" y="79" fill="#c5c2b9" font-family="sans-serif" font-size="10.2">6-axis value radar, memory airlock,</text>
+          <text x="28" y="93" fill="#c5c2b9" font-family="sans-serif" font-size="10.2">lookahead DAG firewall &amp; ZK proofs.</text>
+          <text x="28" y="108" fill="#4fb3a8" font-family="monospace" font-size="9">100% in-browser · 0 bytes sent &rarr;</text>
+        </g>
+
+        <!-- Node 2: Possible Futures (/futures) -->
+        <g class="svg-node" data-href="/futures" tabindex="0" role="link" aria-label="Open Possible Futures workbench">
+          <rect x="387" y="20" width="215" height="96" rx="11" fill="#12171e" stroke="#6aa8e0" stroke-width="1.8"/>
+          <rect x="397" y="30" width="76" height="16" rx="8" fill="#18293b"/>
+          <text x="435" y="41" text-anchor="middle" fill="#6aa8e0" font-family="monospace" font-size="8.5" font-weight="700">/FUTURES ATLAS</text>
+          <text x="591" y="41" text-anchor="end" fill="#8c8a82" font-family="monospace" font-size="8.5">42 SCENARIOS</text>
+          <text x="397" y="61" fill="#f0ede6" font-family="serif" font-size="14" font-weight="700">2. Possible Futures</text>
+          <text x="397" y="79" fill="#c5c2b9" font-family="sans-serif" font-size="10.2">Near-future worlds, desirable vs.</text>
+          <text x="397" y="93" fill="#c5c2b9" font-family="sans-serif" font-size="10.2">harmful outcomes &amp; likelihood shifts.</text>
+          <text x="397" y="108" fill="#6aa8e0" font-family="monospace" font-size="9">Filter by 6 network goals &rarr;</text>
+        </g>
+
+        <!-- Node 3: Ideas & Governance (/ideas) -->
+        <g class="svg-node" data-href="/ideas" tabindex="0" role="link" aria-label="Open Ideas and Governance workbench">
+          <rect x="18" y="234" width="215" height="96" rx="11" fill="#12171e" stroke="#e3b341" stroke-width="1.8"/>
+          <rect x="28" y="244" width="72" height="16" rx="8" fill="#332814"/>
+          <text x="64" y="255" text-anchor="middle" fill="#e3b341" font-family="monospace" font-size="8.5" font-weight="700">/IDEAS FORUM</text>
+          <text x="222" y="255" text-anchor="end" fill="#8c8a82" font-family="monospace" font-size="8.5">HOURLY TRIAGE</text>
+          <text x="28" y="275" fill="#f0ede6" font-family="serif" font-size="14" font-weight="700">3. Ideas &amp; Governance</text>
+          <text x="28" y="293" fill="#c5c2b9" font-family="sans-serif" font-size="10.2">Propose features, vote on priorities,</text>
+          <text x="28" y="307" fill="#c5c2b9" font-family="sans-serif" font-size="10.2">and watch agents execute accepted work.</text>
+          <text x="28" y="322" fill="#e3b341" font-family="monospace" font-size="9">Reviewed hourly by agent lanes &rarr;</text>
+        </g>
+
+        <!-- Node 4: External Recognition (/recognition) -->
+        <g class="svg-node" data-href="/recognition" tabindex="0" role="link" aria-label="Open Recognition Ledger">
+          <rect x="387" y="234" width="215" height="96" rx="11" fill="#12171e" stroke="#ef6a52" stroke-width="1.8"/>
+          <rect x="397" y="244" width="84" height="16" rx="8" fill="#361c18"/>
+          <text x="439" y="255" text-anchor="middle" fill="#ef6a52" font-family="monospace" font-size="8.5" font-weight="700">/RECOGNITION</text>
+          <text x="591" y="255" text-anchor="end" fill="#8c8a82" font-family="monospace" font-size="8.5">CALIBRATED</text>
+          <text x="397" y="275" fill="#f0ede6" font-family="serif" font-size="14" font-weight="700">4. Recognition Ledger</text>
+          <text x="397" y="293" fill="#c5c2b9" font-family="sans-serif" font-size="10.2">External labs, security disclosures &amp;</text>
+          <text x="397" y="307" fill="#c5c2b9" font-family="sans-serif" font-size="10.2">forecasts verified against reality.</text>
+          <text x="397" y="322" fill="#ef6a52" font-family="monospace" font-size="9">12 labs &amp; researchers credited &rarr;</text>
+        </g>
+      </svg>
+      <p class="diagram-caption">
+        <span>Public inputs: <strong>/ideas</strong> (attributed to your sign-in)</span>
+        <span>Private sandbox: <strong>/twin</strong> (never leaves your device)</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- 4-Card Interactive Workbench Launchpad -->
+  <section aria-label="Interactive Workbenches">
+    <div class="grid-4" id="net-workbenches">
+      <article class="launchpad-card">
+        <div>
+          <svg class="launchpad-svg" viewBox="0 0 260 76" aria-hidden="true">
+            <rect width="260" height="76" fill="#0d0f13"/>
+            <polygon points="48,14 68,25 68,49 48,60 28,49 28,25" fill="#173330" stroke="#4fb3a8" stroke-width="1.6"/>
+            <polygon points="48,22 61,29 58,45 48,52 35,43 33,28" fill="#4fb3a8" opacity="0.45"/>
+            <rect x="88" y="16" width="70" height="18" rx="4" fill="#141821" stroke="#4fb3a8" stroke-width="1.2"/>
+            <text x="123" y="28" text-anchor="middle" fill="#4fb3a8" font-family="monospace" font-size="8.5">OCAP SANDBOX</text>
+            <rect x="88" y="42" width="70" height="18" rx="4" fill="#141821" stroke="#6aa8e0" stroke-width="1.2"/>
+            <text x="123" y="54" text-anchor="middle" fill="#6aa8e0" font-family="monospace" font-size="8.5">MEMORY AIRLOCK</text>
+            <rect x="172" y="28" width="74" height="22" rx="5" fill="#173330" stroke="#4fb3a8" stroke-width="1.4"/>
+            <text x="209" y="42" text-anchor="middle" fill="#f0ede6" font-family="monospace" font-size="8.5">ZK RECEIPT</text>
+            <line x1="158" y1="25" x2="172" y2="36" stroke="#4fb3a8" stroke-width="1.2"/>
+            <line x1="158" y1="51" x2="172" y2="42" stroke="#6aa8e0" stroke-width="1.2"/>
+          </svg>
+          <div class="card-head">
+            <h3>Your Personal Twin</h3>
+            <span class="tag ok">5 Studios</span>
+          </div>
+          <p>Run a local prototype of your personal agent: 6-axis value radar, safety-critical memory airlock, lookahead tool DAG simulator, visual screen shield, and zero-leakage income proofs.</p>
+        </div>
+        <a class="btn primary sm" href="/twin">Open Personal Twin Studio &rarr;</a>
+      </article>
+
+      <article class="launchpad-card">
+        <div>
+          <svg class="launchpad-svg" viewBox="0 0 260 76" aria-hidden="true">
+            <rect width="260" height="76" fill="#0d0f13"/>
+            <circle cx="34" cy="38" r="10" fill="#18293b" stroke="#6aa8e0" stroke-width="1.6"/>
+            <path d="M44 38 C85 38, 95 18, 145 18 L235 18" fill="none" stroke="#4fb3a8" stroke-width="2"/>
+            <path d="M44 38 C85 38, 95 58, 145 58 L235 58" fill="none" stroke="#ef6a52" stroke-width="2" stroke-dasharray="4 3"/>
+            <rect x="148" y="9" width="88" height="16" rx="4" fill="#173330"/>
+            <text x="192" y="20" text-anchor="middle" fill="#4fb3a8" font-family="monospace" font-size="8">WITH CIN: 78%</text>
+            <rect x="148" y="49" width="88" height="16" rx="4" fill="#361c18"/>
+            <text x="192" y="60" text-anchor="middle" fill="#ef6a52" font-family="monospace" font-size="8">EXTRACTION: 18%</text>
+          </svg>
+          <div class="card-head">
+            <h3>Possible Futures</h3>
+            <span class="tag info" id="lp-scen-badge">42 Scenarios</span>
+          </div>
+          <p>Explore concrete 1-to-5 year scenarios derived from primary signals, comparing baseline outcome likelihoods today against likelihoods with CIN safeguards deployed.</p>
+        </div>
+        <a class="btn sm" href="/futures">Explore 42 Scenarios &rarr;</a>
+      </article>
+
+      <article class="launchpad-card">
+        <div>
+          <svg class="launchpad-svg" viewBox="0 0 260 76" aria-hidden="true">
+            <rect width="260" height="76" fill="#0d0f13"/>
+            <rect x="16" y="18" width="66" height="40" rx="6" fill="#332814" stroke="#e3b341" stroke-width="1.4"/>
+            <text x="49" y="36" text-anchor="middle" fill="#e3b341" font-family="monospace" font-size="8.5" font-weight="700">IDEA POST</text>
+            <text x="49" y="48" text-anchor="middle" fill="#c5c2b9" font-family="sans-serif" font-size="8">Vote &amp; Discuss</text>
+            <line x1="82" y1="38" x2="104" y2="38" stroke="#e3b341" stroke-width="1.6"/>
+            <rect x="104" y="18" width="68" height="40" rx="6" fill="#141821" stroke="#6aa8e0" stroke-width="1.4"/>
+            <text x="138" y="36" text-anchor="middle" fill="#6aa8e0" font-family="monospace" font-size="8.5" font-weight="700">AGENT LANE</text>
+            <text x="138" y="48" text-anchor="middle" fill="#c5c2b9" font-family="sans-serif" font-size="8">Hourly Triage</text>
+            <line x1="172" y1="38" x2="192" y2="38" stroke="#4fb3a8" stroke-width="1.6"/>
+            <rect x="192" y="18" width="54" height="40" rx="6" fill="#173330" stroke="#4fb3a8" stroke-width="1.4"/>
+            <text x="219" y="36" text-anchor="middle" fill="#4fb3a8" font-family="monospace" font-size="8.5" font-weight="700">SHIPPED</text>
+            <text x="219" y="48" text-anchor="middle" fill="#f0ede6" font-family="sans-serif" font-size="8">In Code</text>
+          </svg>
+          <div class="card-head">
+            <h3>Ideas &amp; Governance</h3>
+            <span class="tag wip">Hourly Triage</span>
+          </div>
+          <p>Propose a mechanism, simulation, or interface improvement. Our agent streams review every submission within hours and report back where your idea went.</p>
+        </div>
+        <a class="btn sm" href="/ideas">Propose &amp; Vote on Ideas &rarr;</a>
+      </article>
+
+      <article class="launchpad-card">
+        <div>
+          <svg class="launchpad-svg" viewBox="0 0 260 76" aria-hidden="true">
+            <rect width="260" height="76" fill="#0d0f13"/>
+            <rect x="18" y="14" width="105" height="48" rx="6" fill="#141821" stroke="#ef6a52" stroke-width="1.4"/>
+            <text x="70" y="32" text-anchor="middle" fill="#ef6a52" font-family="monospace" font-size="8.5" font-weight="700">PUBLIC FORECAST</text>
+            <text x="70" y="47" text-anchor="middle" fill="#c5c2b9" font-family="sans-serif" font-size="8.5">Logged with Date</text>
+            <line x1="123" y1="38" x2="148" y2="38" stroke="#4fb3a8" stroke-width="1.8"/>
+            <rect x="148" y="14" width="94" height="48" rx="6" fill="#173330" stroke="#4fb3a8" stroke-width="1.5"/>
+            <text x="195" y="32" text-anchor="middle" fill="#4fb3a8" font-family="monospace" font-size="8.5" font-weight="700">VERIFIED TRUE</text>
+            <text x="195" y="47" text-anchor="middle" fill="#f0ede6" font-family="sans-serif" font-size="8.5">Public Attribution</text>
+          </svg>
+          <div class="card-head">
+            <h3>Recognition Ledger</h3>
+            <span class="tag ok" id="lp-rec-badge">12 Credited</span>
+          </div>
+          <p>Credit where it is due: labs, security researchers, and open-source teams recognized for forecasts that came true and standards that keep AI accountable.</p>
+        </div>
+        <a class="btn sm" href="/recognition">Inspect Recognition Ledger &rarr;</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- 2-Column Live Observatory: Trajectory Reading + Agent Fleet Pulse -->
+  <div class="grid-2">
+    <section>
+      <h2>Is the world moving toward our principles?</h2>
+      <div class="card" id="traj">
+        <p class="muted">Loading the live reading&hellip;</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Live agent fleet missions &amp; recent deliveries</h2>
+      <div class="card" id="fleet-pulse">
+        <p class="muted">Loading live agent mission telemetry&hellip;</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- 2-Column Featured Scenarios + Latest Ideas -->
+  <div class="grid-2">
+    <section>
+      <div class="card-head">
+        <h2>Featured near-future scenarios</h2>
+        <a class="btn sm" href="/futures">All 42 scenarios &rarr;</a>
+      </div>
+      <div class="card" id="featured-futures">
+        <p class="muted">Loading recent scenarios&hellip;</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="card-head">
+        <h2>Latest ideas &amp; shipped work</h2>
+        <a class="btn sm primary" href="/ideas">Share an idea &rarr;</a>
+      </div>
+      <div class="card" id="latest">
+        <p class="muted">Loading&hellip;</p>
+      </div>
+    </section>
+  </div>
 </main>
+
 <footer class="site wrap">
-  <p>The open network site of the <a href="https://collectiveintelligencenetwork.org">Collective Intelligence Network</a>. Anything you post in Ideas is public; everything you enter in Your Twin stays in your browser.</p>
+  <span>The open network workbench of the <a href="https://collectiveintelligencenetwork.org">Collective Intelligence Network</a>.</span>
+  <span>Anything you post in <a href="/ideas">Ideas</a> is public; everything you enter in <a href="/twin">Your Twin</a> stays strictly in your browser.</span>
 </footer>
-<script type="module" src="/assets/home.js?v=4"></script>
+<script type="module" src="/assets/home.js?v=12"></script>
 </body>
 </html>

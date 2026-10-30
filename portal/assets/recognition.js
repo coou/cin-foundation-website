@@ -1,5 +1,5 @@
 // Recognition: forecasts that came true, and work that serves the goals.
-import { mountAuth, el, getJSON, ago } from './portal.js?v=3';
+import { mountAuth, el, getJSON, ago } from './portal.js?v=12';
 import {
   RECOGNITION_KINDS,
   filterRecognition,
@@ -126,9 +126,14 @@ getJSON('/data/recognition.json').then((d) => {
   const st = document.getElementById('rstate');
   allItems = (d && Array.isArray(d.recognition)) ? d.recognition : [];
   const cal = (d && d.calibration) || { resolved: 0, correct: 0, partial: 0 };
+  const kpiTotal = document.getElementById('rec-kpi-total');
+  const kpiCal = document.getElementById('rec-kpi-cal');
+  if (kpiTotal && allItems.length) kpiTotal.textContent = String(allItems.length);
+  if (kpiCal && cal.resolved) kpiCal.textContent = `${cal.correct}/${cal.resolved} true`;
+
   if (st) {
     st.textContent = (allItems.length ? allItems.length + ' recognised so far. ' : 'Nothing recognised yet; the agents are starting their record. ') +
-      (cal.resolved ? cal.resolved + ' forecasts checked: ' + cal.correct + ' came true, ' + cal.partial + ' partly.' : 'No forecasts have fallen due yet.');
+      (cal.resolved ? cal.resolved + ' forecasts checked: ' + cal.correct + ' came true, ' + cal.partial + ' partly.' : 'Forecasts are checked as their target dates fall due.');
   }
   const counts = calculateKindCounts(allItems);
   renderFilters(counts);
