@@ -1678,7 +1678,7 @@
           var com = Math.round(v * 0.05);
           return {
             badV: '$0 Royalties · -$' + rent + ',000 Cloud API Rent',
-            okV: '+$' + direct + 'k Direct · +$' + lin + 'k Lineage · +$' + com + 'k Commons'
+            okV: '+$' + (direct + lin) + 'k Creator (95%) + $' + com + 'k Floor'
           };
         }
       },
@@ -2374,12 +2374,12 @@
     svg.append('rect').attr('x', 24).attr('y', 140).attr('width', 372).attr('height', 30).attr('rx', 5)
       .attr('fill', 'rgba(239,106,82,0.16)').attr('stroke', '#ef6a52');
     svg.append('text').attr('x', 32).attr('y', 160).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
-      .text('✗ ' + res.badV.slice(0, 38));
+      .text('✗ ' + res.badV.slice(0, 34));
 
     svg.append('rect').attr('x', 24).attr('y', 176).attr('width', 372).attr('height', 30).attr('rx', 5)
       .attr('fill', 'rgba(79,179,168,0.18)').attr('stroke', '#4fb3a8');
     svg.append('text').attr('x', 32).attr('y', 196).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
-      .text('✓ ' + res.okV.slice(0, 38));
+      .text('✓ ' + res.okV.slice(0, 34));
   }
 
   var wmVizModes = document.getElementById('wm-viz-modes');
@@ -2501,7 +2501,7 @@
 
       // Left: Exponential 4.5-mo AI Doubling vs Flat 40 bits/s Human Biology
       hSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
-        .text('1. THE BIOLOGICAL VS. SILICON SPEED COLLISION (2024–2028)');
+        .text('1. BIOLOGY (~40B/S) VS. AI SWARMS (64×)');
 
       var hx = d3.scaleLinear().domain([0, 6]).range([24, 316]);
       var hy = d3.scaleLinear().domain([0, 64]).range([92, 32]);
@@ -2521,7 +2521,7 @@
 
       // Right: 5-Zone Safety Gradient ("Last Resort Before Pause")
       hSvg.append('text').attr('x', 350).attr('y', 22).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
-        .text('2. CO-INTELLIGENCE AIRLOCK: LAST RESORT BEFORE PAUSE');
+        .text('2. LAST RESORT BEFORE HARD PAUSE');
 
       var hZones = [
         { k: 'e/acc', sub: 'Exposed', w: 56, c: '#ef6a52' },
@@ -2542,7 +2542,7 @@
         curX += z.w;
       });
       hSvg.append('text').attr('x', 350).attr('y', 96).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#e5a93c')
-        .text('✓ Two Internets + 24h Mortal Lease = Co-Exist Without Pause');
+        .text('✓ Two Internets + 24h Lease = Safe Co-Existence');
     }
 
     // 2. 4-Step Proof-Carrying Code & Shapley Royalty Visualizer (#em-d3-svg)

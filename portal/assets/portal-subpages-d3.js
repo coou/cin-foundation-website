@@ -126,7 +126,7 @@
       root.append('text')
         .attr('x', 28).attr('y', 34)
         .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
-        .text('1-TO-1 PAIR INTELLIGENCE MOAT VS. 60-90 DAY CLOUD DISTILLATION CLIFF');
+        .text('1. PAIR MOAT VS. 90-DAY CLOUD CLIFF');
 
       var chartX0 = 52, chartX1 = 430, chartY0 = 198, chartY1 = 52;
       var chartW = chartX1 - chartX0;
@@ -184,7 +184,7 @@
       root.append('text')
         .attr('x', chartX0 + 68).attr('y', yForPct(18) - 6)
         .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
-        .text('60-90 Day Cloud AI Distillation Cliff (Commoditized)');
+        .text('90-Day Cloud Cliff (4% Moat)');
 
       // Uncopyable Pair Moat curve
       root.append('polyline')
@@ -214,7 +214,7 @@
       }
 
       root.append('text')
-        .attr('x', Math.min(335, Math.max(68, selX - 42))).attr('y', selY + 26)
+        .attr('x', Math.min(275, Math.max(68, selX - 42))).attr('y', selY + 26)
         .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('Yr ' + y + ': ' + d.uncopyable + '% Uncopyable');
 
@@ -226,13 +226,13 @@
       root.append('text')
         .attr('x', 476).attr('y', 34)
         .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
-        .text('YEAR ' + y + ' STACKED PAIR MOAT & OCAP FIREWALL');
+        .text('2. YEAR ' + y + ' PAIR MOAT STACK');
 
       var layers = [
-        { label: 'Tacit Human Craft', pct: d.craft, color: '#9d7fe8', desc: 'Embodied judgment & domain taste' },
-        { label: '10-Yr Private Memory', pct: d.memory, color: '#e3b341', desc: 'Pinned constraints & episodic vault' },
-        { label: 'Local Rank-16 LoRA', pct: d.lora, color: '#4fb3a8', desc: 'On-device preference weight deltas' },
-        { label: 'Commodity Open Base', pct: d.base, color: '#6aa8e0', desc: 'Distilled 60-90d open backbone' }
+        { label: '1. Tacit Craft', pct: d.craft, color: '#9d7fe8', desc: 'Embodied judgment' },
+        { label: '2. 10-Yr Memory', pct: d.memory, color: '#e3b341', desc: 'Private episodic vault' },
+        { label: '3. Local LoRA', pct: d.lora, color: '#4fb3a8', desc: 'Rank-16 weight deltas' },
+        { label: '4. Open Base', pct: d.base, color: '#6aa8e0', desc: '90d commodity model' }
       ];
 
       for (var l = 0; l < layers.length; l++) {

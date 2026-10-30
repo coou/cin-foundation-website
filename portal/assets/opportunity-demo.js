@@ -305,7 +305,7 @@
       .attr('stroke-dasharray', '4 3');
 
     hubG.append('rect')
-      .attr('x', -72).attr('y', -46).attr('width', 144).attr('height', 92).attr('rx', 12)
+      .attr('x', -84).attr('y', -46).attr('width', 168).attr('height', 92).attr('rx', 12)
       .attr('fill', '#162226').attr('stroke', '#4fb3a8').attr('stroke-width', 2.2);
 
     hubG.append('text')
