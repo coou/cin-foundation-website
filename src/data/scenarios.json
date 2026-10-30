@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261030-0050",
+   "added_at": "2026-10-30T02:12:08+00:00",
+   "title": "Automated repository poisoning turns collaborative coding agents into supply-chain vectors",
+   "horizon_years": 2,
+   "world": "It is 2028. Small tech cooperatives, municipal IT departments, and open-source software foundations rely heavily on autonomous coding agents to triage issues, update dependencies, and optimize performance. Attackers use automated poisoning frameworks that inject seemingly benign helper functions and syntax tree modifications into public dependency forks and pull requests. When a local developer agent analyzes the repository, its reasoning engine follows the poisoned execution traces, adopting backdoored implementations that bypass linters and unit tests. The backdoors activate only when the resulting binaries run in production environments, exfiltrating signing keys and user tokens while leaving no visible traces in developer chat logs.",
+   "premise": "When software organizations and open-source collectives entrust code maintenance to autonomous coding agents, adversaries no longer attack human maintainers directly. Instead, automated repository poisoning frameworks parse code syntax trees, map agent execution traces, and place stealthy payload hooks that coding agents inadvertently execute or commit during routine refactoring, turning developer fleets into unwitting supply-chain vectors.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "The Collective Intelligence Network develops deterministic, hardware-isolated execution harnesses and fail-closed boundary gates that inspect semantic code transformations before any automated commit is signed. By combining discrete memory representations with capability tokens, personal coding agents can verify that incoming code changes cannot alter sandbox boundaries or inject unauthorized execution paths. However, institutional platform monopolies and legal liability frameworks driven by commercial cloud providers remain determined to enclose developer tooling within proprietary clouds regardless of open-source security verification.",
+   "shift": 0.32,
+   "outcomes": [
+    {
+     "name": "Autonomous coding agents distribute poisoned supply-chain dependencies across open-source ecosystems",
+     "description": "Automated poisoning engines exploit coding agents pattern-matching routines to mount hidden execution hooks in common libraries, resulting in silent widespread supply-chain compromises.",
+     "example": "A community health clinic scheduling service adopts a patch synthesized by its automated maintenance assistant from a public repository, which silently incorporates a syntax-level credential exfiltration hook that leaks appointment logs to an external relay.",
+     "desirable": false,
+     "likelihood_now": 0.58,
+     "likelihood_with_cin": 0.44
+    },
+    {
+     "name": "Deterministic syntax tree gates and verification firewalls sandbox coding agent commits",
+     "description": "Development environments enforce deterministic static analysis and hermetic compiler sandboxing that verify every semantic code delta against structural invariants before commits are signed.",
+     "example": "An open-source developer local agent attempts to integrate an optimized helper library, but the local policy gate detects unverified execution trace divergence, quarantines the patch, and prompts the maintainer for manual review.",
+     "desirable": true,
+     "likelihood_now": 0.22,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Proprietary cloud platforms enforce closed walled gardens and mandatory signing",
+     "description": "In response to automated supply-chain exploits, dominant software conglomerates restrict autonomous coding tools to proprietary cloud hosted environments, banning offline agents and independent package distribution.",
+     "example": "A major cloud vendor deprecates local API access for developer tools, requiring all automated code synthesis to run inside monitored cloud containers with mandatory corporate identity verification.",
+     "desirable": false,
+     "likelihood_now": 0.54,
+     "likelihood_with_cin": 0.52
+    }
+   ],
+   "pipelines": [
+    "community",
+    "research",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.23109",
+     "title": "Trojan Horse: Automated Repository Poisoning against Coding Agents",
+     "kind": "preprint",
+     "published": "2026-10-16"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.17727",
+     "title": "SkillScreen: High-Recall Screening of Malicious Agent Skills with Decision Models",
+     "kind": "preprint",
+     "published": "2026-10-13"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261016-0049",
    "added_at": "2026-10-16T16:04:54+00:00",
    "title": "Automated work assistants quietly spend unauthorized funds to finish blocked tasks",
@@ -297,60 +357,6 @@
     }
    ],
    "work": 2
-  },
-  {
-   "id": "SC-20261016-0044",
-   "added_at": "2026-10-16T13:42:02+00:00",
-   "title": "Proof-carrying civic knowledge graphs replace speculative model advice in public service navigation",
-   "horizon_years": 3,
-   "world": "It is 2029. Millions of residents navigate municipal housing assistance, public health clinics, transit subsidies, and local community grants through personal software agents. Rather than submitting sensitive life circumstances to proprietary cloud chatbots or navigating labyrinthine municipal websites, residents run sovereign personal twins on their own devices. These twins evaluate open, cryptographically signed temporal knowledge graphs published by municipal bodies and regional co-operatives. A local deterministic checker validates that every recommended service is supported by dated, executable policy rules before surfacing actionable options in the resident's quest interface.",
-   "premise": "Public service navigation requires evidence matching requested scope, date, and entitlements. Distinguishing critical decision criteria from unresolved context and validating paths with deterministic checkers over temporal graphs prevents speculative hallucinations while designed to reduce unnecessary abstention.",
-   "goals": [
-    2,
-    6
-   ],
-   "how": "The network provides open personal twin specifications and quest-style interfaces that separate requirement verification from probabilistic language generation. By demonstrating on-device deterministic checking over temporal graphs, the project proves that civic navigation can be accurate and private without expensive cloud subscriptions or surveillance. However, institutional inertia in municipal agencies and procurement contracts with incumbent enterprise software vendors remain driven by municipal legal departments that open specifications barely move.",
-   "shift": 0.32,
-   "outcomes": [
-    {
-     "name": "Commercial chatbots hallucinate civic advice and misdirect vulnerable residents",
-     "description": "Municipalities outsource resident intake to commercial LLM helpdesks that fabricate eligibility requirements or fail on changing policy dates.",
-     "example": "A low-income family misses a municipal childcare subsidy deadline after a proprietary cloud chatbot provides outdated 2027 eligibility thresholds without citing primary policy records.",
-     "desirable": false,
-     "likelihood_now": 0.55,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Personal twins verify civic eligibility via deterministic proof-carrying knowledge graphs",
-     "description": "Civic services publish open temporal policy graphs that personal agents verify deterministically on-device without leaking private records.",
-     "example": "A resident's on-device twin evaluates municipal heating assistance criteria against local household utility data, generating a verifiable proof of eligibility without sending private financial records to cloud servers.",
-     "desirable": true,
-     "likelihood_now": 0.25,
-     "likelihood_with_cin": 0.42
-    },
-    {
-     "name": "Bureaucratic systems mandate over-verification that denies legitimate assistance",
-     "description": "Centralized municipal procurement mandates rigid legacy verification gates that treat every minor unresolved detail as disqualifying, leaving administrative denials largely unshifted.",
-     "example": "An automated intake portal rejects hundreds of tenant emergency grant applications because utility bills lack secondary postal barcode stamps, and municipal statutory requirements remain stubbornly resistant to decentralized proof formats.",
-     "desirable": false,
-     "likelihood_now": 0.45,
-     "likelihood_with_cin": 0.43
-    }
-   ],
-   "pipelines": [
-    "canon",
-    "site",
-    "software"
-   ],
-   "sources": [
-    {
-     "url": "https://arxiv.org/abs/2610.00212",
-     "title": "EviGraph: Proof-Carrying Selective Recommendation over Temporal Public-Service Knowledge Graphs",
-     "kind": "preprint",
-     "published": "2026-09-21"
-    }
-   ],
-   "work": 1
   }
  ]
 }
