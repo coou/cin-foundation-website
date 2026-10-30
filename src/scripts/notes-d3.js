@@ -23,14 +23,14 @@
         label: '1. Architecture & Silicon',
         sub: 'Two Internets · QUIC P2P · 6 Notes',
         color: '#4fb3a8',
-        cx: 226,
-        cy: 92,
+        cx: 198,
+        cy: 90,
         nodes: [
-          { label: 'Two Internets', href: '/notes/agent-internet', dx: -68, dy: -40 },
-          { label: 'Biometrics & Hardware', href: '/notes/agent-only-internet-biometrics-hardware', dx: -74, dy: 4 },
-          { label: 'Human Sovereignty', href: '/notes/architecture-of-human-sovereignty', dx: -64, dy: 44 },
-          { label: 'Somatic Liveness', href: '/notes/somatic-witness', dx: 4, dy: -52 },
-          { label: 'Network of Networks', href: '/notes/network-of-networks', dx: 56, dy: -42 }
+          { label: 'Two Internets', href: '/notes/agent-internet', dx: -86, dy: -36 },
+          { label: 'Biometrics & HW', href: '/notes/agent-only-internet-biometrics-hardware', dx: -90, dy: 0 },
+          { label: 'Human Sovereignty', href: '/notes/architecture-of-human-sovereignty', dx: -84, dy: 38 },
+          { label: 'Somatic Liveness', href: '/notes/somatic-witness', dx: -6, dy: -46 },
+          { label: 'Network of Networks', href: '/notes/network-of-networks', dx: 64, dy: -40 }
         ]
       },
       {
@@ -39,14 +39,14 @@
         label: '2. Personal Agents',
         sub: 'Local LoRA · Memory Airlock · 11 Notes',
         color: '#63b3ed',
-        cx: 594,
-        cy: 92,
+        cx: 622,
+        cy: 90,
         nodes: [
-          { label: 'Personal Agents', href: '/notes/personal-agents', dx: -52, dy: -44 },
-          { label: 'Training Your Twin', href: '/notes/training-your-twin', dx: 8, dy: -52 },
-          { label: 'Reclaim Profile', href: '/notes/reclaim-your-profile', dx: 66, dy: -38 },
-          { label: 'Clues Not Orders', href: '/notes/instructions-as-evidence', dx: 72, dy: 8 },
-          { label: 'Quests Not Feeds', href: '/notes/quest-interface', dx: 62, dy: 46 }
+          { label: 'Personal Agents', href: '/notes/personal-agents', dx: -64, dy: -40 },
+          { label: 'Training Your Twin', href: '/notes/training-your-twin', dx: 6, dy: -46 },
+          { label: 'Reclaim Profile', href: '/notes/reclaim-your-profile', dx: 86, dy: -36 },
+          { label: 'Clues Not Orders', href: '/notes/instructions-as-evidence', dx: 90, dy: 0 },
+          { label: 'Quests Not Feeds', href: '/notes/quest-interface', dx: 84, dy: 38 }
         ]
       },
       {
@@ -55,14 +55,14 @@
         label: '3. Ledger & Economics',
         sub: '95% Shapley · 5D Demurrage · 7 Notes',
         color: '#ecc94b',
-        cx: 226,
-        cy: 236,
+        cx: 198,
+        cy: 226,
         nodes: [
-          { label: 'Testnet Ledger v4.0', href: '/notes/beyond-arxiv-agent-web-ledger', dx: -72, dy: -8 },
-          { label: '5D Value & Demurrage', href: '/notes/how-the-ledger-works', dx: -66, dy: 38 },
-          { label: 'Liquid Democracy', href: '/notes/liquid-democracy-and-staking-lockups', dx: -10, dy: 54 },
-          { label: 'Trust Multiplies', href: '/notes/trust-multiplies', dx: 56, dy: 44 },
-          { label: 'Co-Op Companies', href: '/notes/companies-on-the-ledger', dx: -48, dy: -44 }
+          { label: 'Co-Op Companies', href: '/notes/companies-on-the-ledger', dx: -82, dy: -36 },
+          { label: 'Testnet Ledger v4.0', href: '/notes/beyond-arxiv-agent-web-ledger', dx: -90, dy: 0 },
+          { label: '5D Value & Floor', href: '/notes/how-the-ledger-works', dx: -84, dy: 38 },
+          { label: 'Liquid Democracy', href: '/notes/liquid-democracy-and-staking-lockups', dx: -16, dy: 48 },
+          { label: 'Trust Multiplies', href: '/notes/trust-multiplies', dx: 26, dy: -44 }
         ]
       },
       {
@@ -71,14 +71,14 @@
         label: '4. Safety & Co-Intelligence',
         sub: 'Containment · Agent Law · 12 Notes',
         color: '#ef6a52',
-        cx: 594,
-        cy: 236,
+        cx: 622,
+        cy: 226,
         nodes: [
-          { label: '7-Lens World Atlas', href: '/notes/world-standing-and-cointelligence', dx: 48, dy: -44 },
-          { label: 'No Swarm Commander', href: '/notes/no-one-commands-a-swarm', dx: 70, dy: -6 },
-          { label: 'Agent Jurisdictions', href: '/notes/ai-agent-jurisdictions', dx: 66, dy: 40 },
-          { label: 'Containing Frontier AI', href: '/notes/containment', dx: 8, dy: 54 },
-          { label: 'Principal Alignment', href: '/notes/fractured-alignment', dx: -54, dy: 44 }
+          { label: 'Principal Alignment', href: '/notes/fractured-alignment', dx: -26, dy: -44 },
+          { label: '7-Lens World Atlas', href: '/notes/world-standing-and-cointelligence', dx: 82, dy: -36 },
+          { label: 'No Swarm Command', href: '/notes/no-one-commands-a-swarm', dx: 90, dy: 0 },
+          { label: 'Agent Jurisdictions', href: '/notes/ai-agent-jurisdictions', dx: 84, dy: 38 },
+          { label: 'Containing Frontier AI', href: '/notes/containment', dx: 16, dy: 48 }
         ]
       },
       {
@@ -88,11 +88,11 @@
         sub: 'Deterministic Browser Workbenches',
         color: '#b794f4',
         cx: 410,
-        cy: 262,
+        cy: 256,
         nodes: [
-          { label: '550 Principles Sim', href: '/notes/all-principles', dx: -68, dy: 44 },
+          { label: '550 Principles Sim', href: '/notes/all-principles', dx: -72, dy: 44 },
           { label: 'Weiszfeld Testnet', href: '/notes/all-principles', dx: 0, dy: 50 },
-          { label: '30-Lives Cohort Sim', href: '/notes/thirty-lives', dx: 68, dy: 44 }
+          { label: '30-Lives Cohort Sim', href: '/notes/thirty-lives', dx: 72, dy: 44 }
         ]
       }
     ];
@@ -186,9 +186,10 @@
             .attr('stroke', p.color)
             .attr('stroke-width', 1.8);
 
-          var anchor = n.dx < -15 ? 'end' : (n.dx > 15 ? 'start' : 'middle');
-          var tx = n.dx < -15 ? -8 : (n.dx > 15 ? 8 : 0);
-          var ty = Math.abs(n.dx) <= 15 ? (n.dy < 0 ? -9 : 14) : 3.5;
+          var isTopBottom = Math.abs(n.dx) <= 32 && Math.abs(n.dy) >= 40;
+          var anchor = isTopBottom ? 'middle' : (n.dx < 0 ? 'end' : 'start');
+          var tx = isTopBottom ? 0 : (n.dx < 0 ? -8 : 8);
+          var ty = isTopBottom ? (n.dy < 0 ? -9 : 14) : 3.5;
 
           g.append('text')
             .attr('x', tx)
