@@ -1,5 +1,5 @@
 // Network home: live trajectory, interactive workbench map, 4-mode D3 world matrix, agent fleet pulse, scenarios, and ideas.
-import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=20';
+import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=21';
 import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 mountAuth(() => {});
@@ -1053,23 +1053,23 @@ function renderPwmD3Flow(d, val, res) {
 
 // Mode 4: Dedicated D3 18-Actor Global AI Ecosystem Quadrant + 5-Zone Safety Gradient (#pwm-d3-quadrant-svg)
 const PWM_GLOBAL_ACTORS = [
-  { id: 1,  name: 'Closed Cloud Labs',       lens: 'labs',       x: 16, y: 18, color: '#ef6a52', role: '15-40% API Rent · $0 Creator Share' },
-  { id: 2,  name: 'Hyperscaler Clusters',    lens: 'labs',       x: 10, y: 12, color: '#ef6a52', role: '$100B Closed Compute Oligopoly' },
-  { id: 3,  name: 'Ad-Attention Wrappers',   lens: 'labs',       x: 24, y: 10, color: '#ef6a52', role: 'Surveillance Telemetry & Lock-In' },
-  { id: 4,  name: 'Raw e/acc Swarms',        lens: 'safety',     x: 34, y: 9,  color: '#ef6a52', role: 'Zone 1: Zero Containment Barriers' },
-  { id: 5,  name: 'Voluntary Lab RSPs',      lens: 'safety',     x: 28, y: 38, color: '#e07b42', role: 'Zone 2: Self-Policed Under Race' },
-  { id: 6,  name: 'Eval Labs (METR/AISI)',   lens: 'safety',     x: 45, y: 66, color: '#e3b341', role: 'Zone 3: T50 Horizon Diagnostics' },
-  { id: 7,  name: 'Global Hard Pause',       lens: 'safety',     x: 20, y: 88, color: '#6aa8e0', role: 'Zone 5: Treaty Compute Freeze' },
-  { id: 8,  name: 'Statutory Legislatures',  lens: 'gov',        x: 15, y: 54, color: '#e3b341', role: '3-5 Yr Lag · Payroll Tax Erosion' },
-  { id: 9,  name: '5D Municipal Ledgers',    lens: 'gov',        x: 78, y: 84, color: '#4fb3a8', role: '<10ms Silicon Gate + $25k Floor' },
-  { id: 10, name: 'Public Univs (arXiv)',    lens: 'research',   x: 58, y: 44, color: '#e3b341', role: '88% Breakthroughs · $0 Royalties' },
-  { id: 11, name: 'Shapley Research Mesh',   lens: 'research',   x: 84, y: 80, color: '#4fb3a8', role: '15% Lineage Royalty + SPRA 95.3%' },
-  { id: 12, name: 'Cloud API Enterprises',   lens: 'enterprise', x: 26, y: 26, color: '#ef6a52', role: '-18% Margin · Workflows Leaked' },
-  { id: 13, name: '500-Firm PSI Co-Ops',     lens: 'enterprise', x: 82, y: 72, color: '#4fb3a8', role: '+34% Wholesale Margin · 0B Leak' },
-  { id: 14, name: 'AI Commodity Cartels',    lens: 'humanity',   x: 13, y: 28, color: '#ef6a52', role: '-38% Producer Surplus Extraction' },
-  { id: 15, name: 'Producer PSI Co-Ops',     lens: 'humanity',   x: 76, y: 66, color: '#4fb3a8', role: '$8 Liveness + Offline Voice Twin' },
-  { id: 16, name: 'Raw Open Weights',        lens: 'pair',       x: 68, y: 22, color: '#e3b341', role: '60-90d Distillation · 0% Airlock' },
-  { id: 17, name: '1-to-1 OCap Pair Twin',   lens: 'pair',       x: 91, y: 90, color: '#4fb3a8', role: '96% Uncopyable Local Pair Moat' },
+  { id: 1,  name: 'Closed Cloud Labs',       lens: 'labs',       x: 6,  y: 44, color: '#ef6a52', role: '15-40% API Rent · $0 Creator Share' },
+  { id: 2,  name: 'Hyperscaler Clusters',    lens: 'labs',       x: 6,  y: 35, color: '#ef6a52', role: '$100B Closed Compute Oligopoly' },
+  { id: 3,  name: 'Ad-Attention Wrappers',   lens: 'labs',       x: 6,  y: 26, color: '#ef6a52', role: 'Surveillance Telemetry & Lock-In' },
+  { id: 4,  name: 'Raw e/acc Swarms',        lens: 'safety',     x: 6,  y: 17, color: '#ef6a52', role: 'Zone 1: Zero Containment Barriers' },
+  { id: 5,  name: 'Voluntary Lab RSPs',      lens: 'safety',     x: 6,  y: 9,  color: '#e07b42', role: 'Zone 2: Self-Policed Under Race' },
+  { id: 12, name: 'Cloud API Enterprises',   lens: 'enterprise', x: 46, y: 38, color: '#ef6a52', role: '-18% Margin · Workflows Leaked' },
+  { id: 14, name: 'AI Commodity Cartels',    lens: 'humanity',   x: 46, y: 22, color: '#ef6a52', role: '-38% Producer Surplus Extraction' },
+  { id: 8,  name: 'Statutory Legislatures',  lens: 'gov',        x: 8,  y: 60, color: '#e3b341', role: '3-5 Yr Lag · Payroll Tax Erosion' },
+  { id: 6,  name: 'Eval Labs (METR/AISI)',   lens: 'safety',     x: 10, y: 74, color: '#e3b341', role: 'Zone 3: T50 Horizon Diagnostics' },
+  { id: 7,  name: 'Global Hard Pause',       lens: 'safety',     x: 12, y: 88, color: '#6aa8e0', role: 'Zone 5: Treaty Compute Freeze' },
+  { id: 10, name: 'Public Univs (arXiv)',    lens: 'research',   x: 56, y: 36, color: '#e3b341', role: '88% Breakthroughs · $0 Royalties' },
+  { id: 16, name: 'Raw Open Weights',        lens: 'pair',       x: 58, y: 18, color: '#e3b341', role: '60-90d Distillation · 0% Airlock' },
+  { id: 15, name: 'Producer PSI Co-Ops',     lens: 'humanity',   x: 95, y: 55, color: '#4fb3a8', role: '$8 Liveness + Offline Voice Twin' },
+  { id: 13, name: '500-Firm PSI Co-Ops',     lens: 'enterprise', x: 95, y: 63, color: '#4fb3a8', role: '+34% Wholesale Margin · 0B Leak' },
+  { id: 11, name: 'Shapley Research Mesh',   lens: 'research',   x: 95, y: 71, color: '#4fb3a8', role: '15% Lineage Royalty + SPRA 95.3%' },
+  { id: 9,  name: '5D Municipal Ledgers',    lens: 'gov',        x: 95, y: 79, color: '#4fb3a8', role: '<10ms Silicon Gate + $25k Floor' },
+  { id: 17, name: '1-to-1 OCap Pair Twin',   lens: 'pair',       x: 95, y: 87, color: '#4fb3a8', role: '96% Uncopyable Local Pair Moat' },
   { id: 18, name: 'CIN Co-Intelligence',     lens: 'all',        x: 95, y: 95, color: '#4fb3a8', role: 'Zone 4: Two Internets + 24h Lease' }
 ];
 
@@ -1156,7 +1156,7 @@ function renderPwmD3Quadrant(d, val, res) {
   PWM_GLOBAL_ACTORS.forEach((actor) => {
     const isMatch = actor.lens === currentPwmKey || actor.lens === 'all';
     const ax = mapX(actor.x);
-    const ay = mapY(Math.min(98, Math.max(5, actor.y + (isMatch && actor.x > 70 ? (ratio - 0.5) * 4 : 0))));
+    const ay = mapY(actor.y);
 
     const gNode = root.append('g')
       .attr('class', 'svg-node')
@@ -1179,7 +1179,7 @@ function renderPwmD3Quadrant(d, val, res) {
       .attr('stroke', '#0d0f13').attr('stroke-width', 1.4)
       .attr('opacity', isMatch ? '1' : '0.52');
 
-    const alignEnd = actor.x > 72;
+    const alignEnd = actor.x > 40;
     gNode.append('text')
       .attr('x', alignEnd ? ax - 8 : ax + 8)
       .attr('y', ay + 3)
@@ -1224,7 +1224,7 @@ function renderPwmD3Quadrant(d, val, res) {
     .attr('fill', '#142623').attr('stroke', '#4fb3a8');
   root.append('text')
     .attr('x', 619).attr('y', 256).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-    .text(res.okV.slice(0, 38));
+    .text(res.okV.slice(0, 42));
 
   // Bottom Strip: 5-Zone Safety Gradient: Last Resort Before Pause
   root.append('rect')

@@ -2253,24 +2253,24 @@
 
 
   var GLOBAL_ACTORS = [
-    { id: 'openai', label: 'OpenAI / GPT', lens: 'labs', x: 18, y: 18, r: 8, col: '#ef6a52', sub: '$100B+ Cloud · 0% Royalty' },
-    { id: 'anthropic', label: 'Anthropic', lens: 'labs', x: 24, y: 36, r: 7.5, col: '#ef6a52', sub: 'Cloud API + RSP Pledges' },
-    { id: 'deepmind', label: 'Google DeepMind', lens: 'labs', x: 20, y: 28, r: 8, col: '#ef6a52', sub: 'Hyperscaler Cloud Lock-In' },
-    { id: 'xai', label: 'xAI / Raw e/acc', lens: 'safety', x: 12, y: 10, r: 7, col: '#ef6a52', sub: 'Unbounded Swarm Velocity' },
-    { id: 'meta', label: 'Meta / Open Weights', lens: 'pair', x: 64, y: 24, r: 7.5, col: '#e5a93c', sub: '60-90d Distillation Cliff' },
-    { id: 'deepseek', label: 'DeepSeek / Qwen', lens: 'pair', x: 70, y: 18, r: 7, col: '#e5a93c', sub: 'Commodity Open Base ($0)' },
-    { id: 'metr', label: 'METR & Redwood', lens: 'safety', x: 46, y: 68, r: 6.5, col: '#e5a93c', sub: 'T50 Evals & Swarm Audits' },
-    { id: 'fli', label: 'FLI / Hard Pause', lens: 'safety', x: 35, y: 88, r: 6.5, col: '#5da2d5', sub: 'Global Compute Moratorium' },
-    { id: 'us_eu', label: 'US / EU / UK Govts', lens: 'gov', x: 28, y: 54, r: 7.5, col: '#e5a93c', sub: '3-5 Yr Statutory Lag' },
-    { id: 'munic', label: 'Cities & Tax Base', lens: 'gov', x: 42, y: 44, r: 6.5, col: '#ef6a52', sub: 'Payroll Tax Erosion Risk' },
-    { id: 'univ', label: 'MIT / Stanford / CERN', lens: 'research', x: 56, y: 52, r: 7.5, col: '#5da2d5', sub: '88% Breakthroughs · <1% GPUs' },
-    { id: 'arxiv', label: 'Open Science / SPRA', lens: 'research', x: 76, y: 74, r: 7, col: '#4fb3a8', sub: '15% Shapley + 95.3% SPRA' },
-    { id: 'f500', label: 'Cloud API Tenants', lens: 'enterprise', x: 30, y: 22, r: 7, col: '#ef6a52', sub: '15-40% GPO & Wrapper Toll' },
-    { id: 'psi_coop', label: '500-Clinic PSI Co-Op', lens: 'enterprise', x: 84, y: 78, r: 7.5, col: '#4fb3a8', sub: '+34% Margin · 0 Bytes Leaked' },
-    { id: 'cartels', label: 'AI Commodity Cartels', lens: 'humanity', x: 14, y: 42, r: 7, col: '#ef6a52', sub: '-38% Producer Price Dump' },
-    { id: 'workers', label: '4.8B Physical Workers', lens: 'humanity', x: 78, y: 64, r: 8, col: '#4fb3a8', sub: '$8 Sensor + PSI Co-Op (+38%)' },
-    { id: 'pair_twin', label: '1-to-1 Human+LoRA Pair', lens: 'pair', x: 90, y: 86, r: 8.5, col: '#4fb3a8', sub: '96% Uncopyable Craft Moat' },
-    { id: 'cin', label: 'CIN CO-INTELLIGENCE', lens: 'all', x: 92, y: 94, r: 10.5, col: '#4fb3a8', sub: 'Two Internets · Mortal Lease · 95% Shapley' }
+    { id: 'xai', label: 'xAI / Raw e/acc', lens: 'safety', x: 6, y: 12, r: 6.5, col: '#ef6a52', sub: 'Unbounded Swarm Velocity' },
+    { id: 'openai', label: 'OpenAI / GPT', lens: 'labs', x: 8, y: 24, r: 7.5, col: '#ef6a52', sub: '$100B+ Cloud · 0% Royalty' },
+    { id: 'deepmind', label: 'Google DeepMind', lens: 'labs', x: 10, y: 36, r: 7.5, col: '#ef6a52', sub: 'Hyperscaler Cloud Lock-In' },
+    { id: 'anthropic', label: 'Anthropic', lens: 'labs', x: 12, y: 48, r: 7, col: '#ef6a52', sub: 'Cloud API + RSP Pledges' },
+    { id: 'f500', label: 'Cloud API Tenants', lens: 'enterprise', x: 42, y: 14, r: 6.5, col: '#ef6a52', sub: '15-40% GPO & Wrapper Toll' },
+    { id: 'munic', label: 'Cities & Tax Base', lens: 'gov', x: 42, y: 30, r: 6.5, col: '#ef6a52', sub: 'Payroll Tax Erosion Risk' },
+    { id: 'cartels', label: 'AI Commodity Cartels', lens: 'humanity', x: 42, y: 44, r: 6.5, col: '#ef6a52', sub: '-38% Producer Price Dump' },
+    { id: 'us_eu', label: 'US / EU / UK Govts', lens: 'gov', x: 10, y: 64, r: 7, col: '#e5a93c', sub: '3-5 Yr Statutory Lag' },
+    { id: 'metr', label: 'METR & Redwood', lens: 'safety', x: 14, y: 77, r: 6.5, col: '#e5a93c', sub: 'T50 Evals & Swarm Audits' },
+    { id: 'fli', label: 'FLI / Hard Pause', lens: 'safety', x: 18, y: 90, r: 6.5, col: '#5da2d5', sub: 'Global Compute Moratorium' },
+    { id: 'meta', label: 'Meta / Open Weights', lens: 'pair', x: 64, y: 32, r: 7, col: '#e5a93c', sub: '60-90d Distillation Cliff' },
+    { id: 'deepseek', label: 'DeepSeek / Qwen', lens: 'pair', x: 66, y: 16, r: 6.5, col: '#e5a93c', sub: 'Commodity Open Base ($0)' },
+    { id: 'univ', label: 'MIT / Stanford / CERN', lens: 'research', x: 94, y: 54, r: 7, col: '#5da2d5', sub: '88% Breakthroughs · <1% GPUs' },
+    { id: 'workers', label: '4.8B Physical Workers', lens: 'humanity', x: 94, y: 63, r: 7.5, col: '#4fb3a8', sub: '$8 Sensor + PSI Co-Op (+38%)' },
+    { id: 'arxiv', label: 'Open Science / SPRA', lens: 'research', x: 94, y: 72, r: 6.5, col: '#4fb3a8', sub: '15% Shapley + 95.3% SPRA' },
+    { id: 'psi_coop', label: '500-Clinic PSI Co-Op', lens: 'enterprise', x: 94, y: 80, r: 7, col: '#4fb3a8', sub: '+34% Margin · 0 Bytes Leaked' },
+    { id: 'pair_twin', label: '1-to-1 Human+LoRA Pair', lens: 'pair', x: 94, y: 88, r: 7.5, col: '#4fb3a8', sub: '96% Uncopyable Craft Moat' },
+    { id: 'cin', label: 'CIN CO-INTELLIGENCE', lens: 'all', x: 94, y: 96, r: 9.5, col: '#4fb3a8', sub: 'Two Internets · Mortal Lease · 95% Shapley' }
   ];
 
   var urlLens = (location.search.match(/[?&]lens=([a-z]+)/) || [])[1];
@@ -2542,8 +2542,8 @@
           .attr('font-size', 7.4).attr('fill', '#d5d9e2').text(z.sub);
         curX += z.w;
       });
-      hSvg.append('text').attr('x', 350).attr('y', 96).attr('font-size', 8.2).attr('font-weight', '700').attr('fill', '#e5a93c')
-        .text('✓ Two Internets + 24h Mortal Lease = Co-Existence Without Hitting Pause');
+      hSvg.append('text').attr('x', 350).attr('y', 96).attr('font-size', 7.5).attr('font-weight', '700').attr('fill', '#e5a93c')
+        .text('✓ Two Internets + 24h Mortal Lease = Co-Exist Without Pause');
     }
 
     // 2. 4-Step Proof-Carrying Code & Shapley Royalty Visualizer (#em-d3-svg)
