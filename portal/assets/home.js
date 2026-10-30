@@ -1,5 +1,5 @@
 // Network home: live trajectory, interactive workbench map, 4-mode D3 world matrix, agent fleet pulse, scenarios, and ideas.
-import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=22';
+import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=23';
 import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 mountAuth(() => {});
@@ -547,7 +547,7 @@ const PWM_DATA = {
 
 const pwmTabs = document.getElementById('pwm-tabs');
 const pwmVizModes = document.getElementById('pwm-viz-modes');
-const pwmRng = document.getElementById('pwm-sim-rng');
+const pwmRng = document.getElementById('pwm-sim-rng') || document.getElementById('pwm-sim-slider');
 
 const PWM_SHORT = {
   labs: ['Scrapes public craft ($0); rents back via cloud APIs.', 'Equity valuation demands labor replacement & lock-in.', 'Local LoRA + 95% Shapley royalty + 5% commons floor.'],
@@ -1257,6 +1257,353 @@ function renderPwmD3Quadrant(d, val, res) {
   });
 }
 
+// Right-Column Bespoke 2-Panel D3.js v7 Lens Infographic (#pwm-right-d3-svg)
+function renderPwmRightInfographicD3(d, val, res) {
+  const rightSvg = document.getElementById('pwm-right-d3-svg');
+  const root = selectD3Root(rightSvg);
+  if (!root) return;
+
+  const span = Math.max(1, d.sim.max - d.sim.min);
+  const ratio = Math.max(0.08, Math.min(0.95, (val - d.sim.min) / span));
+
+  root.append('rect')
+    .attr('x', 0).attr('y', 0).attr('width', 380).attr('height', 310).attr('rx', 10)
+    .attr('fill', '#0d0f13');
+
+  // Top Card (y=8..168): Bespoke Lens Visual Comparison
+  root.append('rect')
+    .attr('x', 8).attr('y', 8).attr('width', 364).attr('height', 160).attr('rx', 9)
+    .attr('fill', '#131720').attr('stroke', '#282f3d').attr('stroke-width', 1.4);
+
+  if (currentPwmKey === 'labs') {
+    root.append('text')
+      .attr('x', 18).attr('y', 25).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+      .text('01 · PROFIT VS. COOPERATION SPLIT ($100 FLOW)');
+
+    // SOTA Cloud Labs box
+    root.append('rect')
+      .attr('x', 18).attr('y', 33).attr('width', 344).attr('height', 56).attr('rx', 6)
+      .attr('fill', 'rgba(239,106,82,0.09)').attr('stroke', '#ef6a52').attr('stroke-width', 1.2);
+    root.append('text')
+      .attr('x', 26).attr('y', 47).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+      .text('SOTA Cloud Labs: 72% Equity + 28% API Toll + $0 Creator');
+    root.append('rect')
+      .attr('x', 26).attr('y', 54).attr('width', 236).attr('height', 16).attr('rx', 3)
+      .attr('fill', '#ef6a52');
+    root.append('text')
+      .attr('x', 144).attr('y', 65).attr('text-anchor', 'middle').attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
+      .text('72% Shareholder Capture');
+    root.append('rect')
+      .attr('x', 264).attr('y', 54).attr('width', 90).attr('height', 16).attr('rx', 3)
+      .attr('fill', '#9e3929');
+    root.append('text')
+      .attr('x', 309).attr('y', 65).attr('text-anchor', 'middle').attr('fill', '#ffffff').attr('font-family', 'monospace').attr('font-size', '7.2').attr('font-weight', '700')
+      .text('28% Toll · $0');
+    root.append('text')
+      .attr('x', 26).attr('y', 82).attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '7.4')
+      .text('Public craft scraped free; rented back as closed API tokens');
+
+    // CIN Ledger box
+    root.append('rect')
+      .attr('x', 18).attr('y', 95).attr('width', 344).attr('height', 64).attr('rx', 6)
+      .attr('fill', 'rgba(79,179,168,0.12)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
+    root.append('text')
+      .attr('x', 26).attr('y', 109).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+      .text('CIN Ledger: 85% Direct Solver + 10% Shapley + 5% Floor');
+    root.append('rect')
+      .attr('x', 26).attr('y', 116).attr('width', 274).attr('height', 18).attr('rx', 3)
+      .attr('fill', '#4fb3a8');
+    root.append('text')
+      .attr('x', 163).attr('y', 128).attr('text-anchor', 'middle').attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+      .text('85% Direct Solver');
+    root.append('rect')
+      .attr('x', 302).attr('y', 116).attr('width', 32).attr('height', 18).attr('rx', 3)
+      .attr('fill', '#6aa8e0');
+    root.append('text')
+      .attr('x', 318).attr('y', 128).attr('text-anchor', 'middle').attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7').attr('font-weight', '700')
+      .text('10%');
+    root.append('rect')
+      .attr('x', 336).attr('y', 116).attr('width', 18).attr('height', 18).attr('rx', 3)
+      .attr('fill', '#e3b341');
+    root.append('text')
+      .attr('x', 26).attr('y', 149).attr('fill', '#e9e6de').attr('font-family', 'monospace').attr('font-size', '7.4')
+      .text('Proof-Carrying Code + 95% Data Shapley Royalty Split');
+  } else if (currentPwmKey === 'safety') {
+    root.append('text')
+      .attr('x', 18).attr('y', 25).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
+      .text('02 · LAST RESORT BEFORE PAUSE (5-ZONE THERMOMETER)');
+
+    const sZones = [
+      { lbl: '1. Raw e/acc',  sub: '0 Barriers',   c: '#ef6a52', x: 18,  w: 64, hi: false },
+      { lbl: '2. Lab RSPs',   sub: 'Self-Policed', c: '#e07b42', x: 85,  w: 64, hi: false },
+      { lbl: '3. Eval Labs',  sub: 'METR / AISI',  c: '#e3b341', x: 152, w: 64, hi: false },
+      { lbl: '4. ★ Airlock',  sub: '24h Lease',    c: '#4fb3a8', x: 219, w: 78, hi: true  },
+      { lbl: '5. Pause',      sub: 'GPU Freeze',   c: '#6aa8e0', x: 300, w: 62, hi: false }
+    ];
+    sZones.forEach((z) => {
+      root.append('rect')
+        .attr('x', z.x).attr('y', 34).attr('width', z.w).attr('height', 60).attr('rx', 5)
+        .attr('fill', z.hi ? 'rgba(79,179,168,0.22)' : '#171c27')
+        .attr('stroke', z.c).attr('stroke-width', z.hi ? 2 : 1.1);
+      root.append('text')
+        .attr('x', z.x + Math.round(z.w / 2)).attr('y', 51).attr('text-anchor', 'middle')
+        .attr('fill', z.c).attr('font-family', 'monospace').attr('font-size', '7.1').attr('font-weight', '700')
+        .text(z.lbl);
+      root.append('text')
+        .attr('x', z.x + Math.round(z.w / 2)).attr('y', 66).attr('text-anchor', 'middle')
+        .attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '6.9')
+        .text(z.sub);
+      if (z.hi) {
+        root.append('text')
+          .attr('x', z.x + Math.round(z.w / 2)).attr('y', 84).attr('text-anchor', 'middle')
+          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '6.6').attr('font-weight', '700')
+          .text('[LAST RESORT]');
+      }
+    });
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 102).attr('width', 344).attr('height', 58).attr('rx', 6)
+      .attr('fill', '#171c27').attr('stroke', '#2c3446');
+    root.append('text')
+      .attr('x', 26).attr('y', 117).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+      .text('~40 b/s Biology vs. 10¹² b/s Silicon Swarm Meter');
+    root.append('rect')
+      .attr('x', 26).attr('y', 124).attr('width', 68).attr('height', 14).attr('rx', 3)
+      .attr('fill', '#6aa8e0');
+    root.append('text')
+      .attr('x', 60).attr('y', 134).attr('text-anchor', 'middle').attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '6.8').attr('font-weight', '700')
+      .text('~40 b/s Bio');
+    root.append('rect')
+      .attr('x', 98).attr('y', 124).attr('width', 256).attr('height', 14).attr('rx', 3)
+      .attr('fill', 'rgba(79,179,168,0.25)').attr('stroke', '#4fb3a8');
+    root.append('text')
+      .attr('x', 226).attr('y', 134).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7').attr('font-weight', '700')
+      .text('10¹² b/s Swarm Gated by OCap Airlock');
+    root.append('text')
+      .attr('x', 26).attr('y', 152).attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '7.2')
+      .text('Two-Internet Isolation + 24h Lease + Φ(R) Quorum Gate');
+  } else if (currentPwmKey === 'gov') {
+    root.append('text')
+      .attr('x', 18).attr('y', 25).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
+      .text('03 · STATUTORY LAG VS. SILICON QUORUM GATE Φ(R)');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 34).attr('width', 344).attr('height', 30).attr('rx', 5)
+      .attr('fill', 'rgba(239,106,82,0.14)').attr('stroke', '#ef6a52');
+    root.append('text')
+      .attr('x', 26).attr('y', 52).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+      .text('36–60 Mo Statute Lag (8–13 AI Doublings Behind)');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 70).attr('width', 344).attr('height', 30).attr('rx', 5)
+      .attr('fill', 'rgba(79,179,168,0.18)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
+    root.append('text')
+      .attr('x', 26).attr('y', 88).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+      .text('★ <10ms Weiszfeld Quorum Gate Φ(R) Hardware Lock');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 106).attr('width', 168).attr('height', 54).attr('rx', 6)
+      .attr('fill', '#142623').attr('stroke', '#4fb3a8');
+    root.append('text')
+      .attr('x', 102).attr('y', 125).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+      .text('$25k Exempt Floor');
+    root.append('text')
+      .attr('x', 102).attr('y', 144).attr('text-anchor', 'middle').attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.4')
+      .text('0% tax on household base');
+
+    root.append('rect')
+      .attr('x', 194).attr('y', 106).attr('width', 168).attr('height', 54).attr('rx', 6)
+      .attr('fill', '#241e14').attr('stroke', '#e3b341');
+    root.append('text')
+      .attr('x', 278).attr('y', 125).attr('text-anchor', 'middle').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+      .text('2%/mo Demurrage');
+    root.append('text')
+      .attr('x', 278).attr('y', 144).attr('text-anchor', 'middle').attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.4')
+      .text('Funds post-labor commons');
+  } else if (currentPwmKey === 'research') {
+    root.append('text')
+      .attr('x', 18).attr('y', 25).attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
+      .text('04 · UNIVERSITY BREAKTHROUGHS VS. ROYALTY GAP');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 35).attr('width', 302).attr('height', 24).attr('rx', 4)
+      .attr('fill', '#4fb3a8');
+    root.append('text')
+      .attr('x', 26).attr('y', 50).attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+      .text('88% Fundamental Breakthroughs (Public Univs)');
+    root.append('rect')
+      .attr('x', 322).attr('y', 35).attr('width', 40).attr('height', 24).attr('rx', 4)
+      .attr('fill', '#ef6a52');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 67).attr('width', 344).attr('height', 28).attr('rx', 5)
+      .attr('fill', 'rgba(239,106,82,0.16)').attr('stroke', '#ef6a52');
+    root.append('text')
+      .attr('x', 26).attr('y', 84).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+      .text('<1% Academic GPU Access · $0 Cloud Royalty Paid');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 103).attr('width', 344).attr('height', 56).attr('rx', 6)
+      .attr('fill', 'rgba(79,179,168,0.15)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
+    root.append('text')
+      .attr('x', 26).attr('y', 121).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+      .text('★ 15% Perpetual Shapley Academic Endowment');
+    root.append('text')
+      .attr('x', 26).attr('y', 138).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+      .text('95.3% SPRA Token Compression (~260 tok/paper)');
+    root.append('text')
+      .attr('x', 26).attr('y', 152).attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '7.2')
+      .text('Federated Rank-16 TIES-LoRA mesh over QUIC P2P');
+  } else if (currentPwmKey === 'enterprise') {
+    root.append('text')
+      .attr('x', 18).attr('y', 25).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
+      .text('05 · MIDDLEMAN TOLL VS. 500-FIRM PSI CO-OP');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 35).attr('width', 344).attr('height', 54).attr('rx', 6)
+      .attr('fill', 'rgba(239,106,82,0.11)').attr('stroke', '#ef6a52');
+    root.append('text')
+      .attr('x', 26).attr('y', 53).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+      .text('-15% to -40% GPO / PBM / Wrapper Extraction');
+    root.append('text')
+      .attr('x', 26).attr('y', 71).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.5')
+      .text('Cloud API prompts leak proprietary clinic & SMB trade secrets');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 97).attr('width', 344).attr('height', 62).attr('rx', 6)
+      .attr('fill', 'rgba(79,179,168,0.14)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.6);
+    root.append('text')
+      .attr('x', 26).attr('y', 115).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+      .text('★ +18% to +34% OPRF PSI Co-Op Wholesale Margin');
+    root.append('text')
+      .attr('x', 26).attr('y', 133).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+      .text('0 Bytes Wasm OCap Egress · Freedman (2004) PSI');
+    root.append('text')
+      .attr('x', 26).attr('y', 149).attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '7.3')
+      .text('500 independent clinics & firms bargain as one co-op');
+  } else if (currentPwmKey === 'humanity') {
+    root.append('text')
+      .attr('x', 18).attr('y', 25).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
+      .text('06 · INTELLIGENCE GAMBIT (4.8B NON-DIGITAL WORKERS)');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 35).attr('width', 344).attr('height', 54).attr('rx', 6)
+      .attr('fill', 'rgba(239,106,82,0.12)').attr('stroke', '#ef6a52');
+    root.append('text')
+      .attr('x', 26).attr('y', 53).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.9').attr('font-weight', '700')
+      .text('Producer Share Collapse: 78% → 24% (AI Cartels)');
+    root.append('text')
+      .attr('x', 26).attr('y', 71).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.5')
+      .text('Algorithmic buyer cartels dump physical commodity prices');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 97).attr('width', 344).attr('height', 62).attr('rx', 6)
+      .attr('fill', 'rgba(79,179,168,0.14)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.6);
+    root.append('text')
+      .attr('x', 26).attr('y', 115).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.9').attr('font-weight', '700')
+      .text('★ $8 Pre-ADC Liveness + Offline Voice Twin');
+    root.append('text')
+      .attr('x', 26).attr('y', 133).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+      .text('PSI Producer Co-Op (+15% to +38% Pay) + 5D Credit');
+    root.append('text')
+      .attr('x', 26).attr('y', 149).attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '7.3')
+      .text('Hardware-attested physical craft parity on $45 phones');
+  } else {
+    // pair lens
+    root.append('text')
+      .attr('x', 18).attr('y', 25).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
+      .text('07 · 60-90D DISTILLATION CLIFF VS. 96% PAIR MOAT');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 35).attr('width', 344).attr('height', 50).attr('rx', 6)
+      .attr('fill', 'rgba(239,106,82,0.12)').attr('stroke', '#ef6a52');
+    root.append('text')
+      .attr('x', 26).attr('y', 53).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+      .text('Cloud API Moat Decay: 100% → 4% in 90d');
+    root.append('text')
+      .attr('x', 26).attr('y', 71).attr('fill', '#e9e6de').attr('font-family', 'monospace').attr('font-size', '7.4')
+      .text('-$5B to -$15B/yr Cloud Burn (Distilled to Open Weights)');
+
+    root.append('rect')
+      .attr('x', 18).attr('y', 93).attr('width', 344).attr('height', 66).attr('rx', 6)
+      .attr('fill', 'rgba(79,179,168,0.13)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.6);
+    root.append('text')
+      .attr('x', 26).attr('y', 109).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+      .text('4-Layer Local Pair Moat = 96% Uncopyable');
+
+    const moatLayers = [
+      { l: '4%',  w: 24,  c: '#6aa8e0' },
+      { l: '30% LoRA', w: 96, c: '#4fb3a8' },
+      { l: '32% Mem',  w: 102, c: '#e3b341' },
+      { l: '34% Craft', w: 106, c: '#9d7fe8' }
+    ];
+    let mx = 26;
+    moatLayers.forEach((ml) => {
+      root.append('rect')
+        .attr('x', mx).attr('y', 116).attr('width', ml.w - 2).attr('height', 18).attr('rx', 3)
+        .attr('fill', ml.c);
+      root.append('text')
+        .attr('x', mx + Math.round(ml.w / 2)).attr('y', 128).attr('text-anchor', 'middle')
+        .attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '6.9').attr('font-weight', '700')
+        .text(ml.l);
+      mx += ml.w;
+    });
+    root.append('text')
+      .attr('x', 26).attr('y', 149).attr('fill', '#e9e6de').attr('font-family', 'monospace').attr('font-size', '7.2')
+      .text('4% Base + 30% LoRA + 32% Memory + 34% Craft = 96%');
+  }
+
+  // Bottom Card (y=176..302): Live Stress-Test Visual Verdict & 3-Pillar Architecture Badges
+  root.append('rect')
+    .attr('x', 8).attr('y', 176).attr('width', 364).attr('height', 126).attr('rx', 9)
+    .attr('fill', '#131720').attr('stroke', '#4fb3a8').attr('stroke-width', 1.4);
+
+  root.append('text')
+    .attr('x', 18).attr('y', 193).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+    .text('LIVE STRESS-TEST VERDICT');
+  root.append('text')
+    .attr('x', 362).attr('y', 193).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+    .text(d.sim.fmt(val));
+
+  const badBarW = Math.round(344 * Math.max(0.32, 0.88 - ratio * 0.42));
+  root.append('rect')
+    .attr('x', 18).attr('y', 200).attr('width', 344).attr('height', 28).attr('rx', 5)
+    .attr('fill', '#191316').attr('stroke', '#ef6a52').attr('stroke-width', 1.1);
+  root.append('rect')
+    .attr('x', 18).attr('y', 200).attr('width', badBarW).attr('height', 28).attr('rx', 5)
+    .attr('fill', 'rgba(239,106,82,0.22)');
+  root.append('text')
+    .attr('x', 25).attr('y', 218).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
+    .text(res.badV.slice(0, 48));
+
+  const okBarW = Math.round(344 * Math.min(1, 0.52 + ratio * 0.48));
+  root.append('rect')
+    .attr('x', 18).attr('y', 234).attr('width', 344).attr('height', 28).attr('rx', 5)
+    .attr('fill', '#111d1c').attr('stroke', '#4fb3a8').attr('stroke-width', 1.3);
+  root.append('rect')
+    .attr('x', 18).attr('y', 234).attr('width', okBarW).attr('height', 28).attr('rx', 5)
+    .attr('fill', 'rgba(79,179,168,0.26)');
+  root.append('text')
+    .attr('x', 25).attr('y', 252).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
+    .text(res.okV.slice(0, 48));
+
+  // 3-Pillar Architecture Badges
+  const badges = [
+    { lbl: 'OCap Airlock (0B)', x: 18,  w: 110, c: '#6aa8e0', bg: '#15202b' },
+    { lbl: '95% Shapley Split', x: 135, w: 110, c: '#4fb3a8', bg: '#132623' },
+    { lbl: '24h Mortal Lease',  x: 252, w: 110, c: '#e3b341', bg: '#241e14' }
+  ];
+  badges.forEach((bg) => {
+    root.append('rect')
+      .attr('x', bg.x).attr('y', 270).attr('width', bg.w).attr('height', 22).attr('rx', 4)
+      .attr('fill', bg.bg).attr('stroke', bg.c).attr('stroke-width', 1.1);
+    root.append('text')
+      .attr('x', bg.x + Math.round(bg.w / 2)).attr('y', 284).attr('text-anchor', 'middle')
+      .attr('fill', bg.c).attr('font-family', 'monospace').attr('font-size', '7.1').attr('font-weight', '700')
+      .text(bg.lbl);
+  });
+}
+
 function setNodeHidden(node, isHidden) {
   if (!node) return;
   node.hidden = isHidden;
@@ -1327,6 +1674,11 @@ function updatePwmSim() {
   renderPwmD3Radar(d, val, res);
   renderPwmD3Flow(d, val, res);
   renderPwmD3Quadrant(d, val, res);
+  renderPwmRightInfographicD3(d, val, res);
+}
+
+function renderPwm() {
+  updatePwmSim();
 }
 
 if (pwmRng) {

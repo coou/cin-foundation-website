@@ -397,7 +397,7 @@
 
   function initEcosystemD3() {
     var d3 = window.d3;
-    var svgEl = document.getElementById('ws-ecosystem-svg');
+    var svgEl = document.getElementById('ws-ecosystem-svg') || document.getElementById('ws-quadrant-svg');
     if (!d3 || !svgEl) return;
 
     var state = {
@@ -409,13 +409,15 @@
 
     var width = 860;
     var height = 420;
-    var margin = { top: 52, right: 26, bottom: 48, left: 58 };
+    var padL = 68;
+    var margin = { top: 56, right: 24, bottom: 48, left: padL };
 
     var x = d3.scaleLinear().domain([0, 100]).range([margin.left, width - margin.right]);
     var y = d3.scaleLinear().domain([0, 100]).range([height - margin.bottom, margin.top]);
 
-    var svg = d3.select(svgEl);
-    svg.selectAll('*').remove();
+    var rawSvg = d3.select(svgEl);
+    rawSvg.selectAll('*').remove();
+    var svg = rawSvg.append('g').attr('id', 'ws-quadrant-svg');
 
     svg.append('rect')
       .attr('x', 4)
@@ -456,33 +458,45 @@
     ZONES.forEach(function (z) {
       var zx0 = x(z.x0);
       var zx1 = x(z.x1);
+      var zw = zx1 - zx0;
       zoneGroup.append('rect')
         .attr('x', zx0)
         .attr('y', margin.top)
-        .attr('width', zx1 - zx0)
+        .attr('width', zw)
         .attr('height', height - margin.top - margin.bottom)
         .attr('fill', z.fill)
         .attr('stroke', z.highlight ? '#4fb3a8' : '#252a34')
         .attr('stroke-width', z.highlight ? 1.8 : 1)
         .attr('stroke-dasharray', z.highlight ? '5 3' : null);
 
+      zoneGroup.append('rect')
+        .attr('x', zx0 + 3)
+        .attr('y', 11)
+        .attr('width', Math.max(20, zw - 6))
+        .attr('height', 38)
+        .attr('rx', 4)
+        .attr('fill', z.highlight ? 'rgba(79, 179, 168, 0.22)' : 'rgba(24, 29, 39, 0.9)')
+        .attr('stroke', z.stroke)
+        .attr('stroke-width', z.highlight ? 1.5 : 0.9)
+        .attr('stroke-opacity', z.highlight ? 0.95 : 0.6);
+
       zoneGroup.append('text')
         .attr('x', (zx0 + zx1) / 2)
-        .attr('y', 24)
+        .attr('y', 25)
         .attr('text-anchor', 'middle')
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 9.5)
+        .attr('font-size', 9.2)
         .attr('font-weight', 700)
         .attr('fill', z.stroke)
         .text(z.label);
 
       zoneGroup.append('text')
         .attr('x', (zx0 + zx1) / 2)
-        .attr('y', 38)
+        .attr('y', 40)
         .attr('text-anchor', 'middle')
         .attr('font-family', 'system-ui, sans-serif')
-        .attr('font-size', 9)
-        .attr('fill', '#9aa3b2')
+        .attr('font-size', 8.6)
+        .attr('fill', z.highlight ? '#e9e6de' : '#9aa3b2')
         .text(z.sub);
     });
 
@@ -527,10 +541,12 @@
       .attr('fill', '#d5d9e2')
       .text('DEPLOYMENT & CONTAINMENT POSTURE (0% = Unbounded Swarms → 82% = CIN Airlock → 95% = Global Pause)');
 
+    var midY = Math.round((margin.top + height - margin.bottom) / 2);
     svg.append('text')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', -(margin.top + height - margin.bottom) / 2)
-      .attr('y', 18)
+      .attr('x', 18)
+      .attr('y', midY)
+      .attr('dy', '0.35em')
+      .attr('transform', 'rotate(-90, 18, ' + midY + ')')
       .attr('text-anchor', 'middle')
       .attr('font-family', 'ui-monospace, monospace')
       .attr('font-size', 10)
@@ -632,7 +648,7 @@
       if (lensEl) lensEl.textContent = actor.lensLabel;
       if (linkEl) {
         linkEl.setAttribute('href', actor.targetSec);
-        linkEl.textContent = 'Jump to ' + actor.lensLabel + ' ↓';
+        linkEl.textContent = 'Jump ↓';
       }
       if (posEl) posEl.textContent = actor.posture;
       if (riskEl) riskEl.textContent = actor.risk;
@@ -847,24 +863,24 @@
       if (simState.mode === 'flow') {
         s1.min = '10'; s1.max = '90'; s1.step = '5'; s1.value = String(simState.autoShare);
         s2.min = '60'; s2.max = '95'; s2.step = '5'; s2.value = String(simState.shapleyRate);
-        if (s1Lbl) s1Lbl.textContent = 'AI Automation Share of Economy (10% → 90%)';
-        if (s2Lbl) s2Lbl.textContent = 'Demurrage & Shapley Royalty Rate';
-        if (s1Val) s1Val.textContent = simState.autoShare + '% Automated';
-        if (s2Val) s2Val.textContent = simState.shapleyRate + '% Shapley · 2%/mo';
+        if (s1Lbl) s1Lbl.textContent = 'Automation (10%–90%)';
+        if (s2Lbl) s2Lbl.textContent = 'Shapley & Demurrage';
+        if (s1Val) s1Val.textContent = simState.autoShare + '%';
+        if (s2Val) s2Val.textContent = simState.shapleyRate + '% · 2%/mo';
       } else if (simState.mode === 'bandwidth') {
         s1.min = '10'; s1.max = '100'; s1.step = '5'; s1.value = String(simState.airlockCover);
         s2.min = '10'; s2.max = '95'; s2.step = '5'; s2.value = String(simState.psiWorkforce);
-        if (s1Lbl) s1Lbl.textContent = 'CIN Zone 4 Airlock & 24h Mortal Lease Coverage';
-        if (s2Lbl) s2Lbl.textContent = '4.8B Workforce PSI & $8 Pre-ADC Shield';
-        if (s1Val) s1Val.textContent = simState.airlockCover + '% Airlock';
-        if (s2Val) s2Val.textContent = simState.psiWorkforce + '% Shielded';
+        if (s1Lbl) s1Lbl.textContent = 'Zone 4 Airlock';
+        if (s2Lbl) s2Lbl.textContent = 'Workforce PSI Shield';
+        if (s1Val) s1Val.textContent = simState.airlockCover + '%';
+        if (s2Val) s2Val.textContent = simState.psiWorkforce + '%';
       } else {
         s1.min = '15'; s1.max = '180'; s1.step = '15'; s1.value = String(simState.distillDays);
         s2.min = '1'; s2.max = '10'; s2.step = '1'; s2.value = String(simState.pairYears);
-        if (s1Lbl) s1Lbl.textContent = 'Open-Weight Distillation Speed (15 → 180 Days)';
-        if (s2Lbl) s2Lbl.textContent = '1-to-1 Pair Co-Adaptation Horizon (1 → 10 Years)';
-        if (s1Val) s1Val.textContent = simState.distillDays + ' Days';
-        if (s2Val) s2Val.textContent = 'Year ' + simState.pairYears;
+        if (s1Lbl) s1Lbl.textContent = 'Distillation (15–180d)';
+        if (s2Lbl) s2Lbl.textContent = 'Pair Horizon (1–10y)';
+        if (s1Val) s1Val.textContent = simState.distillDays + 'd';
+        if (s2Val) s2Val.textContent = 'Yr ' + simState.pairYears;
       }
     }
 
@@ -883,7 +899,7 @@
       var floorShare = 100 - totalCreator;
 
       if (topBadge) {
-        topBadge.textContent = '$' + totalCreator + ' CREATOR RETURN · $' + floorShare + ' DEMURRAGE FLOOR ($25K/YR)';
+        topBadge.textContent = totalCreator + '% CREATOR · $' + floorShare + ' FLOOR';
       }
 
       svg.append('text')

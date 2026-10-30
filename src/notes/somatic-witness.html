@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=60">
+  <link rel="stylesheet" href="/styles/site.css?v=61">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -45,14 +45,16 @@
     <a class="back" href="/notes">&larr; All notes</a>
     <span class="label">Hardware and personal agents</span>
     <h1>How your agent knows you are human—without watching you</h1>
-    <p class="lede">Today&rsquo;s technology gives you a bad choice: wear a commercial tracker that streams your body&rsquo;s signals to a company&rsquo;s cloud, or use a blind chatbot that cannot tell a tired nurse from a server farm running fifty thousand fake accounts. There is a third path: a tiny, open-hardware sensor that works only for you.</p>
+    <p class="lede">Today&rsquo;s technology gives you a bad choice: wear a commercial tracker that streams your body&rsquo;s signals to a company&rsquo;s cloud, or use a blind chatbot that cannot tell a tired nurse from a server farm running fifty thousand fake accounts.</p>
+    <details class="scen-drawer"><summary>Inspect context &amp; scope &#9662;</summary><p>There is a third path: a tiny, open-hardware sensor that works only for you.</p></details>
     <p class="meta">20 October 2026 · 8 min read · Theoretical hardware &amp; protocol blueprint, verified in simulation</p>
   </header>
 
   <div class="note-body wrap-narrow">
     <aside class="callout">
       <b>In short</b>
-      <p>We are designing an open-schematic, low-cost personal sensor module—the <strong>Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness)</strong> (target parts cost under eight dollars, drawing less than one milliwatt)—that pairs only with your own device. Grounded in hardware-attested biometric liveness verification and Physical Unclonable Functions (Blaise Gassend et al., 2002; W3C FIDO2 / WebAuthn, 2021), it comprehends physical work, creative flow, exhaustion and acute stress; computes a continuous <strong>&ldquo;how human&rdquo; liveness score</strong> from the natural coupling of pulse, breath and micro-movement; and co-signs events onto your private personal ledger. Raw body signals overwrite themselves every thirty seconds and never leave your possession.</p>
+      <details class="scen-drawer"><summary>Inspect technical derivation, proofs &amp; citations &#9662;</summary><p>We are designing an open-schematic, low-cost personal sensor module—the <strong>Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness)</strong> (target parts cost under eight dollars, drawing less than one milliwatt)—that pairs only with your own device.</p></details>
+      <details class="scen-drawer"><summary>Inspect technical derivation, proofs &amp; citations &#9662;</summary><details class="scen-drawer"><summary>Inspect technical derivation, proofs &amp; citations &#9662;</summary><p>Grounded in hardware-attested biometric liveness verification and Physical Unclonable Functions (Blaise Gassend et al., 2002; W3C FIDO2 / WebAuthn, 2021), it comprehends physical work, creative flow, exhaustion and acute stress; computes a continuous <strong>&ldquo;how human&rdquo; liveness score</strong> from the natural coupling of pulse, breath and micro-movement; and co-signs events onto your private personal ledger. Raw body signals overwrite themselves every thirty seconds and never leave your possession.</p></details></details>
     </aside>
 
     <figure class="diagram" style="margin:1.2rem 0 1.5rem">
@@ -91,7 +93,7 @@
 
 
     <h2>Two problems that turn out to be the same problem</h2>
-    <p>When we talk about a personal agent that protects your wellbeing and helps your community coordinate on a shared ledger, two practical questions immediately come up:</p>
+    <details class="scen-drawer"><summary>Inspect technical derivation, proofs &amp; citations &#9662;</summary><p>When we talk about a personal agent that protects your wellbeing and helps your community coordinate on a shared ledger, two practical questions immediately come up:</p></details>
     <details class="scen-drawer">
       <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
       <ol>
@@ -141,7 +143,7 @@
       <figcaption>How the on-device sensor verifies human liveness and blocks coercion using a 2-of-2 Silicon PUF + Secure Enclave signature while erasing 100% of raw waveforms locally.</figcaption>
     </figure>
     <h2>What lives inside the sensor module</h2>
-    <p>The reference design is a postage-stamp-sized open board that fits inside a ring, wristband clasp, work-badge clip or earpiece, with no microphone recording speech, no camera, and no Wi-Fi or cellular radio:</p>
+    <details class="scen-drawer"><summary>Inspect technical derivation, proofs &amp; citations &#9662;</summary><p>The reference design is a postage-stamp-sized open board that fits inside a ring, wristband clasp, work-badge clip or earpiece, with no microphone recording speech, no camera, and no Wi-Fi or cellular radio:</p></details>
     <details class="scen-drawer">
       <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
       <ul>
@@ -154,7 +156,7 @@
 
 
     <h2>Interactive explorer: test the Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness) sensor</h2>
-    <p>Pick one of the six tested scenarios below—or move the sliders yourself—to see how the on-chip verifier computes the continuous <strong>&ldquo;how human&rdquo; score</strong> and decides whether to co-sign an event onto your personal ledger.</p>
+    <details class="scen-drawer"><summary>Inspect technical derivation, proofs &amp; citations &#9662;</summary><p>Pick one of the six tested scenarios below—or move the sliders yourself—to see how the on-chip verifier computes the continuous <strong>&ldquo;how human&rdquo; score</strong> and decides whether to co-sign an event onto your personal ledger.</p></details>
 
     <div class="trust-calc" id="sw-sim">
       <div class="sl-tasks" role="group" aria-label="Sensor test scenarios" style="margin-top:0">
@@ -195,15 +197,16 @@
     </div>
 
     <h2>Why server-farm bots cannot fake coupled body entropy</h2>
-    <p>A computer script can easily generate random numbers, or replay a stolen recording of someone&rsquo;s heartbeat. What is hard to forge inside a sealed silicon chip is the live, simultaneous coupling of three physical processes in a real body: the way your heart rate speeds and slows slightly with every breath (respiratory sinus arrhythmia), the tiny mechanical vibration of muscle fibres firing as you move, and the thermal and skin-conductance shifts that follow real effort.</p>
-    <details class="scen-drawer">
+    <p>A computer script can easily generate random numbers, or replay a stolen recording of someone&rsquo;s heartbeat.</p>
+      <details class="scen-drawer">
       <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+        <p>What is hard to forge inside a sealed silicon chip is the live, simultaneous coupling of three physical processes in a real body: the way your heart rate speeds and slows slightly with every breath (respiratory sinus arrhythmia), the tiny mechanical vibration of muscle fibres firing as you move, and the thermal and skin-conductance shifts that follow real effort.</p>
       <p>Because the sensor computes this coupling right where the analog signal enters the chip—and signs the result with its un-copyable silicon key—a cloud server farm has no way to inject fake waves without physically building and moving fifty thousand real biological bodies.</p>
     </details>
 
 
     <h2>The duress lock: protecting you if you are forced</h2>
-    <p>Any system where your body or device unlocks value has to face an ugly question: <em>what if someone threatens you physically to make you approve a transfer?</em></p>
+    <details class="scen-drawer"><summary>Inspect technical derivation, proofs &amp; citations &#9662;</summary><p>Any system where your body or device unlocks value has to face an ugly question: <em>what if someone threatens you physically to make you approve a transfer?</em></p></details>
     <details class="scen-drawer">
       <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
       <p>When the sensor detects the unmistakable physiological signature of acute terror or coercion—a sudden spike in skin conductance and heart rate without corresponding physical exercise—it does not display an error message that would put you in danger. Instead, it silently withholds your real hardware signature and opens a pre-configured <strong>safe decoy wallet</strong> with a small balance, while quietly logging a time-locked recovery proof for your trusted guardians.</p>
@@ -211,9 +214,10 @@
 
 
     <h2>Fairness for people with cheap or no wearables</h2>
-    <p>Not everyone can afford a smart ring, and no one should ever be ranked as &ldquo;less human&rdquo; because their hardware is cheap. Our design holds two hard rules:</p>
-    <details class="scen-drawer">
+    <p>Not everyone can afford a smart ring, and no one should ever be ranked as &ldquo;less human&rdquo; because their hardware is cheap.</p>
+      <details class="scen-drawer">
       <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+        <p>Our design holds two hard rules:</p>
       <ul>
       <li><strong>Free cooperative sensor loans:</strong> any member of a local co-operative can borrow an open-hardware work clip at no cost, verify its published parts list, and pair it locally with a basic phone.</li>
       <li><strong>In-person community vouching:</strong> if a sensor is lost, broken or unavailable, three neighbours in your community can co-sign a presence check in person. Hardware sensors make everyday verification effortless; they never become a tollbooth on human dignity.</li>
@@ -262,9 +266,9 @@
   </div>
 </footer>
 
-<script src="/scripts/vendor/d3.v7.min.js?v=60" defer></script>
-<script src="/scripts/site.js?v=60" defer></script>
+<script src="/scripts/vendor/d3.v7.min.js?v=61" defer></script>
+<script src="/scripts/site.js?v=61" defer></script>
 <script src="/scripts/everyday.js?v=61" defer></script>
-<script src="/scripts/notes-d3.js?v=60" defer></script>
+<script src="/scripts/notes-d3.js?v=61" defer></script>
 </body>
 </html>

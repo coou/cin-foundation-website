@@ -14,9 +14,9 @@
 <meta property="og:image" content="/assets/images/og-image.svg">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-<link rel="stylesheet" href="/styles/site.css?v=60">
-<script src="/scripts/vendor/d3.v7.min.js?v=60" defer></script>
-<script src="/scripts/world-standing-d3.js?v=60" defer></script>
+<link rel="stylesheet" href="/styles/site.css?v=61">
+<script src="/scripts/vendor/d3.v7.min.js?v=61" defer></script>
+<script src="/scripts/world-standing-d3.js?v=61" defer></script>
 <style>
   .ws-d3-card {
     margin: 1.4rem 0 2.2rem;
@@ -259,6 +259,34 @@
     text-transform: uppercase;
     color: var(--ink-3);
   }
+  .ws-jump-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+    gap: .45rem;
+    margin: .9rem 0 1.2rem;
+  }
+  .ws-jump-card {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .46rem .68rem;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--ok);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--ink);
+    font: 600 .74rem/1.25 var(--sans);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .ws-jump-card:hover {
+    border-color: var(--ok);
+    transform: translateY(-1px);
+  }
+  .ws-jump-card b {
+    font: 700 .68rem/1 var(--mono);
+    color: var(--ok);
+  }
 </style>
 </head>
 <body class="page-note">
@@ -289,19 +317,29 @@
   <div class="wrap-narrow">
     <header class="note-head">
       <a class="back" href="/notes">&larr; Blueprints</a>
-      <span class="label">D3.js v7 Observatory &middot; 7 Lenses &amp; 18 Actors</span>
+      <span class="label">7-Lens Observatory</span>
       <h1>Where the World Stands vs. CIN Co-Intelligence</h1>
-      <p class="lede">Human biology processes <b>~40 bits/s</b> while AI task horizons double every <b>4.5 months</b> (<a href="https://metr.org" target="_blank" rel="noopener">METR, 2026</a>); <b>Two-Internet Isolation</b>, <b>Mortal Leases</b> (<a href="https://arxiv.org/abs/2311.09589" target="_blank" rel="noopener">Hinton, 2022; Ororbia &amp; Friston, 2023</a>), and <b>1-to-1 Pair Intelligence</b> form humanity&rsquo;s co-existence airlock.</p>
+      <p class="lede">Biology runs at <b>~40 bits/s</b> while AI doubles every <b>4.5 months</b> (<a href="https://metr.org" target="_blank" rel="noopener">METR, 2026</a>); <b>Two-Internet Airlocks</b>, <b>24h Leases</b> (<a href="https://arxiv.org/abs/2311.09589" target="_blank" rel="noopener">Hinton, 2022</a>), and <b>1-to-1 Pair Moats</b> protect sovereignty.</p>
     </header>
 
     <div class="note-body">
 
+      <nav id="ws-lens-jump-strip" class="ws-jump-strip" aria-label="7-Lens Visual Quick-Jump Strip">
+        <a class="ws-jump-card" href="#lens-labs"><b>01</b><span>SOTA Labs &middot; $0 vs. 95% Shapley</span></a>
+        <a class="ws-jump-card" href="#lens-safety"><b>02</b><span>Safety &middot; Last Resort Before Pause</span></a>
+        <a class="ws-jump-card" href="#lens-gov"><b>03</b><span>Governments &middot; 3-5yr Lag vs. &lt;10ms Gate</span></a>
+        <a class="ws-jump-card" href="#lens-research"><b>04</b><span>Universities &middot; 88% Ideas vs. 15% Royalty</span></a>
+        <a class="ws-jump-card" href="#lens-enterprise"><b>05</b><span>Enterprise &middot; -32% Toll vs. PSI Co-Op</span></a>
+        <a class="ws-jump-card" href="#lens-humanity"><b>06</b><span>Global Adoption &middot; 4.8B Worker Shield</span></a>
+        <a class="ws-jump-card" href="#lens-pair"><b>07</b><span>Pair Economy &middot; 90d Cliff vs. 96% Moat</span></a>
+      </nav>
+
       <!-- ================= STUDIO 1: HERO INTERACTIVE D3.JS V7 2D ECOSYSTEM OBSERVATORY ================= -->
       <section id="ws-ecosystem-d3-card" class="ws-d3-card" aria-label="Interactive D3.js 7-Lens Global AI Ecosystem Observatory">
-        <div class="ws-d3-top">
+        <div id="studio-quadrant" class="ws-d3-top">
           <div>
-            <span class="label">Studio 1 &middot; D3.js v7 Quadrant</span>
-            <h2 style="font-size:1.24rem;margin-top:.18rem">18 Global Actors: Containment vs. Sovereignty</h2>
+            <span class="label">Studio 1</span>
+            <h2 style="font-size:1.24rem;margin-top:.18rem">18-Actor Sovereignty Quadrant</h2>
           </div>
           <span style="font:700 .66rem/1 var(--mono);color:var(--ok)">CLICK BUBBLE</span>
         </div>
@@ -332,8 +370,10 @@
 
         <div style="overflow-x:auto" id="ws-d3-ecosystem-svg">
           <svg id="ws-ecosystem-svg" data-rich-viz="true" viewBox="0 0 860 420" role="img" aria-label="Interactive D3.js 2D Ecosystem Map comparing 18 global AI actors">
-            <rect x="4" y="4" width="852" height="412" rx="14" fill="#12151c" stroke="#2a2f3a" stroke-width="1.5"/>
-            <text x="430" y="210" text-anchor="middle" font-family="monospace" font-size="12" fill="#4fb3a8">D3.js v7 18-Actor Observatory</text>
+            <g id="ws-quadrant-svg">
+              <rect x="4" y="4" width="852" height="412" rx="14" fill="#12151c" stroke="#2a2f3a" stroke-width="1.5"/>
+              <text x="430" y="210" text-anchor="middle" font-family="monospace" font-size="12" fill="#4fb3a8">D3.js v7 18-Actor Observatory</text>
+            </g>
           </svg>
         </div>
 
@@ -349,20 +389,23 @@
             <rect x="2" y="2" width="676" height="114" rx="10" fill="#141821" stroke="#2a303d" stroke-width="1.2"/>
             <text x="340" y="62" text-anchor="middle" font-family="monospace" font-size="10" fill="#4fb3a8">D3 Actor vs. CIN Comparator</text>
           </svg>
-          <div class="ws-insp-grid">
-            <div class="ws-insp-pill">
-              <small>Posture</small>
-              <p id="ws-insp-posture"><span id="ws-ai-desc">Two-Internet airlock + 24h lease.</span></p>
+          <details class="scen-drawer">
+            <summary>Inspect actor posture, risk &amp; CIN co-intelligence transition &#9662;</summary>
+            <div class="ws-insp-grid">
+              <div class="ws-insp-pill">
+                <small>Posture</small>
+                <p id="ws-insp-posture"><span id="ws-ai-desc">Two-Internet airlock + 24h lease.</span></p>
+              </div>
+              <div class="ws-insp-pill risk">
+                <small>Risk</small>
+                <p id="ws-insp-risk">Swarm race forces treaty freeze.</p>
+              </div>
+              <div class="ws-insp-pill cin">
+                <small>CIN</small>
+                <p id="ws-insp-cin"><span id="ws-ai-cin">95% Shapley + biological airlock.</span></p>
+              </div>
             </div>
-            <div class="ws-insp-pill risk">
-              <small>Risk</small>
-              <p id="ws-insp-risk">Swarm race forces treaty freeze.</p>
-            </div>
-            <div class="ws-insp-pill cin">
-              <small>CIN</small>
-              <p id="ws-insp-cin"><span id="ws-ai-cin">95% Shapley + biological airlock.</span></p>
-            </div>
-          </div>
+          </details>
         </div>
       </section>
 
@@ -370,30 +413,30 @@
       <section id="ws-deep-sim-card" class="ws-d3-card" aria-label="Interactive D3.js v7 Co-Intelligence vs. Extraction Lab">
         <div class="ws-d3-top">
           <div>
-            <span class="label">Studio 2 &middot; 3-Mode D3.js v7 Lab</span>
-            <h2 style="font-size:1.22rem;margin-top:.18rem">Interactive D3.js v7 Co-Intelligence vs. Extraction Lab: Value Flow, Biological Bandwidth &amp; Pair Moat</h2>
+            <span class="label">Studio 2</span>
+            <h2 style="font-size:1.22rem;margin-top:.18rem">Co-Intelligence vs. Extraction Lab</h2>
           </div>
-          <span id="ws-deep-sim-badge" style="font:700 .66rem/1 var(--mono);color:var(--ok)">95% CREATOR &middot; 96% MOAT</span>
+          <span id="ws-deep-sim-badge" style="font:700 .66rem/1 var(--mono);color:var(--ok)">95% CREATOR</span>
         </div>
 
         <div class="ws-filter-pills" role="toolbar" aria-label="Select D3 simulation mode">
-          <button type="button" data-ws-sim-mode="flow" aria-pressed="true">1. $100 Value Flow</button>
-          <button type="button" data-ws-sim-mode="bandwidth" aria-pressed="false">2. Bandwidth &amp; 5 Zones</button>
-          <button type="button" data-ws-sim-mode="moat" aria-pressed="false">3. 10-Yr Pair Moat</button>
+          <button type="button" data-ws-sim-mode="flow" aria-pressed="true">1. Value Flow</button>
+          <button type="button" data-ws-sim-mode="bandwidth" aria-pressed="false">2. Bandwidth</button>
+          <button type="button" data-ws-sim-mode="moat" aria-pressed="false">3. Pair Moat</button>
         </div>
 
         <div class="ws-controls-bar dual-sliders">
           <div>
             <label for="ws-sim-slider-1" style="display:flex;justify-content:space-between;font:600 .76rem var(--sans)">
-              <span id="ws-sim-s1-label" data-moat-label="Open-Weight Distillation Speed (15 &rarr; 180 Days)">Automation Share (10%&ndash;90%)</span>
+              <span id="ws-sim-s1-label" data-moat-label="Open-Weight Distillation Speed (15 &rarr; 180 Days)">Automation</span>
               <b id="ws-sim-s1-val" style="font-family:var(--mono);color:var(--ok)">55%</b>
             </label>
             <input type="range" id="ws-sim-slider-1" min="10" max="90" step="5" value="55" style="width:100%;margin-top:.25rem;accent-color:var(--ok);cursor:pointer">
           </div>
           <div>
             <label for="ws-sim-slider-2" style="display:flex;justify-content:space-between;font:600 .76rem var(--sans)">
-              <span id="ws-sim-s2-label">Shapley &amp; Demurrage</span>
-              <b id="ws-sim-s2-val" style="font-family:var(--mono);color:var(--ok)">95% &middot; 2%/mo</b>
+              <span id="ws-sim-s2-label">Shapley</span>
+              <b id="ws-sim-s2-val" style="font-family:var(--mono);color:var(--ok)">95%</b>
             </label>
             <input type="range" id="ws-sim-slider-2" min="60" max="95" step="5" value="95" style="width:100%;margin-top:.25rem;accent-color:var(--ok);cursor:pointer">
           </div>
@@ -409,9 +452,8 @@
 
       <!-- ================= LENS 1: SOTA MODEL AI LABS ================= -->
       <section id="lens-labs" class="ws-lens-sec">
-        <span id="lens-1-sota-labs" class="label"><span id="sota-labs"></span>Lens 1 &middot; Labs</span>
-        <h2>1. SOTA Labs: Cloud Rent vs. 95% Shapley</h2>
-        <p class="ws-lead-sentence">Cloud labs pay creators $0; CIN routes 95% Data Shapley royalties.</p>
+        <span id="lens-1-sota-labs" class="label"><span id="sota-labs"></span>Lens 1</span>
+        <h2>1. SOTA Labs: $0 vs. 95% Shapley</h2>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad"><small>Cloud</small><b>$0 Royalty</b></div>
@@ -457,7 +499,8 @@
         </figure>
 
         <details class="scen-drawer">
-          <summary>Sources &amp; table &#9662;</summary>
+          <summary>Table &#9662;</summary>
+          <p class="ws-lead-sentence">Cloud labs pay creators $0; CIN routes 95% Data Shapley royalties.</p>
           <p><b>Causal Chain &amp; Citations:</b> Domain specialists intend to compound their craft without training their own replacement &rarr; centralized cloud AI labs scrape public repositories for $0 and charge 15%&ndash;40% API rent &rarr; CIN executes Low-Rank Adapters (<a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">Hu et al., 2022</a>) locally inside WebAssembly Object-Capability sandboxes (<a href="https://doi.org/10.1145/365230.365252" target="_blank" rel="noopener">Dennis &amp; Van Horn, 1966</a>) with Proof-Carrying Code (<a href="https://dl.acm.org/doi/10.1145/263699.263712" target="_blank" rel="noopener">Necula, 1997</a>) and truncated Monte Carlo Data Shapley attribution (<a href="https://arxiv.org/abs/1904.02868" target="_blank" rel="noopener">Ghorbani &amp; Zou, 2019</a>).</p>
           <table>
             <thead>
@@ -474,9 +517,8 @@
 
       <!-- ================= LENS 2: AI SAFETY LABS & LAST RESORT BEFORE PAUSE ================= -->
       <section id="lens-safety" class="ws-lens-sec">
-        <span id="lens-2-safety-pause" class="label"><span id="safety-labs"></span><span id="lens-2-safety-labs"></span>Lens 2 &middot; Safety</span>
-        <h2>2. Safety: Last Resort Before Pause</h2>
-        <p class="ws-lead-sentence">Eval scorecards lack runtime barriers; CIN enforces the Two-Internet airlock before a compute freeze.</p>
+        <span id="lens-2-safety-pause" class="label"><span id="safety-labs"></span><span id="lens-2-safety-labs"></span>Lens 2</span>
+        <h2>2. Safety: Airlock Before Pause</h2>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad"><small>Bandwidth Gap</small><b>~40 vs. 10&sup1;&sup2; b/s</b></div>
@@ -522,7 +564,7 @@
         </figure>
 
         <details class="scen-drawer">
-          <summary>Sources &amp; table &#9662;</summary>
+          <summary>Table &#9662;</summary>
           <p><b>Why Biological Evolution Needs a Protocol Airlock:</b> Conscious human information processing operates at roughly <b>~40 bits/s</b> across 25-year generations, whereas autonomous machine swarms coordinate at <b>10&sup1;&sup2; bits/s</b> while doubling task horizons every <b>4.5 months</b> (<a href="https://metr.org" target="_blank" rel="noopener">METR, 2026</a>). Evaluation institutes (<a href="https://www.redwoodresearch.org" target="_blank" rel="noopener">Redwood Research</a>, Apollo, UK AISI) measure these capabilities, but only a hard protocol boundary—splitting the Human Internet from the Agent-Only Internet and binding every agent lease 1-to-1 to a living human (<a href="https://arxiv.org/abs/2311.09589" target="_blank" rel="noopener">Hinton, 2022; Ororbia &amp; Friston, 2023</a>)—bridges the 10&sup1;⁰&times; gap without a Zone 5 global GPU shutdown.</p>
           <table>
             <thead>
@@ -541,9 +583,8 @@
 
       <!-- ================= LENS 3: GOVERNMENT INSTITUTIONS ================= -->
       <section id="lens-gov" class="ws-lens-sec">
-        <span id="lens-3-governments" class="label"><span id="governments"></span>Lens 3 &middot; Governments</span>
-        <h2>3. Governments: 36-Mo Lag vs. &lt;10ms Quorum</h2>
-        <p class="ws-lead-sentence">Statutes lag 4.5-month AI doublings; CIN enforces sub-10ms silicon quorum gates and demurrage floors.</p>
+        <span id="lens-3-governments" class="label"><span id="governments"></span>Lens 3</span>
+        <h2>3. Governments: Lag vs. &lt;10ms Quorum</h2>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad"><small>Statute Lag</small><b>36 Mo (64&times;)</b></div>
@@ -583,7 +624,8 @@
         </figure>
 
         <details class="scen-drawer">
-          <summary>Sources &amp; table &#9662;</summary>
+          <summary>Table &#9662;</summary>
+          <p class="ws-lead-sentence">Statutes lag 4.5-month AI doublings; CIN enforces sub-10ms silicon quorum gates and demurrage floors.</p>
           <p><b>Causal Chain:</b> Democratic institutions intend to protect infrastructure and fund civic services &rarr; 18&ndash;36 month legislative cycles lag behind 4.5-month AI capability doublings while automation erodes the 72% payroll tax base &rarr; CIN enforces sub-10ms hardware quorum gates for high-consequence actions and stabilizes municipal budgets via a $25,000 tax-exempt citizen floor paired with 2%/month demurrage on idle conglomerate hoards.</p>
           <table>
             <thead>
@@ -600,9 +642,8 @@
 
       <!-- ================= LENS 4: PUBLIC RESEARCH & UNIVERSITIES ================= -->
       <section id="lens-research" class="ws-lens-sec">
-        <span id="lens-4-universities" class="label"><span id="universities"></span>Lens 4 &middot; Universities</span>
-        <h2>4. Universities: Compute Squeeze vs. Shapley Endowments</h2>
-        <p class="ws-lead-sentence">Universities originate 88% of AI math for $0 royalty; CIN pays perpetual citation endowments.</p>
+        <span id="lens-4-universities" class="label"><span id="universities"></span>Lens 4</span>
+        <h2>4. Universities: $0 vs. Endowment</h2>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad"><small>Cloud Scrape</small><b>&lt;1% GPU &middot; $0</b></div>
@@ -642,7 +683,8 @@
         </figure>
 
         <details class="scen-drawer">
-          <summary>Sources &amp; table &#9662;</summary>
+          <summary>Table &#9662;</summary>
+          <p class="ws-lead-sentence">Universities originate 88% of AI math for $0 royalty; CIN pays perpetual citation endowments.</p>
           <p><b>Causal Chain &amp; Citations:</b> Public research universities originate foundational methods (Transformers, Diffusion, Low-Rank Adaptation, TIES-Merging) &rarr; commercial cloud labs ingest arXiv preprints for $0 while pricing universities out of compute pods &rarr; CIN compiles papers into 260-token SPRA units (<a href="https://arxiv.org/abs/2610.21424" target="_blank" rel="noopener">Leng et al., 2026</a>), federates 18 MB TIES-LoRA adapters (<a href="https://arxiv.org/abs/2306.01708" target="_blank" rel="noopener">Yadav et al., 2023</a>) over IETF QUIC (<a href="https://datatracker.ietf.org/doc/html/rfc9000" target="_blank" rel="noopener">RFC 9000</a>), and routes perpetual Data Shapley lineage royalties to cited university labs.</p>
           <table>
             <thead>
@@ -659,9 +701,8 @@
 
       <!-- ================= LENS 5: PRIVATE ENTERPRISE ================= -->
       <section id="lens-enterprise" class="ws-lens-sec">
-        <span id="lens-5-enterprise" class="label"><span id="enterprise"></span>Lens 5 &middot; Enterprise</span>
-        <h2>5. Enterprise: 32% Toll vs. Local Wasm &amp; PSI</h2>
-        <p class="ws-lead-sentence">Tenants lose 32% to middlemen and leak IP; local Wasm sandboxes and PSI co-ops protect margins.</p>
+        <span id="lens-5-enterprise" class="label"><span id="enterprise"></span>Lens 5</span>
+        <h2>5. Enterprise: -32% Toll vs. PSI</h2>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad"><small>Tenant Toll</small><b>-32% Margin</b></div>
@@ -701,7 +742,8 @@
         </figure>
 
         <details class="scen-drawer">
-          <summary>Sources &amp; table &#9662;</summary>
+          <summary>Table &#9662;</summary>
+          <p class="ws-lead-sentence">Tenants lose 32% to middlemen and leak IP; local Wasm sandboxes and PSI co-ops protect margins.</p>
           <p><b>Causal Chain &amp; Citations:</b> Independent clinics, credit unions, and small businesses intend to automate billing and procurement without surrendering trade secrets &rarr; cloud SaaS, PBM, and Group Purchasing Organizations (GPOs) extract 32% middleman tolls while harvesting prompts &rarr; CIN executes CMS National Correct Coding Initiative (NCCI) CPT billing audits inside local WebAssembly sandboxes and forms 500-firm Private Set Intersection (<a href="https://doi.org/10.1007/978-3-540-24676-3_1" target="_blank" rel="noopener">Freedman et al., 2004</a>) buyer cooperatives.</p>
           <table>
             <thead>
@@ -718,9 +760,8 @@
 
       <!-- ================= LENS 6: GLOBAL HUMAN ADOPTION & THE INTELLIGENCE GAMBIT ================= -->
       <section id="lens-humanity" class="ws-lens-sec">
-        <span id="lens-6-workforce" class="label"><span id="human-adoption"></span><span id="lens-6-human-adoption"></span>Lens 6 &middot; Workforce</span>
-        <h2>6. Workforce: Shielding 4.8B Workers From AI Cartels</h2>
-        <p class="ws-lead-sentence">AI cartels crush unshielded producers; offline twins, $8 Pre-ADC sensors, and PSI co-ops restore parity.</p>
+        <span id="lens-6-workforce" class="label"><span id="human-adoption"></span><span id="lens-6-human-adoption"></span>Lens 6</span>
+        <h2>6. Workforce: 4.8B Producer Shield</h2>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad"><small>Cartel Dump</small><b>78% &rarr; 24% Share</b></div>
@@ -758,7 +799,8 @@
         </figure>
 
         <details class="scen-drawer">
-          <summary>Sources &amp; table &#9662;</summary>
+          <summary>Table &#9662;</summary>
+          <p class="ws-lead-sentence">AI cartels crush unshielded producers; offline twins, $8 Pre-ADC sensors, and PSI co-ops restore parity.</p>
           <p><b>Causal Chain &amp; Citations:</b> Over 4.8 billion people work in agriculture, construction, resource extraction, artisan trades, and caregiving &rarr; automated commodity buyer cartels use satellite and swarm forecasting to collapse physical producer trade share from 78% to 24% &rarr; CIN deploys $8 analog Pre-ADC physical-presence sensors (<a href="https://doi.org/10.1109/JSSC.2022.3161802" target="_blank" rel="noopener">Datta et al., 2022</a>) paired with offline quantized voice twins on $45 handsets, uniting 10,000+ smallholders into Private Set Intersection supply cooperatives (<a href="https://doi.org/10.1007/978-3-540-24676-3_1" target="_blank" rel="noopener">Freedman et al., 2004</a>).</p>
           <table>
             <thead>
@@ -775,9 +817,8 @@
 
       <!-- ================= LENS 7: ECONOMY OF PAIR INTELLIGENCE VS. UNPROFITABLE CLOUD AI ================= -->
       <section id="lens-pair" class="ws-lens-sec">
-        <span id="lens-7-pair-economy" class="label"><span id="pair-intelligence"></span><span id="lens-7-pair-intelligence"></span>Lens 7 &middot; Pair Economy</span>
-        <h2>7. Pair Economy: Cloud Burn vs. 96% Pair Moat</h2>
-        <p class="ws-lead-sentence">Open weights distill cloud APIs in 60&ndash;90 days; 10-year local human-LoRA pairs build a 96% moat.</p>
+        <span id="lens-7-pair-economy" class="label"><span id="pair-intelligence"></span><span id="lens-7-pair-intelligence"></span>Lens 7</span>
+        <h2>7. Pair Economy: Cliff vs. 96% Moat</h2>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad"><small>Cloud Burn</small><b>-$5B to -$15B/yr</b></div>
@@ -820,7 +861,8 @@
         </figure>
 
         <details class="scen-drawer">
-          <summary>Sources &amp; table &#9662;</summary>
+          <summary>Table &#9662;</summary>
+          <p class="ws-lead-sentence">Open weights distill cloud APIs in 60&ndash;90 days; 10-year local human-LoRA pairs build a 96% moat.</p>
           <p><b>Why Centralized Cloud AI Bleeds -$5B to -$15B/Yr While 1-to-1 Pair Intelligence Compounds from 66% to 96%:</b> Frontier cloud labs spend $10B&ndash;$100B training monolithic models, only for open-weight distillation and Low-Rank Adaptation (<a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">Hu et al., 2022</a>; <a href="https://arxiv.org/abs/2306.01708" target="_blank" rel="noopener">Yadav et al., 2023</a>) to replicate baseline capability within <b>60&ndash;90 days</b>. Conversely, a <b>1-to-1 Pair</b>—combining <b>34% tacit human craft</b>, <b>32% 10-year private episodic memory</b>, and <b>30% on-device rank-16 LoRA weights</b> (<a href="https://mitpress.mit.edu/9780262661157/affective-computing/" target="_blank" rel="noopener">Picard, 1997</a>) atop a <b>4% commodity open backbone</b>—reaches a <b>96% uncopyable moat</b> by Year 10.</p>
           <div class="sim-shell" id="pair-moat-sim" style="margin:.8rem 0;padding:.9rem 1rem;background:var(--paper);border:1px solid var(--rule);border-radius:10px">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.85rem">
@@ -852,6 +894,6 @@
 </article>
 </main>
 
-<script src="/scripts/site.js?v=60" defer></script>
+<script src="/scripts/site.js?v=61" defer></script>
 </body>
 </html>

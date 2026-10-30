@@ -4,6 +4,164 @@
 (function () {
   'use strict';
 
+  /* ---------- 0. Top-Right Hero D3.js v7 30-Day Sovereignty Trajectory Sparkline (#traj-hero-d3-svg) ---------- */
+  function renderTrajHeroSparkD3() {
+    var d3 = window.d3;
+    var svgEl = document.getElementById('traj-hero-d3-svg');
+    if (!d3 || typeof d3.select !== 'function' || !svgEl) return;
+
+    var svg = d3.select(svgEl);
+    svg.selectAll('*').remove();
+
+    var defs = svg.append('defs');
+    var areaGrad = defs.append('linearGradient')
+      .attr('id', 'traj-hero-spark-grad')
+      .attr('x1', '0%').attr('y1', '0%')
+      .attr('x2', '0%').attr('y2', '100%');
+    areaGrad.append('stop').attr('offset', '0%').attr('stop-color', '#4fb3a8').attr('stop-opacity', 0.34);
+    areaGrad.append('stop').attr('offset', '100%').attr('stop-color', '#4fb3a8').attr('stop-opacity', 0.03);
+
+    /* Outer dark background rect */
+    svg.append('rect')
+      .attr('x', 2).attr('y', 2)
+      .attr('width', 516).attr('height', 112).attr('rx', 9)
+      .attr('fill', '#12161f')
+      .attr('stroke', '#2c303a')
+      .attr('stroke-width', 1.2);
+
+    /* Left Panel (x = 14..310): 30-Day Sovereignty Trajectory */
+    svg.append('text')
+      .attr('x', 16).attr('y', 22)
+      .attr('font-family', 'ui-monospace, monospace')
+      .attr('font-size', 8.2).attr('font-weight', 700).attr('fill', '#4fb3a8')
+      .text('30-DAY SOVEREIGNTY TRAJECTORY (50.0 NEUTRAL → 70.1 TOWARD)');
+
+    var pts = [
+      { day: 0, v: 51.4 },
+      { day: 4, v: 53.0 },
+      { day: 8, v: 55.2 },
+      { day: 12, v: 57.8 },
+      { day: 16, v: 60.4 },
+      { day: 20, v: 63.6 },
+      { day: 24, v: 66.5 },
+      { day: 27, v: 68.7 },
+      { day: 29, v: 70.1 }
+    ];
+
+    var xScale = d3.scaleLinear().domain([0, 29]).range([20, 302]);
+    var yScale = d3.scaleLinear().domain([47, 73]).range([98, 34]);
+    var y50 = yScale(50.0);
+
+    /* Dashed 50.0 neutral baseline */
+    svg.append('line')
+      .attr('x1', 16).attr('x2', 306)
+      .attr('y1', y50).attr('y2', y50)
+      .attr('stroke', '#8c95a6').attr('stroke-width', 1)
+      .attr('stroke-dasharray', '4 3').attr('opacity', 0.75);
+
+    svg.append('text')
+      .attr('x', 18).attr('y', y50 + 11)
+      .attr('font-family', 'ui-monospace, monospace')
+      .attr('font-size', 7.6).attr('fill', '#8c95a6')
+      .text('50.0 Neutral Baseline');
+
+    var areaGen = d3.area()
+      .x(function (d) { return xScale(d.day); })
+      .y0(y50)
+      .y1(function (d) { return yScale(d.v); })
+      .curve(d3.curveMonotoneX);
+
+    var lineGen = d3.line()
+      .x(function (d) { return xScale(d.day); })
+      .y(function (d) { return yScale(d.v); })
+      .curve(d3.curveMonotoneX);
+
+    svg.append('path')
+      .datum(pts)
+      .attr('fill', 'url(#traj-hero-spark-grad)')
+      .attr('d', areaGen);
+
+    svg.append('path')
+      .datum(pts)
+      .attr('fill', 'none')
+      .attr('stroke', '#4fb3a8')
+      .attr('stroke-width', 2.4)
+      .attr('d', lineGen);
+
+    /* Start dot (51.4) */
+    var x0 = xScale(0);
+    var y0 = yScale(51.4);
+    svg.append('circle')
+      .attr('cx', x0).attr('cy', y0).attr('r', 3)
+      .attr('fill', '#4fb3a8');
+    svg.append('text')
+      .attr('x', x0 + 6).attr('y', y0 - 5)
+      .attr('font-family', 'ui-monospace, monospace')
+      .attr('font-size', 8).attr('font-weight', 700).attr('fill', '#c5cad6')
+      .text('51.4');
+
+    /* Glowing endpoint circle (70.1) */
+    var xEnd = xScale(29);
+    var yEnd = yScale(70.1);
+    svg.append('circle')
+      .attr('cx', xEnd).attr('cy', yEnd).attr('r', 7)
+      .attr('fill', 'rgba(79, 179, 168, 0.28)')
+      .attr('stroke', '#e5a93c').attr('stroke-width', 1.2);
+    svg.append('circle')
+      .attr('cx', xEnd).attr('cy', yEnd).attr('r', 3.6)
+      .attr('fill', '#4fb3a8')
+      .attr('stroke', '#ffffff').attr('stroke-width', 1.2);
+    svg.append('text')
+      .attr('x', xEnd - 9).attr('y', yEnd + 3)
+      .attr('text-anchor', 'end')
+      .attr('font-family', 'ui-monospace, monospace')
+      .attr('font-size', 8.6).attr('font-weight', 700).attr('fill', '#e5a93c')
+      .text('70.1');
+
+    /* Divider */
+    svg.append('line')
+      .attr('x1', 316).attr('x2', 316)
+      .attr('y1', 12).attr('y2', 104)
+      .attr('stroke', '#262c3a').attr('stroke-width', 1);
+
+    /* Right Panel (x = 324..506): Dual-Agent Verification */
+    svg.append('text')
+      .attr('x', 326).attr('y', 22)
+      .attr('font-family', 'ui-monospace, monospace')
+      .attr('font-size', 8.2).attr('font-weight', 700).attr('fill', '#e5a93c')
+      .text('DUAL-AGENT VERIFICATION');
+
+    var rightRows = [
+      { y: 30, text: '5,977 Primary Sources', fill: '#181e2b', stroke: '#2b3344', color: '#e9e6de', dot: '#4fb3a8' },
+      { y: 56, text: '87% Dual-Agent Agreement', fill: '#181e2b', stroke: '#2b3344', color: '#4fb3a8', dot: '#5da2d5' },
+      { y: 82, text: '64x / 27mo AI Doubling Alert', fill: 'rgba(239, 106, 82, 0.14)', stroke: '#ef6a52', color: '#ef6a52', dot: '#ef6a52' }
+    ];
+
+    rightRows.forEach(function (r) {
+      svg.append('rect')
+        .attr('x', 326).attr('y', r.y)
+        .attr('width', 180).attr('height', 22).attr('rx', 4)
+        .attr('fill', r.fill)
+        .attr('stroke', r.stroke).attr('stroke-width', 1);
+
+      svg.append('circle')
+        .attr('cx', 336).attr('cy', r.y + 11).attr('r', 3)
+        .attr('fill', r.dot);
+
+      svg.append('text')
+        .attr('x', 344).attr('y', r.y + 14)
+        .attr('font-family', 'ui-monospace, monospace')
+        .attr('font-size', 8.3).attr('font-weight', 700).attr('fill', r.color)
+        .text(r.text);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderTrajHeroSparkD3);
+  } else {
+    renderTrajHeroSparkD3();
+  }
+
   /* ---------- 1. Interactive 6-Stage Strategic Foresight Observatory (#foresight-atlas) ---------- */
   var faRoot = document.getElementById('foresight-atlas');
   if (faRoot) {
@@ -531,8 +689,9 @@
         thsDelta.textContent = (d0 >= 0 ? '+' : '') + d0.toFixed(1) + ' in 24 h';
       }
       if (thsSub) {
-        thsSub.innerHTML = t.signals_7d + ' new sources verified this week (' + t.signals_total + ' total) · Updated ' + ago(t.updated) + '.';
+        thsSub.innerHTML = t.signals_7d + ' sources verified (' + t.signals_total + ' total).';
       }
+      renderTrajHeroSparkD3();
       if (thsBars && t.categories) {
         thsBars.innerHTML = Object.keys(t.categories).map(function (k) {
           var c = t.categories[k];

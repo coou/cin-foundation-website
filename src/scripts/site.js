@@ -2025,6 +2025,7 @@
     renderD3RadarLens(currentKey, d, val, normDelta);
     renderD3FlowLens(currentKey, d, val, res, normDelta);
     renderD3QuadrantLens(currentKey, d, val, res, normDelta);
+    renderWmRightInfographicD3(currentKey, d, val, res, normDelta);
   }
 
   var RADAR_AXES = [
@@ -2381,6 +2382,112 @@
         .text(idx === 3 ? 'Two Internets + 24h Lease' : (idx === 4 ? 'Compute Freeze' : '40 bits/s Exposed'));
       zx += z.w;
     });
+  }
+
+  function renderWmRightInfographicD3(key, d, val, res, normDelta) {
+    var rEl = document.getElementById('wm-right-d3-svg');
+    if (!rEl || !window.d3) return;
+    var d3 = window.d3;
+    var svg = d3.select(rEl);
+    svg.selectAll('*').remove();
+
+    svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 412).attr('height', 218).attr('rx', 10)
+      .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+
+    var SPECS = {
+      labs: {
+        title: '1. PROFIT VS. COOPERATION ($100 VALUE SPLIT)',
+        sqLbl: 'SOTA Cloud Labs', sqSegs: [{ w: 202, c: '#ef6a52', t: '$72 Equity' }, { w: 78, c: '#9e3929', t: '$28 Toll' }],
+        cinLbl: 'CIN Co-Intelligence', cinSegs: [{ w: 238, c: '#4fb3a8', t: '$85 Solver' }, { w: 28, c: '#5da2d5', t: '$10' }, { w: 14, c: '#e5a93c', t: '' }],
+        foot: '✓ 95% Data Shapley Creator Return + 5% Philanthropic Commons'
+      },
+      safety: {
+        title: '2. LAST RESORT BEFORE PAUSE (5-ZONE AIRLOCK)',
+        sqLbl: 'Unshielded (~40b/s)', sqSegs: [{ w: 58, c: '#ef6a52', t: '10¹²b/s' }, { w: 222, c: '#2a1617', t: 'Biology Overwhelmed by Swarms' }],
+        cinLbl: 'Zone 4 CIN Airlock', cinSegs: [{ w: 280, c: '#4fb3a8', t: '★ Two Internets + 24h Mortal Lease (Co-Exist)' }],
+        foot: '✓ Hardware 1-to-1 Bond Prevents Extinction Without GPU Freeze'
+      },
+      gov: {
+        title: '3. STATUTORY LAG VS. <10MS SILICON QUORUM',
+        sqLbl: '3-5 Yr Statute Lag', sqSegs: [{ w: 48, c: '#ef6a52', t: '8-13x' }, { w: 232, c: '#2a1617', t: '64x–1,024x Behind AI Doubling' }],
+        cinLbl: 'Weiszfeld Gate', cinSegs: [{ w: 280, c: '#4fb3a8', t: 'Φ(R) <10ms Gate + $25k Floor + 2%/mo Demurrage' }],
+        foot: '✓ Cryptographic Pre-Execution Quorum + Municipal Tax Cushion'
+      },
+      research: {
+        title: '4. UNIVERSITY ORIGINATION (88%) VS. ROYALTY',
+        sqLbl: 'Cloud Scrape ($0)', sqSegs: [{ w: 22, c: '#ef6a52', t: '<1%' }, { w: 258, c: '#2a1617', t: '88% Ideas Scraped for $0 Royalty' }],
+        cinLbl: 'Shapley + SPRA', cinSegs: [{ w: 280, c: '#4fb3a8', t: '15% Perpetual Lineage + 95.3% SPRA Savings' }],
+        foot: '✓ Automatic Citation Endowments Fund Open University Compute'
+      },
+      enterprise: {
+        title: '5. API TENANT TOLL VS. 500-FIRM PSI CO-OP',
+        sqLbl: 'GPO / Wrapper Toll', sqSegs: [{ w: 190, c: '#2a1617', t: 'Net Margin' }, { w: 90, c: '#ef6a52', t: '-32% Toll' }],
+        cinLbl: 'OPRF PSI Co-Op', cinSegs: [{ w: 280, c: '#4fb3a8', t: '+18% to +34% Wholesale Margin · 0B IP Egress' }],
+        foot: '✓ Local Wasm Sandbox + Blinded Private Set Intersection'
+      },
+      humanity: {
+        title: '6. INTELLIGENCE GAMBIT (4.8B WORKER SHIELD)',
+        sqLbl: 'AI Cartel Dump', sqSegs: [{ w: 68, c: '#ef6a52', t: '24% Share' }, { w: 212, c: '#2a1617', t: '-38% Producer Surplus Extracted' }],
+        cinLbl: 'PSI Producer Co-Op', cinSegs: [{ w: 280, c: '#4fb3a8', t: '$8 Pre-ADC + Offline Voice Twin + 5D Parity' }],
+        foot: '✓ Shields 4.8B Non-Digital Workers From Algorithmic Cartels'
+      },
+      pair: {
+        title: '7. 90-DAY CLOUD CLIFF VS. 96% LOCAL PAIR MOAT',
+        sqLbl: 'Cloud API (90d)', sqSegs: [{ w: 24, c: '#ef6a52', t: '4%' }, { w: 256, c: '#2a1617', t: 'Distilled in 90d (-$5B to -$15B/yr)' }],
+        cinLbl: '1-to-1 Pair Moat', cinSegs: [{ w: 14, c: '#5da2d5', t: '' }, { w: 84, c: '#4fb3a8', t: '30% LoRA' }, { w: 88, c: '#e5a93c', t: '32% Mem' }, { w: 94, c: '#b794f4', t: '34% Craft' }],
+        foot: '✓ 96% Uncopyable Local Moat Compounded Over 1–10 Years'
+      }
+    };
+
+    var sp = SPECS[key] || SPECS.labs;
+    svg.append('text').attr('x', 16).attr('y', 22).attr('font-size', 8.6).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+      .text(sp.title);
+
+    // Row 1: Status Quo Bar
+    svg.append('text').attr('x', 16).attr('y', 47).attr('font-size', 8.2).attr('font-weight', '700').attr('fill', '#ef6a52').text(sp.sqLbl);
+    var sx = 122;
+    sp.sqSegs.forEach(function (sg) {
+      svg.append('rect').attr('x', sx).attr('y', 34).attr('width', sg.w - 2).attr('height', 20).attr('rx', 4)
+        .attr('fill', sg.c).attr('stroke', '#ef6a52').attr('stroke-width', 0.8);
+      if (sg.t) {
+        svg.append('text').attr('x', sx + (sg.w - 2) / 2).attr('y', 47).attr('text-anchor', 'middle')
+          .attr('font-size', 7.6).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#f4f1ea').text(sg.t);
+      }
+      sx += sg.w;
+    });
+
+    // Row 2: CIN Bar
+    svg.append('text').attr('x', 16).attr('y', 75).attr('font-size', 8.2).attr('font-weight', '700').attr('fill', '#4fb3a8').text(sp.cinLbl);
+    var cx = 122;
+    sp.cinSegs.forEach(function (sg) {
+      svg.append('rect').attr('x', cx).attr('y', 62).attr('width', sg.w - 2).attr('height', 20).attr('rx', 4)
+        .attr('fill', sg.c);
+      if (sg.t) {
+        svg.append('text').attr('x', cx + (sg.w - 2) / 2).attr('y', 75).attr('text-anchor', 'middle')
+          .attr('font-size', 7.6).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#111317').text(sg.t);
+      }
+      cx += sg.w;
+    });
+
+    svg.append('text').attr('x', 16).attr('y', 99).attr('font-size', 7.8).attr('font-weight', '700').attr('fill', '#4fb3a8').text(sp.foot);
+
+    // Bottom Live Stress-Test Comparison Box
+    svg.append('rect').attr('x', 14).attr('y', 110).attr('width', 392).attr('height', 102).attr('rx', 8)
+      .attr('fill', '#161b24').attr('stroke', '#2a303c');
+    svg.append('text').attr('x', 24).attr('y', 127).attr('font-size', 8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#5da2d5')
+      .text('LIVE STRESS-TEST VERDICT · INPUT: ' + d.simConfig.formatVal(val));
+
+    // Red Status Quo pill
+    svg.append('rect').attr('x', 24).attr('y', 135).attr('width', 372).attr('height', 30).attr('rx', 5)
+      .attr('fill', 'rgba(239,106,82,0.14)').attr('stroke', '#ef6a52');
+    svg.append('text').attr('x', 32).attr('y', 154).attr('font-size', 8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+      .text('✗ Today: ' + res.badV.slice(0, 50));
+
+    // Green CIN pill
+    svg.append('rect').attr('x', 24).attr('y', 172).attr('width', 372).attr('height', 30).attr('rx', 5)
+      .attr('fill', 'rgba(79,179,168,0.16)').attr('stroke', '#4fb3a8');
+    svg.append('text').attr('x', 32).attr('y', 191).attr('font-size', 8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      .text('✓ CIN: ' + res.okV.slice(0, 52));
   }
 
   var wmVizModes = document.getElementById('wm-viz-modes');
@@ -2742,6 +2849,123 @@
           if (btn) renderProvD3(btn.getAttribute('data-prov-cat') || 'all');
         });
       }
+    }
+    // 6. Live 4-Pillar Output & SPRA 95.3% Compression D3 Visualizer (#live-d3-svg)
+    var liveSvgEl = document.getElementById('live-d3-svg');
+    if (liveSvgEl) {
+      var lSvg = d3.select(liveSvgEl);
+      lSvg.selectAll('*').remove();
+      lSvg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 116).attr('rx', 10)
+        .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+      lSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 9).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+        .text('D3.JS V7 4-PILLAR AUTONOMOUS OUTPUT & SPRA 95.3% CONTEXT COMPRESSION (39 AGENT STREAMS)');
+      var pillars = [
+        { k: '01 · RESEARCH & SPRA', v: '95.3% Token Cut', sub: '~260 tok/paper · 1,902/wk', c: '#4fb3a8' },
+        { k: '02 · TESTNET LEDGER v4.0', v: '16/16 Certified', sub: '9.4ms QUIC · 95% Shapley', c: '#5da2d5' },
+        { k: '03 · OPPORTUNITY GRAPH', v: '12 NAICS Sectors', sub: '0% Ad-Platform Tax', c: '#e5a93c' },
+        { k: '04 · PUBLIC UX & SOCIAL', v: '41/41 D3 Pages', sub: 'Zero Cloud Telemetry', c: '#b794f4' }
+      ];
+      pillars.forEach(function (pl, idx) {
+        var px = 16 + idx * 184;
+        lSvg.append('rect').attr('x', px).attr('y', 32).attr('width', 174).attr('height', 76).attr('rx', 8)
+          .attr('fill', '#161b24').attr('stroke', pl.c).attr('stroke-width', 1.4);
+        lSvg.append('text').attr('x', px + 10).attr('y', 50).attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', pl.c).text(pl.k);
+        lSvg.append('text').attr('x', px + 10).attr('y', 72).attr('font-size', 11).attr('font-weight', '700').attr('fill', '#f4f1ea').text(pl.v);
+        lSvg.append('text').attr('x', px + 10).attr('y', 92).attr('font-size', 8).attr('fill', '#9aa3b2').text(pl.sub);
+      });
+    }
+
+    // 7. 2027-2030 Futures Cone Probability D3 Visualizer (#sg2-d3-svg)
+    var sg2SvgEl = document.getElementById('sg2-d3-svg');
+    if (sg2SvgEl) {
+      var s2Svg = d3.select(sg2SvgEl);
+      s2Svg.selectAll('*').remove();
+      s2Svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 136).attr('rx', 10)
+        .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+      s2Svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+        .text('D3.JS V7 CALIBRATED 2027–2030 FUTURES CONE PROBABILITY DISTRIBUTION (SUM = 100% · VOROS 2003)');
+      var cones = [
+        { k: '1. Co-Intelligence Airlock & PSI Co-Ops', p: 44, c: '#4fb3a8', sub: 'Local Wasm OCap + 95% Shapley + 24h Lease' },
+        { k: '2. Centralized Cloud Oligopoly Lock-In', p: 26, c: '#e5a93c', sub: '15–40% API Rent + Closed Compute Moat' },
+        { k: '3. Fragmented Sovereign Guild Shards', p: 18, c: '#5da2d5', sub: 'Regional QUIC Co-Ops + Statutory Friction' },
+        { k: '4. Unbounded Swarm Shock & Treaty Pause', p: 12, c: '#ef6a52', sub: 'Autonomous Breakouts Force Compute Freeze' }
+      ];
+      cones.forEach(function (cn, i) {
+        var cy = 36 + i * 24;
+        s2Svg.append('text').attr('x', 18).attr('y', cy + 13).attr('font-size', 8.4).attr('font-weight', '700').attr('fill', cn.c).text(cn.k);
+        s2Svg.append('rect').attr('x', 246).attr('y', cy + 2).attr('width', 240).attr('height', 15).attr('rx', 4).attr('fill', '#161b24');
+        s2Svg.append('rect').attr('x', 246).attr('y', cy + 2).attr('width', Math.round(cn.p * 4.8)).attr('height', 15).attr('rx', 4).attr('fill', cn.c);
+        s2Svg.append('text').attr('x', 496).attr('y', cy + 13).attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#f4f1ea').text(cn.p + '% · ' + cn.sub);
+      });
+    }
+
+    // 8. Interactive Catastrophe Risk vs. Safeguard Compounding D3 Curve (#rl-d3-svg)
+    var rlSvgEl = document.getElementById('rl-d3-svg');
+    if (rlSvgEl) {
+      function renderRlD3() {
+        var rInput = document.getElementById('rl-risk');
+        var sInput = document.getElementById('rl-safe');
+        var rVal = rInput ? Number(rInput.value) : 45;
+        var sVal = sInput ? Number(sInput.value) : 20;
+        var rSvg = d3.select(rlSvgEl);
+        rSvg.selectAll('*').remove();
+        rSvg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 124).attr('rx', 10)
+          .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+        rSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 9).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+          .text('D3.JS V7 SAFEGUARD COMPOUNDING CURVE · PROBLEM DIFFICULTY: ' + rVal + '% · SAFEGUARDS BUILT: ' + sVal + '%');
+
+        var rxScale = d3.scaleLinear().domain([0, 100]).range([36, 480]);
+        var ryScale = d3.scaleLinear().domain([0, 60]).range([108, 34]);
+        rSvg.append('line').attr('x1', 36).attr('y1', 108).attr('x2', 480).attr('y2', 108).attr('stroke', '#2c3342');
+        var pts = d3.range(0, 101, 5).map(function (sv) {
+          var baseRisk = 4 + (rVal / 100) * 48;
+          var damped = baseRisk * Math.pow(1 - (sv / 100) * 0.88, 1.8);
+          return [rxScale(sv), ryScale(Math.min(58, damped))];
+        });
+        rSvg.append('path').attr('d', d3.line()(pts)).attr('fill', 'none').attr('stroke', '#4fb3a8').attr('stroke-width', 2.8);
+        var curRisk = (4 + (rVal / 100) * 48) * Math.pow(1 - (sVal / 100) * 0.88, 1.8);
+        rSvg.append('circle').attr('cx', rxScale(sVal)).attr('cy', ryScale(Math.min(58, curRisk))).attr('r', 5.5).attr('fill', '#ef6a52').attr('stroke', '#fff').attr('stroke-width', 1.5);
+
+        rSvg.append('rect').attr('x', 502).attr('y', 30).attr('width', 238).attr('height', 84).attr('rx', 8)
+          .attr('fill', '#161b24').attr('stroke', '#4fb3a8');
+        rSvg.append('text').attr('x', 514).attr('y', 50).attr('font-size', 8.4).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c').text('SAFEGUARD REDUCTION EFFECT');
+        rSvg.append('text').attr('x', 514).attr('y', 72).attr('font-size', 9.5).attr('font-weight', '700').attr('fill', '#ef6a52').text('Unshielded Baseline: ' + Math.round(4 + (rVal / 100) * 48) + '% Catastrophe');
+        rSvg.append('text').attr('x', 514).attr('y', 94).attr('font-size', 9.5).attr('font-weight', '700').attr('fill', '#4fb3a8').text('✓ With CIN Safeguards: ' + curRisk.toFixed(1) + '%');
+      }
+      renderRlD3();
+      var rlSec = document.getElementById('risk-lab');
+      if (rlSec) {
+        rlSec.addEventListener('input', renderRlD3);
+        rlSec.addEventListener('click', function () { setTimeout(renderRlD3, 20); });
+      }
+    }
+
+    // 9. 550-Principle Constitutional Funnel & 6 Binding Pillars D3 Visualizer (#ln2-d3-svg)
+    var ln2SvgEl = document.getElementById('ln2-d3-svg');
+    if (ln2SvgEl) {
+      var l2Svg = d3.select(ln2SvgEl);
+      l2Svg.selectAll('*').remove();
+      l2Svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 124).attr('rx', 10)
+        .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+      l2Svg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 9).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+        .text('D3.JS V7 CONSTITUTIONAL DISTILLATION FUNNEL (550 PRINCIPLES → 44 PROTOCOL SPECS → 19 FLOOR RULES)');
+      var stages = [
+        { k: '1. OPEN CORPUS', n: '550 Principles', sub: '434 Initial + 116 Safeguards', c: '#5da2d5' },
+        { k: '2. ADVERSARIAL AUDIT', n: '316 Kept + 144 Rev', sub: '27 Redundant Retired', c: '#e5a93c' },
+        { k: '3. PROTOCOL WHEEL', n: '44 Active Specs', sub: 'Steelman + Falsification', c: '#b794f4' },
+        { k: '4. HARDWARE FLOOR', n: '19 Binding Rules', sub: '6 Non-Negotiable Pillars', c: '#4fb3a8' }
+      ];
+      stages.forEach(function (st, idx) {
+        var sx = 18 + idx * 184;
+        if (idx < 3) {
+          l2Svg.append('line').attr('x1', sx + 172).attr('y1', 72).attr('x2', sx + 184).attr('y2', 72).attr('stroke', '#4fb3a8').attr('stroke-width', 2);
+        }
+        l2Svg.append('rect').attr('x', sx).attr('y', 34).attr('width', 172).attr('height', 76).attr('rx', 8)
+          .attr('fill', '#161b24').attr('stroke', st.c).attr('stroke-width', 1.4);
+        l2Svg.append('text').attr('x', sx + 10).attr('y', 52).attr('font-size', 8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', st.c).text(st.k);
+        l2Svg.append('text').attr('x', sx + 10).attr('y', 74).attr('font-size', 11.2).attr('font-weight', '700').attr('fill', '#f4f1ea').text(st.n);
+        l2Svg.append('text').attr('x', sx + 10).attr('y', 94).attr('font-size', 8).attr('fill', '#9aa3b2').text(st.sub);
+      });
     }
   }
 

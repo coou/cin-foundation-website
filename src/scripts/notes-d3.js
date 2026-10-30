@@ -1,7 +1,7 @@
 /* ==========================================================================
    notes-d3.js — D3.js v7 Interactive Visualizations for Blueprints Hub & All Notes
-   1. #notes-d3-constellation (src/notes/index.html): 5-Pillar & 30-Blueprint Radial Network Map
-   2. #ledger-d3-chart (src/notes/beyond-arxiv-agent-web-ledger.html): 9.1x NextLat/LoRA Speed & 95%/5% Data Shapley Visualizer
+   1. #notes-d3-constellation (src/notes/index.html): 5-Pillar Radial Network & 7-Lens Matrix
+   2. #ledger-d3-chart (src/notes/beyond-arxiv-agent-web-ledger.html): 9.1x Continuous Latent (Coconut)/LoRA Speed & 95%/5% Data Shapley Visualizer
    3. #principles-d3-chart (src/notes/all-principles.html & principle-testnet): Weiszfeld L1 Geometric Median & 550-Principle Cluster Visualizer
    4. .note-d3-workbench (28 Blueprint Notes, Founder & Updates): 3-Mode Interactive D3.js v7 Mechanism, Causal DAG & Stress-Test Explorer
    ========================================================================== */
@@ -9,9 +9,9 @@
   'use strict';
 
   /* ------------------------------------------------------------------------
-     1. BLUEPRINTS HUB: 5-Pillar & 30-Blueprint Radial Constellation (#notes-d3-constellation)
+     1. BLUEPRINTS HUB: 5-Pillar Radial Constellation & 7-Lens Matrix (#notes-d3-constellation)
      ------------------------------------------------------------------------ */
-  function initNotesConstellation() {
+  function initNotesHubConstellationD3() {
     var svgEl = document.getElementById('notes-d3-constellation');
     if (!svgEl || !window.d3) return;
     var d3 = window.d3;
@@ -98,18 +98,124 @@
       }
     ];
 
+    var LENSES = [
+      {
+        id: 'lens-1',
+        label: '1. SOTA AI Labs (Profit vs. Cooperation)',
+        color: '#4fb3a8',
+        metric: '95% Data Shapley',
+        notes: [
+          { slug: 'how-the-ledger-works', href: '/notes/how-the-ledger-works', match: 'how-the-ledger-works' },
+          { slug: 'beyond-arxiv-agent-web-ledger', href: '/notes/beyond-arxiv-agent-web-ledger', match: 'beyond-arxiv-agent-web-ledger' }
+        ]
+      },
+      {
+        id: 'lens-2',
+        label: '2. AI Safety (Last Resort Before Pause)',
+        color: '#ef6a52',
+        metric: 'Two Internets + 24h Lease',
+        notes: [
+          { slug: 'containment', href: '/notes/containment', match: 'containment' },
+          { slug: 'agent-internet', href: '/notes/agent-internet', match: 'agent-internet' },
+          { slug: 'no-one-commands-a-swarm', href: '/notes/no-one-commands-a-swarm', match: 'no-one-commands-a-swarm' }
+        ]
+      },
+      {
+        id: 'lens-3',
+        label: '3. Governments (3-5yr Lag vs. <10ms Gate)',
+        color: '#ecc94b',
+        metric: 'Weiszfeld Quorum + $25k Floor',
+        notes: [
+          { slug: 'ai-agent-jurisdictions', href: '/notes/ai-agent-jurisdictions', match: 'ai-agent-jurisdictions' },
+          { slug: 'liquid-democracy-and-staking-lockups', href: '/notes/liquid-democracy-and-staking-lockups', match: 'liquid-democracy-and-staking-lockups' }
+        ]
+      },
+      {
+        id: 'lens-4',
+        label: '4. Universities (88% Ideas vs. 15% Royalty)',
+        color: '#63b3ed',
+        metric: '15% Shapley + 95.3% SPRA',
+        notes: [
+          { slug: 'related-labs-and-researchers', href: '/notes/related-labs-and-researchers', match: 'related-labs-and-researchers' },
+          { slug: 'instructions-as-evidence', href: '/notes/instructions-as-evidence', match: 'instructions-as-evidence' }
+        ]
+      },
+      {
+        id: 'lens-5',
+        label: '5. Private Enterprise (PSI Co-Op vs. Toll)',
+        color: '#b794f4',
+        metric: '+34% Margin · 0B Leak',
+        notes: [
+          { slug: 'companies-on-the-ledger', href: '/notes/companies-on-the-ledger', match: 'companies-on-the-ledger' },
+          { slug: 'weiszfeld-git-merge-testnet', href: '/notes/all-principles', match: 'testnet' }
+        ]
+      },
+      {
+        id: 'lens-6',
+        label: '6. Global Workforce (4.8B Shield vs. Cartel)',
+        color: '#68d391',
+        metric: '$8 Pre-ADC + 5D Credit',
+        notes: [
+          { slug: 'thirty-lives', href: '/notes/thirty-lives', match: 'thirty-lives' },
+          { slug: 'somatic-witness', href: '/notes/somatic-witness', match: 'somatic-witness' },
+          { slug: 'value-system', href: '/notes/value-system', match: 'value-system' }
+        ]
+      },
+      {
+        id: 'lens-7',
+        label: '7. Pair Intelligence (90d Cliff vs. 96% Moat)',
+        color: '#f6ad55',
+        metric: '96% Local Pair Moat',
+        notes: [
+          { slug: 'personal-agents', href: '/notes/personal-agents', match: 'personal-agents' },
+          { slug: 'training-your-twin', href: '/notes/training-your-twin', match: 'training-your-twin' },
+          { slug: 'reclaim-your-profile', href: '/notes/reclaim-your-profile', match: 'reclaim-your-profile' }
+        ]
+      }
+    ];
+
+    var currentMode = 'constellation';
     var activeCat = 'all';
+    var activeLensId = 'all';
+
+    function openMoreNotesDrawer() {
+      var drawer = document.getElementById('notes-more-drawer');
+      if (drawer) drawer.open = true;
+    }
 
     function triggerCategoryFilter(cat) {
+      openMoreNotesDrawer();
       activeCat = (activeCat === cat && cat !== 'all') ? 'all' : cat;
       var btn = document.querySelector('#notes-toolbar [data-note-cat="' + activeCat + '"]');
       if (btn) {
         btn.click();
       }
-      render(activeCat);
+      renderConstellation(activeCat);
     }
 
-    function render(selectedCat) {
+    function filterByLens(lens) {
+      openMoreNotesDrawer();
+      var cards = document.querySelectorAll('.notes-grid .note-card');
+      if (!lens || activeLensId === lens.id) {
+        activeLensId = 'all';
+        [].forEach.call(cards, function (c) {
+          c.style.display = '';
+        });
+      } else {
+        activeLensId = lens.id;
+        [].forEach.call(cards, function (c) {
+          var href = c.getAttribute('href') || '';
+          var matched = href.indexOf('world-standing-and-cointelligence') !== -1;
+          lens.notes.forEach(function (n) {
+            if (href.indexOf(n.match) !== -1) matched = true;
+          });
+          c.style.display = matched ? '' : 'none';
+        });
+      }
+      renderLensesMatrix();
+    }
+
+    function renderConstellation(selectedCat) {
       svg.attr('viewBox', '0 0 820 340');
       svg.selectAll('*').remove();
 
@@ -287,21 +393,198 @@
         .text('Click to Filter');
     }
 
-    render('all');
+    function renderLensesMatrix() {
+      svg.attr('viewBox', '0 0 820 340');
+      svg.selectAll('*').remove();
+
+      svg.append('rect')
+        .attr('x', 4)
+        .attr('y', 4)
+        .attr('width', 812)
+        .attr('height', 332)
+        .attr('rx', 14)
+        .attr('fill', '#12151c')
+        .attr('stroke', '#2a2f3a')
+        .attr('stroke-width', 1.5);
+
+      svg.append('text')
+        .attr('x', 18)
+        .attr('y', 24)
+        .attr('font-size', 9.5)
+        .attr('font-weight', 700)
+        .attr('font-family', 'monospace')
+        .attr('fill', '#4fb3a8')
+        .text('7 GLOBAL STANDING LENSES → BLUEPRINTS MATRIX (CLICK ANY ROW TO FILTER CARDS OR CHIP TO OPEN)');
+
+      var resetG = svg.append('g')
+        .attr('transform', 'translate(668, 10)')
+        .style('cursor', 'pointer')
+        .on('click', function () {
+          window.location.href = '/notes/world-standing-and-cointelligence';
+        });
+      resetG.append('rect')
+        .attr('width', 136)
+        .attr('height', 20)
+        .attr('rx', 6)
+        .attr('fill', '#192328')
+        .attr('stroke', '#4fb3a8')
+        .attr('stroke-width', 1.2);
+      resetG.append('text')
+        .attr('x', 68)
+        .attr('y', 13.5)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', 8.5)
+        .attr('font-weight', 700)
+        .attr('font-family', 'monospace')
+        .attr('fill', '#4fb3a8')
+        .text('Open 7-Lens Atlas →');
+
+      LENSES.forEach(function (lens, idx) {
+        var ry = 36 + idx * 42;
+        var isSelected = activeLensId === lens.id;
+        var isFocused = activeLensId === 'all' || isSelected;
+
+        var rowG = svg.append('g')
+          .attr('transform', 'translate(14,' + ry + ')')
+          .attr('data-lens-row', lens.id)
+          .style('cursor', 'pointer')
+          .style('opacity', isFocused ? 1 : 0.42)
+          .on('click', function () {
+            filterByLens(lens);
+          });
+
+        rowG.append('rect')
+          .attr('x', 0)
+          .attr('y', 0)
+          .attr('width', 792)
+          .attr('height', 36)
+          .attr('rx', 8)
+          .attr('fill', isSelected ? 'rgba(79,179,168,0.16)' : '#171b24')
+          .attr('stroke', isSelected ? lens.color : '#262b38')
+          .attr('stroke-width', isSelected ? 2 : 1.2);
+
+        rowG.append('rect')
+          .attr('x', 0)
+          .attr('y', 0)
+          .attr('width', 5)
+          .attr('height', 36)
+          .attr('rx', 3)
+          .attr('fill', lens.color);
+
+        rowG.append('text')
+          .attr('x', 14)
+          .attr('y', 22)
+          .attr('font-size', 9.6)
+          .attr('font-weight', 700)
+          .attr('font-family', 'monospace')
+          .attr('fill', lens.color)
+          .text(lens.label);
+
+        rowG.append('text')
+          .attr('x', 278)
+          .attr('y', 22)
+          .attr('font-size', 10)
+          .attr('font-family', 'monospace')
+          .attr('fill', '#8c8f96')
+          .text('→');
+
+        var chipX = 294;
+        lens.notes.forEach(function (n) {
+          var chipW = Math.max(82, n.slug.length * 5.2 + 14);
+          var chipG = rowG.append('g')
+            .attr('transform', 'translate(' + chipX + ', 6)')
+            .on('click', function (ev) {
+              ev.stopPropagation();
+              window.location.href = n.href;
+            });
+
+          chipG.append('rect')
+            .attr('width', chipW)
+            .attr('height', 24)
+            .attr('rx', 6)
+            .attr('fill', '#11151d')
+            .attr('stroke', lens.color)
+            .attr('stroke-opacity', 0.7)
+            .attr('stroke-width', 1.1);
+
+          chipG.append('text')
+            .attr('x', chipW / 2)
+            .attr('y', 15.5)
+            .attr('text-anchor', 'middle')
+            .attr('font-size', 8.4)
+            .attr('font-family', 'monospace')
+            .attr('fill', '#e9e6de')
+            .text(n.slug);
+
+          chipX += chipW + 6;
+        });
+
+        rowG.append('rect')
+          .attr('x', 612)
+          .attr('y', 6)
+          .attr('width', 172)
+          .attr('height', 24)
+          .attr('rx', 6)
+          .attr('fill', 'rgba(79,179,168,0.12)')
+          .attr('stroke', lens.color)
+          .attr('stroke-width', 1.1);
+
+        rowG.append('text')
+          .attr('x', 698)
+          .attr('y', 21.5)
+          .attr('text-anchor', 'middle')
+          .attr('font-size', 8.7)
+          .attr('font-weight', 700)
+          .attr('font-family', 'monospace')
+          .attr('fill', lens.color)
+          .text(lens.metric);
+      });
+    }
+
+    renderConstellation('all');
+
+    var modeWrap = document.getElementById('notes-hub-d3-modes');
+    if (modeWrap) {
+      var modeBtns = modeWrap.querySelectorAll('[data-nh-mode]');
+      [].forEach.call(modeBtns, function (btn) {
+        btn.addEventListener('click', function () {
+          currentMode = btn.getAttribute('data-nh-mode') || 'constellation';
+          [].forEach.call(modeBtns, function (b) {
+            var on = b === btn;
+            b.setAttribute('aria-selected', on ? 'true' : 'false');
+            b.style.borderColor = on ? 'var(--ok)' : 'var(--rule)';
+            b.style.background = on ? 'color-mix(in srgb,var(--ok) 16%,var(--card))' : 'var(--paper)';
+          });
+          if (currentMode === 'lenses') {
+            renderLensesMatrix();
+          } else {
+            renderConstellation(activeCat);
+          }
+        });
+      });
+    }
 
     var toolbar = document.getElementById('notes-toolbar');
     if (toolbar) {
       [].forEach.call(toolbar.querySelectorAll('[data-note-cat]'), function (btn) {
         btn.addEventListener('click', function () {
+          openMoreNotesDrawer();
           activeCat = btn.getAttribute('data-note-cat') || 'all';
-          render(activeCat);
+          if (currentMode === 'constellation') {
+            renderConstellation(activeCat);
+          }
         });
       });
     }
+    var searchInput = document.getElementById('notes-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', openMoreNotesDrawer);
+    }
   }
+  var initNotesConstellation = initNotesHubConstellationD3;
 
   /* ------------------------------------------------------------------------
-     2. BEYOND-ARXIV LEDGER: 9.1x NextLat/LoRA Speed & 95%/5% Shapley (#ledger-d3-chart)
+     2. BEYOND-ARXIV LEDGER: 9.1x Continuous Latent (Coconut)/LoRA Speed & 95%/5% Shapley (#ledger-d3-chart)
      ------------------------------------------------------------------------ */
   function initLedgerD3Chart() {
     var svgEl = document.getElementById('ledger-d3-chart');
@@ -404,12 +687,12 @@
         .attr('font-size', 12)
         .attr('font-weight', 700)
         .attr('fill', '#f4f1ea')
-        .text('NextLat + LoRA TIES-Merging: ' + meta.speedup + ' (' + cinMs + ' ms)');
+        .text('Latent (Coconut) + LoRA TIES-Merging: ' + meta.speedup + ' (' + cinMs + ' ms)');
 
       var bars = [
         { label: 'Legacy English Token Debate', ms: 128.0, color: '#ef6a52', note: '128 ms (1.0x · lossy prose)' },
         { label: 'Naive Raw Weight Average', ms: 48.0, color: '#ecc94b', note: '48 ms (sign cancellation)' },
-        { label: 'CIN NextLat + LoRA TIES Merge', ms: cinMs, color: '#4fb3a8', note: cinMs + ' ms (' + meta.speedup + ' · ' + meta.genBoost + ')' }
+        { label: 'CIN Latent (Coconut) + LoRA TIES Merge', ms: cinMs, color: '#4fb3a8', note: cinMs + ' ms (' + meta.speedup + ' · ' + meta.genBoost + ')' }
       ];
 
       var xScale = d3.scaleLinear().domain([0, 140]).range([0, 325]);
