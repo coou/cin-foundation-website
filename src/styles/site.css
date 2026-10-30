@@ -1732,6 +1732,139 @@ html:not(.no-js) .mem-fallback-table {
   font-size: .85rem;
 }
 
+/* Action Airlock & Task Lifecycle Simulator (#airlock-demo) */
+.airlock-demo {
+  margin: 2rem 0;
+  padding: 1.3rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.airlock-demo h3 {
+  margin-top: 0;
+  margin-bottom: .4rem;
+  font-size: 1.15rem;
+}
+.airlock-desc {
+  font-size: .95rem;
+  color: var(--ink-2);
+  margin-bottom: 1.2rem;
+}
+.airlock-scenarios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+.airlock-btn {
+  padding: .45rem .85rem;
+  font: 500 .9rem var(--sans);
+  border: 1px solid var(--rule);
+  border-radius: 99px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.airlock-btn:hover {
+  border-color: var(--ink-3);
+}
+.airlock-btn[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  font-weight: 600;
+}
+.airlock-toggle-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+  padding: .6rem .85rem;
+  border-radius: 8px;
+  background: var(--paper-2);
+  margin-bottom: 1.2rem;
+  font-size: .9rem;
+}
+.airlock-toggle-btn {
+  padding: .35rem .75rem;
+  font: 600 .85rem var(--sans);
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+.airlock-toggle-btn:hover {
+  border-color: var(--ink-2);
+}
+.airlock-panel {
+  display: grid;
+  gap: .8rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 1rem;
+}
+.airlock-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: .8rem;
+  font-size: .9rem;
+  align-items: baseline;
+}
+@media (max-width: 600px) {
+  .airlock-row {
+    grid-template-columns: 1fr;
+    gap: .2rem;
+  }
+}
+.airlock-label {
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.airlock-val {
+  color: var(--ink);
+}
+.airlock-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 1rem;
+}
+.airlock-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: .85rem;
+}
+.airlock-table th, .airlock-table td {
+  padding: .5rem .6rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+}
+.airlock-table th {
+  color: var(--ink-2);
+  font-weight: 600;
+}
+html.no-js .airlock-scenarios,
+html.no-js .airlock-toggle-wrap,
+html.no-js .airlock-panel {
+  display: none !important;
+}
+html.no-js .airlock-fallback-table {
+  display: block !important;
+}
+html:not(.no-js) .airlock-fallback-table {
+  display: none;
+}
+.airlock-demo figcaption {
+  margin-top: 1rem;
+  color: var(--ink-3);
+  font-size: .85rem;
+}
+
 /* v27: note body callout and heading defensive wrapping */
 .note-body h2, .note-body h3, .note-body p, .note-body li {
   overflow-wrap: anywhere;
