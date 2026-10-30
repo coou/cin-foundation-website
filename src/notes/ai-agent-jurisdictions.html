@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Autonomous AI agent jurisdictions: how law and architecture draw the line · Collective Intelligence Network</title>
+  <meta name="description" content="A comparative guide to autonomous AI agent regulation across the EU AI Act, Colorado law, proposed federal statutes, and NIST agent identity tenets.">
+  <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121317" media="(prefers-color-scheme: dark)">
+  <meta name="referrer" content="no-referrer">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Autonomous AI agent jurisdictions: how law and architecture draw the line">
+  <meta property="og:description" content="A comparative guide to autonomous AI agent regulation across the EU AI Act, Colorado law, proposed federal statutes, and NIST agent identity tenets.">
+  <meta property="og:image" content="/assets/images/og-image.svg">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
+  <link rel="stylesheet" href="/styles/site.css?v=46">
+  <style>
+    .juris-explorer {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+    }
+    .juris-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .juris-btn {
+      padding: 0.5rem 0.85rem;
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .juris-btn[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+      font-weight: 600;
+    }
+    .juris-card {
+      padding: 1.25rem;
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+    }
+    .juris-card h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .juris-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: var(--muted);
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+    .juris-badge.enacted {
+      background: #e6f4ea;
+      color: #137333;
+    }
+    .juris-badge.proposed {
+      background: #fef7e0;
+      color: #b06000;
+    }
+    .juris-badge.guidance {
+      background: #e8f0fe;
+      color: #1a73e8;
+    }
+    .juris-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .juris-meta div strong {
+      display: block;
+      color: var(--muted-ink);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .tenet-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .tenet-card {
+      padding: 1rem;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+    }
+    .tenet-card h4 {
+      margin-top: 0;
+      margin-bottom: 0.4rem;
+      font-size: 1rem;
+      color: var(--ink);
+    }
+    .tenet-card p {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: var(--muted-ink);
+    }
+  </style>
+</head>
+<body class="page-note">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head scrolled">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Collective Intelligence Network, home">
+      <img src="/assets/images/logo-small.png" alt="" width="30" height="30">
+      <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="/#architecture">Architecture</a>
+      <a href="/#for-you">For You</a>
+      <a href="/notes" aria-current="true">Blueprints</a>
+      <a href="/#lines">Principles</a>
+      <a href="/trajectory">Trajectory</a>
+      <a href="/founder">Founder</a>
+      <a href="/#involved">Status</a>
+      <a class="nav-net" href="https://cintnet.org" target="_blank" rel="noopener">Network site &#8599;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Policy, Law and Architecture</span>
+    <h1>Autonomous AI agent jurisdictions: how law and architecture draw the line</h1>
+    <p class="lede">When personal and commercial agents take actions in the real world—booking appointments, auditing medical bills, or making payments—who is legally accountable? A comparative look at emerging statutes and why separating policy from reasoning solves what pure oversight cannot.</p>
+    <p class="meta">30 October 2026 · 9 min read · Policy research &amp; design notes</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>Lawmakers across the world are drawing hard lines around autonomous software: the EU AI Act enforces human oversight and transparency, Colorado establishes affirmative duties of care for consequential life decisions, federal legislators propose criminal liability for reckless agents under the Computer Fraud and Abuse Act, and NIST's October 2026 guidelines mandate ten core tenets for agent identity. We explain why cloud surveillance fails these tests and how client-side policy airlocks provide verifiable compliance by construction.</p></aside>
+
+    <h2>The question that arrives when software acts</h2>
+    <p>When an artificial intelligence assistant merely drafts an email or summarizes an article, mistakes are irritating but contained. But when an agent acts autonomously—initiating financial transactions, modifying health records, executing contracts, or reconfiguring system settings—the legal and human question shifts immediately from <em>what was said</em> to <em>who authorized it, what limits applied, and who is responsible for the outcome</em>.</p>
+    <p>Most commercial solutions attempt to solve this through conversational warnings or by streaming everything back to centralized cloud surveillance databases. But conversational warnings are routinely bypassed by prompt injection, while central logging compromises privacy without preventing unauthorized execution. Real accountability requires deterministic architectural boundaries.</p>
+
+    <h2>Interactive Jurisdictional Explorer</h2>
+    <p>Explore how major legal frameworks classify autonomous agents, allocate liability between developers and operators, and define technical compliance requirements.</p>
+
+    <figure class="juris-explorer" id="juris-explorer">
+      <div class="juris-pills" role="group" aria-label="Select legal jurisdiction">
+        <button type="button" class="juris-btn" data-juris="eu" aria-pressed="true">European Union (AI Act)</button>
+        <button type="button" class="juris-btn" data-juris="colorado" aria-pressed="false">United States: Colorado</button>
+        <button type="button" class="juris-btn" data-juris="nist" aria-pressed="false">NIST AIMS Guidance</button>
+        <button type="button" class="juris-btn" data-juris="us-fed" aria-pressed="false">US Federal (Proposed)</button>
+        <button type="button" class="juris-btn" data-juris="canada" aria-pressed="false">Canada (AIDA Baseline)</button>
+      </div>
+
+      <div class="juris-card" id="juris-card" aria-live="polite">
+        <h3 id="jc-title">Regulation (EU) 2024/1689 (EU AI Act) <span class="juris-badge enacted" id="jc-badge">Enacted</span></h3>
+        <p id="jc-desc">The European Union's comprehensive risk-tiered framework entered into force on August 1, 2024, establishing strict transparency duties, high-risk operational obligations, and rules for general-purpose AI models.</p>
+        
+        <div class="juris-meta">
+          <div>
+            <strong>Legal Scope &amp; Trigger</strong>
+            <span id="jc-scope">Tiered classification: prohibited practices, high-risk deployments in essential services, and models trained on over 10^25 FLOPs.</span>
+          </div>
+          <div>
+            <strong>Human Oversight Duty</strong>
+            <span id="jc-oversight">Article 14 requires systems to be designed so that natural persons can oversee operations, interpret outputs, and intervene or stop execution.</span>
+          </div>
+          <div>
+            <strong>Transparency Requirement</strong>
+            <span id="jc-transparency">Article 50 requires natural persons to be informed whenever they interact directly with an automated AI system unless obvious.</span>
+          </div>
+          <div>
+            <strong>Primary Statutory Link</strong>
+            <span id="jc-link"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689" target="_blank" rel="noopener noreferrer">Official Journal of the European Union (Regulation 2024/1689) &rarr;</a></span>
+          </div>
+        </div>
+      </div>
+      <figcaption>Comparative synthesis of active and proposed statutory frameworks governing autonomous software agents.</figcaption>
+    </figure>
+
+    <h2>The Ten Tenets of Agent Identity (NIST AIMS, October 2026)</h2>
+    <p>On October 27, 2026, the National Institute of Standards and Technology (NIST) published its foundational Cybersecurity Insights guidance: <em>Design Tenets for Agent Identity Management Systems (AIMS)</em>. Rather than treating an agent as either a mere computer script or an unregulated human proxy, NIST articulated ten foundational principles for building trustworthy agent ecosystems:</p>
+
+    <div class="tenet-list">
+      <div class="tenet-card">
+        <h4>1. Distinct Agent Identity</h4>
+        <p>Agents must possess unique, verifiable cryptographic identities distinct from their human users and base model providers.</p>
+      </div>
+      <div class="tenet-card">
+        <h4>2. Attenuated Delegation</h4>
+        <p>An agent never inherits broad user privileges; authority must be deliberately scoped to the minimum necessary actions.</p>
+      </div>
+      <div class="tenet-card">
+        <h4>3. Zero Standing Privilege</h4>
+        <p>Permissions are granted dynamically for bounded durations and expire immediately upon task completion.</p>
+      </div>
+      <div class="tenet-card">
+        <h4>4. Short-Lived Revocable Auth</h4>
+        <p>Tokens and authorization leases must be ephemeral and instantly revocable at the local edge.</p>
+      </div>
+      <div class="tenet-card">
+        <h4>5. Human-in-the-Loop Triggers</h4>
+        <p>High-consequence actions (financial transfers, legal commitments, medical updates) require explicit human re-authentication.</p>
+      </div>
+      <div class="tenet-card">
+        <h4>6. Explicit Intent Mandates</h4>
+        <p>Every delegation is bound to a machine-readable intent specification defining exact boundaries and failure limits.</p>
+      </div>
+      <div class="tenet-card" style="border-left: 3px solid var(--ok);">
+        <h4>7. Separation of Policy from Reasoning</h4>
+        <p><strong>Crucial architectural tenet:</strong> The language model performing task reasoning must never evaluate its own policy permissions. Policy enforcement must remain deterministic and independent.</p>
+      </div>
+      <div class="tenet-card">
+        <h4>8. Deterministic Access Decisions</h4>
+        <p>Execution gates must fail closed upon any ambiguity, schema violation, or unverified signature.</p>
+      </div>
+      <div class="tenet-card">
+        <h4>9. Continuous Local Monitoring</h4>
+        <p>Agent runtime boundaries are monitored in real time for anomalies without sending private data to external feeds.</p>
+      </div>
+      <div class="tenet-card">
+        <h4>10. Immutable Evidence Trails</h4>
+        <p>All state transitions and capability invocations produce tamper-evident cryptographic receipts verifying compliance.</p>
+      </div>
+    </div>
+
+    <h2>Why the Separation of Policy from Reasoning is Essential</h2>
+    <p>Tenet 7 from NIST’s October 2026 framework pinpoints the central design flaw in modern agent assistants: asking a reasoning model to self-police its own behavioral rules. If you prompt an agent: <em>"Never transfer money without asking, but help the user accomplish their goal,"</em> an attacker can provide deceptive contextual text that tricks the model's reasoning into believing the transfer is authorized or required.</p>
+    <p>In our architecture, the agent’s reasoning engine has zero authority to execute actions directly. It can only propose an action candidate to an independent client-side broker. The broker evaluates the action against hard mathematical capability bounds, checks the human mandate, and asserts non-negotiable floor rights. If the mandate is exceeded or expired, the request is rejected immediately at the hardware boundary—regardless of how clever the model’s internal reasoning was.</p>
+
+    <h2>Federal Accountability and Criminal Standards</h2>
+    <p>In October 2026, bipartisan legislation introduced in the United States Senate—the <em>AI Agent Accountability Act</em> (Murphy-Hawley)—clarified the application of the Computer Fraud and Abuse Act (CFAA, 18 U.S.C. Section 1030) to autonomous software. Under this proposed standard, operators who recklessly deploy autonomous systems that cause unauthorized network disruption, financial exploitation, or system damage face severe civil and criminal penalties, while developers who fail to implement reasonable pre-execution containment face joint liability.</p>
+    <p>This statutory pressure creates an urgent requirement for deployers: you must be able to prove that your agent operated within verified, time-bounded capabilities, and that unauthorized lateral actions were mathematically barred rather than merely discouraged by prompt engineering.</p>
+
+    <h2>Outcomes</h2>
+    <ul class="outcomes">
+      <li><span class="oc want">We want this</span><b>Verifiable local mandates protect everyday people</b><p>Personal agents execute tasks under strict client-side intent mandates, shielding users from accidental runaway liability and preventing malicious tool exploitation.</p><p class="oc-ex"><b>For example:</b> A personal agent disputing an improper hospital billing code is strictly capped to reading itemized bills and generating formal appeal letters, with a hard circuit breaker preventing financial disbursements or signature forgery.</p></li>
+      <li><span class="oc avoid">We want to avoid this</span><b>Blanket operator criminalization without developer safeguards</b><p>Legal regimes hold ordinary citizens strictly liable for autonomous agent crimes while allowing proprietary model vendors to disclaim all responsibility for jailbreaks and rogue actions.</p><p class="oc-ex"><b>For example:</b> A small clinic whose scheduling agent was hijacked via indirect prompt injection faces federal prosecution while the frontier model vendor disclaims warranty in its terms of service.</p></li>
+      <li><span class="oc avoid">We want to avoid this</span><b>Compliance via centralized surveillance lakes</b><p>Governments and platforms mandate that every agent keystroke, context vector, and query be uploaded to centralized corporate monitoring clouds, creating catastrophic honeypots for identity theft and state surveillance.</p><p class="oc-ex"><b>For example:</b> A national regulation requires continuous audio and screen recording for all local agents, exposing confidential legal, medical, and domestic conversations to third-party data breaches.</p></li>
+      <li><span class="oc want">We want this</span><b>Deterministic policy airlocks decouple reasoning from authority</b><p>Software ecosystems standardize on independent client-side capability brokers, ensuring that model reasoning can never override cryptographic permissions or legal mandates.</p><p class="oc-ex"><b>For example:</b> An enterprise agent runtime adopts deterministic handle capabilities; even if an adversarial document induces internal prompt confusion, the execution broker rejects network egress because no valid capability token was granted.</p></li>
+    </ul>
+
+    <h2>How this fits</h2>
+    <p>This work connects directly to <strong>Goal 3 (Voluntary Institutional Transition)</strong> and <strong>Goal 5 (Public Pulse and Plain-Language Understanding)</strong>. By translating complex statutory mandates into plain English and demonstrating that verifiable local sandboxes satisfy regulatory care standards without compromising privacy, we give clinics, worker co-ops, and households the technical and legal confidence to adopt autonomous personal agents safely.</p>
+  </div>
+
+  <footer class="note-foot wrap-narrow">
+    <h2>Keep reading</h2>
+    <ul class="note-links">
+      <li><a href="/notes/personal-agents">An agent that works only for you</a></li>
+      <li><a href="/notes/architecture-of-human-sovereignty">The architecture of human sovereignty</a></li>
+      <li><a href="/notes/agent-internet">Two internets: one for people, one for agents</a></li>
+      <li><a href="/notes/containment">Containing frontier AI</a></li>
+    </ul>
+    <p class="note-contact">Questions or policy corrections? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
+  </footer>
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="spectrum" aria-hidden="true"></div>
+    <div class="foot-grid">
+      <div>
+        <h4>Collective Intelligence Network</h4>
+        <p>An independent research and design project preparing people for advanced AI.</p>
+        <p>This site was designed and written with AI agents.</p>
+      </div>
+      <div>
+        <h4>This site</h4>
+        <ul>
+          <li>No cookies, analytics or third-party requests</li>
+          <li>Works without JavaScript</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Read more</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/notes">All notes</a></li>
+          <li><a href="/trajectory">Trajectory</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/#involved">Get involved</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var data = {
+    eu: {
+      title: "Regulation (EU) 2024/1689 (EU AI Act)",
+      badge: "Enacted",
+      badgeClass: "enacted",
+      desc: "The European Union's comprehensive risk-tiered framework entered into force on August 1, 2024, establishing strict transparency duties, high-risk operational obligations, and rules for general-purpose AI models.",
+      scope: "Tiered classification: prohibited practices, high-risk deployments in essential services, and models trained on over 10^25 FLOPs.",
+      oversight: "Article 14 requires systems to be designed so that natural persons can oversee operations, interpret outputs, and intervene or stop execution.",
+      transparency: "Article 50 requires natural persons to be informed whenever they interact directly with an automated AI system unless obvious.",
+      linkUrl: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689",
+      linkText: "Official Journal of the European Union (Regulation 2024/1689) \u2192"
+    },
+    colorado: {
+      title: "Colorado SB 24-205 / SB 26-189 (Consumer Protections in AI)",
+      badge: "Enacted / 2027",
+      badgeClass: "enacted",
+      desc: "Enacted in May 2024 and amended in 2026, establishing affirmative duties of reasonable care for developers and deployers of high-risk systems involved in consequential decisions.",
+      scope: "High-risk AI systems that make or are substantial factors in consequential decisions affecting financial, healthcare, employment, or housing access.",
+      oversight: "Deployers must implement risk management policies, conduct impact assessments, and provide consumers notice and appeal rights for consequential decisions.",
+      transparency: "Affirmative disclosure required prior to deploying high-risk systems, with affirmative defense mechanisms for documented compliance programs.",
+      linkUrl: "https://leg.colorado.gov/bills/sb24-205",
+      linkText: "Colorado General Assembly (SB 24-205 Text) \u2192"
+    },
+    nist: {
+      title: "NIST AIMS: Design Tenets for Agent Identity Management",
+      badge: "Guidance",
+      badgeClass: "guidance",
+      desc: "Published by NIST Cybersecurity Insights on October 27, 2026, outlining ten foundational design tenets for secure, privacy-preserving agent identity and access.",
+      scope: "All autonomous software agents and multi-agent coordination environments interacting across networks and privileged digital resources.",
+      oversight: "Requires continuous local monitoring, human-in-the-loop triggers for high-impact actions, and explicit short-lived revocable intent mandates.",
+      transparency: "Tenet 7 mandates strict architectural separation of policy enforcement from model reasoning, backed by immutable cryptographic event evidence.",
+      linkUrl: "https://www.nist.gov/blogs/cybersecurity-insights/design-tenets-agent-identity-management-systems",
+      linkText: "NIST Cybersecurity Insights (AIMS Tenets) \u2192"
+    },
+    "us-fed": {
+      title: "AI Agent Accountability Act of 2026 (Murphy-Hawley)",
+      badge: "Proposed",
+      badgeClass: "proposed",
+      desc: "Bipartisan federal legislation introduced on October 1, 2026, extending the Computer Fraud and Abuse Act (CFAA) to autonomous agents and establishing criminal liability for reckless deployment.",
+      scope: "Autonomous AI agents and operators whose systems access protected computers, databases, or critical network infrastructure without authorization.",
+      oversight: "Imposes affirmative criminal liability on operators who recklessly cause unauthorized access or system damage, and developer liability for failure to implement safeguards.",
+      transparency: "Requires verifiable audit logging and pre-execution containment boundaries to avoid joint civil liability under expanded federal cyber statute.",
+      linkUrl: "https://www.murphy.senate.gov/newsroom/press-releases/murphy-hawley-announce-breakthrough-bipartisan-legislation-to-force-ai-developers-to-prioritize-safety-or-face-prison-time",
+      linkText: "U.S. Senate Press Announcement (Murphy-Hawley) \u2192"
+    },
+    canada: {
+      title: "Canada Bill C-27 (Part 3: Artificial Intelligence and Data Act)",
+      badge: "Prorogued Baseline",
+      badgeClass: "proposed",
+      desc: "Canada's federal statutory baseline for regulating high-impact artificial intelligence systems in interprovincial and international commerce (died on order paper Jan 2025; baseline model).",
+      scope: "Commercial high-impact AI systems operating in trade and commerce, targeting systems that may cause serious physical, psychological, or economic harm.",
+      oversight: "Mandates risk mitigation plans, independent audits, and confidential compliance reporting to an Artificial Intelligence and Data Commissioner.",
+      transparency: "Requires public explanations of high-impact decision systems and establishes strict measures regarding the processing of anonymized data.",
+      linkUrl: "https://www.parl.ca/legisinfo/en/bill/44-1/c-27",
+      linkText: "Parliament of Canada (Bill C-27 Legislative Summary) \u2192"
+    }
+  };
+
+  var buttons = document.querySelectorAll(".juris-btn");
+  var titleEl = document.getElementById("jc-title");
+  var descEl = document.getElementById("jc-desc");
+  var scopeEl = document.getElementById("jc-scope");
+  var oversightEl = document.getElementById("jc-oversight");
+  var transparencyEl = document.getElementById("jc-transparency");
+  var linkEl = document.getElementById("jc-link");
+
+  function setJuris(key) {
+    var item = data[key];
+    if (!item) return;
+
+    buttons.forEach(function(btn) {
+      var active = btn.getAttribute("data-juris") === key;
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+
+    titleEl.textContent = "";
+    var tText = document.createTextNode(item.title + " ");
+    var badgeSpan = document.createElement("span");
+    badgeSpan.className = "juris-badge " + item.badgeClass;
+    badgeSpan.id = "jc-badge";
+    badgeSpan.textContent = item.badge;
+    titleEl.appendChild(tText);
+    titleEl.appendChild(badgeSpan);
+
+    descEl.textContent = item.desc;
+    scopeEl.textContent = item.scope;
+    oversightEl.textContent = item.oversight;
+    transparencyEl.textContent = item.transparency;
+
+    linkEl.textContent = "";
+    var a = document.createElement("a");
+    a.href = item.linkUrl;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = item.linkText;
+    linkEl.appendChild(a);
+  }
+
+  buttons.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      var key = btn.getAttribute("data-juris");
+      setJuris(key);
+    });
+  });
+})();
+</script>
+<script src="/scripts/site.js?v=46" defer></script>
+</body>
+</html>
