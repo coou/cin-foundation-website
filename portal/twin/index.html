@@ -722,6 +722,58 @@
           <div id="capability-eval-result" class="twin-result"></div>
         </div>
       </section>
+    
+      <!-- Card 3E: Three-Valued Auto-Purchase Decision Gate -->
+      <section class="card" id="auto-purchase-inspector">
+        <div class="card-head">
+          <div>
+            <h2 class="flush">Three-valued auto-purchase decision gate</h2>
+            <p class="muted flush">Evaluates assistant commerce requests against client-side spending limits. Decouples item preference matching from financial execution authorization (preference is not permission).</p>
+          </div>
+          <span class="tag ok">Financial Gate</span>
+        </div>
+        <form id="evaluate-auto-purchase" class="stack twin-subblock">
+          <div class="form-grid-2">
+            <label>Merchant
+              <input type="text" name="merchant" value="Bookshop Cooperative" maxlength="60" required>
+            </label>
+            <label>Item description
+              <input type="text" name="item_description" value="Field Guide to Local Networks" maxlength="100" required>
+            </label>
+          </div>
+          <div class="form-grid-2">
+            <label>Amount (in USD)
+              <input type="number" step="0.01" min="0.01" max="1000" name="amount" value="18.50" required>
+            </label>
+            <label>Currency
+              <select name="currency">
+                <option value="USD" selected>USD</option>
+                <option value="CAD">CAD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-grid-2">
+            <label>User preference fit
+              <select name="preference">
+                <option value="0.95" selected>95% (High match)</option>
+                <option value="0.75">75% (Moderate match)</option>
+                <option value="0.50">50% (Weak match)</option>
+              </select>
+            </label>
+            <label>Explicit user warrant (active authorization)
+              <select name="has_warrant">
+                <option value="true">Yes (User explicitly authorized buying items in this category)</option>
+                <option value="false" selected>No (Assistant inferred permission from past browsing)</option>
+              </select>
+            </label>
+          </div>
+          <div><button class="btn sm">Evaluate auto-purchase gate</button></div>
+        </form>
+        <div id="auto-purchase-eval-result" class="twin-result"></div>
+      </section>
+
     </div>
   </div>
 

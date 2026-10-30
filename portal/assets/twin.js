@@ -46,7 +46,9 @@ import {
   summarizeIncomeProof,
   processRetrievalAirlock,
   verifyRetrievalAirlockReceipt,
-  summarizeRetrievalAirlock
+  summarizeRetrievalAirlock,
+  evaluateAutoPurchaseGate,
+  summarizeAutoPurchaseDecision
 } from './twin-core.js';
 
 mountAuth(() => {});
@@ -1800,6 +1802,7 @@ if (incForm) {
   incForm.onsubmit = (e) => {
     e.preventDefault();
     runIncomeProofInspector();
+  runAutoPurchaseInspector();
   };
 }
 
@@ -2176,6 +2179,55 @@ if (wipeBtn) {
     renderAll();
     const status = document.getElementById('data-status');
     if (status) status.textContent = 'All twin data wiped from this browser.';
+  };
+}
+
+
+function runAutoPurchaseInspector() {
+  const form = document.getElementById('evaluate-auto-purchase');
+  const resultBox = document.getElementById('auto-purchase-eval-result');
+  if (!form || !resultBox) return;
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    resultBox.textContent = '';
+
+    const fd = new FormData(form);
+    const amountVal = parseFloat(fd.get('amount') || '0');
+    const amountCents = Math.round(amountVal * 100);
+    const prefVal = parseFloat(fd.get('preference') || '0.9');
+    const hasWarrant = fd.get('has_warrant') === 'true';
+    const merchant = (fd.get('merchant') || 'Acme Market').trim();
+    const itemDesc = (fd.get('item_description') || 'General goods').trim();
+    const currency = (fd.get('currency') || 'USD').trim().toUpperCase();
+
+    const req = {
+      request_id: 'req_' + Date.now().toString(36),
+      agent_id: 'shopping_assistant_01',
+      merchant,
+      currency,
+      amount_cents: amountCents,
+      item_description: itemDesc,
+      user_preference_score: prefVal,
+      has_user_warrant: hasWarrant,
+      requested_at: new Date().toISOString(),
+      category: 'shopping'
+    };
+
+    const res = evaluateAutoPurchaseGate(req);
+    const summary = summarizeAutoPurchaseDecision(res);
+
+    const p = el('p', summary.status_class);
+    p.appendChild(document.createTextNode(summary.text));
+    resultBox.appendChild(p);
+
+    if (res.ok && res.receipt) {
+      const receiptBox = el('div', 'twin-subblock');
+      receiptBox.appendChild(el('h4', 'flush', 'Deterministic authorization receipt:'));
+      const pre = el('pre', 'plain', JSON.stringify(res.receipt, null, 2));
+      receiptBox.appendChild(pre);
+      resultBox.appendChild(receiptBox);
+    }
   };
 }
 
