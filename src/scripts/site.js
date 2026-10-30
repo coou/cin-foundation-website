@@ -1887,6 +1887,24 @@
     }
   };
 
+  function renderBars(d, scaleDelta) {
+    if (!barsEl || !d || !d.bars) return;
+    var delta = scaleDelta || 0;
+    barsEl.innerHTML = d.bars.map(function (b) {
+      var badW = Math.max(4, Math.min(96, Math.round(b[2] - delta * 8)));
+      var okW = Math.max(12, Math.min(100, Math.round(b[3] + delta * 6)));
+      return (
+        '<div class="wm-bar-item">' +
+          '<div class="wm-bar-lbl"><span>' + b[0] + '</span><b>' + badW + '% vs. ' + okW + '%</b></div>' +
+          '<div class="wm-bar-dual">' +
+            '<i class="b-bad" style="width:' + badW + '%"></i>' +
+            '<i class="b-ok" style="width:' + okW + '%"></i>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
   function updateSimReadout() {
     var d = LENSES[currentKey];
     if (!d || !d.simConfig || !simRng) return;
@@ -1897,6 +1915,9 @@
     if (soBadV) soBadV.textContent = res.badV;
     if (soOkK) soOkK.textContent = d.simConfig.okK;
     if (soOkV) soOkV.textContent = res.okV;
+    var span = Math.max(1, d.simConfig.max - d.simConfig.min);
+    var normDelta = (val - d.simConfig.val) / span;
+    renderBars(d, normDelta);
   }
 
   function selectLens(key) {

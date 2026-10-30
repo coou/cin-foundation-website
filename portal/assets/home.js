@@ -437,6 +437,27 @@ function updatePwmSim() {
   if (bV) bV.textContent = res.badV;
   if (oK) oK.textContent = d.sim.okK;
   if (oV) oV.textContent = res.okV;
+  const barsEl = document.getElementById('pwm-bars');
+  if (barsEl && d.bars) {
+    const span = Math.max(1, d.sim.max - d.sim.min);
+    const delta = (val - d.sim.val) / span;
+    clearChildren(barsEl);
+    d.bars.forEach((b) => {
+      const badW = Math.max(4, Math.min(96, Math.round(b[2] - delta * 8)));
+      const okW = Math.max(12, Math.min(100, Math.round(b[3] + delta * 6)));
+      const row = el('div', 'pwm-bar-row');
+      const top = el('div', 'pwm-bar-top');
+      top.append(el('span', null, b[0]), el('b', null, `${badW}% vs. ${okW}%`));
+      const track = el('div', 'pwm-bar-track');
+      const iBad = el('i', 'bad');
+      iBad.style.width = `${badW}%`;
+      const iOk = el('i', 'ok');
+      iOk.style.width = `${okW}%`;
+      track.append(iBad, iOk);
+      row.append(top, track);
+      barsEl.appendChild(row);
+    });
+  }
 }
 
 if (pwmRng) {

@@ -38,6 +38,23 @@ service cloud.firestore {
       }
     }
 
+    // Public interactive Opportunity Landscape & Personal Sensor Matcher demo queue:
+    // Visitors submit slider vectors + archetype; Realm A Antigravity agents respond within ~5 minutes.
+    match /opportunity_requests/{reqId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly([
+          'stereotype', 'sliders', 'focusSector', 'contextNote', 'clientLabel', 'status', 'createdAt'
+        ])
+        && text(request.resource.data.stereotype, 2, 60)
+        && text(request.resource.data.focusSector, 2, 60)
+        && text(request.resource.data.contextNote, 0, 600)
+        && text(request.resource.data.clientLabel, 1, 80)
+        && request.resource.data.status == 'queued'
+        && request.resource.data.sliders is map
+        && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
