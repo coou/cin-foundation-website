@@ -1387,7 +1387,7 @@
               .attr('rx', 4).attr('fill', pil.color);
 
             gRow.append('text')
-              .attr('x', 418).attr('y', py + 21).attr('text-anchor', 'end')
+              .attr('x', 228 + barW - 8).attr('y', py + 21).attr('text-anchor', 'end')
               .attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
               .text(pil.share + '% SLA');
           })(DASH_PILLARS[p], p);

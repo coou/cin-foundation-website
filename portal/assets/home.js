@@ -1,5 +1,5 @@
 // Network home: live trajectory, interactive workbench map, 4-mode D3 world matrix, agent fleet pulse, scenarios, and ideas.
-import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=21';
+import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=22';
 import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 mountAuth(() => {});
@@ -621,7 +621,7 @@ function renderPwmD3Overlay(d, val, res) {
 
   g.append('text')
     .attr('x', barX + barW - 8).attr('y', 23).attr('text-anchor', 'end').attr('font-size', '9').attr('font-weight', '700').attr('fill', '#4fb3a8')
-    .text(res.okV.slice(0, 42));
+    .text(res.okV.slice(0, 48));
 }
 
 // Mode 2: Dedicated D3 6-Axis Structural Radar + 6-Row Metric Table (#pwm-d3-radar-svg)
@@ -1058,8 +1058,8 @@ const PWM_GLOBAL_ACTORS = [
   { id: 3,  name: 'Ad-Attention Wrappers',   lens: 'labs',       x: 6,  y: 26, color: '#ef6a52', role: 'Surveillance Telemetry & Lock-In' },
   { id: 4,  name: 'Raw e/acc Swarms',        lens: 'safety',     x: 6,  y: 17, color: '#ef6a52', role: 'Zone 1: Zero Containment Barriers' },
   { id: 5,  name: 'Voluntary Lab RSPs',      lens: 'safety',     x: 6,  y: 9,  color: '#e07b42', role: 'Zone 2: Self-Policed Under Race' },
-  { id: 12, name: 'Cloud API Enterprises',   lens: 'enterprise', x: 46, y: 38, color: '#ef6a52', role: '-18% Margin · Workflows Leaked' },
-  { id: 14, name: 'AI Commodity Cartels',    lens: 'humanity',   x: 46, y: 22, color: '#ef6a52', role: '-38% Producer Surplus Extraction' },
+  { id: 12, name: 'Cloud API Firms',         lens: 'enterprise', x: 35, y: 18, color: '#ef6a52', role: '-18% Margin · Workflows Leaked' },
+  { id: 14, name: 'AI Commodity Cartels',    lens: 'humanity',   x: 35, y: 9, color: '#ef6a52', role: '-38% Producer Surplus Extraction' },
   { id: 8,  name: 'Statutory Legislatures',  lens: 'gov',        x: 8,  y: 60, color: '#e3b341', role: '3-5 Yr Lag · Payroll Tax Erosion' },
   { id: 6,  name: 'Eval Labs (METR/AISI)',   lens: 'safety',     x: 10, y: 74, color: '#e3b341', role: 'Zone 3: T50 Horizon Diagnostics' },
   { id: 7,  name: 'Global Hard Pause',       lens: 'safety',     x: 12, y: 88, color: '#6aa8e0', role: 'Zone 5: Treaty Compute Freeze' },
@@ -1179,7 +1179,7 @@ function renderPwmD3Quadrant(d, val, res) {
       .attr('stroke', '#0d0f13').attr('stroke-width', 1.4)
       .attr('opacity', isMatch ? '1' : '0.52');
 
-    const alignEnd = actor.x > 40;
+    const alignEnd = actor.x > 65;
     gNode.append('text')
       .attr('x', alignEnd ? ax - 8 : ax + 8)
       .attr('y', ay + 3)
@@ -1224,7 +1224,7 @@ function renderPwmD3Quadrant(d, val, res) {
     .attr('fill', '#142623').attr('stroke', '#4fb3a8');
   root.append('text')
     .attr('x', 619).attr('y', 256).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-    .text(res.okV.slice(0, 42));
+    .text(res.okV.slice(0, 48));
 
   // Bottom Strip: 5-Zone Safety Gradient: Last Resort Before Pause
   root.append('rect')
