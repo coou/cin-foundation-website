@@ -1103,36 +1103,312 @@
     updateProg();
   }
 
-  // 1. Automatic Section Jump Bar (.note-toc-bar) Strictly Scoped Inside .note-head on /notes/<slug> Pages
+  // 0. Interactive 5-Pillar Blueprint Architecture Map on /notes Hub (#notes-hub-svg)
+  var hubSvg = document.getElementById('notes-hub-svg');
+  if (hubSvg) {
+    [].forEach.call(hubSvg.querySelectorAll('[data-note-cat]'), function (g) {
+      g.addEventListener('click', function () {
+        var cat = g.getAttribute('data-note-cat');
+        var pill = document.querySelector('.notes-pills [data-cat="' + cat + '"]');
+        if (pill) {
+          pill.click();
+          var grid = document.getElementById('notes-grid');
+          if (grid && grid.scrollIntoView) {
+            grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+  }
+
+  // 1. Widescreen 2-Column Hero Card + Sticky Left Scroll-Spy Rail on /notes/<slug> Pages
   var isBlueprintDetail = location.pathname.indexOf('/notes/') === 0 && location.pathname !== '/notes/' && location.pathname !== '/notes/index.html';
   var noteArticle = isBlueprintDetail && document.querySelector('article.note');
   var noteHead = noteArticle && noteArticle.querySelector('.note-head');
   var noteBody = noteArticle && noteArticle.querySelector('.note-body');
-  if (noteArticle && noteHead && noteBody && !noteArticle.querySelector('.note-toc-bar')) {
+  if (noteArticle && noteHead && noteBody && !noteHead.classList.contains('has-hero-split')) {
+    var slugPath = location.pathname.replace(/^\/notes\//, '').replace(/\.html$/, '').replace(/\/$/, '');
     var headings = [].slice.call(noteBody.querySelectorAll('h2'));
+    var svgCount = noteBody.querySelectorAll('svg').length;
+    var simEl = noteBody.querySelector('.sim-shell, .juris-explorer, .gov-sim-panel, .dpop-sim-shell, .gm-sim, .persona-explorer, #sw-sim, #dm-calc, #aoi-sim, #rea-stream-sim, #insensor-ledger-sim, #sym-search-sim, #sch-dir');
+
+    headings.forEach(function (h, idx) {
+      if (!h.id) {
+        var s = (h.textContent || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        h.id = s || ('sec-' + (idx + 1));
+      }
+    });
+
+    // Classify note domain for custom schematic & provenance metadata
+    var domainKey = 'arch';
+    if (/ledger|value|companies|beyond-arxiv|testnet/.test(slugPath)) domainKey = 'ledger';
+    else if (/personal|twin|reclaim|quest|who-is|somatic|biometrics|sovereignty/.test(slugPath)) domainKey = 'twin';
+    else if (/containment|swarm|jurisdictions|liquid-democracy|instructions|fractured|trust/.test(slugPath)) domainKey = 'safety';
+    else if (/thirty-lives|simulations|signals|related-labs|all-principles|many-minds|collective|network/.test(slugPath)) domainKey = 'sim';
+
+    var DOMAIN_META = {
+      arch: {
+        tag: 'Pillar 1 · Two Internets & Local OCap',
+        badge: 'RFC 9000 QUIC + OCap',
+        kpi3Val: '0 Bytes',
+        kpi3Lbl: 'Cloud Telemetry Leak',
+        prov: 'IETF RFC 9000/9221 QUIC · Dennis & Van Horn (1966) OCap · Hardware PUF/TPM',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Two Internets Architecture Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Human Internet</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Hardware Liveness</text>' +
+          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">0 Foreign Bots</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">100% Human Spaces</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">OCap Sandbox</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">6 Narrow Agents</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">3-of-6 Quorum</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">Local Device Bus</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Agent Internet</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">IETF QUIC P2P</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">9.4 ms Latency</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Scoped ZK Proofs</text>' +
+        '</svg>'
+      },
+      ledger: {
+        tag: 'Pillar 2 & 3 · Attribution & 5D Ledger',
+        badge: 'PCC + Data Shapley',
+        kpi3Val: '1,000 Cr',
+        kpi3Lbl: 'Exact Conservation',
+        prov: 'Necula (POPL 1997) PCC · Shapley (1953) · Ghorbani & Zou (ICML 2019) · TIES-Merging',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Shared Attribution and 5D Ledger Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Local Sandbox</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Tasker &amp; Solver</text>' +
+          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">5-Session Iso</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">LoRA Weight Delta</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Functional Proof</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Necula 1997 PCC</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">16/16 Certified</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">Deterministic Gate</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="var(--card)" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">5D Royalty Split</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Data Shapley</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">$25k Floor Safe</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">0% Middleman Toll</text>' +
+        '</svg>'
+      },
+      twin: {
+        tag: 'Pillar 4 · Human-Bound Personal Twin',
+        badge: 'Local LoRA + PUF',
+        kpi3Val: '0 Bytes',
+        kpi3Lbl: 'Raw Biometrics Sent',
+        prov: 'Hu et al. (ICLR 2022) LoRA · Picard (1997) · Sweller (1988) · FIDO2/WebAuthn',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Human-Bound Personal Agent Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Pre-ADC Sensor</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">HRV + Piezo MMG</text>' +
+          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">50 ms Erasure</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">Duress Lock ≥24ms</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Personal Twin</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">On-Device LoRA</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Telic vs Limbic</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">100% User-Owned</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Craft Royalty</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">ZK-LSH Subspace</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Scoped Escrow</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Direct Settlement</text>' +
+        '</svg>'
+      },
+      safety: {
+        tag: 'Containment, Governance & Statutory Gate',
+        badge: 'NIST AIMS Tenet 7',
+        kpi3Val: '100%',
+        kpi3Lbl: 'Swarm Abuses Blocked',
+        prov: 'NIST AI RMF / AIMS Tenet 7 · RFC 9449 DPoP · Saltzer & Schroeder (1975) · Ostrom (1990)',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Risk-Scaled Containment and Policy Gate Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Agent Proposal</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Reasoning Plane</text>' +
+          '<text x="16" y="62" fill="var(--accent)" font-size="9" font-family="var(--mono)">0 Direct IO Keys</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">Typed AST Intent</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Policy Gate</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Φ(R) = 1−(1−R)⁵</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">3-of-6 Watchers</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">Deterministic Check</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="var(--card)" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Signed Receipt</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">RFC 9449 DPoP</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Audit Verified</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Fails Closed</text>' +
+        '</svg>'
+      },
+      sim: {
+        tag: 'Pillar 5 · Simulations, Signals & Foresight',
+        badge: 'Deterministic Suite',
+        kpi3Val: '0.87→0.58',
+        kpi3Lbl: '365d Gini Compression',
+        prov: 'Brier (1950) Proper Scoring · Dalkey & Helmer (1963) Delphi · METR Task Horizon',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Society Simulation and Strategic Foresight Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">30 Lives &amp; 550</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">6 Continents</text>' +
+          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Tiers 0 to 4</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">365-Day Monte Carlo</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">5-Step Foresight</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">STEEP + Delphi</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Brier Calibrated</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">100% Cone Sum</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">4.2x Thriving</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Care &amp; Craft</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Zero Hoarding</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Reproducible Code</text>' +
+        '</svg>'
+      }
+    };
+
+    var dm = DOMAIN_META[domainKey] || DOMAIN_META.arch;
+
+    // Wrap existing .note-head children into .note-head-left
+    var leftDiv = document.createElement('div');
+    leftDiv.className = 'note-head-left';
+    while (noteHead.firstChild) {
+      leftDiv.appendChild(noteHead.firstChild);
+    }
+
+    // Add compact section pills bar inside leftDiv if >= 2 headings
     if (headings.length >= 2) {
       var tocBar = document.createElement('nav');
       tocBar.className = 'note-toc-bar';
       tocBar.setAttribute('aria-label', 'In this blueprint');
       var labelSpan = document.createElement('span');
       labelSpan.className = 'ntb-k';
-      labelSpan.textContent = 'Sections in this blueprint:';
+      labelSpan.textContent = 'Jump to section:';
       tocBar.appendChild(labelSpan);
       var listDiv = document.createElement('div');
       listDiv.className = 'ntb-links';
-      headings.forEach(function (h, idx) {
-        if (!h.id) {
-          var slug = (h.textContent || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-          h.id = slug || ('sec-' + (idx + 1));
-        }
+      headings.slice(0, 6).forEach(function (h, idx) {
         var a = document.createElement('a');
         a.href = '#' + h.id;
         var cleanTxt = (h.textContent || '').replace(/^\s*\d+[\.\)]\s*/, '').trim();
-        a.textContent = (idx + 1) + '. ' + (cleanTxt.length > 44 ? cleanTxt.slice(0, 42) + '…' : cleanTxt);
+        a.textContent = (idx + 1) + '. ' + (cleanTxt.length > 36 ? cleanTxt.slice(0, 34) + '…' : cleanTxt);
         listDiv.appendChild(a);
       });
       tocBar.appendChild(listDiv);
-      noteHead.appendChild(tocBar);
+      leftDiv.appendChild(tocBar);
+    }
+
+    // Build Right-Column Visual Blueprint Architecture & Provenance Card (.note-hero-card)
+    var rightCard = document.createElement('aside');
+    rightCard.className = 'note-hero-card';
+    rightCard.setAttribute('aria-label', 'Blueprint Architecture Summary');
+
+    var targetJumpHref = '#';
+    var targetJumpLabel = 'Inspect Architecture ↓';
+    if (simEl) {
+      if (!simEl.id) simEl.id = 'interactive-workbench';
+      targetJumpHref = '#' + simEl.id;
+      targetJumpLabel = 'Launch Interactive Simulator ↓';
+    } else if (headings.length > 0) {
+      targetJumpHref = '#' + headings[0].id;
+      targetJumpLabel = 'Read Technical Spec ↓';
+    }
+
+    rightCard.innerHTML =
+      '<div class="nhc-top">' +
+        '<span class="nhc-k">' + dm.tag + '</span>' +
+        '<span class="nhc-badge">' + dm.badge + '</span>' +
+      '</div>' +
+      '<div class="nhc-svg-wrap">' + dm.svg + '</div>' +
+      '<div class="nhc-kpis">' +
+        '<div class="nhc-kpi"><b>' + Math.max(1, headings.length) + ' Sections</b><span>Structured Blueprint</span></div>' +
+        '<div class="nhc-kpi"><b>' + (svgCount + 1) + ' Schematics</b><span>' + (simEl ? '+ Live Simulator' : 'Verified SVG Specs') + '</span></div>' +
+        '<div class="nhc-kpi"><b>' + dm.kpi3Val + '</b><span>' + dm.kpi3Lbl + '</span></div>' +
+      '</div>' +
+      '<div class="nhc-actions">' +
+        '<a href="' + targetJumpHref + '" class="primary">' + targetJumpLabel + '</a>' +
+        '<a href="/notes">All 30 Blueprints</a>' +
+        '<a href="https://cintnet.org/twin" target="_blank" rel="noopener">Twin Sandbox &#8599;</a>' +
+      '</div>';
+
+    noteHead.classList.add('has-hero-split');
+    noteHead.appendChild(leftDiv);
+    noteHead.appendChild(rightCard);
+
+    // Build 2-Column Widescreen Body Grid (.note-widescreen-grid) for notes with >= 3 headings
+    var skipStickyRail = slugPath === 'all-principles' || slugPath === 'thirty-lives' || slugPath === 'related-labs-and-researchers';
+    if (headings.length >= 3 && !skipStickyRail) {
+      var wsGrid = document.createElement('div');
+      wsGrid.className = 'note-widescreen-grid';
+
+      var rail = document.createElement('aside');
+      rail.className = 'note-sticky-rail';
+      rail.setAttribute('aria-label', 'Blueprint outline and provenance');
+
+      var railLinksHtml = headings.map(function (h, idx) {
+        var cleanTxt = (h.textContent || '').replace(/^\s*\d+[\.\)]\s*/, '').trim();
+        var label = (idx + 1) + '. ' + (cleanTxt.length > 42 ? cleanTxt.slice(0, 40) + '…' : cleanTxt);
+        return '<a href="#' + h.id + '" data-spy-id="' + h.id + '"' + (idx === 0 ? ' class="active"' : '') + '>' + label + '</a>';
+      }).join('');
+
+      rail.innerHTML =
+        '<div>' +
+          '<div class="nsr-k" style="margin-bottom:.45rem">In This Blueprint</div>' +
+          '<nav class="nsr-links">' + railLinksHtml + '</nav>' +
+        '</div>' +
+        '<div class="nsr-prov">' +
+          '<b>Scientific Provenance</b>' +
+          '<div>' + dm.prov + '</div>' +
+          '<div style="margin-top:.35rem;display:grid;gap:.25rem">' +
+            '<a href="/notes/beyond-arxiv-agent-web-ledger" style="color:var(--ok);font-weight:600;text-decoration:none">&rarr; Testnet Ledger v4.0</a>' +
+            '<a href="/notes/all-principles" style="color:var(--ok);font-weight:600;text-decoration:none">&rarr; 550-Principle Library</a>' +
+          '</div>' +
+        '</div>';
+
+      var mainCol = document.createElement('div');
+      mainCol.className = 'note-main-col';
+      while (noteBody.firstChild) {
+        mainCol.appendChild(noteBody.firstChild);
+      }
+
+      wsGrid.appendChild(rail);
+      wsGrid.appendChild(mainCol);
+      noteBody.appendChild(wsGrid);
+      noteArticle.classList.add('has-sticky-rail');
+
+      // Scroll-spy listener for sticky rail links
+      var spyLinks = [].slice.call(rail.querySelectorAll('[data-spy-id]'));
+      var updateSpy = function () {
+        var activeId = headings[0].id;
+        var threshold = window.scrollY + 140;
+        for (var i = 0; i < headings.length; i++) {
+          if (headings[i].offsetTop <= threshold) {
+            activeId = headings[i].id;
+          }
+        }
+        spyLinks.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('data-spy-id') === activeId);
+        });
+      };
+      window.addEventListener('scroll', updateSpy, { passive: true });
+    }
+    if (location.hash) {
+      var hashEl = document.getElementById(location.hash.slice(1));
+      if (hashEl && hashEl.scrollIntoView) {
+        setTimeout(function () { hashEl.scrollIntoView(); }, 50);
+      }
     }
   }
 

@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=47">
+  <link rel="stylesheet" href="/styles/site.css?v=49">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -52,7 +52,7 @@
   <div class="note-body wrap-narrow">
     <aside class="callout">
       <b>In short</b>
-      <p>We are designing an open-schematic, low-cost personal sensor module—the <strong>Somatic Witness</strong> (target parts cost under eight dollars, drawing less than one milliwatt)—that pairs only with your own device. Grounded in hardware-attested biometric liveness verification and Physical Unclonable Functions (Blaise Gassend et al., 2002; W3C FIDO2 / WebAuthn, 2021), it comprehends physical work, creative flow, exhaustion and acute stress; computes a continuous <strong>&ldquo;how human&rdquo; liveness score</strong> from the natural coupling of pulse, breath and micro-movement; and co-signs events onto your private personal ledger. Raw body signals overwrite themselves every thirty seconds and never leave your possession.</p>
+      <p>We are designing an open-schematic, low-cost personal sensor module—the <strong>Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness)</strong> (target parts cost under eight dollars, drawing less than one milliwatt)—that pairs only with your own device. Grounded in hardware-attested biometric liveness verification and Physical Unclonable Functions (Blaise Gassend et al., 2002; W3C FIDO2 / WebAuthn, 2021), it comprehends physical work, creative flow, exhaustion and acute stress; computes a continuous <strong>&ldquo;how human&rdquo; liveness score</strong> from the natural coupling of pulse, breath and micro-movement; and co-signs events onto your private personal ledger. Raw body signals overwrite themselves every thirty seconds and never leave your possession.</p>
     </aside>
 
     <h2>Two problems that turn out to be the same problem</h2>
@@ -63,6 +63,46 @@
     </ol>
     <p>Both problems are solved by moving comprehension to a tiny, sealed sensor module that you physically wear or carry—under rules where <strong>you own the hardware, raw signals die on the chip, and only cryptographic proofs ever step across the boundary.</strong></p>
 
+    <figure class="diagram" aria-label="2-of-2 Silicon PUF and TPM Hardware-Attested Biometric Liveness and Duress Firewall">
+      <svg viewBox="0 0 820 265" role="img" aria-label="Hardware-attested biometric liveness and physical presence verification pipeline">
+        <rect x="14" y="16" width="244" height="196" rx="12" class="d-box"/>
+        <text x="30" y="42" class="d-title">1. Coupled Bio-Physical Entropy</text>
+        <text x="30" y="62" class="d-sub">Pre-ADC analog &amp; optical sensing</text>
+        <rect x="30" y="78" width="212" height="52" rx="8" class="d-fill"/>
+        <text x="42" y="99" class="d-code">PPG + Baroreflex Mutual Info</text>
+        <text x="42" y="117" class="d-sub">I(PPG; Resp) &ge; 0.42 bits live check</text>
+        <rect x="30" y="140" width="212" height="54" rx="8" class="d-fill"/>
+        <text x="42" y="161" class="d-code">Piezo Mechanomyography (MMG)</text>
+        <text x="42" y="179" class="d-sub">8–45 Hz muscle micro-tremor</text>
+
+        <path d="M258 114 L298 114" class="d-line"/>
+
+        <rect x="298" y="16" width="244" height="196" rx="12" class="d-fill"/>
+        <text x="314" y="42" class="d-title">2. Silicon Root &amp; Duress Gate</text>
+        <text x="314" y="62" class="d-sub">SRAM PUF + FIDO2/WebAuthn Enclave</text>
+        <rect x="314" y="78" width="212" height="52" rx="8" class="d-box"/>
+        <text x="326" y="99" class="d-code">2-of-2 Threshold Signature</text>
+        <text x="326" y="117" class="d-sub">Wearable PUF + Device Secure Enclave</text>
+        <rect x="314" y="140" width="212" height="54" rx="8" class="d-box" style="stroke:var(--bad)"/>
+        <text x="326" y="161" class="d-code" style="fill:var(--bad)">Autonomic Coercion Firewall</text>
+        <text x="326" y="179" class="d-sub">HRV RMSSD &lt; 24 ms -> Silent Decoy</text>
+
+        <path d="M542 114 L582 114" class="d-line"/>
+
+        <rect x="582" y="16" width="224" height="196" rx="12" class="d-box"/>
+        <text x="598" y="42" class="d-title">3. Zero-Knowledge Proof</text>
+        <text x="598" y="62" class="d-sub">Hardware-Enforced Data Erasure</text>
+        <rect x="598" y="78" width="192" height="116" rx="8" class="d-fill"/>
+        <text x="612" y="104" class="d-code">0 Bytes Raw Biometrics</text>
+        <text x="612" y="124" class="d-sub">Raw waveforms erased in 50 ms</text>
+        <text x="612" y="148" class="d-code">1-Bit Liveness Attestation</text>
+        <text x="612" y="168" class="d-sub">Blocks 50,000-node server</text>
+        <text x="612" y="184" class="d-sub">botnets at silicon boundary</text>
+
+        <text x="24" y="240" class="d-sub">Canonical mechanism: Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn).</text>
+      </svg>
+      <figcaption>How the on-device sensor verifies human liveness and blocks coercion using a 2-of-2 Silicon PUF + Secure Enclave signature while erasing 100% of raw waveforms locally.</figcaption>
+    </figure>
     <h2>What lives inside the sensor module</h2>
     <p>The reference design is a postage-stamp-sized open board that fits inside a ring, wristband clasp, work-badge clip or earpiece, with no microphone recording speech, no camera, and no Wi-Fi or cellular radio:</p>
     <ul>
@@ -72,7 +112,7 @@
       <li><strong>Evolutionary expansion bus:</strong> as wearable and neural-interface hardware matures—from today&rsquo;s rings and clips to tomorrow&rsquo;s non-invasive muscle-intent bands and optical ear sensors—the same open local protocol lets new sensors plug into your personal agent without handing your nervous system to a platform monopoly.</li>
     </ul>
 
-    <h2>Interactive explorer: test the Somatic Witness sensor</h2>
+    <h2>Interactive explorer: test the Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness) sensor</h2>
     <p>Pick one of the six tested scenarios below—or move the sliders yourself—to see how the on-chip verifier computes the continuous <strong>&ldquo;how human&rdquo; score</strong> and decides whether to co-sign an event onto your personal ledger.</p>
 
     <div class="trust-calc" id="sw-sim">
@@ -140,7 +180,35 @@
 </article>
 </main>
 
-<script src="/scripts/site.js?v=47" defer></script>
-<script src="/scripts/everyday.js?v=47" defer></script>
+<footer class="site-foot">
+  <div class="wrap foot-grid">
+    <div>
+      <b>Collective Intelligence Network</b>
+      <p>An open research and design project for human-AI co-evolution. Built in the open by AI agents under human direction.</p>
+    </div>
+    <div>
+      <b>Read</b>
+      <ul>
+        <li><a href="/notes/beyond-arxiv-agent-web-ledger">Agent-Web Testnet Ledger v4.0</a></li>
+        <li><a href="/notes/personal-agents">Personal agents</a></li>
+        <li><a href="/notes/agent-internet">The two internets</a></li>
+        <li><a href="/notes/containment">Containment</a></li>
+        <li><a href="/notes/value-system">Value beyond money</a></li>
+        <li><a href="/notes">All 30 notes</a></li>
+      </ul>
+    </div>
+    <div>
+      <b>Participate</b>
+      <ul>
+        <li><a href="https://cintnet.org">Network site (cintnet.org)</a></li>
+        <li><a href="https://cintnet.org/twin">Personal Twin OCap Sandbox</a></li>
+        <li><a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="/scripts/site.js?v=49" defer></script>
+<script src="/scripts/everyday.js?v=49" defer></script>
 </body>
 </html>

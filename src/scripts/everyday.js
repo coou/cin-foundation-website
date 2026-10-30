@@ -1516,7 +1516,7 @@
 
       if (socGrid) {
         socGrid.innerHTML = filtered.map(function (p, idx) {
-          return '<div style="padding:.65rem .75rem;border-radius:8px;border:1px solid var(--rule);background:var(--bg-2);font-size:.8rem;display:flex;flex-direction:column;justify-content:space-between;gap:.35rem">' +
+          return '<div style="padding:.65rem .75rem;border-radius:8px;border:1px solid var(--rule);background:var(--paper-2);font-size:.8rem;display:flex;flex-direction:column;justify-content:space-between;gap:.35rem">' +
             '<div>' +
               '<div style="display:flex;justify-content:space-between;gap:.3rem;align-items:baseline">' +
                 '<b style="font-size:.84rem;color:var(--ink)">#' + (idx + 1) + ' · ' + p.name + '</b>' +
