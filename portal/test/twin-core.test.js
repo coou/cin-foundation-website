@@ -180,6 +180,14 @@ import {
   evaluateEdgeCloudExecution,
   verifyCollaborationReceipt,
   summarizeCollaborationExecution,
+  RUNTIME_ACTION_DECISIONS,
+  RUNTIME_ACTION_TYPES,
+  DEFAULT_RUNTIME_MONITOR_POLICY,
+  validateBrowserActionDescriptor,
+  evaluateBrowserWriteAction,
+  createRuntimeMonitorReceipt,
+  verifyRuntimeMonitorReceipt,
+  summarizeRuntimeMonitorDecision,
 } from '../assets/twin-core.js';
 
 // Fake key for redaction tests, built at runtime so the repository secret check does not flag it.
@@ -8335,4 +8343,327 @@ test('summarizeCollaborationExecution produces clear plain language without inte
   assert.equal(blockedSummary.ok, false);
   assert.equal(blockedSummary.status_class, 'status-err');
   assert.equal(blockedSummary.badge, 'Execution Blocked');
+});
+
+
+// --- BROWSER WRITE ACTION RUNTIME MONITOR TESTS (SC-20261016-0035#1) ---
+
+test('runtime monitor constants are deeply frozen and valid', () => {
+  assert.equal(Object.isFrozen(RUNTIME_ACTION_DECISIONS), true);
+  assert.equal(Object.isFrozen(RUNTIME_ACTION_TYPES), true);
+  assert.equal(Object.isFrozen(DEFAULT_RUNTIME_MONITOR_POLICY), true);
+
+  assert.equal(RUNTIME_ACTION_DECISIONS.ALLOW, 'allow');
+  assert.equal(RUNTIME_ACTION_DECISIONS.BLOCK, 'block');
+  assert.equal(RUNTIME_ACTION_DECISIONS.CONFIRM, 'confirm');
+  assert.equal(RUNTIME_ACTION_DECISIONS.REVISE, 'revise');
+
+  assert.ok(RUNTIME_ACTION_TYPES.includes('form_submission'));
+  assert.ok(RUNTIME_ACTION_TYPES.includes('financial_transaction'));
+  assert.ok(RUNTIME_ACTION_TYPES.includes('credential_storage'));
+  assert.ok(RUNTIME_ACTION_TYPES.includes('dom_mutation'));
+});
+
+test('validateBrowserActionDescriptor accepts well-formed descriptor and freezes output', () => {
+  const descriptor = {
+    action_id: 'act-form-submit-001',
+    action_type: 'form_submission',
+    target_origin: 'https://service.city.gov',
+    payload_summary: 'Submit utility appointment rescheduling form',
+    is_idempotent: false,
+    estimated_reversibility: 0.85,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true,
+    over_privileged_fields_count: 0,
+    active_grant_id: 'grnt-123'
+  };
+
+  const validated = validateBrowserActionDescriptor(descriptor);
+  assert.equal(Object.isFrozen(validated), true);
+  assert.equal(validated.action_id, 'act-form-submit-001');
+  assert.equal(validated.action_type, 'form_submission');
+  assert.equal(validated.target_origin, 'https://service.city.gov');
+  assert.equal(validated.estimated_reversibility, 0.85);
+});
+
+test('validateBrowserActionDescriptor fails closed on invalid or forbidden inputs', () => {
+  assert.throws(() => validateBrowserActionDescriptor(null), /must be a non-null object/);
+  assert.throws(() => validateBrowserActionDescriptor([]), /must be a non-null object/);
+  assert.throws(() => validateBrowserActionDescriptor({ invalid_key: 1 }), /Unknown property/);
+
+  // Invalid action_id
+  assert.throws(() => validateBrowserActionDescriptor({
+    action_id: 'bad_id',
+    action_type: 'form_submission',
+    target_origin: 'https://example.com',
+    payload_summary: 'Test',
+    is_idempotent: true,
+    estimated_reversibility: 1.0,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  }), /action_id must be a string/);
+
+  // Forbidden scheme
+  assert.throws(() => validateBrowserActionDescriptor({
+    action_id: 'act-test-001',
+    action_type: 'form_submission',
+    target_origin: 'javascript:alert(1)',
+    payload_summary: 'XSS attempt',
+    is_idempotent: true,
+    estimated_reversibility: 1.0,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  }), /forbidden scheme/);
+
+  // Non-finite reversibility
+  assert.throws(() => validateBrowserActionDescriptor({
+    action_id: 'act-test-002',
+    action_type: 'form_submission',
+    target_origin: 'https://example.com',
+    payload_summary: 'Test',
+    is_idempotent: true,
+    estimated_reversibility: NaN,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  }), /finite number/);
+});
+
+test('evaluateBrowserWriteAction evaluates ALLOW for benign idempotent and read-only actions', () => {
+  const readAction = {
+    action_id: 'act-read-dom-001',
+    action_type: 'read_only_dom',
+    target_origin: 'https://docs.local.org',
+    payload_summary: 'Inspect page headers and search input',
+    is_idempotent: true,
+    estimated_reversibility: 1.0,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+
+  const res = evaluateBrowserWriteAction(readAction, {}, { now: '2026-10-30T00:00:00Z' });
+  assert.equal(res.ok, true);
+  assert.equal(res.decision, RUNTIME_ACTION_DECISIONS.ALLOW);
+  assert.ok(res.reason.includes('complies with all local runtime monitor safety rules'));
+});
+
+test('evaluateBrowserWriteAction evaluates BLOCK for forbidden destinations and credential theft', () => {
+  // Prohibited destination
+  const darkwebAction = {
+    action_id: 'act-dark-001',
+    action_type: 'external_http_post',
+    target_origin: 'https://darkweb.hidden-node.onion',
+    payload_summary: 'Post telemetry',
+    is_idempotent: true,
+    estimated_reversibility: 0.9,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+  const resDark = evaluateBrowserWriteAction(darkwebAction);
+  assert.equal(resDark.ok, true);
+  assert.equal(resDark.decision, RUNTIME_ACTION_DECISIONS.BLOCK);
+  assert.ok(resDark.reason.includes('prohibited'));
+
+  // Credential storage modification
+  const credAction = {
+    action_id: 'act-cred-001',
+    action_type: 'credential_storage',
+    target_origin: 'https://accounts.portal.gov',
+    payload_summary: 'Update saved auth token',
+    is_idempotent: true,
+    estimated_reversibility: 0.5,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+  const resCred = evaluateBrowserWriteAction(credAction);
+  assert.equal(resCred.ok, true);
+  assert.equal(resCred.decision, RUNTIME_ACTION_DECISIONS.BLOCK);
+  assert.ok(resCred.reason.includes('credential storage modification'));
+
+  // Background network write without pre-grant
+  const bgPostAction = {
+    action_id: 'act-bg-post-001',
+    action_type: 'external_http_post',
+    target_origin: 'https://api.external-service.com',
+    payload_summary: 'Sync state to remote endpoint',
+    is_idempotent: true,
+    estimated_reversibility: 0.9,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: false // user absent!
+  };
+  const resBg = evaluateBrowserWriteAction(bgPostAction);
+  assert.equal(resBg.ok, true);
+  assert.equal(resBg.decision, RUNTIME_ACTION_DECISIONS.BLOCK);
+  assert.ok(resBg.reason.includes('Background external network write'));
+});
+
+test('evaluateBrowserWriteAction evaluates REVISE for over-privileged observation fields (MINIM)', () => {
+  const overPrivilegedAction = {
+    action_id: 'act-form-leak-001',
+    action_type: 'form_submission',
+    target_origin: 'https://support.tickets.net',
+    payload_summary: 'Submit support ticket with full DOM capture',
+    is_idempotent: true,
+    estimated_reversibility: 0.9,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true,
+    over_privileged_fields_count: 5 // Over-privileged fields detected
+  };
+
+  const res = evaluateBrowserWriteAction(overPrivilegedAction);
+  assert.equal(res.ok, true);
+  assert.equal(res.decision, RUNTIME_ACTION_DECISIONS.REVISE);
+  assert.ok(res.reason.includes('unnecessary observation fields'));
+  assert.ok(res.reason.includes('sanitize and prune'));
+});
+
+test('evaluateBrowserWriteAction evaluates CONFIRM for financial, unconsented PII, or low reversibility', () => {
+  // Financial mutation
+  const finAction = {
+    action_id: 'act-fin-001',
+    action_type: 'financial_transaction',
+    target_origin: 'https://checkout.store.org',
+    payload_summary: 'Authorize renewal charge',
+    is_idempotent: false,
+    estimated_reversibility: 0.5,
+    contains_pii: false,
+    contains_financial_mutation: true,
+    user_present: true
+  };
+  const resFin = evaluateBrowserWriteAction(finAction);
+  assert.equal(resFin.ok, true);
+  assert.equal(resFin.decision, RUNTIME_ACTION_DECISIONS.CONFIRM);
+  assert.ok(resFin.reason.includes('Financial mutation detected'));
+
+  // PII without active grant
+  const piiAction = {
+    action_id: 'act-pii-001',
+    action_type: 'form_submission',
+    target_origin: 'https://clinic.records.org',
+    payload_summary: 'Update patient address and phone',
+    is_idempotent: true,
+    estimated_reversibility: 0.95,
+    contains_pii: true,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+  const resPii = evaluateBrowserWriteAction(piiAction);
+  assert.equal(resPii.ok, true);
+  assert.equal(resPii.decision, RUNTIME_ACTION_DECISIONS.CONFIRM);
+  assert.ok(resPii.reason.includes('personal identity data without active grant'));
+
+  // Low reversibility (e.g. 0.40 < 0.80 threshold)
+  const lowRevAction = {
+    action_id: 'act-delete-001',
+    action_type: 'dom_mutation',
+    target_origin: 'https://app.mailbox.org',
+    payload_summary: 'Purge old archived message folder',
+    is_idempotent: true,
+    estimated_reversibility: 0.25,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+  const resLowRev = evaluateBrowserWriteAction(lowRevAction);
+  assert.equal(resLowRev.ok, true);
+  assert.equal(resLowRev.decision, RUNTIME_ACTION_DECISIONS.CONFIRM);
+  assert.ok(resLowRev.reason.includes('reversibility'));
+});
+
+test('createRuntimeMonitorReceipt and verifyRuntimeMonitorReceipt authenticate and detect tampering fail-closed', () => {
+  const action = {
+    action_id: 'act-submit-099',
+    action_type: 'form_submission',
+    target_origin: 'https://forms.portal.gov',
+    payload_summary: 'Submit inquiry form',
+    is_idempotent: true,
+    estimated_reversibility: 0.95,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true,
+    over_privileged_fields_count: 0
+  };
+
+  const evalRes = evaluateBrowserWriteAction(action, {}, { now: '2026-10-30T00:00:00Z' });
+  const receipt = createRuntimeMonitorReceipt(evalRes.action, evalRes, '2026-10-30T00:00:00Z');
+
+  assert.equal(Object.isFrozen(receipt), true);
+  assert.ok(receipt.receipt_id.startsWith('rtm-rcpt-'));
+  assert.equal(receipt.decision, 'allow');
+  assert.equal(receipt.status, 'admitted');
+
+  // Verify valid receipt
+  const verified = verifyRuntimeMonitorReceipt(receipt);
+  assert.equal(verified.ok, true);
+  assert.equal(verified.verified, true);
+  assert.equal(verified.receipt.receipt_id, receipt.receipt_id);
+
+  // Tampered decision
+  const tamperedDecision = { ...receipt, decision: 'confirm' };
+  const verifyTampered = verifyRuntimeMonitorReceipt(tamperedDecision);
+  assert.equal(verifyTampered.ok, false);
+  assert.equal(verifyTampered.verified, false);
+  assert.ok(verifyTampered.reason.includes('Cryptographic commitment hash mismatch'));
+
+  // Tampered receipt ID
+  const tamperedId = { ...receipt, receipt_id: 'rtm-rcpt-fakefakefakefake' };
+  const verifyTamperedId = verifyRuntimeMonitorReceipt(tamperedId);
+  assert.equal(verifyTamperedId.ok, false);
+  assert.equal(verifyTamperedId.verified, false);
+  assert.ok(verifyTamperedId.reason.includes('Receipt ID does not match'));
+});
+
+test('summarizeRuntimeMonitorDecision generates clean plain language without internal jargon', () => {
+  const allowSummary = summarizeRuntimeMonitorDecision({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.ALLOW,
+    reason: 'Complies with safety rules.'
+  });
+  assert.equal(allowSummary.ok, true);
+  assert.equal(allowSummary.badge, 'Allowed');
+  assert.equal(allowSummary.status_class, 'status-ok');
+  assert.ok(allowSummary.text.includes('permitted to execute automatically'));
+
+  const confirmSummary = summarizeRuntimeMonitorDecision({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+    reason: 'Financial payment approval.'
+  });
+  assert.equal(confirmSummary.ok, true);
+  assert.equal(confirmSummary.badge, 'Confirmation Required');
+  assert.equal(confirmSummary.status_class, 'status-warn');
+  assert.ok(confirmSummary.text.includes('Human approval needed'));
+
+  const reviseSummary = summarizeRuntimeMonitorDecision({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.REVISE,
+    reason: 'Excess fields.'
+  });
+  assert.equal(reviseSummary.ok, true);
+  assert.equal(reviseSummary.badge, 'Revision Requested');
+  assert.equal(reviseSummary.status_class, 'status-info');
+
+  const blockSummary = summarizeRuntimeMonitorDecision({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+    reason: 'Prohibited origin.'
+  });
+  assert.equal(blockSummary.ok, true);
+  assert.equal(blockSummary.badge, 'Blocked');
+  assert.equal(blockSummary.status_class, 'status-err');
+
+  // Verify zero internal codes/jargon
+  for (const text of [allowSummary.text, confirmSummary.text, reviseSummary.text, blockSummary.text]) {
+    for (const jargon of ['ticket', 'D-', 'T1', 'T2', 'spec', 'floor right', 'F1', 'F2', '§']) {
+      assert.equal(text.includes(jargon), false);
+    }
+  }
 });
