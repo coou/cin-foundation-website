@@ -1084,18 +1084,39 @@
 (function () {
   'use strict';
 
-  // 1. Automatic Section Jump Bar (.note-toc-bar) on all 29 /notes/*.html Blueprint Pages
-  var noteArticle = document.querySelector('article.note');
+
+  // 0. Top 2px Spectrum Reading Progress Bar inside .site-head
+  var siteHeadEl = document.querySelector('.site-head');
+  if (siteHeadEl && !document.getElementById('read-progress')) {
+    var prog = document.createElement('div');
+    prog.id = 'read-progress';
+    prog.className = 'read-progress';
+    prog.setAttribute('aria-hidden', 'true');
+    siteHeadEl.appendChild(prog);
+    var updateProg = function () {
+      var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      var pct = Math.min(100, Math.max(0, (window.scrollY / maxScroll) * 100));
+      prog.style.width = pct.toFixed(1) + '%';
+    };
+    window.addEventListener('scroll', updateProg, { passive: true });
+    window.addEventListener('resize', updateProg, { passive: true });
+    updateProg();
+  }
+
+  // 1. Automatic Section Jump Bar (.note-toc-bar) Strictly Scoped Inside .note-head on /notes/<slug> Pages
+  var isBlueprintDetail = location.pathname.indexOf('/notes/') === 0 && location.pathname !== '/notes/' && location.pathname !== '/notes/index.html';
+  var noteArticle = isBlueprintDetail && document.querySelector('article.note');
   var noteHead = noteArticle && noteArticle.querySelector('.note-head');
-  if (noteArticle && noteHead && !noteArticle.querySelector('.note-toc-bar')) {
-    var headings = [].slice.call(noteArticle.querySelectorAll('h2'));
+  var noteBody = noteArticle && noteArticle.querySelector('.note-body');
+  if (noteArticle && noteHead && noteBody && !noteArticle.querySelector('.note-toc-bar')) {
+    var headings = [].slice.call(noteBody.querySelectorAll('h2'));
     if (headings.length >= 2) {
       var tocBar = document.createElement('nav');
       tocBar.className = 'note-toc-bar';
       tocBar.setAttribute('aria-label', 'In this blueprint');
       var labelSpan = document.createElement('span');
       labelSpan.className = 'ntb-k';
-      labelSpan.textContent = 'In this blueprint:';
+      labelSpan.textContent = 'Sections in this blueprint:';
       tocBar.appendChild(labelSpan);
       var listDiv = document.createElement('div');
       listDiv.className = 'ntb-links';
@@ -1107,11 +1128,11 @@
         var a = document.createElement('a');
         a.href = '#' + h.id;
         var cleanTxt = (h.textContent || '').replace(/^\s*\d+[\.\)]\s*/, '').trim();
-        a.textContent = (idx + 1) + '. ' + (cleanTxt.length > 42 ? cleanTxt.slice(0, 40) + '…' : cleanTxt);
+        a.textContent = (idx + 1) + '. ' + (cleanTxt.length > 44 ? cleanTxt.slice(0, 42) + '…' : cleanTxt);
         listDiv.appendChild(a);
       });
       tocBar.appendChild(listDiv);
-      noteHead.insertAdjacentElement('afterend', tocBar);
+      noteHead.appendChild(tocBar);
     }
   }
 

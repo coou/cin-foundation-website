@@ -3139,3 +3139,197 @@ html:not(.no-js) #em-demo #em-grid7 {
   white-space: pre-wrap;
   word-break: break-word;
 }
+/* ==========================================================================
+   ?v=47 WIDESCREEN TRAJECTORY OBSERVATORY (.traj-hero), .note TOP-GAP FIX,
+   BALANCED .wrap-narrow WIDTH, & CONSTRAINED .note-toc-bar
+   ========================================================================== */
+
+/* 1. Eliminate 8rem (128px) top blank void on .note pages & widen .wrap-narrow to 56rem */
+.note {
+  padding: clamp(1.75rem, 3.2vw, 2.75rem) 0 4rem;
+}
+.wrap-narrow {
+  width: min(100% - 2.5rem, 56rem);
+  margin-inline: auto;
+}
+.note-toc-bar {
+  width: 100%;
+  max-width: 56rem;
+  margin: .85rem auto 0;
+  box-sizing: border-box;
+}
+
+/* 2. Widescreen Trajectory & Foresight Observatory Hero (.traj-hero) */
+.traj-hero {
+  padding: clamp(1.6rem, 3vw, 2.6rem) 0 4rem;
+}
+.traj-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+@media (max-width: 960px) {
+  .traj-hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.traj-hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.traj-hero-copy .back {
+  font: 600 .82rem var(--mono);
+  color: var(--ink-3);
+  text-decoration: none;
+  align-self: flex-start;
+}
+.traj-hero-copy .back:hover {
+  color: var(--accent);
+}
+.traj-hero-copy h1 {
+  font-size: clamp(2rem, 3.4vw, 2.85rem);
+  line-height: 1.08;
+  margin: .35rem 0 .65rem;
+}
+.traj-hero-copy .lede {
+  font-size: clamp(.96rem, 1.15vw, 1.06rem);
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+}
+.traj-hero-scorecard {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3.5px solid var(--ok);
+  border-radius: 18px;
+  padding: 1.15rem 1.3rem;
+  display: grid;
+  gap: .9rem;
+  align-content: space-between;
+  box-shadow: 0 22px 44px -32px rgba(0,0,0,.32);
+}
+.ths-k {
+  display: block;
+  font: 700 .68rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ok);
+}
+.ths-score {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  margin-top: .25rem;
+}
+.ths-score b {
+  font: 700 clamp(2rem, 3.2vw, 2.6rem)/1 var(--serif);
+  color: var(--ink);
+}
+.ths-max {
+  font: 600 .95rem/1 var(--mono);
+  color: var(--ink-3);
+}
+.ths-sub {
+  margin: .3rem 0 0;
+  font-size: .82rem;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+.ths-bars {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .48rem .9rem;
+  padding-top: .75rem;
+  border-top: 1px solid var(--rule);
+}
+@media (max-width: 560px) {
+  .ths-bars {
+    grid-template-columns: 1fr;
+  }
+}
+.ths-bar-row {
+  display: grid;
+  grid-template-columns: 1fr 4.5rem 1.8rem;
+  align-items: center;
+  gap: .45rem;
+  font-size: .76rem;
+  color: var(--ink-2);
+}
+.ths-bar-row span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ths-bar-row b {
+  font: 700 .76rem/1 var(--mono);
+  color: var(--ink);
+  text-align: right;
+}
+/* 3. Top 2px Spectrum Reading Progress Bar & 6-Studio Homepage Jump Strip */
+.read-progress {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2.5px;
+  width: 0%;
+  background: var(--spectrum);
+  z-index: 60;
+  pointer-events: none;
+  transition: width .08s linear;
+}
+.home-jump-strip {
+  display: grid;
+  gap: .6rem;
+  margin-bottom: 1.5rem;
+  padding: .85rem 1.05rem;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--ok);
+  border-radius: 14px;
+}
+.home-jump-strip .hjs-k {
+  font: 700 .68rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ok);
+}
+.home-jump-strip .hjs-links {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: .5rem;
+}
+@media (max-width: 1080px) {
+  .home-jump-strip .hjs-links {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .home-jump-strip .hjs-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.home-jump-strip .hjs-links a {
+  display: grid;
+  gap: .15rem;
+  padding: .5rem .65rem;
+  border-radius: 9px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.home-jump-strip .hjs-links a:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.home-jump-strip .hjs-links b {
+  font-size: .78rem;
+  line-height: 1.2;
+}
+.home-jump-strip .hjs-links small {
+  font: 500 .66rem/1.2 var(--mono);
+  color: var(--ink-3);
+}

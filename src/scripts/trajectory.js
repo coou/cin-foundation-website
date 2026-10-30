@@ -190,9 +190,17 @@
 
     var exGrid = document.getElementById('fa-ex-grid');
     var exPills = document.getElementById('fa-ex-pills');
+    var exSearch = document.getElementById('fa-ex-search');
+    var activeExKey = 'all';
     if (exGrid) {
       var renderEx20 = function (filterKey) {
-        var list = EX20.filter(function (x) { return !filterKey || filterKey === 'all' || x.g === filterKey; });
+        if (filterKey) activeExKey = filterKey;
+        var q = exSearch ? (exSearch.value || '').toLowerCase().trim() : '';
+        var list = EX20.filter(function (x) {
+          var matchStage = !activeExKey || activeExKey === 'all' || x.g === activeExKey;
+          var matchQ = !q || ((x.title + ' ' + x.cite + ' ' + x.intent + ' ' + x.mech).toLowerCase().indexOf(q) !== -1);
+          return matchStage && matchQ;
+        });
         exGrid.innerHTML = list.map(function (x) {
           return '<article class="prov-card">' +
             '<div class="prov-top"><span class="prov-cat">' + x.st + '</span><span class="cite-badge">[' + x.cite + ']</span></div>' +
@@ -215,6 +223,7 @@
           renderEx20(b.getAttribute('data-fa-ex'));
         });
       }
+      if (exSearch) { exSearch.addEventListener('input', function () { renderEx20(); }); }
     }
 
   }
@@ -289,6 +298,28 @@
   }
 
   function render(t, sigs) {
+    var thsVal = document.getElementById('ths-val');
+    var thsDelta = document.getElementById('ths-delta');
+    var thsSub = document.getElementById('ths-sub');
+    var thsBars = document.getElementById('ths-bars');
+    if (thsVal && t && typeof t.overall === 'number') {
+      thsVal.textContent = t.overall.toFixed(1);
+      var d0 = t.overall - (t.overall_24h_ago || t.overall);
+      if (thsDelta) {
+        thsDelta.className = 'lt-delta ' + (d0 >= 0 ? 'up' : 'down');
+        thsDelta.textContent = (d0 >= 0 ? '+' : '') + d0.toFixed(1) + ' in 24 h';
+      }
+      if (thsSub) {
+        thsSub.innerHTML = t.signals_7d + ' new sources verified this week (' + t.signals_total + ' total) · Updated ' + ago(t.updated) + '.';
+      }
+      if (thsBars && t.categories) {
+        thsBars.innerHTML = Object.keys(t.categories).map(function (k) {
+          var c = t.categories[k];
+          var sc = Math.round(c.index || 50);
+          return '<div class="ths-bar-row"><span>' + c.name + '</span><div class="wb-bar-track"><div class="wb-bar-fill ' + (sc >= 50 ? 'ok' : 'bad') + '" style="width:' + sc + '%"></div></div><b>' + sc + '</b></div>';
+        }).join('');
+      }
+    }
     var hosts = [panel, page].filter(Boolean);
     hosts.forEach(function (host) {
       host.textContent = '';
