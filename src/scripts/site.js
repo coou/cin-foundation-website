@@ -2250,12 +2250,7 @@
     if (!btn) return;
     selectLens(btn.getAttribute('data-wm-lens'));
   });
-  var urlLens = (location.search.match(/[?&]lens=([a-z]+)/) || [])[1];
-  if (urlLens && LENSES[urlLens]) {
-    selectLens(urlLens);
-  } else {
-    updateSimReadout();
-  }
+
 
   var GLOBAL_ACTORS = [
     { id: 'openai', label: 'OpenAI / GPT', lens: 'labs', x: 18, y: 18, r: 8, col: '#ef6a52', sub: '$100B+ Cloud · 0% Royalty' },
@@ -2277,6 +2272,13 @@
     { id: 'pair_twin', label: '1-to-1 Human+LoRA Pair', lens: 'pair', x: 90, y: 86, r: 8.5, col: '#4fb3a8', sub: '96% Uncopyable Craft Moat' },
     { id: 'cin', label: 'CIN CO-INTELLIGENCE', lens: 'all', x: 92, y: 94, r: 10.5, col: '#4fb3a8', sub: 'Two Internets · Mortal Lease · 95% Shapley' }
   ];
+
+  var urlLens = (location.search.match(/[?&]lens=([a-z]+)/) || [])[1];
+  if (urlLens && LENSES[urlLens]) {
+    selectLens(urlLens);
+  } else {
+    updateSimReadout();
+  }
 
   function renderD3QuadrantLens(key, d, val, res, normDelta) {
     var svgEl = document.getElementById('wm-d3-quadrant-svg');
