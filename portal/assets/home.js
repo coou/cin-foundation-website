@@ -1051,13 +1051,23 @@ function renderPwmD3Flow(d, val, res) {
     .text('1-to-1 Pair Intelligence compounds permanently on device.');
 }
 
+function setNodeHidden(node, isHidden) {
+  if (!node) return;
+  node.hidden = isHidden;
+  if (isHidden) {
+    node.setAttribute('hidden', '');
+  } else {
+    node.removeAttribute('hidden');
+  }
+}
+
 function syncPwmModeVisibility() {
   const archBox = document.getElementById('pwm-svg-box');
   const radarSvg = document.getElementById('pwm-d3-radar-svg');
   const flowSvg = document.getElementById('pwm-d3-flow-svg');
-  if (archBox) archBox.hidden = currentPwmMode !== 'arch';
-  if (radarSvg) radarSvg.hidden = currentPwmMode !== 'radar';
-  if (flowSvg) flowSvg.hidden = currentPwmMode !== 'flow';
+  setNodeHidden(archBox, currentPwmMode !== 'arch');
+  setNodeHidden(radarSvg, currentPwmMode !== 'radar');
+  setNodeHidden(flowSvg, currentPwmMode !== 'flow');
 
   if (pwmVizModes) {
     pwmVizModes.querySelectorAll('[data-pwm-mode]').forEach((btn) => {
@@ -1139,7 +1149,7 @@ if (pwmTabs) {
     document.getElementById('pwm-title').textContent = d.title;
     document.getElementById('pwm-badge').textContent = d.badge;
     document.querySelectorAll('#pwm-svg-box [data-pwm-svg]').forEach((svg) => {
-      svg.hidden = svg.getAttribute('data-pwm-svg') !== key;
+      setNodeHidden(svg, svg.getAttribute('data-pwm-svg') !== key);
     });
     if (d.sim && pwmRng) {
       const lblEl = document.getElementById('pwm-sim-lbl');
