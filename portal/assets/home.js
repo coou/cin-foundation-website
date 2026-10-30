@@ -1,5 +1,5 @@
-// Network home: live trajectory, interactive workbench map, 3-mode D3 world matrix, agent fleet pulse, scenarios, and ideas.
-import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=17';
+// Network home: live trajectory, interactive workbench map, 4-mode D3 world matrix, agent fleet pulse, scenarios, and ideas.
+import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=20';
 import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 mountAuth(() => {});
@@ -252,7 +252,7 @@ backend().then(async (b) => {
 
 // =========================================================================
 // 6. Interactive 7-Lens World Standing vs. CIN Co-Intelligence Studio (#portal-world-matrix)
-//    with 3-Mode D3.js v7 Visual Switcher (#pwm-viz-modes):
+//    with 4-Mode D3.js v7 Visual Switcher (#pwm-viz-modes):
 //      Mode 1: Architecture & Value Split (data-pwm-mode="arch")
 //      Mode 2: D3 6-Axis Structural Radar (data-pwm-mode="radar" -> #pwm-d3-radar-svg)
 //      Mode 3: D3 Co-Intelligence Flow & Bandwidth Sim (data-pwm-mode="flow" -> #pwm-d3-flow-svg)
@@ -1051,6 +1051,212 @@ function renderPwmD3Flow(d, val, res) {
     .text('1-to-1 Pair Intelligence compounds permanently on device.');
 }
 
+// Mode 4: Dedicated D3 18-Actor Global AI Ecosystem Quadrant + 5-Zone Safety Gradient (#pwm-d3-quadrant-svg)
+const PWM_GLOBAL_ACTORS = [
+  { id: 1,  name: 'Closed Cloud Labs',       lens: 'labs',       x: 16, y: 18, color: '#ef6a52', role: '15-40% API Rent · $0 Creator Share' },
+  { id: 2,  name: 'Hyperscaler Clusters',    lens: 'labs',       x: 10, y: 12, color: '#ef6a52', role: '$100B Closed Compute Oligopoly' },
+  { id: 3,  name: 'Ad-Attention Wrappers',   lens: 'labs',       x: 24, y: 10, color: '#ef6a52', role: 'Surveillance Telemetry & Lock-In' },
+  { id: 4,  name: 'Raw e/acc Swarms',        lens: 'safety',     x: 34, y: 9,  color: '#ef6a52', role: 'Zone 1: Zero Containment Barriers' },
+  { id: 5,  name: 'Voluntary Lab RSPs',      lens: 'safety',     x: 28, y: 38, color: '#e07b42', role: 'Zone 2: Self-Policed Under Race' },
+  { id: 6,  name: 'Eval Labs (METR/AISI)',   lens: 'safety',     x: 45, y: 66, color: '#e3b341', role: 'Zone 3: T50 Horizon Diagnostics' },
+  { id: 7,  name: 'Global Hard Pause',       lens: 'safety',     x: 20, y: 88, color: '#6aa8e0', role: 'Zone 5: Treaty Compute Freeze' },
+  { id: 8,  name: 'Statutory Legislatures',  lens: 'gov',        x: 15, y: 54, color: '#e3b341', role: '3-5 Yr Lag · Payroll Tax Erosion' },
+  { id: 9,  name: '5D Municipal Ledgers',    lens: 'gov',        x: 78, y: 84, color: '#4fb3a8', role: '<10ms Silicon Gate + $25k Floor' },
+  { id: 10, name: 'Public Univs (arXiv)',    lens: 'research',   x: 58, y: 44, color: '#e3b341', role: '88% Breakthroughs · $0 Royalties' },
+  { id: 11, name: 'Shapley Research Mesh',   lens: 'research',   x: 84, y: 80, color: '#4fb3a8', role: '15% Lineage Royalty + SPRA 95.3%' },
+  { id: 12, name: 'Cloud API Enterprises',   lens: 'enterprise', x: 26, y: 26, color: '#ef6a52', role: '-18% Margin · Workflows Leaked' },
+  { id: 13, name: '500-Firm PSI Co-Ops',     lens: 'enterprise', x: 82, y: 72, color: '#4fb3a8', role: '+34% Wholesale Margin · 0B Leak' },
+  { id: 14, name: 'AI Commodity Cartels',    lens: 'humanity',   x: 13, y: 28, color: '#ef6a52', role: '-38% Producer Surplus Extraction' },
+  { id: 15, name: 'Producer PSI Co-Ops',     lens: 'humanity',   x: 76, y: 66, color: '#4fb3a8', role: '$8 Liveness + Offline Voice Twin' },
+  { id: 16, name: 'Raw Open Weights',        lens: 'pair',       x: 68, y: 22, color: '#e3b341', role: '60-90d Distillation · 0% Airlock' },
+  { id: 17, name: '1-to-1 OCap Pair Twin',   lens: 'pair',       x: 91, y: 90, color: '#4fb3a8', role: '96% Uncopyable Local Pair Moat' },
+  { id: 18, name: 'CIN Co-Intelligence',     lens: 'all',        x: 95, y: 95, color: '#4fb3a8', role: 'Zone 4: Two Internets + 24h Lease' }
+];
+
+function renderPwmD3Quadrant(d, val, res) {
+  const quadEl = document.getElementById('pwm-d3-quadrant-svg');
+  const root = selectD3Root(quadEl);
+  if (!root) return;
+
+  const span = Math.max(1, d.sim.max - d.sim.min);
+  const ratio = Math.max(0.08, Math.min(0.95, (val - d.sim.min) / span));
+
+  root.append('rect')
+    .attr('x', 0).attr('y', 0).attr('width', 760).attr('height', 360).attr('rx', 12)
+    .attr('fill', '#0d0f13');
+
+  // Top-Left Panel: 18-Actor 4-Quadrant Coordinate Plane
+  const qx0 = 12, qy0 = 12, qw = 468, qh = 264;
+  const plotX0 = 46, plotX1 = 464, plotY0 = 248, plotY1 = 40;
+  const plotW = plotX1 - plotX0;
+  const plotH = plotY0 - plotY1;
+  const midX = Math.round((plotX0 + plotX1) / 2);
+  const midY = Math.round((plotY0 + plotY1) / 2);
+
+  root.append('rect')
+    .attr('x', qx0).attr('y', qy0).attr('width', qw).attr('height', qh).attr('rx', 10)
+    .attr('fill', '#131720').attr('stroke', '#282f3d').attr('stroke-width', 1.4);
+
+  root.append('text')
+    .attr('x', 24).attr('y', 29).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+    .text(`D3 18-ACTOR GLOBAL QUADRANT · ACTIVE LENS: ${currentPwmKey.toUpperCase()}`);
+
+  // 4 Quadrant background shading
+  root.append('rect')
+    .attr('x', plotX0).attr('y', midY).attr('width', midX - plotX0).attr('height', plotY0 - midY)
+    .attr('fill', 'rgba(239,106,82,0.08)');
+  root.append('rect')
+    .attr('x', midX).attr('y', plotY1).attr('width', plotX1 - midX).attr('height', midY - plotY1)
+    .attr('fill', 'rgba(79,179,168,0.11)');
+
+  // Quadrant divider lines
+  root.append('line')
+    .attr('x1', midX).attr('y1', plotY1).attr('x2', midX).attr('y2', plotY0)
+    .attr('stroke', '#323a4c').attr('stroke-width', 1.3).attr('stroke-dasharray', '4 3');
+  root.append('line')
+    .attr('x1', plotX0).attr('y1', midY).attr('x2', plotX1).attr('y2', midY)
+    .attr('stroke', '#323a4c').attr('stroke-width', 1.3).attr('stroke-dasharray', '4 3');
+
+  // Quadrant corner watermarks & Axis labels
+  root.append('text')
+    .attr('x', plotX0 + 6).attr('y', plotY0 - 6).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
+    .text('Q3: CENTRALIZED RENT + UNBOUNDED SWARM');
+  root.append('text')
+    .attr('x', plotX1 - 6).attr('y', plotY0 - 6).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
+    .text('Q4: OPEN WEIGHTS ($0 ROYALTY / NO AIRLOCK)');
+  root.append('text')
+    .attr('x', plotX0 + 6).attr('y', plotY1 + 11).attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
+    .text('Q2: TREATY FREEZE / STATUTORY LAG');
+  root.append('text')
+    .attr('x', plotX1 - 6).attr('y', plotY1 + 11).attr('text-anchor', 'end').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
+    .text('Q1: SOVEREIGN 1-TO-1 CO-INTELLIGENCE');
+
+  root.append('text')
+    .attr('x', midX).attr('y', 268).attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+    .text('X: Centralized Rent (0%) → Sovereign 1-to-1 Ownership (100%)');
+
+  root.append('text')
+    .attr('x', 24).attr('y', midY).attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
+    .attr('transform', `rotate(-90, 24, ${midY})`)
+    .text('Y: Unbounded Competitive AI -> Co-Intelligence Airlock');
+
+  const mapX = (xv) => Math.round(plotX0 + (xv / 100) * plotW);
+  const mapY = (yv) => Math.round(plotY0 - (yv / 100) * plotH);
+
+  // Draw transition vectors from highlighted status-quo actor to highlighted CIN actor
+  const lensActors = PWM_GLOBAL_ACTORS.filter((a) => a.lens === currentPwmKey || a.lens === 'all');
+  const sqActor = lensActors.find((a) => a.x < 50) || PWM_GLOBAL_ACTORS[0];
+  const cinActor = lensActors.find((a) => a.x >= 70 && a.lens === currentPwmKey) || PWM_GLOBAL_ACTORS[17];
+
+  root.append('path')
+    .attr('d', `M ${mapX(sqActor.x)} ${mapY(sqActor.y)} Q ${midX} ${midY - 18} ${mapX(cinActor.x)} ${mapY(cinActor.y)}`)
+    .attr('fill', 'none').attr('stroke', '#4fb3a8').attr('stroke-width', 2.2).attr('stroke-dasharray', '5 3');
+
+  // Plot all 18 actors
+  PWM_GLOBAL_ACTORS.forEach((actor) => {
+    const isMatch = actor.lens === currentPwmKey || actor.lens === 'all';
+    const ax = mapX(actor.x);
+    const ay = mapY(Math.min(98, Math.max(5, actor.y + (isMatch && actor.x > 70 ? (ratio - 0.5) * 4 : 0))));
+
+    const gNode = root.append('g')
+      .attr('class', 'svg-node')
+      .on('click', () => {
+        if (actor.lens !== 'all' && pwmTabs) {
+          const targetBtn = pwmTabs.querySelector(`[data-pwm="${actor.lens}"]`);
+          if (targetBtn) targetBtn.click();
+        }
+      });
+
+    if (isMatch) {
+      gNode.append('circle')
+        .attr('cx', ax).attr('cy', ay).attr('r', 10)
+        .attr('fill', 'none').attr('stroke', actor.color).attr('stroke-width', 1.5).attr('opacity', '0.65');
+    }
+
+    gNode.append('circle')
+      .attr('cx', ax).attr('cy', ay).attr('r', isMatch ? 5.8 : 3.6)
+      .attr('fill', actor.color)
+      .attr('stroke', '#0d0f13').attr('stroke-width', 1.4)
+      .attr('opacity', isMatch ? '1' : '0.52');
+
+    const alignEnd = actor.x > 72;
+    gNode.append('text')
+      .attr('x', alignEnd ? ax - 8 : ax + 8)
+      .attr('y', ay + 3)
+      .attr('text-anchor', alignEnd ? 'end' : 'start')
+      .attr('fill', isMatch ? '#f0ede6' : '#8c8a82')
+      .attr('font-family', 'sans-serif')
+      .attr('font-size', isMatch ? '8.2' : '7.1')
+      .attr('font-weight', isMatch ? '700' : '400')
+      .text(`${actor.id}. ${actor.name}`);
+  });
+
+  // Top-Right Panel: Highlighted Lens Actors & Coordinates
+  root.append('rect')
+    .attr('x', 490).attr('y', 12).attr('width', 258).attr('height', 264).attr('rx', 10)
+    .attr('fill', '#131720').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
+
+  root.append('text')
+    .attr('x', 502).attr('y', 30).attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '8.8').attr('font-weight', '700')
+    .text(`HIGHLIGHTED LENS ACTORS (${currentPwmKey.toUpperCase()})`);
+
+  root.append('text')
+    .attr('x', 502).attr('y', 44).attr('fill', '#8c8a82').attr('font-family', 'monospace').attr('font-size', '7.5')
+    .text(`Click any node on quadrant to switch lens · ${d.sim.fmt(val)}`);
+
+  lensActors.slice(0, 4).forEach((act, idx) => {
+    const ry = 54 + idx * 46;
+    root.append('rect')
+      .attr('x', 500).attr('y', ry).attr('width', 238).attr('height', 40).attr('rx', 6)
+      .attr('fill', '#171c27').attr('stroke', act.color).attr('stroke-width', 1.2);
+
+    root.append('text')
+      .attr('x', 508).attr('y', ry + 15).attr('fill', act.color).attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+      .text(`#${act.id} ${act.name} (X:${act.x}% · Y:${act.y}%)`);
+
+    root.append('text')
+      .attr('x', 508).attr('y', ry + 29).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.8')
+      .text(act.role);
+  });
+
+  root.append('rect')
+    .attr('x', 500).attr('y', 240).attr('width', 238).attr('height', 26).attr('rx', 5)
+    .attr('fill', '#142623').attr('stroke', '#4fb3a8');
+  root.append('text')
+    .attr('x', 619).attr('y', 256).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
+    .text(res.okV.slice(0, 38));
+
+  // Bottom Strip: 5-Zone Safety Gradient: Last Resort Before Pause
+  root.append('rect')
+    .attr('x', 12).attr('y', 284).attr('width', 736).attr('height', 64).attr('rx', 10)
+    .attr('fill', '#131720').attr('stroke', '#2c3446').attr('stroke-width', 1.4);
+
+  root.append('text')
+    .attr('x', 24).attr('y', 301).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.6').attr('font-weight', '700')
+    .text('5-ZONE SAFETY GRADIENT: LAST RESORT BEFORE PAUSE (BIOLOGY ~40 BITS/S VS. 10¹² BITS/S SWARMS)');
+
+  const zones = [
+    { z: 'Zone 1: Raw e/acc',       sub: '0 Barriers · Swarm Flood',    c: '#ef6a52', x: 24,  w: 136, hi: false },
+    { z: 'Zone 2: Voluntary RSPs',  sub: 'Self-Policed · Race Eroded',  c: '#e07b42', x: 166, w: 136, hi: false },
+    { z: 'Zone 3: Eval Labs',       sub: 'METR/AISI Diagnostics Only',  c: '#e3b341', x: 308, w: 136, hi: false },
+    { z: 'Zone 4: CIN Airlock',     sub: '24h Lease · Last Resort',     c: '#4fb3a8', x: 450, w: 152, hi: true  },
+    { z: 'Zone 5: Hard Pause',      sub: 'Global GPU Treaty Freeze',    c: '#6aa8e0', x: 608, w: 128, hi: false }
+  ];
+
+  zones.forEach((zn) => {
+    root.append('rect')
+      .attr('x', zn.x).attr('y', 308).attr('width', zn.w).attr('height', 32).attr('rx', 6)
+      .attr('fill', zn.hi ? 'rgba(79,179,168,0.22)' : '#171c27')
+      .attr('stroke', zn.c).attr('stroke-width', zn.hi ? 2.2 : 1.2);
+    root.append('text')
+      .attr('x', zn.x + 8).attr('y', 321).attr('fill', zn.c).attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+      .text(zn.z);
+    root.append('text')
+      .attr('x', zn.x + 8).attr('y', 333).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.4')
+      .text(zn.sub);
+  });
+}
+
 function setNodeHidden(node, isHidden) {
   if (!node) return;
   node.hidden = isHidden;
@@ -1065,9 +1271,11 @@ function syncPwmModeVisibility() {
   const archBox = document.getElementById('pwm-svg-box');
   const radarSvg = document.getElementById('pwm-d3-radar-svg');
   const flowSvg = document.getElementById('pwm-d3-flow-svg');
+  const quadSvg = document.getElementById('pwm-d3-quadrant-svg');
   setNodeHidden(archBox, currentPwmMode !== 'arch');
   setNodeHidden(radarSvg, currentPwmMode !== 'radar');
   setNodeHidden(flowSvg, currentPwmMode !== 'flow');
+  setNodeHidden(quadSvg, currentPwmMode !== 'quadrant');
 
   if (pwmVizModes) {
     pwmVizModes.querySelectorAll('[data-pwm-mode]').forEach((btn) => {
@@ -1118,6 +1326,7 @@ function updatePwmSim() {
   renderPwmD3Overlay(d, val, res);
   renderPwmD3Radar(d, val, res);
   renderPwmD3Flow(d, val, res);
+  renderPwmD3Quadrant(d, val, res);
 }
 
 if (pwmRng) {

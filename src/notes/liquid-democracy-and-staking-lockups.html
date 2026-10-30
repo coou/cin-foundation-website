@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=55">
+  <link rel="stylesheet" href="/styles/site.css?v=57">
   <style>
     .gov-sim-panel {
       margin: 2.2rem 0;
@@ -204,6 +204,21 @@
   </svg>
 </figure>
 
+    <div class="note-d3-card" style="margin:1.1rem 0 1.4rem;padding:1rem 1.15rem;border-radius:14px;background:var(--card);border:1px solid var(--rule)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.65rem">
+        <span class="label" style="margin:0">Interactive D3.js v7 Mechanism &amp; Impact Explorer</span>
+        <div class="note-d3-modes" role="tablist" aria-label="Select D3 visual mode" style="display:flex;gap:.35rem;flex-wrap:wrap">
+          <button type="button" role="tab" data-nd3-mode="compare" aria-selected="true" style="padding:.28rem .65rem;border-radius:99px;border:1px solid var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--card));color:var(--ink);font:600 .7rem/1.2 var(--mono);cursor:pointer">1. Status Quo vs. CIN</button>
+          <button type="button" role="tab" data-nd3-mode="causal" aria-selected="false" style="padding:.28rem .65rem;border-radius:99px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);font:600 .7rem/1.2 var(--mono);cursor:pointer">2. 4-Step Causal Proof Chain</button>
+          <button type="button" role="tab" data-nd3-mode="scale" aria-selected="false" style="padding:.28rem .65rem;border-radius:99px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);font:600 .7rem/1.2 var(--mono);cursor:pointer">3. Stress-Test Curve</button>
+        </div>
+      </div>
+      <svg class="note-d3-workbench" data-rich-viz="true" data-note-slug="liquid-democracy-and-staking-lockups" viewBox="0 0 780 220" role="img" aria-label="Interactive D3.js v7 Mechanism and Impact Explorer" style="width:100%;height:auto;display:block;border-radius:10px">
+        <rect x="2" y="2" width="776" height="216" rx="10" fill="#12151c" stroke="#2a2f3a" stroke-width="1.4"/>
+        <text x="390" y="114" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#4fb3a8">Initializing D3.js v7 Mechanism &amp; Impact Explorer (liquid-democracy-and-staking-lockups)...</text>
+      </svg>
+    </div>
+
 
     <h2>1. The promise and the quiet trap</h2>
     <p>Imagine your local credit union, community energy cooperative, or open-source software collective trying to make decisions. Direct democracy sounds wonderful in theory, but in practice, nobody has the hours required to study dozens of technical proposals every week. When voter fatigue sets in, participation drops, quorums fail, and a tiny committed faction passes whatever it wants.</p>
@@ -220,12 +235,14 @@
 
     <h2>2. The mechanism: temporal commitment staking multipliers</h2>
     <p>How do we preserve the flexibility of delegation without letting liquid capital or charismatic super-delegates capture the network? The answer lies in <strong>time-weighted commitment</strong>, first analyzed empirically on large-scale decentralized protocols like the Internet Computer Network Nervous System (<a href="https://arxiv.org/abs/2404.13768" target="_blank" rel="noopener noreferrer">Liu &amp; Zhang, 2024; arXiv:2404.13768</a>; IEEE QRS-C).</p>
+    <details class="scen-drawer"><summary>Inspect 1.0x–2.5x staking duration multiplier rules &#9662;</summary>
     <p>Rather than treating every vote as identical regardless of intention, the governance engine introduces a <strong>staking duration multiplier</strong>:</p>
     <ul>
       <li><strong>Transient or liquid votes</strong> receive a baseline <code>1.0x</code> weight. Speculators who bought tokens this morning can still vote, but their influence reflects their zero-commitment horizon.</li>
       <li><strong>Long-term community stakeholders</strong> who lock their governance deposits for 6 months, 1 year, or 2 years receive a scaled multiplier up to <code>2.5x</code>.</li>
       <li><strong>Transitive cycle protection</strong> ensures that if circular delegations occur (Alice delegates to Bob, Bob to Charlie, Charlie to Alice), the system safely falls back to direct self-voting rather than deadlocking or dropping ballots.</li>
     </ul>
+    </details>
 
     <figure class="diagram">
       <svg viewBox="0 0 780 245" role="img" aria-label="Comparison between unconstrained transitive liquid democracy where 3 super-delegates capture 79.2% of voting power and temporal commitment staking lock-ups where patient community voters expand the Nakamoto threshold to 5.">
@@ -459,6 +476,8 @@
   update();
 })();
 </script>
-<script src="/scripts/site.js?v=55" defer></script>
+<script src="/scripts/vendor/d3.v7.min.js?v=57" defer></script>
+<script src="/scripts/site.js?v=57" defer></script>
+<script src="/scripts/notes-d3.js?v=57" defer></script>
 </body>
 </html>

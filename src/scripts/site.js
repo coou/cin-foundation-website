@@ -2024,6 +2024,7 @@
     renderD3LensOverlay(d, val, res);
     renderD3RadarLens(currentKey, d, val, normDelta);
     renderD3FlowLens(currentKey, d, val, res, normDelta);
+    renderD3QuadrantLens(currentKey, d, val, res, normDelta);
   }
 
   var RADAR_AXES = [
@@ -2256,9 +2257,134 @@
     updateSimReadout();
   }
 
+  var GLOBAL_ACTORS = [
+    { id: 'openai', label: 'OpenAI / GPT', lens: 'labs', x: 18, y: 18, r: 8, col: '#ef6a52', sub: '$100B+ Cloud · 0% Royalty' },
+    { id: 'anthropic', label: 'Anthropic', lens: 'labs', x: 24, y: 36, r: 7.5, col: '#ef6a52', sub: 'Cloud API + RSP Pledges' },
+    { id: 'deepmind', label: 'Google DeepMind', lens: 'labs', x: 20, y: 28, r: 8, col: '#ef6a52', sub: 'Hyperscaler Cloud Lock-In' },
+    { id: 'xai', label: 'xAI / Raw e/acc', lens: 'safety', x: 12, y: 10, r: 7, col: '#ef6a52', sub: 'Unbounded Swarm Velocity' },
+    { id: 'meta', label: 'Meta / Open Weights', lens: 'pair', x: 64, y: 24, r: 7.5, col: '#e5a93c', sub: '60-90d Distillation Cliff' },
+    { id: 'deepseek', label: 'DeepSeek / Qwen', lens: 'pair', x: 70, y: 18, r: 7, col: '#e5a93c', sub: 'Commodity Open Base ($0)' },
+    { id: 'metr', label: 'METR & Redwood', lens: 'safety', x: 46, y: 68, r: 6.5, col: '#e5a93c', sub: 'T50 Evals & Swarm Audits' },
+    { id: 'fli', label: 'FLI / Hard Pause', lens: 'safety', x: 35, y: 88, r: 6.5, col: '#5da2d5', sub: 'Global Compute Moratorium' },
+    { id: 'us_eu', label: 'US / EU / UK Govts', lens: 'gov', x: 28, y: 54, r: 7.5, col: '#e5a93c', sub: '3-5 Yr Statutory Lag' },
+    { id: 'munic', label: 'Cities & Tax Base', lens: 'gov', x: 42, y: 44, r: 6.5, col: '#ef6a52', sub: 'Payroll Tax Erosion Risk' },
+    { id: 'univ', label: 'MIT / Stanford / CERN', lens: 'research', x: 56, y: 52, r: 7.5, col: '#5da2d5', sub: '88% Breakthroughs · <1% GPUs' },
+    { id: 'arxiv', label: 'Open Science / SPRA', lens: 'research', x: 76, y: 74, r: 7, col: '#4fb3a8', sub: '15% Shapley + 95.3% SPRA' },
+    { id: 'f500', label: 'Cloud API Tenants', lens: 'enterprise', x: 30, y: 22, r: 7, col: '#ef6a52', sub: '15-40% GPO & Wrapper Toll' },
+    { id: 'psi_coop', label: '500-Clinic PSI Co-Op', lens: 'enterprise', x: 84, y: 78, r: 7.5, col: '#4fb3a8', sub: '+34% Margin · 0 Bytes Leaked' },
+    { id: 'cartels', label: 'AI Commodity Cartels', lens: 'humanity', x: 14, y: 42, r: 7, col: '#ef6a52', sub: '-38% Producer Price Dump' },
+    { id: 'workers', label: '4.8B Physical Workers', lens: 'humanity', x: 78, y: 64, r: 8, col: '#4fb3a8', sub: '$8 Sensor + PSI Co-Op (+38%)' },
+    { id: 'pair_twin', label: '1-to-1 Human+LoRA Pair', lens: 'pair', x: 90, y: 86, r: 8.5, col: '#4fb3a8', sub: '96% Uncopyable Craft Moat' },
+    { id: 'cin', label: 'CIN CO-INTELLIGENCE', lens: 'all', x: 92, y: 94, r: 10.5, col: '#4fb3a8', sub: 'Two Internets · Mortal Lease · 95% Shapley' }
+  ];
+
+  function renderD3QuadrantLens(key, d, val, res, normDelta) {
+    var svgEl = document.getElementById('wm-d3-quadrant-svg');
+    if (!svgEl || !window.d3) return;
+    var d3 = window.d3;
+    var svg = d3.select(svgEl);
+    svg.selectAll('*').remove();
+
+    svg.append('rect').attr('x', 8).attr('y', 8).attr('width', 744).attr('height', 344).attr('rx', 12)
+      .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+
+    svg.append('text').attr('x', 24).attr('y', 30).attr('font-size', 10.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      .text('D3.JS V7 18-ACTOR GLOBAL AI QUADRANT & 5-ZONE SAFETY SPECTRUM (CLICK ANY ACTOR TO FILTER LENS)');
+
+    var plotX = 48, plotY = 44, plotW = 456, plotH = 234;
+    svg.append('rect').attr('x', plotX).attr('y', plotY).attr('width', plotW).attr('height', plotH).attr('rx', 8)
+      .attr('fill', '#151923').attr('stroke', '#2a303c');
+
+    // Quadrant dividers
+    var midX = plotX + plotW / 2, midY = plotY + plotH / 2;
+    svg.append('line').attr('x1', midX).attr('y1', plotY).attr('x2', midX).attr('y2', plotY + plotH).attr('stroke', '#2c3342').attr('stroke-dasharray', '4 3');
+    svg.append('line').attr('x1', plotX).attr('y1', midY).attr('x2', plotX + plotW).attr('y2', midY).attr('stroke', '#2c3342').attr('stroke-dasharray', '4 3');
+
+    // Quadrant labels
+    svg.append('text').attr('x', plotX + 10).attr('y', plotY + 16).attr('font-size', 8.2).attr('font-family', 'monospace').attr('fill', '#5da2d5').text('TOP-DOWN TREATY / HARD PAUSE');
+    svg.append('text').attr('x', plotX + plotW - 10).attr('y', plotY + 16).attr('text-anchor', 'end').attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8').text('★ CIN CO-INTELLIGENCE AIRLOCK');
+    svg.append('text').attr('x', plotX + 10).attr('y', plotY + plotH - 8).attr('font-size', 8.2).attr('font-family', 'monospace').attr('fill', '#ef6a52').text('CENTRALIZED RENT & SWARM RISK');
+    svg.append('text').attr('x', plotX + plotW - 10).attr('y', plotY + plotH - 8).attr('text-anchor', 'end').attr('font-size', 8.2).attr('font-family', 'monospace').attr('fill', '#e5a93c').text('RAW OPEN WEIGHTS (0% ROYALTY)');
+
+    var xScale = d3.scaleLinear().domain([0, 100]).range([plotX + 24, plotX + plotW - 28]);
+    var yScale = d3.scaleLinear().domain([0, 100]).range([plotY + plotH - 22, plotY + 24]);
+
+    // Vector arrows from active lens actors toward CIN Co-Intelligence
+    var cinPt = [xScale(92), yScale(94)];
+    GLOBAL_ACTORS.forEach(function (act) {
+      if (act.lens === key) {
+        svg.append('line')
+          .attr('x1', xScale(act.x)).attr('y1', yScale(act.y))
+          .attr('x2', cinPt[0]).attr('y2', cinPt[1])
+          .attr('stroke', '#4fb3a8').attr('stroke-width', 1.4).attr('stroke-dasharray', '3 3').attr('opacity', 0.65);
+      }
+    });
+
+    // Plot 18 actors
+    GLOBAL_ACTORS.forEach(function (act) {
+      var isMatch = (act.lens === key || act.lens === 'all');
+      var cx = xScale(act.x), cy = yScale(act.y);
+      var g = svg.append('g').style('cursor', 'pointer').on('click', function () {
+        if (act.lens && act.lens !== 'all') selectLens(act.lens);
+      });
+      if (isMatch) {
+        g.append('circle').attr('cx', cx).attr('cy', cy).attr('r', act.r + 4.5)
+          .attr('fill', 'none').attr('stroke', act.col).attr('stroke-width', 1.4).attr('opacity', 0.75);
+      }
+      g.append('circle').attr('cx', cx).attr('cy', cy).attr('r', act.r)
+        .attr('fill', act.col).attr('fill-opacity', isMatch ? 0.92 : 0.35)
+        .attr('stroke', isMatch ? '#fff' : act.col).attr('stroke-width', isMatch ? 1.6 : 1);
+      g.append('text')
+        .attr('x', cx + (act.x > 68 ? -act.r - 5 : act.r + 5))
+        .attr('y', cy + 3)
+        .attr('text-anchor', act.x > 68 ? 'end' : 'start')
+        .attr('font-size', isMatch ? 8.8 : 7.8)
+        .attr('font-weight', isMatch ? '700' : '500')
+        .attr('fill', isMatch ? '#f4f1ea' : '#8c8f96')
+        .text(act.label);
+    });
+
+    // Right panel: Active Lens Actor Breakdown
+    svg.append('rect').attr('x', 516).attr('y', 44).attr('width', 222).attr('height', 234).attr('rx', 8)
+      .attr('fill', '#161b24').attr('stroke', '#2c303a');
+    svg.append('text').attr('x', 528).attr('y', 64).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+      .text('ACTIVE LENS ACTORS (' + key.toUpperCase() + ')');
+
+    var matched = GLOBAL_ACTORS.filter(function (a) { return a.lens === key || a.id === 'cin'; });
+    matched.slice(0, 4).forEach(function (act, idx) {
+      var by = 76 + idx * 48;
+      svg.append('rect').attr('x', 526).attr('y', by).attr('width', 202).attr('height', 40).attr('rx', 6)
+        .attr('fill', '#12161f').attr('stroke', act.col).attr('stroke-width', 1.2);
+      svg.append('text').attr('x', 534).attr('y', by + 16).attr('font-size', 9).attr('font-weight', '700').attr('fill', act.col).text(act.label);
+      svg.append('text').attr('x', 534).attr('y', by + 31).attr('font-size', 8.2).attr('fill', '#d5d9e2').text(act.sub);
+    });
+
+    // Bottom 5-Zone Safety Gradient Strip ("Last Resort Before Pause")
+    var zones = [
+      { lbl: '1. Unbounded e/acc', c: '#ef6a52', w: 132 },
+      { lbl: '2. Voluntary Lab RSPs', c: '#d97757', w: 136 },
+      { lbl: '3. Eval Orgs (METR)', c: '#e5a93c', w: 136 },
+      { lbl: '4. CIN AIRLOCK (LAST RESORT)', c: '#4fb3a8', w: 184 },
+      { lbl: '5. Global Hard Pause', c: '#5da2d5', w: 124 }
+    ];
+    var zx = 22;
+    zones.forEach(function (z, idx) {
+      svg.append('rect').attr('x', zx).attr('y', 292).attr('width', z.w - 4).attr('height', 46).attr('rx', 6)
+        .attr('fill', idx === 3 ? 'rgba(79,179,168,0.22)' : '#161b24')
+        .attr('stroke', z.c).attr('stroke-width', idx === 3 ? 2 : 1.2);
+      svg.append('text').attr('x', zx + (z.w - 4) / 2).attr('y', 311).attr('text-anchor', 'middle')
+        .attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', z.c).text(z.lbl);
+      svg.append('text').attr('x', zx + (z.w - 4) / 2).attr('y', 327).attr('text-anchor', 'middle')
+        .attr('font-size', 7.8).attr('fill', '#c7cbd4')
+        .text(idx === 3 ? 'Two Internets + 24h Lease' : (idx === 4 ? 'Compute Freeze' : '40 bits/s Exposed'));
+      zx += z.w;
+    });
+  }
+
   var wmVizModes = document.getElementById('wm-viz-modes');
   var radarWrap = document.getElementById('wm-d3-radar-wrap');
   var flowWrap = document.getElementById('wm-d3-flow-wrap');
+  var quadWrap = document.getElementById('wm-d3-quadrant-wrap');
   if (wmVizModes) {
     wmVizModes.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-wm-mode]');
@@ -2273,6 +2399,7 @@
       if (svgWrap) svgWrap.hidden = (mode !== 'arch');
       if (radarWrap) radarWrap.hidden = (mode !== 'radar');
       if (flowWrap) flowWrap.hidden = (mode !== 'flow');
+      if (quadWrap) quadWrap.hidden = (mode !== 'quadrant');
       updateSimReadout();
     });
   }
@@ -2352,4 +2479,270 @@
   });
   if (window.d3) renderSwarmLockD3(slSlider.value);
   else window.addEventListener('load', function () { renderSwarmLockD3(slSlider.value); });
+})();
+
+
+// ==========================================================================
+// ?v=57 HERO D3 ALARM STRIP, EM-DEMO D3, 30-LIVES D3, 8-GOALS D3 & PROVENANCE D3
+// ==========================================================================
+(function () {
+  function bootExtraHomeD3() {
+    if (!window.d3) return;
+    var d3 = window.d3;
+
+    // 1. Hero Alarm D3 Strip (#hero-d3-alarm-svg)
+    var heroSvgEl = document.getElementById('hero-d3-alarm-svg');
+    if (heroSvgEl) {
+      var hSvg = d3.select(heroSvgEl);
+      hSvg.selectAll('*').remove();
+      hSvg.append('rect').attr('x', 4).attr('y', 4).attr('width', 672).attr('height', 108).attr('rx', 10)
+        .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+
+      // Left: Exponential 4.5-mo AI Doubling vs Flat 40 bits/s Human Biology
+      hSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 8.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+        .text('1. THE BIOLOGICAL VS. SILICON SPEED COLLISION (2024–2028)');
+
+      var hx = d3.scaleLinear().domain([0, 6]).range([24, 316]);
+      var hy = d3.scaleLinear().domain([0, 64]).range([92, 32]);
+      hSvg.append('line').attr('x1', 24).attr('y1', 92).attr('x2', 316).attr('y2', 92).attr('stroke', '#323846');
+      // Flat human biology line (~40 bits/s)
+      hSvg.append('line').attr('x1', 24).attr('y1', 84).attr('x2', 316).attr('y2', 84).attr('stroke', '#5da2d5').attr('stroke-width', 2.2).attr('stroke-dasharray', '4 3');
+      hSvg.append('text').attr('x', 28).attr('y', 78).attr('font-size', 8.2).attr('font-weight', '700').attr('fill', '#5da2d5').text('Human Biology (~40 bits/s · 0% change)');
+
+      // Exponential machine doubling curve (2^x)
+      var expPts = d3.range(0, 6.1, 0.25).map(function (t) { return [hx(t), hy(Math.pow(2, t))]; });
+      hSvg.append('path').attr('d', d3.line()(expPts)).attr('fill', 'none').attr('stroke', '#ef6a52').attr('stroke-width', 2.8);
+      hSvg.append('circle').attr('cx', hx(6)).attr('cy', hy(64)).attr('r', 4.5).attr('fill', '#ef6a52');
+      hSvg.append('text').attr('x', hx(5.7)).attr('y', 40).attr('text-anchor', 'end').attr('font-size', 8.4).attr('font-weight', '700').attr('fill', '#ef6a52').text('AI Swarms: 64× / 27 mo (10¹² bits/s)');
+
+      // Divider
+      hSvg.append('line').attr('x1', 336).attr('y1', 14).attr('x2', 336).attr('y2', 102).attr('stroke', '#2a303c');
+
+      // Right: 5-Zone Safety Gradient ("Last Resort Before Pause")
+      hSvg.append('text').attr('x', 350).attr('y', 22).attr('font-size', 8.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+        .text('2. CO-INTELLIGENCE AIRLOCK: LAST RESORT BEFORE PAUSE');
+
+      var hZones = [
+        { k: 'e/acc', sub: 'Extinction', w: 54, c: '#ef6a52' },
+        { k: 'Lab RSP', sub: 'Self-Policed', w: 60, c: '#d97757' },
+        { k: 'Eval Lab', sub: 'Diagnostic', w: 58, c: '#e5a93c' },
+        { k: 'CIN AIRLOCK', sub: '1-to-1 + Lease', w: 88, c: '#4fb3a8', hi: true },
+        { k: 'Pause', sub: 'GPU Freeze', w: 54, c: '#5da2d5' }
+      ];
+      var curX = 350;
+      hZones.forEach(function (z) {
+        hSvg.append('rect').attr('x', curX).attr('y', 32).attr('width', z.w - 3).attr('height', 46).attr('rx', 5)
+          .attr('fill', z.hi ? 'rgba(79,179,168,0.22)' : '#161b24')
+          .attr('stroke', z.c).attr('stroke-width', z.hi ? 2 : 1.1);
+        hSvg.append('text').attr('x', curX + (z.w - 3) / 2).attr('y', 50).attr('text-anchor', 'middle')
+          .attr('font-size', 7.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', z.c).text(z.k);
+        hSvg.append('text').attr('x', curX + (z.w - 3) / 2).attr('y', 66).attr('text-anchor', 'middle')
+          .attr('font-size', 7.4).attr('fill', '#d5d9e2').text(z.sub);
+        curX += z.w;
+      });
+      hSvg.append('text').attr('x', 350).attr('y', 96).attr('font-size', 8.2).attr('font-weight', '700').attr('fill', '#e5a93c')
+        .text('✓ Two Internets + 24h Mortal Lease = Co-Existence Without Hitting Pause');
+    }
+
+    // 2. 4-Step Proof-Carrying Code & Shapley Royalty Visualizer (#em-d3-svg)
+    var emSvgEl = document.getElementById('em-d3-svg');
+    if (emSvgEl) {
+      var EM_META = {
+        php:   { name: 'PHP / TLS Security Patch', uses: '14,200 Servers', sqPay: '$0 (Scraped Free)', cinPay: '$42,600 Direct Shapley (95%)', commons: '$2,240 Commons (5%)' },
+        tech:  { name: 'Heat-Pump Diagnostic LoRA', uses: '3,800 Technicians', sqPay: '$0 (OEM Locked)', cinPay: '$19,000 Guild Royalty (95%)', commons: '$1,000 Commons (5%)' },
+        nurse: { name: 'Pediatric Sepsis Handoff Check', uses: '640 ER Wards', sqPay: '$0 (EHR Vendor Capture)', cinPay: '$31,350 Nurse Team (95%)', commons: '$1,650 Commons (5%)' },
+        solar: { name: 'Microgrid Permit & Load Solver', uses: '1,950 Co-Ops', sqPay: '$0 (SaaS Middleman Toll)', cinPay: '$27,780 Eng Guild (95%)', commons: '$1,460 Commons (5%)' }
+      };
+      var activeScen = 'php';
+      var activeStep = 0;
+
+      function renderEmD3() {
+        var m = EM_META[activeScen] || EM_META.php;
+        var svg = d3.select(emSvgEl);
+        svg.selectAll('*').remove();
+        svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 104).attr('rx', 10)
+          .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+
+        svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+          .text('D3.JS V7 VALUE & PROOF COMPARISON · ' + m.name.toUpperCase() + ' (' + m.uses + ')');
+
+        // Status quo bar
+        svg.append('text').attr('x', 18).attr('y', 50).attr('font-size', 9).attr('font-weight', '700').attr('fill', '#ef6a52').text('Today (Cloud Scrape)');
+        svg.append('rect').attr('x', 156).attr('y', 36).attr('width', 580).attr('height', 20).attr('rx', 4).attr('fill', 'rgba(239,106,82,0.22)').attr('stroke', '#ef6a52');
+        svg.append('text').attr('x', 166).attr('y', 50).attr('font-size', 8.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+          .text('100% Captured by Cloud AI / Middlemen · Creator Paid: ' + m.sqPay);
+
+        // CIN bar (scales progress with activeStep 0..3)
+        var stepProg = 0.4 + (activeStep / 3) * 0.6;
+        var solverW = Math.round(551 * stepProg);
+        var comW = Math.round(29 * stepProg);
+        svg.append('text').attr('x', 18).attr('y', 82).attr('font-size', 9).attr('font-weight', '700').attr('fill', '#4fb3a8').text('CIN Ledger (Step ' + (activeStep + 1) + '/4)');
+        svg.append('rect').attr('x', 156).attr('y', 68).attr('width', solverW).attr('height', 22).attr('rx', 4).attr('fill', '#4fb3a8');
+        svg.append('rect').attr('x', 156 + solverW + 2).attr('y', 68).attr('width', comW).attr('height', 22).attr('rx', 3).attr('fill', '#e5a93c');
+        svg.append('text').attr('x', 166).attr('y', 83).attr('font-size', 8.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#111317')
+          .text('✓ PCC Verified · ' + m.cinPay + ' + ' + m.commons);
+      }
+
+      renderEmD3();
+      var emDemo = document.getElementById('em-demo');
+      if (emDemo) {
+        emDemo.addEventListener('click', function (e) {
+          var sBtn = e.target.closest('[data-em-scen]');
+          if (sBtn) activeScen = sBtn.getAttribute('data-em-scen') || 'php';
+          setTimeout(function () {
+            var onNode = emDemo.querySelector('.em-node.on');
+            if (onNode) activeStep = Number(onNode.getAttribute('data-em-node') || 0);
+            renderEmD3();
+          }, 20);
+        });
+      }
+    }
+
+    // 3. 30-Lives 5D Value & Gini Compression D3 Visualizer (#pe-d3-svg)
+    var peSvgEl = document.getElementById('pe-d3-svg');
+    if (peSvgEl) {
+      function renderPeD3(pid, titleTxt) {
+        var num = parseInt((pid || 'P01').replace(/\D/g, ''), 10) || 1;
+        var dims = [
+          { k: 'Craft & Skill', v: 78 + (num * 7) % 20, c: '#4fb3a8' },
+          { k: 'Care & Health', v: 72 + (num * 11) % 25, c: '#5da2d5' },
+          { k: 'Ecology', v: 68 + (num * 13) % 28, c: '#e5a93c' },
+          { k: 'Knowledge DAG', v: 80 + (num * 5) % 19, c: '#b794f4' },
+          { k: 'Local Compute', v: 74 + (num * 9) % 22, c: '#4fb3a8' }
+        ];
+        var svg = d3.select(peSvgEl);
+        svg.selectAll('*').remove();
+        svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 116).attr('rx', 10)
+          .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+
+        svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+          .text('D3.JS V7 5D VALUE VECTOR & GINI COMPRESSION · ' + (pid || 'P01') + ' (' + (titleTxt || 'Emergency-Room Nurse').slice(0, 36).toUpperCase() + ')');
+
+        dims.forEach(function (dm, i) {
+          var bx = 18 + i * 94;
+          svg.append('rect').attr('x', bx).attr('y', 34).attr('width', 86).attr('height', 72).attr('rx', 7)
+            .attr('fill', '#161b24').attr('stroke', dm.c).attr('stroke-width', 1.2);
+          svg.append('text').attr('x', bx + 43).attr('y', 50).attr('text-anchor', 'middle').attr('font-size', 8).attr('font-weight', '700').attr('fill', dm.c).text(dm.k);
+          svg.append('text').attr('x', bx + 43).attr('y', 72).attr('text-anchor', 'middle').attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#f4f1ea').text('+' + dm.v + '%');
+          svg.append('rect').attr('x', bx + 10).attr('y', 84).attr('width', 66).attr('height', 8).attr('rx', 4).attr('fill', '#10131a');
+          svg.append('rect').attr('x', bx + 10).attr('y', 84).attr('width', Math.round(0.66 * dm.v)).attr('height', 8).attr('rx', 4).attr('fill', dm.c);
+        });
+
+        // Right box: 365-Day Cohort Gini Compression (0.87 -> 0.58)
+        svg.append('rect').attr('x', 494).attr('y', 34).attr('width', 248).attr('height', 72).attr('rx', 7)
+          .attr('fill', 'rgba(79,179,168,0.12)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.4);
+        svg.append('text').attr('x', 506).attr('y', 52).attr('font-size', 8.6).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+          .text('365-DAY COHORT GINI COMPRESSION');
+        svg.append('text').attr('x', 506).attr('y', 72).attr('font-size', 9).attr('fill', '#ef6a52').text('Status Quo Gini: 0.87 ($0 Floor)');
+        svg.append('text').attr('x', 506).attr('y', 92).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', '#4fb3a8').text('✓ CIN 5D Ledger Gini: 0.58 ($25k Floor)');
+      }
+
+      renderPeD3('P01', 'Amara Osei — Emergency-Room Nurse');
+      var peRoot = document.getElementById('pe-root');
+      if (peRoot) {
+        peRoot.addEventListener('click', function (e) {
+          var item = e.target.closest('[data-pid]');
+          if (item) {
+            setTimeout(function () {
+              var h3 = peRoot.querySelector('#pe-detail h3');
+              renderPeD3(item.getAttribute('data-pid'), h3 ? h3.textContent : '');
+            }, 20);
+          }
+        });
+      }
+    }
+
+    // 4. 8-Goals Architectural Invariant Matrix (#goals-d3-svg)
+    var goalsSvgEl = document.getElementById('goals-d3-svg');
+    if (goalsSvgEl) {
+      var gSvg = d3.select(goalsSvgEl);
+      gSvg.selectAll('*').remove();
+      gSvg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 136).attr('rx', 10)
+        .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+      gSvg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+        .text('D3.JS V7 8-INVARIANT PROTOCOL DEPENDENCY PIPELINE (CLICK ANY NODE TO INSPECT GOAL)');
+
+      var G_NODES = [
+        { n: '01', k: 'Two Internets', sub: 'QUIC + OCap', c: '#ef6a52' },
+        { n: '02', k: '0% Middleman', sub: 'NCCI + PSI', c: '#e07b42' },
+        { n: '03', k: '5D Value', sub: '$25k Floor', c: '#e5a93c' },
+        { n: '04', k: 'Sandbox Sim', sub: 'Red-Team', c: '#8ab861' },
+        { n: '05', k: 'Foresight', sub: 'METR + Delphi', c: '#4fb3a8' },
+        { n: '06', k: 'Focus Shield', sub: 'Sweller Load', c: '#5da2d5' },
+        { n: '07', k: '95% Shapley', sub: 'PCC + LoRA', c: '#7c7ae0' },
+        { n: '08', k: '1-to-1 Silicon', sub: 'PUF + Pre-ADC', c: '#b794f4' }
+      ];
+      G_NODES.forEach(function (gn, idx) {
+        var gx = 16 + idx * 91;
+        if (idx < 7) {
+          gSvg.append('line').attr('x1', gx + 83).attr('y1', 78).attr('x2', gx + 91).attr('y2', 78).attr('stroke', '#3a3f4b').attr('stroke-width', 2);
+        }
+        var gNode = gSvg.append('g').style('cursor', 'pointer').on('click', function () {
+          var items = document.querySelectorAll('#goals + figure + ol.goals > li.goal');
+          if (items[idx]) {
+            var dr = items[idx].querySelector('details');
+            if (dr) dr.open = true;
+            items[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+        gNode.append('rect').attr('x', gx).attr('y', 38).attr('width', 83).attr('height', 84).attr('rx', 8)
+          .attr('fill', '#161b24').attr('stroke', gn.c).attr('stroke-width', 1.5);
+        gNode.append('text').attr('x', gx + 41.5).attr('y', 58).attr('text-anchor', 'middle').attr('font-size', 11).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', gn.c).text('GOAL ' + gn.n);
+        gNode.append('text').attr('x', gx + 41.5).attr('y', 78).attr('text-anchor', 'middle').attr('font-size', 8.4).attr('font-weight', '700').attr('fill', '#f4f1ea').text(gn.k);
+        gNode.append('text').attr('x', gx + 41.5).attr('y', 96).attr('text-anchor', 'middle').attr('font-size', 7.8).attr('font-family', 'monospace').attr('fill', '#9aa3b2').text(gn.sub);
+        gNode.append('text').attr('x', gx + 41.5).attr('y', 113).attr('text-anchor', 'middle').attr('font-size', 7.2).attr('fill', '#4fb3a8').text('Inspect ▾');
+      });
+    }
+
+    // 5. Scientific Provenance 4-Step Causal Pipeline D3 Visualizer (#prov-d3-svg)
+    var provSvgEl = document.getElementById('prov-d3-svg');
+    if (provSvgEl) {
+      var PROV_META = {
+        all:     { lbl: 'ALL 12 CANONICAL MECHANISMS', count: 12, s1: 'Protect Human Agency & Royalties', s2: 'Cloud Lock-In & 15–40% Rent', s3: '<1ms Wasm OCap + QUIC + LoRA', s4: '12 Primary-Cited Protocol Specs' },
+        sandbox: { lbl: 'OCAP SANDBOX & IETF QUIC TRANSPORT', count: 2, s1: 'Zero-Exfiltration Local Execution', s2: 'POSIX Ambient Authority & TCP Lag', s3: 'WebAssembly OCap + 0-RTT QUIC', s4: 'Dennis & Van Horn (1966) · RFC 9000' },
+        ledger:  { lbl: 'PCC, DATA SHAPLEY & TIES-LORA LEDGER', count: 4, s1: '95% Royalties & 9.1× Faster Merge', s2: 'Unpaid Scraping & Sign Cancellation', s3: 'Monte Carlo Shapley + Rank-16 LoRA', s4: 'Necula (1997) · Ghorbani & Zou (2019)' },
+        market:  { lbl: 'CMS NCCI AUDITS & PSI BUYER CO-OPS', count: 2, s1: 'Save 15%–48% on Day One', s2: '380% Chargemaster & 28% GPO Tolls', s3: 'OPRF Private Set Intersection', s4: 'Freedman et al. (2004) · CMS NCCI' },
+        silicon: { lbl: 'PRE-ADC SILICON, PUF & WEISZFELD QUORUMS', count: 4, s1: '1-Human-1-Voice & Swarm Lock', s2: 'Biometric Surveillance & Sybil Farms', s3: '<1mW Pre-ADC + 2-of-2 Silicon Keys', s4: 'Gassend (2002) · Weiszfeld (1937)' }
+      };
+
+      function renderProvD3(cat) {
+        var pm = PROV_META[cat] || PROV_META.all;
+        var pSvg = d3.select(provSvgEl);
+        pSvg.selectAll('*').remove();
+        pSvg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 120).attr('rx', 10)
+          .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+        pSvg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+          .text('D3.JS V7 4-STEP CAUSAL PROVENANCE DERIVATION · ' + pm.lbl + ' (' + pm.count + ' SPECS)');
+
+        var steps = [
+          { k: '1. HUMAN INTENT', v: pm.s1, c: '#5da2d5' },
+          { k: '2. LEGACY BOTTLENECK', v: pm.s2, c: '#ef6a52' },
+          { k: '3. CAPABILITY THRESHOLD', v: pm.s3, c: '#e5a93c' },
+          { k: '4. VERIFIED MECHANISM', v: pm.s4, c: '#4fb3a8' }
+        ];
+        steps.forEach(function (st, idx) {
+          var sx = 18 + idx * 184;
+          if (idx < 3) {
+            pSvg.append('line').attr('x1', sx + 172).attr('y1', 74).attr('x2', sx + 184).attr('y2', 74).attr('stroke', '#4fb3a8').attr('stroke-width', 2);
+          }
+          pSvg.append('rect').attr('x', sx).attr('y', 38).attr('width', 172).attr('height', 70).attr('rx', 8)
+            .attr('fill', '#161b24').attr('stroke', st.c).attr('stroke-width', 1.4);
+          pSvg.append('text').attr('x', sx + 10).attr('y', 58).attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', st.c).text(st.k);
+          pSvg.append('text').attr('x', sx + 10).attr('y', 82).attr('font-size', 8.6).attr('font-weight', '600').attr('fill', '#e9e6de').text(st.v);
+        });
+      }
+
+      renderProvD3('all');
+      var provPills = document.getElementById('prov-pills');
+      if (provPills) {
+        provPills.addEventListener('click', function (e) {
+          var btn = e.target.closest('[data-prov-cat]');
+          if (btn) renderProvD3(btn.getAttribute('data-prov-cat') || 'all');
+        });
+      }
+    }
+  }
+
+  if (window.d3) bootExtraHomeD3();
+  else window.addEventListener('load', bootExtraHomeD3);
 })();

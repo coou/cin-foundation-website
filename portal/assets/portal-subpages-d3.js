@@ -1043,11 +1043,522 @@
     render('epistemic');
   }
 
+// ============================================================================
+  // 1B. TWIN STUDIO TAB 2: Biological (~40 bits/s) vs. Swarm (10^12 bits/s) Airlock (#twin-d3-airlock)
+  // ============================================================================
+  var AIRLOCK_LEASES = {
+    24: {
+      hours: 24,
+      label: '24h Max Mortal Lease · 99.9999% Swarm Noise Blocked · ~40 bits/s Human Pace',
+      blockedPct: '99.9999%',
+      quorumMs: '<10 ms Φ(R) Gate',
+      egressBytes: '0 Bytes Raw PII',
+      statusColor: '#4fb3a8',
+      leaseFill: 1.0
+    },
+    8: {
+      hours: 8,
+      label: '8h Workday Focus Lease · Cognitive Load Shield Active · ~40 bits/s Human Pace',
+      blockedPct: '99.9999%',
+      quorumMs: '6.4 ms Φ(R) Gate',
+      egressBytes: '0 Bytes Raw PII',
+      statusColor: '#4fb3a8',
+      leaseFill: 0.62
+    },
+    1: {
+      hours: 1,
+      label: '1h Ephemeral Task Lease · Single-Origin Capability Envelope · Auto-Wipe on Expiry',
+      blockedPct: '99.9999%',
+      quorumMs: '4.2 ms Φ(R) Gate',
+      egressBytes: '0 Bytes Raw PII',
+      statusColor: '#e3b341',
+      leaseFill: 0.28
+    },
+    0: {
+      hours: 0,
+      label: '0ms Emergency Revoke · All External QUIC Tunnels Severed · 100% Air-Gapped Local Vault',
+      blockedPct: '100% Severed',
+      quorumMs: '0.0 ms Hard Cut',
+      egressBytes: '0 Bytes Egress',
+      statusColor: '#ef6a52',
+      leaseFill: 0.06
+    }
+  };
+
+  function initTwinAirlockD3() {
+    var svgEl = document.getElementById('twin-d3-airlock');
+    var tabsWrap = document.getElementById('twin-d3-tabs');
+    var paneMoat = document.getElementById('twin-d3-pane-moat');
+    var paneAirlock = document.getElementById('twin-d3-pane-airlock');
+
+    if (tabsWrap && paneMoat && paneAirlock) {
+      tabsWrap.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-twin-d3-tab]');
+        if (!btn) return;
+        var mode = btn.getAttribute('data-twin-d3-tab');
+        var allBtns = tabsWrap.querySelectorAll('[data-twin-d3-tab]');
+        for (var i = 0; i < allBtns.length; i++) {
+          var isAct = allBtns[i] === btn;
+          allBtns[i].classList.toggle('active', isAct);
+          allBtns[i].setAttribute('aria-selected', String(isAct));
+        }
+        var showAir = mode === 'airlock';
+        paneMoat.hidden = showAir;
+        paneAirlock.hidden = !showAir;
+        if (showAir) {
+          paneMoat.setAttribute('hidden', '');
+          paneAirlock.removeAttribute('hidden');
+        } else {
+          paneAirlock.setAttribute('hidden', '');
+          paneMoat.removeAttribute('hidden');
+        }
+      });
+    }
+
+    if (!svgEl) return;
+
+    var leaseOut = document.getElementById('twin-airlock-lease-out');
+    var leaseBtns = document.querySelectorAll('[data-airlock-lease]');
+
+    function renderAirlock(hoursKey) {
+      var k = Number(hoursKey);
+      if (!(k in AIRLOCK_LEASES)) k = 24;
+      var cfg = AIRLOCK_LEASES[k];
+
+      if (leaseOut) {
+        leaseOut.textContent = cfg.label;
+      }
+      for (var i = 0; i < leaseBtns.length; i++) {
+        var bVal = Number(leaseBtns[i].getAttribute('data-airlock-lease'));
+        leaseBtns[i].classList.toggle('active', bVal === k);
+      }
+
+      var root = selectSvg(svgEl);
+
+      root.append('rect')
+        .attr('x', 0).attr('y', 0).attr('width', 760).attr('height', 260)
+        .attr('rx', 10).attr('fill', '#0d0f13');
+
+      root.append('rect')
+        .attr('x', 14).attr('y', 14).attr('width', 216).attr('height', 232)
+        .attr('rx', 8).attr('fill', '#221518').attr('stroke', '#ef6a52').attr('stroke-width', 1.4);
+
+      root.append('text')
+        .attr('x', 26).attr('y', 34)
+        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+        .text('1. SILICON SWARM INTERNET');
+
+      root.append('text')
+        .attr('x', 26).attr('y', 54)
+        .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+        .text('10¹² bits/s Velocity');
+
+      var swarmVectors = [
+        'Persuasive Bot Swarms',
+        'Indirect Prompt Injection',
+        'Cloud Telemetry Scraping',
+        '60-90d Weight Distillation'
+      ];
+      for (var s = 0; s < swarmVectors.length; s++) {
+        var sy = 74 + s * 32;
+        root.append('rect')
+          .attr('x', 26).attr('y', sy).attr('width', 192).attr('height', 24)
+          .attr('rx', 5).attr('fill', 'rgba(239,106,82,0.16)').attr('stroke', '#ef6a52');
+        root.append('text')
+          .attr('x', 36).attr('y', sy + 15)
+          .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8.5').attr('font-weight', '700')
+          .text('⚡ ' + swarmVectors[s]);
+      }
+
+      root.append('text')
+        .attr('x', 122).attr('y', 228).attr('text-anchor', 'middle')
+        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+        .text('4.5-Month Capability Doubling');
+
+      root.append('rect')
+        .attr('x', 252).attr('y', 14).attr('width', 256).attr('height', 232)
+        .attr('rx', 8).attr('fill', '#122220').attr('stroke', cfg.statusColor).attr('stroke-width', 2);
+
+      root.append('text')
+        .attr('x', 380).attr('y', 34).attr('text-anchor', 'middle')
+        .attr('fill', cfg.statusColor).attr('font-family', 'monospace').attr('font-size', '9.2').attr('font-weight', '700')
+        .text('2. TWO-INTERNET OCAP AIRLOCK');
+
+      root.append('text')
+        .attr('x', 380).attr('y', 52).attr('text-anchor', 'middle')
+        .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+        .text('Active Lease: ' + (k === 0 ? 'REVOKED (0ms Cut)' : k + 'h Mortal Lease'));
+
+      root.append('rect')
+        .attr('x', 272).attr('y', 62).attr('width', 216).attr('height', 14)
+        .attr('rx', 7).attr('fill', '#0d1218').attr('stroke', '#283242');
+      root.append('rect')
+        .attr('x', 272).attr('y', 62).attr('width', Math.round(216 * cfg.leaseFill)).attr('height', 14)
+        .attr('rx', 7).attr('fill', cfg.statusColor);
+
+      var gates = [
+        ['Swarm Traffic Filtered', cfg.blockedPct],
+        ['Hardware Quorum Gate', cfg.quorumMs],
+        ['Outbound Raw Data Egress', cfg.egressBytes],
+        ['Transport Protocol', 'QUIC RFC 9000 + ICE']
+      ];
+      for (var g = 0; g < gates.length; g++) {
+        var gy = 90 + g * 34;
+        root.append('rect')
+          .attr('x', 268).attr('y', gy).attr('width', 224).attr('height', 26)
+          .attr('rx', 5).attr('fill', '#151b24').attr('stroke', '#2a3342');
+        root.append('text')
+          .attr('x', 278).attr('y', gy + 16)
+          .attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '8.4')
+          .text(gates[g][0]);
+        root.append('text')
+          .attr('x', 482).attr('y', gy + 16).attr('text-anchor', 'end')
+          .attr('fill', cfg.statusColor).attr('font-family', 'monospace').attr('font-size', '8.4').attr('font-weight', '700')
+          .text(gates[g][1]);
+      }
+
+      root.append('rect')
+        .attr('x', 530).attr('y', 14).attr('width', 216).attr('height', 232)
+        .attr('rx', 8).attr('fill', '#121822').attr('stroke', '#6aa8e0').attr('stroke-width', 1.5);
+
+      root.append('text')
+        .attr('x', 638).attr('y', 34).attr('text-anchor', 'middle')
+        .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+        .text('3. HUMAN BIOLOGY & TWIN');
+
+      root.append('text')
+        .attr('x', 638).attr('y', 54).attr('text-anchor', 'middle')
+        .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+        .text('~40 bits/s Conscious Pace');
+
+      var humanLayers = [
+        ['Cognitive Load Shield', 'Sweller (1988) Bounded'],
+        ['Reflective Goals', 'Ryan & Deci (2000) Aligned'],
+        ['Hardware Liveness Key', '1-to-1 Biometric Bound'],
+        ['Uncopyable Pair Moat', '96% Local Craft + Vault']
+      ];
+      for (var h = 0; h < humanLayers.length; h++) {
+        var hy = 74 + h * 36;
+        root.append('rect')
+          .attr('x', 544).attr('y', hy).attr('width', 188).attr('height', 28)
+          .attr('rx', 5).attr('fill', '#162230').attr('stroke', '#4fb3a8');
+        root.append('text')
+          .attr('x', 554).attr('y', hy + 12)
+          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+          .text(humanLayers[h][0]);
+        root.append('text')
+          .attr('x', 554).attr('y', hy + 23)
+          .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8')
+          .text(humanLayers[h][1]);
+      }
+
+      root.append('line')
+        .attr('x1', 230).attr('y1', 125).attr('x2', 252).attr('y2', 125)
+        .attr('stroke', '#ef6a52').attr('stroke-width', 2.4).attr('stroke-dasharray', '4 3');
+      root.append('line')
+        .attr('x1', 508).attr('y1', 125).attr('x2', 530).attr('y2', 125)
+        .attr('stroke', cfg.statusColor).attr('stroke-width', 2.6);
+    }
+
+    for (var i = 0; i < leaseBtns.length; i++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          renderAirlock(btn.getAttribute('data-airlock-lease'));
+        });
+      })(leaseBtns[i]);
+    }
+
+    renderAirlock(24);
+  }
+
+  // ============================================================================
+  // 5. DASHBOARD TELEMETRY: 39-Stream Agent Fleet & 4-Pillar Output (#dashboard-d3-svg)
+  // ============================================================================
+  var DASH_PILLARS = [
+    {
+      id: 'P1',
+      name: '1. Website UX & Workbenches',
+      lane: 'A1_SITE_AND_UX_ENGINEERS',
+      share: 96,
+      color: '#4fb3a8',
+      metric: '7 Global Lenses · 4 D3 Modes · 0-Egress Twin',
+      desc: 'Continuous interactive D3.js v7 visualizers, progressive disclosure drawers, and cognitive-load bounded UX.'
+    },
+    {
+      id: 'P2',
+      name: '2. Deep Research & SPRA',
+      lane: 'A4_RESEARCH_PAPER_AND_VOLUME_AUTHORS',
+      share: 95,
+      color: '#6aa8e0',
+      metric: '5 Volumes · 95.3% SPRA Token Savings',
+      desc: 'Twice-daily multi-page formal research compiled into 260-token SPRA Schema-RAG units.'
+    },
+    {
+      id: 'P3',
+      name: '3. Social & Lab Collaboration',
+      lane: 'A3_AUDIENCE_ARTICLE_AND_SOCIAL_AUTHORS',
+      share: 91,
+      color: '#e3b341',
+      metric: '2,521 Primary Signals · 12 Credited Labs',
+      desc: 'Daily researcher outreach packs, Brier-calibrated public forecasts, and plain-language articles.'
+    },
+    {
+      id: 'P4',
+      name: '4. Local Agents + Testnet Sim',
+      lane: 'A2_SOFTWARE_AND_SIM_ENGINEERS',
+      share: 98,
+      color: '#9d7fe8',
+      metric: '205 Twin Primitives · 317 Passing Tests',
+      desc: 'Agent-Web Testnet Ledger v4.0, QUIC P2P transport, and firewalled Realm B clean-room actors.'
+    }
+  ];
+
+  function initDashboardD3() {
+    var svgEl = document.getElementById('dashboard-d3-svg');
+    if (!svgEl) return;
+
+    var tabsWrap = document.getElementById('dashboard-d3-tabs');
+    var statusEl = document.getElementById('dashboard-d3-status');
+    var currentTab = 'pillars';
+
+    function render(tabMode) {
+      currentTab = tabMode || 'pillars';
+      if (tabsWrap) {
+        var btns = tabsWrap.querySelectorAll('[data-dash-tab]');
+        for (var i = 0; i < btns.length; i++) {
+          var isAct = btns[i].getAttribute('data-dash-tab') === currentTab;
+          btns[i].classList.toggle('active', isAct);
+          btns[i].setAttribute('aria-selected', String(isAct));
+        }
+      }
+
+      var root = selectSvg(svgEl);
+      root.append('rect')
+        .attr('x', 0).attr('y', 0).attr('width', 760).attr('height', 250)
+        .attr('rx', 10).attr('fill', '#0d0f13');
+
+      if (currentTab === 'pillars') {
+        if (statusEl) {
+          statusEl.textContent = '4-Pillar Daily Output & SPRA Schema-RAG: 95.3% context token savings (~260 tokens/unit vs. 5,500 raw narrative tokens) across 39 autonomous agent streams.';
+        }
+
+        // Left Panel: 4 Constant Daily Output Pillars
+        root.append('rect')
+          .attr('x', 14).attr('y', 14).attr('width', 432).attr('height', 222)
+          .attr('rx', 8).attr('fill', '#12161f').attr('stroke', '#262c3a');
+
+        root.append('text')
+          .attr('x', 26).attr('y', 34)
+          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '9.2').attr('font-weight', '700')
+          .text('1. FOUR CONSTANT DAILY OUTPUT PILLARS (CLICK ANY PILLAR)');
+
+        for (var p = 0; p < DASH_PILLARS.length; p++) {
+          (function (pil, idx) {
+            var py = 46 + idx * 45;
+            var barW = Math.round((pil.share / 100) * 196);
+            var gRow = root.append('g')
+              .attr('class', 'svg-node')
+              .on('click', function () {
+                if (statusEl) {
+                  statusEl.textContent = pil.name + ' (' + pil.lane + '): ' + pil.metric + ' — ' + pil.desc;
+                }
+              });
+
+            gRow.append('rect')
+              .attr('x', 24).attr('y', py).attr('width', 412).attr('height', 38)
+              .attr('rx', 6).attr('fill', '#161b26').attr('stroke', pil.color).attr('stroke-width', 1.2);
+
+            gRow.append('text')
+              .attr('x', 34).attr('y', py + 15)
+              .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '9.2').attr('font-weight', '700')
+              .text(pil.name);
+
+            gRow.append('text')
+              .attr('x', 34).attr('y', py + 29)
+              .attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '7.8')
+              .text(pil.metric);
+
+            gRow.append('rect')
+              .attr('x', 228).attr('y', py + 10).attr('width', 196).attr('height', 16)
+              .attr('rx', 4).attr('fill', '#0d1017');
+
+            gRow.append('rect')
+              .attr('x', 228).attr('y', py + 10).attr('width', barW).attr('height', 16)
+              .attr('rx', 4).attr('fill', pil.color);
+
+            gRow.append('text')
+              .attr('x', 418).attr('y', py + 21).attr('text-anchor', 'end')
+              .attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+              .text(pil.share + '% SLA');
+          })(DASH_PILLARS[p], p);
+        }
+
+        // Right Panel: SPRA 95.3% Compression & RRSI Instruction Ceiling
+        root.append('rect')
+          .attr('x', 458).attr('y', 14).attr('width', 288).attr('height', 222)
+          .attr('rx', 8).attr('fill', '#12161f').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
+
+        root.append('text')
+          .attr('x', 472).attr('y', 34)
+          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+          .text('2. SPRA SCHEMA-RAG & RRSI TELEMETRY');
+
+        root.append('text')
+          .attr('x', 472).attr('y', 56)
+          .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+          .text('Raw Narrative Volume: ~5,500 tokens (100%)');
+        root.append('rect')
+          .attr('x', 472).attr('y', 64).attr('width', 260).attr('height', 18)
+          .attr('rx', 4).attr('fill', '#ef6a52');
+
+        root.append('text')
+          .attr('x', 472).attr('y', 102)
+          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+          .text('Compiled SPRA Unit: ~260 tokens (-95.3%)');
+        root.append('rect')
+          .attr('x', 472).attr('y', 110).attr('width', 260).attr('height', 18)
+          .attr('rx', 4).attr('fill', '#1a202c');
+        root.append('rect')
+          .attr('x', 472).attr('y', 110).attr('width', 18).attr('height', 18)
+          .attr('rx', 4).attr('fill', '#4fb3a8');
+
+        var rrsiStats = [
+          ['Instruction Ceiling', 'L_max(f_i) Frequency-Bounded'],
+          ['Admission Gate', 'Continual PAC-Learning Critic'],
+          ['Zero-Regime Ideation', 'Regime 0 / Ultra-Light Kernel']
+        ];
+        for (var r = 0; r < rrsiStats.length; r++) {
+          var ry = 140 + r * 28;
+          root.append('rect')
+            .attr('x', 472).attr('y', ry).attr('width', 260).attr('height', 22)
+            .attr('rx', 4).attr('fill', '#161c27').attr('stroke', '#283142');
+          root.append('text')
+            .attr('x', 480).attr('y', ry + 14)
+            .attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '8')
+            .text(rrsiStats[r][0]);
+          root.append('text')
+            .attr('x', 724).attr('y', ry + 14).attr('text-anchor', 'end')
+            .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+            .text(rrsiStats[r][1]);
+        }
+      } else {
+        if (statusEl) {
+          statusEl.textContent = 'Dual-Realm Separation: Realm A Collective Builders (39 autonomous streams across A1-A4) are strictly firewalled from Realm B Clean-Room Testnet Actors via RealmIsolationFirewall.';
+        }
+
+        // Left: Realm A Collective Builders (39 Streams)
+        root.append('rect')
+          .attr('x', 14).attr('y', 14).attr('width', 268).attr('height', 222)
+          .attr('rx', 8).attr('fill', '#12161f').attr('stroke', '#6aa8e0').attr('stroke-width', 1.5);
+
+        root.append('text')
+          .attr('x', 26).attr('y', 34)
+          .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+          .text('REALM A: 39 BUILDER STREAMS');
+
+        var lanes = [
+          ['A1 · Site & D3 UX Engineers', '10 Streams'],
+          ['A2 · Sim & Software Engineers', '11 Streams'],
+          ['A3 · Audience & Social Authors', '9 Streams'],
+          ['A4 · Research & SPRA Authors', '9 Streams']
+        ];
+        for (var l = 0; l < lanes.length; l++) {
+          var ly = 48 + l * 42;
+          root.append('rect')
+            .attr('x', 26).attr('y', ly).attr('width', 244).attr('height', 34)
+            .attr('rx', 6).attr('fill', '#161d29').attr('stroke', '#2e384d');
+          root.append('text')
+            .attr('x', 36).attr('y', ly + 15)
+            .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8.6').attr('font-weight', '700')
+            .text(lanes[l][0]);
+          root.append('text')
+            .attr('x', 36).attr('y', ly + 27)
+            .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '7.8')
+            .text(lanes[l][1] + ' · Antigravity Harness');
+        }
+
+        // Center: RealmIsolationFirewall
+        root.append('rect')
+          .attr('x', 296).attr('y', 14).attr('width', 168).attr('height', 222)
+          .attr('rx', 8).attr('fill', '#132421').attr('stroke', '#4fb3a8').attr('stroke-width', 2);
+
+        root.append('text')
+          .attr('x', 380).attr('y', 36).attr('text-anchor', 'middle')
+          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.8').attr('font-weight', '700')
+          .text('REALM ISOLATION');
+        root.append('text')
+          .attr('x', 380).attr('y', 50).attr('text-anchor', 'middle')
+          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+          .text('FIREWALL (0 BLEED)');
+
+        var fwChecks = [
+          'session_isolation.py',
+          '0 Builder Prompt Bleed',
+          'Clean-Room Actor Factory',
+          'SHA-256 Audit Manifest'
+        ];
+        for (var f = 0; f < fwChecks.length; f++) {
+          var fy = 66 + f * 38;
+          root.append('rect')
+            .attr('x', 308).attr('y', fy).attr('width', 144).attr('height', 28)
+            .attr('rx', 5).attr('fill', '#0f1918').attr('stroke', '#4fb3a8');
+          root.append('text')
+            .attr('x', 380).attr('y', fy + 17).attr('text-anchor', 'middle')
+            .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+            .text('✓ ' + fwChecks[f]);
+        }
+
+        // Right: Realm B Testnet Actors
+        root.append('rect')
+          .attr('x', 478).attr('y', 14).attr('width', 268).attr('height', 222)
+          .attr('rx', 8).attr('fill', '#12161f').attr('stroke', '#e3b341').attr('stroke-width', 1.5);
+
+        root.append('text')
+          .attr('x', 490).attr('y', 34)
+          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+          .text('REALM B: TESTNET ACTORS');
+
+        var actors = [
+          ['Clean-Room Sandbox Actors', 'In-World Incentives Only'],
+          ['QUIC (RFC 9000/9221) P2P', 'NAT-Traversed Settlement'],
+          ['Data Shapley & LoRA Ledger', '95% Creator Attribution'],
+          ['PSI Buyer Co-Ops & Audits', 'CMS NCCI + Wholesale GPO']
+        ];
+        for (var a = 0; a < actors.length; a++) {
+          var ay = 48 + a * 42;
+          root.append('rect')
+            .attr('x', 490).attr('y', ay).attr('width', 244).attr('height', 34)
+            .attr('rx', 6).attr('fill', '#1b1914').attr('stroke', '#473b22');
+          root.append('text')
+            .attr('x', 500).attr('y', ay + 15)
+            .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8.6').attr('font-weight', '700')
+            .text(actors[a][0]);
+          root.append('text')
+            .attr('x', 500).attr('y', ay + 27)
+            .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.8')
+            .text(actors[a][1]);
+        }
+      }
+    }
+
+    if (tabsWrap) {
+      tabsWrap.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-dash-tab]');
+        if (!btn) return;
+        render(btn.getAttribute('data-dash-tab'));
+      });
+    }
+
+    render('pillars');
+  }
+
   function bootAllSubpageStudios() {
     initTwinMoatD3();
+    initTwinAirlockD3();
     initFuturesConeD3();
     initIdeasConstellationD3();
     initRecognitionD3();
+    initDashboardD3();
   }
 
   if (typeof document !== 'undefined') {

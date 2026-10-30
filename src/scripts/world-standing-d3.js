@@ -17,6 +17,7 @@
       x2026: 16, y2026: 64,
       x2032_sq: 12, y2032_sq: 52,
       x2032_cin: 70, y2032_cin: 88,
+      metrics: [4, 12, 14, 8],
       posture: 'Closed frontier API billing $15–$60/M tokens; trains on uncompensated public web craft while burning $5B–$15B/yr on hyperscale clusters.',
       risk: 'Open-weight distillation erodes closed API pricing power within 60–90 days; enterprise tenants face lock-in and workflow leakage.',
       cin: 'Shifts from raw token rent to verifying Proof-Carrying Code (Necula, 1997) with 85% direct + 10% lineage Data Shapley royalties (Ghorbani & Zou, 2019).',
@@ -33,6 +34,7 @@
       x2026: 36, y2026: 52,
       x2032_sq: 32, y2032_sq: 42,
       x2032_cin: 78, y2032_cin: 92,
+      metrics: [6, 16, 38, 15],
       posture: 'Pioneered Responsible Scaling Policies (RSPs) and constitutional alignment, but remains bound to centralized cloud API equity economics.',
       risk: 'Voluntary lab pledges face competitive race pressure whenever rival clusters cross capability thresholds without protocol enforcement.',
       cin: 'Pairs constitutional alignment with hardware-enforced Capability-Bounded Execution Leases (Hinton, 2022) and local OCap sandboxes.',
@@ -49,6 +51,7 @@
       x2026: 26, y2026: 34,
       x2032_sq: 22, y2032_sq: 24,
       x2032_cin: 70, y2032_cin: 72,
+      metrics: [5, 22, 20, 10],
       posture: 'Vertically integrated TPU silicon, search distribution, and frontier science models (AlphaFold), monetized via cloud and ad ecosystems.',
       risk: 'Centralized cloud custody concentrates cognitive infrastructure into three corporate balance sheets, displacing independent software vendors.',
       cin: 'Routes specialized scientific weights over IETF QUIC (RFC 9000) with perpetual Data Shapley royalties to originating laboratories.',
@@ -65,6 +68,7 @@
       x2026: 31, y2026: 76,
       x2032_sq: 28, y2032_sq: 68,
       x2032_cin: 78, y2032_cin: 76,
+      metrics: [12, 18, 16, 72],
       posture: 'Releases open-weight foundation models that commoditize rival closed APIs within 75 days, enabling local inference on consumer silicon.',
       risk: 'Provides $0 creator royalty attribution and zero runtime containment against autonomous swarm proliferation.',
       cin: 'Combines open base weights with local Low-Rank Adapters (Hu et al., 2022), 1-to-1 human hardware binding, and 95% Shapley royalties.',
@@ -81,6 +85,7 @@
       x2026: 6, y2026: 12,
       x2032_sq: 4, y2032_sq: 6,
       x2032_cin: 69, y2032_cin: 14,
+      metrics: [8, 10, 2, 18],
       posture: 'Advocates zero containment barriers and unrestricted autonomous machine swarms operating at 10^12 bits/s across public networks.',
       risk: 'Human biology (~40 bits/s conscious bandwidth, 25-year generation) is mathematically outcompeted and economically displaced.',
       cin: 'Contains machine-speed coordination inside the Agent-Only Internet behind a cryptographic Two-Internet airlock (Dennis & Van Horn, 1966).',
@@ -97,6 +102,7 @@
       x2026: 60, y2026: 68,
       x2032_sq: 58, y2032_sq: 56,
       x2032_cin: 70, y2032_cin: 56,
+      metrics: [25, 30, 54, 45],
       posture: 'Measures 4.5-month task-horizon doubling (METR, 2026) and deceptive alignment via pre-deployment red-teaming and control benchmarks.',
       risk: 'Diagnostic scorecards lack a runtime physical or cryptographic enforcement layer once weights leave the lab.',
       cin: 'Translates evaluation tripwires directly into <10 ms silicon quorum gates and Capability-Bounded Execution Leases.',
@@ -113,6 +119,7 @@
       x2026: 83, y2026: 95,
       x2032_sq: 84, y2032_sq: 96,
       x2032_cin: 86, y2032_cin: 96,
+      metrics: [95, 96, 98, 100],
       posture: 'Structural last resort before a global moratorium: Two-Internet airlock, 1-to-1 human hardware bond, and 24-hour mortal execution leases.',
       risk: 'Requires rapid voluntary adoption across clinics, universities, and co-ops before autonomous swarm externalities force a treaty freeze.',
       cin: 'Preserves frontier scientific progress while guaranteeing human biological sovereignty and 95% Data Shapley contributor royalties.',
@@ -129,6 +136,7 @@
       x2026: 94, y2026: 48,
       x2032_sq: 95, y2032_sq: 42,
       x2032_cin: 95, y2032_cin: 48,
+      metrics: [30, 40, 88, 22],
       posture: 'International treaty moratorium freezing frontier GPU clusters, enforcing FLOP caps, and halting training runs above statutory thresholds.',
       risk: 'Requires intrusive global surveillance of consumer hardware and forfeits AI breakthroughs in oncology, energy, and ecological repair.',
       cin: 'Rendered unnecessary as a blunt shutdown if Zone 4 (CIN Co-Intelligence Airlock) contains autonomous swarms at the protocol layer.',
@@ -145,6 +153,7 @@
       x2026: 56, y2026: 42,
       x2032_sq: 54, y2032_sq: 30,
       x2032_cin: 78, y2032_cin: 60,
+      metrics: [22, 18, 28, 32],
       posture: 'Drafts statutory AI compliance frameworks on 18–36 month legislative cycles while frontier capabilities double every 4.5 months.',
       risk: 'By the time a statute takes effect, model task horizons have multiplied 16×–64×, leaving paper rules unenforceable at runtime.',
       cin: 'Replaces multi-year paper lag with <10 ms cryptographic quorum gates and power-proportionate zero-knowledge auditability.',
@@ -161,6 +170,7 @@
       x2026: 50, y2026: 22,
       x2032_sq: 48, y2032_sq: 12,
       x2032_cin: 70, y2032_cin: 40,
+      metrics: [28, 15, 22, 30],
       posture: 'Relies on human payroll and income taxes for ~72% of civic revenue while automation compresses taxable wage shares.',
       risk: 'Severe fiscal deficit as cloud conglomerates concentrate capital outside local municipal tax jurisdictions.',
       cin: 'Stabilizes post-labor public finance via a $25,000 sovereign exemption floor and 2%/month demurrage recirculation on idle hoards.',
@@ -177,6 +187,7 @@
       x2026: 44, y2026: 66,
       x2032_sq: 41, y2032_sq: 54,
       x2032_cin: 86, y2032_cin: 80,
+      metrics: [2, 24, 48, 40],
       posture: 'Originates 88% of foundational architectures (Transformers, Diffusion, LoRA) on public grants while holding <1% of frontier GPUs.',
       risk: 'Commercial labs scrape arXiv preprints for $0 royalty while academic researchers face severe compute poverty and brain drain.',
       cin: 'Routes a perpetual Data Shapley lineage endowment to originating university labs on every downstream task settlement.',
@@ -193,6 +204,7 @@
       x2026: 70, y2026: 52,
       x2032_sq: 71, y2032_sq: 56,
       x2032_cin: 86, y2032_cin: 64,
+      metrics: [88, 82, 86, 94],
       posture: '500+ university groups co-training 18 MB rank-16 Low-Rank Adapters via TIES-Merging (Yadav et al., 2023) over IETF QUIC.',
       risk: 'Without structured schema compression, raw literature context windows waste 95% of academic GPU budgets.',
       cin: 'Uses SPRA Structured Paper Representation (Leng et al., 2026) to cut literature tokens by 95.3% (5,500 -> 260 tokens).',
@@ -209,6 +221,7 @@
       x2026: 22, y2026: 16,
       x2032_sq: 18, y2032_sq: 10,
       x2032_cin: 78, y2032_cin: 44,
+      metrics: [68, 14, 24, 6],
       posture: 'Streams proprietary ERP, clinical, and pricing workflows into third-party cloud APIs while paying 32% SaaS, PBM, and GPO middleman tolls.',
       risk: 'Fine-tuning prompts leak core trade secrets to cloud conglomerates, compressing enterprise operating margins over 5 years.',
       cin: 'Executes inside a local WebAssembly OCap sandbox (0 bytes leaked) and joins 500-firm Private Set Intersection buyer co-ops.',
@@ -225,6 +238,7 @@
       x2026: 74, y2026: 68,
       x2032_sq: 75, y2032_sq: 72,
       x2032_cin: 86, y2032_cin: 48,
+      metrics: [94, 90, 92, 100],
       posture: 'Independent clinics, credit unions, and SMBs matching overlapping supplier SKUs via Private Set Intersection (Freedman et al., 2004).',
       risk: 'Legacy Group Purchasing Organizations (GPOs) attempt contractual lock-in and opaque rebate bundling to block direct wholesale pricing.',
       cin: 'Unlocks 22%–34% direct wholesale discounts at 0% middleman fee while auditing CMS NCCI CPT billing errors locally.',
@@ -241,6 +255,7 @@
       x2026: 10, y2026: 30,
       x2032_sq: 7, y2032_sq: 20,
       x2032_cin: 70, y2032_cin: 26,
+      metrics: [12, 20, 8, 10],
       posture: 'Uses satellite and swarm forecasting to predict regional harvest gluts and force fire-sale pricing on uncoordinated physical producers.',
       risk: 'Collapses unshielded physical producer trade share from 78% to 24% across the 4.8B non-digital global workforce.',
       cin: 'Counter-balanced by 10,000-producer Private Set Intersection supply cooperatives that enforce transparent reserve price floors.',
@@ -257,6 +272,7 @@
       x2026: 38, y2026: 12,
       x2032_sq: 34, y2032_sq: 6,
       x2032_cin: 78, y2032_cin: 28,
+      metrics: [24, 32, 35, 28],
       posture: '4.8B+ workers in physical trades, farming, caregiving, and craft without cloud subscriptions or high-bandwidth fiber.',
       risk: 'Faces severe terms-of-trade collapse (78% -> 24% share) if frontier AI only serves digital knowledge conglomerates.',
       cin: 'Equips workers with $8 Pre-ADC hardware (Datta et al., 2022), offline voice twins on $45 phones, and 5D care/ecology value parity.',
@@ -273,6 +289,7 @@
       x2026: 14, y2026: 46,
       x2032_sq: 10, y2032_sq: 36,
       x2032_cin: 86, y2032_cin: 32,
+      metrics: [4, 4, 12, 8],
       posture: 'Competes on raw commodity token inference where $100B frontier training runs are distilled into open weights within 60–90 days.',
       risk: 'Retains only 4% commodity backbone share as marginal token prices collapse toward bare electricity cost (-$5B to -$15B/yr burn).',
       cin: 'Pivots from commodity cloud inference to local on-device LoRA specialization and verifiable cooperative settlement.',
@@ -289,6 +306,7 @@
       x2026: 76, y2026: 82,
       x2032_sq: 79, y2032_sq: 84,
       x2032_cin: 86, y2032_cin: 16,
+      metrics: [95, 96, 98, 100],
       posture: 'One biological human paired 1-to-1 with a local Low-Rank Adapter (Hu et al., 2022) accumulating 10 years of episodic craft memory.',
       risk: 'Zero cloud distillation vulnerability because private tacit judgment and local hardware keys never enter public training corpora.',
       cin: '96% uncopyable economic moat by Year 10 (34% tacit craft + 32% episodic memory + 30% on-device rank-16 LoRA weights).',
@@ -541,6 +559,67 @@
       return state.lens === 'all' || d.lens === state.lens;
     }
 
+    function renderActorComparatorD3(actor) {
+      var cmpEl = document.getElementById('ws-actor-d3-svg');
+      if (!d3 || !cmpEl || !actor) return;
+      var cSvg = d3.select(cmpEl);
+      cSvg.selectAll('*').remove();
+
+      cSvg.append('rect')
+        .attr('x', 2).attr('y', 2)
+        .attr('width', 676).attr('height', 114).attr('rx', 8)
+        .attr('fill', '#11151d')
+        .attr('stroke', '#28303e')
+        .attr('stroke-width', 1.2);
+
+      var mScores = actor.metrics || [20, 20, 20, 20];
+      var cinScores = [95, 96, 98, 100];
+      var labels = [
+        '1. Creator & Worker Value Retained',
+        '2. 60-90d Distillation Moat Durability',
+        '3. Biological Bandwidth Airlock (~40 b/s)',
+        '4. Local Data & IP Sovereignty (0-Egress)'
+      ];
+      var barScale = d3.scaleLinear().domain([0, 100]).range([0, 290]);
+
+      labels.forEach(function (lbl, idx) {
+        var ry = 14 + idx * 25;
+        var aScore = mScores[idx];
+        var cScore = cinScores[idx];
+
+        cSvg.append('text')
+          .attr('x', 14).attr('y', ry + 11)
+          .attr('font-family', 'system-ui, sans-serif')
+          .attr('font-size', 9.2).attr('font-weight', 700).attr('fill', '#d5d9e2')
+          .text(lbl);
+
+        // Background track
+        cSvg.append('rect')
+          .attr('x', 248).attr('y', ry + 1)
+          .attr('width', 290).attr('height', 14).attr('rx', 3)
+          .attr('fill', '#1b202c');
+
+        // CIN target bar (teal outline/fill)
+        cSvg.append('rect')
+          .attr('x', 248).attr('y', ry + 1)
+          .attr('width', barScale(cScore)).attr('height', 14).attr('rx', 3)
+          .attr('fill', 'rgba(79,179,168,0.22)')
+          .attr('stroke', '#4fb3a8').attr('stroke-width', 1);
+
+        // Selected Actor bar
+        cSvg.append('rect')
+          .attr('x', 248).attr('y', ry + 3)
+          .attr('width', Math.max(4, barScale(aScore))).attr('height', 10).attr('rx', 2)
+          .attr('fill', actor.color);
+
+        cSvg.append('text')
+          .attr('x', 548).attr('y', ry + 11)
+          .attr('font-family', 'ui-monospace, monospace')
+          .attr('font-size', 8.8).attr('font-weight', 700).attr('fill', '#e9e6de')
+          .text(aScore + '% vs. CIN ' + cScore + '%');
+      });
+    }
+
     function updateInspector(actor) {
       if (!actor) return;
       var titleEl = document.getElementById('ws-insp-title');
@@ -558,6 +637,19 @@
       if (posEl) posEl.textContent = actor.posture;
       if (riskEl) riskEl.textContent = actor.risk;
       if (cinEl) cinEl.textContent = actor.cin;
+
+      var aiCat = document.getElementById('ws-ai-cat');
+      var aiName = document.getElementById('ws-ai-name');
+      var aiMeta = document.getElementById('ws-ai-meta');
+      var aiDesc = document.getElementById('ws-ai-desc');
+      var aiCin = document.getElementById('ws-ai-cin');
+      if (aiCat) aiCat.textContent = actor.lensLabel;
+      if (aiName) aiName.textContent = actor.name;
+      if (aiMeta) aiMeta.textContent = '2026 Posture (' + actor.x2026 + '%, ' + actor.y2026 + '%) → 2032 CIN (' + actor.x2032_cin + '%, ' + actor.y2032_cin + '%)';
+      if (aiDesc) aiDesc.textContent = actor.posture;
+      if (aiCin) aiCin.textContent = actor.cin;
+
+      renderActorComparatorD3(actor);
     }
 
     var vectorPaths = linksLayer.selectAll('path.ws-vec')
@@ -1290,15 +1382,182 @@
     upd();
   }
 
+  /* ==========================================================================
+     PER-LENS INTERACTIVE D3 MINI STRESS-TESTERS (.ws-lens-sim / .ws-lens-d3-gauge)
+     ========================================================================== */
+  function initLensMiniGaugesD3() {
+    var d3 = window.d3;
+    if (!d3) return;
+
+    function drawDualMiniGauge(svgEl, badPct, okPct, badLabel, okLabel) {
+      var svg = d3.select(svgEl);
+      svg.selectAll('*').remove();
+
+      svg.append('rect')
+        .attr('x', 1).attr('y', 1)
+        .attr('width', 678).attr('height', 52).attr('rx', 7)
+        .attr('fill', '#12151d')
+        .attr('stroke', '#28303e')
+        .attr('stroke-width', 1.1);
+
+      var scale = d3.scaleLinear().domain([0, 100]).range([0, 230]);
+
+      // Row 1: Legacy / Status Quo
+      svg.append('text')
+        .attr('x', 12).attr('y', 19)
+        .attr('font-family', 'ui-monospace, monospace')
+        .attr('font-size', 8.8).attr('font-weight', 700).attr('fill', '#ef6a52')
+        .text('STATUS QUO');
+
+      svg.append('rect')
+        .attr('x', 96).attr('y', 9)
+        .attr('width', 230).attr('height', 12).attr('rx', 3)
+        .attr('fill', '#1c212d');
+
+      svg.append('rect')
+        .attr('x', 96).attr('y', 9)
+        .attr('width', Math.max(4, scale(badPct))).attr('height', 12).attr('rx', 3)
+        .attr('fill', '#ef6a52');
+
+      svg.append('text')
+        .attr('x', 336).attr('y', 19)
+        .attr('font-family', 'ui-monospace, monospace')
+        .attr('font-size', 8.9).attr('font-weight', 700).attr('fill', '#e9e6de')
+        .text(badLabel);
+
+      // Row 2: CIN Co-Intelligence
+      svg.append('text')
+        .attr('x', 12).attr('y', 41)
+        .attr('font-family', 'ui-monospace, monospace')
+        .attr('font-size', 8.8).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .text('CIN PROTOCOL');
+
+      svg.append('rect')
+        .attr('x', 96).attr('y', 31)
+        .attr('width', 230).attr('height', 12).attr('rx', 3)
+        .attr('fill', '#1c212d');
+
+      svg.append('rect')
+        .attr('x', 96).attr('y', 31)
+        .attr('width', Math.max(6, scale(okPct))).attr('height', 12).attr('rx', 3)
+        .attr('fill', '#4fb3a8');
+
+      svg.append('text')
+        .attr('x', 336).attr('y', 41)
+        .attr('font-family', 'ui-monospace, monospace')
+        .attr('font-size', 8.9).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .text(okLabel);
+    }
+
+    var sliders = document.querySelectorAll('.ws-lens-slider[data-lens-slider]');
+    sliders.forEach(function (slider) {
+      var key = slider.getAttribute('data-lens-slider');
+      var gaugeEl = document.querySelector('.ws-lens-d3-gauge[data-lens-gauge="' + key + '"]');
+      if (!gaugeEl) return;
+
+      function updateLensGauge() {
+        var v = Number(slider.value);
+        if (key === 'labs') {
+          var vEl = document.getElementById('ws-ls-labs-val');
+          if (vEl) vEl.textContent = '$' + v + 'k/yr';
+          var shapleyK = Math.round(v * 0.95);
+          var commonsK = v - shapleyK;
+          drawDualMiniGauge(
+            gaugeEl,
+            4,
+            95,
+            '$0 Cloud API Royalty · 72% GPU Equity Capture',
+            '$' + shapleyK + 'k/yr Data Shapley (95%) + $' + commonsK + 'k Commons (5%)'
+          );
+        } else if (key === 'safety') {
+          var sEl = document.getElementById('ws-ls-safety-val');
+          if (sEl) sEl.textContent = '10^' + v + ' b/s';
+          var gapExp = Math.max(1, v - 2);
+          var bioPct = Math.max(3, 40 - (v - 3) * 4);
+          drawDualMiniGauge(
+            gaugeEl,
+            bioPct,
+            98,
+            '~40 b/s Biology Overwhelmed by 10^' + gapExp + '× Swarm Gap',
+            'Zone 4 Airlock + 24h Mortal Lease (Last Resort Before Pause)'
+          );
+        } else if (key === 'gov') {
+          var gEl = document.getElementById('ws-ls-gov-val');
+          var mult = Math.pow(2, v);
+          if (gEl) gEl.textContent = v + ' (' + mult + '×)';
+          var statPct = Math.max(4, Math.round(64 / v));
+          drawDualMiniGauge(
+            gaugeEl,
+            statPct,
+            96,
+            '36-Mo Statute Lag (' + mult + '× Behind 4.5-Mo AI Doubling)',
+            '<10ms Silicon Quorum Gate + $25k Exempt Floor (2%/mo)'
+          );
+        } else if (key === 'research') {
+          var rEl = document.getElementById('ws-ls-research-val');
+          if (rEl) rEl.textContent = v + '/yr';
+          var endowK = Math.round(v * 4.2);
+          drawDualMiniGauge(
+            gaugeEl,
+            2,
+            95,
+            '$0 arXiv Cloud Scrape · <1% University GPU Share',
+            '+$' + endowK + 'k/yr (15% Shapley Endowment) + 95.3% SPRA Token Cut'
+          );
+        } else if (key === 'enterprise') {
+          var eEl = document.getElementById('ws-ls-enterprise-val');
+          if (eEl) eEl.textContent = v + ' Firms';
+          var savings = Math.min(34, Math.round(18 + (v / 500) * 16));
+          drawDualMiniGauge(
+            gaugeEl,
+            28,
+            94,
+            '-32% GPO/PBM/SaaS Toll · Cloud Prompt IP Leakage',
+            '+' + savings + '% PSI Co-Op Wholesale Margin · 0B Local Wasm Egress'
+          );
+        } else if (key === 'humanity') {
+          var hEl = document.getElementById('ws-ls-humanity-val');
+          if (hEl) hEl.textContent = v + '%';
+          var share = Math.round(24 + (v / 95) * 64);
+          var payBoost = Math.round(12 + (v / 95) * 26);
+          drawDualMiniGauge(
+            gaugeEl,
+            24,
+            share,
+            '-38% AI Cartel Price Dump (78% → 24% Trade Share)',
+            '+' + payBoost + '% Producer Pay (' + share + '% Parity) + $8 Pre-ADC + 5D Credit'
+          );
+        } else if (key === 'pair') {
+          var pEl = document.getElementById('ws-ls-pair-val');
+          if (pEl) pEl.textContent = v + (v === 1 ? ' Yr' : ' Yrs');
+          var pMoat = Math.min(96, Math.round(66 + ((v - 1) / 9) * 30));
+          var cMoat = Math.max(4, 14 - v);
+          drawDualMiniGauge(
+            gaugeEl,
+            cMoat,
+            pMoat,
+            cMoat + '% Cloud API Moat (60-90d Cliff · -$5B to -$15B/yr Burn)',
+            pMoat + '% Uncopyable Pair Moat (Craft + 10-Yr Memory + Local LoRA)'
+          );
+        }
+      }
+
+      slider.addEventListener('input', updateLensGauge);
+      updateLensGauge();
+    });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       initEcosystemD3();
       initDeepSimD3();
       initPairMoatSimulator();
+      initLensMiniGaugesD3();
     });
   } else {
     initEcosystemD3();
     initDeepSimD3();
     initPairMoatSimulator();
+    initLensMiniGaugesD3();
   }
 })();

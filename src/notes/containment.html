@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=55">
+  <link rel="stylesheet" href="/styles/site.css?v=57">
   <style>
     .dpop-sim-shell {
       border: 1px solid var(--rule, #d8d2c4);
@@ -285,6 +285,21 @@
       <figcaption>Comparing uncontained cloud model access (`#ef6a52`) against one-way verifier diodes and RFC 9449 proof-of-possession containment (`#4fb3a8`).</figcaption>
     </figure>
 
+    <div class="note-d3-card" style="margin:1.1rem 0 1.4rem;padding:1rem 1.15rem;border-radius:14px;background:var(--card);border:1px solid var(--rule)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.65rem">
+        <span class="label" style="margin:0">Interactive D3.js v7 Mechanism &amp; Impact Explorer</span>
+        <div class="note-d3-modes" role="tablist" aria-label="Select D3 visual mode" style="display:flex;gap:.35rem;flex-wrap:wrap">
+          <button type="button" role="tab" data-nd3-mode="compare" aria-selected="true" style="padding:.28rem .65rem;border-radius:99px;border:1px solid var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--card));color:var(--ink);font:600 .7rem/1.2 var(--mono);cursor:pointer">1. Status Quo vs. CIN</button>
+          <button type="button" role="tab" data-nd3-mode="causal" aria-selected="false" style="padding:.28rem .65rem;border-radius:99px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);font:600 .7rem/1.2 var(--mono);cursor:pointer">2. 4-Step Causal Proof Chain</button>
+          <button type="button" role="tab" data-nd3-mode="scale" aria-selected="false" style="padding:.28rem .65rem;border-radius:99px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);font:600 .7rem/1.2 var(--mono);cursor:pointer">3. Stress-Test Curve</button>
+        </div>
+      </div>
+      <svg class="note-d3-workbench" data-rich-viz="true" data-note-slug="containment" viewBox="0 0 780 220" role="img" aria-label="Interactive D3.js v7 Mechanism and Impact Explorer" style="width:100%;height:auto;display:block;border-radius:10px">
+        <rect x="2" y="2" width="776" height="216" rx="10" fill="#12151c" stroke="#2a2f3a" stroke-width="1.4"/>
+        <text x="390" y="114" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#4fb3a8">Initializing D3.js v7 Mechanism &amp; Impact Explorer (containment)...</text>
+      </svg>
+    </div>
+
     <section>
       <h2>Why containment matters now</h2>
       <p>AI models are getting more capable, cheaper to run and more able to act on their own. Today they write code, browse the web, call other software and run for hours with little supervision. Each of those abilities is useful. Each is also a path by which a model that wants something its developers did not intend could act on it.</p>
@@ -354,7 +369,8 @@
       <h2>Cryptographic containment: binding authority to client keys</h2>
       <p>Containment boundaries fail if an authorization token can be copied out of an agent's memory or logs and reused by an attacker. To eliminate token replay without requiring stateful shared secrets, agent-to-agent boundaries use <strong>Demonstrating Proof-of-Possession</strong> (DPoP, <a href="https://www.rfc-editor.org/rfc/rfc9449" rel="noopener noreferrer">IETF RFC 9449</a>).</p>
 
-      <div id="dpop-demo" class="dpop-sim-shell" aria-label="Interactive demonstration of DPoP proof-of-possession token replay defense">
+      <details class="scen-drawer" style="margin:1.1rem 0"><summary>Launch interactive boundary simulator: Bearer Token Replay vs. RFC 9449 DPoP Proof-of-Possession &#9662;</summary>
+<div id="dpop-demo" class="dpop-sim-shell" aria-label="Interactive demonstration of DPoP proof-of-possession token replay defense">
         <div class="dpop-header">
           <span class="dpop-tag">Interactive Boundary Simulator</span>
           <h3>Bearer Token Replay vs. DPoP Proof-of-Possession</h3>
@@ -388,6 +404,7 @@
               </div>
             </div>
           </div>
+      </details>
 
           <div class="dpop-card" id="card-dpop">
             <div class="dpop-card-header">
@@ -458,7 +475,8 @@
 
     <section>
       <h2>What comes next</h2>
-      <p>Nothing described here is built yet. This is research and design. Our next steps are to write a clear, plain-language brief on existing isolation practice and what it would take to apply it to AI models, to design the one-way channel and verifier layer in enough detail that others can criticize it, and to define red-team tests that would show whether it works. We would welcome anyone who works on AI control, secure systems or hardware isolation to tell us where this is wrong.</p>
+      <p>Our next steps are a plain-language brief on hardware isolation, a formal verifier-diode specification, and open red-team benchmarks.</p>
+      <details class="scen-drawer"><summary>Inspect next research &amp; red-team verification steps &#9662;</summary><p>Nothing described here is built yet. This is research and design. Our next steps are to write a clear, plain-language brief on existing isolation practice and what it would take to apply it to AI models, to design the one-way channel and verifier layer in enough detail that others can criticize it, and to define red-team tests that would show whether it works. We would welcome anyone who works on AI control, secure systems or hardware isolation to tell us where this is wrong.</p></details>
     </section>
   </div>
 
@@ -585,6 +603,8 @@
   btnReset.addEventListener("click", resetDemo);
 })();
 </script>
-<script src="/scripts/site.js?v=55" defer></script>
+<script src="/scripts/vendor/d3.v7.min.js?v=57" defer></script>
+<script src="/scripts/site.js?v=57" defer></script>
+<script src="/scripts/notes-d3.js?v=57" defer></script>
 </body>
 </html>

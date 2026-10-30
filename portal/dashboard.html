@@ -4,17 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="refresh" content="0; url=/">
-  <title>CIN network · cintnet.org</title>
+  <title>Fleet Telemetry &amp; Dashboard · CIN network</title>
+  <meta name="description" content="Live D3.js v7 telemetry for the 39-stream autonomous agent fleet, 4 daily output pillars, SPRA Schema-RAG 95.3% compression, and Realm A vs. Realm B isolation.">
   <meta name="referrer" content="no-referrer">
   <link rel="canonical" href="https://cintnet.org/">
-  <link rel="stylesheet" href="/assets/portal.css?v=18">
+  <link rel="stylesheet" href="/assets/portal.css?v=20">
+  <script src="/assets/vendor/d3.v7.min.js?v=20"></script>
+  <script src="/assets/portal-subpages-d3.js?v=20"></script>
 </head>
 <body>
 <header class="top">
   <div class="spectrum"></div>
   <div class="wrap">
     <a class="brand" href="/">
-      <span class="brand-text">CIN network<small>cintnet.org</small></span>
+      <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true">
+        <rect x="2" y="2" width="32" height="32" rx="8" fill="#141821" stroke="#2e3442" stroke-width="1.5"/>
+        <path d="M9 13 C9 9, 17 9, 17 15 L17 27 C17 29, 12 29, 12 25" fill="none" stroke="#6aa8e0" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M27 23 C27 27, 19 27, 19 21 L19 9 C19 7, 24 7, 24 11" fill="none" stroke="#4fb3a8" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M13 27 C9 27, 9 19, 15 19 L27 19 C29 19, 29 24, 25 24" fill="none" stroke="#e3b341" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M23 9 C27 9, 27 17, 21 17 L9 17 C7 17, 7 12, 11 12" fill="none" stroke="#ef6a52" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-text">CIN network<small>cintnet.org · fleet telemetry</small></span>
     </a>
     <nav aria-label="Network">
       <a href="/">Network</a>
@@ -27,10 +37,29 @@
   </div>
 </header>
 <main class="wrap">
-  <span class="label">Network</span>
-  <h1>Explore the open network</h1>
-  <p class="lede">Visit <a href="/twin">Your personal twin</a>, <a href="/futures">Possible futures</a>, <a href="/ideas">Ideas</a>, or <a href="/recognition">Recognition</a>.</p>
+  <section class="card search-card" id="dashboard-d3-studio" aria-label="Autonomous Agent Fleet and 4-Pillar Output Telemetry">
+    <div class="card-head">
+      <div>
+        <span class="label">Live D3.js v7 Fleet Telemetry · 39 Autonomous Agent Streams · SPRA 95.3% Savings</span>
+        <h1 class="flush">39-Stream Agent Fleet &amp; 4-Pillar Output Telemetry</h1>
+      </div>
+      <span class="tag ok">Dual-Realm Firewalled</span>
+    </div>
+
+    <div class="pwm-viz-modes" id="dashboard-d3-tabs" role="tablist" aria-label="Choose Agent Fleet Telemetry View">
+      <button type="button" class="pwm-mode-btn active" role="tab" data-dash-tab="pillars" aria-selected="true">1. 4-Pillar Daily Output &amp; SPRA Compression</button>
+      <button type="button" class="pwm-mode-btn" role="tab" data-dash-tab="realms" aria-selected="false">2. Realm A Builder vs. Realm B Testnet Firewall &amp; 39 Streams</button>
+    </div>
+
+    <svg id="dashboard-d3-svg" class="svg-diagram" data-rich-viz="true" viewBox="0 0 760 250" role="img" aria-label="D3.js v7 Autonomous Agent Fleet & 4-Pillar Output Telemetry"></svg>
+    <div id="dashboard-d3-status" class="twin-result">4-Pillar Daily Output &amp; SPRA Schema-RAG: 95.3% context token savings (~260 tokens/unit vs. 5,500 raw narrative tokens) across 39 autonomous agent streams.</div>
+
+    <details class="portal-drawer">
+      <summary>Inspect architectural details &#9662;</summary>
+      <p class="muted flush">Visit <a href="/">Network Home</a>, <a href="/twin">Your personal twin</a>, <a href="/futures">Possible futures</a>, <a href="/ideas">Ideas</a>, or <a href="/recognition">Recognition</a>. Every instruction edit is screened by Continual PAC-Learning Admission and isolated across Realm A Collective Builders and Realm B Clean-Room Testnet Actors.</p>
+    </details>
+  </section>
 </main>
-<script type="module" src="/assets/dash.js?v=18"></script>
+<script type="module" src="/assets/dash.js?v=20"></script>
 </body>
 </html>

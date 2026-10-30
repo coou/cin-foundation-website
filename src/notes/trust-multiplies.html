@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=55">
+  <link rel="stylesheet" href="/styles/site.css?v=57">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -71,6 +71,21 @@
   </svg>
 </figure>
 
+    <div class="note-d3-card" style="margin:1.1rem 0 1.4rem;padding:1rem 1.15rem;border-radius:14px;background:var(--card);border:1px solid var(--rule)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.65rem">
+        <span class="label" style="margin:0">Interactive D3.js v7 Mechanism &amp; Impact Explorer</span>
+        <div class="note-d3-modes" role="tablist" aria-label="Select D3 visual mode" style="display:flex;gap:.35rem;flex-wrap:wrap">
+          <button type="button" role="tab" data-nd3-mode="compare" aria-selected="true" style="padding:.28rem .65rem;border-radius:99px;border:1px solid var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--card));color:var(--ink);font:600 .7rem/1.2 var(--mono);cursor:pointer">1. Status Quo vs. CIN</button>
+          <button type="button" role="tab" data-nd3-mode="causal" aria-selected="false" style="padding:.28rem .65rem;border-radius:99px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);font:600 .7rem/1.2 var(--mono);cursor:pointer">2. 4-Step Causal Proof Chain</button>
+          <button type="button" role="tab" data-nd3-mode="scale" aria-selected="false" style="padding:.28rem .65rem;border-radius:99px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);font:600 .7rem/1.2 var(--mono);cursor:pointer">3. Stress-Test Curve</button>
+        </div>
+      </div>
+      <svg class="note-d3-workbench" data-rich-viz="true" data-note-slug="trust-multiplies" viewBox="0 0 780 220" role="img" aria-label="Interactive D3.js v7 Mechanism and Impact Explorer" style="width:100%;height:auto;display:block;border-radius:10px">
+        <rect x="2" y="2" width="776" height="216" rx="10" fill="#12151c" stroke="#2a2f3a" stroke-width="1.4"/>
+        <text x="390" y="114" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#4fb3a8">Initializing D3.js v7 Mechanism &amp; Impact Explorer (trust-multiplies)...</text>
+      </svg>
+    </div>
+
 
     <h2>The arithmetic of trust</h2>
     <p>Take a simple model. A task needs a group of people, and each pair in the group must be able to rely on each other. If any two people trust each other with probability <em>t</em>, a group of <em>k</em> people has <em>k&times;(k&minus;1)/2</em> pairs, and the whole group holds together only if every pair does. That number of pairs grows with the square of the group&rsquo;s size, which is why large cooperation is rare.</p>
@@ -89,13 +104,15 @@
         <div><span>Chance the group holds, relying on a shared record</span><b id="tc-rec">&ndash;</b><i class="tc-bar"><i id="tc-rec-bar"></i></i></div>
         <p id="tc-note" class="tc-note"></p>
       </div>
-      <table class="tc-table">
+      <details class="scen-drawer" style="margin-top:.6rem"><summary>Inspect fallback comparison table &#9662;</summary>
+<table class="tc-table">
         <caption>Without the calculator: chance a group holds together</caption>
         <tr><th></th><th>5 people</th><th>10 people</th><th>20 people</th></tr>
         <tr><td>Pair by pair, trust 0.90</td><td>35%</td><td>1%</td><td>almost 0</td></tr>
         <tr><td>Pair by pair, trust 0.97</td><td>74%</td><td>25%</td><td>0.3%</td></tr>
         <tr><td>Shared record, reliance 0.97</td><td>86%</td><td>74%</td><td>54%</td></tr>
       </table>
+      </details>
       <figcaption>Raising trust between pairs from 0.90 to 0.97 makes a ten-person task about 29 times more likely to hold together. A shared record people can rely on at 0.97 lets a group of twenty hold together more than half the time.</figcaption>
     </figure>
     <details class="scen-drawer">
@@ -200,7 +217,9 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=55" defer></script>
-<script src="/scripts/trust.js?v=55" defer></script>
+<script src="/scripts/vendor/d3.v7.min.js?v=57" defer></script>
+<script src="/scripts/site.js?v=57" defer></script>
+<script src="/scripts/trust.js?v=57" defer></script>
+<script src="/scripts/notes-d3.js?v=57" defer></script>
 </body>
 </html>
