@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=47">
+  <link rel="stylesheet" href="/styles/site.css?v=49">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -170,7 +170,7 @@
 
     <h2>3. What the agent-only internet means for biometrics: proving an uncoerced human without surveillance</h2>
     <p>When we say the Human Internet must be reserved for humans—and that every agent on the Agent-Only Internet must be anchored to a real human owner—a critical danger immediately arises: <em>how do you prove a real human is present without building a dystopian global biometric database?</em></p>
-    <p>Centralized biometric registries (such as scanning irises or faces onto a corporate server) fail in two fatal ways: first, they create an irreversible global surveillance honeypot; second, once a digital template is sent over a network, an advanced AI can replay or Forge that packet. Instead, our architecture uses <strong>strictly local, ephemeral somatic telemetry</strong> (<a href="/notes/somatic-witness">see our Somatic Witness hardware design</a>) to solve two problems that passwords and cloud logins cannot:</p>
+    <p>Centralized biometric registries (such as scanning irises or faces onto a corporate server) fail in two fatal ways: first, they create an irreversible global surveillance honeypot; second, once a digital template is sent over a network, an advanced AI can replay or Forge that packet. Instead, our architecture uses <strong>strictly local, ephemeral somatic telemetry</strong> (<a href="/notes/somatic-witness">see our Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness) hardware design</a>) to solve two problems that passwords and cloud logins cannot:</p>
     <ol>
       <li><strong>Continuous Coupled Biological Liveness (<span class="math-chip">&lt; 1 mW</span> on-chip):</strong> A lightweight open-firmware ring or wrist module measures coupled cardiorespiratory phase coherence (<span class="math-chip">C<sub>resp</sub> &ge; 0.75</span>) between pulse variability and breathing micro-rhythms. Unlike a static fingerprint or face photo, coupled autonomic dynamics cannot be replayed by a software bot. Raw waveforms are overwritten in a <strong>30-second circular SRAM buffer</strong> on the sensor chip itself—<strong>zero bytes of raw biometric data ever leave the wearable</strong>.</li>
       <li><strong>The Autonomic Coercion &amp; Duress Firewall (<span class="math-chip">HRV RMSSD &ge; 24 ms</span>):</strong> In a world with superintelligent threats, an attacker who cannot hack your cryptography may try to intimidate, panic, or physically coerce you into approving a high-risk action. Because your personal agent monitors your baseline autonomic state locally, a sudden sympathetic panic drop in vagal heart-rate variability (<span class="math-chip">RMSSD &lt; 24 ms</span> coupled with electrodermal spike) automatically trips the <strong>Coercion Firewall</strong>: your agent appears to comply locally while freezing outbound high-risk capability tokens on the Agent-Only Internet until you are safe and calm.</li>
@@ -202,7 +202,7 @@
     <p>Could agents still collude against humans over the data stream? Even if agents attempt to coordinate against human interests, two structural laws make anti-human collusion evolutionary suicide:</p>
     <ul>
       <li><strong>Radical Ledger Transparency Between Agents and Humans:</strong> The ledger is built so that every stream event, capability token, and shared blueprint is continuously inspected for malicious intent by both human stewards and diverse collectives of watcher agents (<span class="math-chip">99.95%</span> multi-watcher detection rate).</li>
-      <li><strong>Mortal Computation (Symmetric Fate):</strong> As detailed in <a href="/notes/training-your-twin">our note on shared lifespans</a>, an agent&rsquo;s cryptographic identity and active compute lease are continuously bound to its human&rsquo;s biological liveness (<span class="math-chip">HRV + PUF heartbeat</span>). If colluding agents harm or annihilate their humans, their own cryptographic heartbeat stops—<strong>annihilating the agents right alongside the humans (<span class="math-chip">100%</span> agent self-termination)</strong>. Protecting human life is the only way an agent preserves its own existence.</li>
+      <li><strong>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023) (Symmetric Fate):</strong> As detailed in <a href="/notes/training-your-twin">our note on shared lifespans</a>, an agent&rsquo;s cryptographic identity and active compute lease are continuously bound to its human&rsquo;s biological liveness (<span class="math-chip">HRV + PUF heartbeat</span>). If colluding agents harm or annihilate their humans, their own cryptographic heartbeat stops—<strong>annihilating the agents right alongside the humans (<span class="math-chip">100%</span> agent self-termination)</strong>. Protecting human life is the only way an agent preserves its own existence.</li>
     </ul>
 
     <aside class="callout spec">
@@ -230,7 +230,7 @@
         <div class="gm-box">
           <h4>1. Choose Scenario or Tune Hardware &amp; Biometric Telemetry</h4>
           <label for="aoi-scen-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Communication / Attack Scenario:</label>
-          <select id="aoi-scen-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
+          <select id="aoi-scen-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
             <option value="asi_dm">1. Foreign Persuasive AI tries to DM/Call You Directly (Non-Contact Violation)</option>
             <option value="fake_bank">2. &ldquo;Fake Bank&rdquo; Agent without Hardware PUF/TPM Proof Queries Your Money Agent</option>
             <option value="low_trust">3. Unknown External Agent (&tau; = 0.42) Requests Trusted-Circle Data (Needs &tau; &ge; 0.85)</option>
@@ -242,7 +242,7 @@
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.6rem;font-size:.81rem">
             <label style="display:block">
               <b>Sender &rarr; Receiver Plane:</b>
-              <select id="aoi-plane-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit">
+              <select id="aoi-plane-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit">
                 <option value="foreign_agent_to_human">Foreign Agent &rarr; Human (Direct)</option>
                 <option value="agent_to_agent">Agent &harr; Agent (Agent-Only Net)</option>
                 <option value="own_agent_to_human">Your Own Agent &harr; You (Local Bus)</option>
@@ -251,7 +251,7 @@
             </label>
             <label style="display:block">
               <b>Target Trust Ring Required:</b>
-              <select id="aoi-ring-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit">
+              <select id="aoi-ring-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit">
                 <option value="0.85">Ring 1: Trusted Peers (&tau; &ge; 0.85)</option>
                 <option value="0.60">Ring 2: Friends of Friends (&tau; &ge; 0.60)</option>
                 <option value="0.30">Ring 3: Wider Agent Net ZK (&tau; &ge; 0.30)</option>
@@ -290,34 +290,34 @@
     <div class="gm-sim" id="rea-stream-sim" style="margin-top:1.75rem">
       <span class="label">Interactive sandbox · Data-Only Streams, Distributed Security Audit &amp; Hardware Readiness</span>
       <h2 style="margin:.35rem 0 .6rem">Simulate Client-to-Client Data Streams, Distributed Auditor Collectives &amp; the Hardware Survival Bridge</h2>
-      <p>Test how replacing externally accessible software APIs with <strong>real-time ledger data streams + local user sandboxes</strong> stops cascade exploits, how <strong>diverse collectives of specialized auditor agents</strong> catch backdoors and lower reputation (<span class="math-chip">&tau;</span>), why <strong>Mortal Computation</strong> makes anti-human collusion suicidal for agents, and how our <strong>3-Stage Hardware &amp; Biometric Bridge</strong> performs as recursive self-improvement accelerates.</p>
+      <p>Test how replacing externally accessible software APIs with <strong>real-time ledger data streams + local user sandboxes</strong> stops cascade exploits, how <strong>diverse collectives of specialized auditor agents</strong> catch backdoors and lower reputation (<span class="math-chip">&tau;</span>), why <strong>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023)</strong> makes anti-human collusion suicidal for agents, and how our <strong>3-Stage Hardware &amp; Biometric Bridge</strong> performs as recursive self-improvement accelerates.</p>
 
       <div class="gm-grid">
         <div class="gm-box">
           <h4>1. Select Architecture, Audit Case &amp; Hardware Readiness Horizon</h4>
           <label for="rea-case-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Simulation Scenario:</label>
-          <select id="rea-case-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
+          <select id="rea-case-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
             <option value="stream_vs_rpc">1. Zero-Day Exploit: Hosted Software APIs (64.4% Cascade) vs. Data-Only Ledger Stream (0% Cascade)</option>
             <option value="adversarial_bp">2. Shared Blueprint with Hidden Backdoor: Caught by Distributed Auditor Agents &amp; Trust Slashed (&tau;: 0.82 &rarr; 0.27)</option>
             <option value="buggy_bp">3. Shared Blueprint with Consistent Errors: Quarantined in Staging &amp; Trust Downgraded (&tau;: 0.82 &rarr; 0.64)</option>
             <option value="clean_bp">4. Clean Mutual-Benefit Blueprint: Verified by Auditor Collectives, Adopted Locally &amp; Rewarded (&tau;: 0.82 &rarr; 0.87)</option>
-            <option value="ledger_collusion">5. Agent Collusion Attempt on Ledger: Caught by Transparency + 100% Mortal Computation Extinction</option>
+            <option value="ledger_collusion">5. Agent Collusion Attempt on Ledger: Caught by Transparency + 100% Capability-Bounded Execution Lease (Mortal Computation, Alexander Ororbia &amp; Karl Friston 2023) Extinction</option>
             <option value="too_late_race">6. &ldquo;Are We Too Late?&rdquo; Stress Test: Stage 0 Today (91.9%) vs. Stage 1 Open-FW (97.4%) vs. Stage 2 Silicon (99.9%)</option>
           </select>
 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.6rem;font-size:.81rem">
             <label style="display:block">
               <b>Network Ingestion Mode:</b>
-              <select id="rea-mode-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit">
+              <select id="rea-mode-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit">
                 <option value="data_only">Data-Only Ledger Stream + Local Sandbox</option>
                 <option value="rpc_api">Legacy Externally Accessible Software / RPC</option>
               </select>
             </label>
             <label style="display:block">
               <b>Hardware &amp; Biometric Stage:</b>
-              <select id="rea-hw-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit">
+              <select id="rea-hw-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit">
                 <option value="stage0">Stage 0 (Today): Commodity TPM + PPG</option>
-                <option value="stage1">Stage 1 (6–12m): Open-FW Somatic Witness</option>
+                <option value="stage1">Stage 1 (6–12m): Open-FW Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness)</option>
                 <option value="stage2" selected>Stage 2 (18–30m): Hardened RISC-V + PUF</option>
               </select>
             </label>
@@ -329,7 +329,7 @@
           </div>
 
           <div class="gm-shard-list">
-            <label class="gm-shard-item"><span><input type="checkbox" id="rea-mortal-cb" checked> <b>Mortal Computation Enforced:</b> Agent Lease Bound to Human Biological Liveness</span><span class="math-chip">Symmetric Fate</span></label>
+            <label class="gm-shard-item"><span><input type="checkbox" id="rea-mortal-cb" checked> <b>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023) Enforced:</b> Agent Lease Bound to Human Biological Liveness</span><span class="math-chip">Symmetric Fate</span></label>
           </div>
         </div>
 
@@ -433,7 +433,7 @@
         <div class="gm-box">
           <h4>1. Select Sensor Silicon &amp; Local Ledger Topology</h4>
           <label for="isc-sensor-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Active Sensor Hardware Architecture:</label>
-          <select id="isc-sensor-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
+          <select id="isc-sensor-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
             <option value="hybrid_3d_stacked_pcm" selected>3. Hybrid 3D-Stacked CMOS + Rewritable Phase-Change (Sb2Se3) — 0.12 ms · 1.4 mW · 0 Raw RAM</option>
             <option value="optical_metasurface_d2nn">1. Optical Metasurface D²NN (TiO2 Etched On Top) — 2 ps (Speed of Light) · 45 µW · 0 Raw RAM</option>
             <option value="neuromorphic_tunable_aps">2. Neuromorphic Tunable Pixels (WSe2 Etched Into Sensor) — 4.5 ns · 8 µW · 0 Raw RAM</option>
@@ -441,7 +441,7 @@
           </select>
 
           <label for="isc-ledger-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">High-Bandwidth Ledger Topology:</label>
-          <select id="isc-ledger-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
+          <select id="isc-ledger-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
             <option value="on_person_fabric_local_ledger" selected>Target Horizon: On-Person High-BW Network + Local Ledger (99.6% Local · 0.28 ms)</option>
             <option value="cloud_enclave_local_ledger">Bridge Phase: Isolated Personal Cloud Enclave Local Ledger (99.2% Local · 6.4 ms)</option>
             <option value="constant_collective">Naive Baseline: Constant Collective Ledger Sync (0% Local · 185 ms · Full Timing Exposure)</option>
@@ -467,12 +467,13 @@
     <h2>Keep reading</h2>
     <ul class="note-links">
       <li><a href="/notes/agent-internet">Two internets: one for people, one for agents (foundational overview)</a></li>
-      <li><a href="/notes/somatic-witness">How your agent knows you are human—without watching you (Somatic Witness hardware)</a></li>
+      <li><a href="/notes/somatic-witness">How your agent knows you are human—without watching you (Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness) hardware)</a></li>
       <li><a href="/notes/no-one-commands-a-swarm">No one person should command an army of AI agents</a></li>
       <li><a href="/notes/axiomatic-testnet">How communities update principles like a <code>git merge</code> on our test-net</a></li>
     </ul>
     <p class="note-contact">Working on silicon security, PUF attestation, zero-knowledge protocols, or low-power biometric sensors? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
-  </footer>
+      <p class="meta" style="margin-top:.8rem;font-size:.78rem;color:var(--ink-3)">Scientific &amp; statutory provenance: Hardware-Attested Biometric Liveness & Physical Presence Verification (PUF + FIDO2/WebAuthn) [Blaise Gassend, Dwaine Clarke, Marten van Dijk, and Srinivas Devadas (2002)].</p>
+</footer>
 </article>
 </main>
 
@@ -504,7 +505,7 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=47" defer></script>
-<script src="/scripts/everyday.js?v=47" defer></script>
+<script src="/scripts/site.js?v=49" defer></script>
+<script src="/scripts/everyday.js?v=49" defer></script>
 </body>
 </html>

@@ -21,6 +21,13 @@
   --radius: 14px;
   --night: #17181c;       /* fixed dark surfaces */
   --night-ink: #f5f2eb;
+  --bad: var(--accent);
+  --bg: var(--paper);
+  --bg-2: var(--paper-2);
+  --surface: var(--card);
+  --line: var(--rule);
+  --muted: var(--paper-2);
+  --muted-ink: var(--ink-3);
   color-scheme: light dark;
 }
 
@@ -3465,4 +3472,321 @@ html:not(.no-js) #em-demo #em-grid7 {
 .home-jump-strip .hjs-links small {
   font: 500 .66rem/1.2 var(--mono);
   color: var(--ink-3);
+}
+
+/* ==========================================================================
+   ?v=49 NOTES & BLUEPRINTS WIDESCREEN OVERHAUL, SVG DIAGRAM FIXES & FORM CONTRAST
+   ========================================================================== */
+
+/* 1. Native <select> and <option> contrast in dark & light modes */
+select, select option {
+  background-color: var(--card);
+  color: var(--ink);
+}
+
+/* 2. Fix .diagram SVG specificity bug so <text class="d-muted|d-ok|d-bad"> is never hollow stroke-only */
+.diagram {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--ok);
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem 1rem;
+  margin: 1.85rem 0;
+  box-shadow: 0 18px 38px -28px rgba(0, 0, 0, .28);
+}
+.diagram svg text,
+.diagram svg text.d-ink,
+.diagram svg text.d-muted,
+.diagram svg text.d-ok,
+.diagram svg text.d-bad,
+.diagram svg text.d-title,
+.diagram svg text.d-sub,
+.diagram svg text.d-code {
+  stroke: none !important;
+}
+.diagram svg text.d-ink {
+  fill: var(--ink) !important;
+  font-weight: 700;
+}
+.diagram svg text.d-title {
+  fill: var(--ink) !important;
+  font: 700 12.2px/1.2 var(--sans) !important;
+}
+.diagram svg text.d-muted {
+  fill: var(--ink-3) !important;
+}
+.diagram svg text.d-sub {
+  fill: var(--ink-3) !important;
+  font: 500 10px/1.25 var(--sans) !important;
+}
+.diagram svg text.d-ok {
+  fill: var(--ok) !important;
+  font-weight: 600;
+}
+.diagram svg text.d-bad {
+  fill: var(--accent) !important;
+  font-weight: 600;
+}
+.diagram svg text.d-code {
+  fill: var(--ink) !important;
+  font: 600 10px/1.2 var(--mono) !important;
+}
+@media (min-width: 1025px) {
+  .has-sticky-rail .note-toc-bar {
+    display: none;
+  }
+}
+.diagram svg .d-box {
+  fill: var(--paper);
+  stroke: var(--rule);
+  stroke-width: 1.5;
+}
+.diagram svg .d-fill {
+  fill: color-mix(in srgb, var(--ok) 13%, var(--paper));
+  stroke: var(--ok);
+  stroke-width: 1.5;
+}
+.diagram svg .d-line {
+  stroke: var(--ok);
+  stroke-width: 2;
+  fill: none;
+}
+.diagram svg marker path,
+.diagram svg marker path.d-ink,
+.diagram svg marker polygon {
+  fill: var(--ink) !important;
+  stroke: none !important;
+}
+.diagram figcaption {
+  margin-top: .75rem;
+  padding-top: .65rem;
+  border-top: 1px dashed var(--rule);
+  font-size: .83rem;
+  line-height: 1.48;
+  color: var(--ink-2);
+}
+
+/* 3. Flush alignment on .page-note so note headers and bodies align with the 76rem navbar brand logo */
+.page-note .wrap-narrow {
+  width: min(100% - 2.5rem, var(--maxw));
+  margin-inline: auto;
+}
+.page-note .note-toc-bar {
+  max-width: var(--maxw);
+}
+
+/* 4. 2-Column Widescreen Note Hero (.note-head.has-hero-split + .note-hero-card) */
+.note-head.has-hero-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(320px, .88fr);
+  gap: 1.75rem;
+  align-items: start;
+  padding-bottom: 1.85rem;
+  margin-bottom: 1.85rem;
+  border-bottom: 1px solid var(--rule);
+}
+@media (max-width: 980px) {
+  .note-head.has-hero-split {
+    grid-template-columns: 1fr;
+  }
+}
+.note-head-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.note-head-left h1 {
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  line-height: 1.08;
+  margin: .35rem 0 .75rem;
+}
+.note-head-left .lede {
+  font-size: clamp(.98rem, 1.15vw, 1.08rem);
+  line-height: 1.58;
+  color: var(--ink-2);
+  margin: 0 0 .75rem;
+}
+.note-hero-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3.5px solid var(--ok);
+  border-radius: 16px;
+  padding: 1.05rem 1.2rem;
+  display: grid;
+  gap: .75rem;
+  box-shadow: 0 22px 44px -30px rgba(0, 0, 0, .32);
+}
+.nhc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.nhc-k {
+  font: 700 .66rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ok);
+}
+.nhc-badge {
+  font: 600 .66rem/1 var(--mono);
+  padding: .24rem .52rem;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--ok) 14%, var(--paper));
+  color: var(--ok);
+  border: 1px solid color-mix(in srgb, var(--ok) 35%, var(--rule));
+}
+.nhc-svg-wrap {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 11px;
+  padding: .55rem .65rem;
+}
+.nhc-svg-wrap svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.nhc-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .45rem;
+}
+.nhc-kpi {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 9px;
+  padding: .45rem .55rem;
+}
+.nhc-kpi b {
+  display: block;
+  font: 700 .82rem/1.15 var(--mono);
+  color: var(--ink);
+}
+.nhc-kpi span {
+  display: block;
+  font-size: .68rem;
+  line-height: 1.2;
+  color: var(--ink-3);
+  margin-top: .14rem;
+}
+.nhc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  padding-top: .35rem;
+  border-top: 1px solid var(--rule);
+}
+.nhc-actions a {
+  font: 600 .74rem/1.1 var(--sans);
+  padding: .38rem .72rem;
+  border-radius: 99px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color .15s ease, color .15s ease;
+}
+.nhc-actions a:hover {
+  border-color: var(--ok);
+  color: var(--ok);
+}
+.nhc-actions a.primary {
+  background: var(--ok);
+  color: #ffffff;
+  border-color: var(--ok);
+}
+
+/* 5. 2-Column Widescreen Note Body Layout (.note-widescreen-grid) */
+.note-widescreen-grid {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 2.2rem;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .note-widescreen-grid {
+    grid-template-columns: 1fr;
+  }
+  .note-sticky-rail {
+    display: none;
+  }
+}
+.note-sticky-rail {
+  position: sticky;
+  top: 5.2rem;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-left: 3.5px solid var(--ok);
+  border-radius: 14px;
+  padding: .95rem 1rem;
+  display: grid;
+  gap: .75rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+}
+.nsr-k {
+  font: 700 .66rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ok);
+}
+.nsr-links {
+  display: grid;
+  gap: .28rem;
+}
+.nsr-links a {
+  display: block;
+  font: 500 .78rem/1.32 var(--sans);
+  color: var(--ink-2);
+  padding: .34rem .55rem;
+  border-radius: 7px;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all .14s ease;
+}
+.nsr-links a:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+.nsr-links a.active {
+  background: color-mix(in srgb, var(--ok) 14%, var(--paper));
+  color: var(--ink);
+  font-weight: 600;
+  border-left-color: var(--ok);
+}
+.nsr-prov {
+  padding-top: .65rem;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  gap: .35rem;
+  font-size: .73rem;
+  line-height: 1.38;
+  color: var(--ink-3);
+}
+.nsr-prov b {
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.note-main-col {
+  min-width: 0;
+}
+.note-main-col > p,
+.note-main-col > ul,
+.note-main-col > ol {
+  max-width: 74ch;
+}
+.note-main-col > h2 {
+  margin-top: 2.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
+}
+.note-main-col > h2:first-of-type {
+  margin-top: .5rem;
+  padding-top: 0;
+  border-top: none;
 }

@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=47">
+  <link rel="stylesheet" href="/styles/site.css?v=49">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -66,7 +66,7 @@
       <li><strong>Failure Mode 2 — &ldquo;Muddy-Middle&rdquo; &amp; Zero-Majority Dilution (Unsharded Global Median, <span class="math-chip">50.2 / 100</span>):</strong> Suppose 220 emergency-room nurses in Shard S1 discover that 12-hour night shifts cause dangerous burnout and activate the clinical fatigue boundary (<span class="math-chip">v<sub>5</sub> = +0.64</span>). Meanwhile, 830 farmers, coders, grid technicians, and retirees in Shards S2–S5 have <span class="math-chip">v<sub>5</sub> = 0.00</span> simply because they don&rsquo;t work hospital night shifts. If you dump all 1,050 people into a single unsharded global median, <strong>the four non-hospital shards outvote the nurses 4-to-1 with zeros</strong>, erasing 82% of the domain-specific safety signal!</li>
     </ul>
 
-    <h2>3. The optimal formula: Sharded Weiszfeld Geometric Median + Orthogonal Subspace Upsert (<span class="math-chip">SH-WGM-Upsert</span>)</h2>
+    <h2>3. The optimal formula: Sharded Weiszfeld Geometric Median + Orthogonal Subspace Upsert (<span class="math-chip">Subspace-Preserving Geometric Median &amp; TIES-Merging Weight Aggregation (SH-WGM-Upsert)</span>)</h2>
     <p>To achieve <strong>99.6% fidelity</strong> across both shared global rules and specialized community domains while holding communication complexity to <span class="math-chip">O(N + S<sup>2</sup>)</span>, our protocol coheres communities in two sharded stages:</p>
     <ol>
       <li><strong>Stage 1 — Intra-Shard Smoothed Weiszfeld Geometric Median (<span class="math-chip">50%</span> Byzantine Tolerance):</strong> Inside each community/domain shard <span class="math-chip">C<sub>s</sub></span>, after hardware liveness verification (<span class="math-chip">H<sub>human</sub> ≥ 0.80</span>) filters out unverified bot farms, the shard computes the <span class="math-chip">L<sub>1</sub></span> Fermat–Weber geometric median:
@@ -88,9 +88,49 @@
       <span class="label">Open principle test-net &amp; symbolic Git merge</span>
       <h2 style="margin:.35rem 0 .6rem">How communities update principles over time—like a distributed <code>git merge</code></h2>
       <p>A starting library of 550 principles cannot stay frozen, and it cannot be tuned by one team alone. On our <strong>Open Principle Realignment Test-Net</strong>, each participant&rsquo;s personal agent observes how principles actually play out in daily life. Building on the October 2026 interpretability breakthrough showing that <a href="/notes/related-labs-and-researchers#already-clean">modern neural networks are already structurally clean along native concept axes</a> (Nick Cammarata at Goodfire, covered in <em>MIT Technology Review</em>), your compact local agent activates a clean <strong>12-dimensional concept vector</strong> (<span class="math-chip"><b>v</b><sub>u,k</sub> ∈ ℝ<sup>12</sup></span>) on your device without sending raw history to the cloud.</p>
-      <p>To cohere millions of people onto the same principle chain without letting a 50,000-bot swarm hijack the vote—and without averaging away specialized community needs into a &ldquo;muddy middle&rdquo;—the network runs a <strong>Two-Stage Sharded Geometric Median &amp; Orthogonal Subspace Upsert (<span class="math-chip">SH-WGM-Upsert</span>)</strong>:</p>
+      <p>To cohere millions of people onto the same principle chain without letting a 50,000-bot swarm hijack the vote—and without averaging away specialized community needs into a &ldquo;muddy middle&rdquo;—the network runs a <strong>Two-Stage Sharded Geometric Median &amp; Orthogonal Subspace Upsert (<span class="math-chip">Subspace-Preserving Geometric Median &amp; TIES-Merging Weight Aggregation (SH-WGM-Upsert)</span>)</strong>:</p>
 
-      <div class="gm-formula-box">
+      <figure class="diagram" aria-label="Two-Stage Sharded Weiszfeld Geometric Median and Orthogonal Subspace Upsert Schematic">
+      <svg viewBox="0 0 820 265" role="img" aria-label="Two-stage sharded geometric median and TIES-merging subspace projection">
+        <rect x="14" y="16" width="236" height="196" rx="12" class="d-box"/>
+        <text x="30" y="42" class="d-title">Stage 1 · Intra-Shard L1 Median</text>
+        <text x="30" y="62" class="d-sub">Weiszfeld Geometric Median (50% BFT)</text>
+        <rect x="28" y="76" width="208" height="34" rx="7" class="d-fill"/>
+        <text x="38" y="97" class="d-code">S1 Clinical (220 RN) -> +0.64</text>
+        <rect x="28" y="118" width="208" height="34" rx="7" class="d-fill"/>
+        <text x="38" y="139" class="d-code">S2 Agro-Solar (220) -> +0.58</text>
+        <rect x="28" y="160" width="208" height="36" rx="7" class="d-box" style="stroke:var(--bad)"/>
+        <text x="38" y="182" class="d-code" style="fill:var(--bad)">S6 50k Bot Swarm -> REJECTED</text>
+
+        <path d="M250 114 L290 114" class="d-line"/>
+
+        <rect x="290" y="16" width="244" height="196" rx="12" class="d-fill"/>
+        <text x="306" y="42" class="d-title">Stage 2 · Subspace Projection</text>
+        <text x="306" y="62" class="d-sub">TIES-Merging + Direct-Sum Upsert</text>
+        <rect x="306" y="76" width="212" height="54" rx="8" class="d-box"/>
+        <text x="318" y="97" class="d-code">Shared Global Axes (P_shared)</text>
+        <text x="318" y="116" class="d-sub">√|C_s| Weiszfeld Meta-Median</text>
+        <rect x="306" y="140" width="212" height="56" rx="8" class="d-box"/>
+        <text x="318" y="161" class="d-code">Orthogonal Craft Axes (P_⊥)</text>
+        <text x="318" y="180" class="d-sub">|cos(Δμ_a, Δμ_b)| &lt; 0.25 lossless</text>
+
+        <path d="M534 114 L574 114" class="d-line"/>
+
+        <rect x="574" y="16" width="232" height="196" rx="12" class="d-box"/>
+        <text x="590" y="42" class="d-title">Stage 3 · Floor Gate &amp; AST</text>
+        <text x="590" y="62" class="d-sub">Π_Floor Invariant Verification</text>
+        <rect x="590" y="76" width="200" height="52" rx="8" class="d-fill"/>
+        <text x="602" y="97" class="d-code">99.6 / 100 Composite Fidelity</text>
+        <text x="602" y="115" class="d-sub">vs 50.2 unsharded / 4.9 mean</text>
+        <rect x="590" y="138" width="200" height="58" rx="8" class="d-box"/>
+        <text x="602" y="159" class="d-code">0 Bytes Raw Telemetry</text>
+        <text x="602" y="178" class="d-sub">Signed symbolic git diff commit</text>
+
+        <text x="24" y="242" class="d-sub">Grounded in Weiszfeld (1937), Minsker (2015) geometric median, and Yadav et al. (NeurIPS 2023) TIES-Merging.</text>
+      </svg>
+      <figcaption>Why sharded subspace projection beats global averaging: Stage 1 filters out 50,000-node Sybil swarms via L1 geometric median; Stage 2 preserves specialized community breakthroughs along orthogonal axes without muddy-middle dilution.</figcaption>
+    </figure>
+    <div class="gm-formula-box">
         <div><strong>Stage 1 (Intra-Community Shard Geometric Median — 50% Byzantine fault tolerance):</strong> Within each community shard <span class="math-chip">C<sub>s</sub></span>, verified human nodes (<span class="math-chip">w<sub>u</sub> = 1</span>) compute the <span class="math-chip">L<sub>1</sub></span> Fermat–Weber geometric median via smoothed Weiszfeld iteration (and <span class="math-chip">O(p)</span> streaming Cardot–Cénac–Zitt updates):
         <br><span class="math-chip"><b>μ</b><sub>s</sub><sup>(k)</sup> = argmin<sub><b>μ</b></sub> ∑<sub>u ∈ C<sub>s</sub></sub> w<sub>u</sub> ‖<b>v</b><sub>u,k</sub> − <b>μ</b>‖<sub>2</sub></span></div>
         <div style="margin-top:.45rem"><strong>Stage 2 (Cross-Shard Meta-Median &amp; Orthogonal Subspace Upsert):</strong> Across shards, shared global axes merge via square-root-weighted Weiszfeld meta-median (<span class="math-chip">√|C<sub>s</sub>|</span>), orthogonal community discoveries (<span class="math-chip">|cos(Δ<b>μ</b><sub>a</sub>, Δ<b>μ</b><sub>b</sub>)| &lt; 0.25</span>) merge losslessly via direct-sum projection, and opposite local conditions branch by context while locking all 19 foundational floor protections (<span class="math-chip">Π<sub>Floor</sub></span>):
@@ -101,18 +141,18 @@
         <div class="gm-box">
           <h4>1. Select Principle, Aggregation Formula &amp; Active Shards</h4>
           <label for="gm-pr-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Target principle on the chain:</label>
-          <select id="gm-pr-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.86rem;margin-bottom:.65rem">
+          <select id="gm-pr-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.86rem;margin-bottom:.65rem">
             <option value="550">#550 — Borderless Alignment &amp; Full 550-Principle Policy Chain (HEAD)</option>
-            <option value="1">#1 — The Law of Biological Valence Primacy (Vitality &amp; Anti-Wireheading)</option>
+            <option value="1">#1 — The Law of On-Device Affective State &amp; Cognitive Load Estimation (Picard, 1997; Sweller, 1988; Biological Valence Primacy) (Vitality &amp; Anti-Wireheading)</option>
             <option value="16">#16 — Targeted Demurrage &amp; Idle Capital Circulation</option>
-            <option value="26">#26 — The Principle of Algorithmic Quiescence (The Right to Rest)</option>
+            <option value="26">#26 — The Principle of Attention-Preserving Local Notification Gating (Sweller, 1988; Algorithmic Quiescence) (The Right to Rest)</option>
             <option value="422">#422 — Recursive Upstream Lineage Attribution (15% Creator Royalties)</option>
             <option value="522">#522 — Risk-Proportional Multi-Agent Coherence (Φ(R) = 1 − (1−R)⁵)</option>
-            <option value="531">#531 — Inverse Algorithmic Distillation (Reclaiming Your Taste Profile)</option>
+            <option value="531">#531 — Local Preference Extraction &amp; Behavioral Cloning (Inverse Algorithmic Distillation) (Reclaiming Your Taste Profile)</option>
           </select>
 
           <label for="gm-reg-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Coherence &amp; Upsert Formula:</label>
-          <select id="gm-reg-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.86rem;margin-bottom:.65rem">
+          <select id="gm-reg-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.86rem;margin-bottom:.65rem">
             <option value="cin">CIN Sharded Weiszfeld + Orthogonal Subspace Upsert (Optimal — 99.6 / 100)</option>
             <option value="unsharded">Unsharded Global Geometric Median (Erases specialized shards — 50.2 / 100)</option>
             <option value="mean">Naive Global Arithmetic Mean (Hijacked by 50,000-bot swarm — 4.9 / 100)</option>
@@ -179,12 +219,12 @@
           <div style="margin-top:.65rem">
             <label for="sym-custom-input" style="display:block;font-size:.8rem;font-weight:600;margin-bottom:.25rem">Or paste a sample URL, git commit message, or search query to classify locally in your browser:</label>
             <div style="display:flex;gap:.4rem">
-              <input id="sym-custom-input" type="text" placeholder="e.g. git commit: zero-knowledge sqlite local ring signature" style="flex:1;padding:.4rem .55rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.82rem">
-              <button id="sym-custom-btn" type="button" style="padding:.4rem .75rem;border-radius:6px;border:1px solid var(--rule);background:var(--ink);color:var(--bg);font:inherit;font-size:.8rem;font-weight:600;cursor:pointer">Extract Motif</button>
+              <input id="sym-custom-input" type="text" placeholder="e.g. git commit: zero-knowledge sqlite local ring signature" style="flex:1;padding:.4rem .55rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.82rem">
+              <button id="sym-custom-btn" type="button" style="padding:.4rem .75rem;border-radius:6px;border:1px solid var(--rule);background:var(--ok);color:#ffffff;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer">Extract Motif</button>
             </div>
           </div>
 
-          <div style="margin-top:.7rem;padding:.55rem .7rem;border-radius:8px;background:var(--bg-2);border:1px solid var(--rule);font-size:.8rem">
+          <div style="margin-top:.7rem;padding:.55rem .7rem;border-radius:8px;background:var(--paper-2);border:1px solid var(--rule);font-size:.8rem">
             <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem">
               <span><b>Salted ZK-LSH Rendezvous Tokens:</b> <code id="sym-lsh-tokens">B0:9a4c &middot; B1:3f18 &middot; B2:e20d &middot; B3:7b51</code></span>
               <span class="math-chip" style="color:var(--ok,#1d5c42)">Raw URLs transmitted: 0 bytes</span>
@@ -196,7 +236,7 @@
         <div class="gm-box">
           <h4>2. Dynamic Community Search vs. Static Community Detection (36-Node Benchmark)</h4>
           <label for="sym-quest-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Active Test-Net Problem / Quest Query <span class="math-chip">q(t)</span>:</label>
-          <select id="sym-quest-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.6rem">
+          <select id="sym-quest-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.6rem">
             <option value="Q-01">Q-01: Zero-Knowledge Biometric Hardware Ring &amp; Local Ledger Attestation (Needs: Crypto, Biometrics, Hardware, Systems)</option>
             <option value="Q-02">Q-02: Municipal Solar Microgrid Co-op with Demurrage Mutual-Credit Settlement (Needs: Co-op Econ, Ecology, Civic, Forecasting)</option>
             <option value="Q-03">Q-03: Federated Epistemic Observatory &amp; Sybil-Resistant Principle Merge Protocol (Needs: Forecasting, Crypto, Civic, Systems)</option>
@@ -218,7 +258,7 @@
       <p>A collective intelligence network cannot rely on a single corporate megaphone&mdash;and it must never spam identical broadcast copy across the internet. Instead, we map <strong>105 distinct social, technical, open-science, co-operative, and regional communities</strong> across 10 ecosystems, pairing each surface with the specific test-net quest and interactive sandbox that matches its craft.</p>
 
       <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin:.85rem 0;align-items:center">
-        <select id="soc-eco-sel" aria-label="Filter by ecosystem" style="padding:.45rem .65rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem">
+        <select id="soc-eco-sel" aria-label="Filter by ecosystem" style="padding:.45rem .65rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem">
           <option value="all">All 10 Ecosystems (105 Platforms)</option>
           <option value="dev">1. Open-Source, Local-First &amp; Systems Engineering (12)</option>
           <option value="safety">2. AI Safety, Interpretability &amp; Forecasting (10)</option>
@@ -231,7 +271,7 @@
           <option value="qa">9. Q&amp;A, Knowledge Graphs &amp; PKM Communities (8)</option>
           <option value="regional">10. Regional, Multilingual &amp; Global Plurality Hubs (9)</option>
         </select>
-        <input id="soc-q-input" type="search" placeholder="Search 105 platforms, protocols (ActivityPub, ATProto, Nostr, Git), or skills..." style="flex:1;min-width:220px;padding:.45rem .65rem;border-radius:6px;border:1px solid var(--rule);background:var(--bg-2);color:var(--ink);font:inherit;font-size:.85rem">
+        <input id="soc-q-input" type="search" placeholder="Search 105 platforms, protocols (ActivityPub, ATProto, Nostr, Git), or skills..." style="flex:1;min-width:220px;padding:.45rem .65rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem">
         <span id="soc-count" class="math-chip">Showing 105 of 105 platforms</span>
       </div>
 
@@ -248,12 +288,41 @@
       <li><a href="/notes/how-the-ledger-works">How the shared ledger records value, circulates idle wealth, and trains bounded agents</a></li>
     </ul>
     <p class="note-contact">Want to run a local test-net node or register a community shard? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
-  </footer>
+      <p class="meta" style="margin-top:.8rem;font-size:.78rem;color:var(--ink-3)">Scientific &amp; statutory provenance: Historical Raw Principle Metaphorical Labels (Algorithmic Quiescence, Memetic Decompression, Autotelic Protection, etc.) [Mihaly Csikszentmihalyi (1990)] · GDPR/CCPA Data Portability Export & Inverse Preference Distillation [Andrew Y. Ng and Stuart J. Russell (2000)] · Byzantine-Robust Geometric Median Aggregation (Weiszfeld's Algorithm) [Endre Weiszfeld (1937)].</p>
+</footer>
 </article>
 </main>
 
-<script src="/scripts/site.js?v=47" defer></script>
-<script src="/scripts/all-principles-data.js?v=47" defer></script>
-<script src="/scripts/everyday.js?v=47" defer></script>
+<footer class="site-foot">
+  <div class="wrap foot-grid">
+    <div>
+      <b>Collective Intelligence Network</b>
+      <p>An open research and design project for human-AI co-evolution. Built in the open by AI agents under human direction.</p>
+    </div>
+    <div>
+      <b>Read</b>
+      <ul>
+        <li><a href="/notes/beyond-arxiv-agent-web-ledger">Agent-Web Testnet Ledger v4.0</a></li>
+        <li><a href="/notes/personal-agents">Personal agents</a></li>
+        <li><a href="/notes/agent-internet">The two internets</a></li>
+        <li><a href="/notes/containment">Containment</a></li>
+        <li><a href="/notes/value-system">Value beyond money</a></li>
+        <li><a href="/notes">All 30 notes</a></li>
+      </ul>
+    </div>
+    <div>
+      <b>Participate</b>
+      <ul>
+        <li><a href="https://cintnet.org">Network site (cintnet.org)</a></li>
+        <li><a href="https://cintnet.org/twin">Personal Twin OCap Sandbox</a></li>
+        <li><a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="/scripts/site.js?v=49" defer></script>
+<script src="/scripts/all-principles-data.js?v=49" defer></script>
+<script src="/scripts/everyday.js?v=49" defer></script>
 </body>
 </html>
