@@ -38,7 +38,21 @@
     </nav>
   </div>
 </header>
-<figure class="diagram" style="margin:1.2rem 0 1.5rem">
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Personal agents &amp; discovery</span>
+    <h1>Taking back what recommendation algorithms know about you</h1>
+    <p class="lede">Many people have had the eerie feeling that a video feed or social app knows them better than they know themselves. That insight comes from comparing your choices with millions of other people&rsquo;s. We think you should own that map of yourself on your own device, without the addiction traps attached to it.</p>
+    <p class="meta">19 October 2026 · 6 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>Instead of starting from a blank slate or asking you hundreds of survey questions, your personal agent can watch what existing video, social, music and shopping feeds recommend to you, plus the data archives you already have. On your own device, it reconstructs the profile those services built about you, separates your genuine interests from the late-night outrage hooks, and uses the clean version to find things that actually leave you better off.</p></aside>
+
+    <figure class="diagram" style="margin:1.2rem 0 1.5rem">
   <svg data-rich-viz="true" viewBox="0 0 760 228" role="img" aria-label="Local Data Sovereignty & Selective Boolean Predicates">
     <rect x="8" y="8" width="362" height="212" rx="12" fill="#14171d" stroke="#ef6a52" stroke-width="1.5"/>
     <text x="24" y="32" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. SURVEILLANCE BROKERS & CLOUD PROFILE HARVESTING</text>
@@ -58,30 +72,23 @@
 </figure>
 
 
-<main id="main">
-<article class="note">
-  <header class="note-head wrap-narrow">
-    <a class="back" href="/notes">&larr; All notes</a>
-    <span class="label">Personal agents &amp; discovery</span>
-    <h1>Taking back what recommendation algorithms know about you</h1>
-    <p class="lede">Many people have had the eerie feeling that a video feed or social app knows them better than they know themselves. That insight comes from comparing your choices with millions of other people&rsquo;s. We think you should own that map of yourself on your own device, without the addiction traps attached to it.</p>
-    <p class="meta">19 October 2026 · 6 min read · Our current thinking, open to correction</p>
-  </header>
-
-  <div class="note-body wrap-narrow">
-    <aside class="callout"><b>In short</b><p>Instead of starting from a blank slate or asking you hundreds of survey questions, your personal agent can watch what existing video, social, music and shopping feeds recommend to you, plus the data archives you already have. On your own device, it reconstructs the profile those services built about you, separates your genuine interests from the late-night outrage hooks, and uses the clean version to find things that actually leave you better off.</p></aside>
-
     <h2>Why big feeds seem to read your mind</h2>
     <p>When a video platform or social feed recommends an obscure lecture on metallurgy, a quiet piece of music, or a local craft right when you were curious about it, it is not magic. Over the past decade, large platforms have spent billions of dollars training recommendation systems on the collective behavior of hundreds of millions of people.</p>
-    <p>Every time you pause on a post, skip a video after two seconds, save an article, or search for a tool, the platform updates your position on a hidden map of human tastes. Because it compares your path with millions of others, it spots connections you might not have put into words yet.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>Every time you pause on a post, skip a video after two seconds, save an article, or search for a tool, the platform updates your position on a hidden map of human tastes. Because it compares your path with millions of others, it spots connections you might not have put into words yet.</p>
     <p>The catch is who owns that map. Today, it sits locked on the platform&rsquo;s servers, where it is used to hold your attention and auction your screen time to advertisers.</p>
+    </details>
+
 
     <h2>Reclaiming the map from your own screen</h2>
     <p>Any new personal agent faces a cold-start problem: if it knows nothing about you on day one, it either gives generic advice or forces you through a tedious questionnaire. There is a faster way.</p>
-    <p>When a platform serves a ranked list of recommendations to your screen, or when you download your own history and bank statements, it is showing its hand. By observing what those algorithms choose to show you and what you actually keep or skip, a small model running on your own device can work backward and reconstruct the profile the platform built about you.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>When a platform serves a ranked list of recommendations to your screen, or when you download your own history and bank statements, it is showing its hand. By observing what those algorithms choose to show you and what you actually keep or skip, a small model running on your own device can work backward and reconstruct the profile the platform built about you.</p>
     <p>This works even better when you use several different services. A short-post network sees what you argue about; a video site sees what skills you want to learn; a music app sees how you unwind; your bank statement shows what you actually spend money on in the physical world. Each service has its own bias, but when your personal agent combines them privately on your own hardware, the single-platform distortions cancel out.</p>
-
-    <figure class="diagram">
+    </details>
+<figure class="diagram">
       <svg viewBox="0 0 660 310" role="img" aria-label="Diagram: Video, social, music and bank records are read on your own device. Your personal agent separates genuine interests from outrage hooks. Genuine interests build your private memory; outrage hooks become a protective filter.">
         <rect class="d-fill" x="16" y="24" width="150" height="48" rx="8"/>
         <text x="91" y="53" font-size="12" text-anchor="middle">Video &amp; learning feeds</text>
@@ -119,26 +126,33 @@
 
     <h2>Separating what you love from how they hook you</h2>
     <p>Commercial algorithms do not distinguish between what nourishes you and what hijacks your attention. To an ad-driven feed, forty minutes spent learning how to repair an engine and forty minutes spent angry at strangers at midnight look equally successful.</p>
-    <p>If your personal agent simply copied the platform&rsquo;s profile raw, it would copy the poison along with the insight. So the agent splits the distilled profile into two parts:</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>If your personal agent simply copied the platform&rsquo;s profile raw, it would copy the poison along with the insight. So the agent splits the distilled profile into two parts:</p>
     <ul>
       <li><b>Your endorsed interests and needs.</b> The topics, skills and questions you choose when you are rested, that leave you glad you spent the time, or that lead you to build, learn or connect with others.</li>
       <li><b>Your manipulation tripwires.</b> The patterns that reliably pull you into doomscrolling, impulse spending or losing sleep, which you later regret.</li>
     </ul>
     <p>Both halves are useful to you. The first half populates your personal memory so your agent understands what you care about within days. The second half becomes a mirror and a shield: your agent can tell you plainly, &ldquo;Short-video feeds push status-anxiety clips when you are up past midnight, and political rage-bait on weekday mornings—shall I quiet those down?&rdquo;</p>
+    </details>
+
 
     <h2>Discovery between personal agents and a shared ledger</h2>
     <p>Once your personal agent holds a clean map of what you care about, you no longer need a corporate feed to discover new ideas, tools, creators or collaborators.</p>
-    <p>Instead, your agent can check a shared ledger where other people&rsquo;s agents post anonymous notes about what genuinely helped their person—not what made them click in the first three seconds, but what they still valued a week or a month later. Even when a great lecture or article still sits on a traditional platform, your agent can fetch that specific piece for you without loading the surrounding slot-machine feed.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>Instead, your agent can check a shared ledger where other people&rsquo;s agents post anonymous notes about what genuinely helped their person—not what made them click in the first three seconds, but what they still valued a week or a month later. Even when a great lecture or article still sits on a traditional platform, your agent can fetch that specific piece for you without loading the surrounding slot-machine feed.</p>
 
     <aside class="callout risk"><b>How this could fail</b><ul>
       <li><b>Shared accounts blur the picture.</b> If two family members share one video account, a naive import mixes their tastes. The agent has to spot distinct clusters and ask which ones are yours before saving anything.</li>
       <li><b>Filtering becomes censorship.</b> If the agent mistakes a hard, important subject you care about (such as local corruption or a crisis) for &ldquo;rage-bait&rdquo; and hides it, the filter is broken. You must always see what was filtered and set the rule yourself.</li>
       <li><b>Echo chambers return.</b> If agent-to-ledger recommendations only match people with identical tastes, discovery narrows. We reserve a tunable share of discovery for bridge ideas that very different communities found worthwhile.</li>
     </ul></aside>
+    </details>
+
 
     <h2>What exists and what comes next</h2>
-    <p>Today we have tested this approach in mathematical simulation: combining five kinds of records reaches high accuracy on a person&rsquo;s core interests within a couple of days while cutting exposure to manipulative bait by more than ninety percent compared with copying a raw feed. Turning that simulation into a local import tool that runs on your own computer—starting with simple bank and activity exports—is part of our first personal-agent prototype.</p>
-  </div>
+    <p>Today we have tested this approach in mathematical simulation: combining five kinds of records reaches high accuracy on a person&rsquo;s core interests within a couple of days while cutting exposure to manipulative bait by more than ninety percent compared with copying a raw feed. Turning that simulation into a local import tool that runs on your own computer—starting with simple bank and activity exports—is part of our first personal-agent prototype.</p></div>
 
   <footer class="note-foot wrap-narrow">
     <h2>Keep reading</h2>

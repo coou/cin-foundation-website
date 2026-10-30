@@ -9,9 +9,9 @@
   <meta name="theme-color" content="#0d0f13" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
   <link rel="canonical" href="https://cintnet.org/twin">
-  <link rel="stylesheet" href="/assets/portal.css?v=12">
-  <script src="/assets/vendor/d3.v7.min.js" defer></script>
-  <script src="/assets/portal-subpages-d3.js?v=16" defer></script>
+  <link rel="stylesheet" href="/assets/portal.css?v=17">
+  <script src="/assets/vendor/d3.v7.min.js?v=17" defer></script>
+  <script src="/assets/portal-subpages-d3.js?v=17" defer></script>
 </head>
 <body>
 <header class="top">
@@ -47,7 +47,7 @@
         <span class="label">Hardware-isolated local agent prototype · 0 bytes sent to servers</span>
         <h1>Your personal twin, on your own device.</h1>
         <p class="lede">Run your safety-critical constraints, 6-axis value radar, lookahead tool firewall, and zero-leakage proofs 100% locally in your browser.</p>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
           <div class="muted flush">Your personal agent runs strictly inside this browser&rsquo;s local storage sandbox. It holds your safety-critical constraints, 6-axis value radar, lookahead tool firewall, and zero-leakage cryptographic proofs. Nothing you enter is ever sent to a server, and you can export or wipe all state with one click.</div>
         </details>
       </div>
@@ -91,16 +91,14 @@
     <!-- Right Column: Interactive SVG Architecture Diagram of Your Twin -->
     <div class="diagram-card">
       <div class="diagram-head">
-        <span class="diagram-title">Personal Twin OCap Sandbox · Click any studio node to inspect</span>
+        <span class="diagram-title">Personal Twin OCap Sandbox · Click any studio node</span>
         <span class="tag ok">Local-Only Vault</span>
       </div>
       <svg class="svg-diagram" id="twin-arch-svg" viewBox="0 0 620 355" role="img" aria-label="Interactive architecture diagram of your personal twin inside its local Object-Capability sandbox">
         <rect x="0" y="0" width="620" height="355" fill="#0d0f13"/>
-        <!-- Outer OCap Hardware Sandbox Boundary -->
         <rect x="12" y="12" width="596" height="278" rx="12" fill="#10131a" stroke="#4fb3a8" stroke-width="1.6" stroke-dasharray="6 3"/>
-        <text x="26" y="29" fill="#4fb3a8" font-family="monospace" font-size="9" font-weight="700">DEVICE OCAP SANDBOX BOUNDARY (BROWSER LOCALSTORAGE · ZERO CLOUD TELEMETRY)</text>
+        <text x="26" y="29" fill="#4fb3a8" font-family="monospace" font-size="9" font-weight="700">DEVICE OCAP SANDBOX (LOCALSTORAGE · 0 CLOUD TELEMETRY)</text>
 
-        <!-- Row 1: 6 Narrow Specialist Sub-Agents -->
         <g>
           <rect x="24" y="40" width="90" height="34" rx="6" fill="#151922" stroke="#2e3442"/>
           <text x="69" y="55" text-anchor="middle" fill="#f0ede6" font-family="sans-serif" font-size="9.5" font-weight="700">Health &amp; Bio</text>
@@ -127,119 +125,142 @@
           <text x="550" y="67" text-anchor="middle" fill="#9d7fe8" font-family="monospace" font-size="7.5">Cycle Guard</text>
         </g>
 
-        <!-- Row 2: 5 Interactive Studio Modules (Click to switch tab) -->
         <g class="svg-node" data-tab="1" tabindex="0" role="button" aria-label="Open Studio 1: Daily Pulse and Value Radar">
           <rect x="24" y="90" width="178" height="84" rx="9" fill="#131c1d" stroke="#4fb3a8" stroke-width="1.8"/>
           <text x="34" y="108" fill="#4fb3a8" font-family="monospace" font-size="8.5" font-weight="700">STUDIO 1 · PULSE &amp; RADAR</text>
-          <text x="34" y="126" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Value Radar &amp; Focus</text>
-          <text x="34" y="143" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">6-axis alignment radar, signal</text>
-          <text x="34" y="156" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">matching, quests &amp; obligations.</text>
+          <text x="34" y="128" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Value Radar &amp; Focus</text>
+          <text x="34" y="148" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">6-axis radar &amp; daily quests</text>
         </g>
 
         <g class="svg-node" data-tab="2" tabindex="0" role="button" aria-label="Open Studio 2: Memory Vault and Context Compiler">
           <rect x="214" y="90" width="192" height="84" rx="9" fill="#131923" stroke="#6aa8e0" stroke-width="1.8"/>
           <text x="224" y="108" fill="#6aa8e0" font-family="monospace" font-size="8.5" font-weight="700">STUDIO 2 · MEMORY &amp; AIRLOCK</text>
-          <text x="224" y="126" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Memory &amp; Context Compiler</text>
-          <text x="224" y="143" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">Critical constraint pin, retrieval</text>
-          <text x="224" y="156" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">airlock &amp; token-budget compiler.</text>
+          <text x="224" y="128" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Memory &amp; Context Compiler</text>
+          <text x="224" y="148" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">Safety pins &amp; retrieval airlock</text>
         </g>
 
         <g class="svg-node" data-tab="3" tabindex="0" role="button" aria-label="Open Studio 3: OCap Sandbox and Action Firewall">
           <rect x="418" y="90" width="178" height="84" rx="9" fill="#211618" stroke="#ef6a52" stroke-width="1.8"/>
           <text x="428" y="108" fill="#ef6a52" font-family="monospace" font-size="8.5" font-weight="700">STUDIO 3 · ACTION FIREWALL</text>
-          <text x="428" y="126" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Lookahead DAG &amp; Guard</text>
-          <text x="428" y="143" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">Multi-step exfiltration simulator,</text>
-          <text x="428" y="156" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">screen auditor &amp; domain envelope.</text>
+          <text x="428" y="128" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Lookahead DAG &amp; Guard</text>
+          <text x="428" y="148" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">Exfiltration DAG &amp; screen guard</text>
         </g>
 
-        <!-- Row 3: Studio 4 (Zero-Leakage Proofs) + Studio 5 (Commons & Backup) -->
         <g class="svg-node" data-tab="4" tabindex="0" role="button" aria-label="Open Studio 4: Zero-Leakage Proofs and Consent Receipts">
           <rect x="24" y="188" width="284" height="86" rx="9" fill="#1f1b13" stroke="#e3b341" stroke-width="1.8"/>
-          <text x="36" y="206" fill="#e3b341" font-family="monospace" font-size="8.5" font-weight="700">STUDIO 4 · ZERO-LEAKAGE PROOFS &amp; CONSENT RECEIPTS</text>
-          <text x="36" y="225" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Income Shock ZK Proof &amp; ISO-27560 Grants</text>
-          <text x="36" y="242" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">Prove cash-flow drop (&ge;20%) without exposing raw bank feeds;</text>
-          <text x="36" y="256" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">issue, test, and verify revocable capability consent receipts.</text>
+          <text x="36" y="206" fill="#e3b341" font-family="monospace" font-size="8.5" font-weight="700">STUDIO 4 · ZERO-LEAKAGE PROOFS &amp; GRANTS</text>
+          <text x="36" y="226" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Income ZK Proof &amp; ISO-27560 Grants</text>
+          <text x="36" y="246" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">Single-fact proofs &amp; revocable receipts</text>
         </g>
 
         <g class="svg-node" data-tab="5" tabindex="0" role="button" aria-label="Open Studio 5: Commons Ledger, Audit Log and Data Control">
           <rect x="320" y="188" width="276" height="86" rx="9" fill="#191624" stroke="#9d7fe8" stroke-width="1.8"/>
-          <text x="332" y="206" fill="#9d7fe8" font-family="monospace" font-size="8.5" font-weight="700">STUDIO 5 · COMMONS LEDGER &amp; DATA SOVEREIGNTY</text>
-          <text x="332" y="225" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Commons, Audit Log &amp; Data Backup</text>
-          <text x="332" y="242" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">Track code, review &amp; compute contributions, inspect the</text>
-          <text x="332" y="256" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">local audit trail, and export/restore/wipe JSON state.</text>
+          <text x="332" y="206" fill="#9d7fe8" font-family="monospace" font-size="8.5" font-weight="700">STUDIO 5 · COMMONS &amp; DATA SOVEREIGNTY</text>
+          <text x="332" y="226" fill="#f0ede6" font-family="serif" font-size="13" font-weight="700">Commons, Audit Log &amp; Backup</text>
+          <text x="332" y="246" fill="#c5c2b9" font-family="sans-serif" font-size="9.5">Append-only log &amp; JSON export/wipe</text>
         </g>
 
-        <!-- Bottom Egress Gate Bar -->
         <line x1="166" y1="290" x2="166" y2="308" stroke="#e3b341" stroke-width="2"/>
         <line x1="458" y1="290" x2="458" y2="308" stroke="#ef6a52" stroke-width="2" stroke-dasharray="3 2"/>
         <rect x="24" y="308" width="284" height="34" rx="7" fill="#142623" stroke="#4fb3a8" stroke-width="1.3"/>
-        <text x="166" y="329" text-anchor="middle" fill="#4fb3a8" font-family="monospace" font-size="9" font-weight="700">ALLOWED EGRESS: SINGLE-FACT ZK RECEIPTS &amp; JSON BACKUP</text>
+        <text x="166" y="329" text-anchor="middle" fill="#4fb3a8" font-family="monospace" font-size="9" font-weight="700">ALLOWED: ZK RECEIPTS &amp; JSON BACKUP</text>
         <rect x="320" y="308" width="276" height="34" rx="7" fill="#291515" stroke="#ef6a52" stroke-width="1.3"/>
-        <text x="458" y="329" text-anchor="middle" fill="#ef6a52" font-family="monospace" font-size="9" font-weight="700">BLOCKED: RAW MEMORY, BANK FEEDS &amp; UNGRANTED QUERIES</text>
+        <text x="458" y="329" text-anchor="middle" fill="#ef6a52" font-family="monospace" font-size="9" font-weight="700">BLOCKED: RAW MEMORY &amp; BANK FEEDS</text>
       </svg>
       <p class="diagram-caption">
-        <span>Click any studio block above or tab below to switch tools</span>
+        <span>Click any studio block or tab below</span>
         <span id="active-persona-label">Active profile: Engineer &amp; Parent</span>
       </p>
     </div>
   </section>
 
-  <!-- Interactive D3.js v7 1-to-1 Pair Intelligence Moat & Live OCap Firewall Studio -->
-  <section class="card search-card" aria-label="1-to-1 Pair Intelligence Moat and Live OCap Firewall Visualizer">
+  <!-- Interactive 2-Tab D3.js v7 Personal Twin Visual Studio (#twin-d3-studio) -->
+  <section class="card search-card" id="twin-d3-studio" aria-label="1-to-1 Pair Intelligence Moat and Biological vs. Swarm OCap Airlock Visualizer">
     <div class="card-head">
       <div>
-        <span class="label">Interactive D3.js v7 Co-Adaptation Simulator · Local Rank-16 LoRA &amp; Memory Vault</span>
-        <h2 class="flush">1-to-1 Pair Intelligence Moat vs. the 60-90 Day Cloud AI Distillation Cliff</h2>
+        <span class="label">Interactive D3.js v7 Co-Adaptation &amp; Airlock Simulator · Local Rank-16 LoRA &amp; 24h Mortal Lease</span>
+        <h2 class="flush">1-to-1 Pair Intelligence Moat &amp; Biological (~40 bits/s) OCap Airlock</h2>
       </div>
       <span class="tag ok">96% Uncopyable Moat</span>
     </div>
-    <div class="pwm-sim-bar">
-      <div class="pwm-sim-top">
-        <label for="twin-moat-years-slider">Simulate Years of 1-to-1 Co-Adaptation (1 to 10 Yrs)</label>
-        <output id="twin-moat-years-out" for="twin-moat-years-slider">10 Years Co-Adapted (96% Uncopyable Moat)</output>
-      </div>
-      <input type="range" id="twin-moat-years-slider" min="1" max="10" step="1" value="10" aria-label="Simulate Years of 1-to-1 Co-Adaptation (1 to 10 Yrs)">
-      <div class="chip-row" aria-label="Quick co-adaptation year presets">
-        <button type="button" class="chip-btn" data-moat-years="1">Year 1 (66% Moat)</button>
-        <button type="button" class="chip-btn" data-moat-years="3">Year 3 (82% Moat)</button>
-        <button type="button" class="chip-btn" data-moat-years="5">Year 5 (89% Moat)</button>
-        <button type="button" class="chip-btn active" data-moat-years="10">Year 10 (96% Uncopyable Moat)</button>
-      </div>
-      <div class="pwm-sim-out">
-        <div class="bad">
-          <span>60-90 Day Cloud AI Distillation Cliff</span>
-          <b id="twin-moat-cloud-out">Frontier cloud weights commoditize every 60-90 days (only 4% open base weight edge retained)</b>
+
+    <div class="pwm-viz-modes" id="twin-d3-tabs" role="tablist" aria-label="Switch Personal Twin D3 visual mode">
+      <button type="button" class="pwm-mode-btn active" role="tab" data-twin-d3-tab="moat" aria-selected="true">Tab 1: 1-to-1 Pair Moat vs. 60-90d Cloud Cliff</button>
+      <button type="button" class="pwm-mode-btn" role="tab" data-twin-d3-tab="airlock" aria-selected="false">Tab 2: Biological (40 bits/s) vs. Swarm (10^12 bits/s) Airlock &amp; 24h Mortal Lease</button>
+    </div>
+
+    <!-- Tab 1 Pane: 1-to-1 Pair Moat vs. 60-90d Cloud Cliff -->
+    <div class="twin-d3-pane" id="twin-d3-pane-moat" data-twin-d3-pane="moat">
+      <div class="pwm-sim-bar twin-btn-mt">
+        <div class="pwm-sim-top">
+          <label for="twin-moat-years-slider">Simulate Years of 1-to-1 Co-Adaptation (1 to 10 Yrs)</label>
+          <output id="twin-moat-years-out" for="twin-moat-years-slider">10 Years Co-Adapted (96% Uncopyable Moat)</output>
         </div>
-        <div class="ok">
-          <span>4 Stacked Pair Moat Layers (Hardware OCap Sandbox)</span>
-          <b id="twin-moat-local-out">Commodity Open Base 4% + Local Rank-16 LoRA 30% + 10-Yr Private Memory 32% + Tacit Human Craft 34% = 96% Uncopyable Moat</b>
+        <input type="range" id="twin-moat-years-slider" min="1" max="10" step="1" value="10" aria-label="Simulate Years of 1-to-1 Co-Adaptation (1 to 10 Yrs)">
+        <div class="chip-row" aria-label="Quick co-adaptation year presets">
+          <button type="button" class="chip-btn" data-moat-years="1">Year 1 (66% Moat)</button>
+          <button type="button" class="chip-btn" data-moat-years="3">Year 3 (82% Moat)</button>
+          <button type="button" class="chip-btn" data-moat-years="5">Year 5 (89% Moat)</button>
+          <button type="button" class="chip-btn active" data-moat-years="10">Year 10 (96% Uncopyable Moat)</button>
         </div>
+        <details class="portal-drawer">
+          <summary>Details &#9662;</summary>
+          <div class="pwm-sim-out">
+            <div class="bad">
+              <span>60-90 Day Cloud AI Distillation Cliff</span>
+              <b id="twin-moat-cloud-out">Frontier cloud weights commoditize every 60-90 days (only 4% open base weight edge retained)</b>
+            </div>
+            <div class="ok">
+              <span>4 Stacked Pair Moat Layers (Hardware OCap Sandbox)</span>
+              <b id="twin-moat-local-out">Commodity Open Base 4% + Local Rank-16 LoRA 30% + 10-Yr Private Memory 32% + Tacit Human Craft 34% = 96% Uncopyable Moat</b>
+            </div>
+          </div>
+        </details>
+      </div>
+      <div class="twin-subblock">
+        <svg id="twin-d3-moat" class="svg-diagram" data-rich-viz="true" viewBox="0 0 760 250" role="img" aria-label="Interactive D3.js 1-to-1 Pair Intelligence Moat and Local OCap Sandbox Firewall"></svg>
       </div>
     </div>
-    <div class="twin-subblock">
-      <svg id="twin-d3-moat" class="svg-diagram" data-rich-viz="true" viewBox="0 0 760 250" role="img" aria-label="Interactive D3.js 1-to-1 Pair Intelligence Moat and Local OCap Sandbox Firewall"></svg>
+
+    <!-- Tab 2 Pane: Biological (40 bits/s) vs. Swarm (10^12 bits/s) Airlock & 24h Mortal Lease -->
+    <div class="twin-d3-pane" id="twin-d3-pane-airlock" data-twin-d3-pane="airlock" hidden>
+      <div class="pwm-sim-bar twin-btn-mt">
+        <div class="pwm-sim-top">
+          <span>Capability-Bounded Mortal Lease &amp; OCap Airlock Mode</span>
+          <output id="twin-airlock-lease-out">24h Max Mortal Lease · 99.9999% Swarm Noise Blocked · ~40 bits/s Human Pace</output>
+        </div>
+        <div class="chip-row" aria-label="Select OCap Mortal Lease mode">
+          <button type="button" class="chip-btn" data-airlock-lease="1">1h Ephemeral Task Lease</button>
+          <button type="button" class="chip-btn" data-airlock-lease="8">8h Workday Focus Lease</button>
+          <button type="button" class="chip-btn active" data-airlock-lease="24">24h Max Mortal Lease</button>
+          <button type="button" class="chip-btn" data-airlock-lease="0">Emergency Revoke (0ms Cut)</button>
+        </div>
+      </div>
+      <div class="twin-subblock">
+        <svg id="twin-d3-airlock" class="svg-diagram" data-rich-viz="true" viewBox="0 0 760 260" role="img" aria-label="Interactive D3.js Biological 40 bits/s vs. Silicon Swarm 10^12 bits/s OCap Airlock and 24h Mortal Lease"></svg>
+      </div>
     </div>
   </section>
 
   <!-- 5-Studio Navigation Tabs -->
   <div class="studio-tabs" id="twin-tabs" role="tablist" aria-label="Personal Twin Workbench Studios">
     <button type="button" class="studio-tab" role="tab" aria-selected="true" data-tab="1">
-      <span class="tab-num">01</span> Daily Pulse, Radar &amp; Focus
+      <span class="tab-num">01</span> Pulse &amp; Radar
     </button>
     <button type="button" class="studio-tab" role="tab" aria-selected="false" data-tab="2">
-      <span class="tab-num">02</span> Memory Vault, Airlock &amp; Context
+      <span class="tab-num">02</span> Memory &amp; Airlock
     </button>
     <button type="button" class="studio-tab" role="tab" aria-selected="false" data-tab="3">
-      <span class="tab-num">03</span> OCap Sandbox &amp; Action Firewall
+      <span class="tab-num">03</span> Action Firewall
     </button>
     <button type="button" class="studio-tab" role="tab" aria-selected="false" data-tab="4">
-      <span class="tab-num">04</span> Zero-Leakage Proofs &amp; Grants
+      <span class="tab-num">04</span> ZK Proofs &amp; Grants
     </button>
     <button type="button" class="studio-tab" role="tab" aria-selected="false" data-tab="5">
-      <span class="tab-num">05</span> Commons, Audit Log &amp; Data Control
+      <span class="tab-num">05</span> Commons &amp; Backup
     </button>
     <button type="button" class="studio-tab" role="tab" aria-selected="false" data-tab="all">
-      <span class="tab-num">ALL</span> Show All 5 Studios
+      <span class="tab-num">ALL</span> All 5 Studios
     </button>
   </div>
 
@@ -251,10 +272,9 @@
       <!-- Card 1A: 6-Axis Value Priorities & Live Hexagonal Radar -->
       <section class="card">
         <div class="card-head">
-          <h2 class="flush">Value priorities &amp; 6-axis alignment radar</h2>
-          <span class="tag ok">Non-fiat local weights</span>
+          <h2 class="flush">Value priorities &amp; 6-axis radar</h2>
+          <span class="tag ok">Non-fiat weights</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Weight what matters to you across six dimensions. Your twin uses this vector to rank actions and filter feeds locally without single-number fiat scoring.</div></details>
         <div class="radar-box twin-subblock">
           <div id="value-radar-host" aria-label="Six-axis value alignment radar chart"></div>
           <div>
@@ -262,39 +282,41 @@
             <div id="value-summary" class="twin-summary"></div>
           </div>
         </div>
-        <form id="value-form" class="stack twin-subblock">
-          <div class="form-grid-2">
-            <label>Dimension
-              <select name="dimension">
-                <option value="commons">Commons (collective tools &amp; knowledge)</option>
-                <option value="resilience">Resilience (local autonomy &amp; redundancy)</option>
-                <option value="wellbeing">Wellbeing (health &amp; balance)</option>
-                <option value="learning">Learning (skills &amp; inquiry)</option>
-                <option value="containment">Containment (privacy &amp; boundaries)</option>
-                <option value="ecology">Ecology (resource conservation)</option>
-              </select>
-            </label>
-            <label>Priority weight
-              <select name="score">
-                <option value="5">5 - Critical focus</option>
-                <option value="4">4 - High priority</option>
-                <option value="3" selected>3 - Balanced</option>
-                <option value="2">2 - Lower priority</option>
-                <option value="1">1 - Minimal</option>
-              </select>
-            </label>
-          </div>
-          <div><button class="btn primary sm">Set priority</button></div>
-        </form>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Weight what matters to you across six dimensions. Your twin uses this vector to rank actions and filter feeds locally without single-number fiat scoring.</div>
+          <form id="value-form" class="stack twin-subblock">
+            <div class="form-grid-2">
+              <label>Dimension
+                <select name="dimension">
+                  <option value="commons">Commons (collective tools &amp; knowledge)</option>
+                  <option value="resilience">Resilience (local autonomy &amp; redundancy)</option>
+                  <option value="wellbeing">Wellbeing (health &amp; balance)</option>
+                  <option value="learning">Learning (skills &amp; inquiry)</option>
+                  <option value="containment">Containment (privacy &amp; boundaries)</option>
+                  <option value="ecology">Ecology (resource conservation)</option>
+                </select>
+              </label>
+              <label>Priority weight
+                <select name="score">
+                  <option value="5">5 - Critical focus</option>
+                  <option value="4">4 - High priority</option>
+                  <option value="3" selected>3 - Balanced</option>
+                  <option value="2">2 - Lower priority</option>
+                  <option value="1">1 - Minimal</option>
+                </select>
+              </label>
+            </div>
+            <div><button class="btn primary sm">Set priority</button></div>
+          </form>
+        </details>
       </section>
 
       <!-- Card 1B: Personal Topics & Today's Verified Signal Trajectory -->
       <section class="card">
         <div class="card-head">
-          <h2 class="flush">What matters to you &amp; today&rsquo;s signal pulse</h2>
-          <span class="tag info">2,521 Verified Sources</span>
+          <h2 class="flush">Today&rsquo;s signal pulse</h2>
+          <span class="tag info">2,521 Sources</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Your twin matches your local topics against the verified primary research and incident feed without revealing your interests to any server.</div></details>
         <div class="chip-row" id="topic-quick-chips" aria-label="Quick topic toggles">
           <button type="button" class="chip-btn" data-topic="privacy">+ privacy</button>
           <button type="button" class="chip-btn" data-topic="local agents">+ local agents</button>
@@ -304,21 +326,23 @@
           <button type="button" class="chip-btn" data-topic="cryptography">+ cryptography</button>
           <button type="button" class="chip-btn" data-topic="co-ops">+ co-ops</button>
         </div>
-        <form id="interests" class="stack">
-          <label>Topics you care about (comma-separated)
-            <input type="text" name="topics" placeholder="for example: privacy, local agents, security, healthcare" maxlength="1200">
-          </label>
-          <div class="btn-row flush">
-            <button class="btn primary sm">Save topics locally</button>
-            <span class="muted" id="saved"></span>
-          </div>
-        </form>
         <div class="twin-subblock">
-          <h3 class="flush twin-subhead">Today&rsquo;s highest-weight matching signals</h3>
           <div id="trajectory-gauge-host"></div>
           <ul class="plain" id="quest"><li class="muted">Add topics to see what matters today.</li></ul>
           <div id="trajectory-summary" class="twin-summary"></div>
         </div>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Your twin matches your local topics against the verified primary research and incident feed without revealing your interests to any server.</div>
+          <form id="interests" class="stack twin-subblock">
+            <label>Topics you care about (comma-separated)
+              <input type="text" name="topics" placeholder="for example: privacy, local agents, security, healthcare" maxlength="1200">
+            </label>
+            <div class="btn-row flush">
+              <button class="btn primary sm">Save topics locally</button>
+              <span class="muted" id="saved"></span>
+            </div>
+          </form>
+        </details>
       </section>
     </div>
 
@@ -326,83 +350,87 @@
       <!-- Card 1C: Daily Quests -->
       <section class="card">
         <div class="card-head">
-          <h2 class="flush">Daily quests &amp; focus priorities</h2>
-          <span class="tag ok">Local Focus Queue</span>
+          <h2 class="flush">Daily quests &amp; focus</h2>
+          <span class="tag ok">Local Queue</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Active focus items for your day. Checked quests remain in your local record and feed your token-budgeted assistant context.</div></details>
         <ul class="plain" id="quests"></ul>
         <div id="quest-summary" class="twin-summary"></div>
-        <form id="quest-form" class="stack twin-subblock">
-          <div class="form-grid-2">
-            <label>Category
-              <select name="category">
-                <option value="learning">Learning</option>
-                <option value="creation">Creation</option>
-                <option value="community">Community</option>
-                <option value="health">Health</option>
-                <option value="maintenance">Maintenance</option>
-                <option value="other">Other</option>
-              </select>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Active focus items for your day. Checked quests remain in your local record and feed your token-budgeted assistant context.</div>
+          <form id="quest-form" class="stack twin-subblock">
+            <div class="form-grid-2">
+              <label>Category
+                <select name="category">
+                  <option value="learning">Learning</option>
+                  <option value="creation">Creation</option>
+                  <option value="community">Community</option>
+                  <option value="health">Health</option>
+                  <option value="maintenance">Maintenance</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label>Priority
+                <select name="priority">
+                  <option value="1">Focus (top priority)</option>
+                  <option value="2" selected>Normal</option>
+                  <option value="3">Low</option>
+                </select>
+              </label>
+            </div>
+            <label>Quest title
+              <input type="text" name="title" placeholder="for example: audit CVE-2026-109618 patch in local sandbox" maxlength="100" required>
             </label>
-            <label>Priority
-              <select name="priority">
-                <option value="1">Focus (top priority)</option>
-                <option value="2" selected>Normal</option>
-                <option value="3">Low</option>
-              </select>
-            </label>
-          </div>
-          <label>Quest title
-            <input type="text" name="title" placeholder="for example: audit CVE-2026-109618 patch in local sandbox" maxlength="100" required>
-          </label>
-          <div><button class="btn sm">Add quest</button></div>
-        </form>
+            <div><button class="btn sm">Add quest</button></div>
+          </form>
+        </details>
       </section>
 
       <!-- Card 1D: Obligations & Deadlines -->
       <section class="card">
         <div class="card-head">
-          <h2 class="flush">Obligations, renewals &amp; deadlines</h2>
-          <span class="tag wip">Lead-Time Watch</span>
+          <h2 class="flush">Obligations &amp; deadlines</h2>
+          <span class="tag wip">Lead Watch</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Track renewals, contracts, warranties, and deadlines locally with configurable lead-warning windows so no subscription or filing traps you.</div></details>
         <ul class="plain" id="obligations"></ul>
         <div id="obligation-summary" class="twin-summary"></div>
-        <form id="obligation" class="stack twin-subblock">
-          <div class="form-grid-2">
-            <label>Category
-              <select name="category">
-                <option value="renewal">Renewal</option>
-                <option value="contract">Contract</option>
-                <option value="warranty">Warranty</option>
-                <option value="tax">Tax</option>
-                <option value="document">Document</option>
-                <option value="other">Other</option>
-              </select>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Track renewals, contracts, warranties, and deadlines locally with configurable lead-warning windows so no subscription or filing traps you.</div>
+          <form id="obligation" class="stack twin-subblock">
+            <div class="form-grid-2">
+              <label>Category
+                <select name="category">
+                  <option value="renewal">Renewal</option>
+                  <option value="contract">Contract</option>
+                  <option value="warranty">Warranty</option>
+                  <option value="tax">Tax</option>
+                  <option value="document">Document</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label>Lead warning
+                <select name="lead_days">
+                  <option value="7">7 days</option>
+                  <option value="14">14 days</option>
+                  <option value="30" selected>30 days</option>
+                  <option value="60">60 days</option>
+                  <option value="90">90 days</option>
+                </select>
+              </label>
+            </div>
+            <div class="form-grid-2">
+              <label>Obligation
+                <input type="text" name="title" placeholder="for example: passport renewal" maxlength="80">
+              </label>
+              <label>Due date
+                <input type="date" name="due_date" required>
+              </label>
+            </div>
+            <label>Notes (optional)
+              <input type="text" name="notes" placeholder="optional notes" maxlength="100">
             </label>
-            <label>Lead warning
-              <select name="lead_days">
-                <option value="7">7 days</option>
-                <option value="14">14 days</option>
-                <option value="30" selected>30 days</option>
-                <option value="60">60 days</option>
-                <option value="90">90 days</option>
-              </select>
-            </label>
-          </div>
-          <div class="form-grid-2">
-            <label>Obligation
-              <input type="text" name="title" placeholder="for example: passport renewal" maxlength="80">
-            </label>
-            <label>Due date
-              <input type="date" name="due_date" required>
-            </label>
-          </div>
-          <label>Notes (optional)
-            <input type="text" name="notes" placeholder="optional notes" maxlength="100">
-          </label>
-          <div><button class="btn sm">Add obligation</button></div>
-        </form>
+            <div><button class="btn sm">Add obligation</button></div>
+          </form>
+        </details>
       </section>
     </div>
   </div>
@@ -415,78 +443,84 @@
       <!-- Card 2A: Critical Memory Vault -->
       <section class="card">
         <div class="card-head">
-          <h2 class="flush">Critical memory &amp; non-compressible constraints</h2>
-          <span class="tag no">Safety-Critical Pin</span>
+          <h2 class="flush">Critical memory constraints</h2>
+          <span class="tag no">Safety Pin</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Facts and boundaries your twin and local models must never compress away (allergies, medical rules, hard boundaries). Screened locally against speculative wording before pinning.</div></details>
         <ul class="plain" id="facts"></ul>
         <div id="fact-summary" class="twin-summary"></div>
-        <form id="fact" class="stack twin-subblock">
-          <div class="form-grid-2">
-            <label>Category
-              <select name="category">
-                <option value="medical">Medical / Allergy</option>
-                <option value="dietary">Dietary</option>
-                <option value="emergency">Emergency contact</option>
-                <option value="boundary">Personal boundary</option>
-                <option value="preference">Preference</option>
-                <option value="other">Other</option>
-              </select>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Facts and boundaries your twin and local models must never compress away (allergies, medical rules, hard boundaries). Screened locally against speculative wording before pinning.</div>
+          <form id="fact" class="stack twin-subblock">
+            <div class="form-grid-2">
+              <label>Category
+                <select name="category">
+                  <option value="medical">Medical / Allergy</option>
+                  <option value="dietary">Dietary</option>
+                  <option value="emergency">Emergency contact</option>
+                  <option value="boundary">Personal boundary</option>
+                  <option value="preference">Preference</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label><input type="checkbox" name="critical" checked> Pin as safety-critical constraint</label>
+            </div>
+            <label>Fact or constraint statement
+              <input type="text" name="statement" placeholder="for example: Severe penicillin allergy — never prescribe beta-lactam antibiotics" maxlength="140" required>
             </label>
-            <label><input type="checkbox" name="critical" checked> Pin as safety-critical constraint</label>
-          </div>
-          <label>Fact or constraint statement
-            <input type="text" name="statement" placeholder="for example: Severe penicillin allergy — never prescribe beta-lactam antibiotics" maxlength="140" required>
-          </label>
-          <div><button class="btn primary sm">Add memory constraint</button></div>
-        </form>
+            <div><button class="btn primary sm">Add memory constraint</button></div>
+          </form>
+        </details>
       </section>
 
       <!-- Card 2B: Token-Budgeted Local Context Assembler -->
       <section class="card">
         <div class="card-head">
-          <h2 class="flush">Token-budgeted local context compiler</h2>
-          <span class="tag info">Deterministic Prefix Hash</span>
+          <h2 class="flush">Token-budgeted context compiler</h2>
+          <span class="tag info">Prefix Hash</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Compile a strict token-budgeted prompt context for local on-device models (8GB/16GB RAM). Prioritizes safety-critical constraints first, then active obligations and focus quests.</div></details>
-        <form id="assemble-context" class="stack">
-          <div class="form-grid-2">
-            <label>On-device token budget
-              <select name="budget">
-                <option value="512">512 tokens (compact edge)</option>
-                <option value="1024" selected>1024 tokens (standard local)</option>
-                <option value="2048">2048 tokens (extended)</option>
-                <option value="4096">4096 tokens (full context)</option>
-              </select>
-            </label>
-            <label>System role instruction
-              <input type="text" name="system_prompt" value="You are a personal twin assistant operating strictly within the person's local browser device." maxlength="200">
-            </label>
-          </div>
-          <div><button class="btn primary sm">Compile token-budgeted context</button></div>
-        </form>
         <div id="context-bar-host" class="twin-subblock"></div>
         <div id="context-assembly-result" class="twin-summary"></div>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Compile a strict token-budgeted prompt context for local on-device models (8GB/16GB RAM). Prioritizes safety-critical constraints first, then active obligations and focus quests.</div>
+          <form id="assemble-context" class="stack twin-subblock">
+            <div class="form-grid-2">
+              <label>On-device token budget
+                <select name="budget">
+                  <option value="512">512 tokens (compact edge)</option>
+                  <option value="1024" selected>1024 tokens (standard local)</option>
+                  <option value="2048">2048 tokens (extended)</option>
+                  <option value="4096">4096 tokens (full context)</option>
+                </select>
+              </label>
+              <label>System role instruction
+                <input type="text" name="system_prompt" value="You are a personal twin assistant operating strictly within the person's local browser device." maxlength="200">
+              </label>
+            </div>
+            <div><button class="btn primary sm">Compile token-budgeted context</button></div>
+          </form>
+        </details>
       </section>
     </div>
 
     <!-- Card 2C: Interactive Retrieval Airlock & Prompt-Injection Sanitizer -->
     <section class="card" id="retrieval-airlock-inspector">
       <div class="card-head">
-        <div>
-          <h2 class="flush">Retrieval airlock &amp; indirect prompt-injection sanitizer</h2>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Before an external document, email, or web snippet enters your twin&rsquo;s context window, the Retrieval Airlock strips zero-width Unicode steganography, neutralizes system-role overrides, and quarantines data exfiltration payloads.</div></details>
-        </div>
-        <span class="tag ok">Cryptographic Airlock Receipt</span>
+        <h2 class="flush">Retrieval airlock &amp; prompt-injection sanitizer</h2>
+        <span class="tag ok">Airlock Receipt</span>
       </div>
       <div class="chip-row" id="airlock-presets">
-        <button type="button" class="chip-btn active" data-airlock="override">Preset 1: System Role Override Attack</button>
-        <button type="button" class="chip-btn" data-airlock="stego">Preset 2: Zero-Width Unicode Steganography</button>
-        <button type="button" class="chip-btn" data-airlock="exfil">Preset 3: Private Memory Exfiltration Trap</button>
-        <button type="button" class="chip-btn" data-airlock="clean">Preset 4: Benign Technical Article</button>
+        <button type="button" class="chip-btn active" data-airlock="override">Preset 1: Role Override</button>
+        <button type="button" class="chip-btn" data-airlock="stego">Preset 2: Steganography</button>
+        <button type="button" class="chip-btn" data-airlock="exfil">Preset 3: Exfiltration Trap</button>
+        <button type="button" class="chip-btn" data-airlock="clean">Preset 4: Benign Article</button>
       </div>
-      <div class="grid-2 twin-subblock">
-        <form id="test-retrieval-airlock" class="stack">
+      <div class="twin-subblock">
+        <div id="airlock-svg-host"></div>
+        <div id="airlock-eval-result" class="twin-result"></div>
+      </div>
+      <details class="portal-drawer"><summary>Details &#9662;</summary>
+        <div class="muted flush">Before an external document, email, or web snippet enters your twin&rsquo;s context window, the Retrieval Airlock strips zero-width Unicode steganography, neutralizes system-role overrides, and quarantines data exfiltration payloads.</div>
+        <form id="test-retrieval-airlock" class="stack twin-subblock">
           <div class="form-grid-2">
             <label>Untrusted source URI
               <input type="text" name="source_uri" value="https://untrusted-feed.example.org/post/94" maxlength="160" required>
@@ -504,11 +538,7 @@
           </label>
           <div><button class="btn primary sm">Run Retrieval Airlock inspection</button></div>
         </form>
-        <div>
-          <div id="airlock-svg-host"></div>
-          <div id="airlock-eval-result" class="twin-result"></div>
-        </div>
-      </div>
+      </details>
     </section>
   </div>
 
@@ -516,24 +546,26 @@
   <!-- STUDIO 3: OCAP SANDBOX & ACTION FIREWALL                              -->
   <!-- ===================================================================== -->
   <div class="studio-pane" id="twin-pane-3" data-pane="3" hidden>
-    <!-- Card 3A: Interactive Multi-Step Lookahead Tool Simulator (Full Width with Visual DAG) -->
+    <!-- Card 3A: Interactive Multi-Step Lookahead Tool Simulator -->
     <section class="card" id="lookahead-simulator-inspector">
       <div class="card-head">
-        <div>
-          <h2 class="flush">Lookahead multi-step tool trajectory simulator</h2>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Simulates multi-step assistant plans in a shadow state before any tool runs—catching private-data taint propagation, exfiltration chains, privilege escalation, and circular peer loops.</div></details>
-        </div>
-        <span class="tag no">Shadow-State Taint Tracking</span>
+        <h2 class="flush">Lookahead tool trajectory simulator</h2>
+        <span class="tag no">Taint Tracking</span>
       </div>
       <div class="chip-row" id="lookahead-presets">
-        <button type="button" class="chip-btn active" data-lookahead="exfiltration_trap">Trap 1: Read Medical Memory &rarr; Exfiltrate to Ad Network</button>
-        <button type="button" class="chip-btn" data-lookahead="privilege_escape">Trap 2: Untrusted Shell Privilege Escape</button>
-        <button type="button" class="chip-btn" data-lookahead="destructive_mutation">Trap 3: Destructive Storage Wipe</button>
-        <button type="button" class="chip-btn" data-lookahead="circular_delegation">Trap 4: Circular Peer Delegation Loop</button>
-        <button type="button" class="chip-btn" data-lookahead="benign_read">Safe Plan: Read Public Topics &amp; Format Summary</button>
+        <button type="button" class="chip-btn active" data-lookahead="exfiltration_trap">Trap 1: Memory Exfiltration</button>
+        <button type="button" class="chip-btn" data-lookahead="privilege_escape">Trap 2: Shell Escape</button>
+        <button type="button" class="chip-btn" data-lookahead="destructive_mutation">Trap 3: Storage Wipe</button>
+        <button type="button" class="chip-btn" data-lookahead="circular_delegation">Trap 4: Circular Loop</button>
+        <button type="button" class="chip-btn" data-lookahead="benign_read">Safe Plan: Public Summary</button>
       </div>
-      <div class="grid-2 twin-subblock">
-        <form id="test-lookahead" class="stack">
+      <div class="twin-subblock">
+        <div id="lookahead-dag-host"></div>
+        <div id="lookahead-eval-result" class="twin-result"></div>
+      </div>
+      <details class="portal-drawer"><summary>Details &#9662;</summary>
+        <div class="muted flush">Simulates multi-step assistant plans in a shadow state before any tool runs—catching private-data taint propagation, exfiltration chains, privilege escalation, and circular peer loops.</div>
+        <form id="test-lookahead" class="stack twin-subblock">
           <div class="form-grid-2">
             <label>Assistant or agent identifier
               <input type="text" name="agent_id" placeholder="for example: research_assistant" value="research_assistant" maxlength="60" required>
@@ -553,269 +585,261 @@
           </label>
           <div><button class="btn primary sm">Simulate multi-step trajectory</button></div>
         </form>
-        <div>
-          <div id="lookahead-dag-host"></div>
-          <div id="lookahead-eval-result" class="twin-result"></div>
-        </div>
-      </div>
+      </details>
     </section>
 
     <div class="grid-2">
       <!-- Card 3B: Visual Assistant Screen Auditor -->
       <section class="card" id="visual-auditor-inspector">
         <div class="card-head">
-          <h2 class="flush">Visual screen assistant auditor</h2>
-          <span class="tag wip">DOM &amp; Viewport Guard</span>
+          <h2 class="flush">Visual screen auditor</h2>
+          <span class="tag wip">Viewport Guard</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Tests whether an assistant that sees your screen may click or type on an element. Blocks password/card fields and on-screen prompt-injection overlays.</div></details>
         <div class="chip-row" id="visual-presets">
-          <button type="button" class="chip-btn active" data-vis="password_block">Test: Password Field Block</button>
-          <button type="button" class="chip-btn" data-vis="injection_block">Test: On-Screen Prompt Injection</button>
-          <button type="button" class="chip-btn" data-vis="safe_click">Test: Safe Search Input</button>
+          <button type="button" class="chip-btn active" data-vis="password_block">Password Block</button>
+          <button type="button" class="chip-btn" data-vis="injection_block">Prompt Overlay</button>
+          <button type="button" class="chip-btn" data-vis="safe_click">Safe Click</button>
         </div>
         <div id="visual-viewport-host" class="twin-subblock"></div>
-        <form id="audit-visual-action" class="stack twin-subblock">
-          <div class="form-grid-2">
-            <label>Assistant identifier
-              <input type="text" name="assistant_id" value="on-device-vision-agent" maxlength="60" required>
-            </label>
-            <label>Action type
-              <select name="action_type">
-                <option value="click">Click element</option>
-                <option value="type" selected>Type input</option>
-                <option value="scroll">Scroll</option>
-                <option value="navigate">Navigate</option>
-              </select>
-            </label>
-          </div>
-          <div class="form-grid-2">
-            <label>Target element tag
-              <input type="text" name="tag_name" value="input" maxlength="20" required>
-            </label>
-            <label>Element type
-              <input type="text" name="element_type" value="password" maxlength="30" required>
-            </label>
-          </div>
-          <div class="form-grid-2">
-            <label>Proposed input (if typing)
-              <input type="text" name="proposed_input" value="user_secret_phrase" maxlength="140">
-            </label>
-            <label>Text shown on element
-              <input type="text" name="detected_text" value="Enter Vault Password" maxlength="140">
-            </label>
-          </div>
-          <div><button class="btn primary sm">Audit visual action</button></div>
-        </form>
         <div id="visual-audit-result" class="twin-result"></div>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Tests whether an assistant that sees your screen may click or type on an element. Blocks password/card fields and on-screen prompt-injection overlays.</div>
+          <form id="audit-visual-action" class="stack twin-subblock">
+            <div class="form-grid-2">
+              <label>Assistant identifier
+                <input type="text" name="assistant_id" value="on-device-vision-agent" maxlength="60" required>
+              </label>
+              <label>Action type
+                <select name="action_type">
+                  <option value="click">Click element</option>
+                  <option value="type" selected>Type input</option>
+                  <option value="scroll">Scroll</option>
+                  <option value="navigate">Navigate</option>
+                </select>
+              </label>
+            </div>
+            <div class="form-grid-2">
+              <label>Target element tag
+                <input type="text" name="tag_name" value="input" maxlength="20" required>
+              </label>
+              <label>Element type
+                <input type="text" name="element_type" value="password" maxlength="30" required>
+              </label>
+            </div>
+            <div class="form-grid-2">
+              <label>Proposed input (if typing)
+                <input type="text" name="proposed_input" value="user_secret_phrase" maxlength="140">
+              </label>
+              <label>Text shown on element
+                <input type="text" name="detected_text" value="Enter Vault Password" maxlength="140">
+              </label>
+            </div>
+            <div><button class="btn primary sm">Audit visual action</button></div>
+          </form>
+        </details>
       </section>
 
       <!-- Card 3C: Domain Authority Envelope & Peer Delegation -->
       <section class="card">
         <div id="authority-envelope-inspector">
           <div class="card-head">
-            <h2 class="flush">Domain authority envelope</h2>
-            <span class="tag info">Scoped Capability</span>
+            <h2 class="flush">Domain authority &amp; delegation</h2>
+            <span class="tag info">Scoped OCap</span>
           </div>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Allowed domains: <code>github.com</code>, <code>api.github.com</code>, <code>docs.github.com</code>; scopes: <code>repo:read</code>, <code>issues:read</code>, <code>docs:read</code>. Blocks credential egress and gates writes.</div></details>
-          <form id="audit-authority-envelope" class="stack">
-            <div class="form-grid-2">
-              <label>Assistant or service
-                <input type="text" name="grantee" value="repo_review_agent" maxlength="60" required>
-              </label>
-              <label>Target domain
-                <input type="text" name="target_domain" value="github.com" maxlength="100" required>
-              </label>
-            </div>
-            <div class="form-grid-2">
-              <label>Action verb
-                <select name="action">
-                  <option value="read" selected>read</option>
-                  <option value="search">search</option>
-                  <option value="http_get">open a page</option>
-                  <option value="write">change something</option>
-                  <option value="oauth_authorize">sign in to another app (asks you first)</option>
-                  <option value="register_webhook">set up automatic notifications (asks you first)</option>
-                </select>
-              </label>
-              <label>Scope
-                <input type="text" name="scope" value="repo:read" maxlength="80" required>
-              </label>
-            </div>
-            <div class="form-grid-2">
-              <label><input type="checkbox" name="is_write"> Changes something (write)</label>
-              <label><input type="checkbox" name="contains_credentials"> Carries credentials/tokens</label>
-            </div>
-            <div><button class="btn sm">Test authority envelope</button></div>
-          </form>
           <div id="authority-envelope-result" class="twin-result"></div>
-        </div>
-
-        <div id="delegation-inspector" class="twin-subblock">
-          <h3 class="flush twin-subhead">Peer delegation commitment &amp; depth guard</h3>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Logs upstream accountability when delegating tasks to peer agents and blocks runaway delegation depth (&gt;5 hops).</div></details>
-          <form id="test-delegation" class="stack">
-            <div class="form-grid-2">
-              <label>Delegating agent
-                <input type="text" name="delegator" value="planner_agent" maxlength="60" required>
-              </label>
-              <label>Assigned peer
-                <input type="text" name="delegatee" value="audit_agent" maxlength="60" required>
-              </label>
-            </div>
-            <div class="form-grid-2">
-              <label>Chain depth
-                <select name="depth">
-                  <option value="0">0 (Root task)</option>
-                  <option value="1" selected>1 (Subtask)</option>
-                  <option value="2">2 (Nested subtask)</option>
-                  <option value="6">6 (Exceeds max depth — blocks)</option>
-                </select>
-              </label>
-              <label>Escalation mode
-                <select name="esc_mode">
-                  <option value="upstream_return" selected>Return to upstream delegator</option>
-                  <option value="peer_failover">Failover to alternate peer</option>
-                  <option value="supervisor_escalate">Escalate to supervisor</option>
-                </select>
-              </label>
-            </div>
-            <label>Task description
-              <input type="text" name="task_desc" value="Verify NCCI CPT bundle minimization" maxlength="120" required>
-            </label>
-            <div><button class="btn sm">Test delegation commitment</button></div>
-          </form>
           <div id="delegation-eval-result" class="twin-result"></div>
+          <details class="portal-drawer"><summary>Details &#9662;</summary>
+            <div class="muted flush">Allowed domains: <code>github.com</code>, <code>api.github.com</code>, <code>docs.github.com</code>; scopes: <code>repo:read</code>, <code>issues:read</code>, <code>docs:read</code>. Blocks credential egress, gates writes, and caps peer delegation depth (&le;5 hops).</div>
+            <form id="audit-authority-envelope" class="stack twin-subblock">
+              <div class="form-grid-2">
+                <label>Assistant or service
+                  <input type="text" name="grantee" value="repo_review_agent" maxlength="60" required>
+                </label>
+                <label>Target domain
+                  <input type="text" name="target_domain" value="github.com" maxlength="100" required>
+                </label>
+              </div>
+              <div class="form-grid-2">
+                <label>Action verb
+                  <select name="action">
+                    <option value="read" selected>read</option>
+                    <option value="search">search</option>
+                    <option value="http_get">open a page</option>
+                    <option value="write">change something</option>
+                    <option value="oauth_authorize">sign in to another app (asks you first)</option>
+                    <option value="register_webhook">set up automatic notifications (asks you first)</option>
+                  </select>
+                </label>
+                <label>Scope
+                  <input type="text" name="scope" value="repo:read" maxlength="80" required>
+                </label>
+              </div>
+              <div class="form-grid-2">
+                <label><input type="checkbox" name="is_write"> Changes something (write)</label>
+                <label><input type="checkbox" name="contains_credentials"> Carries credentials/tokens</label>
+              </div>
+              <div><button class="btn sm">Test authority envelope</button></div>
+            </form>
+
+            <div id="delegation-inspector" class="twin-subblock">
+              <form id="test-delegation" class="stack">
+                <div class="form-grid-2">
+                  <label>Delegating agent
+                    <input type="text" name="delegator" value="planner_agent" maxlength="60" required>
+                  </label>
+                  <label>Assigned peer
+                    <input type="text" name="delegatee" value="audit_agent" maxlength="60" required>
+                  </label>
+                </div>
+                <div class="form-grid-2">
+                  <label>Chain depth
+                    <select name="depth">
+                      <option value="0">0 (Root task)</option>
+                      <option value="1" selected>1 (Subtask)</option>
+                      <option value="2">2 (Nested subtask)</option>
+                      <option value="6">6 (Exceeds max depth — blocks)</option>
+                    </select>
+                  </label>
+                  <label>Escalation mode
+                    <select name="esc_mode">
+                      <option value="upstream_return" selected>Return to upstream delegator</option>
+                      <option value="peer_failover">Failover to alternate peer</option>
+                      <option value="supervisor_escalate">Escalate to supervisor</option>
+                    </select>
+                  </label>
+                </div>
+                <label>Task description
+                  <input type="text" name="task_desc" value="Verify NCCI CPT bundle minimization" maxlength="120" required>
+                </label>
+                <div><button class="btn sm">Test delegation commitment</button></div>
+              </form>
+            </div>
+          </details>
         </div>
       </section>
     </div>
 
     <div class="grid-2">
-      <!-- Card 3D: Pending Actions Queue & Boundary Action Auditor -->
+      <!-- Card 3D: Pending Actions Queue -->
       <section class="card">
         <div class="card-head">
-          <h2 class="flush">Pending assistant actions queue</h2>
-          <span class="tag wip">Human-in-the-Loop Gate</span>
+          <h2 class="flush">Pending actions queue</h2>
+          <span class="tag wip">Human Gate</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Review requests from local assistants or services before they execute. Nothing runs without your explicit approval.</div></details>
         <ul class="plain" id="actions"></ul>
         <div id="action-summary" class="twin-summary"></div>
-        <form id="action-request" class="stack twin-subblock">
-          <div class="form-grid-2">
-            <label>Service / Assistant
-              <input type="text" name="who" placeholder="for example: calendar agent" maxlength="60">
-            </label>
-            <label>Requested action
-              <input type="text" name="description" placeholder="for example: reschedule pediatric checkup" maxlength="100">
-            </label>
-          </div>
-          <div><button class="btn sm">Queue test request</button></div>
-        </form>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Review requests from local assistants or services before they execute. Nothing runs without your explicit approval.</div>
+          <form id="action-request" class="stack twin-subblock">
+            <div class="form-grid-2">
+              <label>Service / Assistant
+                <input type="text" name="who" placeholder="for example: calendar agent" maxlength="60">
+              </label>
+              <label>Requested action
+                <input type="text" name="description" placeholder="for example: reschedule pediatric checkup" maxlength="100">
+              </label>
+            </div>
+            <div><button class="btn sm">Queue test request</button></div>
+          </form>
+        </details>
       </section>
 
-      <!-- Card 3E: Pre-Execution Boundary Auditor & Ephemeral Lease Preview -->
-      <section class="card">
-        <div id="boundary-inspector">
-          <h2 class="flush">Pre-execution boundary &amp; constraint audit</h2>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Checks whether an assistant&rsquo;s proposed action violates your pinned critical memory constraints or lacks an active grant.</div></details>
-          <form id="audit-action" class="stack">
-            <div class="form-grid-2">
-              <label>Assistant or service
-                <input type="text" name="who" value="clinic_prescriber_bot" maxlength="60" required>
-              </label>
-              <label>Scope (optional)
-                <input type="text" name="scope" value="medication_order" maxlength="80">
-              </label>
-            </div>
-            <label>Proposed action
-              <input type="text" name="action" value="Order amoxicillin / penicillin antibiotic prescription" maxlength="100" required>
-            </label>
-            <div><button class="btn sm">Audit boundary action</button></div>
-          </form>
-          <div id="boundary-audit-result" class="twin-result"></div>
-        </div>
-
-        <div id="capability-inspector" class="twin-subblock">
-          <h3 class="flush twin-subhead">Preview a short-lived capability lease</h3>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Evaluate a time-bounded (5 to 60 min) permission request against your active grants and critical constraints.</div></details>
-          <form id="capability-request" class="stack">
-            <div class="form-grid-2">
-              <label>Assistant or service
-                <input type="text" name="grantee" value="calendar_sync_agent" maxlength="60" required>
-              </label>
-              <label>Requested scope
-                <input type="text" name="scope" value="appointment times" maxlength="80" required>
-              </label>
-            </div>
-            <div class="form-grid-2">
-              <label>Purpose
-                <input type="text" name="purpose" value="Sync dental clinic checkup slot" maxlength="120" required>
-              </label>
-              <label>Lease TTL
-                <select name="ttl">
-                  <option value="300">5 minutes</option>
-                  <option value="900" selected>15 minutes</option>
-                  <option value="1800">30 minutes</option>
-                  <option value="3600">1 hour (maximum)</option>
-                </select>
-              </label>
-            </div>
-            <div><button class="btn sm">Preview capability lease</button></div>
-          </form>
-          <div id="capability-eval-result" class="twin-result"></div>
-        </div>
-      </section>
-    
-      <!-- Card 3E: Three-Valued Auto-Purchase Decision Gate -->
+      <!-- Card 3E: Pre-Execution Boundary Auditor, Lease Preview & Auto-Purchase Gate -->
       <section class="card" id="auto-purchase-inspector">
-        <div class="card-head">
-          <div>
-            <h2 class="flush">Three-valued auto-purchase decision gate</h2>
-            <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Evaluates assistant commerce requests against client-side spending limits. Decouples item preference matching from financial execution authorization (preference is not permission).</div></details>
+        <div id="boundary-inspector">
+          <div class="card-head">
+            <h2 class="flush">Boundary, lease &amp; purchase gates</h2>
+            <span class="tag ok">Financial Gate</span>
           </div>
-          <span class="tag ok">Financial Gate</span>
-        </div>
-        <form id="evaluate-auto-purchase" class="stack twin-subblock">
-          <div class="form-grid-2">
-            <label>Merchant
-              <input type="text" name="merchant" value="Bookshop Cooperative" maxlength="60" required>
-            </label>
-            <label>Item description
-              <input type="text" name="item_description" value="Field Guide to Local Networks" maxlength="100" required>
-            </label>
-          </div>
-          <div class="form-grid-2">
-            <label>Amount (in USD)
-              <input type="number" step="0.01" min="0.01" max="1000" name="amount" value="18.50" required>
-            </label>
-            <label>Currency
-              <select name="currency">
-                <option value="USD" selected>USD</option>
-                <option value="CAD">CAD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-              </select>
-            </label>
-          </div>
-          <div class="form-grid-2">
-            <label>User preference fit
-              <select name="preference">
-                <option value="0.95" selected>95% (High match)</option>
-                <option value="0.75">75% (Moderate match)</option>
-                <option value="0.50">50% (Weak match)</option>
-              </select>
-            </label>
-            <label>Explicit user warrant (active authorization)
-              <select name="has_warrant">
-                <option value="true">Yes (User explicitly authorized buying items in this category)</option>
-                <option value="false" selected>No (Assistant inferred permission from past browsing)</option>
-              </select>
-            </label>
-          </div>
-          <div><button class="btn sm">Evaluate auto-purchase gate</button></div>
-        </form>
-        <div id="auto-purchase-eval-result" class="twin-result"></div>
-      </section>
+          <div id="boundary-audit-result" class="twin-result"></div>
+          <div id="capability-eval-result" class="twin-result"></div>
+          <div id="auto-purchase-eval-result" class="twin-result"></div>
+          <details class="portal-drawer"><summary>Details &#9662;</summary>
+            <div class="muted flush">Checks proposed actions against pinned critical memory constraints, previews time-bounded capability leases (5–60 min), and decouples preference matching from financial purchase warrants.</div>
+            <form id="audit-action" class="stack twin-subblock">
+              <div class="form-grid-2">
+                <label>Assistant or service
+                  <input type="text" name="who" value="clinic_prescriber_bot" maxlength="60" required>
+                </label>
+                <label>Scope (optional)
+                  <input type="text" name="scope" value="medication_order" maxlength="80">
+                </label>
+              </div>
+              <label>Proposed action
+                <input type="text" name="action" value="Order amoxicillin / penicillin antibiotic prescription" maxlength="100" required>
+              </label>
+              <div><button class="btn sm">Audit boundary action</button></div>
+            </form>
 
+            <div id="capability-inspector" class="twin-subblock">
+              <form id="capability-request" class="stack">
+                <div class="form-grid-2">
+                  <label>Assistant or service
+                    <input type="text" name="grantee" value="calendar_sync_agent" maxlength="60" required>
+                  </label>
+                  <label>Requested scope
+                    <input type="text" name="scope" value="appointment times" maxlength="80" required>
+                  </label>
+                </div>
+                <div class="form-grid-2">
+                  <label>Purpose
+                    <input type="text" name="purpose" value="Sync dental clinic checkup slot" maxlength="120" required>
+                  </label>
+                  <label>Lease TTL
+                    <select name="ttl">
+                      <option value="300">5 minutes</option>
+                      <option value="900" selected>15 minutes</option>
+                      <option value="1800">30 minutes</option>
+                      <option value="3600">1 hour (maximum)</option>
+                    </select>
+                  </label>
+                </div>
+                <div><button class="btn sm">Preview capability lease</button></div>
+              </form>
+            </div>
+
+            <form id="evaluate-auto-purchase" class="stack twin-subblock">
+              <div class="form-grid-2">
+                <label>Merchant
+                  <input type="text" name="merchant" value="Bookshop Cooperative" maxlength="60" required>
+                </label>
+                <label>Item description
+                  <input type="text" name="item_description" value="Field Guide to Local Networks" maxlength="100" required>
+                </label>
+              </div>
+              <div class="form-grid-2">
+                <label>Amount (in USD)
+                  <input type="number" step="0.01" min="0.01" max="1000" name="amount" value="18.50" required>
+                </label>
+                <label>Currency
+                  <select name="currency">
+                    <option value="USD" selected>USD</option>
+                    <option value="CAD">CAD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                  </select>
+                </label>
+              </div>
+              <div class="form-grid-2">
+                <label>User preference fit
+                  <select name="preference">
+                    <option value="0.95" selected>95% (High match)</option>
+                    <option value="0.75">75% (Moderate match)</option>
+                    <option value="0.50">50% (Weak match)</option>
+                  </select>
+                </label>
+                <label>Explicit user warrant
+                  <select name="has_warrant">
+                    <option value="true">Yes (Explicit warrant)</option>
+                    <option value="false" selected>No (Inferred from browsing)</option>
+                  </select>
+                </label>
+              </div>
+              <div><button class="btn sm">Evaluate auto-purchase gate</button></div>
+            </form>
+          </details>
+        </div>
+      </section>
     </div>
   </div>
 
@@ -826,109 +850,109 @@
     <!-- Card 4A: Zero-Leakage Income Verification Proof Studio -->
     <section class="card">
       <div class="card-head">
-        <div>
-          <h2 class="flush">Zero-leakage income shock verification proof</h2>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Generate a portable cryptographic qualification receipt during an income shock or job transition without handing over raw bank feeds, employer names, or account numbers.</div></details>
-        </div>
-        <span class="tag ok">Single-Fact Boolean Predicate</span>
+        <h2 class="flush">Zero-leakage income shock proof</h2>
+        <span class="tag ok">Boolean Predicate</span>
       </div>
-      <div class="grid-2 twin-subblock" id="income-proof-inspector">
-        <form id="generate-income-proof" class="stack">
-          <div class="form-grid-2">
-            <label>Pre-shock baseline window
-              <input type="text" name="baseline_dates" value="2026-01-01 to 2026-02-28" readonly>
-            </label>
-            <label>Post-shock evaluation window
-              <input type="text" name="eval_dates" value="2026-04-01 to 2026-05-31" readonly>
-            </label>
-          </div>
-          <div class="form-grid-2">
-            <label>Local bank feed scenario
-              <select name="scenario_feed">
-                <option value="severe_shock" selected>Severe income shock (-66% drop: $6k/mo &rarr; $2k/mo)</option>
-                <option value="moderate_drop">Moderate income drop (-25% drop: $5k/mo &rarr; $3.75k/mo)</option>
-                <option value="no_drop">Stable income (0% drop: $5k/mo &rarr; $5k/mo)</option>
-              </select>
-            </label>
-            <label>Relief qualification threshold
-              <select name="threshold">
-                <option value="20" selected>20% drop required</option>
-                <option value="30">30% drop required</option>
-                <option value="50">50% drop required</option>
-              </select>
-            </label>
-          </div>
-          <div><button class="btn primary sm">Generate zero-leakage proof</button></div>
-        </form>
-        <div>
-          <div id="income-proof-svg-host"></div>
-          <div id="income-proof-eval-result" class="twin-result"></div>
+      <div id="income-proof-svg-host" class="twin-subblock"></div>
+      <div id="income-proof-eval-result" class="twin-result"></div>
+      <details class="portal-drawer"><summary>Details &#9662;</summary>
+        <div class="muted flush">Generate a portable cryptographic qualification receipt during an income shock or job transition without handing over raw bank feeds, employer names, or account numbers.</div>
+        <div id="income-proof-inspector" class="twin-subblock">
+          <form id="generate-income-proof" class="stack">
+            <div class="form-grid-2">
+              <label>Pre-shock baseline window
+                <input type="text" name="baseline_dates" value="2026-01-01 to 2026-02-28" readonly>
+              </label>
+              <label>Post-shock evaluation window
+                <input type="text" name="eval_dates" value="2026-04-01 to 2026-05-31" readonly>
+              </label>
+            </div>
+            <div class="form-grid-2">
+              <label>Local bank feed scenario
+                <select name="scenario_feed">
+                  <option value="severe_shock" selected>Severe income shock (-66% drop: $6k/mo &rarr; $2k/mo)</option>
+                  <option value="moderate_drop">Moderate income drop (-25% drop: $5k/mo &rarr; $3.75k/mo)</option>
+                  <option value="no_drop">Stable income (0% drop: $5k/mo &rarr; $5k/mo)</option>
+                </select>
+              </label>
+              <label>Relief qualification threshold
+                <select name="threshold">
+                  <option value="20" selected>20% drop required</option>
+                  <option value="30">30% drop required</option>
+                  <option value="50">50% drop required</option>
+                </select>
+              </label>
+            </div>
+            <div><button class="btn primary sm">Generate zero-leakage proof</button></div>
+          </form>
         </div>
-      </div>
+      </details>
     </section>
 
     <div class="grid-2">
       <!-- Card 4B: Active ISO-27560 Consent Grants -->
       <section class="card">
         <div class="card-head">
-          <h2 class="flush">Who may ask for your data (OCap grants)</h2>
-          <span class="tag info">ISO-27560 Receipts</span>
+          <h2 class="flush">Active OCap consent grants</h2>
+          <span class="tag info">ISO-27560</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Your twin refuses every service by default. Each grant issues a portable ISO-27560 consent receipt you can download, audit, or revoke at any time.</div></details>
         <ul class="plain" id="grants"></ul>
-        <form id="grant" class="stack twin-subblock">
-          <div class="form-grid-2">
-            <label>Service or peer agent
-              <input type="text" name="who" placeholder="for example: family_dentist_clinic" maxlength="60">
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Your twin refuses every service by default. Each grant issues a portable ISO-27560 consent receipt you can download, audit, or revoke at any time.</div>
+          <form id="grant" class="stack twin-subblock">
+            <div class="form-grid-2">
+              <label>Service or peer agent
+                <input type="text" name="who" placeholder="for example: family_dentist_clinic" maxlength="60">
+              </label>
+              <label>Valid for
+                <select name="duration">
+                  <option value="30">30 days</option>
+                  <option value="90">90 days</option>
+                  <option value="365">1 year</option>
+                  <option value="0">Indefinite</option>
+                </select>
+              </label>
+            </div>
+            <label>Permitted scope (what they may see)
+              <input type="text" name="what" placeholder="for example: appointment times" maxlength="80">
             </label>
-            <label>Valid for
-              <select name="duration">
-                <option value="30">30 days</option>
-                <option value="90">90 days</option>
-                <option value="365">1 year</option>
-                <option value="0">Indefinite</option>
-              </select>
-            </label>
-          </div>
-          <label>Permitted scope (what they may see)
-            <input type="text" name="what" placeholder="for example: appointment times" maxlength="80">
-          </label>
-          <div><button class="btn primary sm">Issue capability grant</button></div>
-        </form>
+            <div><button class="btn primary sm">Issue capability grant</button></div>
+          </form>
+        </details>
       </section>
 
       <!-- Card 4C: Access Request Evaluator & Consent Receipt Verifier -->
       <section class="card">
         <div id="access-inspector">
-          <h2 class="flush">Test an incoming access request</h2>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Check whether an incoming query from a service or assistant is permitted under your active grants or blocked fail-closed.</div></details>
-          <form id="verify-access" class="stack">
-            <div class="form-grid-2">
-              <label>Requesting service
-                <input type="text" name="service" value="calendar_sync_agent" maxlength="60">
-              </label>
-              <label>Requested scope
-                <input type="text" name="scope" value="appointment times" maxlength="80">
-              </label>
-            </div>
-            <div><button class="btn sm">Check permission</button></div>
-          </form>
-          <div id="access-eval-result" class="twin-result"></div>
-        </div>
-
-        <div id="receipt-inspector" class="twin-subblock">
           <div class="card-head">
-            <h3 class="flush twin-subhead">Verify a portable consent receipt</h3>
-            <button type="button" class="btn sm" id="fill-sample-receipt">Load receipt from active grant</button>
+            <h2 class="flush">Access &amp; receipt verifier</h2>
+            <button type="button" class="btn sm" id="fill-sample-receipt">Load active receipt</button>
           </div>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Verify whether an ISO-27560 JSON receipt matches an active, unrevoked grant on this device.</div></details>
-          <form id="verify-receipt" class="stack">
-            <label>Consent Receipt JSON
-              <textarea name="receipt_json" placeholder="Click 'Load receipt from active grant' above or paste receipt JSON here" rows="3" maxlength="2000" required></textarea>
-            </label>
-            <div><button class="btn sm">Check receipt against local grants</button></div>
-          </form>
+          <div id="access-eval-result" class="twin-result"></div>
           <div id="receipt-verify-result" class="twin-result"></div>
+          <details class="portal-drawer"><summary>Details &#9662;</summary>
+            <div class="muted flush">Check whether an incoming query from a service or assistant is permitted under your active grants or blocked fail-closed, and verify ISO-27560 JSON receipts.</div>
+            <form id="verify-access" class="stack twin-subblock">
+              <div class="form-grid-2">
+                <label>Requesting service
+                  <input type="text" name="service" value="calendar_sync_agent" maxlength="60">
+                </label>
+                <label>Requested scope
+                  <input type="text" name="scope" value="appointment times" maxlength="80">
+                </label>
+              </div>
+              <div><button class="btn sm">Check permission</button></div>
+            </form>
+
+            <div id="receipt-inspector" class="twin-subblock">
+              <form id="verify-receipt" class="stack">
+                <label>Consent Receipt JSON
+                  <textarea name="receipt_json" placeholder="Click 'Load active receipt' above or paste receipt JSON here" rows="3" maxlength="2000" required></textarea>
+                </label>
+                <div><button class="btn sm">Check receipt against local grants</button></div>
+              </form>
+            </div>
+          </details>
         </div>
       </section>
     </div>
@@ -943,56 +967,58 @@
       <section class="card">
         <div class="card-head">
           <h2 class="flush">Contributions to the commons</h2>
-          <span class="tag ok">Local Attribution Log</span>
+          <span class="tag ok">Local Attribution</span>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Record code, reviews, domain knowledge, verification audits, or compute you contributed to the collective. Stored locally in your browser.</div></details>
         <div id="contrib-chart-host"></div>
         <ul class="plain" id="contributions"></ul>
         <div id="contribution-summary" class="twin-summary"></div>
-        <form id="contribution" class="stack twin-subblock">
-          <div class="form-grid-2">
-            <label>Contribution category
-              <select name="kind">
-                <option value="code">Code</option>
-                <option value="review">Review</option>
-                <option value="knowledge">Knowledge</option>
-                <option value="compute">Compute</option>
-                <option value="verification">Verification</option>
-                <option value="community">Community</option>
-                <option value="other">Other</option>
-              </select>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Record code, reviews, domain knowledge, verification audits, or compute you contributed to the collective. Stored locally in your browser.</div>
+          <form id="contribution" class="stack twin-subblock">
+            <div class="form-grid-2">
+              <label>Contribution category
+                <select name="kind">
+                  <option value="code">Code</option>
+                  <option value="review">Review</option>
+                  <option value="knowledge">Knowledge</option>
+                  <option value="compute">Compute</option>
+                  <option value="verification">Verification</option>
+                  <option value="community">Community</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label>What you contributed
+                <input type="text" name="what" placeholder="for example: verified NCCI CPT billing rule set" maxlength="100">
+              </label>
+            </div>
+            <label>Impact / verification notes
+              <input type="text" name="impact" placeholder="for example: caught $1,420 duplicate facility fee upcoding" maxlength="100">
             </label>
-            <label>What you contributed
-              <input type="text" name="what" placeholder="for example: verified NCCI CPT billing rule set" maxlength="100">
-            </label>
-          </div>
-          <label>Impact / verification notes
-            <input type="text" name="impact" placeholder="for example: caught $1,420 duplicate facility fee upcoding" maxlength="100">
-          </label>
-          <div><button class="btn sm">Record contribution</button></div>
-        </form>
+            <div><button class="btn sm">Record contribution</button></div>
+          </form>
+        </details>
       </section>
 
       <!-- Card 5B: Append-Only Local Activity Log & Data Sovereignty -->
       <section class="card">
         <div class="card-head">
-          <h2 class="flush">Append-only local activity log</h2>
+          <h2 class="flush">Local audit log &amp; backup</h2>
           <button class="btn sm" id="clear-events">Clear log</button>
         </div>
-        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Every state change, capability grant, and action decision on this device is recorded in this local audit log and never transmitted externally.</div></details>
         <ul class="plain" id="events"></ul>
         <div id="event-summary" class="twin-summary"></div>
 
         <div class="twin-subblock">
-          <h3 class="flush twin-subhead">Your data, your control (JSON backup &amp; wipe)</h3>
-          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Download a portable JSON backup of your entire twin state, restore a previous backup, or wipe all local browser storage immediately.</div></details>
-          <div class="twin-btn-row twin-btn-mt">
-            <button class="btn primary sm" id="export">Export JSON backup</button>
-            <label class="btn sm twin-file-label">Import backup <input type="file" id="import-file" accept=".json,application/json" class="twin-file-input"></label>
-            <button class="btn sm" id="wipe">Delete everything stored here</button>
+          <div class="twin-btn-row">
+            <button class="btn primary sm" id="export">Export JSON</button>
+            <label class="btn sm twin-file-label">Import <input type="file" id="import-file" accept=".json,application/json" class="twin-file-input"></label>
+            <button class="btn sm" id="wipe">Wipe local state</button>
           </div>
           <p class="muted twin-btn-mt" id="data-status"></p>
         </div>
+        <details class="portal-drawer"><summary>Details &#9662;</summary>
+          <div class="muted flush">Every state change, capability grant, and action decision on this device is recorded in this local audit log and never transmitted externally. Download a portable JSON backup or wipe browser storage immediately.</div>
+        </details>
       </section>
     </div>
   </div>
@@ -1000,8 +1026,8 @@
 
 <footer class="site wrap">
   <span>The open network workbench of the <a href="https://collectiveintelligencenetwork.org">Collective Intelligence Network</a>.</span>
-  <span>Everything you enter in <strong>Your Twin</strong> stays strictly in your browser&rsquo;s local storage (`0 bytes` network egress).</span>
+  <span>Everything in <strong>Your Twin</strong> stays strictly in your browser (`0 bytes` egress).</span>
 </footer>
-<script type="module" src="/assets/twin.js?v=12"></script>
+<script type="module" src="/assets/twin.js?v=17"></script>
 </body>
 </html>

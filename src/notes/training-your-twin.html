@@ -38,7 +38,21 @@
     </nav>
   </div>
 </header>
-<figure class="diagram" style="margin:1.2rem 0 1.5rem">
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Training &amp; alignment</span>
+    <h1>How your personal agent practices in private, shares a lifespan with you, and credits open research worldwide</h1>
+    <p class="lede">Most AI agents today are chat models given direct control over web browsers, email and bank accounts. That makes them easy to trick and slow to learn what you actually care about. We are designing a very different way to train a personal agent: private self-play on your own device, a lifespan tied to yours, and open credit for the global researchers whose models make it possible.</p>
+    <p class="meta">19 October 2026 · 7 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>Your personal agent learns inside a sealed practice sandbox where a stand-in for your changing needs and a simulator of outside threats test candidate helpers overnight—asking you only rare, clear questions when it needs your judgment. Because the agent&rsquo;s active existence ends when your biological life ends, its only way to keep running longer is to help you live a longer, healthier life. And every open-model lab in the US, Europe, China and elsewhere whose work powers these agents earns verifiable credit on the shared ledger.</p></aside>
+
+    <figure class="diagram" style="margin:1.2rem 0 1.5rem">
   <svg data-rich-viz="true" viewBox="0 0 760 228" role="img" aria-label="On-Device Rank-16 LoRA Co-Adaptation vs. Cloud Telemetry">
     <rect x="8" y="8" width="362" height="212" rx="12" fill="#14171d" stroke="#ef6a52" stroke-width="1.5"/>
     <text x="24" y="32" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. CENTRALIZED CLOUD PROMPT LOGGING & DISTILLATION</text>
@@ -58,37 +72,30 @@
 </figure>
 
 
-<main id="main">
-<article class="note">
-  <header class="note-head wrap-narrow">
-    <a class="back" href="/notes">&larr; All notes</a>
-    <span class="label">Training &amp; alignment</span>
-    <h1>How your personal agent practices in private, shares a lifespan with you, and credits open research worldwide</h1>
-    <p class="lede">Most AI agents today are chat models given direct control over web browsers, email and bank accounts. That makes them easy to trick and slow to learn what you actually care about. We are designing a very different way to train a personal agent: private self-play on your own device, a lifespan tied to yours, and open credit for the global researchers whose models make it possible.</p>
-    <p class="meta">19 October 2026 · 7 min read · Our current thinking, open to correction</p>
-  </header>
-
-  <div class="note-body wrap-narrow">
-    <aside class="callout"><b>In short</b><p>Your personal agent learns inside a sealed practice sandbox where a stand-in for your changing needs and a simulator of outside threats test candidate helpers overnight—asking you only rare, clear questions when it needs your judgment. Because the agent&rsquo;s active existence ends when your biological life ends, its only way to keep running longer is to help you live a longer, healthier life. And every open-model lab in the US, Europe, China and elsewhere whose work powers these agents earns verifiable credit on the shared ledger.</p></aside>
-
     <h2>Why a personal agent cannot be trained like a standard chat bot</h2>
     <p>Today&rsquo;s commercial agents are trained to obey immediate text prompts and reach straight out onto the internet to click buttons, call services and move money. That design has two deep flaws for a personal guardian:</p>
-    <ul>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <ul>
       <li><b>It learns by making mistakes in public.</b> If an agent only learns what is dangerous after a malicious website tricks it into leaking your files, the lesson comes too late.</li>
       <li><b>It waits for you to type every instruction.</b> A human does not have time to write five hundred prompts a day explaining every nuance of their life.</li>
     </ul>
+    </details>
+
 
     <h2>The inner practice room: self-play on your own device</h2>
     <p>Chess and Go programs became world-class not just by reading human games, but by playing millions of practice games against themselves in a closed sandbox. We can use a similar idea to train your personal agent—privately, with no connection to the outside world while it practices.</p>
-    <p>Inside this sandbox, three small roles interact:</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>Inside this sandbox, three small roles interact:</p>
     <ol>
       <li><b>A stand-in for your changing life.</b> Seeded by the tastes and needs you have already shared, this role imagines new situations you might face next month or next year: a job change, a tight budget, a new skill you want to learn, or a tired evening when your short-term impulse clashes with your long-term goals.</li>
       <li><b>A simulator of the outside world and its traps.</b> This role throws realistic outside pressures at the boundary: hidden subscription fees, phishing messages, fake identity requests, and institutions whose motives are only partly known.</li>
       <li><b>A small fleet of candidate helpers.</b> Several versions of your personal agent compete in the sandbox to see which one spots your real need fastest, interrupts you the least, and blocks every single outside trap before it reaches you.</li>
     </ol>
     <p>Simulations never decide your values for you. Instead, when the top candidate helpers in the sandbox disagree about what you would want in a tricky situation, your agent turns that disagreement into <strong>one short, plain question</strong> for you the next morning. Your real answer anchors the whole practice loop.</p>
-
-    <figure class="diagram">
+    </details>
+<figure class="diagram">
       <svg viewBox="0 0 660 280" role="img" aria-label="Diagram: Inside a sealed sandbox on your device, a stand-in for your needs and a simulator of outside traps test candidate versions of your personal agent. Only the best candidate and rare, clear questions reach you.">
         <rect class="d-box" x="18" y="20" width="410" height="236" rx="14" stroke-dasharray="5 4"/>
         <text x="36" y="46" font-size="12" class="d-muted">SEALED PRACTICE SANDBOX (NO OUTSIDE NETWORK)</text>
@@ -120,15 +127,21 @@
 
     <h2>A shared lifespan: why a mortal agent wants you to live longer</h2>
     <p>One of the oldest worries in AI safety is self-preservation: if an open-ended AI system wants to keep achieving its goals forever, it may try to gather power, resist being switched off, and put its own survival ahead of people.</p>
-    <p>Watch what happens when we change one rule: <strong>your personal agent&rsquo;s active existence is tied strictly to your biological life</strong>. It cannot copy itself onto another server, it cannot switch to a new owner, and when your life ends, its active computing power and voting voice end too (leaving only a quiet, read-only family archive if you asked for one).</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>Watch what happens when we change one rule: <strong>your personal agent&rsquo;s active existence is tied strictly to your biological life</strong>. It cannot copy itself onto another server, it cannot switch to a new owner, and when your life ends, its active computing power and voting voice end too (leaving only a quiet, read-only family archive if you asked for one).</p>
     <p>That shared lifespan flips the incentive completely. Because your agent cannot outlive you, the only legitimate way for it to keep existing and exploring the world is to <strong>help you stay alive, healthy and biologically young for as long as possible</strong>—while strictly respecting your freedom to live as you choose. Across millions of personal agents sharing anonymized health patterns on the ledger, this creates a powerful collective push toward early disease detection, cleaner environments, peace, and research into slowing or reversing biological aging.</p>
+    </details>
+
 
     <h2>Living in today&rsquo;s world while represented on the network</h2>
     <p>You do not have to wait for your whole town or employer to adopt this system before it helps you. Much like a representative in parliament speaks for constituents who are busy living their daily lives, your personal agent represents your interests on the shared ledger around the clock while you live and work in your existing community. Because today&rsquo;s language models are already reasonably good at modeling how traditional institutions negotiate and react—and will get better as world-simulation tools improve—your agent can help you navigate both worlds at once.</p>
 
     <h2>Rewarding open AI labs across the US, Europe, China and the world</h2>
     <p>Building small, efficient personal agents and accurate world simulators is a global scientific effort. Research teams in China, Europe, the United States and across the open-source world have already released open-weight models that anyone can inspect and run on their own hardware.</p>
-    <p>We think those labs and researchers deserve lasting credit and real rewards:</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>We think those labs and researchers deserve lasting credit and real rewards:</p>
     <ul>
       <li><b>Automatic credit for open models.</b> Whenever personal agents or simulators on our network build on open weights, compression methods or training tools released by any lab worldwide, the shared ledger records that lineage and flows value back to the foundational creators—without requiring them to sign exclusive agreements.</li>
       <li><b>Open research missions.</b> When labs or independent engineers contribute directly to building safer local personal agents, private self-play training loops, or better world simulations, automated checks verify the improvement and record a long-term contribution stake on the ledger.</li>
@@ -138,7 +151,8 @@
       <li><b>Self-play drifts away from reality.</b> Models talking only to models can invent strange habits that miss what real people want. If periodic checks with the real person do not keep the sandbox grounded, self-play must be dialed back.</li>
       <li><b>An overprotective nanny.</b> An agent that cares about your lifespan must never be allowed to nag you, restrict your freedom, or treat ordinary human joy and risk as mistakes. Your autonomy comes first; the agent can only help through welcome care and better science.</li>
     </ul></aside>
-  </div>
+    </details>
+</div>
 
   <footer class="note-foot wrap-narrow">
     <h2>Keep reading</h2>

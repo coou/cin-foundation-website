@@ -14,20 +14,20 @@
 <meta property="og:image" content="/assets/images/og-image.svg">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-<link rel="stylesheet" href="/styles/site.css?v=53">
-<script src="/scripts/vendor/d3.v7.min.js" defer></script>
-<script src="/scripts/world-standing-d3.js" defer></script>
+<link rel="stylesheet" href="/styles/site.css?v=54">
+<script src="/scripts/vendor/d3.v7.min.js?v=54" defer></script>
+<script src="/scripts/world-standing-d3.js?v=54" defer></script>
 <style>
   .ws-d3-card {
-    margin: 1.5rem 0 2.6rem;
-    padding: clamp(1rem, 2.5vw, 1.5rem);
+    margin: 1.5rem 0 2.4rem;
+    padding: clamp(1rem, 2.5vw, 1.45rem);
     background: var(--card);
     border: 1.5px solid var(--rule);
     border-top: 4px solid var(--ok);
     border-radius: 18px;
     box-shadow: 0 24px 48px -32px rgba(0,0,0,.35);
     display: grid;
-    gap: 1rem;
+    gap: .95rem;
   }
   .ws-d3-top {
     display: flex;
@@ -35,7 +35,7 @@
     justify-content: space-between;
     align-items: center;
     gap: .75rem;
-    padding-bottom: .75rem;
+    padding-bottom: .7rem;
     border-bottom: 1px solid var(--rule);
   }
   .ws-filter-pills {
@@ -72,8 +72,12 @@
     border: 1px solid var(--rule);
     border-radius: 12px;
   }
+  .ws-controls-bar.dual-sliders {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
   @media (max-width: 720px) {
-    .ws-controls-bar { grid-template-columns: 1fr; }
+    .ws-controls-bar,
+    .ws-controls-bar.dual-sliders { grid-template-columns: 1fr; }
   }
   .ws-toggle-btn {
     font: 700 .76rem/1.2 var(--mono);
@@ -138,32 +142,32 @@
     color: var(--ink-2);
   }
   .ws-lens-sec {
-    padding: 2rem 0 1.2rem;
+    padding: 1.85rem 0 1.1rem;
     border-top: 1px solid var(--rule);
   }
   .ws-lead-sentence {
-    font-size: 1.02rem;
-    line-height: 1.52;
+    font-size: 1.01rem;
+    line-height: 1.5;
     color: var(--ink-2);
-    margin: .4rem 0 .9rem;
+    margin: .35rem 0 .85rem;
   }
   .ws-metric-badges {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: .65rem;
-    margin-bottom: 1rem;
+    margin-bottom: .9rem;
   }
   @media (max-width: 680px) {
     .ws-metric-badges { grid-template-columns: 1fr; }
   }
   .ws-mbadge {
-    padding: .65rem .85rem;
+    padding: .6rem .8rem;
     background: var(--card);
     border: 1px solid var(--rule);
     border-left: 3.5px solid var(--ok);
     border-radius: 10px;
     display: grid;
-    gap: .15rem;
+    gap: .14rem;
   }
   .ws-mbadge.bad { border-left-color: var(--accent); }
   .ws-mbadge.warn { border-left-color: var(--gold); }
@@ -177,23 +181,23 @@
   .ws-mbadge.warn small { color: var(--gold); }
   .ws-mbadge.ok small { color: var(--ok); }
   .ws-mbadge b {
-    font: 700 .95rem/1.2 var(--serif);
+    font: 700 .94rem/1.2 var(--serif);
     color: var(--ink);
   }
   .ws-mbadge span {
-    font-size: .75rem;
+    font-size: .74rem;
     color: var(--ink-2);
   }
   details.scen-drawer {
-    margin-top: .85rem;
+    margin-top: .75rem;
     background: var(--card);
     border: 1px solid var(--rule);
     border-radius: 12px;
-    padding: .65rem .95rem;
+    padding: .6rem .9rem;
   }
   details.scen-drawer > summary {
     cursor: pointer;
-    font: 600 .8rem/1.3 var(--mono);
+    font: 600 .78rem/1.3 var(--mono);
     color: var(--ok);
     list-style: none;
     display: flex;
@@ -202,8 +206,8 @@
   }
   details.scen-drawer > summary::-webkit-details-marker { display: none; }
   details.scen-drawer[open] > summary {
-    padding-bottom: .65rem;
-    margin-bottom: .75rem;
+    padding-bottom: .6rem;
+    margin-bottom: .7rem;
     border-bottom: 1px dashed var(--rule);
   }
   .scen-drawer table {
@@ -252,112 +256,177 @@
 <article class="note">
   <div class="wrap-narrow">
     <header class="note-head">
-      <a class="back" href="/notes">&larr; All blueprints &amp; simulators</a>
-      <span class="label">Flagship D3.js v7 Visual Observatory · 7 Global Lenses &amp; 18 Actors</span>
+      <a class="back" href="/notes">&larr; All blueprints</a>
+      <span class="label">D3.js v7 Visual Observatory &middot; 7 Lenses &amp; 18 Actors</span>
       <h1>Where the World Stands vs. CIN Co-Intelligence: The Last Resort Before a Hard Pause</h1>
-      <p class="lede">Human biology processes conscious thought at <b>~40 bits/s</b> while frontier AI task horizons double every <b>4.5 months</b> (<a href="https://metr.org" target="_blank" rel="noopener">METR, 2026</a>). Explore the interactive D3.js observatory and seven visual lenses below to inspect why <b>Two-Internet Isolation</b>, <b>Capability-Bounded Execution Leases</b> (<a href="https://arxiv.org/abs/2311.09589" target="_blank" rel="noopener">Hinton, 2022; Ororbia &amp; Friston, 2023</a>), and <b>1-to-1 Pair Intelligence</b> form humanity&rsquo;s last viable co-existence architecture.</p>
+      <p class="lede">Human biology processes conscious thought at <b>~40 bits/s</b> while frontier AI task horizons double every <b>4.5 months</b> (<a href="https://metr.org" target="_blank" rel="noopener">METR, 2026</a>). Explore the two interactive D3.js v7 studios and seven lenses below to inspect why <b>Two-Internet Isolation</b>, <b>Capability-Bounded Execution Leases</b> (<a href="https://arxiv.org/abs/2311.09589" target="_blank" rel="noopener">Hinton, 2022; Ororbia &amp; Friston, 2023</a>), and <b>1-to-1 Pair Intelligence</b> form humanity&rsquo;s last viable co-existence architecture.</p>
     </header>
 
     <div class="note-body">
 
-      <!-- ================= HERO INTERACTIVE D3.JS V7 2D ECOSYSTEM OBSERVATORY ================= -->
+      <!-- ================= STUDIO 1: HERO INTERACTIVE D3.JS V7 2D ECOSYSTEM OBSERVATORY ================= -->
       <section id="ws-ecosystem-d3-card" class="ws-d3-card" aria-label="Interactive D3.js 7-Lens Global AI Ecosystem Observatory">
         <div class="ws-d3-top">
           <div>
-            <span class="label">Interactive D3.js v7 2D Quadrant &amp; Trajectory Map</span>
-            <h2 style="font-size:1.35rem;margin-top:.25rem">18 Global Actors Across Deployment Posture vs. Human Biological &amp; Economic Sovereignty</h2>
+            <span class="label">Studio 1 &middot; Interactive D3.js v7 2D Quadrant Map</span>
+            <h2 style="font-size:1.28rem;margin-top:.2rem">18 Global Actors Across Deployment Posture vs. Human Sovereignty</h2>
           </div>
-          <span style="font:700 .7rem/1 var(--mono);color:var(--ok)">CLICK ANY BUBBLE OR LENS FILTER</span>
+          <span style="font:700 .68rem/1 var(--mono);color:var(--ok)">CLICK BUBBLE OR LENS</span>
         </div>
 
         <div class="ws-filter-pills" role="toolbar" aria-label="Filter actors by global comparison lens">
-          <button type="button" data-ws-filter="all" aria-pressed="true">All 18 Actors</button>
-          <button type="button" data-ws-filter="sota-labs" aria-pressed="false">1. SOTA AI Labs</button>
-          <button type="button" data-ws-filter="safety-labs" aria-pressed="false">2. AI Safety &amp; Pause Gradient</button>
-          <button type="button" data-ws-filter="governments" aria-pressed="false">3. Governments</button>
+          <button type="button" data-ws-filter="all" aria-pressed="true">All 18</button>
+          <button type="button" data-ws-filter="sota-labs" aria-pressed="false">1. SOTA Labs</button>
+          <button type="button" data-ws-filter="safety-labs" aria-pressed="false">2. Safety</button>
+          <button type="button" data-ws-filter="governments" aria-pressed="false">3. Gov</button>
           <button type="button" data-ws-filter="universities" aria-pressed="false">4. Universities</button>
           <button type="button" data-ws-filter="enterprise" aria-pressed="false">5. Enterprise</button>
-          <button type="button" data-ws-filter="human-adoption" aria-pressed="false">6. Global Workforce</button>
-          <button type="button" data-ws-filter="pair-intelligence" aria-pressed="false">7. Pair vs. Cloud Economics</button>
+          <button type="button" data-ws-filter="human-adoption" aria-pressed="false">6. Workforce</button>
+          <button type="button" data-ws-filter="pair-intelligence" aria-pressed="false">7. Pair Moat</button>
         </div>
 
         <div class="ws-controls-bar">
           <div>
-            <label for="ws-year-slider" style="display:flex;justify-content:space-between;font:600 .8rem var(--sans)">
-              <span>Year Horizon (2026 &rarr; 2032 Forecast)</span>
+            <label for="ws-year-slider" style="display:flex;justify-content:space-between;font:600 .78rem var(--sans)">
+              <span>Year Horizon (2026 &rarr; 2032)</span>
               <b id="ws-year-val" style="font-family:var(--mono);color:var(--ok)">2028</b>
             </label>
-            <input type="range" id="ws-year-slider" min="2026" max="2032" step="1" value="2028" style="width:100%;margin-top:.3rem;accent-color:var(--ok);cursor:pointer">
+            <input type="range" id="ws-year-slider" min="2026" max="2032" step="1" value="2028" style="width:100%;margin-top:.28rem;accent-color:var(--ok);cursor:pointer">
           </div>
           <button type="button" id="ws-cin-toggle" class="ws-toggle-btn" aria-pressed="false">
-            Toggle CIN Co-Intelligence Architecture: OFF (Status Quo)
+            Toggle CIN Architecture: OFF
           </button>
         </div>
 
         <div style="overflow-x:auto">
-          <svg id="ws-ecosystem-svg" data-rich-viz="true" viewBox="0 0 860 420" role="img" aria-label="Interactive D3.js 2D Ecosystem Map comparing 18 global AI actors across Deployment Posture and Human Biological &amp; Economic Sovereignty">
+          <svg id="ws-ecosystem-svg" data-rich-viz="true" viewBox="0 0 860 420" role="img" aria-label="Interactive D3.js 2D Ecosystem Map comparing 18 global AI actors">
             <rect x="4" y="4" width="852" height="412" rx="14" fill="#12151c" stroke="#2a2f3a" stroke-width="1.5"/>
-            <text x="430" y="210" text-anchor="middle" font-family="monospace" font-size="12" fill="#4fb3a8">Initializing D3.js v7 18-Actor Global Co-Intelligence Observatory...</text>
+            <text x="430" y="210" text-anchor="middle" font-family="monospace" font-size="12" fill="#4fb3a8">D3.js v7 18-Actor Observatory</text>
           </svg>
         </div>
 
         <div class="ws-inspector" aria-live="polite">
           <div class="ws-insp-head">
             <div>
-              <span id="ws-insp-lens" style="font:700 .68rem/1 var(--mono);color:var(--ok);text-transform:uppercase">2. AI Safety &amp; Pause Gradient</span>
-              <h3 id="ws-insp-title" style="font-size:1.08rem;margin:.15rem 0 0">CIN Co-Intelligence Airlock (Zone 4)</h3>
+              <span id="ws-insp-lens" style="font:700 .66rem/1 var(--mono);color:var(--ok);text-transform:uppercase">2. AI Safety</span>
+              <h3 id="ws-insp-title" style="font-size:1.04rem;margin:.15rem 0 0">CIN Co-Intelligence Airlock (Zone 4)</h3>
             </div>
-            <a id="ws-insp-link" href="#safety-labs" style="font:600 .76rem var(--mono);color:var(--ok)">Jump to 2. AI Safety &amp; Pause Gradient section &darr;</a>
+            <a id="ws-insp-link" href="#lens-2-safety-pause" style="font:600 .74rem var(--mono);color:var(--ok)">Jump &darr;</a>
           </div>
           <div class="ws-insp-grid">
             <div class="ws-insp-pill">
-              <small>Current Posture &amp; Incentive</small>
-              <p id="ws-insp-posture">Structural last resort before a global moratorium: Two-Internet airlock, 1-to-1 human hardware bond, and mortal execution leases.</p>
+              <small>Posture</small>
+              <p id="ws-insp-posture">Two-Internet airlock, 1-to-1 hardware bond, and 24h mortal leases.</p>
             </div>
             <div class="ws-insp-pill risk">
-              <small>2030 Risk / Vulnerability</small>
-              <p id="ws-insp-risk">Requires rapid voluntary adoption across clinics, universities, and co-ops before autonomous swarm externalities force a treaty freeze.</p>
+              <small>2030 Risk</small>
+              <p id="ws-insp-risk">Requires voluntary adoption before swarm externalities force a treaty freeze.</p>
             </div>
             <div class="ws-insp-pill cin">
-              <small>With CIN Co-Intelligence</small>
-              <p id="ws-insp-cin">Preserves frontier scientific progress while guaranteeing human biological sovereignty and 95% Data Shapley contributor royalties.</p>
+              <small>With CIN</small>
+              <p id="ws-insp-cin">Guarantees biological sovereignty and 95% Data Shapley contributor royalties.</p>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- ================= STUDIO 2: INTERACTIVE D3.JS V7 CO-INTELLIGENCE VS. EXTRACTION LAB ================= -->
+      <section id="ws-deep-sim-card" class="ws-d3-card" aria-label="Interactive D3.js v7 Co-Intelligence vs. Extraction Lab">
+        <div class="ws-d3-top">
+          <div>
+            <span class="label">Studio 2 &middot; 3-Mode D3.js v7 Stress-Tester</span>
+            <h2 style="font-size:1.25rem;margin-top:.2rem">Interactive D3.js v7 Co-Intelligence vs. Extraction Lab: Value Flow, Biological Bandwidth &amp; Pair Moat</h2>
+          </div>
+          <span id="ws-deep-sim-badge" style="font:700 .68rem/1 var(--mono);color:var(--ok)">95% CREATOR RETURN &middot; 96% MOAT</span>
+        </div>
+
+        <div class="ws-filter-pills" role="toolbar" aria-label="Select D3 simulation mode">
+          <button type="button" data-ws-sim-mode="flow" aria-pressed="true">Mode 1: $100 Value Flow</button>
+          <button type="button" data-ws-sim-mode="bandwidth" aria-pressed="false">Mode 2: Bandwidth Clock &amp; 5 Zones</button>
+          <button type="button" data-ws-sim-mode="moat" aria-pressed="false">Mode 3: 10-Yr Pair Moat</button>
+        </div>
+
+        <div class="ws-controls-bar dual-sliders">
+          <div>
+            <label for="ws-sim-slider-1" style="display:flex;justify-content:space-between;font:600 .78rem var(--sans)">
+              <span id="ws-sim-s1-label" data-moat-label="Open-Weight Distillation Speed (15 &rarr; 180 Days)">AI Automation Share of Economy (10% &rarr; 90%)</span>
+              <b id="ws-sim-s1-val" style="font-family:var(--mono);color:var(--ok)">55%</b>
+            </label>
+            <input type="range" id="ws-sim-slider-1" min="10" max="90" step="5" value="55" style="width:100%;margin-top:.28rem;accent-color:var(--ok);cursor:pointer">
+          </div>
+          <div>
+            <label for="ws-sim-slider-2" style="display:flex;justify-content:space-between;font:600 .78rem var(--sans)">
+              <span id="ws-sim-s2-label">Demurrage &amp; Shapley Royalty Rate</span>
+              <b id="ws-sim-s2-val" style="font-family:var(--mono);color:var(--ok)">95% &middot; 2%/mo</b>
+            </label>
+            <input type="range" id="ws-sim-slider-2" min="60" max="95" step="5" value="95" style="width:100%;margin-top:.28rem;accent-color:var(--ok);cursor:pointer">
+          </div>
+        </div>
+
+        <div style="overflow-x:auto">
+          <svg id="ws-deep-sim-svg" data-rich-viz="true" viewBox="0 0 860 360" role="img" aria-label="Interactive D3.js v7 Co-Intelligence vs Extraction Lab">
+            <rect x="4" y="4" width="852" height="352" rx="14" fill="#12151c" stroke="#2a2f3a" stroke-width="1.5"/>
+            <text x="430" y="180" text-anchor="middle" font-family="monospace" font-size="12" fill="#4fb3a8">D3.js v7 Co-Intelligence Lab</text>
+          </svg>
+        </div>
+      </section>
+
       <!-- ================= LENS 1: SOTA MODEL AI LABS ================= -->
-      <section id="sota-labs" class="ws-lens-sec">
-        <span class="label">Lens 1 of 7 · SOTA Model AI Labs</span>
-        <h2>1. SOTA AI Labs: Shareholder Cloud Rent vs. Cooperative Data Shapley Royalties</h2>
-        <p class="ws-lead-sentence">Frontier AI labs extract shareholder rent from uncompensated human craft, whereas CIN routes 95% of task value to verified contributors.</p>
+      <section id="lens-1-sota-labs" class="ws-lens-sec">
+        <span id="sota-labs" class="label">Lens 1 &middot; SOTA AI Labs</span>
+        <h2>1. SOTA AI Labs: Cloud Rent vs. 95% Data Shapley Royalties</h2>
+        <p class="ws-lead-sentence">Frontier AI labs extract shareholder rent from uncompensated human craft, while CIN routes 95% of value to verified contributors.</p>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad">
-            <small>Cloud Lab Royalty to Creators</small>
-            <b>$0 (0% Scraped Free)</b>
-            <span>72% to cloud/GPU equity + 28% API rent</span>
+            <small>Cloud Lab Royalty</small>
+            <b>$0 (0% Scraped)</b>
+            <span>$72 equity + $28 API markup</span>
           </div>
           <div class="ws-mbadge ok">
-            <small>CIN Cooperative Settlement</small>
-            <b>95% Data Shapley Royalty</b>
-            <span>85% direct human solver + 10% lineage</span>
+            <small>CIN Settlement</small>
+            <b>95% Data Shapley</b>
+            <span>$85 solver + $10 lineage</span>
           </div>
           <div class="ws-mbadge warn">
-            <small>Philanthropic Floor</small>
-            <b>5% Civic Commons Pool</b>
-            <span>Funds rural hardware &amp; open verification</span>
+            <small>Civic Floor</small>
+            <b>$5 Floor ($25k/yr)</b>
+            <span>Funded via 2%/mo demurrage</span>
           </div>
         </div>
 
         <figure class="diagram">
-          <svg data-rich-viz="true" viewBox="0 0 760 340" role="img" aria-label="2D Quadrant and $100 Value-Flow Sankey comparing SOTA AI Labs profit extraction against CIN cooperative Data Shapley royalties"><rect x="12" y="12" width="360" height="202" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="34" font-size="10.5" font-weight="700" font-family="monospace" fill="#e9e6de">1. INCENTIVE QUADRANT: RENT VS. CO-INTELLIGENCE</text><line x1="192" y1="46" x2="192" y2="200" stroke="#3a3f4b" stroke-width="1.4" stroke-dasharray="4 3"/><line x1="26" y1="124" x2="358" y2="124" stroke="#3a3f4b" stroke-width="1.4" stroke-dasharray="4 3"/><text x="198" y="58" font-size="9.5" font-family="monospace" fill="#4fb3a8">&uarr; HUMAN-ISOLATED AIRLOCK</text><text x="30" y="116" font-size="9.5" font-family="monospace" fill="#ef6a52">&larr; SHAREHOLDER RENT</text><rect x="24" y="138" width="156" height="48" rx="8" fill="rgba(239,106,82,0.15)" stroke="#ef6a52" stroke-width="1.6"/><text x="102" y="158" text-anchor="middle" font-size="10" font-weight="700" fill="#ef6a52">SOTA Cloud Labs</text><text x="102" y="176" text-anchor="middle" font-size="9.5" fill="#e9e6de">OpenAI · Anthropic · Google</text><rect x="200" y="146" width="158" height="36" rx="7" fill="rgba(229,169,60,0.13)" stroke="#e5a93c" stroke-width="1.4"/><text x="279" y="168" text-anchor="middle" font-size="9.5" font-weight="700" fill="#e5a93c">Open Weights ($0 Royalty)</text><rect x="200" y="66" width="158" height="48" rx="8" fill="rgba(79,179,168,0.2)" stroke="#4fb3a8" stroke-width="2"/><text x="279" y="86" text-anchor="middle" font-size="10" font-weight="700" fill="#4fb3a8">CIN Co-Intelligence</text><text x="279" y="104" text-anchor="middle" font-size="9.5" fill="#e9e6de">Local LoRA + 95% Shapley</text><path d="M180,152 Q192,120 200,94" fill="none" stroke="#4fb3a8" stroke-width="2.2" stroke-dasharray="4 3"/><rect x="384" y="12" width="364" height="202" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="398" y="34" font-size="10.5" font-weight="700" font-family="monospace" fill="#e9e6de">2. REWARD SYSTEM: PROFIT VS. COOPERATION</text><rect x="398" y="48" width="162" height="152" rx="9" fill="rgba(239,106,82,0.09)" stroke="#ef6a52" stroke-width="1.4"/><text x="410" y="72" font-size="10" font-weight="700" fill="#ef6a52">SOTA AI Conglomerates</text><text x="410" y="98" font-size="9.5" fill="#e9e6de">• Scrape public craft ($0)</text><text x="410" y="122" font-size="9.5" fill="#e9e6de">• 15%–40% API token rent</text><text x="410" y="146" font-size="9.5" fill="#e9e6de">• Displaces human labor</text><text x="410" y="178" font-size="9.5" font-weight="700" fill="#ef6a52">Goal: Equity Valuation</text><rect x="572" y="48" width="162" height="152" rx="9" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.6"/><text x="584" y="72" font-size="10" font-weight="700" fill="#4fb3a8">CIN Cooperative Ledger</text><text x="584" y="98" font-size="9.5" fill="#e9e6de">&#10003; Private on-device LoRA</text><text x="584" y="122" font-size="9.5" fill="#e9e6de">&#10003; Proof-Carrying Code</text><text x="584" y="146" font-size="9.5" fill="#e9e6de">&#10003; 95% Shapley royalties</text><text x="584" y="178" font-size="9.5" font-weight="700" fill="#e5a93c">Goal: Human Cooperation</text><rect x="12" y="224" width="736" height="104" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="246" font-size="10.5" font-weight="700" font-family="monospace" fill="#e5a93c">3. WHERE EVERY $100 OF AI-GENERATED VALUE FLOWS</text><text x="26" y="274" font-size="10" font-weight="700" fill="#ef6a52">SOTA Cloud AI</text><rect x="132" y="258" width="428" height="22" rx="4" fill="#ef6a52"/><text x="346" y="273" text-anchor="middle" font-size="9.5" font-weight="700" fill="#111317">$72 Cloud Lab &amp; GPU Shareholders</text><rect x="562" y="258" width="170" height="22" rx="4" fill="#b84a39"/><text x="647" y="273" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">$28 Rent · $0 Creator</text><text x="26" y="306" font-size="10" font-weight="700" fill="#4fb3a8">CIN Ledger</text><rect x="132" y="290" width="500" height="22" rx="4" fill="#4fb3a8"/><text x="382" y="305" text-anchor="middle" font-size="9.5" font-weight="700" fill="#111317">$85 Direct Human Solver + $10 Lineage (95% Data Shapley)</text><rect x="634" y="290" width="98" height="22" rx="4" fill="#e5a93c"/><text x="683" y="305" text-anchor="middle" font-size="9.5" font-weight="700" fill="#111317">$5 Commons</text></svg>
-          <figcaption>Figure 1 (Lens 1): SOTA Model AI Labs Shareholder Profit Loop vs. CIN Cooperative Proof-Carrying Code (<a href="https://dl.acm.org/doi/10.1145/263699.263712" target="_blank" rel="noopener">Necula, 1997</a>) &amp; Data Shapley Royalty Distribution ($85 Direct / $10 Lineage / $5 Philanthropic Commons; <a href="https://arxiv.org/abs/1904.02868" target="_blank" rel="noopener">Ghorbani &amp; Zou, 2019</a>).</figcaption>
+          <svg data-rich-viz="true" viewBox="0 0 760 320" role="img" aria-label="Dual panel comparing SOTA AI Labs rent extraction against CIN 95 percent Data Shapley royalties">
+            <rect x="12" y="12" width="360" height="190" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="26" y="36" font-size="10" font-weight="700" font-family="monospace" fill="#e9e6de">1. INCENTIVE QUADRANT</text>
+            <line x1="192" y1="48" x2="192" y2="190" stroke="#3a3f4b" stroke-width="1.4" stroke-dasharray="4 3"/>
+            <line x1="26" y1="118" x2="358" y2="118" stroke="#3a3f4b" stroke-width="1.4" stroke-dasharray="4 3"/>
+            <rect x="28" y="132" width="150" height="44" rx="8" fill="rgba(239,106,82,0.15)" stroke="#ef6a52" stroke-width="1.5"/>
+            <text x="103" y="158" text-anchor="middle" font-size="10" font-weight="700" fill="#ef6a52">SOTA Cloud ($0 Royalty)</text>
+            <rect x="204" y="56" width="150" height="48" rx="8" fill="rgba(79,179,168,0.2)" stroke="#4fb3a8" stroke-width="2"/>
+            <text x="279" y="84" text-anchor="middle" font-size="10" font-weight="700" fill="#4fb3a8">CIN (95% Shapley)</text>
+            <rect x="384" y="12" width="364" height="190" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="398" y="36" font-size="10" font-weight="700" font-family="monospace" fill="#e9e6de">2. PROFIT VS. COOPERATION</text>
+            <rect x="398" y="52" width="160" height="132" rx="9" fill="rgba(239,106,82,0.09)" stroke="#ef6a52" stroke-width="1.4"/>
+            <text x="412" y="82" font-size="10" font-weight="700" fill="#ef6a52">Cloud Oligopoly</text>
+            <text x="412" y="114" font-size="9.5" fill="#e9e6de">$72 GPU Rent + $28 API</text>
+            <text x="412" y="156" font-size="9.5" font-weight="700" fill="#ef6a52">$0 Creator Return</text>
+            <rect x="572" y="52" width="162" height="132" rx="9" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.6"/>
+            <text x="586" y="82" font-size="10" font-weight="700" fill="#4fb3a8">CIN Ledger</text>
+            <text x="586" y="114" font-size="9.5" fill="#e9e6de">Local OCap + LoRA</text>
+            <text x="586" y="156" font-size="9.5" font-weight="700" fill="#e5a93c">95% Creator Return</text>
+            <rect x="12" y="212" width="736" height="96" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="26" y="234" font-size="10" font-weight="700" font-family="monospace" fill="#e5a93c">3. $100 VALUE FLOW</text>
+            <rect x="132" y="246" width="590" height="20" rx="4" fill="#ef6a52"/>
+            <text x="427" y="260" text-anchor="middle" font-size="9.5" font-weight="700" fill="#111317">Cloud: $72 Equity + $28 API Markup ($0 Creator)</text>
+            <rect x="132" y="274" width="590" height="20" rx="4" fill="#4fb3a8"/>
+            <text x="427" y="288" text-anchor="middle" font-size="9.5" font-weight="700" fill="#111317">CIN: $85 Solver + $10 Lineage + $5 Floor</text>
+          </svg>
         </figure>
 
         <details class="scen-drawer">
-          <summary>Inspect full comparison table &amp; primary-source evidence &#9662;</summary>
-          <p><b>Causal Chain:</b> Domain specialists and software creators intend to compound their craft without training their own replacement &rarr; centralized cloud AI labs scrape public repositories for $0 and charge 15%&ndash;40% API rent &rarr; CIN executes Low-Rank Adapters (<a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">Hu et al., 2022</a>) locally inside WebAssembly Object-Capability sandboxes (<a href="https://doi.org/10.1145/365230.365252" target="_blank" rel="noopener">Dennis &amp; Van Horn, 1966</a>) and settles verified tasks via truncated Monte Carlo Data Shapley attribution (<a href="https://arxiv.org/abs/1904.02868" target="_blank" rel="noopener">Ghorbani &amp; Zou, 2019</a>).</p>
+          <summary>Inspect table &amp; sources &#9662;</summary>
+          <p><b>Causal Chain &amp; Citations:</b> Domain specialists intend to compound their craft without training their own replacement &rarr; centralized cloud AI labs scrape public repositories for $0 and charge 15%&ndash;40% API rent &rarr; CIN executes Low-Rank Adapters (<a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">Hu et al., 2022</a>) locally inside WebAssembly Object-Capability sandboxes (<a href="https://doi.org/10.1145/365230.365252" target="_blank" rel="noopener">Dennis &amp; Van Horn, 1966</a>) with Proof-Carrying Code (<a href="https://dl.acm.org/doi/10.1145/263699.263712" target="_blank" rel="noopener">Necula, 1997</a>) and truncated Monte Carlo Data Shapley attribution (<a href="https://arxiv.org/abs/1904.02868" target="_blank" rel="noopener">Ghorbani &amp; Zou, 2019</a>).</p>
           <table>
             <thead>
               <tr><th>Dimension</th><th>SOTA Cloud AI Labs (OpenAI, Anthropic, Google)</th><th>CIN Co-Intelligence Architecture</th></tr>
@@ -372,46 +441,70 @@
       </section>
 
       <!-- ================= LENS 2: AI SAFETY LABS & LAST RESORT BEFORE PAUSE ================= -->
-      <section id="safety-labs" class="ws-lens-sec">
-        <span class="label">Lens 2 of 7 · AI Safety Spectrum &amp; Biological Survival</span>
-        <h2>2. AI Safety Labs &amp; CIN as the Last Resort to Co-Exist Before Hitting the Pause Button</h2>
-        <p class="ws-lead-sentence">Evaluation institutes diagnose model risks without runtime barriers; CIN builds the final protocol airlock before humanity must freeze global compute.</p>
+      <section id="lens-2-safety-pause" class="ws-lens-sec">
+        <span id="safety-labs" class="label"><span id="lens-2-safety-labs"></span>Lens 2 &middot; AI Safety Spectrum</span>
+        <h2>2. AI Safety Spectrum: Last Resort Before a Global Hard Pause</h2>
+        <p class="ws-lead-sentence">Evaluation institutes diagnose model risks without runtime barriers, whereas CIN enforces the final protocol airlock before a global compute freeze.</p>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad">
-            <small>Biological vs. Swarm Speed</small>
-            <b>~40 bits/s vs. 10&sup1;&sup2; bits/s</b>
-            <span>Biology loses any unshielded race</span>
+            <small>Bandwidth Gap</small>
+            <b>~40 vs. 10&sup1;&sup2; bits/s</b>
+            <span>25-yr biology vs. 4.5-mo AI</span>
           </div>
           <div class="ws-mbadge warn">
-            <small>Eval Lab Limitation</small>
-            <b>Diagnostics Without Containment</b>
-            <span>METR &amp; AISI scorecards cannot halt swarms</span>
+            <small>Eval Lab Limit</small>
+            <b>Diagnostics Only</b>
+            <span>No runtime swarm airlock</span>
           </div>
           <div class="ws-mbadge ok">
-            <small>Zone 4 Last-Resort Airlock</small>
-            <b>1-to-1 Mortal Compute Lease</b>
-            <span>Avoids blunt Zone 5 global GPU shutdown</span>
+            <small>Zone 4 Airlock</small>
+            <b>24h Mortal Lease</b>
+            <span>Bridges 10&sup1;&sup0;&times; gap safely</span>
           </div>
         </div>
 
         <figure class="diagram">
-          <svg data-rich-viz="true" viewBox="0 0 760 340" role="img" aria-label="5-Zone Global AI Safety Spectrum and Biological versus Machine Bandwidth Chart"><rect x="12" y="12" width="736" height="172" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="34" font-size="10.5" font-weight="700" font-family="monospace" fill="#e9e6de">1. THE 5-ZONE SAFETY SPECTRUM: LAST RESORT BEFORE A GLOBAL PAUSE</text><rect x="24" y="44" width="134" height="8" rx="4" fill="#ef6a52"/><rect x="160" y="44" width="134" height="8" fill="#e07b42"/><rect x="296" y="44" width="134" height="8" fill="#e5a93c"/><rect x="432" y="44" width="168" height="8" fill="#4fb3a8"/><rect x="602" y="44" width="134" height="8" rx="4" fill="#5da2d5"/><rect x="24" y="58" width="132" height="112" rx="8" fill="rgba(239,106,82,0.09)" stroke="#ef6a52" stroke-width="1.3"/><text x="32" y="78" font-size="9.5" font-weight="700" fill="#ef6a52">1. Raw e/acc</text><text x="32" y="98" font-size="9.5" fill="#e9e6de">• 0 safety barriers</text><text x="32" y="118" font-size="9.5" fill="#e9e6de">• ASI bot swarms</text><text x="32" y="152" font-size="9.5" font-weight="700" fill="#ef6a52">Biology Replaced</text><rect x="160" y="58" width="132" height="112" rx="8" fill="rgba(224,123,66,0.09)" stroke="#e07b42" stroke-width="1.3"/><text x="168" y="78" font-size="9.5" font-weight="700" fill="#e07b42">2. Lab RSPs</text><text x="168" y="98" font-size="9.5" fill="#e9e6de">• OpenAI / Anthropic</text><text x="168" y="118" font-size="9.5" fill="#e9e6de">• Voluntary pledges</text><text x="168" y="152" font-size="9.5" font-weight="700" fill="#e07b42">Self-Policed Race</text><rect x="296" y="58" width="132" height="112" rx="8" fill="rgba(229,169,60,0.09)" stroke="#e5a93c" stroke-width="1.3"/><text x="304" y="78" font-size="9.5" font-weight="700" fill="#e5a93c">3. Eval Institutes</text><text x="304" y="98" font-size="9.5" fill="#e9e6de">• METR · Redwood</text><text x="304" y="118" font-size="9.5" fill="#e9e6de">• Apollo · UK AISI</text><text x="304" y="152" font-size="9.5" font-weight="700" fill="#e5a93c">Vital Diagnostics</text><rect x="432" y="54" width="166" height="120" rx="9" fill="rgba(79,179,168,0.2)" stroke="#4fb3a8" stroke-width="2.4"/><text x="442" y="76" font-size="10" font-weight="700" fill="#4fb3a8">4. CIN · LAST RESORT</text><text x="442" y="96" font-size="9.5" fill="#e9e6de">&#10003; Two-Internet Airlock</text><text x="442" y="116" font-size="9.5" fill="#e9e6de">&#10003; 1-to-1 Human Bond</text><text x="442" y="136" font-size="9.5" fill="#e9e6de">&#10003; Mortal Compute Lease</text><text x="442" y="158" font-size="9.5" font-weight="700" fill="#e5a93c">Co-Existence Barrier</text><rect x="602" y="58" width="134" height="112" rx="8" fill="rgba(93,162,213,0.09)" stroke="#5da2d5" stroke-width="1.3"/><text x="610" y="78" font-size="9.5" font-weight="700" fill="#5da2d5">5. Hard Pause</text><text x="610" y="98" font-size="9.5" fill="#e9e6de">• Global GPU freeze</text><text x="610" y="118" font-size="9.5" fill="#e9e6de">• Treaty shutdowns</text><text x="610" y="152" font-size="9.5" font-weight="700" fill="#5da2d5">If Zone 4 Fails</text><rect x="12" y="194" width="736" height="134" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="216" font-size="10.5" font-weight="700" font-family="monospace" fill="#e5a93c">2. BIOLOGICAL LIMITS (~40 BITS/S) VS. MACHINE SWARMS (10&sup1;&sup2; BITS/S)</text><rect x="26" y="230" width="90" height="22" rx="4" fill="#8c8f96"/><text x="126" y="245" font-size="9.5" font-family="monospace" fill="#e9e6de">Human Biology (~40 bits/s · 10,000-yr evolutionary cycle)</text><rect x="26" y="262" width="706" height="22" rx="4" fill="rgba(239,106,82,0.26)" stroke="#ef6a52" stroke-width="1.3"/><text x="38" y="277" font-size="9.5" font-weight="700" font-family="monospace" fill="#ef6a52">Competitive Unbound ASI Swarm (10&sup1;&sup2; bits/s · 4.5-mo doubling) &rarr; Biology Loses</text><rect x="26" y="294" width="706" height="22" rx="4" fill="rgba(79,179,168,0.24)" stroke="#4fb3a8" stroke-width="1.6"/><text x="38" y="309" font-size="9.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN 1-to-1 Mortal Pair Intelligence &rarr; AI Bounded to Your Biological Lifespan</text></svg>
-          <figcaption>Figure 2 (Lens 2): The 5-Zone Global AI Spectrum &amp; Biological Bandwidth Mismatch (~40 bits/s vs. 10&sup1;&sup2; bits/s). CIN occupies Zone 4—the last structural co-existence barrier before humanity is forced into a Zone 5 global moratorium.</figcaption>
+          <svg data-rich-viz="true" viewBox="0 0 760 320" role="img" aria-label="5-Zone Global AI Safety Spectrum and Biological versus Machine Bandwidth Chart">
+            <rect x="12" y="12" width="736" height="164" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="26" y="36" font-size="10" font-weight="700" font-family="monospace" fill="#e9e6de">1. THE 5 SAFETY &amp; CONTAINMENT ZONES</text>
+            <rect x="24" y="50" width="132" height="108" rx="8" fill="rgba(239,106,82,0.09)" stroke="#ef6a52" stroke-width="1.3"/>
+            <text x="34" y="78" font-size="9.5" font-weight="700" fill="#ef6a52">Zone 1: Raw Accel</text>
+            <text x="34" y="132" font-size="9.5" fill="#e9e6de">Unbounded Swarms</text>
+            <rect x="162" y="50" width="132" height="108" rx="8" fill="rgba(224,123,66,0.09)" stroke="#e07b42" stroke-width="1.3"/>
+            <text x="172" y="78" font-size="9.5" font-weight="700" fill="#e07b42">Zone 2: Lab RSPs</text>
+            <text x="172" y="132" font-size="9.5" fill="#e9e6de">Self-Policed Pledges</text>
+            <rect x="300" y="50" width="132" height="108" rx="8" fill="rgba(229,169,60,0.09)" stroke="#e5a93c" stroke-width="1.3"/>
+            <text x="310" y="78" font-size="9.5" font-weight="700" fill="#e5a93c">Zone 3: Eval Labs</text>
+            <text x="310" y="132" font-size="9.5" fill="#e9e6de">Diagnostics Only</text>
+            <rect x="438" y="46" width="160" height="116" rx="9" fill="rgba(79,179,168,0.2)" stroke="#4fb3a8" stroke-width="2.2"/>
+            <text x="448" y="74" font-size="10" font-weight="700" fill="#4fb3a8">Zone 4: CIN Airlock</text>
+            <text x="448" y="104" font-size="9.5" fill="#e9e6de">24h Mortal Lease</text>
+            <text x="448" y="136" font-size="9.5" font-weight="700" fill="#e5a93c">1-to-1 Hardware Bond</text>
+            <rect x="604" y="50" width="132" height="108" rx="8" fill="rgba(93,162,213,0.09)" stroke="#5da2d5" stroke-width="1.3"/>
+            <text x="614" y="78" font-size="9.5" font-weight="700" fill="#5da2d5">Zone 5: Hard Pause</text>
+            <text x="614" y="132" font-size="9.5" fill="#e9e6de">Global GPU Freeze</text>
+            <rect x="12" y="186" width="736" height="122" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="26" y="210" font-size="10" font-weight="700" font-family="monospace" fill="#e5a93c">2. ~40 BITS/S BIOLOGY VS. 10&sup1;&sup2; BITS/S SWARMS</text>
+            <rect x="26" y="224" width="110" height="22" rx="4" fill="#8c8f96"/>
+            <text x="148" y="239" font-size="9.5" font-family="monospace" fill="#e9e6de">Human Biology (~40 bits/s &middot; 25-yr cycle)</text>
+            <rect x="26" y="256" width="700" height="22" rx="4" fill="rgba(79,179,168,0.24)" stroke="#4fb3a8" stroke-width="1.6"/>
+            <text x="38" y="271" font-size="9.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN Zone 4 Airlock Bridges 10&sup1;&sup0;&times; Bandwidth Gap</text>
+          </svg>
         </figure>
 
         <details class="scen-drawer">
-          <summary>Inspect full comparison table &amp; primary-source evidence &#9662;</summary>
-          <p><b>Why Biological Evolution Cannot Survive Unbounded Machine Competition:</b> Conscious human information processing operates at roughly <b>~40 bits/s</b> and adapts across millennial genetic generations, whereas autonomous machine swarms coordinate at gigabit-to-terabit speeds while doubling their autonomous task horizon every <b>4.5 months</b> (<a href="https://metr.org" target="_blank" rel="noopener">METR, 2026</a>). Evaluation institutes (<a href="https://www.redwoodresearch.org" target="_blank" rel="noopener">Redwood Research</a>, Apollo, UK AISI) measure these capabilities, but only a hard protocol boundary—splitting the Human Internet from the Agent-Only Internet and binding every agent lease 1-to-1 to a living human (<a href="https://arxiv.org/abs/2311.09589" target="_blank" rel="noopener">Hinton, 2022; Ororbia &amp; Friston, 2023</a>)—allows co-existence without a global GPU shutdown.</p>
+          <summary>Inspect table &amp; sources &#9662;</summary>
+          <p><b>Why Biological Evolution Needs a Protocol Airlock:</b> Conscious human information processing operates at roughly <b>~40 bits/s</b> across 25-year generations, whereas autonomous machine swarms coordinate at <b>10&sup1;&sup2; bits/s</b> while doubling task horizons every <b>4.5 months</b> (<a href="https://metr.org" target="_blank" rel="noopener">METR, 2026</a>). Evaluation institutes (<a href="https://www.redwoodresearch.org" target="_blank" rel="noopener">Redwood Research</a>, Apollo, UK AISI) measure these capabilities, but only a hard protocol boundary—splitting the Human Internet from the Agent-Only Internet and binding every agent lease 1-to-1 to a living human (<a href="https://arxiv.org/abs/2311.09589" target="_blank" rel="noopener">Hinton, 2022; Ororbia &amp; Friston, 2023</a>)—bridges the 10&sup1;&sup0;&times; gap without a Zone 5 global GPU shutdown.</p>
           <table>
             <thead>
               <tr><th>Safety Zone</th><th>Representative Actors</th><th>Containment Mechanism &amp; Failure Mode</th></tr>
             </thead>
             <tbody>
-              <tr><td><b>Zone 1: Raw e/acc</b></td><td>Unbounded Swarm Proponents</td><td>Zero barriers; autonomous bot swarms flood human civic and market channels.</td></tr>
+              <tr><td><b>Zone 1: Raw Acceleration</b></td><td>Unbounded Swarm Proponents</td><td>Zero barriers; autonomous bot swarms flood human civic and market channels.</td></tr>
               <tr><td><b>Zone 2: Voluntary RSPs</b></td><td>Frontier Corporate Labs</td><td>Non-binding internal pledges vulnerable to competitive race dynamics.</td></tr>
               <tr><td><b>Zone 3: Eval Institutes</b></td><td>METR, Redwood, Apollo, UK AISI</td><td>Rigorous pre-deployment benchmarks, but zero runtime containment once weights deploy.</td></tr>
-              <tr><td><b>Zone 4: CIN Airlock</b></td><td>Collective Intelligence Network</td><td>Two-Internet isolation + 1-to-1 human hardware binding + mortal execution leases.</td></tr>
+              <tr><td><b>Zone 4: CIN Airlock</b></td><td>Collective Intelligence Network</td><td>Two-Internet isolation + 1-to-1 human hardware binding + 24h mortal execution leases.</td></tr>
               <tr><td><b>Zone 5: Hard Pause</b></td><td>Treaty Moratorium Advocates</td><td>Global GPU cap and training freeze required if Zone 4 co-existence fails.</td></tr>
             </tbody>
           </table>
@@ -419,43 +512,61 @@
       </section>
 
       <!-- ================= LENS 3: GOVERNMENT INSTITUTIONS ================= -->
-      <section id="governments" class="ws-lens-sec">
-        <span class="label">Lens 3 of 7 · Government &amp; Democratic Institutions</span>
-        <h2>3. Governments: 36-Month Statutory Lag &amp; Tax Erosion vs. Sub-10ms Silicon Quorum Gates</h2>
+      <section id="lens-3-governments" class="ws-lens-sec">
+        <span id="governments" class="label">Lens 3 &middot; Governments</span>
+        <h2>3. Governments: 36-Month Statute Lag vs. Sub-10ms Silicon Quorum Gates</h2>
         <p class="ws-lead-sentence">Three-year legislative cycles cannot govern ninety-day capability doublings or replace payroll taxes without sub-ten-millisecond cryptographic quorum gates.</p>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad">
-            <small>Legislative vs. AI Velocity</small>
-            <b>18&ndash;36 Mo vs. 4.5 Mo</b>
-            <span>64&times; capability jump before law passes</span>
+            <small>Statute Velocity Lag</small>
+            <b>36 Mo vs. 4.5 Mo</b>
+            <span>64&times; jump before law passes</span>
           </div>
           <div class="ws-mbadge ok">
-            <small>Runtime Containment Gate</small>
-            <b>&lt;10 ms Silicon Quorum</b>
-            <span>Blocks single-commander swarm risk</span>
+            <small>Runtime Gate</small>
+            <b>&lt;10 ms Quorum</b>
+            <span>Blocks rogue swarm execution</span>
           </div>
           <div class="ws-mbadge warn">
-            <small>Post-Labor Fiscal Base</small>
-            <b>$25k Floor + 2%/mo Demurrage</b>
-            <span>Replaces eroding wage payroll taxes</span>
+            <small>Fiscal Stabilization</small>
+            <b>$25k + 2%/mo</b>
+            <span>Demurrage funds public floor</span>
           </div>
         </div>
 
         <figure class="diagram">
-          <svg data-rich-viz="true" viewBox="0 0 760 340" role="img" aria-label="Dual chart showing Government statutory lag and payroll tax erosion versus CIN sub-10ms silicon quorum gates and 5D demurrage floor"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. STATUTORY LAG VS. 4.5-MO AI DOUBLING</text><line x1="44" y1="214" x2="352" y2="214" stroke="#3a3f4b" stroke-width="1.4"/><line x1="44" y1="56" x2="44" y2="214" stroke="#3a3f4b" stroke-width="1.4"/><path d="M48,204 Q155,190 225,132 T345,64" fill="none" stroke="#ef6a52" stroke-width="3.2"/><text x="130" y="80" font-size="10" font-weight="700" fill="#ef6a52">AI Capability (64&times; in 3 yrs)</text><path d="M48,206 L165,206 L165,194 L275,194 L275,182 L348,182" fill="none" stroke="#8c8f96" stroke-width="2.2" stroke-dasharray="4 3"/><text x="172" y="208" font-size="9.5" fill="#8c8f96">Statutes (3–5 yr lag)</text><path d="M48,200 Q152,185 222,128 T345,60" fill="none" stroke="#4fb3a8" stroke-width="2.4" stroke-dasharray="3 3"/><text x="58" y="142" font-size="10" font-weight="700" fill="#4fb3a8">&#10003; CIN Silicon Gate (&lt;10 ms)</text><rect x="26" y="232" width="334" height="80" rx="8" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.4"/><text x="38" y="254" font-size="10" font-weight="700" fill="#4fb3a8">Power-Proportionate Auditability (Tiers 0–4)</text><text x="38" y="276" font-size="9.5" fill="#e9e6de">• Citizens (Tier 0): 100% private local enclave</text><text x="38" y="296" font-size="9.5" fill="#e9e6de">• Public Officials &amp; Labs (Tier 4): ZK compliance</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#e5a93c">2. POST-LABOR FISCAL &amp; TAX STABILIZATION</text><text x="400" y="64" font-size="9.5" font-weight="700" fill="#ef6a52">Today: 72% of State Tax Relies on Eroding Payroll</text><rect x="400" y="74" width="330" height="24" rx="4" fill="rgba(239,106,82,0.15)" stroke="#ef6a52" stroke-width="1.2"/><rect x="400" y="74" width="102" height="24" rx="4" fill="#ef6a52"/><text x="408" y="90" font-size="9.5" font-weight="700" fill="#111317">Shrinking Wage</text><text x="512" y="90" font-size="9.5" fill="#ef6a52">&larr; Automation Fiscal Deficit</text><text x="400" y="124" font-size="9.5" font-weight="700" fill="#4fb3a8">CIN: $25k Exempt Floor + 2%/mo Hoard Demurrage</text><rect x="400" y="134" width="165" height="24" rx="4" fill="#4fb3a8"/><text x="408" y="150" font-size="9.5" font-weight="700" fill="#111317">$25k Exempt Floor</text><rect x="567" y="134" width="163" height="24" rx="4" fill="#e5a93c"/><text x="575" y="150" font-size="9.5" font-weight="700" fill="#111317">2%/mo &rarr; Civic Commons</text><rect x="400" y="176" width="330" height="136" rx="8" fill="#181c24" stroke="#2c303a" stroke-width="1.2"/><text x="414" y="200" font-size="10" font-weight="700" fill="#e9e6de">How CIN Stabilizes Democratic Institutions:</text><text x="414" y="224" font-size="9.5" fill="#4fb3a8">&#10003; Auto-funds schools, grids &amp; care via demurrage</text><text x="414" y="248" font-size="9.5" fill="#4fb3a8">&#10003; Blocks single-commander cyber/drone swarms</text><text x="414" y="272" font-size="9.5" fill="#4fb3a8">&#10003; Requires 2-of-2 Silicon Keys for city-scale risk</text><text x="414" y="296" font-size="9.5" font-weight="700" fill="#e5a93c">Result: Fast runtime safety + post-labor revenue</text></svg>
-          <figcaption>Figure 3 (Lens 3): Government Statutory Velocity Lag (18–36 Months) &amp; Payroll Tax Erosion vs. CIN &lt;10 ms Cryptographic Quorum Gates and Sovereign Demurrage Recirculation.</figcaption>
+          <svg data-rich-viz="true" viewBox="0 0 760 320" role="img" aria-label="Dual chart showing Government statutory lag and payroll tax erosion versus CIN sub-10ms silicon quorum gates">
+            <rect x="12" y="12" width="362" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="26" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. 36-MO STATUTE LAG VS. AI DOUBLING</text>
+            <line x1="44" y1="214" x2="352" y2="214" stroke="#3a3f4b" stroke-width="1.4"/>
+            <line x1="44" y1="56" x2="44" y2="214" stroke="#3a3f4b" stroke-width="1.4"/>
+            <path d="M48,204 Q155,188 225,130 T345,64" fill="none" stroke="#ef6a52" stroke-width="3"/>
+            <text x="126" y="82" font-size="10" font-weight="700" fill="#ef6a52">AI Horizon (64&times; in 3 yrs)</text>
+            <path d="M48,206 L165,206 L165,192 L275,192 L275,180 L348,180" fill="none" stroke="#8c8f96" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="172" y="206" font-size="9.5" fill="#8c8f96">36-Mo Statute Lag</text>
+            <text x="58" y="144" font-size="10" font-weight="700" fill="#4fb3a8">&#10003; CIN Gate (&lt;10 ms)</text>
+            <rect x="386" y="12" width="362" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="400" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#e5a93c">2. POST-LABOR FISCAL BASE</text>
+            <rect x="400" y="70" width="330" height="32" rx="5" fill="rgba(239,106,82,0.18)" stroke="#ef6a52" stroke-width="1.2"/>
+            <text x="414" y="90" font-size="9.5" font-weight="700" fill="#ef6a52">Legacy: 72% Payroll Tax Base Erodes</text>
+            <rect x="400" y="128" width="330" height="36" rx="5" fill="rgba(79,179,168,0.2)" stroke="#4fb3a8" stroke-width="1.6"/>
+            <text x="414" y="150" font-size="9.5" font-weight="700" fill="#4fb3a8">CIN: $25k Exempt Floor + 2%/mo Demurrage</text>
+            <rect x="400" y="190" width="330" height="92" rx="8" fill="#181c24" stroke="#2c303a" stroke-width="1.2"/>
+            <text x="414" y="222" font-size="9.5" fill="#e9e6de">Tier 0 Citizens Private &middot; Tier 4 Audited</text>
+            <text x="414" y="256" font-size="9.5" font-weight="700" fill="#e5a93c">2-of-2 Silicon Keys Block Single-Commander Risk</text>
+          </svg>
         </figure>
 
         <details class="scen-drawer">
-          <summary>Inspect full comparison table &amp; primary-source evidence &#9662;</summary>
-          <p><b>Causal Chain:</b> Democratic institutions intend to protect public infrastructure and fund civic services &rarr; 18&ndash;36 month legislative cycles lag behind 4.5-month AI capability doublings while automation erodes the 72% payroll tax base &rarr; CIN enforces sub-10ms hardware quorum gates for high-consequence actions and stabilizes municipal budgets via a $25,000 tax-exempt citizen floor paired with 2%/month demurrage on idle conglomerate hoards.</p>
+          <summary>Inspect table &amp; sources &#9662;</summary>
+          <p><b>Causal Chain:</b> Democratic institutions intend to protect infrastructure and fund civic services &rarr; 18&ndash;36 month legislative cycles lag behind 4.5-month AI capability doublings while automation erodes the 72% payroll tax base &rarr; CIN enforces sub-10ms hardware quorum gates for high-consequence actions and stabilizes municipal budgets via a $25,000 tax-exempt citizen floor paired with 2%/month demurrage on idle conglomerate hoards.</p>
           <table>
             <thead>
               <tr><th>Governance Dimension</th><th>Legacy Statutory State</th><th>CIN Cryptographic Civic Protocol</th></tr>
             </thead>
             <tbody>
-              <tr><td><b>Enforcement Speed</b></td><td>18–36 month committee and court cycle; ex-post fines after damage occurs.</td><td>&lt;10 ms runtime cryptographic quorum gate blocking unauthorized swarm execution.</td></tr>
+              <tr><td><b>Enforcement Speed</b></td><td>18&ndash;36 month committee and court cycle; ex-post fines after damage occurs.</td><td>&lt;10 ms runtime cryptographic quorum gate blocking unauthorized swarm execution.</td></tr>
               <tr><td><b>Surveillance vs. Privacy</b></td><td>Blunt KYC/identity mandates that expose ordinary citizens while failing to audit frontier labs.</td><td>Power-Proportionate Auditability: Tier 0 citizens stay 100% private; Tier 4 officials/labs emit ZK proofs.</td></tr>
               <tr><td><b>Fiscal Sustainability</b></td><td>Payroll tax base shrinks as AI replaces routine cognitive labor.</td><td>$25k sovereign floor per person + 2%/mo hoard demurrage automatically funding public commons.</td></tr>
             </tbody>
@@ -464,37 +575,55 @@
       </section>
 
       <!-- ================= LENS 4: PUBLIC RESEARCH & UNIVERSITIES ================= -->
-      <section id="universities" class="ws-lens-sec">
-        <span class="label">Lens 4 of 7 · Public Research Institutions &amp; Universities</span>
-        <h2>4. Universities: Compute Poverty &amp; Grant Capture vs. Perpetual Shapley Citation Endowments</h2>
-        <p class="ws-lead-sentence">Public universities originate foundational AI architectures yet face compute scarcity and zero commercial royalties without cryptographic citation endowments.</p>
+      <section id="lens-4-universities" class="ws-lens-sec">
+        <span id="universities" class="label">Lens 4 &middot; Universities</span>
+        <h2>4. Universities: Compute Squeeze vs. Shapley Citation Endowments</h2>
+        <p class="ws-lead-sentence">Public universities originate foundational AI breakthroughs yet face compute scarcity and zero commercial royalties without cryptographic citation endowments.</p>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad">
-            <small>Academic Compute &amp; Royalty</small>
-            <b>&lt;1% GPUs · $0 Royalties</b>
-            <span>Despite originating 88% of breakthroughs</span>
+            <small>Academic Squeeze</small>
+            <b>88% Math &rarr; &lt;1% GPUs</b>
+            <span>$0 API royalty paid today</span>
           </div>
           <div class="ws-mbadge ok">
-            <small>CIN Citation Endowment</small>
-            <b>15% Perpetual Lineage Share</b>
-            <span>Paid on every downstream task settlement</span>
+            <small>Citation Endowment</small>
+            <b>10%&ndash;15% Lineage</b>
+            <span>Perpetual Data Shapley return</span>
           </div>
           <div class="ws-mbadge warn">
-            <small>SPRA Literature Compression</small>
-            <b>95.3% Token Reduction</b>
-            <span>5,500-token papers &rarr; 260-token schemas</span>
+            <small>SPRA Compression</small>
+            <b>95.3% Token Cut</b>
+            <span>5,500 &rarr; 260-token schemas</span>
           </div>
         </div>
 
         <figure class="diagram">
-          <svg data-rich-viz="true" viewBox="0 0 760 340" role="img" aria-label="Asymmetry bar chart showing Public Universities originating 88% of breakthroughs for 0% royalties versus CIN 15% perpetual Data Shapley academic endowment"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. ACADEMIC ORIGIN VS. COMMERCIAL CAPTURE</text><text x="26" y="66" font-size="9.5" font-weight="700" fill="#e9e6de">A. Core AI Breakthroughs Originated (Transformers, LoRA)</text><rect x="26" y="76" width="292" height="22" rx="4" fill="#4fb3a8"/><text x="36" y="91" font-size="9.5" font-weight="700" fill="#111317">88% Public Universities &amp; Research Groups</text><rect x="320" y="76" width="40" height="22" rx="4" fill="#ef6a52"/><text x="26" y="124" font-size="9.5" font-weight="700" fill="#e9e6de">B. Frontier GPU Cluster Share ($100M+ Compute Pods)</text><rect x="26" y="134" width="10" height="22" rx="2" fill="#4fb3a8"/><rect x="38" y="134" width="322" height="22" rx="4" fill="#ef6a52"/><text x="48" y="149" font-size="9.5" font-weight="700" fill="#111317">&lt;1% Universities vs. 99% Cloud Hyperscalers</text><text x="26" y="182" font-size="9.5" font-weight="700" fill="#e9e6de">C. Downstream Commercial Royalties Paid Today</text><rect x="26" y="192" width="334" height="22" rx="4" fill="rgba(239,106,82,0.22)" stroke="#ef6a52" stroke-width="1.2"/><text x="36" y="207" font-size="9.5" font-weight="700" fill="#ef6a52">$0 Paid to arXiv Authors (100% Scraped Free)</text><text x="26" y="242" font-size="9.5" font-weight="700" fill="#4fb3a8">D. With CIN Ledger: Perpetual Academic Endowment</text><rect x="26" y="252" width="334" height="26" rx="5" fill="rgba(79,179,168,0.22)" stroke="#4fb3a8" stroke-width="1.8"/><text x="36" y="269" font-size="9.5" font-weight="700" fill="#4fb3a8">&#10003; 15% Perpetual Data Shapley Lineage Royalty</text><text x="26" y="304" font-size="9.5" fill="#8c8f96">Every downstream task settlement funds the lab.</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. HOW CIN EMPOWERS UNIVERSITY RESEARCH</text><rect x="400" y="54" width="334" height="80" rx="9" fill="rgba(79,179,168,0.1)" stroke="#4fb3a8" stroke-width="1.4"/><text x="414" y="76" font-size="10" font-weight="700" fill="#4fb3a8">1. SPRA Schema-RAG (95.3% Token Savings)</text><text x="414" y="98" font-size="9.5" fill="#e9e6de">Compiles 5,500-token papers into 260-token formal</text><text x="414" y="118" font-size="9.5" fill="#e5a93c">schemas (Leng et al., 2026) for 20&times; lower GPU cost.</text><rect x="400" y="144" width="334" height="80" rx="9" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.4"/><text x="414" y="166" font-size="10" font-weight="700" fill="#5da2d5">2. Federated TIES-LoRA Academic Mesh</text><text x="414" y="188" font-size="9.5" fill="#e9e6de">500 university groups co-train 18 MB rank-16 LoRA</text><text x="414" y="208" font-size="9.5" fill="#5da2d5">adapters over IETF QUIC without $1B clusters.</text><rect x="400" y="234" width="334" height="80" rx="9" fill="rgba(229,169,60,0.11)" stroke="#e5a93c" stroke-width="1.4"/><text x="414" y="256" font-size="10" font-weight="700" fill="#e5a93c">3. Beyond-arXiv Proof-Carrying Endowments</text><text x="414" y="278" font-size="9.5" fill="#e9e6de">Cryptographic citation DAG routes 15% royalties</text><text x="414" y="298" font-size="9.5" font-weight="700" fill="#4fb3a8">directly to university labs on every verified use.</text></svg>
-          <figcaption>Figure 4 (Lens 4): Public Universities Originate 88% of Core AI Breakthroughs Yet Capture 0% of Commercial Royalties vs. CIN 15% Perpetual Data Shapley Endowment &amp; 95.3% SPRA Token Savings (<a href="https://arxiv.org/abs/2610.21424" target="_blank" rel="noopener">Leng et al., 2026</a>).</figcaption>
+          <svg data-rich-viz="true" viewBox="0 0 760 320" role="img" aria-label="Asymmetry chart showing Public Universities originating 88 percent of breakthroughs for 0 royalties versus CIN Data Shapley endowment">
+            <rect x="12" y="12" width="362" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="26" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. ACADEMIC ORIGIN VS. CAPTURE</text>
+            <rect x="26" y="68" width="292" height="28" rx="4" fill="#4fb3a8"/>
+            <text x="36" y="86" font-size="9.5" font-weight="700" fill="#111317">88% Foundational Math Originated</text>
+            <rect x="26" y="126" width="334" height="28" rx="4" fill="#ef6a52"/>
+            <text x="36" y="144" font-size="9.5" font-weight="700" fill="#111317">&lt;1% Frontier Compute Share</text>
+            <rect x="26" y="184" width="334" height="28" rx="4" fill="rgba(239,106,82,0.22)" stroke="#ef6a52" stroke-width="1.2"/>
+            <text x="36" y="202" font-size="9.5" font-weight="700" fill="#ef6a52">$0 Commercial API Royalty Paid</text>
+            <rect x="26" y="242" width="334" height="40" rx="6" fill="rgba(79,179,168,0.2)" stroke="#4fb3a8" stroke-width="1.6"/>
+            <text x="36" y="266" font-size="9.5" font-weight="700" fill="#4fb3a8">&#10003; CIN: Perpetual Citation Endowment</text>
+            <rect x="386" y="12" width="362" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="400" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#4fb3a8">2. FEDERATED ACADEMIC MESH</text>
+            <rect x="400" y="64" width="334" height="64" rx="8" fill="rgba(79,179,168,0.1)" stroke="#4fb3a8" stroke-width="1.4"/>
+            <text x="414" y="100" font-size="10" font-weight="700" fill="#4fb3a8">1. SPRA Schema-RAG (95.3% Token Cut)</text>
+            <rect x="400" y="144" width="334" height="64" rx="8" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.4"/>
+            <text x="414" y="180" font-size="10" font-weight="700" fill="#5da2d5">2. 500-Lab TIES-LoRA QUIC Mesh</text>
+            <rect x="400" y="224" width="334" height="64" rx="8" fill="rgba(229,169,60,0.11)" stroke="#e5a93c" stroke-width="1.4"/>
+            <text x="414" y="260" font-size="10" font-weight="700" fill="#e5a93c">3. Cryptographic Citation Royalties</text>
+          </svg>
         </figure>
 
         <details class="scen-drawer">
-          <summary>Inspect full comparison table &amp; primary-source evidence &#9662;</summary>
-          <p><b>Causal Chain:</b> Public research universities and graduate laboratories originate foundational methods (Transformers, Diffusion, Low-Rank Adaptation, TIES-Merging) &rarr; commercial cloud labs ingest arXiv preprints for $0 while pricing universities out of compute pods &rarr; CIN compiles papers into 260-token SPRA units (<a href="https://arxiv.org/abs/2610.21424" target="_blank" rel="noopener">Leng et al., 2026</a>), federates 18 MB TIES-LoRA adapters (<a href="https://arxiv.org/abs/2306.01708" target="_blank" rel="noopener">Yadav et al., 2023</a>) over IETF QUIC (<a href="https://datatracker.ietf.org/doc/html/rfc9000" target="_blank" rel="noopener">RFC 9000</a>), and routes 15% perpetual lineage royalties to cited university labs.</p>
+          <summary>Inspect table &amp; sources &#9662;</summary>
+          <p><b>Causal Chain &amp; Citations:</b> Public research universities originate foundational methods (Transformers, Diffusion, Low-Rank Adaptation, TIES-Merging) &rarr; commercial cloud labs ingest arXiv preprints for $0 while pricing universities out of compute pods &rarr; CIN compiles papers into 260-token SPRA units (<a href="https://arxiv.org/abs/2610.21424" target="_blank" rel="noopener">Leng et al., 2026</a>), federates 18 MB TIES-LoRA adapters (<a href="https://arxiv.org/abs/2306.01708" target="_blank" rel="noopener">Yadav et al., 2023</a>) over IETF QUIC (<a href="https://datatracker.ietf.org/doc/html/rfc9000" target="_blank" rel="noopener">RFC 9000</a>), and routes perpetual Data Shapley lineage royalties to cited university labs.</p>
           <table>
             <thead>
               <tr><th>Academic Metric</th><th>arXiv + Cloud Oligopoly Status Quo</th><th>CIN Federated University Mesh</th></tr>
@@ -502,51 +631,69 @@
             <tbody>
               <tr><td><b>Literature Synthesis Cost</b></td><td>~5,500 tokens per full-text paper; saturates context windows and GPU memory.</td><td>~260 tokens per SPRA formal schema (95.3% token cut; 20&times; lower academic compute cost).</td></tr>
               <tr><td><b>Model Training Paradigm</b></td><td>Requires $100M+ centralized GPU clusters controlled by corporate sponsors.</td><td>500 university labs co-merge 18 MB rank-16 LoRA deltas via TIES-Merging over IETF QUIC.</td></tr>
-              <tr><td><b>Downstream Revenue Share</b></td><td>$0 commercial royalty; public grants subsidize private equity capture.</td><td>15% perpetual Data Shapley lineage endowment paid automatically via cryptographic citation DAG.</td></tr>
+              <tr><td><b>Downstream Revenue Share</b></td><td>$0 commercial royalty; public grants subsidize private equity capture.</td><td>Perpetual Data Shapley lineage endowment paid automatically via cryptographic citation DAG.</td></tr>
             </tbody>
           </table>
         </details>
       </section>
 
       <!-- ================= LENS 5: PRIVATE ENTERPRISE ================= -->
-      <section id="enterprise" class="ws-lens-sec">
-        <span class="label">Lens 5 of 7 · Private Enterprise, Clinics &amp; Cooperatives</span>
-        <h2>5. Private Enterprise: Middleman Tolls &amp; Cloud IP Leakage vs. Local Wasm Sandboxes &amp; PSI Co-Ops</h2>
-        <p class="ws-lead-sentence">Cloud API tenants leak proprietary workflows and pay middleman tolls, while local sandboxes and Private Set Intersection preserve margins.</p>
+      <section id="lens-5-enterprise" class="ws-lens-sec">
+        <span id="enterprise" class="label">Lens 5 &middot; Enterprise &amp; Clinics</span>
+        <h2>5. Enterprise &amp; Clinics: 32% Extraction vs. Local Wasm &amp; PSI Co-Ops</h2>
+        <p class="ws-lead-sentence">Cloud API tenants leak proprietary workflows and pay middleman tolls, whereas local sandboxes and Private Set Intersection preserve enterprise margins.</p>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad">
-            <small>Cloud Tenant Margin Impact</small>
-            <b>-18% 5-Yr Margin Erosion</b>
-            <span>15%&ndash;40% GPO/SaaS tolls + prompt leakage</span>
+            <small>Legacy Tenant Loss</small>
+            <b>32% Extraction</b>
+            <span>SaaS, PBM &amp; GPO middleman tolls</span>
           </div>
           <div class="ws-mbadge ok">
-            <small>Local Wasm OCap Sandbox</small>
-            <b>0 Bytes Leaked Externally</b>
-            <span>100% enterprise ownership of LoRA weights</span>
+            <small>Local OCap Sandbox</small>
+            <b>0 Bytes Leaked</b>
+            <span>On-premise Wasm execution</span>
           </div>
           <div class="ws-mbadge warn">
-            <small>500-Firm PSI Buyer Co-Op</small>
-            <b>22%&ndash;34% Wholesale Cut</b>
-            <span>Direct supplier matching at 0% GPO fee</span>
+            <small>500-Firm PSI GPO</small>
+            <b>22%&ndash;34% Savings</b>
+            <span>Direct wholesale SKU matching</span>
           </div>
         </div>
 
         <figure class="diagram">
-          <svg data-rich-viz="true" viewBox="0 0 760 340" role="img" aria-label="5-Year Enterprise Competitive Divergence Curve comparing Cloud API Tenants against CIN Local OCap Sandbox and PSI Buyer Coalitions"><rect x="12" y="12" width="380" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#e9e6de">1. 5-YEAR ENTERPRISE MARGIN &amp; MOAT CURVE</text><line x1="48" y1="244" x2="368" y2="244" stroke="#3a3f4b" stroke-width="1.4"/><line x1="48" y1="62" x2="48" y2="244" stroke="#3a3f4b" stroke-width="1.4"/><text x="48" y="262" font-size="9.5" font-family="monospace" fill="#8c8f96">Year 1</text><text x="185" y="262" font-size="9.5" font-family="monospace" fill="#8c8f96">Year 3</text><text x="320" y="262" font-size="9.5" font-family="monospace" fill="#8c8f96">Year 5</text><path d="M52,175 Q150,142 240,104 T360,72" fill="none" stroke="#4fb3a8" stroke-width="3.4"/><circle cx="360" cy="72" r="5" fill="#4fb3a8"/><text x="60" y="88" font-size="10" font-weight="700" fill="#4fb3a8">CIN Sovereign Enterprise (+34% Margin)</text><text x="60" y="106" font-size="9.5" fill="#e9e6de">Local Wasm OCap + 500-Firm PSI Co-Op</text><path d="M52,165 Q160,170 250,182 T360,194" fill="none" stroke="#ef6a52" stroke-width="3.2"/><circle cx="360" cy="194" r="5" fill="#ef6a52"/><text x="60" y="214" font-size="10" font-weight="700" fill="#ef6a52">Stagnant Cloud API Renter (-18% Margin)</text><text x="60" y="232" font-size="9.5" fill="#8c8f96">Leaks IP to cloud + pays 15%–40% tolls</text><rect x="26" y="276" width="350" height="38" rx="7" fill="#181c24" stroke="#2c303a" stroke-width="1.2"/><text x="36" y="300" font-size="9.5" font-weight="700" fill="#e5a93c">Cloud prompts train oligarchies to replace you.</text><rect x="404" y="12" width="344" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="418" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. SOVEREIGN ENTERPRISE STACK</text><rect x="418" y="54" width="316" height="80" rx="8" fill="rgba(79,179,168,0.1)" stroke="#4fb3a8" stroke-width="1.4"/><text x="430" y="76" font-size="10" font-weight="700" fill="#4fb3a8">A. Local Wasm OCap Sandbox (0 Bytes Leaked)</text><text x="430" y="98" font-size="9.5" fill="#e9e6de">ERP, clinical &amp; pricing files stay on-premise;</text><text x="430" y="118" font-size="9.5" fill="#4fb3a8">you own 100% of fine-tuned LoRA weights.</text><rect x="418" y="144" width="316" height="80" rx="8" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.4"/><text x="430" y="166" font-size="10" font-weight="700" fill="#5da2d5">B. Private Set Intersection (PSI) Buyer Co-Ops</text><text x="430" y="188" font-size="9.5" fill="#e9e6de">500 independent clinics/SMBs match supplier SKUs</text><text x="430" y="208" font-size="9.5" font-weight="700" fill="#e5a93c">for 22%–34% wholesale cuts at 0% GPO fee.</text><rect x="418" y="234" width="316" height="80" rx="8" fill="rgba(229,169,60,0.1)" stroke="#e5a93c" stroke-width="1.4"/><text x="430" y="256" font-size="10" font-weight="700" fill="#e5a93c">C. Federated Guild TIES-LoRA Merging</text><text x="430" y="278" font-size="9.5" fill="#e9e6de">Independent firms pool verified domain skills</text><text x="430" y="298" font-size="9.5" font-weight="700" fill="#4fb3a8">to out-compete Fortune 500 conglomerates.</text></svg>
-          <figcaption>Figure 5 (Lens 5): 5-Year Enterprise Competitive Divergence: Cloud API Tenant Stagnation vs. Sovereign Local WebAssembly OCap Sandbox &amp; 500-Firm Private Set Intersection (<a href="https://doi.org/10.1007/978-3-540-24676-3_1" target="_blank" rel="noopener">Freedman et al., 2004</a>) Buyer Coalitions.</figcaption>
+          <svg data-rich-viz="true" viewBox="0 0 760 320" role="img" aria-label="5-Year Enterprise Competitive Divergence Curve comparing Cloud API Tenants against CIN Local OCap Sandbox and PSI Buyer Coalitions">
+            <rect x="12" y="12" width="380" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="26" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#e9e6de">1. 5-YEAR ENTERPRISE MARGIN CURVE</text>
+            <line x1="48" y1="244" x2="368" y2="244" stroke="#3a3f4b" stroke-width="1.4"/>
+            <line x1="48" y1="62" x2="48" y2="244" stroke="#3a3f4b" stroke-width="1.4"/>
+            <path d="M52,175 Q150,142 240,104 T360,72" fill="none" stroke="#4fb3a8" stroke-width="3.2"/>
+            <circle cx="360" cy="72" r="5" fill="#4fb3a8"/>
+            <text x="60" y="92" font-size="10" font-weight="700" fill="#4fb3a8">CIN Sovereign Firm (+34% Margin)</text>
+            <path d="M52,165 Q160,170 250,182 T360,198" fill="none" stroke="#ef6a52" stroke-width="3"/>
+            <circle cx="360" cy="198" r="5" fill="#ef6a52"/>
+            <text x="60" y="218" font-size="10" font-weight="700" fill="#ef6a52">Legacy Tenant (32% Middleman Loss)</text>
+            <rect x="404" y="12" width="344" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="418" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#4fb3a8">2. SOVEREIGN ENTERPRISE STACK</text>
+            <rect x="418" y="64" width="316" height="64" rx="8" fill="rgba(79,179,168,0.1)" stroke="#4fb3a8" stroke-width="1.4"/>
+            <text x="432" y="100" font-size="10" font-weight="700" fill="#4fb3a8">A. Local Wasm OCap (0 Bytes Leaked)</text>
+            <rect x="418" y="144" width="316" height="64" rx="8" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.4"/>
+            <text x="432" y="180" font-size="10" font-weight="700" fill="#5da2d5">B. 500-Firm PSI Buyer Co-Op</text>
+            <rect x="418" y="224" width="316" height="64" rx="8" fill="rgba(229,169,60,0.1)" stroke="#e5a93c" stroke-width="1.4"/>
+            <text x="432" y="260" font-size="10" font-weight="700" fill="#e5a93c">C. Guild TIES-LoRA Weight Pooling</text>
+          </svg>
         </figure>
 
         <details class="scen-drawer">
-          <summary>Inspect full comparison table &amp; primary-source evidence &#9662;</summary>
-          <p><b>Causal Chain:</b> Independent clinics, credit unions, and small businesses intend to automate billing and procurement without surrendering their customer relationships or trade secrets &rarr; cloud SaaS platforms and Group Purchasing Organizations (GPOs) extract 15%&ndash;40% middleman tolls while harvesting enterprise prompts &rarr; CIN executes CMS National Correct Coding Initiative (NCCI) CPT billing audits inside local WebAssembly sandboxes and forms 500-firm Private Set Intersection (<a href="https://doi.org/10.1007/978-3-540-24676-3_1" target="_blank" rel="noopener">Freedman et al., 2004</a>) buyer cooperatives.</p>
+          <summary>Inspect table &amp; sources &#9662;</summary>
+          <p><b>Causal Chain &amp; Citations:</b> Independent clinics, credit unions, and small businesses intend to automate billing and procurement without surrendering trade secrets &rarr; cloud SaaS, PBM, and Group Purchasing Organizations (GPOs) extract 32% middleman tolls while harvesting prompts &rarr; CIN executes CMS National Correct Coding Initiative (NCCI) CPT billing audits inside local WebAssembly sandboxes and forms 500-firm Private Set Intersection (<a href="https://doi.org/10.1007/978-3-540-24676-3_1" target="_blank" rel="noopener">Freedman et al., 2004</a>) buyer cooperatives.</p>
           <table>
             <thead>
               <tr><th>Enterprise Function</th><th>Cloud API Wrapper &amp; GPO Status Quo</th><th>CIN Sovereign Enterprise Architecture</th></tr>
             </thead>
             <tbody>
               <tr><td><b>Trade-Secret Custody</b></td><td>Proprietary pricing, CAD, and clinical records transmitted to external cloud API endpoints.</td><td>Executed locally inside hardware-isolated Wasm OCap sandboxes; zero raw data leaves the premise.</td></tr>
-              <tr><td><b>Supply-Chain Procurement</b></td><td>15%–40% opaque GPO and distributor middleman markups on medical and industrial SKUs.</td><td>Private Set Intersection (PSI) matches overlapping SKU demand across 500 firms for 22%–34% wholesale savings.</td></tr>
+              <tr><td><b>Supply-Chain Procurement</b></td><td>32% lost to opaque SaaS, PBM, and GPO middleman markups on medical and industrial SKUs.</td><td>Private Set Intersection (PSI) matches overlapping SKU demand across 500 firms for 22%&ndash;34% wholesale savings.</td></tr>
               <tr><td><b>Domain Model Ownership</b></td><td>Rented monthly via per-seat SaaS subscriptions; vendor retains all model improvements.</td><td>Enterprise owns its local LoRA weights and pools non-sensitive skill deltas with guild peers via TIES-Merging.</td></tr>
             </tbody>
           </table>
@@ -554,44 +701,60 @@
       </section>
 
       <!-- ================= LENS 6: GLOBAL HUMAN ADOPTION & THE INTELLIGENCE GAMBIT ================= -->
-      <section id="human-adoption" class="ws-lens-sec">
-        <span class="label">Lens 6 of 7 · Global Human Adoption &amp; The Non-Digital Majority</span>
-        <h2>6. Global Workforce: The &ldquo;Intelligence Gambit&rdquo; Against 4.8B Physical Workers vs. Offline Parity</h2>
+      <section id="lens-6-workforce" class="ws-lens-sec">
+        <span id="human-adoption" class="label"><span id="lens-6-human-adoption"></span>Lens 6 &middot; Global Workforce</span>
+        <h2>6. Global Workforce: Shielding 4.8B Physical Workers From Buyer Cartels</h2>
         <p class="ws-lead-sentence">Automated commodity cartels depress physical labor terms unless non-digital workers wield offline voice twins and cooperative supply floors.</p>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad">
-            <small>Asymmetric Cartel Extraction</small>
-            <b>30%&ndash;50% Surplus Drained</b>
-            <span>4.8B+ physical workers (60%+ of humanity)</span>
+            <small>Trade Share Collapse</small>
+            <b>78% &rarr; 24% Share</b>
+            <span>4.8B physical &amp; rural workers</span>
           </div>
           <div class="ws-mbadge ok">
-            <small>Offline Hardware &amp; Voice Twin</small>
-            <b>$8 Pre-ADC + $45 Phone</b>
-            <span>Local dialect agent with 0 biometric leak</span>
+            <small>Offline Hardware</small>
+            <b>$8 Pre-ADC Witness</b>
+            <span>$45 phone; 0 biometric leak</span>
           </div>
           <div class="ws-mbadge warn">
-            <small>Producer PSI Co-Ops &amp; 5D Floor</small>
-            <b>+38% Producer Income</b>
-            <span>10,000-smallholder supply floor + $25k floor</span>
+            <small>Producer PSI Shield</small>
+            <b>+38% Income</b>
+            <span>10,000-producer reserve floor</span>
           </div>
         </div>
 
         <figure class="diagram">
-          <svg data-rich-viz="true" viewBox="0 0 760 340" role="img" aria-label="Global 8.1B Workforce and Resource Trade Asymmetry diagram comparing the Unleveraged Intelligence Gambit against CIN Pre-ADC Hardware and Producer PSI Co-Ops"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. THE GLOBAL “INTELLIGENCE GAMBIT”</text><rect x="26" y="54" width="334" height="68" rx="8" fill="rgba(239,106,82,0.14)" stroke="#ef6a52" stroke-width="1.5"/><text x="38" y="76" font-size="10" font-weight="700" fill="#ef6a52">AI-Armed Commodity &amp; Buyer Cartels</text><text x="38" y="96" font-size="9.5" fill="#e9e6de">Swarm forecasting predicts harvests &amp; gluts</text><text x="38" y="112" font-size="9.5" fill="#e9e6de">to force fire-sale prices on physical producers.</text><path d="M192,124 L192,152" stroke="#ef6a52" stroke-width="2.4"/><text x="192" y="144" text-anchor="middle" font-size="9.5" font-weight="700" fill="#ef6a52">30%–50% Surplus Extracted &darr;</text><rect x="26" y="156" width="334" height="106" rx="8" fill="#181c24" stroke="#ef6a52" stroke-width="1.3"/><text x="38" y="178" font-size="10" font-weight="700" fill="#e9e6de">4.8B+ Non-Digital &amp; Physical Labor Majority</text><rect x="38" y="190" width="310" height="18" rx="4" fill="rgba(239,106,82,0.25)"/><rect x="38" y="190" width="195" height="18" rx="4" fill="#ef6a52"/><text x="46" y="203" font-size="9.5" font-weight="700" fill="#111317">60%+ Global Workforce Exposed</text><text x="38" y="228" font-size="9.5" fill="#8c8f96">• Farmers, artisans, builders, miners &amp; care</text><text x="38" y="248" font-size="9.5" font-weight="700" fill="#ef6a52">• Unshielded against algorithmic price-dumping</text><rect x="26" y="272" width="334" height="42" rx="7" fill="rgba(229,169,60,0.1)" stroke="#e5a93c" stroke-width="1.2"/><text x="38" y="298" font-size="9.5" font-weight="700" fill="#e5a93c">Asymmetric AI bankrupts non-digital trade.</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. CIN PARITY FOR THE PHYSICAL WORLD</text><rect x="400" y="54" width="334" height="80" rx="8" fill="rgba(79,179,168,0.1)" stroke="#4fb3a8" stroke-width="1.4"/><text x="412" y="76" font-size="10" font-weight="700" fill="#4fb3a8">1. $8 Pre-ADC Hardware + Offline Voice Twin</text><text x="412" y="98" font-size="9.5" fill="#e9e6de">Runs offline on $45 phones in local dialect;</text><text x="412" y="118" font-size="9.5" fill="#4fb3a8">proves physical craft with 0 biometric leak.</text><rect x="400" y="144" width="334" height="80" rx="8" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.4"/><text x="412" y="166" font-size="10" font-weight="700" fill="#5da2d5">2. Producer PSI Bargaining Cooperatives</text><text x="412" y="188" font-size="9.5" fill="#e9e6de">10,000 smallholders pool supply floors via PSI</text><text x="412" y="208" font-size="9.5" font-weight="700" fill="#e5a93c">to block price-dumping (+38% producer income).</text><rect x="400" y="234" width="334" height="80" rx="8" fill="rgba(229,169,60,0.11)" stroke="#e5a93c" stroke-width="1.4"/><text x="412" y="256" font-size="10" font-weight="700" fill="#e5a93c">3. 5D Value Ledger &amp; $25k Security Floor</text><text x="412" y="278" font-size="9.5" fill="#e9e6de">Credits Caregiving, Craft &amp; Ecology alongside</text><text x="412" y="298" font-size="9.5" font-weight="700" fill="#4fb3a8">digital code so physical workers thrive.</text></svg>
-          <figcaption>Figure 6 (Lens 6): The Global Intelligence Gambit (8.1B Workforce): Protecting the 4.8B+ Physical, Agricultural &amp; Non-Digital Majority via $8 Pre-ADC Hardware (<a href="https://doi.org/10.1109/JSSC.2022.3161802" target="_blank" rel="noopener">Datta et al., 2022</a>), Offline Voice Twins &amp; Producer PSI Co-Ops.</figcaption>
+          <svg data-rich-viz="true" viewBox="0 0 760 320" role="img" aria-label="Global 4.8B Workforce trade asymmetry comparing AI Buyer Cartels against CIN Pre-ADC Hardware and Producer PSI Co-Ops">
+            <rect x="12" y="12" width="362" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="26" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. 4.8B WORKFORCE CARTEL SQUEEZE</text>
+            <rect x="26" y="64" width="334" height="76" rx="8" fill="rgba(239,106,82,0.14)" stroke="#ef6a52" stroke-width="1.5"/>
+            <text x="38" y="106" font-size="10" font-weight="700" fill="#ef6a52">AI Buyer Cartels Force Fire-Sale Prices</text>
+            <rect x="26" y="162" width="334" height="120" rx="8" fill="#181c24" stroke="#ef6a52" stroke-width="1.3"/>
+            <text x="38" y="196" font-size="10" font-weight="700" fill="#e9e6de">4.8B Un-Digitized Physical Workers</text>
+            <rect x="38" y="218" width="290" height="26" rx="4" fill="#ef6a52"/>
+            <text x="48" y="235" font-size="9.5" font-weight="700" fill="#111317">Trade Share Collapses: 78% &rarr; 24%</text>
+            <rect x="386" y="12" width="362" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="400" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#4fb3a8">2. CIN PHYSICAL-WORLD SHIELD</text>
+            <rect x="400" y="64" width="334" height="64" rx="8" fill="rgba(79,179,168,0.1)" stroke="#4fb3a8" stroke-width="1.4"/>
+            <text x="414" y="100" font-size="10" font-weight="700" fill="#4fb3a8">1. $8 Pre-ADC Witness + Offline Twin</text>
+            <rect x="400" y="144" width="334" height="64" rx="8" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.4"/>
+            <text x="414" y="180" font-size="10" font-weight="700" fill="#5da2d5">2. 10,000-Producer PSI Supply Floor</text>
+            <rect x="400" y="224" width="334" height="64" rx="8" fill="rgba(229,169,60,0.11)" stroke="#e5a93c" stroke-width="1.4"/>
+            <text x="414" y="260" font-size="10" font-weight="700" fill="#e5a93c">3. 5D Care, Craft &amp; Ecology Parity</text>
+          </svg>
         </figure>
 
         <details class="scen-drawer">
-          <summary>Inspect full comparison table &amp; primary-source evidence &#9662;</summary>
-          <p><b>Causal Chain:</b> Over 4.8 billion people work in agriculture, construction, resource extraction, artisan trades, and caregiving &rarr; automated commodity buyer cartels use satellite and swarm forecasting to predict regional harvest gluts and depress farm-gate and physical wages by 30%&ndash;50% &rarr; CIN deploys $8 analog Pre-ADC physical-presence sensors (<a href="https://doi.org/10.1109/JSSC.2022.3161802" target="_blank" rel="noopener">Datta et al., 2022</a>) paired with offline quantized voice twins on $45 handsets, uniting 10,000+ smallholders into Private Set Intersection supply cooperatives and crediting caregiving and ecological stewardship across a 5D value ledger.</p>
+          <summary>Inspect table &amp; sources &#9662;</summary>
+          <p><b>Causal Chain &amp; Citations:</b> Over 4.8 billion people work in agriculture, construction, resource extraction, artisan trades, and caregiving &rarr; automated commodity buyer cartels use satellite and swarm forecasting to collapse physical producer trade share from 78% to 24% &rarr; CIN deploys $8 analog Pre-ADC physical-presence sensors (<a href="https://doi.org/10.1109/JSSC.2022.3161802" target="_blank" rel="noopener">Datta et al., 2022</a>) paired with offline quantized voice twins on $45 handsets, uniting 10,000+ smallholders into Private Set Intersection supply cooperatives (<a href="https://doi.org/10.1007/978-3-540-24676-3_1" target="_blank" rel="noopener">Freedman et al., 2004</a>).</p>
           <table>
             <thead>
               <tr><th>Workforce Dimension</th><th>Asymmetric Cloud Cartel Gambit</th><th>CIN Physical-World Co-Intelligence</th></tr>
             </thead>
             <tbody>
-              <tr><td><b>Hardware &amp; Connectivity</b></td><td>Requires $1,000 smartphones, $20/mo cloud subscriptions, and continuous broadband fiber.</td><td>Runs offline via quantized local models on $45 phones + $8 solar/USB Pre-ADC hardware dongle.</td></tr>
-              <tr><td><b>Terms of Trade &amp; Pricing</b></td><td>Buyer cartels pit isolated smallholders against algorithmic commodity trading desks.</td><td>10,000-producer Private Set Intersection (PSI) cooperatives enforce collective reserve price floors (+38% income).</td></tr>
+              <tr><td><b>Hardware &amp; Connectivity</b></td><td>Requires $1,000 smartphones, $20/mo cloud subscriptions, and continuous broadband fiber.</td><td>Runs offline via quantized local models on $45 phones + $8 solar/USB Pre-ADC hardware witness.</td></tr>
+              <tr><td><b>Terms of Trade &amp; Pricing</b></td><td>Buyer cartels collapse unshielded physical producer trade share from 78% to 24%.</td><td>10,000-producer Private Set Intersection (PSI) cooperatives enforce collective reserve price floors (+38% income).</td></tr>
               <tr><td><b>Valuation of Non-Digital Work</b></td><td>Counts only digital API tokens and financialized GDP; caregiving and ecology valued at $0.</td><td>5D Value Ledger credits Caregiving, Embodied Craft, and Ecological Restoration alongside software.</td></tr>
             </tbody>
           </table>
@@ -599,62 +762,78 @@
       </section>
 
       <!-- ================= LENS 7: ECONOMY OF PAIR INTELLIGENCE VS. UNPROFITABLE CLOUD AI ================= -->
-      <section id="pair-intelligence" class="ws-lens-sec">
-        <span class="label">Lens 7 of 7 · Economy of Pair Intelligence vs. Unprofitable Cloud AI</span>
-        <h2>7. Pair Intelligence Economy: Why Cloud AI Bleeds $5B&ndash;$15B/Yr While 1-to-1 Pairs Retain a 96% Moat</h2>
+      <section id="lens-7-pair-economy" class="ws-lens-sec">
+        <span id="pair-intelligence" class="label"><span id="lens-7-pair-intelligence"></span>Lens 7 &middot; Pair Economy</span>
+        <h2>7. Pair Intelligence Economy: Cloud AI Burn vs. 96% Pair Moat</h2>
         <p class="ws-lead-sentence">Open-weight distillation erodes closed cloud pricing within ninety days, making ten-year human-bound local adaptation the only durable economic moat.</p>
 
         <div class="ws-metric-badges">
           <div class="ws-mbadge bad">
-            <small>Closed Cloud API Burn</small>
-            <b>-$5B to -$15B / Year</b>
-            <span>60&ndash;90 day open-weight distillation cliff</span>
+            <small>Closed Cloud Burn</small>
+            <b>-$5B to -$15B/Yr</b>
+            <span>60&ndash;90d distillation cliff</span>
           </div>
           <div class="ws-mbadge warn">
-            <small>Commodity Token Pricing</small>
-            <b id="pm-cloud-moat">8% Pricing Power</b>
-            <span>Collapses toward bare electricity cost</span>
+            <small>Open Backbone</small>
+            <b id="pm-cloud-moat">4% Commodity Base</b>
+            <span>Distilled to electricity cost</span>
           </div>
           <div class="ws-mbadge ok">
-            <small>1-to-1 Human + Local LoRA Pair</small>
+            <small>1-to-1 Pair Moat</small>
             <b id="pm-pair-moat">96% Uncopyable Moat</b>
-            <span>5&ndash;10 yr private craft + local LoRA memory</span>
+            <span>66% &rarr; 96% by Year 10</span>
           </div>
         </div>
 
         <figure class="diagram">
-          <svg data-rich-viz="true" viewBox="0 0 760 340" role="img" aria-label="Dual chart comparing Centralized Cloud AI 75-day open-weight distillation cliff against 1-to-1 Human plus Local LoRA 10-year compounding moat"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. THE 60–90 DAY CLOUD DISTILLATION CLIFF</text><line x1="46" y1="224" x2="352" y2="224" stroke="#3a3f4b" stroke-width="1.4"/><line x1="46" y1="58" x2="46" y2="224" stroke="#3a3f4b" stroke-width="1.4"/><path d="M50,70 L118,74 Q142,188 210,208 L346,216" fill="none" stroke="#ef6a52" stroke-width="3.2"/><circle cx="118" cy="74" r="4.5" fill="#ef6a52"/><text x="128" y="80" font-size="9.5" font-weight="700" fill="#ef6a52">Day 75: Open Weights Match API</text><text x="56" y="198" font-size="9.5" fill="#8c8f96">Marginal API Price &rarr; $0 Electricity Cost</text><rect x="26" y="242" width="334" height="72" rx="8" fill="rgba(239,106,82,0.11)" stroke="#ef6a52" stroke-width="1.3"/><text x="38" y="264" font-size="10" font-weight="700" fill="#ef6a52">Why Centralized Cloud AI Bleeds $5B–$15B/Yr:</text><text x="38" y="284" font-size="9.5" fill="#e9e6de">• $100B capex depreciates in 18 months</text><text x="38" y="302" font-size="9.5" fill="#e9e6de">• Zero switching cost across commodity APIs</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. 1-TO-1 PAIR INTELLIGENCE MOAT (10-YR)</text><line x1="418" y1="224" x2="726" y2="224" stroke="#3a3f4b" stroke-width="1.4"/><line x1="418" y1="58" x2="418" y2="224" stroke="#3a3f4b" stroke-width="1.4"/><path d="M422,196 Q520,136 610,94 T720,66" fill="none" stroke="#4fb3a8" stroke-width="3.4"/><circle cx="720" cy="66" r="5" fill="#4fb3a8"/><text x="432" y="84" font-size="10" font-weight="700" fill="#4fb3a8">Human + Local LoRA + 10-Yr Memory</text><text x="432" y="102" font-size="9.5" fill="#e9e6de">96% Uncopyable Tacit Craft &amp; Somatic Context</text><text x="400" y="248" font-size="9.5" font-weight="700" font-family="monospace" fill="#e5a93c" id="pm-svg-dynamic-label">Live Readout: 96% Pair Moat (5 yr LoRA) vs. 8% Cloud Pricing (75d distillation)</text><rect x="400" y="260" width="298" height="20" rx="4" fill="#4fb3a8" id="pm-svg-pair-bar"/><text x="408" y="274" font-size="9.5" font-weight="700" fill="#111317">1-to-1 Pair Moat (Uncopyable Local LoRA)</text><rect x="400" y="288" width="26" height="20" rx="4" fill="#ef6a52" id="pm-svg-cloud-bar"/><text x="434" y="302" font-size="9.5" font-weight="700" fill="#ef6a52">Closed Cloud API Pricing Power</text></svg>
-          <figcaption>Figure 7 (Lens 7): The 60–90 Day Open-Weight Distillation Cliff vs. 1-to-1 Human + Local Low-Rank Adapter (<a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">Hu et al., 2022</a>) Pair Intelligence Moat. Adjust the interactive sliders below to stress-test unit economics.</figcaption>
+          <svg data-rich-viz="true" viewBox="0 0 760 320" role="img" aria-label="Dual chart comparing Centralized Cloud AI 60 to 90 day open-weight distillation cliff against 1-to-1 Human plus Local LoRA 10-year 96 percent uncopyable moat">
+            <rect x="12" y="12" width="362" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="26" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. 60&ndash;90 DAY DISTILLATION CLIFF</text>
+            <line x1="46" y1="214" x2="352" y2="214" stroke="#3a3f4b" stroke-width="1.4"/>
+            <line x1="46" y1="56" x2="46" y2="214" stroke="#3a3f4b" stroke-width="1.4"/>
+            <path d="M50,68 L118,72 Q142,182 210,198 L346,206" fill="none" stroke="#ef6a52" stroke-width="3"/>
+            <circle cx="118" cy="72" r="4.5" fill="#ef6a52"/>
+            <text x="128" y="78" font-size="9.5" font-weight="700" fill="#ef6a52">60&ndash;90d Open-Weight Cliff</text>
+            <rect x="26" y="236" width="334" height="52" rx="8" fill="rgba(239,106,82,0.11)" stroke="#ef6a52" stroke-width="1.3"/>
+            <text x="38" y="266" font-size="9.5" font-weight="700" fill="#ef6a52">Cloud AI Burns -$5B to -$15B/Yr</text>
+            <rect x="386" y="12" width="362" height="296" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/>
+            <text x="400" y="38" font-size="10" font-weight="700" font-family="monospace" fill="#4fb3a8">2. 1-TO-1 PAIR MOAT (66% &rarr; 96%)</text>
+            <line x1="418" y1="214" x2="726" y2="214" stroke="#3a3f4b" stroke-width="1.4"/>
+            <line x1="418" y1="56" x2="418" y2="214" stroke="#3a3f4b" stroke-width="1.4"/>
+            <path d="M422,152 Q520,112 610,82 T720,62" fill="none" stroke="#4fb3a8" stroke-width="3.2"/>
+            <circle cx="720" cy="62" r="5" fill="#4fb3a8"/>
+            <text x="432" y="80" font-size="10" font-weight="700" fill="#4fb3a8">Yr-10 Pair Moat: 96% Uncopyable</text>
+            <text x="400" y="238" font-size="9.5" font-weight="700" font-family="monospace" fill="#e5a93c" id="pm-svg-dynamic-label">34% Craft + 32% Memory + 30% LoRA</text>
+            <rect x="400" y="248" width="298" height="18" rx="4" fill="#4fb3a8" id="pm-svg-pair-bar"/>
+            <text x="408" y="261" font-size="9.5" font-weight="700" fill="#111317">96% Pair Moat</text>
+            <rect x="400" y="274" width="26" height="18" rx="4" fill="#ef6a52" id="pm-svg-cloud-bar"/>
+            <text x="434" y="287" font-size="9.5" font-weight="700" fill="#ef6a52">4% Open Backbone</text>
+          </svg>
         </figure>
 
-        <div class="sim-shell" id="pair-moat-sim" style="margin:1rem 0;padding:1.1rem 1.25rem;background:var(--card);border:1px solid var(--rule);border-top:3.5px solid var(--ok);border-radius:14px">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem">
-            <span class="label">Interactive Pair-Intelligence Moat &amp; Distillation Stress-Tester</span>
-            <span style="font:600 .7rem/1 var(--mono);color:var(--ok)">DRAG SLIDERS TO UPDATE FIGURE 7 &amp; BADGES</span>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1rem">
-            <div>
-              <label for="pm-distill" style="display:flex;justify-content:space-between;font:600 .8rem var(--sans)"><span>Open-Weight Distillation Lag</span><b id="pm-distill-val" style="font-family:var(--mono);color:var(--ok)">75 Days</b></label>
-              <input type="range" id="pm-distill" min="30" max="360" step="15" value="75" style="width:100%;margin-top:.3rem;accent-color:var(--ok)">
-            </div>
-            <div>
-              <label for="pm-years" style="display:flex;justify-content:space-between;font:600 .8rem var(--sans)"><span>Human + Local LoRA Co-Adaptation</span><b id="pm-years-val" style="font-family:var(--mono);color:var(--ok)">5 Years</b></label>
-              <input type="range" id="pm-years" min="1" max="10" step="1" value="5" style="width:100%;margin-top:.3rem;accent-color:var(--ok)">
-            </div>
-          </div>
-        </div>
-
         <details class="scen-drawer">
-          <summary>Inspect full comparison table &amp; primary-source evidence &#9662;</summary>
-          <p><b>Why Centralized Cloud AI Is Structurally Unprofitable While 1-to-1 Pair Intelligence Compounds:</b> Frontier cloud labs spend $10B&ndash;$100B training monolithic models, only for open-weight distillation and Low-Rank Adaptation (<a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">Hu et al., 2022</a>; <a href="https://arxiv.org/abs/2306.01708" target="_blank" rel="noopener">Yadav et al., 2023</a>) to replicate baseline capability within <b>60&ndash;90 days</b>. Because raw token inference has zero switching cost, API margins collapse toward bare electricity cost, generating $5B&ndash;$15B in annual operating losses. Conversely, a <b>1-to-1 Pair</b>—one biological human bound to a local on-device LoRA adapter accumulating 10 years of private episodic memory, tacit craft judgment, and affective context (<a href="https://mitpress.mit.edu/9780262661157/affective-computing/" target="_blank" rel="noopener">Picard, 1997</a>)—cannot be scraped, distilled, or commoditized.</p>
+          <summary>Inspect table, stress-tester &amp; sources &#9662;</summary>
+          <p><b>Why Centralized Cloud AI Bleeds -$5B to -$15B/Yr While 1-to-1 Pair Intelligence Compounds from 66% to 96%:</b> Frontier cloud labs spend $10B&ndash;$100B training monolithic models, only for open-weight distillation and Low-Rank Adaptation (<a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">Hu et al., 2022</a>; <a href="https://arxiv.org/abs/2306.01708" target="_blank" rel="noopener">Yadav et al., 2023</a>) to replicate baseline capability within <b>60&ndash;90 days</b>. Conversely, a <b>1-to-1 Pair</b>—combining <b>34% tacit human craft</b>, <b>32% 10-year private episodic memory</b>, and <b>30% on-device rank-16 LoRA weights</b> (<a href="https://mitpress.mit.edu/9780262661157/affective-computing/" target="_blank" rel="noopener">Picard, 1997</a>) atop a <b>4% commodity open backbone</b>—reaches a <b>96% uncopyable moat</b> by Year 10.</p>
+          <div class="sim-shell" id="pair-moat-sim" style="margin:.8rem 0;padding:.9rem 1rem;background:var(--paper);border:1px solid var(--rule);border-radius:10px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.85rem">
+              <div>
+                <label for="pm-distill" style="display:flex;justify-content:space-between;font:600 .78rem var(--sans)"><span>Open-Weight Distillation Speed (15 &rarr; 180 Days)</span><b id="pm-distill-val" style="font-family:var(--mono);color:var(--ok)">75 Days</b></label>
+                <input type="range" id="pm-distill" min="15" max="180" step="15" value="75" style="width:100%;margin-top:.25rem;accent-color:var(--ok)">
+              </div>
+              <div>
+                <label for="pm-years" style="display:flex;justify-content:space-between;font:600 .78rem var(--sans)"><span>1-to-1 Pair Co-Adaptation (1 &rarr; 10 Years)</span><b id="pm-years-val" style="font-family:var(--mono);color:var(--ok)">10 Years</b></label>
+                <input type="range" id="pm-years" min="1" max="10" step="1" value="10" style="width:100%;margin-top:.25rem;accent-color:var(--ok)">
+              </div>
+            </div>
+          </div>
           <table>
             <thead>
               <tr><th>Economic Metric</th><th>Centralized Frontier Cloud API</th><th>1-to-1 Human + Local LoRA Pair</th></tr>
             </thead>
             <tbody>
-              <tr><td><b>Capex Depreciation</b></td><td>$10B–$100B GPU clusters obsolete within 60–90 days of open-weight distillation.</td><td>Runs on local consumer NPU/silicon; 18 MB rank-16 LoRA weights compound across hardware upgrades.</td></tr>
-              <tr><td><b>Defensibility / Moat</b></td><td>~8% residual pricing power; zero switching barrier between rival API endpoints.</td><td>96% uncopyable moat anchored in private 10-year episodic craft memory and hardware-bound keys.</td></tr>
-              <tr><td><b>Value Capture</b></td><td>Negative cash flow (-$5B to -$15B/yr) subsidized by speculative equity raises.</td><td>Retains 95% Data Shapley royalties on verified outputs settled across the cooperative ledger.</td></tr>
+              <tr><td><b>Capex Depreciation</b></td><td>$10B&ndash;$100B GPU clusters obsolete within 60&ndash;90 days of open-weight distillation.</td><td>Runs on local consumer NPU/silicon; 18 MB rank-16 LoRA weights compound across hardware upgrades.</td></tr>
+              <tr><td><b>Defensibility / Moat</b></td><td>4% commodity backbone share; -$5B to -$15B/yr cash burn across rival API endpoints.</td><td>66% &rarr; 96% uncopyable moat by Year 10 (34% tacit craft + 32% 10-yr memory + 30% rank-16 LoRA).</td></tr>
+              <tr><td><b>Value Capture</b></td><td>Negative cash flow subsidized by speculative equity raises.</td><td>Retains 95% Data Shapley royalties on verified outputs settled across the cooperative ledger.</td></tr>
             </tbody>
           </table>
         </details>
@@ -665,6 +844,6 @@
 </article>
 </main>
 
-<script src="/scripts/site.js?v=53" defer></script>
+<script src="/scripts/site.js?v=54" defer></script>
 </body>
 </html>

@@ -321,7 +321,51 @@
           '<div><span class="r-ok">[SHAPLEY-ROYALTY]</span> Marginal accuracy gain (+' + v2 + '%) across ' + v1.toLocaleString('en-US') + ' executions = ' + fmtUsd(grossMo) + '/mo (Ghorbani &amp; Zou, 2019)</div>' +
           '<div class="arch-links" style="margin-top:.55rem;padding-top:.45rem;border-top:1px dashed rgba(255,255,255,.2)"><a class="blueprint-badge" href="/notes/how-the-ledger-works">How the Shared Ledger Works &rarr;</a><a class="blueprint-badge" href="/notes/beyond-arxiv-agent-web-ledger">Testnet Ledger v4.0 Simulator &rarr;</a></div>';
       }
+      if (wbMode === 'medical') {
+        renderWedgeD3('medical', '1. Legacy Chargemaster', k1v.textContent, '2. CMS NCCI + PSI Fair', k2v.textContent, '3. Household Saved', k3v.textContent, 0.52);
+      } else if (wbMode === 'coop') {
+        renderWedgeD3('coop', '1. Legacy 28% GPO Toll', k1v.textContent, '2. Direct QUIC Escrow', k2v.textContent, '3. Member Saved/Yr', k3v.textContent, 0.84);
+      } else {
+        renderWedgeD3('creator', '1. Cloud AI Scraping', '$0 / mo (0%)', '2. Shapley Pool/Mo', k2v.textContent, '3. Lead Author (70%)', k3v.textContent, 0.95);
+      }
     };
+    var renderWedgeD3 = function (mode, leftTitle, leftVal, midTitle, midVal, rightTitle, rightVal, ratioOk) {
+      var svgEl = document.getElementById('wb-d3-svg');
+      if (!svgEl || !window.d3) return;
+      var d3 = window.d3;
+      var svg = d3.select(svgEl);
+      svg.selectAll('*').remove();
+
+      svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 672).attr('height', 120).attr('rx', 10)
+        .attr('fill', '#11151c').attr('stroke', '#2c303a').attr('stroke-width', 1.4);
+
+      svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+        .text('D3.JS V7 LIVE WATERFALL: LEGACY EXTRACTION VS. CIN LOCAL OCAP / PSI / SHAPLEY');
+
+      var boxes = [
+        { x: 18, w: 196, k: leftTitle, v: leftVal, col: '#ef6a52', bg: 'rgba(239,106,82,0.14)' },
+        { x: 242, w: 196, k: midTitle, v: midVal, col: '#5da2d5', bg: 'rgba(93,162,213,0.14)' },
+        { x: 466, w: 196, k: rightTitle, v: rightVal, col: '#4fb3a8', bg: 'rgba(79,179,168,0.18)' }
+      ];
+
+      boxes.forEach(function (b, idx) {
+        svg.append('rect').attr('x', b.x).attr('y', 34).attr('width', b.w).attr('height', 52).attr('rx', 7)
+          .attr('fill', b.bg).attr('stroke', b.col).attr('stroke-width', 1.4);
+        svg.append('text').attr('x', b.x + 12).attr('y', 52).attr('font-size', 9).attr('font-family', 'monospace').attr('fill', '#c7cbd4').text(b.k);
+        svg.append('text').attr('x', b.x + 12).attr('y', 74).attr('font-size', 13).attr('font-weight', '700').attr('fill', b.col).text(b.v);
+        if (idx < 2) {
+          svg.append('text').attr('x', b.x + b.w + 14).attr('y', 64).attr('text-anchor', 'middle').attr('font-size', 13).attr('font-weight', '700').attr('fill', '#e5a93c').text('→');
+        }
+      });
+
+      var barW = 644;
+      var okW = Math.max(48, Math.min(barW - 48, Math.round(barW * ratioOk)));
+      svg.append('rect').attr('x', 18).attr('y', 96).attr('width', barW).attr('height', 16).attr('rx', 4).attr('fill', 'rgba(239,106,82,0.28)');
+      svg.append('rect').attr('x', 18).attr('y', 96).attr('width', okW).attr('height', 16).attr('rx', 4).attr('fill', '#4fb3a8');
+      svg.append('text').attr('x', 26).attr('y', 108).attr('font-size', 9).attr('font-weight', '700').attr('fill', '#0d1117')
+        .text('Retained by Household / SMB / Creator: ' + Math.round(ratioOk * 100) + '%');
+    };
+
 
     wbBtns.forEach(function (b) {
       b.addEventListener('click', function () { configureWbMode(b.getAttribute('data-wb-mode')); });
@@ -1978,6 +2022,179 @@
     var normDelta = (val - d.simConfig.val) / span;
     renderBars(d, normDelta);
     renderD3LensOverlay(d, val, res);
+    renderD3RadarLens(currentKey, d, val, normDelta);
+    renderD3FlowLens(currentKey, d, val, res, normDelta);
+  }
+
+  var RADAR_AXES = [
+    'Human Sovereignty',
+    'Creator Royalties',
+    'Swarm Containment',
+    'Local Privacy (0-Egress)',
+    'Compute Access',
+    'Uncopyable Moat'
+  ];
+
+  var RADAR_PROFILES = {
+    labs:       { sq: [14, 5, 20, 12, 18, 15], ow: [48, 10, 32, 72, 68, 22], cin: [96, 95, 96, 100, 92, 96] },
+    safety:     { sq: [16, 12, 24, 15, 22, 18], ow: [42, 14, 18, 65, 60, 20], cin: [98, 95, 98, 100, 90, 97] },
+    gov:        { sq: [22, 18, 16, 20, 25, 20], ow: [45, 20, 28, 60, 58, 25], cin: [95, 92, 97, 98, 91, 94] },
+    research:   { sq: [18, 2, 25, 22, 12, 16], ow: [62, 15, 38, 70, 54, 30], cin: [96, 94, 95, 98, 96, 95] },
+    enterprise: { sq: [16, 14, 22, 10, 28, 14], ow: [54, 35, 36, 75, 62, 38], cin: [98, 96, 94, 100, 94, 97] },
+    humanity:   { sq: [12, 10, 18, 14, 15, 12], ow: [38, 18, 26, 55, 42, 24], cin: [95, 94, 93, 98, 95, 94] },
+    pair:       { sq: [10, 8, 20, 8, 20, 12], ow: [52, 20, 32, 78, 70, 18], cin: [99, 95, 96, 100, 94, 98] }
+  };
+
+  function renderD3RadarLens(key, d, val, normDelta) {
+    var svgEl = document.getElementById('wm-d3-radar-svg');
+    if (!svgEl || !window.d3) return;
+    var d3 = window.d3;
+    var svg = d3.select(svgEl);
+    svg.selectAll('*').remove();
+
+    var prof = RADAR_PROFILES[key] || RADAR_PROFILES.labs;
+    var boost = Math.round((normDelta || 0) * 6);
+    var sqVals = prof.sq.map(function (v) { return Math.max(4, Math.min(95, v - boost)); });
+    var owVals = prof.ow.map(function (v) { return Math.max(8, Math.min(95, v)); });
+    var cinVals = prof.cin.map(function (v) { return Math.max(50, Math.min(100, v + Math.round(boost * 0.5))); });
+
+    svg.append('rect').attr('x', 8).attr('y', 8).attr('width', 744).attr('height', 344).attr('rx', 12)
+      .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+
+    svg.append('text').attr('x', 24).attr('y', 32).attr('font-size', 10.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      .text('D3.JS V7 6-AXIS STRUCTURAL RADAR: STATUS QUO VS. OPEN WEIGHTS VS. CIN CO-INTELLIGENCE');
+
+    var cx = 205, cy = 192, maxR = 112;
+    [0.25, 0.5, 0.75, 1.0].forEach(function (ring) {
+      svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', maxR * ring)
+        .attr('fill', 'none').attr('stroke', '#2a303c').attr('stroke-dasharray', ring < 1 ? '3 3' : 'none');
+    });
+
+    var n = RADAR_AXES.length;
+    RADAR_AXES.forEach(function (axisName, i) {
+      var ang = -Math.PI / 2 + (i * 2 * Math.PI / n);
+      var x2 = cx + Math.cos(ang) * maxR;
+      var y2 = cy + Math.sin(ang) * maxR;
+      svg.append('line').attr('x1', cx).attr('y1', cy).attr('x2', x2).attr('y2', y2).attr('stroke', '#323846');
+      var lx = cx + Math.cos(ang) * (maxR + 22);
+      var ly = cy + Math.sin(ang) * (maxR + 16);
+      var anchor = Math.abs(Math.cos(ang)) < 0.2 ? 'middle' : (Math.cos(ang) > 0 ? 'start' : 'end');
+      svg.append('text').attr('x', lx).attr('y', ly + 3).attr('text-anchor', anchor)
+        .attr('font-size', 9.2).attr('font-weight', '700').attr('fill', '#d5d9e2').text(axisName);
+    });
+
+    function polyPoints(arr) {
+      return arr.map(function (v, i) {
+        var ang = -Math.PI / 2 + (i * 2 * Math.PI / n);
+        var r = (v / 100) * maxR;
+        return (cx + Math.cos(ang) * r).toFixed(1) + ',' + (cy + Math.sin(ang) * r).toFixed(1);
+      }).join(' ');
+    }
+
+    svg.append('polygon').attr('points', polyPoints(sqVals))
+      .attr('fill', 'rgba(239,106,82,0.22)').attr('stroke', '#ef6a52').attr('stroke-width', 2);
+    svg.append('polygon').attr('points', polyPoints(owVals))
+      .attr('fill', 'rgba(229,169,60,0.16)').attr('stroke', '#e5a93c').attr('stroke-width', 1.8).attr('stroke-dasharray', '4 3');
+    svg.append('polygon').attr('points', polyPoints(cinVals))
+      .attr('fill', 'rgba(79,179,168,0.28)').attr('stroke', '#4fb3a8').attr('stroke-width', 2.6);
+
+    // Right panel: 6-row live D3 comparative table
+    var rx = 408, ry = 54;
+    svg.append('rect').attr('x', rx).attr('y', ry).attr('width', 328).attr('height', 278).attr('rx', 10)
+      .attr('fill', '#161b24').attr('stroke', '#2c303a');
+    svg.append('text').attr('x', rx + 14).attr('y', ry + 24).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+      .text('DIMENSION               CLOUD   OPEN    CIN');
+
+    RADAR_AXES.forEach(function (ax, idx) {
+      var y = ry + 54 + idx * 36;
+      svg.append('line').attr('x1', rx + 12).attr('y1', y - 16).attr('x2', rx + 316).attr('y2', y - 16).attr('stroke', '#252a34');
+      svg.append('text').attr('x', rx + 14).attr('y', y).attr('font-size', 9.5).attr('font-weight', '600').attr('fill', '#e9e6de').text(ax);
+      svg.append('text').attr('x', rx + 188).attr('y', y).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52').text(sqVals[idx] + '%');
+      svg.append('text').attr('x', rx + 242).attr('y', y).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c').text(owVals[idx] + '%');
+      svg.append('text').attr('x', rx + 292).attr('y', y).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8').text(cinVals[idx] + '%');
+    });
+  }
+
+  function renderD3FlowLens(key, d, val, res, normDelta) {
+    var svgEl = document.getElementById('wm-d3-flow-svg');
+    if (!svgEl || !window.d3) return;
+    var d3 = window.d3;
+    var svg = d3.select(svgEl);
+    svg.selectAll('*').remove();
+
+    svg.append('rect').attr('x', 8).attr('y', 8).attr('width', 744).attr('height', 344).attr('rx', 12)
+      .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+
+    svg.append('text').attr('x', 24).attr('y', 32).attr('font-size', 10.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      .text('D3.JS V7 CO-INTELLIGENCE LAB: $100 VALUE FLOW, BIOLOGICAL AIRLOCK & 96% PAIR MOAT');
+
+    // Left panel: $100 Value & Incentive Flow
+    svg.append('rect').attr('x', 22).attr('y', 46).attr('width', 348).attr('height', 290).attr('rx', 10)
+      .attr('fill', '#161b24').attr('stroke', '#2c303a');
+    svg.append('text').attr('x', 36).attr('y', 70).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+      .text('1. STATUS QUO: RENT & EXTRACTION FLOW');
+
+    var flowsSq = [
+      { label: 'Cloud Shareholder & GPU Rent', pct: 72, col: '#ef6a52' },
+      { label: 'Middleman / API / GPO Markup', pct: 28, col: '#d97757' },
+      { label: 'Human Creator / Solver Royalty', pct: 0, col: '#6e7681' }
+    ];
+    flowsSq.forEach(function (f, i) {
+      var y = 84 + i * 34;
+      svg.append('text').attr('x', 36).attr('y', y + 11).attr('font-size', 9.2).attr('fill', '#d5d9e2').text(f.label);
+      svg.append('rect').attr('x', 212).attr('y', y).attr('width', Math.max(6, f.pct * 1.35)).attr('height', 16).attr('rx', 4).attr('fill', f.col);
+      svg.append('text').attr('x', 218 + Math.max(6, f.pct * 1.35)).attr('y', y + 12).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', f.col).text('$' + f.pct);
+    });
+
+    svg.append('text').attr('x', 36).attr('y', 204).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      .text('2. CIN LEDGER: COOPERATION & SHAPLEY FLOW');
+
+    var flowsCin = [
+      { label: 'Direct Human Solver (Shapley)', pct: 85, col: '#4fb3a8' },
+      { label: 'Upstream Academic & Lineage', pct: 10, col: '#5da2d5' },
+      { label: 'Universal $25k Floor & Commons', pct: 5, col: '#e5a93c' }
+    ];
+    flowsCin.forEach(function (f, i) {
+      var y = 218 + i * 34;
+      svg.append('text').attr('x', 36).attr('y', y + 11).attr('font-size', 9.2).attr('fill', '#d5d9e2').text(f.label);
+      svg.append('rect').attr('x', 212).attr('y', y).attr('width', Math.max(10, f.pct * 1.35)).attr('height', 16).attr('rx', 4).attr('fill', f.col);
+      svg.append('text').attr('x', 218 + Math.max(10, f.pct * 1.35)).attr('y', y + 12).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', f.col).text('$' + f.pct);
+    });
+
+    // Right panel: Biological (~40 bits/s) vs. Silicon Swarm (10^12 bits/s) Airlock & 96% Pair Moat
+    svg.append('rect').attr('x', 384).attr('y', 46).attr('width', 352).attr('height', 290).attr('rx', 10)
+      .attr('fill', '#161b24').attr('stroke', '#2c303a');
+    svg.append('text').attr('x', 398).attr('y', 70).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+      .text('3. BIOLOGICAL AIRLOCK & 1-TO-1 PAIR MOAT');
+
+    // Bandwidth mismatch visual
+    svg.append('rect').attr('x', 398).attr('y', 84).attr('width', 324).attr('height', 74).attr('rx', 8)
+      .attr('fill', 'rgba(239,106,82,0.1)').attr('stroke', '#ef6a52');
+    svg.append('text').attr('x', 410).attr('y', 104).attr('font-size', 9.5).attr('font-weight', '700').attr('fill', '#ef6a52')
+      .text('Competitive Intelligence Trap (Without CIN Airlock)');
+    svg.append('text').attr('x', 410).attr('y', 124).attr('font-size', 9.2).attr('fill', '#e9e6de')
+      .text('Human Biology: ~40 bits/s · 25-yr generation');
+    svg.append('text').attr('x', 410).attr('y', 144).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', '#ef6a52')
+      .text('Unbound Swarms: 10¹² bits/s · 4.5-mo doubling → Extinction');
+
+    // CIN Co-Intelligence Airlock + Pair Moat visual
+    svg.append('rect').attr('x', 398).attr('y', 170).attr('width', 324).attr('height', 152).attr('rx', 8)
+      .attr('fill', 'rgba(79,179,168,0.14)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.6);
+    svg.append('text').attr('x', 410).attr('y', 192).attr('font-size', 9.5).attr('font-weight', '700').attr('fill', '#4fb3a8')
+      .text('CIN Co-Intelligence Barrier (Last Resort Before Pause)');
+    svg.append('text').attr('x', 410).attr('y', 214).attr('font-size', 9.2).attr('fill', '#e9e6de')
+      .text('✓ Two-Internet OCap Airlock: 0 direct bot-to-human contact');
+    svg.append('text').attr('x', 410).attr('y', 234).attr('font-size', 9.2).attr('fill', '#e9e6de')
+      .text('✓ 24h Mortal Execution Lease + 1-to-1 Silicon PUF Bond');
+    svg.append('text').attr('x', 410).attr('y', 254).attr('font-size', 9.2).attr('fill', '#e9e6de')
+      .text('✓ 96% Pair Moat: 34% Craft + 32% Memory + 30% Local LoRA');
+
+    svg.append('rect').attr('x', 410).attr('y', 270).attr('width', 300).attr('height', 38).attr('rx', 6)
+      .attr('fill', '#11151c').attr('stroke', '#e5a93c');
+    svg.append('text').attr('x', 422).attr('y', 286).attr('font-size', 8.8).attr('font-family', 'monospace').attr('fill', '#e5a93c')
+      .text('ACTIVE STRESS-TEST (' + d.simConfig.formatVal(val) + '):');
+    svg.append('text').attr('x', 422).attr('y', 301).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', '#4fb3a8')
+      .text(res.okV.slice(0, 48));
   }
 
   function selectLens(key) {
@@ -2038,4 +2255,101 @@
   } else {
     updateSimReadout();
   }
+
+  var wmVizModes = document.getElementById('wm-viz-modes');
+  var radarWrap = document.getElementById('wm-d3-radar-wrap');
+  var flowWrap = document.getElementById('wm-d3-flow-wrap');
+  if (wmVizModes) {
+    wmVizModes.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-wm-mode]');
+      if (!btn) return;
+      var mode = btn.getAttribute('data-wm-mode');
+      [].forEach.call(wmVizModes.querySelectorAll('[data-wm-mode]'), function (b) {
+        var on = b === btn;
+        b.setAttribute('aria-selected', String(on));
+        b.style.borderColor = on ? 'var(--ok)' : '';
+        b.style.background = on ? 'color-mix(in srgb,var(--ok) 16%,var(--card))' : '';
+      });
+      if (svgWrap) svgWrap.hidden = (mode !== 'arch');
+      if (radarWrap) radarWrap.hidden = (mode !== 'radar');
+      if (flowWrap) flowWrap.hidden = (mode !== 'flow');
+      updateSimReadout();
+    });
+  }
+})();
+
+// ==========================================================================
+// ?v=54 D3.JS V7 RISK-SCALED QUORUM CURVE IN #swarm-lock
+// ==========================================================================
+(function () {
+  var slSvgEl = document.getElementById('sl-d3-curve-svg');
+  var slSlider = document.getElementById('sl-risk-slider');
+  var slRoot = document.getElementById('swarm-lock');
+  if (!slSvgEl || !slSlider || !slRoot) return;
+
+  function renderSwarmLockD3(rPct) {
+    if (!window.d3) return;
+    var d3 = window.d3;
+    var svg = d3.select(slSvgEl);
+    svg.selectAll('*').remove();
+
+    var r01 = Math.max(0, Math.min(1, Number(rPct || 0) / 100));
+    var phiVal = r01 <= 0.001 ? 0 : (1 - Math.pow(1 - Math.min(0.9999, r01), 5));
+    var lockHrs = r01 > 0.30 ? Math.round(72 * r01 * r01 * 10) / 10 : 0;
+
+    svg.append('rect').attr('x', 6).attr('y', 6).attr('width', 748).attr('height', 172).attr('rx', 12)
+      .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
+
+    svg.append('text').attr('x', 22).attr('y', 28).attr('font-size', 10).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      .text('D3.JS V7 RISK-SCALED QUORUM CURVE: Φ(R) = 1 − (1 − R)⁵ & DELIBERATION TIME-LOCK τ(R) = 72h·R²');
+
+    var xScale = d3.scaleLinear().domain([0, 100]).range([54, 480]);
+    var yScale = d3.scaleLinear().domain([0, 100]).range([148, 46]);
+
+    // Axes
+    svg.append('line').attr('x1', 54).attr('y1', 148).attr('x2', 480).attr('y2', 148).attr('stroke', '#3a3f4b');
+    svg.append('line').attr('x1', 54).attr('y1', 46).attr('x2', 54).attr('y2', 148).attr('stroke', '#3a3f4b');
+
+    [0, 25, 50, 75, 100].forEach(function (t) {
+      svg.append('text').attr('x', xScale(t)).attr('y', 164).attr('text-anchor', 'middle').attr('font-size', 8.8).attr('font-family', 'monospace').attr('fill', '#8c8f96').text(t + '% Risk');
+    });
+
+    // Plot Phi(R) curve
+    var pts = d3.range(0, 101, 2).map(function (x) {
+      var rr = x / 100;
+      var pp = rr <= 0.001 ? 0 : (1 - Math.pow(1 - rr, 5)) * 100;
+      return [xScale(x), yScale(pp)];
+    });
+    var lineGen = d3.line();
+    svg.append('path').attr('d', lineGen(pts)).attr('fill', 'none').attr('stroke', '#4fb3a8').attr('stroke-width', 3);
+
+    // Current marker
+    var cx = xScale(r01 * 100);
+    var cy = yScale(phiVal * 100);
+    svg.append('line').attr('x1', cx).attr('y1', 46).attr('x2', cx).attr('y2', 148).attr('stroke', '#e5a93c').attr('stroke-dasharray', '3 3');
+    svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 6.5).attr('fill', r01 > 0.5 ? '#ef6a52' : '#4fb3a8').attr('stroke', '#fff').attr('stroke-width', 2);
+
+    // Right readout panel
+    svg.append('rect').attr('x', 502).attr('y', 40).attr('width', 236).attr('height', 124).attr('rx', 9)
+      .attr('fill', '#161b24').attr('stroke', r01 > 0.5 ? '#ef6a52' : '#4fb3a8').attr('stroke-width', 1.4);
+    svg.append('text').attr('x', 516).attr('y', 62).attr('font-size', 9.2).attr('font-family', 'monospace').attr('fill', '#c7cbd4')
+      .text('BLAST-RADIUS RISK: ' + Math.round(r01 * 1000) / 10 + '%');
+    svg.append('text').attr('x', 516).attr('y', 86).attr('font-size', 11).attr('font-weight', '700').attr('fill', '#4fb3a8')
+      .text('Quorum Φ(R): ' + (phiVal * 100).toFixed(2) + '%');
+    svg.append('text').attr('x', 516).attr('y', 110).attr('font-size', 10).attr('font-weight', '700').attr('fill', '#e5a93c')
+      .text('Time-Lock τ(R): ' + (lockHrs > 0 ? lockHrs + ' hrs' : '0h (Immediate)'));
+    svg.append('text').attr('x', 516).attr('y', 136).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', r01 > 0.5 ? '#ef6a52' : '#4fb3a8')
+      .text(r01 > 0.5 ? '✗ SINGLE-COMMANDER BLOCKED' : '✓ UNLOCKED BY LOCAL CONSENT');
+  }
+
+  slSlider.addEventListener('input', function () {
+    renderSwarmLockD3(slSlider.value);
+  });
+  slRoot.addEventListener('click', function (e) {
+    if (e.target.closest('[data-sl-task]')) {
+      setTimeout(function () { renderSwarmLockD3(slSlider.value); }, 10);
+    }
+  });
+  if (window.d3) renderSwarmLockD3(slSlider.value);
+  else window.addEventListener('load', function () { renderSwarmLockD3(slSlider.value); });
 })();

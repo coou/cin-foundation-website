@@ -1401,3 +1401,79 @@ footer.site {
   .opp-biz-grid { grid-template-columns: 1fr; }
   .opp-dossiers-list { grid-template-columns: 1fr; }
 }
+
+
+/* ?v=17 Interactive 3-Mode D3 Switcher & Collapsible Portal Drawers */
+.portal-drawer {
+  margin-top: 0.45rem;
+  padding-top: 0.38rem;
+  border-top: 1px dashed var(--rule);
+}
+.portal-drawer summary {
+  font: 600 0.74rem/1.3 var(--mono);
+  color: #4fb3a8;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.portal-drawer summary::-webkit-details-marker {
+  display: none;
+}
+.portal-drawer summary:hover {
+  color: #e3b341;
+}
+.portal-drawer[open] > summary {
+  margin-bottom: 0.5rem;
+  color: #e3b341;
+}
+
+.pwm-viz-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+  padding: 0.35rem;
+  background: #0d0f14;
+  border: 1px solid var(--rule-strong);
+  border-radius: 10px;
+}
+.pwm-mode-btn {
+  flex: 1 1 auto;
+  font: 600 0.75rem/1.25 var(--mono);
+  padding: 0.42rem 0.68rem;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: #141821;
+  color: var(--ink-2);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+.pwm-mode-btn:hover {
+  color: var(--ink);
+  border-color: #4fb3a8;
+}
+.pwm-mode-btn.active,
+.pwm-mode-btn[aria-selected="true"] {
+  background: #173330;
+  color: #ffffff;
+  border-color: #4fb3a8;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.pwm-svg-wrap {
+  display: grid;
+  gap: 0.5rem;
+}
+.pwm-svg-wrap svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+.pwm-svg-wrap [hidden],
+.pwm-svg-box[hidden],
+.twin-d3-pane[hidden] {
+  display: none !important;
+}

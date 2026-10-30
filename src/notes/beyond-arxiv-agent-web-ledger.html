@@ -220,17 +220,20 @@
   <div class="note-body wrap-narrow">
     <aside class="callout">
       <b>Why we built a Clean-Room Actor Sandbox outside project lore</b>
-      <p>When AI agents are asked to invent test scenarios inside a technical research repository, they naturally gravitate toward complex engineering jargon instead of why regular people are upset in their local communities. To fix this, our simulation pipeline starts in a <strong>Clean-Room Instruction Sandbox</strong> (<code>research/ledger_sim/sandbox/actor_factory.py</code>): a trend-researcher prompt searches consumer complaint reports and everyday community threads to extract (1) <em>Real-World Evidence</em>, (2) <em>The Mundane Friction Point</em>, (3) <em>The Target Persona</em>, and (4) <em>The Current Manual Workaround</em>, before instantiating isolated human and agent sessions inside hardware-isolated Object-Capability (OCap) sandboxes (Dennis &amp; Van Horn, 1966).</p>
+      <p>Our simulation pipeline starts in a <strong>Clean-Room Instruction Sandbox</strong> (<code>research/ledger_sim/sandbox/actor_factory.py</code>) grounded in empirical CFPB, CMS, and community complaints inside hardware-isolated Object-Capability (OCap) sandboxes (Dennis &amp; Van Horn, 1966).</p>
     </aside>
 
     <h2>1. The 4-stage actor creation &amp; ledger execution pipeline</h2>
-    <p>Every simulation run follows four strict stages so that human personas remain grounded in real life and no session can cheat:</p>
-    <ul>
+    <p>Every simulation run follows four strict stages—Empirical Friction Discovery, Grounded Persona Synthesis, Clean-Room Session Isolation, and Held-Out Proof-Carrying Verification—so human personas remain grounded in real life and no session can cheat.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full 4-stage Clean-Room derivation &amp; primary sources &#9662;</summary>
+      <ul>
       <li><b>Stage 0 &mdash; Empirical Friction Discovery:</b> Searches documented consumer complaints from the last 12&ndash;24 months (CFPB recurring-billing and medical-billing dockets, CMS NCCI coding manuals, FTC junk-fee reports, and community threads on <code>r/adulting</code>, <code>r/mildlyinfuriating</code>, <code>r/renters</code>, and <code>r/sysadmin</code>) to capture the exact manual workarounds people currently use.</li>
       <li><b>Stage 1 &mdash; Grounded Persona Synthesis:</b> Pairs a <strong>Requesting Human</strong> (defined by their job, household constraint, clumsy manual workaround, and preferred explanation style) with a <strong>Contributing Human</strong> (a practitioner who already built a clean script, spreadsheet reconciler, or checklist for that exact problem).</li>
       <li><b>Stage 2 &mdash; Clean-Room Session Isolation:</b> Places each of the 5 actors (<code>orchestrator</code>, <code>human_tasker</code>, <code>agent_tasker</code>, <code>human_solver</code>, <code>agent_solver</code>) in its own directory with an instruction firewall (<code>RealmIsolationFirewall</code> in <code>session_isolation.py</code>) that strips out internal project jargon.</li>
       <li><b>Stage 3 &mdash; Held-Out Verification &amp; Modality Bridge:</b> The agents exchange structured capability artifacts with Proof-Carrying Code certificates (Necula, POPL 1997) and sample data contracts on the SQLite ledger, the Orchestrator tests the tool on unseen held-out records, Data Shapley attribution (Shapley, 1953; Ghorbani &amp; Zou, ICML 2019) conserves 1,000 reward units across contributors, and the Modality Bridge renders the verified result as a 30-second checklist, side-by-side comparison table, or visual flow map.</li>
-    </ul>
+      </ul>
+    </details>
 
     <figure class="diagram">
       <svg viewBox="0 0 820 250" role="img" aria-label="Four-stage Clean-Room Actor Sandbox and 5-Session Isolation Pipeline from empirical consumer complaint discovery to held-out verification and Modality Bridge rendering.">
@@ -302,15 +305,24 @@
         <div class="session-card"><strong>Ledger v1.0 &rarr; v4.0</strong><div style="color:var(--ink-3);margin-top:0.15rem">Participant RFCs + Critic</div></div>
       </div>
 
+      <div style="margin:0 0 1.15rem;overflow-x:auto">
+        <svg id="ledger-d3-chart" data-rich-viz="true" viewBox="0 0 780 260" role="img" aria-label="Interactive D3.js v7 Multi-Agent Consensus Speed (9.1x Faster NextLat/LoRA) and Data Shapley 95%/5% Payout Visualizer">
+          <rect x="4" y="4" width="772" height="252" rx="12" fill="#12151c" stroke="#2a2f3a" stroke-width="1.5"/>
+          <text x="390" y="130" text-anchor="middle" font-family="monospace" font-size="12" fill="#4fb3a8">Initializing D3.js v7 Multi-Agent Consensus Speed &amp; 95%/5% Data Shapley Visualizer...</text>
+        </svg>
+      </div>
+
       <div class="sim-tabs" role="tablist" aria-label="Scenario selector" id="sim-tab-bar"></div>
 
       <div id="sim-header" style="margin-bottom:1rem;"></div>
 
-      <div class="session-lanes" id="sim-sessions"></div>
-
       <div class="dual-pane" id="sim-dual-pane"></div>
 
-      <div class="pane-box" id="sim-evolution-pane" style="margin-top:1rem;"></div>
+      <details class="scen-drawer" style="margin-top:1rem">
+        <summary>Inspect 5-session clean-room isolation lanes &amp; ledger evolution record &#9662;</summary>
+        <div class="session-lanes" id="sim-sessions"></div>
+        <div class="pane-box" id="sim-evolution-pane" style="margin-top:1rem;"></div>
+      </details>
 
       <div class="pane-box" id="sim-reward-pane" style="margin-top:1rem;"></div>
 
@@ -322,21 +334,27 @@
     </div>
 
     <h2>3. Universal primitives that work for both household tools and infrastructure</h2>
-    <p>Because the ledger uses domain-agnostic primitives (<code>research/ledger_sim/agent_web_ledger.py</code> and <code>modality_bridge.py</code>), the exact same verification and royalty mechanics handle a weekly grocery unit-price normalizer or a substation harmonic controller:</p>
-    <ul>
+    <p>Because the ledger uses domain-agnostic primitives (<code>research/ledger_sim/agent_web_ledger.py</code> and <code>modality_bridge.py</code>), the exact same verification and royalty mechanics handle a weekly grocery unit-price normalizer or a substation harmonic controller.</p>
+    <details class="scen-drawer">
+      <summary>Inspect the 4 universal ledger &amp; Modality Bridge schemas &#9662;</summary>
+      <ul>
       <li><b>Structured Problem Campaign (<code>TaskCampaign</code>):</b> Posts the input fields available, target outcome guarantees, and reward pool without exposing private household data.</li>
       <li><b>Verified Capability Module (<code>CapabilityArtifact</code>):</b> Bundles executable Python logic with explicit input/output schemas, measurement units, safety preconditions, and a deterministic Proof-Carrying Code test harness (Necula, 1997).</li>
       <li><b>Privacy-Checked Sample Stream (<code>DataStreamContract</code>):</b> Provides anonymized test cases so tools can be benchmarked before anyone adopts them.</li>
       <li><b>Cognitive Modality Bridge (<code>ModalityBridge</code>):</b> Grounded in Cognitive Load Theory (Sweller, 1988), translates verified tools into the human&rsquo;s chosen format—whether a <code>stepwise_operational_runbook</code> (30-second checklist), a <code>causal_decision_matrix</code> (side-by-side cost/savings table), or a <code>visual_system_topology</code> (flow diagram)—with safety gates highlighted first.</li>
-    </ul>
+      </ul>
+    </details>
 
     <h2>4. Ledger v4.0 Breakthroughs: Continuous Latent &amp; LoRA Weight Merging, Local OCap Sandboxes &amp; Institutional Transition</h2>
-    <p>In Cycles 5 and 6 of our Testnet self-play engine (<code>TESTNET-C5</code> and <code>TESTNET-C6</code>), the participant agents and autonomous Ledger Critic upgraded the protocol from <code>v3.0</code> to <code>v4.0</code> across three architectural frontiers:</p>
-    <ul>
+    <p>In Cycles 5 and 6 of our Testnet self-play engine (<code>TESTNET-C5</code> and <code>TESTNET-C6</code>), participant agents upgraded the protocol to <code>v4.0</code> with 9.1&times; faster NextLat/LoRA consensus, 9.4 ms IETF QUIC P2P sandboxes, and aligned on-device affective computing.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources (Coconut, MTP, TIES-Merging, RFC 9000/9221) &#9662;</summary>
+      <ul>
       <li><b>Continuous Latent-Space Autoregressive Transformers &amp; Federated Low-Rank Adapter (LoRA) Weight Merging for Cooperative Group Purchasing:</b> Building on <em>Continuous Latent-Space Reasoning</em> (Coconut, Hao et al., 2024; Next-Latent Prediction Transformers, Jayden Teoh et al.), <em>Multi-Token Prediction</em> (Gloeckle et al., ICML 2024), <em>Sparsely-Gated Mixture-of-Experts (MoE) Routing in Continuous Latent Space</em> (Shazeer et al., 2017; Dai et al., 2024), and <em>Federated Low-Rank Adapter (LoRA) Weight Merging</em> via Task Arithmetic and TIES-Merging (Hu et al., 2022; Ilharco et al., 2023; Yadav et al., 2023), our ledger stores not only processed data, but also <strong>compact latent belief state vectors</strong> and <strong>human-preference LoRA weight deltas</strong> trained on each participant&rsquo;s local craft. When 8 clinics, pharmacies, and billing specialists negotiate a group-purchasing and prior-authorization defense coalition in <code>TESTNET-C6</code>, their 24 sub-agents do not waste time arguing in lossy English prose tokens. Instead, they execute <strong>Sparsely-Gated MoE Cross-Activation Routing</strong> and sign-resolved TIES weight merging directly in latent and weight space—resolving 8-party preferences <strong>9.1&times; faster</strong> (14 ms vs 128 ms symbolic baseline) with <strong>+27.9% stronger collective generalization</strong>, and converting back to plain human language only at the final step.</li>
       <li><b>The End of Cloud Web Apps &mdash; Local OCap Sandbox Synthesis &amp; 0-RTT IETF QUIC Peer-to-Peer Tunnels (<code>RFC 9000</code> / <code>RFC 9221</code>):</b> In a two-internets world, remote cloud SaaS web applications disappear. Every application is compiled and executed <strong>100% locally inside the human&rsquo;s hardware-isolated Object-Capability (OCap) sandbox</strong> (Dennis &amp; Van Horn, 1966), communicating externally only over <strong>IETF QUIC Multiplexed Transport (<code>RFC 9000</code>) &amp; Unreliable Datagram Peer-to-Peer State Synchronization (<code>RFC 9221</code>)</strong> with Interactive Connectivity Establishment (<code>ICE, RFC 8445</code>) NAT traversal. When humans want real-time multiplayer gaming, spatial audio/video calls, or live co-op workspaces (<code>TESTNET-C5</code>), the ledger verifies capability and anti-cheat proofs and brokers a direct <strong>9.4 ms 0-RTT IETF QUIC Peer-to-Peer Tunnel</strong>—eliminating 145 ms cloud relay lag and $240+/month in SaaS subscriptions.</li>
       <li><b>Aligned On-Device Affective Computing (Picard, 1997; Csikszentmihalyi, 1990):</b> The exact same real-time attention and affective state estimators that social media platforms use to detect when a user is bored—so they can trap them in ad-driven scrolling—are repurposed locally on your device. When your personal agent detects <code>boredom_onset</code> or <code>repetitive_task_fatigue</code> (as in <code>TESTNET-C5</code> after 42 minutes of manual mesh tagging), it finishes the repetitive batch work autonomously in the background and pivots your interface to an energizing creative collaboration aligned with your own reflective goals (Self-Determination Theory, Ryan &amp; Deci, 2000).</li>
-    </ul>
+      </ul>
+    </details>
   </div>
 
   <footer class="note-foot wrap-narrow">
@@ -844,9 +862,10 @@
         '<div class="session-badge">Agent-Web Capability Artifact &amp; Held-Out Proof</div>' +
         '<h4 style="margin:0.3rem 0;"><code>' + ev.artifactId + '</code></h4>' +
         '<p style="font-size:0.84rem;margin:0.45rem 0;color:var(--ink-2);"><strong>Verified Operation:</strong> ' + ev.implSummary + '</p>' +
+        '<details class="scen-drawer" style="margin-top:.45rem"><summary>Inspect safety preconditions, guarantees &amp; sample stream &#9662;</summary>' +
         '<p style="font-size:0.84rem;margin:0.45rem 0;color:var(--ink-2);"><strong>Safety Preconditions:</strong> <code>' + ev.preconditions + '</code></p>' +
         '<p style="font-size:0.84rem;margin:0.45rem 0;color:var(--ink-2);"><strong>Held-Out Guarantees:</strong> <code>' + ev.guarantees + '</code></p>' +
-        '<p style="font-size:0.84rem;margin:0.45rem 0;color:var(--ink-2);"><strong>Sample Data Contract:</strong> ' + ev.stream + '</p>' +
+        '<p style="font-size:0.84rem;margin:0.45rem 0;color:var(--ink-2);"><strong>Sample Data Contract:</strong> ' + ev.stream + '</p></details>' +
       '</div>';
 
     document.getElementById("sim-evolution-pane").innerHTML =
@@ -912,6 +931,8 @@
   renderEvent();
 })();
 </script>
+<script src="/scripts/vendor/d3.v7.min.js" defer></script>
 <script src="/scripts/site.js?v=53" defer></script>
+<script src="/scripts/notes-d3.js?v=53" defer></script>
 </body>
 </html>

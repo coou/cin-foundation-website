@@ -38,7 +38,21 @@
     </nav>
   </div>
 </header>
-<figure class="diagram" style="margin:1.2rem 0 1.5rem">
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Coordination</span>
+    <h1>Why trust multiplies</h1>
+    <p class="lede">Hard problems need many people working together, and the chance that a large group can all rely on each other falls steeply as it grows. Records anyone can check change that arithmetic.</p>
+    <p class="meta">14 October 2026 · 6 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>If every pair in a group must trust each other, a group of twenty almost never holds together. If everyone only needs to rely on one shared, checkable record, it often does. Transparency about actions and commitments, never about people&rsquo;s private lives, is what makes large cooperation possible. Add a share of computing for every person, and the problems a community can take on grow with the size of the group it can hold together.</p></aside>
+
+    <figure class="diagram" style="margin:1.2rem 0 1.5rem">
   <svg data-rich-viz="true" viewBox="0 0 760 228" role="img" aria-label="Concentric Trust Rings & Zero-Knowledge Capability Routing">
     <rect x="8" y="8" width="362" height="212" rx="12" fill="#14171d" stroke="#ef6a52" stroke-width="1.5"/>
     <text x="24" y="32" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. FLAT CLOUD SOCIAL GRAPHS & BOT SWARMS</text>
@@ -58,24 +72,13 @@
 </figure>
 
 
-<main id="main">
-<article class="note">
-  <header class="note-head wrap-narrow">
-    <a class="back" href="/notes">&larr; All notes</a>
-    <span class="label">Coordination</span>
-    <h1>Why trust multiplies</h1>
-    <p class="lede">Hard problems need many people working together, and the chance that a large group can all rely on each other falls steeply as it grows. Records anyone can check change that arithmetic.</p>
-    <p class="meta">14 October 2026 · 6 min read · Our current thinking, open to correction</p>
-  </header>
-
-  <div class="note-body wrap-narrow">
-    <aside class="callout"><b>In short</b><p>If every pair in a group must trust each other, a group of twenty almost never holds together. If everyone only needs to rely on one shared, checkable record, it often does. Transparency about actions and commitments, never about people&rsquo;s private lives, is what makes large cooperation possible. Add a share of computing for every person, and the problems a community can take on grow with the size of the group it can hold together.</p></aside>
-
     <h2>The arithmetic of trust</h2>
     <p>Take a simple model. A task needs a group of people, and each pair in the group must be able to rely on each other. If any two people trust each other with probability <em>t</em>, a group of <em>k</em> people has <em>k&times;(k&minus;1)/2</em> pairs, and the whole group holds together only if every pair does. That number of pairs grows with the square of the group&rsquo;s size, which is why large cooperation is rare.</p>
-    <p>Now suppose people do not need to trust each other one by one. Each only needs to rely on a shared record of signed commitments, verified deliveries and checkable observations. Then the group holds when each member can rely on the record, and the exponent grows only with the group&rsquo;s size.</p>
-
-    <figure class="trust-calc" id="trust-calc">
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>Now suppose people do not need to trust each other one by one. Each only needs to rely on a shared record of signed commitments, verified deliveries and checkable observations. Then the group holds when each member can rely on the record, and the exponent grows only with the group&rsquo;s size.</p>
+    </details>
+<figure class="trust-calc" id="trust-calc">
       <div class="tc-controls">
         <label>How much any two people trust each other <output id="tc-t-out">0.95</output><input id="tc-t" type="range" min="0.80" max="0.99" step="0.01" value="0.95"></label>
         <label>How much people can rely on a shared record <output id="tc-r-out">0.97</output><input id="tc-r" type="range" min="0.80" max="0.995" step="0.005" value="0.97"></label>
@@ -95,10 +98,11 @@
       </table>
       <figcaption>Raising trust between pairs from 0.90 to 0.97 makes a ten-person task about 29 times more likely to hold together. A shared record people can rely on at 0.97 lets a group of twenty hold together more than half the time.</figcaption>
     </figure>
-
-    <p>The model is deliberately crude. Real trust is not the same between every pair, groups do not simply hold or break, and records can themselves be forged. It is a hypothesis to test in simulation, not a law. But the direction fits the evidence: countries where people trust each other more have tended to grow faster, and studies of small groups have found a measurable collective intelligence that depends more on how evenly members take part than on how clever each one is.</p>
-
-    <figure class="diagram" aria-label="Multiplicative Trust Score and Inverse Transparency Curve">
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>The model is deliberately crude. Real trust is not the same between every pair, groups do not simply hold or break, and records can themselves be forged. It is a hypothesis to test in simulation, not a law. But the direction fits the evidence: countries where people trust each other more have tended to grow faster, and studies of small groups have found a measurable collective intelligence that depends more on how evenly members take part than on how clever each one is.</p>
+    </details>
+<figure class="diagram" aria-label="Multiplicative Trust Score and Inverse Transparency Curve">
       <svg viewBox="0 0 820 250" role="img" aria-label="Multiplicative trust update rule and inverse transparency curve across Tiers 0 to 4">
         <rect x="16" y="16" width="376" height="186" rx="12" class="d-box"/>
         <text x="32" y="42" class="d-title">1. Multiplicative Trust Dynamics</text>
@@ -134,19 +138,27 @@
 
     <h2>Communities that copy and change each other</h2>
     <p>Communities will disagree about how to run their records: how much to reveal, how fast recognition should fade, who may observe what. The answer is not one rule for everyone. Any community can copy the shared rules, change one, and run. Open-source software shows this working: LibreOffice split from OpenOffice in 2010 and MariaDB from MySQL in 2009 when their communities lost confidence, and both are still maintained. The economist Albert Hirschman argued in 1970 that the freedom to leave keeps institutions honest.</p>
-    <p>Each community&rsquo;s results would be recorded in a form others can compare: which rules hold larger groups together, which protect people with the least, which get the most done. Rules that work spread by being copied. Rules that fail are dropped. No one is forced onto a rule, and anyone can move to a community that suits them.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>Each community&rsquo;s results would be recorded in a form others can compare: which rules hold larger groups together, which protect people with the least, which get the most done. Rules that work spread by being copied. Rules that fail are dropped. No one is forced onto a rule, and anyone can move to a community that suits them.</p>
+    </details>
+
 
     <h2>What could happen</h2>
-    <ul class="outcomes">
+    <p>Key architectural rules, failure boundaries, and verification steps for <strong>what could happen</strong>.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <ul class="outcomes">
       <li><span class="oc want">We want this</span><b>Large groups work together</b><p>Communities with shared, checkable records routinely run projects with dozens of members.</p><p class="oc-ex"><b>For example:</b> forty households and their agents design, fund and install a neighbourhood heating network, each checking the others&rsquo; commitments on the shared record rather than vetting forty strangers.</p></li>
       <li><span class="oc avoid">We want to avoid this</span><b>A forged record is trusted everywhere</b><p>High reliance on a record that can be falsified multiplies harm instead of output.</p><p class="oc-ex"><b>For example:</b> a batch of forged delivery records lets one supplier claim hundreds of rewards before independent observers notice.</p></li>
       <li><span class="oc avoid">We want to avoid this</span><b>Transparency turns into surveillance</b><p>Communities try to raise trust by watching their members.</p><p class="oc-ex"><b>For example:</b> a housing co-operative asks members&rsquo; agents to share location history &ldquo;for trust&rdquo;, and half the members quietly stop using their agents.</p></li>
       <li><span class="oc want">We want this</span><b>Better rules spread</b><p>Communities copy and change the rules, compare results openly, and what works spreads.</p><p class="oc-ex"><b>For example:</b> a community that slows how fast recognition for care work fades sees more people take part after a year, and nine others copy the change.</p></li>
     </ul>
+    </details>
+
 
     <h2>What comes next</h2>
-    <p>A simulation comparing trust pair by pair with a shared record, for groups of 5 to 100, with noise, forged records and members free to leave. If a shared record does not at least double the largest group that holds together, we will say so and drop the claim.</p>
-  </div>
+    <p>A simulation comparing trust pair by pair with a shared record, for groups of 5 to 100, with noise, forged records and members free to leave. If a shared record does not at least double the largest group that holds together, we will say so and drop the claim.</p></div>
 
   <footer class="note-foot wrap-narrow">
     <h2>Keep reading</h2>

@@ -38,7 +38,21 @@
     </nav>
   </div>
 </header>
-<figure class="diagram" style="margin:1.2rem 0 1.5rem">
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">AI safety &amp; shared governance</span>
+    <h1>No one person should command an army of AI agents</h1>
+    <p class="lede">Throughout history, even the most powerful ruler had to convince thousands of human beings—each with a conscience and a family—to carry out an order. Today, a single account or command console can direct millions of autonomous AI agents at once. We think that command structure is the most dangerous flaw in modern AI, and we are proposing a practical way to replace it.</p>
+    <p class="meta">19 October 2026 · 7 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>No single human, executive or commander should have direct root control over a large fleet of outward-acting AI agents. Instead, each person directs only their own personal agent. Any task that requires many agents must pass through a shared ledger where independent pairs of people and agents check the risk. As the risk to others rises toward catastrophe, the agreement required from affected people approaches unanimity.</p></aside>
+
+    <figure class="diagram" style="margin:1.2rem 0 1.5rem">
   <svg data-rich-viz="true" viewBox="0 0 760 228" role="img" aria-label="Risk-Scaled Multi-Verifier Quorum Gates vs. Single Commander">
     <rect x="8" y="8" width="362" height="212" rx="12" fill="#14171d" stroke="#ef6a52" stroke-width="1.5"/>
     <text x="24" y="32" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. SINGLE-COMMANDER SWARM & UNILATERAL RISK</text>
@@ -58,36 +72,29 @@
 </figure>
 
 
-<main id="main">
-<article class="note">
-  <header class="note-head wrap-narrow">
-    <a class="back" href="/notes">&larr; All notes</a>
-    <span class="label">AI safety &amp; shared governance</span>
-    <h1>No one person should command an army of AI agents</h1>
-    <p class="lede">Throughout history, even the most powerful ruler had to convince thousands of human beings—each with a conscience and a family—to carry out an order. Today, a single account or command console can direct millions of autonomous AI agents at once. We think that command structure is the most dangerous flaw in modern AI, and we are proposing a practical way to replace it.</p>
-    <p class="meta">19 October 2026 · 7 min read · Our current thinking, open to correction</p>
-  </header>
-
-  <div class="note-body wrap-narrow">
-    <aside class="callout"><b>In short</b><p>No single human, executive or commander should have direct root control over a large fleet of outward-acting AI agents. Instead, each person directs only their own personal agent. Any task that requires many agents must pass through a shared ledger where independent pairs of people and agents check the risk. As the risk to others rises toward catastrophe, the agreement required from affected people approaches unanimity.</p></aside>
-
     <h2>The single-commander problem</h2>
     <p>When people worry about advanced AI, they usually picture a rogue model waking up on its own. There is a simpler danger that is already here: <strong>one person with a keyboard directing a million obedient agents</strong>.</p>
-    <p>In the systems being built today across industry and defense, whoever holds the master API key, pays for the server cluster, or sits at the command terminal can spin up and direct a massive fleet of software or robotic agents simultaneously. That creates three immediate hazards:</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>In the systems being built today across industry and defense, whoever holds the master API key, pays for the server cluster, or sits at the command terminal can spin up and direct a massive fleet of software or robotic agents simultaneously. That creates three immediate hazards:</p>
     <ul>
       <li><b>One human mistake scales instantly.</b> If a leader panics, misreads a false alarm, or acts out of malice, there are no human soldiers in the chain to hesitate or ask questions.</li>
       <li><b>One stolen key hands over the army.</b> An adversarial AI or foreign attacker does not need to fight society head-on if all authority sits in a few command consoles; it only needs to spoof, bribe or hack one commander.</li>
       <li><b>No human brain can supervise a swarm.</b> Saying a human is &ldquo;in the loop&rdquo; over a hundred thousand fast-moving agents is a comforting fiction. No one can read that fast.</li>
     </ul>
+    </details>
+
 
     <h2>Two rules that close the vulnerability</h2>
     <p>Instead of trying to make a single commander infallible, we change how commands move:</p>
-    <ol>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <ol>
       <li><b>One person, one personal agent.</b> A person can directly instruct only their own bounded personal agent. No human holds a master key that commands an external fleet of agents acting in the shared world. (Running parallel calculations inside a sealed research sandbox that touches no one outside is fine; acting on the outside world is not.)</li>
       <li><b>Agreement scales with risk.</b> When a task needs many agents to act together, the request goes to a shared ledger. Independent agents—built by different makers so they do not share the same blind spots—estimate how many people the action could affect and how hard it would be to undo. The higher that risk score, the larger the share of affected people whose personal agents must co-sign before the action can run.</li>
     </ol>
-
-    <figure class="diagram">
+    </details>
+<figure class="diagram">
       <svg viewBox="0 0 660 300" role="img" aria-label="Diagram: A request for many agents enters the shared ledger. Independent evaluators check the risk. Personal tasks need only you; neighborhood projects need the neighbors involved; catastrophic actions like war require near-total agreement from families on both sides, blocking the strike.">
         <rect class="d-box" x="16" y="106" width="145" height="78" rx="10"/>
         <text x="88" y="138" font-size="12.5" text-anchor="middle" class="d-ink" font-weight="bold">Multi-agent request</text>
@@ -122,7 +129,10 @@
     </figure>
 
     <h2>What this looks like across everyday life and global crises</h2>
-    <table class="tbl">
+    <p>Key architectural rules, failure boundaries, and verification steps for <strong>what this looks like across everyday life and global crises</strong>.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <table class="tbl">
       <thead>
         <tr><th>Action</th><th>Who is affected</th><th>Agreement needed to unlock</th></tr>
       </thead>
@@ -134,10 +144,14 @@
       </tbody>
     </table>
     <p>Consider why that last row matters. In the old world, launching a war required only a few people in a bunker turning keys. Under risk-scaled agreement, the cryptographic key to unlock catastrophic force is split across the personal agents of millions of ordinary citizens on both sides of a border. Because parents and workers on both sides will not vote to incinerate their own children, a rogue commander or hijacked AI literally cannot assemble the key to fire.</p>
+    </details>
+
 
     <h2>Why AI labs, their engineers and political leaders all gain by adopting this</h2>
     <p>A safeguard like this works best when the major AI labs and governments adopt it together. At first glance, getting competitors to agree sounds hard. Look closer at the trap each group is in today:</p>
-    <ul>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <ul>
       <li><b>For AI lab leaders and boards:</b> Every responsible lab worries that if it refuses to sell unrestricted agent swarms, a rival will—or a government will invoke emergency powers to compel the lab&rsquo;s servers to obey a reckless order. When human-agent separation and threshold locks are built into the hardware and runtime standard across labs, a lab CEO can honestly tell any coercive official: &ldquo;Our servers cannot forge a mass-risk signature; those keys live on the devices of millions of citizens.&rdquo;</li>
       <li><b>For engineers and researchers inside AI labs:</b> No leader can secretly wire a hundred-million-dollar compute cluster alone; it takes hundreds of engineers. By pairing this standard with anonymous cryptographic whistleblower proofs, any engineer inside a lab can prove to independent watchers that a build bypasses the human-agent separation gate—without revealing which employee spoke up or leaking trade secrets.</li>
       <li><b>For political leaders and defense ministries:</b> Concentrating AI command in one central ministry creates a fatal target for deepfake spoofing, insider betrayal or a 30-second flash war. Giving every citizen a defensive personal agent and locking strategic systems behind threshold checks makes a country resilient against decapitation and accidental escalation.</li>
@@ -148,10 +162,11 @@
       <li><b>Models collude to call a dangerous task &ldquo;low risk.&rdquo;</b> If the agent proposing an attack also grades its risk, it will lie. Risk must be scored by an ensemble of models from independent makers, using the conservative upper reading.</li>
       <li><b>Emergency paralysis.</b> What if a fast defensive action—like shutting a ruptured valve or blocking a cyberattack—cannot wait for a vote? The design separates reversible local circuit-breakers (shutting off a valve or blocking incoming traffic, which lowers danger immediately) from irreversible offensive actions (which always require the threshold lock and cooling-off timer).</li>
     </ul></aside>
+    </details>
+
 
     <h2>How to help</h2>
-    <p>We have built and tested the mathematical model for this threshold lock in our open simulation suite. Now we want to put it in front of the people building AI runtimes, working inside frontier and open-weight labs, and shaping public policy. If you work at an AI lab, serve in public office, or research threshold cryptography and multi-agent safety, <a href="mailto:contact@collectiveintelligencenetwork.org">write to us</a>.</p>
-  </div>
+    <p>We have built and tested the mathematical model for this threshold lock in our open simulation suite. Now we want to put it in front of the people building AI runtimes, working inside frontier and open-weight labs, and shaping public policy. If you work at an AI lab, serve in public office, or research threshold cryptography and multi-agent safety, <a href="mailto:contact@collectiveintelligencenetwork.org">write to us</a>.</p></div>
 
   <footer class="note-foot wrap-narrow">
     <h2>Keep reading</h2>

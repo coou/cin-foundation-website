@@ -38,7 +38,24 @@
     </nav>
   </div>
 </header>
-<figure class="diagram" style="margin:1.2rem 0 1.5rem">
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Hardware and personal agents</span>
+    <h1>How your agent knows you are human—without watching you</h1>
+    <p class="lede">Today&rsquo;s technology gives you a bad choice: wear a commercial tracker that streams your body&rsquo;s signals to a company&rsquo;s cloud, or use a blind chatbot that cannot tell a tired nurse from a server farm running fifty thousand fake accounts. There is a third path: a tiny, open-hardware sensor that works only for you.</p>
+    <p class="meta">20 October 2026 · 8 min read · Theoretical hardware &amp; protocol blueprint, verified in simulation</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout">
+      <b>In short</b>
+      <p>We are designing an open-schematic, low-cost personal sensor module—the <strong>Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness)</strong> (target parts cost under eight dollars, drawing less than one milliwatt)—that pairs only with your own device. Grounded in hardware-attested biometric liveness verification and Physical Unclonable Functions (Blaise Gassend et al., 2002; W3C FIDO2 / WebAuthn, 2021), it comprehends physical work, creative flow, exhaustion and acute stress; computes a continuous <strong>&ldquo;how human&rdquo; liveness score</strong> from the natural coupling of pulse, breath and micro-movement; and co-signs events onto your private personal ledger. Raw body signals overwrite themselves every thirty seconds and never leave your possession.</p>
+    </aside>
+
+    <figure class="diagram" style="margin:1.2rem 0 1.5rem">
   <svg data-rich-viz="true" viewBox="0 0 760 228" role="img" aria-label="Pre-ADC In-Sensor Computing & Autonomic Coercion Shield">
     <rect x="8" y="8" width="362" height="212" rx="12" fill="#14171d" stroke="#ef6a52" stroke-width="1.5"/>
     <text x="24" y="32" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. CLOUD WEARABLES & RAW BIOMETRIC SURVEILLANCE</text>
@@ -58,31 +75,17 @@
 </figure>
 
 
-<main id="main">
-<article class="note">
-  <header class="note-head wrap-narrow">
-    <a class="back" href="/notes">&larr; All notes</a>
-    <span class="label">Hardware and personal agents</span>
-    <h1>How your agent knows you are human—without watching you</h1>
-    <p class="lede">Today&rsquo;s technology gives you a bad choice: wear a commercial tracker that streams your body&rsquo;s signals to a company&rsquo;s cloud, or use a blind chatbot that cannot tell a tired nurse from a server farm running fifty thousand fake accounts. There is a third path: a tiny, open-hardware sensor that works only for you.</p>
-    <p class="meta">20 October 2026 · 8 min read · Theoretical hardware &amp; protocol blueprint, verified in simulation</p>
-  </header>
-
-  <div class="note-body wrap-narrow">
-    <aside class="callout">
-      <b>In short</b>
-      <p>We are designing an open-schematic, low-cost personal sensor module—the <strong>Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness)</strong> (target parts cost under eight dollars, drawing less than one milliwatt)—that pairs only with your own device. Grounded in hardware-attested biometric liveness verification and Physical Unclonable Functions (Blaise Gassend et al., 2002; W3C FIDO2 / WebAuthn, 2021), it comprehends physical work, creative flow, exhaustion and acute stress; computes a continuous <strong>&ldquo;how human&rdquo; liveness score</strong> from the natural coupling of pulse, breath and micro-movement; and co-signs events onto your private personal ledger. Raw body signals overwrite themselves every thirty seconds and never leave your possession.</p>
-    </aside>
-
     <h2>Two problems that turn out to be the same problem</h2>
     <p>When we talk about a personal agent that protects your wellbeing and helps your community coordinate on a shared ledger, two practical questions immediately come up:</p>
-    <ol>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <ol>
       <li><strong>How does your agent understand your real life without pestering you?</strong> If you have to type a diary entry every time you finish an eight-hour nursing shift, tend a field, build a cabinet, or get pulled into a 2 a.m. doomscrolling spiral, you will soon stop using it.</li>
       <li><strong>How does the network know a real, uncoerced human stands behind an agent?</strong> When anyone with a credit card can rent ten thousand cloud bots that write and talk like people, one-time passwords and video calls stop proving personhood. Yet central iris-scanning databases create a permanent honeypot of biometric data.</li>
     </ol>
     <p>Both problems are solved by moving comprehension to a tiny, sealed sensor module that you physically wear or carry—under rules where <strong>you own the hardware, raw signals die on the chip, and only cryptographic proofs ever step across the boundary.</strong></p>
-
-    <figure class="diagram" aria-label="2-of-2 Silicon PUF and TPM Hardware-Attested Biometric Liveness and Duress Firewall">
+    </details>
+<figure class="diagram" aria-label="2-of-2 Silicon PUF and TPM Hardware-Attested Biometric Liveness and Duress Firewall">
       <svg viewBox="0 0 820 265" role="img" aria-label="Hardware-attested biometric liveness and physical presence verification pipeline">
         <rect x="14" y="16" width="244" height="196" rx="12" class="d-box"/>
         <text x="30" y="42" class="d-title">1. Coupled Bio-Physical Entropy</text>
@@ -124,12 +127,16 @@
     </figure>
     <h2>What lives inside the sensor module</h2>
     <p>The reference design is a postage-stamp-sized open board that fits inside a ring, wristband clasp, work-badge clip or earpiece, with no microphone recording speech, no camera, and no Wi-Fi or cellular radio:</p>
-    <ul>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <ul>
       <li><strong>Pulse, breath and micro-movement front-end:</strong> optical pulse sensors, skin conductance, temperature, and a 6-axis inertial and muscle-vibration sensor (mechanomyography). Together they sense physical exertion, rest and nervous-system load.</li>
       <li><strong>Microwatt activity classifier:</strong> a tiny spiking neural circuit on the chip recognizes broad activity states—<em>strenuous physical care or labour</em>, <em>focused craft or study flow</em>, <em>restorative sleep</em>, <em>late-night outrage/stress trap</em>, or <em>acute physical panic/duress</em>—and discards the raw waveform buffer every thirty seconds.</li>
       <li><strong>Silicon fingerprint (Physical Unclonable Function):</strong> microscopic manufacturing variations in the chip&rsquo;s SRAM form a hardware key that cannot be copied out, even if someone pries the chip open.</li>
       <li><strong>Evolutionary expansion bus:</strong> as wearable and neural-interface hardware matures—from today&rsquo;s rings and clips to tomorrow&rsquo;s non-invasive muscle-intent bands and optical ear sensors—the same open local protocol lets new sensors plug into your personal agent without handing your nervous system to a platform monopoly.</li>
     </ul>
+    </details>
+
 
     <h2>Interactive explorer: test the Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness) sensor</h2>
     <p>Pick one of the six tested scenarios below—or move the sliders yourself—to see how the on-chip verifier computes the continuous <strong>&ldquo;how human&rdquo; score</strong> and decides whether to co-sign an event onto your personal ledger.</p>
@@ -172,19 +179,30 @@
 
     <h2>Why server-farm bots cannot fake coupled body entropy</h2>
     <p>A computer script can easily generate random numbers, or replay a stolen recording of someone&rsquo;s heartbeat. What is hard to forge inside a sealed silicon chip is the live, simultaneous coupling of three physical processes in a real body: the way your heart rate speeds and slows slightly with every breath (respiratory sinus arrhythmia), the tiny mechanical vibration of muscle fibres firing as you move, and the thermal and skin-conductance shifts that follow real effort.</p>
-    <p>Because the sensor computes this coupling right where the analog signal enters the chip—and signs the result with its un-copyable silicon key—a cloud server farm has no way to inject fake waves without physically building and moving fifty thousand real biological bodies.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>Because the sensor computes this coupling right where the analog signal enters the chip—and signs the result with its un-copyable silicon key—a cloud server farm has no way to inject fake waves without physically building and moving fifty thousand real biological bodies.</p>
+    </details>
+
 
     <h2>The duress lock: protecting you if you are forced</h2>
     <p>Any system where your body or device unlocks value has to face an ugly question: <em>what if someone threatens you physically to make you approve a transfer?</em></p>
-    <p>When the sensor detects the unmistakable physiological signature of acute terror or coercion—a sudden spike in skin conductance and heart rate without corresponding physical exercise—it does not display an error message that would put you in danger. Instead, it silently withholds your real hardware signature and opens a pre-configured <strong>safe decoy wallet</strong> with a small balance, while quietly logging a time-locked recovery proof for your trusted guardians.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>When the sensor detects the unmistakable physiological signature of acute terror or coercion—a sudden spike in skin conductance and heart rate without corresponding physical exercise—it does not display an error message that would put you in danger. Instead, it silently withholds your real hardware signature and opens a pre-configured <strong>safe decoy wallet</strong> with a small balance, while quietly logging a time-locked recovery proof for your trusted guardians.</p>
+    </details>
+
 
     <h2>Fairness for people with cheap or no wearables</h2>
     <p>Not everyone can afford a smart ring, and no one should ever be ranked as &ldquo;less human&rdquo; because their hardware is cheap. Our design holds two hard rules:</p>
-    <ul>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <ul>
       <li><strong>Free cooperative sensor loans:</strong> any member of a local co-operative can borrow an open-hardware work clip at no cost, verify its published parts list, and pair it locally with a basic phone.</li>
       <li><strong>In-person community vouching:</strong> if a sensor is lost, broken or unavailable, three neighbours in your community can co-sign a presence check in person. Hardware sensors make everyday verification effortless; they never become a tollbooth on human dignity.</li>
     </ul>
-  </div>
+    </details>
+</div>
 
   <footer class="note-foot wrap-narrow">
     <h2>Keep reading</h2>

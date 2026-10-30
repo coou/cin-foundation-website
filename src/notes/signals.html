@@ -38,7 +38,21 @@
     </nav>
   </div>
 </header>
-<figure class="diagram" style="margin:1.2rem 0 1.5rem">
+
+<main id="main">
+<article class="note">
+  <header class="note-head wrap-narrow">
+    <a class="back" href="/notes">&larr; All notes</a>
+    <span class="label">Forecasting &amp; signals</span>
+    <h1>Measuring the oversight gap</h1>
+    <p class="lede">Is AI capability outrunning our ability to check it and to share its power? We want to answer that with evidence, not mood, and to keep score on our own predictions.</p>
+    <p class="meta">5 October 2026 · 7 min read · Our current thinking, open to correction</p>
+  </header>
+
+  <div class="note-body wrap-narrow">
+    <aside class="callout"><b>In short</b><p>We track two lines: what AI can do, and how well people can oversee it and share in its power. The distance between them is the oversight gap. We will publish the indicators behind each line, make dated forecasts that can be scored, and give warning signs at least as much space as good news.</p></aside>
+
+    <figure class="diagram" style="margin:1.2rem 0 1.5rem">
   <svg data-rich-viz="true" viewBox="0 0 760 228" role="img" aria-label="Empirical Signal Verification & 5-Step Foresight Pipeline">
     <rect x="8" y="8" width="362" height="212" rx="12" fill="#14171d" stroke="#ef6a52" stroke-width="1.5"/>
     <text x="24" y="32" font-size="10" font-weight="700" font-family="monospace" fill="#ef6a52">1. UNVERIFIED HYPE & RETROSPECTIVE PLEDGES</text>
@@ -58,28 +72,17 @@
 </figure>
 
 
-<main id="main">
-<article class="note">
-  <header class="note-head wrap-narrow">
-    <a class="back" href="/notes">&larr; All notes</a>
-    <span class="label">Forecasting &amp; signals</span>
-    <h1>Measuring the oversight gap</h1>
-    <p class="lede">Is AI capability outrunning our ability to check it and to share its power? We want to answer that with evidence, not mood, and to keep score on our own predictions.</p>
-    <p class="meta">5 October 2026 · 7 min read · Our current thinking, open to correction</p>
-  </header>
-
-  <div class="note-body wrap-narrow">
-    <aside class="callout"><b>In short</b><p>We track two lines: what AI can do, and how well people can oversee it and share in its power. The distance between them is the oversight gap. We will publish the indicators behind each line, make dated forecasts that can be scored, and give warning signs at least as much space as good news.</p></aside>
-
     <h2>Why measure at all</h2>
     <p>Public talk about AI swings between alarm and excitement, often in the same week. Neither tells you much about what to do. A person deciding whether to trust an AI assistant, a community deciding whether to rely on a single provider, or a co-operative deciding where to invest needs something steadier: a picture of where things are heading, built from sources anyone can check.</p>
-    <p>The question we care about is narrow on purpose. It is not "how powerful is AI?" on its own. It is whether that power is growing faster than the checks on it and faster than its spread to ordinary people. A very capable system that is independently tested, contained, and widely shared is a different world from an equally capable system run by a handful of organizations with no outside view. The homepage chart shows this as two rising lines. This note explains what goes into each line.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>The question we care about is narrow on purpose. It is not "how powerful is AI?" on its own. It is whether that power is growing faster than the checks on it and faster than its spread to ordinary people. A very capable system that is independently tested, contained, and widely shared is a different world from an equally capable system run by a handful of organizations with no outside view. The homepage chart shows this as two rising lines. This note explains what goes into each line.</p>
     <p>Part of this now runs. Our agents record checked sources every day, and <a href="/trajectory">the live trajectory</a> shows whether, on balance, they point toward or away from our principles. The homepage&rsquo;s <a href="/#signals">risk explorer</a> is different: it is a model you set with your own assumptions, not data. The fuller measure of the gap described below is still a design we intend to build and test.</p>
+    </details>
+
 
     <h2>Four families of indicators</h2>
-    <p>Every indicator we track feeds one of the two lines. One family feeds the capability line; three feed the line for oversight and shared power.</p>
-
-    <figure class="diagram">
+    <p>Every indicator we track feeds one of the two lines. One family feeds the capability line; three feed the line for oversight and shared power.</p><figure class="diagram">
       <svg viewBox="0 0 720 400" role="img" aria-label="Four indicator families feeding two lines. What AI can do feeds the capability line. Who checks it, who holds the power, and how society holds up feed the oversight and shared power line. The space between the lines is the oversight gap.">
         <path class="d-fill" d="M40 250 C240 240,440 170,680 100 L680 235 C440 255,240 266,40 270 Z"/>
         <path class="d-bad" stroke-width="3" d="M40 250 C240 240,440 170,680 100"/>
@@ -110,8 +113,9 @@
       </svg>
       <figcaption>How the indicator families feed the two lines. An illustration of the structure, not data.</figcaption>
     </figure>
-
-    <h3>1. What AI can do</h3>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <h3>1. What AI can do</h3>
     <p>This family feeds the capability line. Candidate measures:</p>
     <ul>
       <li><b>How long a task AI can finish on its own.</b> Researchers at METR proposed measuring AI by the length of tasks, timed by how long they take skilled people, that a system can complete with a given reliability. Their paper reports that this "time horizon" has been doubling roughly every seven months over several years (<a href="https://arxiv.org/abs/2503.14499" rel="noopener noreferrer">Kwa et al., 2025</a>). It is a useful measure because it tracks autonomy, not just test scores.</li>
@@ -147,31 +151,49 @@
       <li><b>Data rights</b>: whether people can take their own data with them and decide who sees it.</li>
     </ul>
     <p>Each indicator will be recorded with its exact definition, its source, how often the source updates, its known biases, and a quality grade. Self-reported or opt-in figures can appear, but always labeled, and never alone as the basis for a conclusion. Every retrieval is archived so that anyone can check a past value later.</p>
+    </details>
+
 
     <h2>Warning signs get equal space</h2>
     <p>It is easy to build a dashboard that only shows progress. We are designing against that. For each goal we care about, we track indicators that would show the world moving away from it, and we give those at least as much room as the good news. Rising concentration, more shutdowns, releases that outpace testing, and agent tools that all depend on one company are as important to report as cheaper open models or more citizens' assemblies.</p>
-    <p>We also hold ourselves to a rule: news can prompt us to ask whether an indicator should be added, but it never moves an indicator by itself. Values change only when their named, pre-agreed sources change. That keeps a dramatic headline from reshaping the picture overnight.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>We also hold ourselves to a rule: news can prompt us to ask whether an indicator should be added, but it never moves an indicator by itself. Values change only when their named, pre-agreed sources change. That keeps a dramatic headline from reshaping the picture overnight.</p>
 
     <aside class="callout spec"><b>Speculation</b><p>Our working view is that AI able to improve itself may arrive as soon as 2027, and that special-purpose chips far more efficient than today's, perhaps around 1000 times, could make powerful AI cheap and widespread. These are scenarios, not forecasts. They could be wrong if progress in task length stalls, if efficiency gains stay incremental, or if cost and energy limits bind first. The point of measuring is to find out.</p></aside>
+    </details>
+
 
     <h2>Forecasts we can be held to</h2>
     <p>Charts invite hindsight. A forecast written in advance does not. So every milestone on our public timeline will be a dated forecast with a probability and a clear rule for deciding whether it came true. A made-up example of the form, not a real prediction: "By a named date, an openly licensed model that runs on a consumer computer will match a stated earlier frontier result on a named public test, as reported by a named source. Probability: 60%."</p>
-    <p>When the date arrives, the forecast resolves true or false from its named source and is scored with a standard accuracy measure, the Brier score. We will publish every forecast, including the ones we got wrong, along with our calibration: whether things we called at 60% happened about 60% of the time. If several people forecast, each builds a track record.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>When the date arrives, the forecast resolves true or false from its named source and is scored with a standard accuracy measure, the Brier score. We will publish every forecast, including the ones we got wrong, along with our calibration: whether things we called at 60% happened about 60% of the time. If several people forecast, each builds a track record.</p>
     <p>We are not inventing this from scratch. <a href="https://forecastingresearch.org" rel="noopener noreferrer">The Forecasting Research Institute</a> studies how to make forecasts useful for decisions, and its ForecastBench project offers a continually updated benchmark that compares the forecasting accuracy of AI systems with that of people, using questions whose answers are unknown when asked (<a href="https://arxiv.org/abs/2409.19839" rel="noopener noreferrer">Karger et al., 2024</a>). Work like this shows the method can be done at scale and kept honest.</p>
+    </details>
+
 
     <h2>How this could fail</h2>
-    <aside class="callout risk"><b>How this could fail</b><ul>
+    <p>Key architectural rules, failure boundaries, and verification steps for <strong>how this could fail</strong>.</p>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <aside class="callout risk"><b>How this could fail</b><ul>
       <li><b>Measures get gamed.</b> Once a number matters, people optimize for it. A lab could pass a published test without being safer. We plan to pair each measure with others that are hard to move together and to retire measures that stop tracking reality.</li>
       <li><b>The oversight line is hard to measure.</b> Capability has benchmarks; oversight is often private. If we cannot find sources good enough to grade, the oversight line may say more about what is disclosed than about what is true.</li>
       <li><b>Our view of the future colors the choice of indicators.</b> We expect fast progress. Equal space for warning signs and good news, and scored forecasts, are our main checks on that bias.</li>
       <li><b>Sources disappear or change.</b> Archiving each retrieval helps, but a measure can go dark.</li>
       <li><b>What would make us drop it:</b> if our forecasts score no better than simple baselines over a fair run of questions, or if readers and outside reviewers find the indicators do not help them make better decisions, we will redesign the approach or stop publishing it.</li>
     </ul></aside>
+    </details>
+
 
     <h2>What comes next</h2>
     <p>The first step is a small, carefully documented set of indicators, each with its source, method and known biases written down before any value is shown. Then a first batch of forecasts, published with dates and resolution rules. Reports will follow on a regular schedule, with each number shown next to its source and quality.</p>
-    <p>If you work on AI evaluation, forecasting, open data on computing power, or measures of democratic and digital health, we would like to hear which indicators you trust, which you don't, and why.</p>
-  </div>
+    <details class="scen-drawer">
+      <summary>Inspect full technical derivation &amp; primary sources &#9662;</summary>
+      <p>If you work on AI evaluation, forecasting, open data on computing power, or measures of democratic and digital health, we would like to hear which indicators you trust, which you don't, and why.</p>
+    </details>
+</div>
 
   <footer class="note-foot wrap-narrow">
     <h2>Keep reading</h2>
