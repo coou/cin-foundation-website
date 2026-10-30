@@ -127,7 +127,7 @@
         metric: 'Weiszfeld Quorum + $25k Floor',
         notes: [
           { slug: 'ai-agent-jurisdictions', href: '/notes/ai-agent-jurisdictions', match: 'ai-agent-jurisdictions' },
-          { slug: 'liquid-democracy-and-staking-lockups', href: '/notes/liquid-democracy-and-staking-lockups', match: 'liquid-democracy-and-staking-lockups' }
+          { slug: 'liquid-democracy-lockups', href: '/notes/liquid-democracy-and-staking-lockups', match: 'liquid-democracy-and-staking-lockups' }
         ]
       },
       {
@@ -169,7 +169,7 @@
         notes: [
           { slug: 'personal-agents', href: '/notes/personal-agents', match: 'personal-agents' },
           { slug: 'training-your-twin', href: '/notes/training-your-twin', match: 'training-your-twin' },
-          { slug: 'reclaim-your-profile', href: '/notes/reclaim-your-profile', match: 'reclaim-your-profile' }
+          { slug: 'reclaim-profile', href: '/notes/reclaim-your-profile', match: 'reclaim-your-profile' }
         ]
       }
     ];
@@ -488,7 +488,7 @@
           .attr('fill', '#8c8f96')
           .text('→');
 
-        var chipX = 294;
+        var chipX = 282;
         lens.notes.forEach(function (n) {
           var chipW = Math.max(82, n.slug.length * 5.2 + 14);
           var chipG = rowG.append('g')
