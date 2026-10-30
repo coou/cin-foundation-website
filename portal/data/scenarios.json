@@ -1,6 +1,66 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261030-0054",
+   "added_at": "2026-10-30T15:39:35+00:00",
+   "title": "Cheap decision checkers trap automated assistants in costly loops",
+   "horizon_years": 2,
+   "world": "It is 2028. Small medical practices, repair shops, and community bookkeeping offices run automated digital assistants to process receipts, verify supplier shipments, and draft client communications. To keep compute bills manageable, teams install lightweight decision checkers that pick actions from fixed choices without writing text. In many offices, these checkers lack calibrated confidence limits: an assistant verifying an ordinary wholesale invoice doubts its own answer, runs four extra checking passes with large reasoning models, and turns a ten-cent task into a two-dollar billing spike.",
+   "premise": "Developers deploy cheap, single-pass decision models to guide autonomous assistants and cut costs. In practice, poor probability calibration causes assistants to repeatedly question finished work or choose the wrong tools, driving up operating expenses.",
+   "goals": [
+    1,
+    6
+   ],
+   "how": "Developing open-source agent harnesses that enforce hard execution limits and calibrate small decision models directly on local task histories. Rather than letting uncalibrated classifiers trigger endless cloud queries, the architecture is designed to fail closed, require explicit human confirmation when confidence is low, and run routine choices on local hardware.",
+   "shift": 0.36,
+   "outcomes": [
+    {
+     "name": "Hidden verification loops drain small business budgets",
+     "description": "Uncalibrated decision heads repeatedly ask large models to re-verify correct work, inflating operational bills for independent organizations.",
+     "example": "A neighborhood veterinary clinic receives a $900 monthly compute bill because their patient record assistant repeatedly ran three redundant verification passes on routine medication reminders.",
+     "desirable": false,
+     "likelihood_now": 0.45,
+     "likelihood_with_cin": 0.3
+    },
+    {
+     "name": "Deterministic execution limits and calibrated local controllers",
+     "description": "Harnesses combine calibrated confidence thresholds with hard execution bounds, keeping agent tasks fast and predictable on local hardware.",
+     "example": "A community accounting co-operative runs a local bookkeeping assistant that halts after a single validated pass and alerts a human bookkeeper if confidence falls below an empirical threshold.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Cloud platforms lock calibrated decision controllers behind enterprise tiers",
+     "description": "Major cloud providers offer proprietary, well-calibrated controllers only as expensive managed services, leaving basic API users with raw uncalibrated tools.",
+     "example": "A major cloud provider bundles pre-calibrated workflow routing exclusively into its highest-tier enterprise subscription, pricing out independent developers and small firms.",
+     "desirable": false,
+     "likelihood_now": 0.65,
+     "likelihood_with_cin": 0.62
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.24649",
+     "title": "Good Judgment, Bad Advice: Decision-Model Controllers Raise Agent Cost Without Improving Success",
+     "kind": "paper",
+     "published": "2026-10-17"
+    },
+    {
+     "url": "https://arxiv.org/abs/2610.21412",
+     "title": "JevAgentHarness: Benchmarking, Deploying and Training Decision Models That Share Control with LLMs",
+     "kind": "paper",
+     "published": "2026-10-15"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261030-0053",
    "added_at": "2026-10-30T11:42:00+00:00",
    "title": "Cloud platforms embed invisible keys into AI outputs to sue competitors who train on their data",
@@ -52,7 +112,7 @@
      "published": "2026-10-29"
     }
    ],
-   "work": 0
+   "work": 1
   },
   {
    "id": "SC-20261030-0052",
