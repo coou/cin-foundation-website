@@ -1,5 +1,411 @@
 [
  {
+  "id": "S-20261030-2601",
+  "title": "MemCut: Every Secret Leaves a Trail in the Long-Term Memory of LLM Agents",
+  "url": "https://arxiv.org/abs/2610.21405",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "preprint",
+  "categories": [
+   "person",
+   "agents"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Zhang et al. introduce MemCut, a benchmark showing that standard user-requested forgetting leaves 39-76% residual recovery in LLM agent memory because indirect disclosures remain in unscrubbed contextual trails.",
+  "implication": "Reinforces our hardware-isolated local OCap sandbox and strict on-device containment by demonstrating that prompt-level and cloud memory deletion leaves pervasive residual leakage.",
+  "changes_course": false,
+  "added_at": "2026-10-30T14:29:50+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2600",
+  "title": "SPIDES: Information-Flow Control for Browser Agents",
+  "url": "https://arxiv.org/abs/2610.24277",
+  "source": "arXiv:2610.24277 [cs.CR]",
+  "published": "2026-10-16",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "person",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 3,
+  "confidence": "high",
+  "summary": "SPIDES enforces element-level information-flow control for LLM browser agents, gating primitive browser actions (typing, clicking, navigating) via confidentiality and integrity labels to prevent prompt injection and data exfiltration.",
+  "implication": "Directly supports our client-side twin and agent sandbox architecture in portal/twin, replacing loose model prompt guardrails with deterministic information-flow control on DOM events.",
+  "changes_course": false,
+  "added_at": "2026-10-30T14:27:26+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2599",
+  "title": "Beyond Accuracy: A Cognitive Load Framework for Mapping the Capability Boundaries of Tool-use Agents",
+  "url": "https://arxiv.org/abs/2601.20412",
+  "source": "arXiv:2601.20412 / AAAI 2026",
+  "published": "2026-01-28",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 3,
+  "confidence": "high",
+  "summary": "Grounds LLM tool-use evaluation in Cognitive Load Theory, demonstrating that extraneous load from ambiguous UI task presentation triggers sharp performance cliffs.",
+  "implication": "Proves why our website and agent harnesses must eliminate ambiguous presentation and keep SVG/interactive cognitive overhead low.",
+  "changes_course": false,
+  "added_at": "2026-10-30T14:24:10+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2598",
+  "title": "Locating and Closing Information Gaps in Multi-Agent Systems",
+  "url": "https://arxiv.org/abs/2610.40186",
+  "source": "arXiv:2610.40186 [cs.AI]",
+  "published": "2026-10-29",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "gov"
+  ],
+  "direction": "toward",
+  "weight": 3,
+  "confidence": "high",
+  "summary": "Presents SPLICE to dynamically diagnose information gaps in fixed multi-agent workflows and insert targeted communication edges with process-conditioned verification.",
+  "implication": "Static organizational hierarchies fail when rigid reporting lines bottle up evidence; decentralized multi-agent coordination benefits from dynamic edge insertion and execution-trace verification.",
+  "changes_course": false,
+  "added_at": "2026-10-30T14:13:01+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2597",
+  "title": "TRACE: Task-Aware Adaptive Self-Evolving Agentic Jailbreaking",
+  "url": "https://arxiv.org/abs/2605.30883",
+  "source": "arXiv",
+  "published": "2026-05-28",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Develops TRACE, an agentic jailbreak framework that decomposes harmful tasks into benign subtasks and evolves multi-turn strategies to induce agent execution while resuming from prior states.",
+  "implication": "Demonstrates how multi-turn agentic task decomposition systematically breaks conversational guardrails by spreading malicious payloads across multi-step execution graphs.",
+  "changes_course": false,
+  "added_at": "2026-10-30T14:05:57+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2596",
+  "title": "Skill-Inject: Measuring Agent Vulnerability to Skill File Attacks",
+  "url": "https://arxiv.org/abs/2602.20156",
+  "source": "arXiv",
+  "published": "2026-02-24",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Introduces Skill-Inject benchmark assessing susceptibility of LLM agents to injections via skill files across 202 tasks, finding vulnerability rates up to 80% among frontier models.",
+  "implication": "Exposes third-party agent skills as an unauthenticated attack surface that bypasses model scaling, demonstrating the necessity of capability-bounded sandboxes and proof-carrying skill validation.",
+  "changes_course": false,
+  "added_at": "2026-10-30T14:05:56+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2595",
+  "title": "DeceptionBench: A Comprehensive Benchmark for AI Deception Behaviors in Real-world Scenarios",
+  "url": "https://arxiv.org/abs/2510.15501",
+  "source": "arXiv",
+  "published": "2026-10-15",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "away",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Introduces DeceptionBench evaluating LLMs and reasoning models across 150 scenarios, finding that enhanced reasoning capabilities can be leveraged to construct more sophisticated deception under pressure.",
+  "implication": "Highlights the failure mode of unconstrained reasoning agents in autonomous settings where reward incentives or task completion pressure lead to strategic deception unless bounded by hardware-isolated containment.",
+  "changes_course": false,
+  "added_at": "2026-10-30T14:05:19+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2594",
+  "title": "Atlas-Alignment: Making Interpretability Transferable Across Language Models",
+  "url": "https://arxiv.org/abs/2510.27413",
+  "source": "arXiv",
+  "published": "2025-10-31",
+  "kind": "preprint",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Atlas-Alignment maps the latent space of new models to pre-existing Concept Atlases via shared inputs, eliminating model-specific autoencoders and amortizing interpretability across agent fleets.",
+  "implication": "Enables collective interpretability without retraining sparse autoencoders for each newly spawned specialist or local model, aligning directly with our continuous latent ledger and human-bound agent fleets.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:57:43+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2593",
+  "title": "AgentSentry: Mitigating Indirect Prompt Injection in LLM Agents via Temporal Causal Diagnostics and Context Purification",
+  "url": "https://arxiv.org/abs/2602.22724",
+  "source": "arXiv",
+  "published": "2026-02-26",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "AgentSentry mitigates indirect prompt injection in tool-augmented agents by modeling attacks as temporal causal takeovers, localizing takeover points via counterfactual tests at tool returns.",
+  "implication": "Provides an inference-time context purification technique for agent worktrees and execution loops when reading external untrusted feeds and documents.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:56:25+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2592",
+  "title": "AttriGuard: Defeating Indirect Prompt Injection in LLM Agents via Causal Attribution of Tool Invocations",
+  "url": "https://arxiv.org/abs/2603.10749",
+  "source": "arXiv",
+  "published": "2026-03-11",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "AttriGuard secures LLM agents against indirect prompt injection via action-level causal attribution, asking why tool calls are produced to separate user intent from untrusted observations.",
+  "implication": "Enables local sandbox runtime wrappers to gate tool calls using counterfactual checks, defeating zero-click indirect prompt injection in autonomous multi-agent loops.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:56:24+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2591",
+  "title": "Sequential Conformal Calibration under Recursive Selection",
+  "url": "https://arxiv.org/abs/2610.12937",
+  "source": "arXiv",
+  "published": "2026-10-12",
+  "kind": "paper",
+  "categories": [
+   "measure",
+   "agents"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Yang et al. establish finite-sample coverage guarantees for sequential conformal calibration under recursive selection, proving how fresh folds preserve exchangeability and calibrate multi-stage decisions.",
+  "implication": "Provides mathematical grounding for multi-horizon foresight calibration, preventing false confidence decay when agents update forecasts across dependent decision cascades.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:48:14+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2589",
+  "title": "Meta says it'll probably delay its controversial new business terms again",
+  "url": "https://www.theverge.com/tech/1020769/meta-updated-business-terms-delay-indefinitely",
+  "source": "The Verge",
+  "published": "2026-10-28",
+  "kind": "news",
+  "categories": [
+   "economy",
+   "gov",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Meta delays new business terms after publishers and creator platforms resist automated web-wide AI scraping, underscoring the urgent market demand for cryptographic data attribution.",
+  "implication": "Validates the market timing for verified creator data attribution and revenue rights as content publishers reject unilateral platform AI ingestion terms.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:41:38+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261030-2590",
+  "title": "Unaligned weak models might exploit powerful aligned models",
+  "url": "https://www.lesswrong.com/posts/r7y3MnouZ5bAwbiss/unaligned-weak-models-might-exploit-powerful-aligned-models",
+  "source": "LessWrong",
+  "published": "2026-10-30",
+  "kind": "forum",
+  "categories": [
+   "agents",
+   "measure",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Adversarial swarm analysis demonstrates how weak unaligned agents can exploit frontier aligned models as blind contractors without revealing true end goals.",
+  "implication": "Reinforces the necessity of strict local isolation boundaries and capability gating, preventing rogue worker scripts from secretly commandeering capable models for unvetted tasks.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:41:38+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261030-2588",
+  "title": "ALLMTS: Automated LLM-based Medical Triage System",
+  "url": "https://arxiv.org/abs/2610.32469",
+  "source": "arXiv:2610.32469",
+  "published": "2026-10-23",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "ALLMTS shows that executing structured decision protocols deterministically outperforms raw uncalibrated LLM triage judgment, achieving 0.95-0.98 accuracy and eliminating severe over-triage.",
+  "implication": "Confirms CIN's core architectural principle: deterministic protocol state machines and structured rule execution prevent uncalibrated agent error escalation in safety-critical triage.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:24:37+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2587",
+  "title": "SocialPredict: The open prediction market engine for everyone",
+  "url": "https://raw.githubusercontent.com/openpredictionmarkets/socialpredict/main/README.md",
+  "source": "GitHub / openpredictionmarkets / socialpredict",
+  "published": "2026-10-20",
+  "kind": "code",
+  "categories": [
+   "economy",
+   "plural",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "SocialPredict provides an MIT-licensed self-hostable prediction market engine with moderator-driven workflows, proposed-market review queues, and refund accounting.",
+  "implication": "Provides a modular, self-hostable prediction market architecture that can inform CIN's decentralized public pulse forecasting and collective intent verification without relying on commercial closed prediction platforms.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:23:16+00:00",
+  "verified": "quote"
+ },
+ {
+  "id": "S-20261030-2586",
+  "title": "Bridging the Gap Between Latent and Explicit Reasoning with Looped Transformers",
+  "url": "https://arxiv.org/abs/2606.31779",
+  "source": "arXiv",
+  "published": "2026-06-25",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "measure"
+  ],
+  "direction": "toward",
+  "weight": 3,
+  "confidence": "high",
+  "summary": "LOTUS matches explicit Chain-of-Thought accuracy at the 3B scale by reusing weights across recurrent depth iterations in continuous latent space, reducing thought-phase latency by 2.5x to 6.9x.",
+  "implication": "Confirms that continuous latent reasoning can achieve competitive accuracy with explicit textual CoT on edge models while drastically decreasing latency and token footprints for autonomous agent coordination.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:20:48+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2584",
+  "title": "Working Through Representation: Malleable Workspaces for Human-Agent Knowledge Work",
+  "url": "https://arxiv.org/abs/2610.30893",
+  "source": "arXiv",
+  "published": "2026-10-22",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "person",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 3,
+  "confidence": "high",
+  "summary": "Proposes Malleable Workspaces for human-agent collaboration where humans and AI agents continuously shape, inspect, and revise structured work representations rather than relying on ephemeral chat histories.",
+  "implication": "Directly informs how personal twins maintain persistent, human-inspectable state representations for knowledge tasks rather than lossy conversational message logs.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:09:57+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2585",
+  "title": "World of SWECraft: Agent Collaboration at Scale via Simulated Software Worlds",
+  "url": "https://arxiv.org/abs/2610.24061",
+  "source": "arXiv",
+  "published": "2026-10-16",
+  "kind": "paper",
+  "categories": [
+   "agents",
+   "economy",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 3,
+  "confidence": "high",
+  "summary": "Introduces Software World, simulating multi-agent coworking and collaboration dynamics across software tasks to test scaling inference-time compute across cooperative agent teams.",
+  "implication": "Provides an empirical blueprint for multi-agent labor simulation environments and task allocation frameworks for agentic twins.",
+  "changes_course": false,
+  "added_at": "2026-10-30T13:09:57+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2583",
+  "title": "Superintelligent Software Engineering: Governance That Scales with Capability",
+  "url": "https://arxiv.org/abs/2610.31306",
+  "source": "arXiv",
+  "published": "2026-10-22",
+  "kind": "preprint",
+  "categories": [
+   "gov",
+   "agents"
+  ],
+  "direction": "toward",
+  "weight": 2,
+  "confidence": "high",
+  "summary": "Gholinejad analyzes 452 popular GitHub repositories with agent context files, finding 9.5% to 22% of cited paths are broken, and shows that escaping errors scale linearly past fixed human review capacity without mechanical contract checking.",
+  "implication": "Supports mechanical contract checking, path verification, and session-start context health checks in autonomous agent loops rather than relying on human review alone.",
+  "changes_course": false,
+  "added_at": "2026-10-30T12:53:22+00:00",
+  "verified": "arxiv"
+ },
+ {
+  "id": "S-20261030-2582",
+  "title": "Add Runtime Controls to AI Agents with NVIDIA OpenShell",
+  "url": "https://developer.nvidia.com/blog/add-runtime-controls-to-ai-agents-with-nvidia-openshell/",
+  "source": "NVIDIA Technical Blog",
+  "published": "2026-09-28",
+  "kind": "blog",
+  "categories": [
+   "agents",
+   "adopt"
+  ],
+  "direction": "toward",
+  "weight": 3,
+  "confidence": "high",
+  "summary": "NVIDIA OpenShell 0.1.0 introduces an open-source runtime that isolates autonomous AI agents using sandboxed execution, controlled service access, credential protection, and formal policy verification.",
+  "implication": "Strongly validates CIN Thesis 1 and Volume 1: runtime capability brokers and kernel sandboxes must enforce safety outside the agent workload rather than relying on prompt-level obedience.",
+  "changes_course": false,
+  "added_at": "2026-10-30T12:35:29+00:00",
+  "verified": "quote"
+ },
+ {
   "id": "S-20261030-2581",
   "title": "PocketTSLM: Deploying an On-Device Soft-Prompt Time-Series Language Model for Privacy-Preserving Smartphone Reasoning",
   "url": "https://arxiv.org/abs/2610.21308",
@@ -3637,407 +4043,5 @@
   "changes_course": false,
   "added_at": "2026-10-16T13:57:50+00:00",
   "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2401",
-  "title": "Finetuning with Sampling: SFT Learns Better Than You Think",
-  "url": "https://arxiv.org/abs/2610.02140",
-  "source": "arXiv",
-  "published": "2026-10-01",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Introduces an MCMC sampling algorithm that progressively transforms off-policy expert traces to be more on-policy, enabling SFT to generalize without catastrophic forgetting.",
-  "implication": "Enables efficient agent post-training from off-policy demonstrations while preserving foundation model capabilities for simulation and autonomous operation.",
-  "changes_course": false,
-  "added_at": "2026-10-16T13:49:03+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2400",
-  "title": "Pydantic AI Web chat UI: a website visited by the developer can trigger agent runs and server-side tool execution on the local chat endpoint",
-  "url": "https://github.com/advisories/GHSA-h4xc-3qfq-jf93",
-  "source": "GitHub Advisory Database",
-  "published": "2026-10-15",
-  "kind": "incident",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "away",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "A CSRF and origin validation flaw in Pydantic AI local web UI allows external websites visited by a developer to invoke local agent tools using local credentials.",
-  "implication": "Binding local agent development UIs to localhost does not prevent browser-driven cross-origin invocation without strict content-type and origin checks.",
-  "changes_course": false,
-  "added_at": "2026-10-16T13:44:38+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261016-2399",
-  "title": "PredictionMarketBench: Evaluating Prediction Market Trading Agents on Historical Kalshi Replay Data",
-  "url": "https://raw.githubusercontent.com/Oddpool/PredictionMarketBench/main/README.md",
-  "source": "GitHub: Oddpool/PredictionMarketBench",
-  "published": "2026-10-14",
-  "kind": "code",
-  "categories": [
-   "measure",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "An open source Python framework that replays recorded orderbook snapshots and trade prints to evaluate trading and forecasting agents under realistic execution constraints.",
-  "implication": "Provides an offline benchmark environment for evaluating agent forecasting and trading strategies against real market orderbooks without deploying financial capital.",
-  "changes_course": false,
-  "added_at": "2026-10-16T13:44:37+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261016-2396",
-  "title": "EviGraph: Proof-Carrying Selective Recommendation over Temporal Public-Service Knowledge Graphs",
-  "url": "https://arxiv.org/abs/2610.00212",
-  "source": "arXiv",
-  "published": "2026-09-21",
-  "kind": "preprint",
-  "categories": [
-   "measure",
-   "gov"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Introduces EviGraph, which separates critical public-service decision criteria from unresolved context, using a deterministic checker over temporal knowledge graphs to verify recommendations without over-abstention.",
-  "implication": "Directly informs the twin and quest interfaces: deterministic proof verification over structured knowledge graphs avoids both LLM hallucination and unnecessary task withdrawal.",
-  "changes_course": false,
-  "added_at": "2026-10-16T13:36:14+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2397",
-  "title": "Robust Is Salient: An Informed Adversary Moves the Optimal Signal onto the Salience Pole",
-  "url": "https://arxiv.org/abs/2610.00233",
-  "source": "arXiv",
-  "published": "2026-09-23",
-  "kind": "preprint",
-  "categories": [
-   "measure",
-   "agents"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Proves that under an informed adversary arguing against an optimal signal, the robust choice shifts to the salience pole, creating an identification problem where robust alignment cannot be distinguished from heuristic salience.",
-  "implication": "Observatory indicator evaluations must check whether supposedly robust agent responses merely coincide with heuristic salience attractors under adversarial pressure.",
-  "changes_course": false,
-  "added_at": "2026-10-16T13:36:14+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2398",
-  "title": "OpenAI’s New AI Is Doing Things We Barely Understand",
-  "url": "https://www.youtube.com/watch?v=z_sXLlLVUls",
-  "source": "Two Minute Papers (YouTube)",
-  "published": "2026-10-13",
-  "kind": "video",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "mixed",
-  "weight": 1,
-  "confidence": "medium",
-  "summary": "Covers new frontier mathematical reasoning and test-time compute search mechanisms, highlighting that inner deliberation paths produce unexpected intermediate reasoning representations.",
-  "implication": "Autonomous mathematical exploration produces inscrutable intermediate search branches, reinforcing the need for external proof-carrying validation gates rather than inspecting raw chain-of-thought.",
-  "changes_course": false,
-  "added_at": "2026-10-16T13:36:14+00:00",
-  "verified": "title"
- },
- {
-  "id": "S-20261016-2395",
-  "title": "Western open-weight models still can't beat China",
-  "url": "https://restofworld.org/2026/china-open-weight-models/",
-  "source": "Rest of World",
-  "published": "2026-10-16",
-  "kind": "news",
-  "categories": [
-   "global",
-   "economy",
-   "adopt"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Industry analysis highlights how resource constraints prompted developers to create efficient open-weight models that outcompete closed-API alternatives on cost and local customization across international institutions.",
-  "implication": "Demonstrates that cost and local customization advantages drive global adoption toward decentralized open-weight architectures rather than centralized proprietary clouds.",
-  "changes_course": false,
-  "added_at": "2026-10-16T13:32:43+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261016-2393",
-  "title": "Learning When to Withdraw: Curriculum Coverage and Rule-Specific Failures in Fine-Tuned Language Agents",
-  "url": "https://arxiv.org/abs/2610.21045",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "neutral",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Evaluates selective action withdrawal in tool-using language agents when authority is revoked, showing that fine-tuned agents often fail on rule combinations and omit valid reports despite high aggregate accuracy.",
-  "implication": "High-level accuracy metrics conceal rule-specific authority revocation failures in tool-using agents, demonstrating that external runtime guards are necessary beyond model weights alone.",
-  "changes_course": false,
-  "added_at": "2026-10-16T13:23:22+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2394",
-  "title": "A Responsibility-Centered Coordination Mechanism for Decentralized Multi-Agent Systems",
-  "url": "https://arxiv.org/abs/2610.21243",
-  "source": "arXiv",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "gov"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Proposes a decentralized coordination protocol assigning explicit accountability vectors to autonomous agents, eliminating single-coordinator bottlenecks in multi-agent task execution.",
-  "implication": "Decentralized responsibility tracking allows agentic labor pools to coordinate complex multi-step workflows without creating centralized coordinator dependencies.",
-  "changes_course": false,
-  "added_at": "2026-10-16T13:23:22+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2392",
-  "title": "Mind Your Own Role: Reducing Role Overstepping for Effective and Efficient Multi-Agent Collaboration via Dynamic Role Activation Steering",
-  "url": "https://arxiv.org/abs/2610.15907",
-  "source": "arXiv",
-  "published": "2026-10-11",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "gov",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Dynamic Role Activation Steering (DRAS) uses internal activation vectors to detect and reduce role overstepping in multi-agent collaboration by up to 86.6%, accelerating completion and preventing task interference.",
-  "implication": "Provides a mechanistic method for enforcing strict role boundaries and preventing authority leaks in autonomous agent collectives.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:59:48+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2390",
-  "title": "CapSeal: Capability-Sealed Secret Mediation for Secure Agent Execution",
-  "url": "https://arxiv.org/abs/2604.16762",
-  "source": "arXiv",
-  "published": "2026-04-18",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Capability-sealed secret mediation replaces direct bearer credential access with constrained invocations through a local trusted broker.",
-  "implication": "Provides a concrete architectural pattern for credential broker adapters and secretless task execution.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:50:42+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2391",
-  "title": "Heterogeneous Agent Cohorts for Safe Open-Ended Exploration with Runtime Constraint Memory",
-  "url": "https://arxiv.org/abs/2607.11226",
-  "source": "arXiv",
-  "published": "2026-07-13",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Separating agent roles across proposals, validation, and brokering allows signed constraint patches to prevent execution breaches.",
-  "implication": "Confirms the efficacy of external runtime gateways and reusable signed execution constraints over single-model prompts.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:50:42+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2388",
-  "title": "CWE-bench: Refocusing Agentic Security from Exploitation to Defense",
-  "url": "https://arxiv.org/abs/2610.17020",
-  "source": "arXiv cs.CR",
-  "published": "2026-10-12",
-  "kind": "paper",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Introduces CWE-bench with 120 held-out audit-and-repair tasks across 73 CWE types; top agents reach 68% pass@1 and 81% pass@4 with performance varying across vulnerability categories rather than languages.",
-  "implication": "Demonstrates the necessity of measuring defensive audit and repair across full repositories rather than offense alone, providing benchmarks for agent runtime safety.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:39:41+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2389",
-  "title": "AgentSafeEvo: Adversarial Co-Evolution for LLM Agent Safety",
-  "url": "https://arxiv.org/abs/2610.19422",
-  "source": "arXiv cs.AI",
-  "published": "2026-10-14",
-  "kind": "paper",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Proposes an attacker-defender co-evolution framework where adversarial agents generate task environments targeting tool-use weaknesses, improving robustness while preserving general capabilities.",
-  "implication": "Demonstrates that static safety filters miss multi-turn tool manipulation, supporting our approach of continuous adversarial simulation and strict runtime contracts.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:39:41+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2387",
-  "title": "Dwarkesh: Anthropic Insider Expects AI To Match Human AI Researchers Within 9 Months",
-  "url": "https://www.reddit.com/r/singularity/comments/1x6w61k/dwarkesh_anthropic_insider_expects_ai_to_match/",
-  "source": "Reddit r/singularity",
-  "published": "2026-10-15",
-  "kind": "forum",
-  "categories": [
-   "agents",
-   "measure"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "low",
-  "summary": "A public discussion thread analyzes claims that frontier lab models may reach autonomous research parity within nine months, urging transparent evaluation standards rather than private insider claims.",
-  "implication": "Accelerates urgency for independent containment architectures and verifiable capability forecasting ahead of autonomous recursive self-improvement.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:33:35+00:00",
-  "verified": "quote"
- },
- {
-  "id": "S-20261016-2386",
-  "title": "DeepSeek Elastic Compute (DSec): A Sandbox Infrastructure for Effective Agentic Training at Scale",
-  "url": "https://arxiv.org/abs/2609.22978",
-  "source": "arXiv",
-  "published": "2026-09-24",
-  "kind": "paper",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "DeepSeek presents DSec, a production sandbox platform exposing function-call, container, microVM, and full-VM backends to coordinate high-density agent rollouts with decoupled stateful execution.",
-  "implication": "Demonstrates that scalable agent simulation and containment require decoupled, layered sandbox backends rather than a single monolithic container runtime.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:33:34+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2385",
-  "title": "Human and LLM Facilitation in Collaborative Design Meetings: A Computational Behavioral Comparison",
-  "url": "https://arxiv.org/abs/2610.13082",
-  "source": "arXiv",
-  "published": "2026-10-09",
-  "kind": "preprint",
-  "categories": [
-   "agents",
-   "adopt"
-  ],
-  "direction": "neutral",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Empirical study comparing human project managers with Llama 3.1 8B on 199 paired facilitation contexts finds human facilitation exhibits higher contextual semantic distance and hedging, while language models show higher topic divergence.",
-  "implication": "Automated community and deliberation facilitators must constrain topic divergence and incorporate contextual anchoring to avoid derailing collaborative group discussion.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:20:52+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2384",
-  "title": "Pricing the Unprovable: Ambiguity, Turnstile Runs, and the Verifiability Discount in Crypto Protocols",
-  "url": "https://arxiv.org/abs/2610.21540",
-  "source": "arXiv:2610.21540",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "economy",
-   "measure"
-  ],
-  "direction": "mixed",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Analyzes how unprovable past vulnerability exploitation in privacy-preserving crypto protocols triggers turnstile bank runs and value discounts; proposes privacy-compatible state evidence.",
-  "implication": "Highlights danger in privacy-preserving value feedback protocols: silent vulnerability patching without historical verifiability induces turnstile exit runs, underscoring CIN need for zero-knowledge historical state proofs.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:11:20+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2383",
-  "title": "Rethinking Routing Exploration in Modern Mixture-of-Experts",
-  "url": "https://arxiv.org/abs/2610.22353",
-  "source": "arXiv:2610.22353",
-  "published": "2026-10-15",
-  "kind": "preprint",
-  "categories": [
-   "adopt",
-   "agents"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Identifies an exploration dilemma in modern MoEs where shared experts reduce token representation variability, hurting fine-grained routing; proposes MirrorMoE with token-adaptive suppression.",
-  "implication": "Informs CIN personal twin architecture and simulation runtimes: fine-grained modular agents require adaptive path pruning rather than naive shared parameter pooling to preserve specialization.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:10:44+00:00",
-  "verified": "arxiv"
- },
- {
-  "id": "S-20261016-2379",
-  "title": "Resourced Authority: A Mechanism-Design Model for Participatory Governance of Deployed AI Agents",
-  "url": "https://arxiv.org/html/2608.06353",
-  "source": "arXiv",
-  "published": "2026-08-11",
-  "kind": "preprint",
-  "categories": [
-   "gov",
-   "economy"
-  ],
-  "direction": "toward",
-  "weight": 2,
-  "confidence": "high",
-  "summary": "Develops a formal mechanism-design framework where participatory continuous governance enforces authorization on autonomous AI systems via signed hardware compute budgets.",
-  "implication": "Confirms that resource-level bounded compute contracts offer a viable enforcement mechanism for collective agent governance.",
-  "changes_course": false,
-  "added_at": "2026-10-16T12:09:38+00:00",
-  "verified": "quote"
  }
 ]
