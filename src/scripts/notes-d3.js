@@ -109,13 +109,14 @@
     }
 
     function render(selectedCat) {
+      svg.attr('viewBox', '-80 0 980 348');
       svg.selectAll('*').remove();
 
       svg.append('rect')
-        .attr('x', 4)
+        .attr('x', -76)
         .attr('y', 4)
-        .attr('width', 812)
-        .attr('height', 332)
+        .attr('width', 972)
+        .attr('height', 340)
         .attr('rx', 14)
         .attr('fill', '#12151c')
         .attr('stroke', '#2a2f3a')
@@ -400,7 +401,7 @@
         .attr('font-weight', 700)
         .attr('font-family', 'monospace')
         .attr('fill', '#4fb3a8')
-        .text('1. MULTI-AGENT CONSENSUS LATENCY · ' + state.tabTitle.toUpperCase());
+        .text('1. CONSENSUS LATENCY · ' + state.tabTitle.slice(0, 22).toUpperCase());
 
       leftG.append('text')
         .attr('x', 0)

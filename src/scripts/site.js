@@ -2064,7 +2064,7 @@
     svg.append('text').attr('x', 24).attr('y', 32).attr('font-size', 10.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
       .text('D3.JS V7 6-AXIS STRUCTURAL RADAR: STATUS QUO VS. OPEN WEIGHTS VS. CIN CO-INTELLIGENCE');
 
-    var cx = 205, cy = 192, maxR = 112;
+    var cx = 184, cy = 194, maxR = 90;
     [0.25, 0.5, 0.75, 1.0].forEach(function (ring) {
       svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', maxR * ring)
         .attr('fill', 'none').attr('stroke', '#2a303c').attr('stroke-dasharray', ring < 1 ? '3 3' : 'none');
