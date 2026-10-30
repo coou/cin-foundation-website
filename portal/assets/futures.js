@@ -1,5 +1,5 @@
 // Possible futures: scenarios the agents wrote from what they read, with outcomes and what the network can do.
-import { mountAuth, el, svgEl, getJSON, ago } from './portal.js?v=13';
+import { mountAuth, el, svgEl, getJSON, ago } from './portal.js?v=14';
 import {
   FUTURES_GOALS,
   clampLikelihood,
@@ -60,7 +60,22 @@ function meter(label, v, cls) {
   return row;
 }
 
-function outcome(o) {
+function outcomeCompact(o) {
+  const card = el('div', 'scen-oc-card ' + (o.desirable ? 'want' : 'avoid'));
+  const head = el('div', ' flush');
+  head.append(
+    el('span', 'tag ' + (o.desirable ? 'ok' : 'no'), o.desirable ? 'we want this' : 'we want to avoid this'),
+    el('b', 'twin-subhead', o.name)
+  );
+  card.append(
+    head,
+    meter('Today', o.likelihood_now, 'now'),
+    meter('With CIN', o.likelihood_with_cin, o.desirable ? 'up' : 'down')
+  );
+  return card;
+}
+
+function outcomeDetail(o) {
   const box = el('div', 'outcome ' + (o.desirable ? 'want' : 'avoid'));
   const head = el('p', 'flush');
   head.append(
@@ -72,14 +87,10 @@ function outcome(o) {
   const ex = el('p', 'example');
   ex.append(el('b', null, 'For example: '), document.createTextNode(o.example));
   box.appendChild(ex);
-  box.append(
-    meter('Today', o.likelihood_now, 'now'),
-    meter('With the network', o.likelihood_with_cin, o.desirable ? 'up' : 'down')
-  );
   return box;
 }
 
-function scenario(sc) {
+function scenario(sc, idx) {
   const c = el('article', 'card scenario');
   const meta = el('p', 'muted flush');
   const goalsText = Array.isArray(sc.goals)
@@ -97,8 +108,8 @@ function scenario(sc) {
   c.append(meta, el('h2', 'flush', sc.title));
 
   if (Array.isArray(sc.sources) && sc.sources.length) {
-    const from = el('p', 'muted');
-    from.appendChild(document.createTextNode('Started from: '));
+    const from = el('p', 'muted flush');
+    from.appendChild(document.createTextNode('Primary signal: '));
     sc.sources.forEach((s, i) => {
       if (i) from.appendChild(document.createTextNode(' · '));
       from.appendChild(link(s.url, s.title));
@@ -106,28 +117,40 @@ function scenario(sc) {
     c.appendChild(from);
   }
 
-  c.append(el('p', null, sc.premise));
-  const w = el('blockquote', 'world', sc.world);
-  c.appendChild(w);
+  c.append(el('p', 'flush', sc.premise));
 
-  c.appendChild(el('h3', null, 'What could happen'));
-  if (Array.isArray(sc.outcomes)) {
-    sc.outcomes.forEach((o) => c.appendChild(outcome(o)));
+  if (Array.isArray(sc.outcomes) && sc.outcomes.length) {
+    const grid = el('div', 'scen-outcomes-compact');
+    sc.outcomes.forEach((o) => grid.appendChild(outcomeCompact(o)));
+    c.appendChild(grid);
   }
 
-  c.appendChild(el('h3', null, 'What the network does about it'));
-  c.appendChild(el('p', null, sc.how));
+  const drawer = el('details', 'scen-drawer');
+  if (idx === 0) drawer.open = true;
+  const sum = el('summary', null, 'Inspect world vignette, concrete examples & CIN engineering intervention →');
+  drawer.appendChild(sum);
+
+  const w = el('blockquote', 'world', sc.world);
+  drawer.appendChild(w);
+
+  if (Array.isArray(sc.outcomes)) {
+    sc.outcomes.forEach((o) => drawer.appendChild(outcomeDetail(o)));
+  }
+
+  drawer.appendChild(el('h3', null, 'What the network does about it'));
+  drawer.appendChild(el('p', null, sc.how));
 
   if (Array.isArray(sc.pipelines)) {
-    const work = el('p', 'muted');
+    const work = el('p', 'muted flush');
     const pipelinesText = sc.pipelines.map((p) => WORK[p] || p).join(', ');
     work.textContent =
       'Work this opens: ' +
       pipelinesText +
       (sc.work ? ' · ' + sc.work + ' piece' + (sc.work === 1 ? '' : 's') + ' of work started' : '');
-    c.appendChild(work);
+    drawer.appendChild(work);
   }
 
+  c.appendChild(drawer);
   return c;
 }
 
@@ -159,7 +182,7 @@ function renderList() {
     return;
   }
 
-  const nodes = matched.map((sc) => scenario(sc));
+  const nodes = matched.map((sc, idx) => scenario(sc, idx));
   host.replaceChildren(...nodes);
 }
 

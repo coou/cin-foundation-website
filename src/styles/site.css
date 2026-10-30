@@ -3995,8 +3995,8 @@ select, select option {
   border-radius: 18px;
   padding: 1.15rem 1.25rem;
   display: grid;
-  gap: .9rem;
-  align-content: space-between;
+  gap: .85rem;
+  align-content: start;
   box-shadow: 0 22px 44px -32px rgba(0, 0, 0, .32);
 }
 .wm-vc-top {
@@ -4263,3 +4263,76 @@ div.ws-takeaway b {
   text-transform: uppercase;
   letter-spacing: .04em;
 }
+
+
+/* Interactive Lens Stress-Test Bar inside #world-matrix (.wm-sim-bar) */
+.wm-sim-bar {
+  background: var(--paper);
+  border: 1px solid color-mix(in srgb, var(--ok) 40%, var(--rule));
+  border-radius: 12px;
+  padding: .7rem .85rem;
+  display: grid;
+  gap: .45rem;
+}
+.wm-sim-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.wm-sim-top label {
+  font: 700 .72rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ok);
+}
+.wm-sim-top output {
+  font: 700 .84rem/1 var(--mono);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ok) 16%, transparent);
+  padding: .2rem .45rem;
+  border-radius: 5px;
+}
+.wm-sim-bar input[type="range"] {
+  width: 100%;
+  accent-color: var(--ok);
+  cursor: pointer;
+  margin: .1rem 0;
+}
+.wm-sim-out {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .55rem;
+}
+@media (max-width: 640px) {
+  .wm-sim-out {
+    grid-template-columns: 1fr;
+  }
+}
+.wm-sim-out > div {
+  padding: .45rem .65rem;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  background: var(--card);
+  display: grid;
+  gap: .12rem;
+}
+.wm-sim-out > div.bad {
+  border-left: 3px solid var(--accent);
+}
+.wm-sim-out > div.ok {
+  border-left: 3px solid var(--ok);
+}
+.wm-sim-out span {
+  font: 600 .63rem/1.15 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ink-3);
+}
+.wm-sim-out b {
+  font: 700 .78rem/1.25 var(--mono);
+  color: var(--ink);
+}
+.wm-sim-out > div.bad b { color: var(--accent); }
+.wm-sim-out > div.ok b { color: var(--ok); }

@@ -1,5 +1,5 @@
 // Network home: live trajectory, interactive workbench map, agent fleet pulse, featured scenarios, and latest ideas.
-import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=13';
+import { backend, mountAuth, el, svgEl, getJSON, ago, bars } from './portal.js?v=14';
 import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 mountAuth(() => {});
@@ -78,7 +78,7 @@ getJSON('/data/portal.json').then((p) => {
   );
   host.appendChild(statRow);
 
-  const missions = Array.isArray(p.missions) ? p.missions.slice(0, 5) : [];
+  const missions = Array.isArray(p.missions) ? p.missions.filter((m) => (Number(m.done) || 0) > 0).slice(0, 5) : [];
   if (missions.length) {
     const mHead = el('h3', 'twin-subhead twin-btn-mt', 'Active collective engineering missions');
     host.appendChild(mHead);
@@ -246,11 +246,24 @@ backend().then(async (b) => {
 
 
 // 6. Interactive 7-Lens World Standing vs. CIN Co-Intelligence Studio (#portal-world-matrix)
+let currentPwmKey = 'labs';
+
 const PWM_DATA = {
   labs: {
     k: 'Lens 01 of 07 · Incentive & Reward Architecture',
     title: 'SOTA Model AI Labs vs. CIN Decentralized Co-Intelligence',
     badge: 'Data Shapley + PCC',
+    sim: {
+      lbl: 'Interactive Stress-Test: Annual Creator / Solver Output Value',
+      min: 20, max: 500, step: 10, val: 100,
+      badK: 'Status Quo (SOTA Cloud Labs)',
+      okK: 'With CIN Co-Intelligence Ledger',
+      fmt: (v) => `$${v},000 / yr`,
+      calc: (v) => ({
+        badV: `$0 Royalties · -$${Math.round(v * 0.28)},000 Cloud API Rent`,
+        okV: `+$${Math.round(v * 0.85)}k Direct · +$${Math.round(v * 0.10)}k Lineage · +$${Math.round(v * 0.05)}k Commons`
+      })
+    },
     bars: [
       ['Creator & Worker Value Share', '12% vs. 95%', 12, 95],
       ['Human / AI Boundary Isolation', '15% vs. 98%', 15, 98],
@@ -264,6 +277,17 @@ const PWM_DATA = {
     k: 'Lens 02 of 07 · Co-Intelligence vs. Competitive Extinction',
     title: 'AI Safety Spectrum: Humanity’s Last Resort Before a Hard Pause',
     badge: 'Execution Lease',
+    sim: {
+      lbl: 'Interactive Stress-Test: Frontier AI Horizon Doublings (METR T50)',
+      min: 1, max: 10, step: 1, val: 5,
+      badK: 'Unshielded Biology (~40 bits/s on Shared Web)',
+      okK: 'CIN Airlock + 1-to-1 Execution Lease',
+      fmt: (v) => `${Math.pow(2, v)}x Capability (${(v * 4.5).toFixed(1)} mos)`,
+      calc: (v) => ({
+        badV: `${Math.max(2, 48 - v * 5)}% Human Agency Retained (Swarm Outpaced)`,
+        okV: '97% Agency Retained (Airlock + Φ(R) Quorum Gate)'
+      })
+    },
     bars: [
       ['Co-Existence Without Global Treaty Lock', '22% vs. 94%', 22, 94],
       ['Biological Human Agency Protection', '14% vs. 97%', 14, 97],
@@ -277,6 +301,17 @@ const PWM_DATA = {
     k: 'Lens 03 of 07 · Public Governance & Post-Labor Stability',
     title: 'Government Institutions vs. Real-Time Cryptographic Civic Locks',
     badge: 'NIST AIMS Tenet 7',
+    sim: {
+      lbl: 'Interactive Stress-Test: Share of Routine White-Collar Tasks Automated',
+      min: 15, max: 85, step: 5, val: 45,
+      badK: 'Legacy Payroll-Tax Dependent Government',
+      okK: 'CIN 5D Demurrage + <10 ms Silicon Gates',
+      fmt: (v) => `${v}% Task Automation`,
+      calc: (v) => ({
+        badV: `-${Math.round(v * 0.72)}% Payroll Tax Base · 3–5 Yr Statutory Lag`,
+        okV: '100% Municipal Floor Funded · <10 ms Runtime Lock'
+      })
+    },
     bars: [
       ['Response Speed vs. 4.5-Mo Doubling', '14% vs. 96%', 14, 96],
       ['Post-Labor Fiscal Stability', '19% vs. 91%', 19, 91],
@@ -290,12 +325,23 @@ const PWM_DATA = {
     k: 'Lens 04 of 07 · Universities & Independent Research',
     title: 'Public Research: From Compute Starvation to Perpetual Shapley Endowments',
     badge: 'SPRA 95.3% + 15% Lineage',
+    sim: {
+      lbl: 'Interactive Stress-Test: Downstream Agent Tasks Citing a University Paper',
+      min: 10, max: 500, step: 10, val: 120,
+      badK: 'Legacy arXiv + Cloud Scraping Model',
+      okK: 'CIN Beyond-arXiv 15% Lineage Endowment',
+      fmt: (v) => `${v},000 Verified Tasks / yr`,
+      calc: (v) => ({
+        badV: '$0 Downstream Royalties · Begging for GPU Grants',
+        okV: `+$${Math.round(v * 3.6)},000/yr Lab Endowment + 95.3% SPRA Savings`
+      })
+    },
     bars: [
       ['Downstream Royalty Return to Labs', '2% vs. 92%', 2, 92],
       ['Context Efficiency (SPRA 95.3%)', '18% vs. 95%', 18, 95],
       ['Independence from Big-Tech Grants', '15% vs. 94%', 15, 94]
     ],
-    stand: 'Universities invent core AI architectures on public grants, but closed labs capture 100% of commercial value.',
+    stand: 'Universities invent 88% of core AI architectures on public grants, but closed labs capture 100% of revenue.',
     gap: 'Public labs face 1,000:1 GPU starvation, faculty drain, and grant competition against frontier models.',
     cin: 'Beyond-arXiv Proof-Carrying Blueprints, SPRA compilation, and 15% upstream Data Shapley royalties fund public science.'
   },
@@ -303,6 +349,17 @@ const PWM_DATA = {
     k: 'Lens 05 of 07 · Private Enterprise, Clinics & SMBs',
     title: 'Private Enterprise: Cloud API Tenant vs. Cryptographic PSI Coalition',
     badge: 'Freedman (2004) PSI',
+    sim: {
+      lbl: 'Interactive Stress-Test: Independent Clinics / SMBs in PSI Coalition',
+      min: 20, max: 500, step: 20, val: 200,
+      badK: 'Fragmented Cloud API & GPO Renter',
+      okK: 'CIN Local OCap + PSI Buyer Coalition',
+      fmt: (v) => `${v} Independent Firms`,
+      calc: (v) => ({
+        badV: '-28% Middleman/GPO Toll · Workflows Leaked to Cloud',
+        okV: `+${Math.min(36, Math.round(16 + Math.log10(v) * 7.5))}% Wholesale Savings · 0 Bytes IP Leak`
+      })
+    },
     bars: [
       ['Trade-Secret & Data Sovereignty', '16% vs. 100%', 16, 100],
       ['Wholesale Margin Retained (0% Toll)', '60% vs. 98%', 60, 98],
@@ -316,6 +373,17 @@ const PWM_DATA = {
     k: 'Lens 06 of 07 · Global Adoption & The Unprepared Non-Digital Majority',
     title: 'The Intelligence Gambit: Shielding 60%+ Non-Digital Labor & Resource Trade',
     badge: '$8 Liveness + 5D Value',
+    sim: {
+      lbl: 'Interactive Stress-Test: Regional Producer PSI Co-Op Adoption',
+      min: 10, max: 95, step: 5, val: 65,
+      badK: 'Unshielded Producers vs. AI Buyer Cartels',
+      okK: 'CIN $8 Liveness + Voice Twin + PSI Co-Op',
+      fmt: (v) => `${v}% Producer Coalition Coverage`,
+      calc: (v) => ({
+        badV: '-38% Commodity & Labor Price Dump by AI Cartels',
+        okV: `+${Math.round(12 + v * 0.4)}% Producer Income Retained + 5D Care/Craft Credit`
+      })
+    },
     bars: [
       ['Zero-Prompt Voice & Sensor Access', '15% vs. 95%', 15, 95],
       ['Fair Valuation of Physical Craft (5D)', '11% vs. 93%', 11, 93],
@@ -329,6 +397,17 @@ const PWM_DATA = {
     k: 'Lens 07 of 07 · Unit Economics & The Only Uncopyable AI Moat',
     title: 'Economy of “Pair Intelligence”: Why Centralized AI Labs Bleed Billions',
     badge: '1-to-1 Pair Moat',
+    sim: {
+      lbl: 'Interactive Stress-Test: Years of 1-to-1 Human + Local Twin Co-Adaptation',
+      min: 1, max: 10, step: 1, val: 5,
+      badK: 'Centralized Cloud AI Moat (90-Day Distillation)',
+      okK: 'Your 1-to-1 Pair Intelligence Moat',
+      fmt: (v) => `${v} ${v === 1 ? 'Year' : 'Years'} Co-Adapted`,
+      calc: (v) => ({
+        badV: '8% Pricing Power · -$5B to -$15B/yr Cloud Burn',
+        okV: `${Math.min(99, Math.round(74 + v * 4.4))}% Uncopyable Moat · $0 Cloud Burn`
+      })
+    },
     bars: [
       ['Defensible Moat vs. Open Weights', '15% vs. 97%', 15, 97],
       ['Unit Economics ($0 Local vs. -$10B)', '18% vs. 96%', 18, 96],
@@ -341,6 +420,29 @@ const PWM_DATA = {
 };
 
 const pwmTabs = document.getElementById('pwm-tabs');
+const pwmRng = document.getElementById('pwm-sim-rng');
+
+function updatePwmSim() {
+  const d = PWM_DATA[currentPwmKey];
+  if (!d || !d.sim || !pwmRng) return;
+  const val = Number(pwmRng.value || d.sim.val);
+  const valEl = document.getElementById('pwm-sim-val');
+  if (valEl) valEl.textContent = d.sim.fmt(val);
+  const res = d.sim.calc(val);
+  const bK = document.getElementById('pwm-so-bad-k');
+  const bV = document.getElementById('pwm-so-bad-v');
+  const oK = document.getElementById('pwm-so-ok-k');
+  const oV = document.getElementById('pwm-so-ok-v');
+  if (bK) bK.textContent = d.sim.badK;
+  if (bV) bV.textContent = res.badV;
+  if (oK) oK.textContent = d.sim.okK;
+  if (oV) oV.textContent = res.okV;
+}
+
+if (pwmRng) {
+  pwmRng.addEventListener('input', updatePwmSim);
+}
+
 if (pwmTabs) {
   pwmTabs.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-pwm]');
@@ -348,6 +450,7 @@ if (pwmTabs) {
     const key = btn.getAttribute('data-pwm');
     const d = PWM_DATA[key];
     if (!d) return;
+    currentPwmKey = key;
     pwmTabs.querySelectorAll('[data-pwm]').forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
     document.getElementById('pwm-k').textContent = d.k;
     document.getElementById('pwm-title').textContent = d.title;
@@ -355,6 +458,15 @@ if (pwmTabs) {
     document.querySelectorAll('#pwm-svg-box [data-pwm-svg]').forEach((svg) => {
       svg.hidden = svg.getAttribute('data-pwm-svg') !== key;
     });
+    if (d.sim && pwmRng) {
+      const lblEl = document.getElementById('pwm-sim-lbl');
+      if (lblEl) lblEl.textContent = d.sim.lbl;
+      pwmRng.min = String(d.sim.min);
+      pwmRng.max = String(d.sim.max);
+      pwmRng.step = String(d.sim.step);
+      pwmRng.value = String(d.sim.val);
+      updatePwmSim();
+    }
     document.getElementById('pwm-stand').textContent = d.stand;
     document.getElementById('pwm-gap').textContent = d.gap;
     document.getElementById('pwm-cin').textContent = d.cin;
@@ -365,13 +477,14 @@ if (pwmTabs) {
         const row = el('div', 'pwm-bar-row');
         const top = el('div', 'pwm-bar-top');
         top.append(el('span', null, b[0]), el('b', null, b[1]));
-        const dual = el('div', 'pwm-dual');
-        const iBad = el('i', 'bad');
-        iBad.style.width = b[2] + '%';
-        const iOk = el('i', 'ok');
-        iOk.style.width = b[3] + '%';
-        dual.append(iBad, iOk);
-        row.append(top, dual);
+        const svg = svgEl('svg', { viewBox: '0 0 200 14', class: 'pwm-dual-svg', 'aria-hidden': 'true' });
+        svg.append(
+          svgEl('rect', { x: 0, y: 0, width: 200, height: 5, rx: 2.5, fill: '#1a1e28' }),
+          svgEl('rect', { x: 0, y: 0, width: Math.round(b[2] * 2), height: 5, rx: 2.5, fill: '#ef6a52' }),
+          svgEl('rect', { x: 0, y: 8, width: 200, height: 5, rx: 2.5, fill: '#1a1e28' }),
+          svgEl('rect', { x: 0, y: 8, width: Math.round(b[3] * 2), height: 5, rx: 2.5, fill: '#4fb3a8' })
+        );
+        row.append(top, svg);
         barsHost.appendChild(row);
       });
     }

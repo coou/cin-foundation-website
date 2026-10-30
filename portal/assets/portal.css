@@ -978,3 +978,101 @@ footer.site {
   line-height: 1.38;
   color: var(--ink);
 }
+
+
+/* Interactive Stress-Tester Bar inside #portal-world-matrix (.pwm-sim-bar) & Scenario Drawers */
+.pwm-sim-bar {
+  background: #0d0f14;
+  border: 1px solid rgba(79, 179, 168, 0.4);
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+  display: grid;
+  gap: 0.42rem;
+}
+.pwm-sim-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.pwm-sim-top label {
+  font: 700 0.68rem/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4fb3a8;
+}
+.pwm-sim-top output {
+  font: 700 0.8rem/1 var(--mono);
+  color: var(--ink);
+  background: rgba(79, 179, 168, 0.16);
+  padding: 0.18rem 0.42rem;
+  border-radius: 5px;
+}
+.pwm-sim-bar input[type="range"] {
+  width: 100%;
+  accent-color: #4fb3a8;
+  cursor: pointer;
+}
+.pwm-sim-out {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+@media (max-width: 640px) {
+  .pwm-sim-out { grid-template-columns: 1fr; }
+}
+.pwm-sim-out > div {
+  background: #141821;
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  padding: 0.42rem 0.6rem;
+  display: grid;
+  gap: 0.1rem;
+}
+.pwm-sim-out > div.bad { border-left: 3px solid #ef6a52; }
+.pwm-sim-out > div.ok { border-left: 3px solid #4fb3a8; }
+.pwm-sim-out span {
+  font: 600 0.61rem/1.15 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.pwm-sim-out b {
+  font: 700 0.74rem/1.25 var(--mono);
+}
+.pwm-sim-out > div.bad b { color: #ef6a52; }
+.pwm-sim-out > div.ok b { color: #4fb3a8; }
+
+.scen-outcomes-compact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.65rem;
+  margin: 0.75rem 0;
+}
+.scen-oc-card {
+  background: #0d0f14;
+  border: 1px solid var(--rule);
+  border-radius: 9px;
+  padding: 0.65rem 0.75rem;
+  display: grid;
+  gap: 0.35rem;
+}
+.scen-oc-card.want { border-top: 3px solid #4fb3a8; }
+.scen-oc-card.avoid { border-top: 3px solid #ef6a52; }
+.scen-drawer {
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed var(--rule);
+}
+.scen-drawer summary {
+  font: 600 0.76rem/1.3 var(--mono);
+  color: #4fb3a8;
+  cursor: pointer;
+  user-select: none;
+}
+.scen-drawer summary:hover {
+  color: #e3b341;
+}
+
+.pwm-dual-svg { width: 100%; height: 14px; display: block; }

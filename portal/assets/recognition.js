@@ -1,5 +1,5 @@
 // Recognition: forecasts that came true, and work that serves the goals.
-import { mountAuth, el, getJSON, ago } from './portal.js?v=13';
+import { mountAuth, el, getJSON, ago } from './portal.js?v=14';
 import {
   RECOGNITION_KINDS,
   filterRecognition,
@@ -23,11 +23,32 @@ function link(href, text) {
 function entry(r) {
   const c = el('article', 'card');
   const kindLabel = Object.hasOwn(RECOGNITION_KINDS, r.kind) ? RECOGNITION_KINDS[r.kind] : (r.kind || 'recognition');
-  const meta = el('p', 'muted flush');
-  meta.append(el('span', 'tag ok', kindLabel), document.createTextNode(' ' + ago(r.added_at)));
+  const meta = el('div', 'btn-row flush');
+  meta.append(
+    el('span', 'tag ok', kindLabel),
+    el('span', 'tag info', 'Verified Primary Source'),
+    el('span', 'muted', ago(r.added_at))
+  );
   const h = el('h2', 'flush');
   h.append(document.createTextNode((r.who || 'Contributor') + ': '), link(r.url, r.what || r.title || 'Contribution'));
-  c.append(meta, h, el('p', null, r.why || ''));
+  c.append(meta, h);
+
+  const whyText = (r.why || '').trim();
+  const dotIdx = whyText.indexOf('. ');
+  if (dotIdx !== -1 && dotIdx < 210 && whyText.length > dotIdx + 20) {
+    const firstSent = whyText.slice(0, dotIdx + 1);
+    const restSent = whyText.slice(dotIdx + 2).trim();
+    c.appendChild(el('p', 'flush', firstSent));
+    const dr = el('details', 'scen-drawer');
+    dr.append(
+      el('summary', null, 'Inspect architectural integration & provenance note →'),
+      el('p', 'muted flush', restSent)
+    );
+    c.appendChild(dr);
+  } else {
+    c.appendChild(el('p', 'flush', whyText));
+  }
+
   if (r.prediction) {
     const p = el('p', 'example');
     p.append(
