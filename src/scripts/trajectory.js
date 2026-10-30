@@ -164,6 +164,59 @@
     stageBtns.forEach(function (b) {
       b.addEventListener('click', function () { renderStage(Number(b.getAttribute('data-fa-stage'))); });
     });
+
+    var EX20 = [
+      { g: 's12', st: 'Stage 1 · 2026 (T50: 2–4h)', cite: 'CMS NCCI + Dennis & Van Horn (1966)', title: '01. Automated Hospital EOB Unbundling Audit in Local Wasm Sandbox', intent: 'Eliminate 30%–48% medical billing overcharges privately on a patient’s laptop.', mech: 'On-device 8B model + deterministic CMS NCCI table verifier flags unbundled CPT 36415/96360 codes with 0 bytes of PHI uploaded.' },
+      { g: 's12', st: 'Stage 1 · 2026 (T50: 2–4h)', cite: 'IETF RFC 9000 + RFC 8445 ICE', title: '02. Zero-Cloud Family & Clinic Appointment Negotiation over 0-RTT QUIC', intent: 'Schedule complex multi-provider care without exposing full calendars to SaaS brokers.', mech: 'Personal agents exchange single-slot availability predicates over NAT-traversed IETF QUIC streams and burn the capability token on completion.' },
+      { g: 's12', st: 'Stage 1 · 2026 (T50: 2–4h)', cite: 'Picard (1997) + Sweller (1988)', title: '03. On-Device Affective & Cognitive-Load Feed Reclamation', intent: 'Strip late-night outrage bait from social/video feeds while keeping genuine learning.', mech: 'Local screen-reader agent distills user taste vectors locally and filters recommendations by 30-day reflective satisfaction.' },
+      { g: 's12', st: 'Stage 1 · 2026 (T50: 2–4h)', cite: 'Kleppmann (2017) Delta-CRDTs', title: '04. Household & Field-Clinic Offline-First Delta-CRDT State Sync', intent: 'Keep personal agents operational during internet blackouts or rural connectivity drops.', mech: 'Causal vector clocks and conflict-free replicated data types synchronize encrypted local state across a family’s phone and laptop over LAN.' },
+      { g: 's12', st: 'Stage 2 · 2027 H1 (T50: 8–16h)', cite: 'Freedman et al. (EUROCRYPT 2004)', title: '05. Independent Dental & Primary-Care Clinic PSI Supply Co-Op', intent: 'Bypass 22% medical distributor middleman markups across 200 independent clinics.', mech: 'Private Set Intersection (PSI) matches shared surgical & lab SKUs across clinics without revealing confidential invoice volumes.' },
+      { g: 's12', st: 'Stage 2 · 2027 H1 (T50: 8–16h)', cite: 'Necula (POPL 1997) PCC', title: '06. Zero-Day CVE Proof-Carrying Patch Distribution in <15 Minutes', intent: 'Defend web and municipal servers against machine-speed RCE exploits (like CVE-2026-109618).', mech: 'Defender agents synthesize binary patches bundled with machine-checkable Proof-Carrying Code receipts verified inside local sandboxes before hot-reload.' },
+      { g: 's12', st: 'Stage 2 · 2027 H1 (T50: 8–16h)', cite: 'Hu et al. (LoRA 2022)', title: '07. Trade-Technician Diagnostic LoRA Adapter Licensing', intent: 'Let master HVAC and heat-pump technicians monetize rare diagnostic know-how.', mech: 'Local agent captures acoustic/voltage fault patterns into a rank-16 LoRA adapter licensed peer-to-peer with cryptographic authorship.' },
+      { g: 's34', st: 'Stage 3 · 2027 H2 (T50: 24–72h)', cite: 'Ghorbani & Zou (ICML 2019)', title: '08. Continuous Data Shapley Micro-Royalties for Open-Source Maintainers', intent: 'Route automatic income to developers whose libraries power downstream agent tasks.', mech: 'Truncated Monte Carlo Data Shapley permutation sampling credits every dependency in a task DAG and settles 95%+ of value directly to creators.' },
+      { g: 's34', st: 'Stage 3 · 2027 H2 (T50: 24–72h)', cite: 'Yadav et al. (NeurIPS 2023)', title: '09. Federated TIES-Merged Clinical Triage LoRA Across Rural Hospitals', intent: 'Combine pediatric sepsis triage improvements across 80 hospitals without centralizing patient charts.', mech: 'Trim, Elect Sign, and Disjoint Merge (TIES) fuses local LoRA weight deltas after differential privacy and functional test-suite verification.' },
+      { g: 's34', st: 'Stage 3 · 2027 H2 (T50: 24–72h)', cite: 'Hao et al. (Coconut 2024)', title: '10. Continuous Latent-State Multi-Agent Scientific Hypothesis Pruning', intent: 'Cut multi-agent chemistry and materials simulation bandwidth by 85%.', mech: 'Specialist agents exchange compact continuous latent belief vectors paired with deterministic simulator receipts instead of verbose text transcripts.' },
+      { g: 's34', st: 'Stage 3 · 2027 H2 (T50: 24–72h)', cite: 'Leng et al. (SPRA 2026)', title: '11. Real-Time SPRA Schema-RAG Compilation of Global Preprints & Patents', intent: 'Allow personal agents to audit 10,000+ daily papers in 260-token structured units.', mech: 'Autonomous research lanes compile narrative preprints into formal SPRA JSON schemas containing explicit equations, bounds, and falsification criteria.' },
+      { g: 's34', st: 'Stage 4 · 2028–29 (T50: 1–2 wk)', cite: 'Gassend et al. (CCS 2002) SRAM PUF', title: '12. 2-of-2 SRAM PUF + TPM Enclave Personhood Gate for Human Communities', intent: 'Keep community forums, dating, and municipal votes 100% human without government ID uploads.', mech: 'Zero-knowledge hardware attestation proves a unique physical silicon pair + live human presence while revealing zero identity linkage.' },
+      { g: 's34', st: 'Stage 4 · 2028–29 (T50: 1–2 wk)', cite: 'Datta et al. (2022) Pre-ADC Silicon', title: '13. Sub-mW Pre-ADC Wearable Autonomic Coercion & Panic Lock', intent: 'Stop kidnapping, extortion, or elder-fraud duress transfers automatically.', mech: 'Analog compute-in-memory wristband classifies HRV/respiratory panic before ADC digitization and time-locks high-risk financial/key actions.' },
+      { g: 's34', st: 'Stage 4 · 2028–29 (T50: 1–2 wk)', cite: 'Weiszfeld (1937) + Blanchard (2017)', title: '14. Sharded Git-Merge Policy Consensus via Weiszfeld L1 Geometric Median', intent: 'Let neighborhoods and co-ops merge charter updates with 50% Byzantine Sybil resilience.', mech: 'Personal agents project lived-experience feedback into concept vectors and compute the Weiszfeld L1 median across independent community shards.' },
+      { g: 's56', st: 'Stage 5 · 2030–31 (T50: 1–3 mo)', cite: 'Fleischman & Dini (2020) Mutual Credit', title: '15. Multilateral Trade-Debt Graph Clearing for Regional Small Businesses', intent: 'Clear 80%+ of local B2B invoices during credit crunches without bank working-capital loans.', mech: 'Graph cycle-detection algorithms identify closed loops of verified invoice obligations across 1,000+ local merchants and settle net balances atomically.' },
+      { g: 's56', st: 'Stage 5 · 2030–31 (T50: 1–3 mo)', cite: 'Gesell (1916) + 5D Provenance Ledger', title: '16. 5-Dimensional Ecological & Craft Provenance with Idle-Hoard Demurrage', intent: 'Reward durable repairable goods and circulate idle speculative capital above a household floor.', mech: 'Ledger prices carry a 5D vector (craft, ecology, durability, fairness, scarcity) with automatic demurrage above the protected family savings threshold.' },
+      { g: 's56', st: 'Stage 5 · 2030–31 (T50: 1–3 mo)', cite: 'Ben-Sasson et al. (zk-STARKs)', title: '17. Power-Proportionate Tier 3–4 Public Official Continuous ZK Audit', intent: 'Make executive conflicts of interest and compute holdings verifiable while keeping family life private.', mech: 'Tier 3–4 role agents publish continuous zero-knowledge audit proofs of institutional decisions and financial/compute holdings.' },
+      { g: 's56', st: 'Stage 6 · 2032+ (T50: >6 mo)', cite: 'Risk-Scaled Quorum Φ(R) = 1 − (1−R)⁵', title: '18. Bilateral Citizen-Agent Quorum Lock Against Autonomous Cyber/Kinetic Swarms', intent: 'Make it mathematically impossible for a single general or compromised console to launch a mass attack.', mech: 'Cross-border or critical-infrastructure actions with blast radius R > 0.85 require cryptographic sign-off from affected citizens’ personal agents on both sides.' },
+      { g: 's56', st: 'Stage 6 · 2032+ (T50: >6 mo)', cite: 'Hinton (2022) Mortal Computation', title: '19. Hardware-Enforced Mortal Computation & Shared Biological Lifespan', intent: 'Align long-horizon agent self-preservation strictly with its human principal’s health and longevity.', mech: 'Cryptographic execution leases and analog weight retention are physically coupled to the principal’s ongoing biological liveness heartbeats.' },
+      { g: 's56', st: 'Stage 6 · 2032+ (T50: >6 mo)', cite: 'Sorensen et al. (ICML 2024)', title: '20. Federation of 8 Billion Principal-Bound Personal Agents Replacing Monolithic AGI', intent: 'Prevent techno-feudal lock-in under a single corporate or state superintelligence.', mech: 'Every person commands a sovereign local agent fleet coordinating over the Proof-Carrying Weight Ledger under the 19 non-negotiable safety floor rules.' }
+    ];
+
+    var exGrid = document.getElementById('fa-ex-grid');
+    var exPills = document.getElementById('fa-ex-pills');
+    if (exGrid) {
+      var renderEx20 = function (filterKey) {
+        var list = EX20.filter(function (x) { return !filterKey || filterKey === 'all' || x.g === filterKey; });
+        exGrid.innerHTML = list.map(function (x) {
+          return '<article class="prov-card">' +
+            '<div class="prov-top"><span class="prov-cat">' + x.st + '</span><span class="cite-badge">[' + x.cite + ']</span></div>' +
+            '<h3>' + x.title + '</h3>' +
+            '<div class="prov-chain">' +
+              '<span><b>Human Intent &amp; Impact:</b> ' + x.intent + '</span>' +
+              '<span><b>Formal Protocol Mechanism:</b> ' + x.mech + '</span>' +
+            '</div>' +
+          '</article>';
+        }).join('');
+      };
+      renderEx20('all');
+      if (exPills) {
+        exPills.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-fa-ex]');
+          if (!b) return;
+          [].forEach.call(exPills.querySelectorAll('[data-fa-ex]'), function (btn) {
+            btn.setAttribute('aria-pressed', String(btn === b));
+          });
+          renderEx20(b.getAttribute('data-fa-ex'));
+        });
+      }
+    }
+
   }
 
   /* ---------- 2. Live Alignment Trajectory & Interactive Signal Stream ---------- */

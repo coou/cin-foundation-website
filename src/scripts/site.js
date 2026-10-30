@@ -1115,6 +1115,38 @@
     }
   }
 
+
+  // 3. Scientific Provenance & Terminology Registry Filter/Search (#term-explorer)
+  var provGrid = document.getElementById('prov-grid');
+  var provPills = document.getElementById('prov-pills');
+  var provSearch = document.getElementById('prov-search');
+  if (provGrid) {
+    var activeProvCat = 'all';
+    var filterProv = function () {
+      var q = provSearch ? (provSearch.value || '').toLowerCase().trim() : '';
+      [].forEach.call(provGrid.querySelectorAll('.prov-card'), function (card) {
+        var c = card.getAttribute('data-pcat') || '';
+        var matchCat = (activeProvCat === 'all') || (c === activeProvCat);
+        var matchQ = !q || (card.textContent.toLowerCase().indexOf(q) !== -1);
+        card.style.display = (matchCat && matchQ) ? '' : 'none';
+      });
+    };
+    if (provPills) {
+      provPills.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-prov-cat]');
+        if (!b) return;
+        activeProvCat = b.getAttribute('data-prov-cat') || 'all';
+        [].forEach.call(provPills.querySelectorAll('[data-prov-cat]'), function (btn) {
+          btn.setAttribute('aria-pressed', String(btn === b));
+        });
+        filterProv();
+      });
+    }
+    if (provSearch) {
+      provSearch.addEventListener('input', filterProv);
+    }
+  }
+
   // 2. Global Quick-Jump & Blueprint Command Palette (Ctrl+K / Cmd+K / Floating Pill)
   if (document.getElementById('cmd-dlg')) return;
 
