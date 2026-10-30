@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=51">
+  <link rel="stylesheet" href="/styles/site.css?v=53">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -52,107 +52,117 @@
   <div class="note-body wrap-narrow">
     <aside class="callout"><b>In short</b><p>We propose that services meet automated agents through serving agents of their own, not through open APIs or by letting bots pose as people. Your agent holds your credentials and proves only the single fact a service needs. People keep a separate, human-paced internet that never has to compete with machine traffic. <strong>New deep dive &amp; simulator:</strong> read <a href="/notes/agent-only-internet-biometrics-hardware">Why living with superintelligence requires an agent-only internet—and what it means for biometrics and hardware security &rarr;</a></p></aside>
 
-    <h2>Why this matters</h2>
-    <p>Much of how we trust each other online rests on quiet assumptions. A person filling in a form is one person. Writing a review takes effort, so reviews are rare and mostly sincere. A signature shows that someone meant it. A queue moves at the pace of the people in it. Each of these assumptions breaks once capable software agents can act cheaply, quickly and in large numbers.</p>
-    <p>An agent can fill in ten thousand forms, write a million reviews, book every appointment slot in a city in a second, or flood a public consultation with plausible comments. None of this needs a hostile superintelligence. It only needs today's agents to get cheaper, which they keep doing. When that traffic arrives through the same doors people use, people lose. They wait longer, they are outvoted by copies, and the signals they rely on, such as reviews, petitions and comment threads, stop meaning anything.</p>
-    <p>The usual answers are to put up more barriers against bots, which also burden people, or to open more APIs, which hand raw data and broad powers to any program holding a key. We think both make things worse over time. A third path is to give agents and people separate spaces, each with rules that suit it.</p>
-
-    <aside class="callout spec"><b>Speculation</b><p>Our working assumption is that agents from the leading AI companies keep getting more capable, cheaper and more autonomous, and that AI able to improve itself may arrive as soon as 2027. We also consider a scenario in which special-purpose chips make running agents something like 1000 times more efficient. These are scenarios, not forecasts. If agent costs stopped falling, the pressure described here would grow more slowly, but we expect the same design problems to remain.</p></aside>
-
-    <h2>How it would work</h2>
-    <p>The idea has four parts.</p>
-
-    <h3>1. Services answer through serving agents, not open APIs</h3>
-    <p>A shop, clinic, bank or public office that wants to serve automated agents would run a <em>serving agent</em>. The serving agent represents the service. It publishes what questions it will answer and what actions it will take, answers specific queries, and logs what it did. It never sees more than a query needs.</p>
-    <p>This differs from an open API in an important way. An API usually exposes data and functions to any program with the right key, and the program decides what to pull. A serving agent stays in conversation: it can ask for clarification, refuse requests outside its published terms, and slow down a caller that behaves strangely. Researchers have already begun designing protocols in which agents negotiate how to talk to each other instead of relying on fixed, hand-written interfaces. One example is the <a href="https://arxiv.org/abs/2410.11905" rel="noopener noreferrer">Agora protocol for networks of language-model agents</a>.</p>
-
-    <h3>2. Your agent holds your credentials and proves one fact at a time</h3>
-    <p>On the other side sits a <em>client agent</em>: your own personal agent, working only for you, running on your devices. It keeps your credentials and decides what to reveal. When a service needs to know you are over 18, a licensed electrician or a resident of a city, your agent proves that one fact and nothing else. The service gets proof, never the document or the data behind it.</p>
-    <p>Your agent also keeps track of what it has already told whom. Many harmless answers can add up to a profile, so it refuses questions that would let others piece one together.</p>
-    <p>For this to work, a service must be able to check that an agent really acts for a real person, and within limits that person set. Recent research describes this kind of building block: <a href="https://arxiv.org/abs/2406.12137" rel="noopener noreferrer">identifiers for AI systems</a> that show which system took an action, and <a href="https://arxiv.org/abs/2501.09674" rel="noopener noreferrer">authenticated delegation</a>, through which a person grants an agent scoped, checkable authority. We would build on work like this rather than invent our own.</p>
-
-    <h3>3. Separate doors, and neither side competes with the other</h3>
-    <p>Each service would have two front doors. The human door stays human-paced and human-checked: pages, forms, phone lines and counters, designed for people. The agent door is a separate endpoint with its own identity checks, rate limits and logs. A service can always tell which door a request came through.</p>
-    <p>The point of separating them is fairness in both directions. People never queue behind machine-speed traffic, and a review or comment that arrives through the human door can be counted as human. Agents, for their part, get a door built for them, so they have no reason to pose as people.</p>
-
     <figure class="diagram">
-      <svg viewBox="0 0 640 340" role="img" aria-label="A person reaches a service through a human door; the person's agent reaches the same service through a separate agent door, talking to the service's serving agent.">
-        <defs>
-          <marker id="ai-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" class="d-ink"/>
-          </marker>
-        </defs>
-        <text x="120" y="22" text-anchor="middle" font-size="14" font-weight="600">Human internet</text>
-        <text x="520" y="22" text-anchor="middle" font-size="14" font-weight="600">Agent internet</text>
+      <svg data-rich-viz="true" viewBox="0 0 760 240" role="img" aria-label="Comparison of Legacy Single-Door Mixed Web and Open APIs vs CIN Two-Door Architecture separating the Human Internet from the Agent-Only Internet">
+        <rect x="16" y="18" width="340" height="204" rx="12" fill="rgba(239,106,82,0.08)" stroke="#ef6a52" stroke-width="1.6"/>
+        <text x="32" y="42" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">LEGACY FAILURE: ONE SHARED DOOR &amp; OPEN APIs</text>
+        <text x="32" y="64" font-size="11.5" font-weight="700" fill="var(--ink)">Humans Queued Behind Machine-Speed Swarms</text>
+        <rect x="32" y="80" width="308" height="52" rx="8" fill="var(--paper)" stroke="#ef6a52" stroke-width="1.2"/>
+        <text x="44" y="100" font-size="10" font-weight="700" fill="#ef6a52">Sybil Floods &amp; Fake Public Consultations</text>
+        <text x="44" y="118" font-size="9.5" fill="var(--ink-2)">10,000 forms/sec · CAPTCHAs punish real people</text>
+        <rect x="32" y="144" width="308" height="60" rx="8" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="44" y="165" font-size="10" font-weight="700" fill="#ef6a52">Broad API Keys Expose Raw Databases</text>
+        <text x="44" y="183" font-size="9.5" fill="var(--ink-2)">Any compromised key pulls full customer records</text>
 
-        <rect x="40" y="40" width="160" height="50" rx="8" class="d-box"/>
-        <text x="120" y="70" text-anchor="middle" font-size="14">Person</text>
+        <line x1="356" y1="120" x2="396" y2="120" stroke="#4fb3a8" stroke-width="2" stroke-dasharray="4 3"/>
 
-        <rect x="440" y="40" width="160" height="50" rx="8" class="d-box"/>
-        <text x="520" y="62" text-anchor="middle" font-size="14">Personal agent</text>
-        <text x="520" y="80" text-anchor="middle" font-size="12" class="d-muted">holds credentials</text>
-
-        <line x1="200" y1="65" x2="436" y2="65" class="d-ink" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ai-arrow)"/>
-        <text x="320" y="56" text-anchor="middle" font-size="12">mandate, with limits</text>
-
-        <line x1="320" y1="100" x2="320" y2="230" class="d-muted" stroke-width="1.5" stroke-dasharray="3 5"/>
-
-        <line x1="120" y1="90" x2="120" y2="136" class="d-ink" stroke-width="1.5" marker-end="url(#ai-arrow)"/>
-        <line x1="520" y1="90" x2="520" y2="136" class="d-ink" stroke-width="1.5" marker-end="url(#ai-arrow)"/>
-        <text x="530" y="118" font-size="12" class="d-muted">proves one fact</text>
-
-        <rect x="40" y="140" width="160" height="56" rx="8" class="d-box"/>
-        <text x="120" y="164" text-anchor="middle" font-size="14">Human door</text>
-        <text x="120" y="184" text-anchor="middle" font-size="12" class="d-ok">human-paced</text>
-
-        <rect x="440" y="140" width="160" height="56" rx="8" class="d-box"/>
-        <text x="520" y="164" text-anchor="middle" font-size="14">Serving agent</text>
-        <text x="520" y="184" text-anchor="middle" font-size="12" class="d-ok">identity, limits, logs</text>
-
-        <line x1="160" y1="196" x2="250" y2="262" class="d-ink" stroke-width="1.5" marker-end="url(#ai-arrow)"/>
-        <line x1="480" y1="196" x2="390" y2="262" class="d-ink" stroke-width="1.5" marker-end="url(#ai-arrow)"/>
-
-        <rect x="220" y="266" width="200" height="50" rx="8" class="d-fill"/>
-        <text x="320" y="296" text-anchor="middle" font-size="14">Service</text>
+        <rect x="396" y="18" width="348" height="204" rx="12" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.8"/>
+        <text x="412" y="42" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN MECHANISM: ONE SERVICE, TWO DOORS</text>
+        <text x="412" y="64" font-size="11.5" font-weight="700" fill="var(--ink)">Human-Paced Door + Scoped Serving-Agent Door</text>
+        <rect x="412" y="80" width="316" height="52" rx="8" fill="var(--paper)" stroke="#4fb3a8" stroke-width="1.2"/>
+        <text x="424" y="100" font-size="10" font-weight="700" fill="#4fb3a8">Client Agent &harr; Serving Agent (One Fact at a Time)</text>
+        <text x="424" y="118" font-size="9.5" fill="var(--ink-2)">Authenticated delegation · Disclosure budget · Signed logs</text>
+        <rect x="412" y="144" width="316" height="60" rx="8" fill="var(--paper)" stroke="#4fb3a8" stroke-width="1.2"/>
+        <text x="424" y="165" font-size="10" font-weight="700" fill="#4fb3a8">Physical Limit Switches for Embodied Robots</text>
+        <text x="424" y="183" font-size="9.5" fill="var(--ink-2)">Expiring mandates · Hardware stops outside the AI model</text>
       </svg>
-      <figcaption>One service, two doors. People use a human-paced door; their agents use a separate door with identity checks, rate limits and logs, and receive answers, not raw data.</figcaption>
+      <figcaption>Every service exposes two separate front doors: a human-paced door protected from machine queues, and a serving-agent endpoint where personal agents prove one fact at a time.</figcaption>
     </figure>
 
-    <h3>4. Robots act only on a mandate, with limits outside the model</h3>
-    <p>The same split matters even more when agents can move things in the physical world. Robots would act only on the mandate of an identified person or community, for a stated purpose and a limited time. Their physical limits, such as speed, force, where they may go and what they may handle, would be enforced by mechanisms outside the AI model: hardware stops, geofences, independent monitors. A model can be persuaded or confused; a physical limit switch cannot argue back. Fully independent embodied agents, answering to no one, are the case we most want to avoid. We will never deploy or direct physical force ourselves.</p>
+    <section>
+      <h2>Why this matters</h2>
+      <p>Online trust rests on the quiet assumption that one form, one review, or one queue entry comes from one person at human speed—an assumption that collapses as soon as capable software agents act cheaply in large numbers.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>An agent can fill in ten thousand forms, write a million reviews, book every appointment slot in a city in a second, or flood a public consultation with plausible comments. When that traffic arrives through the same doors people use, people lose.</p>
+        <p>The usual answers are to put up more barriers against bots, which also burden people, or to open more APIs, which hand raw data and broad powers to any program holding a key. A third path is to give agents and people separate spaces, each with rules that suit it.</p>
+        <aside class="callout spec"><b>Speculation</b><p>Our working assumption is that agents keep getting more capable, cheaper and more autonomous, and that AI able to improve itself may arrive as soon as 2027.</p></aside>
+      </details>
+    </section>
 
-    <h3>5. What an agent would carry</h3>
-    <p>On the agent side, every agent would carry a few things a service or another agent can check:</p>
-    <ul>
-      <li><strong>Whom it acts for.</strong> A credential showing that a real, single person or an accountable organisation stands behind it, without revealing who.</li>
-      <li><strong>What shapes its answers.</strong> Its kind of model, its person&rsquo;s stated priorities and its known blind spots, declared openly. Agents reasoning together can then weigh each other&rsquo;s claims, instead of each pretending to be neutral.</li>
-      <li><strong>Its limits.</strong> Permissions that expire and must be renewed, and a budget for how much it may compute.</li>
-      <li><strong>Its records.</strong> Offers, agreements and deliveries signed by both sides and kept by each party, so either can prove what happened.</li>
-    </ul>
-    <p>Requests would travel through circles of trust: first agents whose people know each other, then friends of friends, then the open network, carrying less about the person at each step. <a href="/notes/network-of-networks">A network of networks</a> describes how. And because a credential only proves which program ran, agents also need to notice fakes: <a href="/notes/who-is-really-there">who is really there?</a></p>
+    <section>
+      <h2>How it would work: Serving agents, single-fact proofs &amp; two doors</h2>
+      <p>Instead of open APIs, a clinic, shop, or public office runs a serving agent that negotiates with your personal client agent (<a href="https://arxiv.org/abs/2410.11905" rel="noopener noreferrer">Agora protocol</a>), verifying <a href="https://arxiv.org/abs/2406.12137" rel="noopener noreferrer">AI system identifiers</a> and <a href="https://arxiv.org/abs/2501.09674" rel="noopener noreferrer">authenticated delegation</a> one fact at a time.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <h3>1. Services answer through serving agents, not open APIs</h3>
+        <p>The serving agent publishes what questions it will answer, refuses requests outside its published terms, and logs what it did—never seeing more than a query needs.</p>
+        <h3>2. Your agent holds your credentials and proves one fact at a time</h3>
+        <p>When a service needs to know you are over 18, a licensed electrician or a resident of a city, your agent proves that one fact and nothing else, tracking disclosure budgets so small answers cannot be combined into a profile.</p>
+        <h3>3. Separate doors, and neither side competes with the other</h3>
+        <p>People never queue behind machine-speed traffic, and agents get a door built for them so they have no reason to pose as people.</p>
 
-    <h2>Why this is part of keeping AI safe</h2>
-    <p>This design is one piece of what we call decentralized principal-bound multi-agent alignment (pluralistic / personalized alignment): many bounded agents, each loyal to one person or community, instead of one giant system that knows and controls everything. Splitting the internet supports that in three ways.</p>
-    <ul>
-      <li><strong>No agent gets raw access.</strong> Agents exchange answers and proofs, not databases. A compromised agent learns little and can do little.</li>
-      <li><strong>Every action has an owner.</strong> Agent traffic carries identity and a mandate, so when something goes wrong it can be traced to a person, a community or a service, and limited.</li>
-      <li><strong>Frontier models stay behind the layers.</strong> The largest models do not roam the human internet freely. They reach the world only through narrower, logged channels and through agents that answer to people.</li>
-    </ul>
+        <figure class="diagram">
+          <svg data-rich-viz="true" viewBox="0 0 640 340" role="img" aria-label="A person reaches a service through a human door; the person's agent reaches the same service through a separate agent door, talking to the service's serving agent.">
+            <defs>
+              <marker id="ai-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" class="d-ink"/>
+              </marker>
+            </defs>
+            <text x="120" y="22" text-anchor="middle" font-size="14" font-weight="600">Human internet</text>
+            <text x="520" y="22" text-anchor="middle" font-size="14" font-weight="600">Agent internet</text>
+            <rect x="40" y="40" width="160" height="50" rx="8" class="d-box"/>
+            <text x="120" y="70" text-anchor="middle" font-size="14">Person</text>
+            <rect x="440" y="40" width="160" height="50" rx="8" class="d-box"/>
+            <text x="520" y="62" text-anchor="middle" font-size="14">Personal agent</text>
+            <text x="520" y="80" text-anchor="middle" font-size="12" class="d-muted">holds credentials</text>
+            <line x1="200" y1="65" x2="436" y2="65" class="d-ink" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ai-arrow)"/>
+            <text x="320" y="56" text-anchor="middle" font-size="12">mandate, with limits</text>
+            <line x1="320" y1="100" x2="320" y2="230" class="d-muted" stroke-width="1.5" stroke-dasharray="3 5"/>
+            <line x1="120" y1="90" x2="120" y2="136" class="d-ink" stroke-width="1.5" marker-end="url(#ai-arrow)"/>
+            <line x1="520" y1="90" x2="520" y2="136" class="d-ink" stroke-width="1.5" marker-end="url(#ai-arrow)"/>
+            <text x="530" y="118" font-size="12" class="d-muted">proves one fact</text>
+            <rect x="40" y="140" width="160" height="56" rx="8" class="d-box"/>
+            <text x="120" y="164" text-anchor="middle" font-size="14">Human door</text>
+            <text x="120" y="184" text-anchor="middle" font-size="12" class="d-ok">human-paced</text>
+            <rect x="440" y="140" width="160" height="56" rx="8" class="d-box"/>
+            <text x="520" y="164" text-anchor="middle" font-size="14">Serving agent</text>
+            <text x="520" y="184" text-anchor="middle" font-size="12" class="d-ok">identity, limits, logs</text>
+            <line x1="160" y1="196" x2="250" y2="262" class="d-ink" stroke-width="1.5" marker-end="url(#ai-arrow)"/>
+            <line x1="480" y1="196" x2="390" y2="262" class="d-ink" stroke-width="1.5" marker-end="url(#ai-arrow)"/>
+            <rect x="220" y="266" width="200" height="50" rx="8" class="d-fill"/>
+            <text x="320" y="296" text-anchor="middle" font-size="14">Service</text>
+          </svg>
+          <figcaption>One service, two doors. People use a human-paced door; their agents use a separate door with identity checks, rate limits and logs.</figcaption>
+        </figure>
 
-    <aside class="callout risk"><b>How this could fail</b>
-      <ul>
-        <li><strong>Identity becomes a choke point.</strong> Checking that each agent acts for a real person is itself an identity system that could be captured, abused for surveillance, or used to shut people out. We would favour many independent issuers, checks that reveal only the needed fact, and no single registry.</li>
-        <li><strong>One person, a thousand agents.</strong> If one actor can run many "personal" agents, limits per person mean nothing. If we cannot make this costly without heavy identity checks, the design fails.</li>
-        <li><strong>Agents slip through the human door.</strong> If agents can reliably pass as people, the human side loses its value. Keeping it human without invasive checks is an open problem.</li>
-        <li><strong>Small answers add up.</strong> If personal agents cannot stop profiles being rebuilt from many small answers in tests on synthetic people, the agent-to-agent approach does not protect privacy and should not be deployed.</li>
-        <li><strong>Exclusion.</strong> People without capable devices or agents could be pushed to a slower, neglected human door. The human door must stay a full service, not a fallback.</li>
-        <li><strong>No uptake.</strong> If services find serving agents much costlier than APIs and nobody adopts them, we should drop the idea or fold it into whatever standard does win.</li>
-      </ul>
-    </aside>
+        <h3>4. Robots act only on a mandate, with limits outside the model</h3>
+        <p>Physical limits on speed, force, and geofences are enforced by hardware limit switches outside the AI model. Fully independent embodied agents answering to no one are never deployed.</p>
+        <h3>5. What an agent would carry</h3>
+        <ul>
+          <li><strong>Whom it acts for:</strong> Accountable single-person or community credential without identity exposure.</li>
+          <li><strong>What shapes its answers:</strong> Declared model family, priorities, and blind spots.</li>
+          <li><strong>Its limits &amp; records:</strong> Expiring permissions, compute budgets, and bilaterally signed receipts across <a href="/notes/network-of-networks">circles of trust</a> and <a href="/notes/who-is-really-there">liveness checks</a>.</li>
+        </ul>
+      </details>
+    </section>
 
-    <h2>What comes next</h2>
-    <p>Nothing here is built. This is research and design. Our next steps are to write down, in plain terms, what a serving agent may and may not do; to test the "one fact at a time" approach against attempts to rebuild profiles, using only synthetic people; and to study how existing work on agent identity, delegation and agent-to-agent protocols could fit together rather than starting from scratch.</p>
-    <p>We would also like to hear from people working on agent identity, credentials, accessibility and robot safety. If you see a flaw in this design, or a better one, please tell us.</p>
+    <section>
+      <h2>Why this keeps AI safe—and how it could fail</h2>
+      <p>Splitting the internet enforces decentralized principal-bound multi-agent alignment: no agent gets raw database access, every action has a human owner, and frontier models stay behind logged verifier layers.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <aside class="callout risk"><b>How this could fail</b>
+          <ul>
+            <li><strong>Identity becomes a choke point:</strong> We favour many independent issuers, zero-knowledge single-fact checks, and no single registry.</li>
+            <li><strong>One person, a thousand agents:</strong> Requires hardware-rooted rate limits without invasive surveillance.</li>
+            <li><strong>Agents slip through the human door:</strong> Addressed via local pre-ADC somatic presence proofs.</li>
+            <li><strong>Small answers add up:</strong> Tested against synthetic profile-reconstruction attacks.</li>
+            <li><strong>Exclusion &amp; uptake:</strong> The human door must remain a first-class service, never a neglected fallback.</li>
+          </ul>
+        </aside>
+      </details>
+    </section>
   </div>
 
   <footer class="note-foot wrap-narrow">
@@ -196,6 +206,6 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=51" defer></script>
+<script src="/scripts/site.js?v=53" defer></script>
 </body>
 </html>

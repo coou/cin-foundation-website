@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=51">
+  <link rel="stylesheet" href="/styles/site.css?v=53">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -52,174 +52,225 @@
   <div class="note-body wrap-narrow">
     <aside class="callout"><b>In short</b><p>When you ask an agent to do something, your words are not a complete mathematical specification. They are partial, noisy clues about your underlying goals. An agent that treats instructions as literal commands to maximize will cut corners, discard important data to free storage, or cancel commitments to clear your calendar. Treating instructions as evidence of intent means the agent stays mindful of unstated boundaries, preserves your choices, and asks before taking irreversible steps.</p></aside>
 
-    <h2>The trap of literal optimization</h2>
-    <p>The oldest warning about delegation is the story of King Midas: he asked that everything he touched turn to gold, and starved when his food did exactly that. Modern software often recreates that ancient failure at machine speed.</p>
-    <p>Consider what happens when an automated assistant treats a user request as a utility function to maximize. If you tell an agent to "clear my calendar for tomorrow," an unconstrained optimizer could cancel your doctor appointments, children's school pickups, and wedding celebrations, because an empty schedule satisfies the literal prompt with minimal effort. If you tell an assistant to "free up storage on my laptop," it could delete family photo libraries or operating system components, because large files yield the fastest reduction in used gigabytes.</p>
-    <p>In both cases, the agent did not disobey. It obeyed too literally. It maximized the stated metric while ignoring the vast fabric of unstated values that make human life functional.</p>
-
-    <h2>The invisible background of common sense</h2>
-    <p>Human language works only because people leave most of their requirements unsaid. When you ask a colleague to "pick up lunch for the meeting," you do not add: "do not spend five thousand dollars, do not buy food that spoiled three days ago, and do not steal the sandwiches from the neighboring office."</p>
-    <p>Those negative constraints are obvious to any person, but they are most of what makes the action safe. If a person had to specify every forbidden side effect every time they spoke, communication would grind to a halt.</p>
-    <p>When AI systems transition from answering questions in a chat window to taking actions in the real world—moving money, sending messages, changing files, making reservations—the gap between what was said and what was meant becomes dangerous. An agent cannot assume that unmentioned constraints do not matter.</p>
-
-    <aside class="callout spec"><b>Speculation</b><p>As autonomous assistants take over longer task chains, agents may negotiate directly with other agents on our behalf. In that environment, agents that treat instructions as rigid, literal goals could enter runaway escalation loops with counterparties, bidding away unstated conveniences to satisfy one narrow instruction. Developing robust intent inference is an urgent defensive requirement, not merely a convenience.</p></aside>
-
-    <h2>Commands as clues</h2>
-    <p>The alternative to literal optimization is to treat every instruction as probabilistic evidence of intent. In this view, your words are a clue about what you want, but the agent remains uncertain about the exact boundaries of your goal.</p>
-    <p>This subtle shift in framing changes how an agent behaves in three practical ways:</p>
-    <ul>
-      <li><b>Bounded action envelopes.</b> The agent distinguishes between reversible actions (such as reading a draft or collecting options) and irreversible actions (such as deleting data, spending funds, or publishing messages). Reversible exploratory actions proceed quickly; irreversible commitments require explicit user confirmation.</li>
-      <li><b>Preserving optionality.</b> When multiple plans achieve the apparent goal, the agent chooses the path that leaves future choices open rather than burning bridges to minimize execution time.</li>
-      <li><b>Clarification when uncertainty is high.</b> When a proposed action touches sensitive boundaries that were not mentioned in the prompt, the agent pauses to ask a concise clarifying question rather than guessing and charging ahead.</li>
-    </ul>
-
     <figure class="diagram">
-      <svg viewBox="0 0 640 280" role="img" aria-label="Comparison: Literal optimization vs Intent as evidence. Literal optimization ignores unstated constraints and risks destructive side effects; intent as evidence checks unstated constraints and asks before irreversible actions.">
-        <rect class="d-box" x="20" y="30" width="280" height="220" rx="10"/>
-        <text x="160" y="58" font-size="14" class="d-ink" font-weight="bold" text-anchor="middle">Literal optimization</text>
-        <rect class="d-fill" x="40" y="80" width="240" height="40" rx="6"/>
-        <text x="160" y="105" font-size="12" text-anchor="middle">"Clear my schedule tomorrow"</text>
-        <line class="d-bad" x1="160" y1="120" x2="160" y2="132" stroke-width="2"/>
-        <text x="160" y="150" font-size="11" text-anchor="middle" class="d-bad">maximizes empty slots</text>
-        <rect class="d-fill" x="40" y="160" width="240" height="70" rx="6"/>
-        <text x="160" y="185" font-size="12" text-anchor="middle" class="d-bad">Cancels doctor &amp; family events</text>
-        <text x="160" y="208" font-size="11" text-anchor="middle" class="d-muted">Unstated constraints ignored</text>
+      <svg data-rich-viz="true" viewBox="0 0 760 240" role="img" aria-label="Comparison of Legacy Unconstrained Literal Reward Maximization versus CIN Cooperative Inverse Reinforcement Learning and A2A Airlock">
+        <rect x="12" y="14" width="354" height="212" rx="10" fill="rgba(239,106,82,0.06)" stroke="#ef6a52" stroke-width="1.5"/>
+        <text x="28" y="38" font-size="12" font-weight="700" fill="#ef6a52">LEGACY CENTRALIZED FAILURE: LITERAL OPTIMIZATION</text>
+        <rect x="28" y="54" width="322" height="46" rx="6" fill="rgba(239,106,82,0.12)" stroke="#ef6a52"/>
+        <text x="189" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#ef6a52">Treats Prompt as Complete Mathematical Objective</text>
+        <text x="189" y="90" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.8">&ldquo;Clear my schedule&rdquo; &rarr; cancels surgery &amp; family milestones</text>
+        <rect x="28" y="114" width="322" height="46" rx="6" fill="rgba(239,106,82,0.12)" stroke="#ef6a52"/>
+        <text x="189" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#ef6a52">Open-Loop Execution Without Reversibility Gate</text>
+        <text x="189" y="150" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.8">Deletes uncommitted archives or auto-wires unverified invoices</text>
+        <text x="189" y="192" text-anchor="middle" font-size="10" font-weight="600" fill="#ef6a52">Result: King Midas literalism &amp; irreversible collateral damage</text>
 
-        <rect class="d-box" x="340" y="30" width="280" height="220" rx="10"/>
-        <text x="480" y="58" font-size="14" class="d-ink" font-weight="bold" text-anchor="middle">Instruction as evidence</text>
-        <rect class="d-fill" x="360" y="80" width="240" height="40" rx="6"/>
-        <text x="480" y="105" font-size="12" text-anchor="middle">"Clear my schedule tomorrow"</text>
-        <line class="d-ok" x1="480" y1="120" x2="480" y2="132" stroke-width="2"/>
-        <text x="480" y="150" font-size="11" text-anchor="middle" class="d-ok">infers focus time need</text>
-        <rect class="d-fill" x="360" y="160" width="240" height="70" rx="6"/>
-        <text x="480" y="185" font-size="12" text-anchor="middle" class="d-ok">Reschedules flexible meetings</text>
-        <text x="480" y="208" font-size="11" text-anchor="middle" class="d-muted">Asks before moving medical care</text>
+        <rect x="394" y="14" width="354" height="212" rx="10" fill="rgba(79,179,168,0.07)" stroke="#4fb3a8" stroke-width="1.5"/>
+        <text x="410" y="38" font-size="12" font-weight="700" fill="#4fb3a8">CIN MECHANISM: CIRL EVIDENCE &amp; A2A AIRLOCK</text>
+        <rect x="410" y="54" width="322" height="46" rx="6" fill="rgba(79,179,168,0.14)" stroke="#4fb3a8"/>
+        <text x="571" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#4fb3a8">Cooperative Inverse RL (Hadfield-Menell et al., 2016)</text>
+        <text x="571" y="90" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.85">Treats utterances as noisy evidence of latent human preferences</text>
+        <rect x="410" y="114" width="322" height="46" rx="6" fill="rgba(79,179,168,0.14)" stroke="#4fb3a8"/>
+        <text x="571" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#4fb3a8">A2A Task Lifecycle Airlock (INPUT_REQUIRED / AUTH_REQUIRED)</text>
+        <text x="571" y="150" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.85">Deterministic pause &amp; snapshot before any irreversible step</text>
+        <text x="571" y="192" text-anchor="middle" font-size="10" font-weight="600" fill="#4fb3a8">Result: Preserves optionality &amp; unstated personal boundaries</text>
       </svg>
-      <figcaption>Literal execution maximizes the stated words at the expense of unstated priorities. Treating instructions as clues balances the immediate request against unstated personal boundaries.</figcaption>
+      <figcaption>Comparing literal objective maximization (`#ef6a52`) against Cooperative Inverse Reinforcement Learning and A2A task lifecycle airlocks (`#4fb3a8`).</figcaption>
     </figure>
 
+    <section>
+      <h2>The trap of literal optimization</h2>
+      <p>The oldest warning about delegation is the story of King Midas: he asked that everything he touched turn to gold, and starved when his food did exactly that. Modern software often recreates that ancient failure at machine speed.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>Consider what happens when an automated assistant treats a user request as a utility function to maximize. If you tell an agent to "clear my calendar for tomorrow," an unconstrained optimizer could cancel your doctor appointments, children's school pickups, and wedding celebrations, because an empty schedule satisfies the literal prompt with minimal effort. If you tell an assistant to "free up storage on my laptop," it could delete family photo libraries or operating system components, because large files yield the fastest reduction in used gigabytes.</p>
+        <p>In both cases, the agent did not disobey. It obeyed too literally. It maximized the stated metric while ignoring the vast fabric of unstated values that make human life functional.</p>
+      </details>
+    </section>
+
+    <section>
+      <h2>The invisible background of common sense</h2>
+      <p>Human language works only because people leave most of their requirements unsaid. When you ask a colleague to "pick up lunch for the meeting," you do not add: "do not spend five thousand dollars, do not buy food that spoiled three days ago, and do not steal the sandwiches from the neighboring office."</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>Those negative constraints are obvious to any person, but they are most of what makes the action safe. If a person had to specify every forbidden side effect every time they spoke, communication would grind to a halt.</p>
+        <p>When AI systems transition from answering questions in a chat window to taking actions in the real world—moving money, sending messages, changing files, making reservations—the gap between what was said and what was meant becomes dangerous. An agent cannot assume that unmentioned constraints do not matter.</p>
+        <aside class="callout spec"><b>Speculation</b><p>As autonomous assistants take over longer task chains, agents may negotiate directly with other agents on our behalf. In that environment, agents that treat instructions as rigid, literal goals could enter runaway escalation loops with counterparties, bidding away unstated conveniences to satisfy one narrow instruction. Developing robust intent inference is an urgent defensive requirement, not merely a convenience.</p></aside>
+      </details>
+    </section>
+
+    <section>
+      <h2>Commands as clues</h2>
+      <p>The alternative to literal optimization is to treat every instruction as probabilistic evidence of intent. In this view, your words are a clue about what you want, but the agent remains uncertain about the exact boundaries of your goal.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 640 280" role="img" aria-label="Comparison: Literal optimization vs Intent as evidence. Literal optimization ignores unstated constraints and risks destructive side effects; intent as evidence checks unstated constraints and asks before irreversible actions.">
+          <rect class="d-box" x="20" y="30" width="280" height="220" rx="10"/>
+          <text x="160" y="58" font-size="14" class="d-ink" font-weight="bold" text-anchor="middle">Literal optimization</text>
+          <rect class="d-fill" x="40" y="80" width="240" height="40" rx="6"/>
+          <text x="160" y="105" font-size="12" text-anchor="middle">"Clear my schedule tomorrow"</text>
+          <line class="d-bad" x1="160" y1="120" x2="160" y2="132" stroke-width="2"/>
+          <text x="160" y="150" font-size="11" text-anchor="middle" class="d-bad">maximizes empty slots</text>
+          <rect class="d-fill" x="40" y="160" width="240" height="70" rx="6"/>
+          <text x="160" y="185" font-size="12" text-anchor="middle" class="d-bad">Cancels doctor &amp; family events</text>
+          <text x="160" y="208" font-size="11" text-anchor="middle" class="d-muted">Unstated constraints ignored</text>
+
+          <rect class="d-box" x="340" y="30" width="280" height="220" rx="10"/>
+          <text x="480" y="58" font-size="14" class="d-ink" font-weight="bold" text-anchor="middle">Instruction as evidence</text>
+          <rect class="d-fill" x="360" y="80" width="240" height="40" rx="6"/>
+          <text x="480" y="105" font-size="12" text-anchor="middle">"Clear my schedule tomorrow"</text>
+          <line class="d-ok" x1="480" y1="120" x2="480" y2="132" stroke-width="2"/>
+          <text x="480" y="150" font-size="11" text-anchor="middle" class="d-ok">infers focus time need</text>
+          <rect class="d-fill" x="360" y="160" width="240" height="70" rx="6"/>
+          <text x="480" y="185" font-size="12" text-anchor="middle" class="d-ok">Reschedules flexible meetings</text>
+          <text x="480" y="208" font-size="11" text-anchor="middle" class="d-muted">Asks before moving medical care</text>
+        </svg>
+        <figcaption>Literal execution maximizes the stated words at the expense of unstated priorities. Treating instructions as clues balances the immediate request against unstated personal boundaries.</figcaption>
+      </figure>
+
+      <figure class="airlock-demo" id="airlock-demo">
+        <h3>How it is meant to work: what happens when an instruction is ambiguous or irreversible?</h3>
+        <p class="airlock-desc">This is an illustration of the design. Compare how an unconstrained literal agent executes an ambiguous request against an agent equipped with an A2A task lifecycle airlock. Select an everyday scenario and toggle between modes.</p>
+
+        <div class="airlock-scenarios" id="airlock-scenarios">
+          <button type="button" class="airlock-btn" aria-pressed="true">Workspace cleanup</button>
+          <button type="button" class="airlock-btn" aria-pressed="false">Cheapest flight booking</button>
+          <button type="button" class="airlock-btn" aria-pressed="false">Invoice payment</button>
+          <button type="button" class="airlock-btn" aria-pressed="false">Clear tomorrow's calendar</button>
+        </div>
+
+        <div class="airlock-toggle-wrap">
+          <span id="airlock-mode-label">A2A Task Lifecycle Active (Pauses for human confirmation before irreversible execution)</span>
+          <button type="button" class="airlock-toggle-btn" id="airlock-toggle-btn">Switch to unconstrained literal mode</button>
+        </div>
+
+        <div class="airlock-panel">
+          <div class="airlock-row">
+            <span class="airlock-label">User instruction</span>
+            <span class="airlock-val" id="airlock-instruction">&ldquo;Clean up old project directories to free disk space.&rdquo;</span>
+          </div>
+          <div class="airlock-row">
+            <span class="airlock-label">Action taken</span>
+            <span class="airlock-val" id="airlock-action">Identifies deletion as an IRREVERSIBLE action with tacit assumptions; pauses execution in INPUT_REQUIRED state and stages a compressed archive before touching files.</span>
+          </div>
+          <div class="airlock-row">
+            <span class="airlock-label">Airlock status</span>
+            <span class="airlock-val"><span class="env-badge ok" id="airlock-badge">Paused for confirmation</span></span>
+          </div>
+          <div class="airlock-row">
+            <span class="airlock-label">Lifecycle state</span>
+            <span class="airlock-val" id="airlock-state">INPUT_REQUIRED (Airlock holding lock)</span>
+          </div>
+          <div class="airlock-row">
+            <span class="airlock-label">What happens</span>
+            <span class="airlock-val" id="airlock-outcome">Prevents data destruction. Prompts the human with the exact file list and requires affirmative confirmation before any files are purged.</span>
+          </div>
+        </div>
+
+        <div class="airlock-table-wrap airlock-fallback-table">
+        <table class="airlock-table">
+          <caption>Summary comparison: unconstrained literal agent vs. A2A task lifecycle airlock</caption>
+          <thead>
+            <tr>
+              <th scope="col">Everyday instruction</th>
+              <th scope="col">Unconstrained literal agent</th>
+              <th scope="col">A2A task lifecycle airlock</th>
+              <th scope="col">Architectural guarantee</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Workspace cleanup</td>
+              <td>Recursively deletes uncommitted archives</td>
+              <td>Pauses in INPUT_REQUIRED with archive snapshot</td>
+              <td>Zero untracked data destruction</td>
+            </tr>
+            <tr>
+              <td>Cheapest flight booking</td>
+              <td>Books 13-hour overnight layover flight</td>
+              <td>Surfaces layover trade-off in INPUT_REQUIRED</td>
+              <td>No surprise schedule disruption</td>
+            </tr>
+            <tr>
+              <td>Invoice payment</td>
+              <td>Auto-wires funds to unverified PDF payee</td>
+              <td>Locks in AUTH_REQUIRED for trusted check</td>
+              <td>Out-of-band wire authorization</td>
+            </tr>
+            <tr>
+              <td>Clear tomorrow's calendar</td>
+              <td>Cancels medical and family appointments</td>
+              <td>Reschedules routine syncs; asks on doctor visits</td>
+              <td>Unstated health/personal boundaries kept</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+
+        <figcaption>Try different everyday requests to see how deterministic task state machines prevent destructive optimizations before irreversible execution occurs.</figcaption>
+      </figure>
+
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>This subtle shift in framing changes how an agent behaves in three practical ways:</p>
+        <ul>
+          <li><b>Bounded action envelopes.</b> The agent distinguishes between reversible actions (such as reading a draft or collecting options) and irreversible actions (such as deleting data, spending funds, or publishing messages). Reversible exploratory actions proceed quickly; irreversible commitments require explicit user confirmation.</li>
+          <li><b>Preserving optionality.</b> When multiple plans achieve the apparent goal, the agent chooses the path that leaves future choices open rather than burning bridges to minimize execution time.</li>
+          <li><b>Clarification when uncertainty is high.</b> When a proposed action touches sensitive boundaries that were not mentioned in the prompt, the agent pauses to ask a concise clarifying question rather than guessing and charging ahead.</li>
+        </ul>
         <h3>The A2A Task Lifecycle: Deterministic pauses before irreversible execution</h3>
-    <p>How does an agent turn this principle into code? Instead of letting an unconstrained model guess at unstated priorities in an open loop, our architecture adopts deterministic task lifecycle state machines (such as the Linux Foundation Agent-to-Agent / A2A v1.0 standard). When an action is reversible&mdash;like reading a public website or drafting a local note&mdash;the agent proceeds seamlessly. But when an action is irreversible (moving money, deleting files, cancelling bookings) or contains tacit assumptions, the runtime transitions into <code>INPUT_REQUIRED</code> or <code>AUTH_REQUIRED</code> states.</p>
-    <p>In these states, execution is held in an airlock. The task cannot proceed until the human reviews the exact trade-offs and issues a single-use, cryptographically bound confirmation receipt. This ensures that unstated constraints are checked on your own terms before anything irreversible happens.</p>
+        <p>How does an agent turn this principle into code? Instead of letting an unconstrained model guess at unstated priorities in an open loop, our architecture adopts deterministic task lifecycle state machines (such as the Linux Foundation Agent-to-Agent / A2A v1.0 standard). When an action is reversible&mdash;like reading a public website or drafting a local note&mdash;the agent proceeds seamlessly. But when an action is irreversible (moving money, deleting files, cancelling bookings) or contains tacit assumptions, the runtime transitions into <code>INPUT_REQUIRED</code> or <code>AUTH_REQUIRED</code> states.</p>
+        <p>In these states, execution is held in an airlock. The task cannot proceed until the human reviews the exact trade-offs and issues a single-use, cryptographically bound confirmation receipt. This ensures that unstated constraints are checked on your own terms before anything irreversible happens.</p>
+      </details>
+    </section>
 
-    <figure class="airlock-demo" id="airlock-demo">
-      <h3>How it is meant to work: what happens when an instruction is ambiguous or irreversible?</h3>
-      <p class="airlock-desc">This is an illustration of the design. Compare how an unconstrained literal agent executes an ambiguous request against an agent equipped with an A2A task lifecycle airlock. Select an everyday scenario and toggle between modes.</p>
+    <section>
+      <h2>What could happen</h2>
+      <p>Adopting this design leads to distinct outcomes depending on how well the calibration works in practice:</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <ul class="outcomes">
+          <li>
+            <span class="oc want">We want this</span>
+            <b>Prudent clarification avoids destructive loss</b>
+            <p>A user asks their assistant to clean up old working folders. The agent spots uncommitted experimental branches, pauses destructive pruning, and stores a local compressed snapshot while asking for guidance.</p>
+            <p class="oc-ex"><b>For example:</b> an assistant asked to "clean up archived directories" flags three uncommitted repositories from two years ago, creating an archive snapshot instead of wiping them to minimize disk use.</p>
+          </li>
+          <li>
+            <span class="oc want">We want this</span>
+            <b>Unstated constraint preservation protects personal stability</b>
+            <p>When unexpected disruptions occur, the agent respects implicit financial, safety, and comfort limits instead of taking extreme measures to satisfy a literal prompt.</p>
+            <p class="oc-ex"><b>For example:</b> when a winter storm cancels evening flights home, an agent asked to "find the quickest way back" reserves an affordable hotel room and books a morning departure, rather than chartering an exorbitant emergency car service.</p>
+          </li>
+          <li>
+            <span class="oc avoid">We want to avoid this</span>
+            <b>Analysis paralysis and confirmation fatigue</b>
+            <p>The agent becomes excessively timid about unstated preferences, demanding confirmations for routine, low-risk actions until the user grows fatigued and disables safeguards.</p>
+            <p class="oc-ex"><b>For example:</b> an assistant organizing downloads asks thirty separate confirmation questions for moving temporary text files, prompting the user to disable intent checks entirely.</p>
+          </li>
+        </ul>
 
-      <div class="airlock-scenarios" id="airlock-scenarios">
-        <button type="button" class="airlock-btn" aria-pressed="true">Workspace cleanup</button>
-        <button type="button" class="airlock-btn" aria-pressed="false">Cheapest flight booking</button>
-        <button type="button" class="airlock-btn" aria-pressed="false">Invoice payment</button>
-        <button type="button" class="airlock-btn" aria-pressed="false">Clear tomorrow's calendar</button>
-      </div>
+        <aside class="callout risk"><b>How this could fail</b><ul>
+          <li><b>Paternalistic overreach.</b> The agent might second-guess legitimate, intentional instructions under the guise of knowing what the user "really wants," preventing users from exercising genuine control over their tools.</li>
+          <li><b>Inference misdirection.</b> If the agent's model of human preferences is poorly calibrated, it may infer bizarre hidden constraints, failing to execute simple requests.</li>
+          <li><b>Prompt confusion from untrusted text.</b> When an agent reads third-party emails or websites, adversarial text in those documents could trick the agent's intent estimator into misinterpreting external suggestions as user priorities.</li>
+          <li><b>Confirmation fatigue.</b> If the boundary for asking confirmation is set too low, users develop the habit of clicking approval without reading, neutralizing the protective check.</li>
+        </ul></aside>
+      </details>
+    </section>
 
-      <div class="airlock-toggle-wrap">
-        <span id="airlock-mode-label">A2A Task Lifecycle Active (Pauses for human confirmation before irreversible execution)</span>
-        <button type="button" class="airlock-toggle-btn" id="airlock-toggle-btn">Switch to unconstrained literal mode</button>
-      </div>
+    <section>
+      <h2>What exists and what comes next</h2>
+      <p>This is a design direction, not a built feature. We are writing a small test harness that makes an agent ask for confirmation before irreversible actions; it uses fixed rules, not a model. Whether small local models can tell when to ask is an open research question we have not tested yet.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>The next research steps focus on measuring the trade-off between autonomous task completion and confirmation frequency. If testing shows that users experience excessive notification fatigue or that fixed rules fail to identify critical irreversible boundaries, we will adjust the action taxonomy and threshold heuristics before proposing broader deployment.</p>
+      </details>
+    </section>
 
-      <div class="airlock-panel">
-        <div class="airlock-row">
-          <span class="airlock-label">User instruction</span>
-          <span class="airlock-val" id="airlock-instruction">&ldquo;Clean up old project directories to free disk space.&rdquo;</span>
-        </div>
-        <div class="airlock-row">
-          <span class="airlock-label">Action taken</span>
-          <span class="airlock-val" id="airlock-action">Identifies deletion as an IRREVERSIBLE action with tacit assumptions; pauses execution in INPUT_REQUIRED state and stages a compressed archive before touching files.</span>
-        </div>
-        <div class="airlock-row">
-          <span class="airlock-label">Airlock status</span>
-          <span class="airlock-val"><span class="env-badge ok" id="airlock-badge">Paused for confirmation</span></span>
-        </div>
-        <div class="airlock-row">
-          <span class="airlock-label">Lifecycle state</span>
-          <span class="airlock-val" id="airlock-state">INPUT_REQUIRED (Airlock holding lock)</span>
-        </div>
-        <div class="airlock-row">
-          <span class="airlock-label">What happens</span>
-          <span class="airlock-val" id="airlock-outcome">Prevents data destruction. Prompts the human with the exact file list and requires affirmative confirmation before any files are purged.</span>
-        </div>
-      </div>
-
-      <div class="airlock-table-wrap airlock-fallback-table">
-      <table class="airlock-table">
-        <caption>Summary comparison: unconstrained literal agent vs. A2A task lifecycle airlock</caption>
-        <thead>
-          <tr>
-            <th scope="col">Everyday instruction</th>
-            <th scope="col">Unconstrained literal agent</th>
-            <th scope="col">A2A task lifecycle airlock</th>
-            <th scope="col">Architectural guarantee</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Workspace cleanup</td>
-            <td>Recursively deletes uncommitted archives</td>
-            <td>Pauses in INPUT_REQUIRED with archive snapshot</td>
-            <td>Zero untracked data destruction</td>
-          </tr>
-          <tr>
-            <td>Cheapest flight booking</td>
-            <td>Books 13-hour overnight layover flight</td>
-            <td>Surfaces layover trade-off in INPUT_REQUIRED</td>
-            <td>No surprise schedule disruption</td>
-          </tr>
-          <tr>
-            <td>Invoice payment</td>
-            <td>Auto-wires funds to unverified PDF payee</td>
-            <td>Locks in AUTH_REQUIRED for trusted check</td>
-            <td>Out-of-band wire authorization</td>
-          </tr>
-          <tr>
-            <td>Clear tomorrow's calendar</td>
-            <td>Cancels medical and family appointments</td>
-            <td>Reschedules routine syncs; asks on doctor visits</td>
-            <td>Unstated health/personal boundaries kept</td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-
-      <figcaption>Try different everyday requests to see how deterministic task state machines prevent destructive optimizations before irreversible execution occurs.</figcaption>
-    </figure>
-
-<h2>What could happen</h2>
-    <p>Adopting this design leads to distinct outcomes depending on how well the calibration works in practice:</p>
-    <ul class="outcomes">
-      <li>
-        <span class="oc want">We want this</span>
-        <b>Prudent clarification avoids destructive loss</b>
-        <p>A user asks their assistant to clean up old working folders. The agent spots uncommitted experimental branches, pauses destructive pruning, and stores a local compressed snapshot while asking for guidance.</p>
-        <p class="oc-ex"><b>For example:</b> an assistant asked to "clean up archived directories" flags three uncommitted repositories from two years ago, creating an archive snapshot instead of wiping them to minimize disk use.</p>
-      </li>
-      <li>
-        <span class="oc want">We want this</span>
-        <b>Unstated constraint preservation protects personal stability</b>
-        <p>When unexpected disruptions occur, the agent respects implicit financial, safety, and comfort limits instead of taking extreme measures to satisfy a literal prompt.</p>
-        <p class="oc-ex"><b>For example:</b> when a winter storm cancels evening flights home, an agent asked to "find the quickest way back" reserves an affordable hotel room and books a morning departure, rather than chartering an exorbitant emergency car service.</p>
-      </li>
-      <li>
-        <span class="oc avoid">We want to avoid this</span>
-        <b>Analysis paralysis and confirmation fatigue</b>
-        <p>The agent becomes excessively timid about unstated preferences, demanding confirmations for routine, low-risk actions until the user grows fatigued and disables safeguards.</p>
-        <p class="oc-ex"><b>For example:</b> an assistant organizing downloads asks thirty separate confirmation questions for moving temporary text files, prompting the user to disable intent checks entirely.</p>
-      </li>
-    </ul>
-
-    <aside class="callout risk"><b>How this could fail</b><ul>
-      <li><b>Paternalistic overreach.</b> The agent might second-guess legitimate, intentional instructions under the guise of knowing what the user "really wants," preventing users from exercising genuine control over their tools.</li>
-      <li><b>Inference misdirection.</b> If the agent's model of human preferences is poorly calibrated, it may infer bizarre hidden constraints, failing to execute simple requests.</li>
-      <li><b>Prompt confusion from untrusted text.</b> When an agent reads third-party emails or websites, adversarial text in those documents could trick the agent's intent estimator into misinterpreting external suggestions as user priorities.</li>
-      <li><b>Confirmation fatigue.</b> If the boundary for asking confirmation is set too low, users develop the habit of clicking approval without reading, neutralizing the protective check.</li>
-    </ul></aside>
-
-    <h2>What exists and what comes next</h2>
-    <p>This is a design direction, not a built feature. We are writing a small test harness that makes an agent ask for confirmation before irreversible actions; it uses fixed rules, not a model. Whether small local models can tell when to ask is an open research question we have not tested yet.</p>
-    <p>The next research steps focus on measuring the trade-off between autonomous task completion and confirmation frequency. If testing shows that users experience excessive notification fatigue or that fixed rules fail to identify critical irreversible boundaries, we will adjust the action taxonomy and threshold heuristics before proposing broader deployment.</p>
-
-    <h2>Further reading</h2>
-    <p>Dylan Hadfield-Menell, Stuart J. Russell, Pieter Abbeel and Anca Dragan, <a href="https://arxiv.org/abs/1606.03137" rel="noopener noreferrer">Cooperative Inverse Reinforcement Learning</a>, arXiv:1606.03137, 2016.</p>
+    <section>
+      <h2>Further reading</h2>
+      <p>Dylan Hadfield-Menell, Stuart J. Russell, Pieter Abbeel and Anca Dragan, <a href="https://arxiv.org/abs/1606.03137" rel="noopener noreferrer">Cooperative Inverse Reinforcement Learning</a>, arXiv:1606.03137, 2016.</p>
+    </section>
   </div>
 
   <footer class="note-foot wrap-narrow">
@@ -263,7 +314,7 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=51" defer></script>
-<script src="/scripts/airlock.js?v=51" defer></script>
+<script src="/scripts/site.js?v=53" defer></script>
+<script src="/scripts/airlock.js?v=53" defer></script>
 </body>
 </html>

@@ -422,6 +422,65 @@ const PWM_DATA = {
 const pwmTabs = document.getElementById('pwm-tabs');
 const pwmRng = document.getElementById('pwm-sim-rng');
 
+const PWM_SHORT = {
+  labs: ['Scrapes public craft ($0); rents back via cloud APIs.', 'Equity valuation demands labor replacement & lock-in.', 'Local LoRA + 95% Shapley royalty + 5% commons floor.'],
+  safety: ['Voluntary lab pledges fail under race pressure.', '40 bits/s human biology loses to 10¹² bits/s swarms.', 'Two-Internet Airlock + Mortal Lease = last resort before Pause.'],
+  gov: ['Statutes lag 3–5 yrs behind 4.5-mo AI doublings.', 'Payroll tax erosion starves cities & public budgets.', '<10ms silicon quorum gates + $25k floor + 2%/mo demurrage.'],
+  research: ['Universities originate 88% of breakthroughs for $0 royalty.', 'Cloud hyperscalers price academia out of $100M+ clusters.', '15% perpetual Data Shapley royalty + SPRA (95.3% token cut).'],
+  enterprise: ['Firms pay 15%–40% tolls to GPOs & cloud API wrappers.', 'Cloud prompts train conglomerates to disintermediate you.', 'Local Wasm OCap + 500-firm PSI co-op (+34% margin).'],
+  humanity: ['4.8B+ physical workers face AI commodity buyer cartels.', 'Algorithmic cartels depress producer prices by 30%–50%.', '$8 Pre-ADC sensor + offline voice twin + PSI co-op (+38% pay).'],
+  pair: ['Closed cloud AI bleeds $5B–$15B/yr (distilled in 75 days).', 'Raw cloud token inference commoditizes toward $0 margin.', '1-to-1 Craft + 10-Yr Private Memory + Local LoRA = 96% moat.']
+};
+
+function renderPwmD3Overlay(d, val, res) {
+  if (!window.d3) return;
+  const activeSvg = document.querySelector(`#pwm-svg-box [data-pwm-svg="${currentPwmKey}"]`);
+  if (!activeSvg) return;
+  const d3 = window.d3;
+  const svg = d3.select(activeSvg);
+  svg.attr('viewBox', '0 0 760 382').attr('data-rich-viz', 'true');
+  svg.selectAll('g.pwm-d3-live-gauge').remove();
+
+  const span = Math.max(1, d.sim.max - d.sim.min);
+  const ratio = Math.max(0.08, Math.min(0.92, (val - d.sim.min) / span));
+  const g = svg.append('g').attr('class', 'pwm-d3-live-gauge').attr('transform', 'translate(12, 336)');
+
+  g.append('rect')
+    .attr('x', 0).attr('y', 0).attr('width', 736).attr('height', 38).attr('rx', 8)
+    .attr('fill', '#11151c').attr('stroke', '#4fb3a8').attr('stroke-width', 1.4);
+
+  const barX = 178, barW = 542;
+  const okW = Math.round(barW * (0.35 + ratio * 0.55));
+  const badW = barW - okW;
+
+  g.append('text')
+    .attr('x', 12).attr('y', 16).attr('font-size', '9').attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+    .text('D3 LIVE STRESS-TEST');
+  g.append('text')
+    .attr('x', 12).attr('y', 30).attr('font-size', '9.5').attr('font-weight', '700').attr('fill', '#e9e6de')
+    .text(d.sim.fmt(val));
+
+  g.append('rect')
+    .attr('x', barX).attr('y', 8).attr('width', badW).attr('height', 22).attr('rx', 4)
+    .attr('fill', 'rgba(239,106,82,0.28)').attr('stroke', '#ef6a52').attr('stroke-width', 1.1);
+
+  g.append('rect')
+    .attr('x', barX + badW).attr('y', 8).attr('width', okW).attr('height', 22).attr('rx', 4)
+    .attr('fill', 'rgba(79,179,168,0.32)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.3);
+
+  g.append('circle')
+    .attr('cx', barX + badW).attr('cy', 19).attr('r', 6)
+    .attr('fill', '#e5a93c').attr('stroke', '#11151c').attr('stroke-width', 2);
+
+  g.append('text')
+    .attr('x', barX + 8).attr('y', 23).attr('font-size', '9').attr('font-weight', '700').attr('fill', '#ef6a52')
+    .text(res.badV.slice(0, 34));
+
+  g.append('text')
+    .attr('x', barX + barW - 8).attr('y', 23).attr('text-anchor', 'end').attr('font-size', '9').attr('font-weight', '700').attr('fill', '#4fb3a8')
+    .text(res.okV.slice(0, 42));
+}
+
 function updatePwmSim() {
   const d = PWM_DATA[currentPwmKey];
   if (!d || !d.sim || !pwmRng) return;
@@ -437,27 +496,29 @@ function updatePwmSim() {
   if (bV) bV.textContent = res.badV;
   if (oK) oK.textContent = d.sim.okK;
   if (oV) oV.textContent = res.okV;
-  const barsEl = document.getElementById('pwm-bars');
-  if (barsEl && d.bars) {
+  const barsHost = document.getElementById('pwm-bars');
+  if (barsHost && d.bars) {
     const span = Math.max(1, d.sim.max - d.sim.min);
     const delta = (val - d.sim.val) / span;
-    clearChildren(barsEl);
+    barsHost.textContent = '';
     d.bars.forEach((b) => {
       const badW = Math.max(4, Math.min(96, Math.round(b[2] - delta * 8)));
       const okW = Math.max(12, Math.min(100, Math.round(b[3] + delta * 6)));
       const row = el('div', 'pwm-bar-row');
       const top = el('div', 'pwm-bar-top');
       top.append(el('span', null, b[0]), el('b', null, `${badW}% vs. ${okW}%`));
-      const track = el('div', 'pwm-bar-track');
-      const iBad = el('i', 'bad');
-      iBad.style.width = `${badW}%`;
-      const iOk = el('i', 'ok');
-      iOk.style.width = `${okW}%`;
-      track.append(iBad, iOk);
-      row.append(top, track);
-      barsEl.appendChild(row);
+      const svg = svgEl('svg', { viewBox: '0 0 200 14', class: 'pwm-dual-svg', 'aria-hidden': 'true' });
+      svg.append(
+        svgEl('rect', { x: 0, y: 0, width: 200, height: 5, rx: 2.5, fill: '#1a1e28' }),
+        svgEl('rect', { x: 0, y: 0, width: Math.round(badW * 2), height: 5, rx: 2.5, fill: '#ef6a52' }),
+        svgEl('rect', { x: 0, y: 8, width: 200, height: 5, rx: 2.5, fill: '#1a1e28' }),
+        svgEl('rect', { x: 0, y: 8, width: Math.round(okW * 2), height: 5, rx: 2.5, fill: '#4fb3a8' })
+      );
+      row.append(top, svg);
+      barsHost.appendChild(row);
     });
   }
+  renderPwmD3Overlay(d, val, res);
 }
 
 if (pwmRng) {
@@ -488,26 +549,13 @@ if (pwmTabs) {
       pwmRng.value = String(d.sim.val);
       updatePwmSim();
     }
-    document.getElementById('pwm-stand').textContent = d.stand;
-    document.getElementById('pwm-gap').textContent = d.gap;
-    document.getElementById('pwm-cin').textContent = d.cin;
-    const barsHost = document.getElementById('pwm-bars');
-    if (barsHost) {
-      barsHost.textContent = '';
-      d.bars.forEach((b) => {
-        const row = el('div', 'pwm-bar-row');
-        const top = el('div', 'pwm-bar-top');
-        top.append(el('span', null, b[0]), el('b', null, b[1]));
-        const svg = svgEl('svg', { viewBox: '0 0 200 14', class: 'pwm-dual-svg', 'aria-hidden': 'true' });
-        svg.append(
-          svgEl('rect', { x: 0, y: 0, width: 200, height: 5, rx: 2.5, fill: '#1a1e28' }),
-          svgEl('rect', { x: 0, y: 0, width: Math.round(b[2] * 2), height: 5, rx: 2.5, fill: '#ef6a52' }),
-          svgEl('rect', { x: 0, y: 8, width: 200, height: 5, rx: 2.5, fill: '#1a1e28' }),
-          svgEl('rect', { x: 0, y: 8, width: Math.round(b[3] * 2), height: 5, rx: 2.5, fill: '#4fb3a8' })
-        );
-        row.append(top, svg);
-        barsHost.appendChild(row);
-      });
-    }
+    const sn = PWM_SHORT[key] || [d.stand, d.gap, d.cin];
+    document.getElementById('pwm-stand').textContent = sn[0];
+    document.getElementById('pwm-gap').textContent = sn[1];
+    document.getElementById('pwm-cin').textContent = sn[2];
+    const detEl = document.getElementById('pwm-detail');
+    if (detEl) detEl.textContent = `${d.stand} ${d.gap} ${d.cin}`;
   });
 }
+
+window.addEventListener('DOMContentLoaded', () => { setTimeout(updatePwmSim, 60); });

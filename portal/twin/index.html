@@ -10,6 +10,8 @@
   <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
   <link rel="canonical" href="https://cintnet.org/twin">
   <link rel="stylesheet" href="/assets/portal.css?v=12">
+  <script src="/assets/vendor/d3.v7.min.js" defer></script>
+  <script src="/assets/portal-subpages-d3.js?v=16" defer></script>
 </head>
 <body>
 <header class="top">
@@ -44,7 +46,10 @@
       <div>
         <span class="label">Hardware-isolated local agent prototype · 0 bytes sent to servers</span>
         <h1>Your personal twin, on your own device.</h1>
-        <p class="lede">Your personal agent runs strictly inside this browser&rsquo;s local storage sandbox. It holds your safety-critical constraints, 6-axis value radar, lookahead tool firewall, and zero-leakage cryptographic proofs. Nothing you enter is ever sent to a server, and you can export or wipe all state with one click.</p>
+        <p class="lede">Run your safety-critical constraints, 6-axis value radar, lookahead tool firewall, and zero-leakage proofs 100% locally in your browser.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary>
+          <div class="muted flush">Your personal agent runs strictly inside this browser&rsquo;s local storage sandbox. It holds your safety-critical constraints, 6-axis value radar, lookahead tool firewall, and zero-leakage cryptographic proofs. Nothing you enter is ever sent to a server, and you can export or wipe all state with one click.</div>
+        </details>
       </div>
 
       <!-- Interactive Persona Loadout Switcher -->
@@ -179,6 +184,43 @@
     </div>
   </section>
 
+  <!-- Interactive D3.js v7 1-to-1 Pair Intelligence Moat & Live OCap Firewall Studio -->
+  <section class="card search-card" aria-label="1-to-1 Pair Intelligence Moat and Live OCap Firewall Visualizer">
+    <div class="card-head">
+      <div>
+        <span class="label">Interactive D3.js v7 Co-Adaptation Simulator · Local Rank-16 LoRA &amp; Memory Vault</span>
+        <h2 class="flush">1-to-1 Pair Intelligence Moat vs. the 60-90 Day Cloud AI Distillation Cliff</h2>
+      </div>
+      <span class="tag ok">96% Uncopyable Moat</span>
+    </div>
+    <div class="pwm-sim-bar">
+      <div class="pwm-sim-top">
+        <label for="twin-moat-years-slider">Simulate Years of 1-to-1 Co-Adaptation (1 to 10 Yrs)</label>
+        <output id="twin-moat-years-out" for="twin-moat-years-slider">10 Years Co-Adapted (96% Uncopyable Moat)</output>
+      </div>
+      <input type="range" id="twin-moat-years-slider" min="1" max="10" step="1" value="10" aria-label="Simulate Years of 1-to-1 Co-Adaptation (1 to 10 Yrs)">
+      <div class="chip-row" aria-label="Quick co-adaptation year presets">
+        <button type="button" class="chip-btn" data-moat-years="1">Year 1 (66% Moat)</button>
+        <button type="button" class="chip-btn" data-moat-years="3">Year 3 (82% Moat)</button>
+        <button type="button" class="chip-btn" data-moat-years="5">Year 5 (89% Moat)</button>
+        <button type="button" class="chip-btn active" data-moat-years="10">Year 10 (96% Uncopyable Moat)</button>
+      </div>
+      <div class="pwm-sim-out">
+        <div class="bad">
+          <span>60-90 Day Cloud AI Distillation Cliff</span>
+          <b id="twin-moat-cloud-out">Frontier cloud weights commoditize every 60-90 days (only 4% open base weight edge retained)</b>
+        </div>
+        <div class="ok">
+          <span>4 Stacked Pair Moat Layers (Hardware OCap Sandbox)</span>
+          <b id="twin-moat-local-out">Commodity Open Base 4% + Local Rank-16 LoRA 30% + 10-Yr Private Memory 32% + Tacit Human Craft 34% = 96% Uncopyable Moat</b>
+        </div>
+      </div>
+    </div>
+    <div class="twin-subblock">
+      <svg id="twin-d3-moat" class="svg-diagram" data-rich-viz="true" viewBox="0 0 760 250" role="img" aria-label="Interactive D3.js 1-to-1 Pair Intelligence Moat and Local OCap Sandbox Firewall"></svg>
+    </div>
+  </section>
+
   <!-- 5-Studio Navigation Tabs -->
   <div class="studio-tabs" id="twin-tabs" role="tablist" aria-label="Personal Twin Workbench Studios">
     <button type="button" class="studio-tab" role="tab" aria-selected="true" data-tab="1">
@@ -212,7 +254,7 @@
           <h2 class="flush">Value priorities &amp; 6-axis alignment radar</h2>
           <span class="tag ok">Non-fiat local weights</span>
         </div>
-        <p class="muted flush">Weight what matters to you across six dimensions. Your twin uses this vector to rank actions and filter feeds locally without single-number fiat scoring.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Weight what matters to you across six dimensions. Your twin uses this vector to rank actions and filter feeds locally without single-number fiat scoring.</div></details>
         <div class="radar-box twin-subblock">
           <div id="value-radar-host" aria-label="Six-axis value alignment radar chart"></div>
           <div>
@@ -252,7 +294,7 @@
           <h2 class="flush">What matters to you &amp; today&rsquo;s signal pulse</h2>
           <span class="tag info">2,521 Verified Sources</span>
         </div>
-        <p class="muted flush">Your twin matches your local topics against the verified primary research and incident feed without revealing your interests to any server.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Your twin matches your local topics against the verified primary research and incident feed without revealing your interests to any server.</div></details>
         <div class="chip-row" id="topic-quick-chips" aria-label="Quick topic toggles">
           <button type="button" class="chip-btn" data-topic="privacy">+ privacy</button>
           <button type="button" class="chip-btn" data-topic="local agents">+ local agents</button>
@@ -287,7 +329,7 @@
           <h2 class="flush">Daily quests &amp; focus priorities</h2>
           <span class="tag ok">Local Focus Queue</span>
         </div>
-        <p class="muted flush">Active focus items for your day. Checked quests remain in your local record and feed your token-budgeted assistant context.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Active focus items for your day. Checked quests remain in your local record and feed your token-budgeted assistant context.</div></details>
         <ul class="plain" id="quests"></ul>
         <div id="quest-summary" class="twin-summary"></div>
         <form id="quest-form" class="stack twin-subblock">
@@ -323,7 +365,7 @@
           <h2 class="flush">Obligations, renewals &amp; deadlines</h2>
           <span class="tag wip">Lead-Time Watch</span>
         </div>
-        <p class="muted flush">Track renewals, contracts, warranties, and deadlines locally with configurable lead-warning windows so no subscription or filing traps you.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Track renewals, contracts, warranties, and deadlines locally with configurable lead-warning windows so no subscription or filing traps you.</div></details>
         <ul class="plain" id="obligations"></ul>
         <div id="obligation-summary" class="twin-summary"></div>
         <form id="obligation" class="stack twin-subblock">
@@ -376,7 +418,7 @@
           <h2 class="flush">Critical memory &amp; non-compressible constraints</h2>
           <span class="tag no">Safety-Critical Pin</span>
         </div>
-        <p class="muted flush">Facts and boundaries your twin and local models must never compress away (allergies, medical rules, hard boundaries). Screened locally against speculative wording before pinning.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Facts and boundaries your twin and local models must never compress away (allergies, medical rules, hard boundaries). Screened locally against speculative wording before pinning.</div></details>
         <ul class="plain" id="facts"></ul>
         <div id="fact-summary" class="twin-summary"></div>
         <form id="fact" class="stack twin-subblock">
@@ -406,7 +448,7 @@
           <h2 class="flush">Token-budgeted local context compiler</h2>
           <span class="tag info">Deterministic Prefix Hash</span>
         </div>
-        <p class="muted flush">Compile a strict token-budgeted prompt context for local on-device models (8GB/16GB RAM). Prioritizes safety-critical constraints first, then active obligations and focus quests.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Compile a strict token-budgeted prompt context for local on-device models (8GB/16GB RAM). Prioritizes safety-critical constraints first, then active obligations and focus quests.</div></details>
         <form id="assemble-context" class="stack">
           <div class="form-grid-2">
             <label>On-device token budget
@@ -433,7 +475,7 @@
       <div class="card-head">
         <div>
           <h2 class="flush">Retrieval airlock &amp; indirect prompt-injection sanitizer</h2>
-          <p class="muted flush">Before an external document, email, or web snippet enters your twin&rsquo;s context window, the Retrieval Airlock strips zero-width Unicode steganography, neutralizes system-role overrides, and quarantines data exfiltration payloads.</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Before an external document, email, or web snippet enters your twin&rsquo;s context window, the Retrieval Airlock strips zero-width Unicode steganography, neutralizes system-role overrides, and quarantines data exfiltration payloads.</div></details>
         </div>
         <span class="tag ok">Cryptographic Airlock Receipt</span>
       </div>
@@ -479,7 +521,7 @@
       <div class="card-head">
         <div>
           <h2 class="flush">Lookahead multi-step tool trajectory simulator</h2>
-          <p class="muted flush">Simulates multi-step assistant plans in a shadow state before any tool runs—catching private-data taint propagation, exfiltration chains, privilege escalation, and circular peer loops.</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Simulates multi-step assistant plans in a shadow state before any tool runs—catching private-data taint propagation, exfiltration chains, privilege escalation, and circular peer loops.</div></details>
         </div>
         <span class="tag no">Shadow-State Taint Tracking</span>
       </div>
@@ -525,7 +567,7 @@
           <h2 class="flush">Visual screen assistant auditor</h2>
           <span class="tag wip">DOM &amp; Viewport Guard</span>
         </div>
-        <p class="muted flush">Tests whether an assistant that sees your screen may click or type on an element. Blocks password/card fields and on-screen prompt-injection overlays.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Tests whether an assistant that sees your screen may click or type on an element. Blocks password/card fields and on-screen prompt-injection overlays.</div></details>
         <div class="chip-row" id="visual-presets">
           <button type="button" class="chip-btn active" data-vis="password_block">Test: Password Field Block</button>
           <button type="button" class="chip-btn" data-vis="injection_block">Test: On-Screen Prompt Injection</button>
@@ -574,7 +616,7 @@
             <h2 class="flush">Domain authority envelope</h2>
             <span class="tag info">Scoped Capability</span>
           </div>
-          <p class="muted flush">Allowed domains: <code>github.com</code>, <code>api.github.com</code>, <code>docs.github.com</code>; scopes: <code>repo:read</code>, <code>issues:read</code>, <code>docs:read</code>. Blocks credential egress and gates writes.</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Allowed domains: <code>github.com</code>, <code>api.github.com</code>, <code>docs.github.com</code>; scopes: <code>repo:read</code>, <code>issues:read</code>, <code>docs:read</code>. Blocks credential egress and gates writes.</div></details>
           <form id="audit-authority-envelope" class="stack">
             <div class="form-grid-2">
               <label>Assistant or service
@@ -610,7 +652,7 @@
 
         <div id="delegation-inspector" class="twin-subblock">
           <h3 class="flush twin-subhead">Peer delegation commitment &amp; depth guard</h3>
-          <p class="muted flush">Logs upstream accountability when delegating tasks to peer agents and blocks runaway delegation depth (&gt;5 hops).</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Logs upstream accountability when delegating tasks to peer agents and blocks runaway delegation depth (&gt;5 hops).</div></details>
           <form id="test-delegation" class="stack">
             <div class="form-grid-2">
               <label>Delegating agent
@@ -654,7 +696,7 @@
           <h2 class="flush">Pending assistant actions queue</h2>
           <span class="tag wip">Human-in-the-Loop Gate</span>
         </div>
-        <p class="muted flush">Review requests from local assistants or services before they execute. Nothing runs without your explicit approval.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Review requests from local assistants or services before they execute. Nothing runs without your explicit approval.</div></details>
         <ul class="plain" id="actions"></ul>
         <div id="action-summary" class="twin-summary"></div>
         <form id="action-request" class="stack twin-subblock">
@@ -674,7 +716,7 @@
       <section class="card">
         <div id="boundary-inspector">
           <h2 class="flush">Pre-execution boundary &amp; constraint audit</h2>
-          <p class="muted flush">Checks whether an assistant&rsquo;s proposed action violates your pinned critical memory constraints or lacks an active grant.</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Checks whether an assistant&rsquo;s proposed action violates your pinned critical memory constraints or lacks an active grant.</div></details>
           <form id="audit-action" class="stack">
             <div class="form-grid-2">
               <label>Assistant or service
@@ -694,7 +736,7 @@
 
         <div id="capability-inspector" class="twin-subblock">
           <h3 class="flush twin-subhead">Preview a short-lived capability lease</h3>
-          <p class="muted flush">Evaluate a time-bounded (5 to 60 min) permission request against your active grants and critical constraints.</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Evaluate a time-bounded (5 to 60 min) permission request against your active grants and critical constraints.</div></details>
           <form id="capability-request" class="stack">
             <div class="form-grid-2">
               <label>Assistant or service
@@ -728,7 +770,7 @@
         <div class="card-head">
           <div>
             <h2 class="flush">Three-valued auto-purchase decision gate</h2>
-            <p class="muted flush">Evaluates assistant commerce requests against client-side spending limits. Decouples item preference matching from financial execution authorization (preference is not permission).</p>
+            <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Evaluates assistant commerce requests against client-side spending limits. Decouples item preference matching from financial execution authorization (preference is not permission).</div></details>
           </div>
           <span class="tag ok">Financial Gate</span>
         </div>
@@ -786,7 +828,7 @@
       <div class="card-head">
         <div>
           <h2 class="flush">Zero-leakage income shock verification proof</h2>
-          <p class="muted flush">Generate a portable cryptographic qualification receipt during an income shock or job transition without handing over raw bank feeds, employer names, or account numbers.</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Generate a portable cryptographic qualification receipt during an income shock or job transition without handing over raw bank feeds, employer names, or account numbers.</div></details>
         </div>
         <span class="tag ok">Single-Fact Boolean Predicate</span>
       </div>
@@ -832,7 +874,7 @@
           <h2 class="flush">Who may ask for your data (OCap grants)</h2>
           <span class="tag info">ISO-27560 Receipts</span>
         </div>
-        <p class="muted flush">Your twin refuses every service by default. Each grant issues a portable ISO-27560 consent receipt you can download, audit, or revoke at any time.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Your twin refuses every service by default. Each grant issues a portable ISO-27560 consent receipt you can download, audit, or revoke at any time.</div></details>
         <ul class="plain" id="grants"></ul>
         <form id="grant" class="stack twin-subblock">
           <div class="form-grid-2">
@@ -859,7 +901,7 @@
       <section class="card">
         <div id="access-inspector">
           <h2 class="flush">Test an incoming access request</h2>
-          <p class="muted flush">Check whether an incoming query from a service or assistant is permitted under your active grants or blocked fail-closed.</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Check whether an incoming query from a service or assistant is permitted under your active grants or blocked fail-closed.</div></details>
           <form id="verify-access" class="stack">
             <div class="form-grid-2">
               <label>Requesting service
@@ -879,7 +921,7 @@
             <h3 class="flush twin-subhead">Verify a portable consent receipt</h3>
             <button type="button" class="btn sm" id="fill-sample-receipt">Load receipt from active grant</button>
           </div>
-          <p class="muted flush">Verify whether an ISO-27560 JSON receipt matches an active, unrevoked grant on this device.</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Verify whether an ISO-27560 JSON receipt matches an active, unrevoked grant on this device.</div></details>
           <form id="verify-receipt" class="stack">
             <label>Consent Receipt JSON
               <textarea name="receipt_json" placeholder="Click 'Load receipt from active grant' above or paste receipt JSON here" rows="3" maxlength="2000" required></textarea>
@@ -903,7 +945,7 @@
           <h2 class="flush">Contributions to the commons</h2>
           <span class="tag ok">Local Attribution Log</span>
         </div>
-        <p class="muted flush">Record code, reviews, domain knowledge, verification audits, or compute you contributed to the collective. Stored locally in your browser.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Record code, reviews, domain knowledge, verification audits, or compute you contributed to the collective. Stored locally in your browser.</div></details>
         <div id="contrib-chart-host"></div>
         <ul class="plain" id="contributions"></ul>
         <div id="contribution-summary" class="twin-summary"></div>
@@ -937,13 +979,13 @@
           <h2 class="flush">Append-only local activity log</h2>
           <button class="btn sm" id="clear-events">Clear log</button>
         </div>
-        <p class="muted flush">Every state change, capability grant, and action decision on this device is recorded in this local audit log and never transmitted externally.</p>
+        <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Every state change, capability grant, and action decision on this device is recorded in this local audit log and never transmitted externally.</div></details>
         <ul class="plain" id="events"></ul>
         <div id="event-summary" class="twin-summary"></div>
 
         <div class="twin-subblock">
           <h3 class="flush twin-subhead">Your data, your control (JSON backup &amp; wipe)</h3>
-          <p class="muted flush">Download a portable JSON backup of your entire twin state, restore a previous backup, or wipe all local browser storage immediately.</p>
+          <details class="portal-drawer"><summary>Inspect local privacy &amp; cryptographically bounded twin details ▾</summary><div class="muted flush">Download a portable JSON backup of your entire twin state, restore a previous backup, or wipe all local browser storage immediately.</div></details>
           <div class="twin-btn-row twin-btn-mt">
             <button class="btn primary sm" id="export">Export JSON backup</button>
             <label class="btn sm twin-file-label">Import backup <input type="file" id="import-file" accept=".json,application/json" class="twin-file-input"></label>

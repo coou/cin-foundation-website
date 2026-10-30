@@ -1905,6 +1905,65 @@
     }).join('');
   }
 
+  var SHORT_NOTES = {
+    labs: ['Scrapes public craft ($0); rents intelligence back via cloud APIs.', 'Equity valuation demands labor replacement & proprietary cloud lock-in.', 'Local OCap + 95% Data Shapley royalty + 5% philanthropic floor.'],
+    safety: ['Voluntary pledges & RLHF patches fail under race pressure.', '40 bits/s human biology cannot survive unbound 10¹² bits/s swarms.', 'Two-Internet Airlock + Mortal Execution Lease = last resort before Pause.'],
+    gov: ['Statutes lag 3–5 yrs behind 4.5-month AI capability doublings.', 'Payroll tax erosion starves cities while unitary AI centralizes power.', '<10ms silicon quorum gates + $25k floor + 2%/mo hoard demurrage.'],
+    research: ['Universities originate 88% of breakthroughs for $0 commercial royalty.', 'Hyperscalers capture talent and price academia out of $100M+ clusters.', '15% perpetual Data Shapley citation royalty + SPRA (95.3% token cut).'],
+    enterprise: ['Enterprises pay 15%–40% tolls to GPOs, SaaS & cloud wrappers.', 'Streaming workflows to cloud APIs trains conglomerates to replace you.', 'On-premise Wasm OCap sandbox + 500-firm PSI co-op (+34% margin).'],
+    humanity: ['4.8B+ physical & resource workers face asymmetric AI buyer cartels.', 'Algorithmic commodity cartels dump producer prices by 30%–50%.', '$8 Pre-ADC sensor + offline voice twin + PSI producer co-op (+38% pay).'],
+    pair: ['Closed cloud AI bleeds $5B–$15B/yr; distilled into open weights in 75 days.', 'Raw foundation-model token inference commoditizes toward $0 margin.', '1-to-1 Human Craft + 10-Yr Private Memory + Local LoRA = 96% moat.']
+  };
+
+  function renderD3LensOverlay(d, val, res) {
+    if (!svgWrap || !window.d3) return;
+    var svgNode = svgWrap.querySelector('svg');
+    if (!svgNode) return;
+    var d3 = window.d3;
+    var svg = d3.select(svgNode);
+    svg.attr('viewBox', '0 0 760 382').attr('data-rich-viz', 'true');
+    svg.selectAll('g.wm-d3-live-gauge').remove();
+
+    var span = Math.max(1, d.simConfig.max - d.simConfig.min);
+    var ratio = Math.max(0.08, Math.min(0.92, (val - d.simConfig.min) / span));
+    var g = svg.append('g').attr('class', 'wm-d3-live-gauge').attr('transform', 'translate(12, 336)');
+
+    g.append('rect')
+      .attr('x', 0).attr('y', 0).attr('width', 736).attr('height', 38).attr('rx', 8)
+      .attr('fill', '#11151c').attr('stroke', '#4fb3a8').attr('stroke-width', 1.4);
+
+    var barX = 178, barW = 542;
+    var okW = Math.round(barW * (0.35 + ratio * 0.55));
+    var badW = barW - okW;
+
+    g.append('text')
+      .attr('x', 12).attr('y', 16).attr('font-size', '9').attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      .text('D3 LIVE STRESS-TEST');
+    g.append('text')
+      .attr('x', 12).attr('y', 30).attr('font-size', '9.5').attr('font-weight', '700').attr('fill', '#e9e6de')
+      .text(d.simConfig.formatVal(val));
+
+    g.append('rect')
+      .attr('x', barX).attr('y', 8).attr('width', badW).attr('height', 22).attr('rx', 4)
+      .attr('fill', 'rgba(239,106,82,0.28)').attr('stroke', '#ef6a52').attr('stroke-width', 1.1);
+
+    g.append('rect')
+      .attr('x', barX + badW).attr('y', 8).attr('width', okW).attr('height', 22).attr('rx', 4)
+      .attr('fill', 'rgba(79,179,168,0.32)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.3);
+
+    g.append('circle')
+      .attr('cx', barX + badW).attr('cy', 19).attr('r', 6)
+      .attr('fill', '#e5a93c').attr('stroke', '#11151c').attr('stroke-width', 2);
+
+    g.append('text')
+      .attr('x', barX + 8).attr('y', 23).attr('font-size', '9').attr('font-weight', '700').attr('fill', '#ef6a52')
+      .text(res.badV.slice(0, 34));
+
+    g.append('text')
+      .attr('x', barX + barW - 8).attr('y', 23).attr('text-anchor', 'end').attr('font-size', '9').attr('font-weight', '700').attr('fill', '#4fb3a8')
+      .text(res.okV.slice(0, 42));
+  }
+
   function updateSimReadout() {
     var d = LENSES[currentKey];
     if (!d || !d.simConfig || !simRng) return;
@@ -1918,6 +1977,7 @@
     var span = Math.max(1, d.simConfig.max - d.simConfig.min);
     var normDelta = (val - d.simConfig.val) / span;
     renderBars(d, normDelta);
+    renderD3LensOverlay(d, val, res);
   }
 
   function selectLens(key) {
@@ -1950,22 +2010,13 @@
         return '<div class="wm-kpi"><span>' + kp[0] + '</span><b>' + kp[1] + '</b></div>';
       }).join('');
     }
-    if (barsEl) {
-      barsEl.innerHTML = d.bars.map(function (b) {
-        return (
-          '<div class="wm-bar-item">' +
-            '<div class="wm-bar-lbl"><span>' + b[0] + '</span><b>' + b[1] + '</b></div>' +
-            '<div class="wm-bar-dual">' +
-              '<i class="b-bad" style="width:' + b[2] + '%"></i>' +
-              '<i class="b-ok" style="width:' + b[3] + '%"></i>' +
-            '</div>' +
-          '</div>'
-        );
-      }).join('');
-    }
-    if (standEl) standEl.textContent = d.stand;
-    if (gapEl) gapEl.textContent = d.gap;
-    if (cinEl) cinEl.textContent = d.cin;
+
+    var sn = SHORT_NOTES[key] || [d.stand, d.gap, d.cin];
+    if (standEl) standEl.textContent = sn[0];
+    if (gapEl) gapEl.textContent = sn[1];
+    if (cinEl) cinEl.textContent = sn[2];
+    var detEl = document.getElementById('wm-c-detail');
+    if (detEl) detEl.textContent = d.stand + ' ' + d.gap + ' ' + d.cin;
     if (simLink) {
       simLink.href = d.simHref;
       simLink.textContent = d.simText;
@@ -1984,5 +2035,7 @@
   var urlLens = (location.search.match(/[?&]lens=([a-z]+)/) || [])[1];
   if (urlLens && LENSES[urlLens]) {
     selectLens(urlLens);
+  } else {
+    updateSimReadout();
   }
 })();

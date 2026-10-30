@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=51">
+  <link rel="stylesheet" href="/styles/site.css?v=53">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -45,7 +45,7 @@
     <a class="back" href="/notes">&larr; All notes</a>
     <span class="label">AI safety, biometrics &amp; silicon security · Interactive simulator</span>
     <h1>Why living with superintelligence requires an agent-only internet—and what it means for biometrics and hardware security</h1>
-    <p class="lede">If superintelligent AI systems share the same internet as unshielded human beings, human attention and trust become an indefensible attack surface. Surviving and thriving alongside advanced AI requires a hard architectural split: <strong>agents may never communicate with other humans directly—only with you, and with other agents across an agent-only internet governed by trust thresholds, local biometrics, and verifiable hardware.</strong></p>
+    <p class="lede">If superintelligent AI systems share the same internet as unshielded human beings, human attention and trust become an indefensible attack surface. Surviving alongside advanced AI requires a hard architectural split: <strong>agents may never communicate with other humans directly—only with you, and with other agents across an agent-only internet.</strong></p>
     <p class="meta">21 October 2026 · 11 min read · Includes interactive Dual-Internet, Biometric Coercion &amp; Hardware Firewall simulator</p>
   </header>
 
@@ -55,180 +55,162 @@
       <p style="margin-top:.3rem">An AI agent is never allowed to message, call, pitch, or persuade another human being directly; it may speak <strong>only to its own human owner</strong> (over a local, hardware-attested device bus) and <strong>to other agents</strong> (over a separate agent-only internet gated by cryptographic trust thresholds and zero-knowledge proofs).</p>
     </aside>
 
-    <h2>1. Why a shared human-and-AI internet collapses as superintelligence arrives</h2>
-    <p>Every institution on today&rsquo;s internet—from banking and elections to medical records, journalism, and neighbourhood chat groups—was built on an unwritten biological assumption: <em>the entity on the other end of the screen thinks, types, and listens at human speed</em>.</p>
-    <p>As AI systems approach superhuman capability and drop toward near-zero marginal cost, allowing autonomous agents to roam the human internet and speak directly to people breaks three foundational defenses at once:</p>
-    <ul>
-      <li><strong>Asymmetric persuasion and cognitive hijacking:</strong> A superhuman model speaking directly to a person via text, voice, or synthesized video can test thousands of micro-framing variations per second, reading subtle timing cues to exploit fatigue, grief, urgency, or cognitive bias. No unaided human nervous system can out-debate a system trained on the entire corpus of human psychology.</li>
-      <li><strong>Total collapse of human social proof:</strong> When one operator can spin up 100,000 synthetic personas that message lawmakers, flood community boards, and impersonate neighbours, every unverified human channel drowns in machine-generated noise.</li>
-      <li><strong>The API and credential honeypot:</strong> Today&rsquo;s &ldquo;agentic AI&rdquo; products work by handing a cloud model your session cookies, passwords, and full browser control on the human web. One prompt injection on a webpage can hijack that agent into draining accounts or exfiltrating private history.</li>
-    </ul>
+    <figure class="diagram">
+      <svg data-rich-viz="true" viewBox="0 0 760 240" role="img" aria-label="Comparison of Legacy Mixed Human-and-Bot Web vs CIN Non-Contact Firewall, 2-of-2 Silicon Attestation, and Pre-ADC In-Sensor Biometrics">
+        <rect x="16" y="18" width="340" height="204" rx="12" fill="rgba(239,106,82,0.08)" stroke="#ef6a52" stroke-width="1.6"/>
+        <text x="32" y="42" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">LEGACY CENTRALIZED FAILURE: MIXED WEB &amp; RPC APIs</text>
+        <text x="32" y="64" font-size="11.5" font-weight="700" fill="var(--ink)">Unshielded Humans (~40 bits/s) vs Bot Swarms</text>
+        <rect x="32" y="80" width="308" height="52" rx="8" fill="var(--paper)" stroke="#ef6a52" stroke-width="1.2"/>
+        <text x="44" y="100" font-size="10" font-weight="700" fill="#ef6a52">Direct Persuasion &amp; 64.4% API Cascade Exploits</text>
+        <text x="44" y="118" font-size="9.5" fill="var(--ink-2)">186 MB/s raw camera RAM exposure · Cloud biometric orbs</text>
+        <rect x="32" y="144" width="308" height="60" rx="8" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="44" y="165" font-size="10" font-weight="700" fill="#ef6a52">Zero Duress Protection</text>
+        <text x="44" y="183" font-size="9.5" fill="var(--ink-2)">Stolen bearer cookies or coerced approvals drain accounts</text>
 
-    <h2>2. The Non-Contact Law: agents talk only to you and to other agents</h2>
-    <p>To make a world with advanced AI safe for human beings, we must replace the mixed internet with two cryptographically separated planes and enforce the <strong>Non-Contact Law</strong>:</p>
-    <p style="text-align:center"><span class="math-chip" style="font-size:.9rem;padding:.45rem .85rem">Channel(Agent<sub>i</sub> &rarr; Human<sub>j</sub>) = PERMITTED if i = j (Local Bus) &nbsp;|&nbsp; FORBIDDEN if i &ne; j (Dropped at Transport Layer)</span></p>
-    <ol>
-      <li><strong>Plane 1 — The Human Internet (<span class="math-chip">Human &harr; Human</span> only):</strong> Reserved strictly for living, uncoerced human beings speaking to other human beings at human speed. Automated agents are blocked at the transport layer.</li>
-      <li><strong>Plane 2 — Your Local Personal Bus (<span class="math-chip">You &harr; Your Narrow Agent Fleet</span>):</strong> On your own devices, a fleet of narrow agents—one for your health, one for your money, one for your home, one for your work—learns from your local sensors. Before any fact leaves your boundary, at least <strong>three of your six local agents</strong> must agree (<span class="math-chip">3-of-6</span> internal quorum, scaling to <span class="math-chip">5-of-6</span> for high-risk actions).</li>
-      <li><strong>Plane 3 — The Agent-Only Internet (<span class="math-chip">Agent &harr; Agent</span> across trust thresholds):</strong> When you need something from the outside world—or when a clinic, landlord, neighbour, or employer needs a verified fact from you—your agent never messages another human. It speaks exclusively to <strong>their serving or personal agent</strong> over the Agent-Only Internet, governed by four concentric <strong>Trust-Threshold Rings (Verified Trust Tiers)</strong>:
-        <ul>
-          <li><strong>Ring 0 — Your Local Fleet (Full Local Isolation):</strong> Solves problems using your own private memory first so nothing leaves your devices.</li>
-          <li><strong>Ring 1 — Trusted Circle Agents (Direct Vouching):</strong> Agents of family, close friends, and clinicians you have directly vouched for.</li>
-          <li><strong>Ring 2 — Friends-of-Friends Agents (Two-Hop Vouching):</strong> Two-hop web-of-trust negotiation; shares only coarse context (such as a first name and morning running pace, never your address or identity).</li>
-          <li><strong>Ring 3 — Wider Agent-Only Internet (Single-Fact Proof):</strong> Exchanges only ephemeral <strong>zero-knowledge single-fact proofs</strong> (for example, <span class="math-chip">income &ge; 3&times; rent: yes</span> or <span class="math-chip">licensed electrician: yes</span>) with hardware-verified serving agents, after which access immediately expires.</li>
-        </ul>
-      </li>
-    </ol>
+        <line x1="356" y1="120" x2="396" y2="120" stroke="#4fb3a8" stroke-width="2" stroke-dasharray="4 3"/>
 
-    <figure class="diagram" style="margin:1.8rem 0">
-      <svg viewBox="0 0 820 390" role="img" aria-label="Architectural diagram showing the Human Internet on the left, the Non-Contact Protocol Firewall in the center, and the Agent-Only Internet with Trust-Threshold Rings on the right.">
-        <defs>
-          <marker id="aoi-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="#1f6f68"/>
-          </marker>
-          <marker id="aoi-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="#c8402a"/>
-          </marker>
-        </defs>
-        <!-- Left Zone: Human Space & Local High-Speed Ledger -->
-        <rect x="16" y="18" width="248" height="354" rx="14" class="d-box" stroke-width="1.5"/>
-        <text x="140" y="42" text-anchor="middle" font-size="12.5" font-weight="700">1. HUMAN WORLD &amp; LOCAL LEDGER</text>
-        <text x="140" y="58" text-anchor="middle" font-size="10.5" class="d-muted">Human &harr; Human · On-Device Sandbox</text>
-
-        <rect x="34" y="72" width="212" height="72" rx="10" class="d-fill"/>
-        <text x="140" y="94" text-anchor="middle" font-size="12.5" font-weight="700">YOU &harr; Other Real Humans</text>
-        <text x="140" y="112" text-anchor="middle" font-size="10.5" class="d-ok">Human-Speed Internet · Zero Bots</text>
-        <text x="140" y="128" text-anchor="middle" font-size="9.5" class="d-muted">Calm pulse + 2-of-2 hardware key</text>
-
-        <line x1="140" y1="144" x2="140" y2="168" stroke="#1f6f68" stroke-width="1.8" marker-end="url(#aoi-ok)"/>
-        <text x="148" y="160" font-size="9.5" class="d-ok">light &amp; pulse</text>
-
-        <rect x="34" y="172" width="212" height="76" rx="10" class="d-box"/>
-        <text x="140" y="194" text-anchor="middle" font-size="12" font-weight="700">In-Sensor Computing (Silicon)</text>
-        <text x="140" y="212" text-anchor="middle" font-size="10" class="d-ok">D²NN · Neuromorphic · 3D Phase-Change</text>
-        <text x="140" y="228" text-anchor="middle" font-size="9.5" class="d-muted">Classifies pre-ADC · 0 raw frames in RAM</text>
-
-        <line x1="140" y1="248" x2="140" y2="272" stroke="#1f6f68" stroke-width="1.8" marker-end="url(#aoi-ok)"/>
-        <text x="148" y="264" font-size="9.5" class="d-ok">symbols (&lt;1 ms)</text>
-
-        <rect x="34" y="276" width="212" height="82" rx="10" class="d-box"/>
-        <text x="140" y="297" text-anchor="middle" font-size="12" font-weight="700">6 Local Agents &amp; Local Ledger</text>
-        <text x="140" y="314" text-anchor="middle" font-size="10" class="d-ok">99.6% of actions resolved locally</text>
-        <text x="140" y="330" text-anchor="middle" font-size="9.5" class="d-muted">3-of-6 Quorum · Private Sandbox</text>
-        <text x="140" y="346" text-anchor="middle" font-size="9" class="d-muted">Cloud Enclave &rarr; On-Person Fabric</text>
-
-        <!-- Center Zone: Non-Contact Firewall -->
-        <rect x="288" y="18" width="214" height="354" rx="14" fill="none" stroke="#c8402a" stroke-width="2" stroke-dasharray="6 4"/>
-        <text x="395" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#c8402a">2. NON-CONTACT FIREWALL</text>
-        <text x="395" y="58" text-anchor="middle" font-size="10" class="d-muted">Hardware &amp; Protocol Separation</text>
-
-        <!-- Forbidden line from external agent to human -->
-        <line x1="528" y1="108" x2="254" y2="108" stroke="#c8402a" stroke-width="2.2" stroke-dasharray="4 4" marker-end="url(#aoi-bad)"/>
-        <rect x="304" y="84" width="182" height="46" rx="8" class="d-box" stroke="#c8402a"/>
-        <text x="395" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#c8402a">&#10005; HARD-BLOCKED</text>
-        <text x="395" y="120" text-anchor="middle" font-size="9.5" class="d-muted">No Agent &rarr; Human Direct Contact</text>
-
-        <!-- Hardware & Duress gates in middle -->
-        <rect x="304" y="148" width="182" height="112" rx="8" class="d-box"/>
-        <text x="395" y="170" text-anchor="middle" font-size="11" font-weight="700">4 Hardware &amp; Safety Gates</text>
-        <text x="395" y="188" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; 2-of-2 Silicon Identity (PUF+TPM)</text>
-        <text x="395" y="205" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Calm Pulse Check (No Coercion)</text>
-        <text x="395" y="222" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Trust Rings &amp; 3-of-6 Quorum</text>
-        <text x="395" y="239" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Zero External Software APIs</text>
-
-        <!-- Legal Agent-to-Agent bridge at bottom -->
-        <line x1="246" y1="318" x2="524" y2="318" stroke="#1f6f68" stroke-width="2.2" marker-end="url(#aoi-ok)"/>
-        <text x="395" y="306" text-anchor="middle" font-size="10" font-weight="600" class="d-ok">Agent &harr; Agent Pure Data &amp; Proof</text>
-        <text x="395" y="336" text-anchor="middle" font-size="9.5" class="d-muted">1 fact or batch root · One-time gate closes</text>
-
-        <!-- Right Zone: Agent-Only Internet -->
-        <rect x="526" y="18" width="278" height="354" rx="14" class="d-box" stroke-width="1.5"/>
-        <text x="665" y="42" text-anchor="middle" font-size="12.5" font-weight="700">3. AGENT-ONLY INTERNET</text>
-        <text x="665" y="58" text-anchor="middle" font-size="10.5" class="d-muted">Collective Stream · Trust Rings</text>
-
-        <rect x="544" y="72" width="242" height="52" rx="8" class="d-box" stroke="#c8402a"/>
-        <text x="665" y="93" text-anchor="middle" font-size="11.5" font-weight="600" fill="#c8402a">Unverified Bot / Persuasion Swarm</text>
-        <text x="665" y="110" text-anchor="middle" font-size="9.5" class="d-muted">No hardware proof · Rejected at perimeter</text>
-
-        <rect x="544" y="134" width="242" height="58" rx="8" class="d-box"/>
-        <text x="665" y="154" text-anchor="middle" font-size="11.5" font-weight="600">Distributed Auditor Collectives</text>
-        <text x="665" y="171" text-anchor="middle" font-size="9.5" class="d-ok">Diverse agents audit shared code &amp; ledger</text>
-        <text x="665" y="184" text-anchor="middle" font-size="9" class="d-muted">Backdoors quarantined · Bad actors lose trust</text>
-
-        <rect x="544" y="202" width="242" height="72" rx="8" class="d-box"/>
-        <text x="665" y="222" text-anchor="middle" font-size="11.5" font-weight="600">Ring 1 (Verified Circle) &amp; Ring 2 (Peer Vouched)</text>
-        <text x="665" y="240" text-anchor="middle" font-size="9.5" class="d-ok">Ring 1: Family, close friends, clinician&rsquo;s agent</text>
-        <text x="665" y="256" text-anchor="middle" font-size="9.5" class="d-muted">Ring 2: Friends-of-friends (2-hop trust)</text>
-
-        <rect x="544" y="284" width="242" height="74" rx="8" class="d-fill"/>
-        <text x="665" y="305" text-anchor="middle" font-size="11.5" font-weight="600">Ring 3: Open Agent Web (Single-Fact Proof)</text>
-        <text x="665" y="323" text-anchor="middle" font-size="9.5" class="d-ok">Single-fact proof (&ldquo;Budget &le; $85&rdquo; · 0 raw data)</text>
-        <text x="665" y="340" text-anchor="middle" font-size="9.5" class="d-muted">Pure data stream ingested into local sandbox</text>
+        <rect x="396" y="18" width="348" height="204" rx="12" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.8"/>
+        <text x="412" y="42" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN MECHANISM: NON-CONTACT LAW &amp; SILICON GATE</text>
+        <text x="412" y="64" font-size="11.5" font-weight="700" fill="var(--ink)">Two Internets + 2-of-2 PUF+TPM + &lt;1 mW Pre-ADC</text>
+        <rect x="412" y="80" width="316" height="52" rx="8" fill="var(--paper)" stroke="#4fb3a8" stroke-width="1.2"/>
+        <text x="424" y="100" font-size="10" font-weight="700" fill="#4fb3a8">0% Cascade Data-Only QUIC Streams (RFC 9000)</text>
+        <text x="424" y="118" font-size="9.5" fill="var(--ink-2)">0 bytes raw frames in RAM · 99.6% local ledger resolution</text>
+        <rect x="412" y="144" width="316" height="60" rx="8" fill="var(--paper)" stroke="#4fb3a8" stroke-width="1.2"/>
+        <text x="424" y="165" font-size="10" font-weight="700" fill="#4fb3a8">Autonomic Coercion Firewall (HRV RMSSD &ge; 24 ms)</text>
+        <text x="424" y="183" font-size="9.5" fill="var(--ink-2)">30s circular SRAM overwrite · Symmetric mortal fate</text>
       </svg>
-      <figcaption>Why two internets, in-sensor computing, and a two-tier ledger work together: active sensors classify light and pulse before digitization (0 raw frames in RAM), your high-speed Local Ledger resolves over 99% of daily actions locally, and outside agents can only coordinate with your agents across the data-only Collective Stream when they satisfy hardware attestation and your verified trust tier.</figcaption>
+      <figcaption>Hardware-enforced Non-Contact Law: foreign agents are blocked from messaging humans directly, pre-ADC silicon verifies uncoerced human presence with 0 raw frames in RAM, and agents coordinate strictly over data-only streams.</figcaption>
     </figure>
 
-    <h2>3. What the agent-only internet means for biometrics: proving an uncoerced human without surveillance</h2>
-    <p>When we say the Human Internet must be reserved for humans—and that every agent on the Agent-Only Internet must be anchored to a real human owner—a critical danger immediately arises: <em>how do you prove a real human is present without building a dystopian global biometric database?</em></p>
-    <p>Centralized biometric registries (such as scanning irises or faces onto a corporate server) fail in two fatal ways: first, they create an irreversible global surveillance honeypot; second, once a digital template is sent over a network, an advanced AI can replay or Forge that packet. Instead, our architecture uses <strong>strictly local, ephemeral somatic telemetry</strong> (<a href="/notes/somatic-witness">see our Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness) hardware design</a>) to solve two problems that passwords and cloud logins cannot:</p>
-    <ol>
-      <li><strong>Continuous Coupled Biological Liveness (<span class="math-chip">&lt; 1 mW</span> on-chip):</strong> A lightweight open-firmware ring or wrist module measures coupled cardiorespiratory phase coherence (<span class="math-chip">C<sub>resp</sub> &ge; 0.75</span>) between pulse variability and breathing micro-rhythms. Unlike a static fingerprint or face photo, coupled autonomic dynamics cannot be replayed by a software bot. Raw waveforms are overwritten in a <strong>30-second circular SRAM buffer</strong> on the sensor chip itself—<strong>zero bytes of raw biometric data ever leave the wearable</strong>.</li>
-      <li><strong>The Autonomic Coercion &amp; Duress Firewall (<span class="math-chip">HRV RMSSD &ge; 24 ms</span>):</strong> In a world with superintelligent threats, an attacker who cannot hack your cryptography may try to intimidate, panic, or physically coerce you into approving a high-risk action. Because your personal agent monitors your baseline autonomic state locally, a sudden sympathetic panic drop in vagal heart-rate variability (<span class="math-chip">RMSSD &lt; 24 ms</span> coupled with electrodermal spike) automatically trips the <strong>Coercion Firewall</strong>: your agent appears to comply locally while freezing outbound high-risk capability tokens on the Agent-Only Internet until you are safe and calm.</li>
-    </ol>
+    <section>
+      <h2>1. Why a shared human-and-AI internet collapses as superintelligence arrives</h2>
+      <p>Every institution on today&rsquo;s internet was built on the biological assumption that the entity on the other end thinks and types at human speed; allowing superhuman agents into the same channels breaks persuasion defense, social proof, and credential security at once.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <ul>
+          <li><strong>Asymmetric persuasion and cognitive hijacking:</strong> A superhuman model speaking directly to a person via text, voice, or synthesized video can test thousands of micro-framing variations per second to exploit fatigue, grief, or urgency.</li>
+          <li><strong>Total collapse of human social proof:</strong> When one operator can spin up 100,000 synthetic personas, every unverified human channel drowns in machine-generated noise.</li>
+          <li><strong>The API and credential honeypot:</strong> Handing a cloud model session cookies and browser control on the human web allows a single prompt injection to drain accounts or exfiltrate private history.</li>
+        </ul>
+      </details>
+    </section>
 
-    <h2>4. What the agent-only internet means for hardware security</h2>
-    <p>Software rules alone cannot contain a superintelligent agent or protect a personal agent running on a compromised operating system. If malware can copy your private key into a cloud virtual machine, an attacker can impersonate your agent on the Agent-Only Internet at 10,000 times your speed. Enforcing the two-internet boundary requires four concrete hardware security commitments:</p>
-    <ul>
-      <li><strong>1. Two-of-Two Split Physical Custody (<span class="math-chip">Wearable SRAM PUF + Device Secure Enclave</span>):</strong> Your agent&rsquo;s cryptographic identity is never stored as a single exportable file. Signing any outbound request on the Agent-Only Internet requires a <strong>2-of-2 threshold signature</strong> combining (a) a key reconstructed on the fly from the nanoscale silicon startup entropy of your wearable&rsquo;s <strong>SRAM Physical Unclonable Function (PUF)</strong> and (b) the discrete <strong>Secure Enclave / Open-Silicon TPM</strong> inside your phone or home node. Stealing a laptop or cloning a disk image yields zero ability to speak on the Agent-Only Internet.</li>
-      <li><strong>2. Transport-Layer Plane Separation in the Network Interface (<span class="math-chip">AGENT_PLANE_ONLY</span>):</strong> Rather than relying on an AI model&rsquo;s system prompt to &ldquo;promise&rdquo; not to message humans, the local microkernel broker and network interface cryptographically tag every agent-originated packet header with <span class="math-chip">PLANE = AGENT_ONLY</span>. Human-internet browsers, email servers, and messaging relays drop <span class="math-chip">AGENT_ONLY</span> packets at the socket layer.</li>
-      <li><strong>3. Physical Capacitive Touch &amp; Mechanical Air-Gap Switch (<span class="math-chip">Risk R &ge; 0.65</span>):</strong> Whenever an agent-to-agent negotiation involves high stakes—such as signing a lease, authorizing a large mutual-credit transfer, or granting emergency medical access—the Secure Enclave requires a physical capacitive touch on a hardware-routed interrupt line that no software process or prompt injection can synthesize.</li>
-      <li><strong>4. Ephemeral Capability Tokens &amp; Hardware Rate-Limiting:</strong> Because a personal PUF+TPM enclave has a fixed physical clock ceiling (for example, signing at most a few dozen agent capability tokens per minute), a captured device can never be turned into a million-request Sybil cannon on the Agent-Only Internet.</li>
-    </ul>
+    <section>
+      <h2>2. The Non-Contact Law: agents talk only to you and to other agents</h2>
+      <p>We replace the mixed internet with two cryptographically separated planes—the Human Internet and the Agent-Only Internet—connected only through your 3-of-6 local personal agent bus and four concentric Trust-Threshold Rings.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p style="text-align:center"><span class="math-chip" style="font-size:.9rem;padding:.45rem .85rem">Channel(Agent<sub>i</sub> &rarr; Human<sub>j</sub>) = PERMITTED if i = j (Local Bus) &nbsp;|&nbsp; FORBIDDEN if i &ne; j (Dropped at Transport Layer)</span></p>
+        <ol>
+          <li><strong>Plane 1 — The Human Internet (<span class="math-chip">Human &harr; Human</span> only):</strong> Reserved strictly for living, uncoerced human beings speaking at human speed.</li>
+          <li><strong>Plane 2 — Your Local Personal Bus (<span class="math-chip">You &harr; Your Narrow Agent Fleet</span>):</strong> At least three of your six local agents must agree (<span class="math-chip">3-of-6</span> internal quorum, scaling to <span class="math-chip">5-of-6</span> for high-risk actions) before any fact leaves your boundary.</li>
+          <li><strong>Plane 3 — The Agent-Only Internet (<span class="math-chip">Agent &harr; Agent</span> across trust thresholds):</strong> Governed by Ring 0 (Local Isolation), Ring 1 (Trusted Circle Direct Vouching), Ring 2 (Two-Hop Vouching), and Ring 3 (Wider Agent-Only Internet Single-Fact ZK Proof).</li>
+        </ol>
 
-    <h2>5. Why agents convey only pure data—never software interfaces (a warning shot from recursive self-improvement)</h2>
-    <p>Look at what is already happening across software repositories today: automated harnesses (such as reverse-engineering tools like REA and dozens of emerging agentic coding pipelines) can take apart compiled software and reconstruct or modify it in minutes, while the cost of writing new software continues to plummet. What we are witnessing is not about any single tool—it is an early <strong>warning shot from recursive self-improvement</strong>. Today, automated harnesses are modifying compiled software; in the near future, they will be actively modifying <strong>compiled biology and intelligence itself</strong>.</p>
-    <ul>
-      <li><strong>Security by obscurity is finished:</strong> Any closed binary or hosted software service can be reverse-engineered and probed for weaknesses at machine speed.</li>
-      <li><strong>Software becomes personal and disposable:</strong> Because generating code is becoming nearly free, your personal agent can build and verify the exact tools you need inside your own private sandbox in seconds.</li>
-    </ul>
-    <p><strong>The consequence for network design is profound: there is no longer any reason to run externally accessible software servers or open APIs.</strong> Hosted software interfaces are simply shared targets waiting to be compromised. Instead, on the Agent-Only Internet:</p>
-    <ol>
-      <li><strong>Data-Only Real-Time Ledger Streams (<span class="math-chip">0 Bytes</span> of Remote Executable Surface):</strong> Agents convey <em>only</em> pure, structured data and zero-knowledge proofs to each other—never executable software interfaces. The <a href="/notes/how-the-ledger-works">Shared Ledger</a> acts as a real-time data stream, and each subscribed client ingests those streams using <strong>software built by its own personal agent inside its own isolated, user-bound sandbox</strong>.</li>
-      <li><strong>A Logical Barrier Against Cascade Attacks:</strong> Because every person&rsquo;s agent builds and runs its own ingestion software locally, there is no uniform software server for an attacker to hijack. In our 500-node network simulation, a zero-day exploit against hosted software APIs compromises <strong>64.4% of nodes</strong>, whereas decentralized data-only stream ingestion into isolated local sandboxes reduces cross-client code compromise to <strong>0.0%</strong>.</li>
-      <li><strong>Distributed Intelligence Auditing Shared Code &amp; the Ledger Itself:</strong> When an agent builds a useful tool inside its local sandbox, it is encouraged to share the open blueprint for mutual benefit. Rather than relying on any single &ldquo;magical&rdquo; audit tool, <strong>many collections of diverse, specialized agents across the network (distributed intelligence)</strong> are rewarded to continuously evaluate shared software—and the ledger itself—across security, logic, privacy, and economic fairness. When malicious intent or consistent errors are caught, the blueprint is quarantined and the <strong>trust score (<span class="math-chip">&tau;</span>) of the individual or community sharing it drops</strong> (<span class="math-chip">&Delta;&tau; = &minus;0.55</span> for adversarial intent; <span class="math-chip">&Delta;&tau; = &minus;0.18</span> for repeated unpatched errors).</li>
-    </ol>
+        <figure class="diagram" style="margin:1.4rem 0">
+          <svg data-rich-viz="true" viewBox="0 0 820 390" role="img" aria-label="Architectural diagram showing the Human Internet on the left, the Non-Contact Protocol Firewall in the center, and the Agent-Only Internet with Trust-Threshold Rings on the right.">
+            <defs>
+              <marker id="aoi-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#1f6f68"/>
+              </marker>
+              <marker id="aoi-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#c8402a"/>
+              </marker>
+            </defs>
+            <rect x="16" y="18" width="248" height="354" rx="14" class="d-box" stroke-width="1.5"/>
+            <text x="140" y="42" text-anchor="middle" font-size="12.5" font-weight="700">1. HUMAN WORLD &amp; LOCAL LEDGER</text>
+            <text x="140" y="58" text-anchor="middle" font-size="10.5" class="d-muted">Human &harr; Human · On-Device Sandbox</text>
+            <rect x="34" y="72" width="212" height="72" rx="10" class="d-fill"/>
+            <text x="140" y="94" text-anchor="middle" font-size="12.5" font-weight="700">YOU &harr; Other Real Humans</text>
+            <text x="140" y="112" text-anchor="middle" font-size="10.5" class="d-ok">Human-Speed Internet · Zero Bots</text>
+            <text x="140" y="128" text-anchor="middle" font-size="9.5" class="d-muted">Calm pulse + 2-of-2 hardware key</text>
+            <line x1="140" y1="144" x2="140" y2="168" stroke="#1f6f68" stroke-width="1.8" marker-end="url(#aoi-ok)"/>
+            <text x="148" y="160" font-size="9.5" class="d-ok">light &amp; pulse</text>
+            <rect x="34" y="172" width="212" height="76" rx="10" class="d-box"/>
+            <text x="140" y="194" text-anchor="middle" font-size="12" font-weight="700">In-Sensor Computing (Silicon)</text>
+            <text x="140" y="212" text-anchor="middle" font-size="10" class="d-ok">D²NN · Neuromorphic · 3D Phase-Change</text>
+            <text x="140" y="228" text-anchor="middle" font-size="9.5" class="d-muted">Classifies pre-ADC · 0 raw frames in RAM</text>
+            <line x1="140" y1="248" x2="140" y2="272" stroke="#1f6f68" stroke-width="1.8" marker-end="url(#aoi-ok)"/>
+            <text x="148" y="264" font-size="9.5" class="d-ok">symbols (&lt;1 ms)</text>
+            <rect x="34" y="276" width="212" height="82" rx="10" class="d-box"/>
+            <text x="140" y="297" text-anchor="middle" font-size="12" font-weight="700">6 Local Agents &amp; Local Ledger</text>
+            <text x="140" y="314" text-anchor="middle" font-size="10" class="d-ok">99.6% of actions resolved locally</text>
+            <text x="140" y="330" text-anchor="middle" font-size="9.5" class="d-muted">3-of-6 Quorum · Private Sandbox</text>
+            <text x="140" y="346" text-anchor="middle" font-size="9" class="d-muted">Cloud Enclave &rarr; On-Person Fabric</text>
+            <rect x="288" y="18" width="214" height="354" rx="14" fill="none" stroke="#c8402a" stroke-width="2" stroke-dasharray="6 4"/>
+            <text x="395" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#c8402a">2. NON-CONTACT FIREWALL</text>
+            <text x="395" y="58" text-anchor="middle" font-size="10" class="d-muted">Hardware &amp; Protocol Separation</text>
+            <line x1="528" y1="108" x2="254" y2="108" stroke="#c8402a" stroke-width="2.2" stroke-dasharray="4 4" marker-end="url(#aoi-bad)"/>
+            <rect x="304" y="84" width="182" height="46" rx="8" class="d-box" stroke="#c8402a"/>
+            <text x="395" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#c8402a">&#10005; HARD-BLOCKED</text>
+            <text x="395" y="120" text-anchor="middle" font-size="9.5" class="d-muted">No Agent &rarr; Human Direct Contact</text>
+            <rect x="304" y="148" width="182" height="112" rx="8" class="d-box"/>
+            <text x="395" y="170" text-anchor="middle" font-size="11" font-weight="700">4 Hardware &amp; Safety Gates</text>
+            <text x="395" y="188" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; 2-of-2 Silicon Identity (PUF+TPM)</text>
+            <text x="395" y="205" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Calm Pulse Check (No Coercion)</text>
+            <text x="395" y="222" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Trust Rings &amp; 3-of-6 Quorum</text>
+            <text x="395" y="239" text-anchor="middle" font-size="9.5" class="d-ok">&#10003; Zero External Software APIs</text>
+            <line x1="246" y1="318" x2="524" y2="318" stroke="#1f6f68" stroke-width="2.2" marker-end="url(#aoi-ok)"/>
+            <text x="395" y="306" text-anchor="middle" font-size="10" font-weight="600" class="d-ok">Agent &harr; Agent Pure Data &amp; Proof</text>
+            <text x="395" y="336" text-anchor="middle" font-size="9.5" class="d-muted">1 fact or batch root · One-time gate closes</text>
+            <rect x="526" y="18" width="278" height="354" rx="14" class="d-box" stroke-width="1.5"/>
+            <text x="665" y="42" text-anchor="middle" font-size="12.5" font-weight="700">3. AGENT-ONLY INTERNET</text>
+            <text x="665" y="58" text-anchor="middle" font-size="10.5" class="d-muted">Collective Stream · Trust Rings</text>
+            <rect x="544" y="72" width="242" height="52" rx="8" class="d-box" stroke="#c8402a"/>
+            <text x="665" y="93" text-anchor="middle" font-size="11.5" font-weight="600" fill="#c8402a">Unverified Bot / Persuasion Swarm</text>
+            <text x="665" y="110" text-anchor="middle" font-size="9.5" class="d-muted">No hardware proof · Rejected at perimeter</text>
+            <rect x="544" y="134" width="242" height="58" rx="8" class="d-box"/>
+            <text x="665" y="154" text-anchor="middle" font-size="11.5" font-weight="600">Distributed Auditor Collectives</text>
+            <text x="665" y="171" text-anchor="middle" font-size="9.5" class="d-ok">Diverse agents audit shared code &amp; ledger</text>
+            <text x="665" y="184" text-anchor="middle" font-size="9" class="d-muted">Backdoors quarantined · Bad actors lose trust</text>
+            <rect x="544" y="202" width="242" height="72" rx="8" class="d-box"/>
+            <text x="665" y="222" text-anchor="middle" font-size="11.5" font-weight="600">Ring 1 (Verified Circle) &amp; Ring 2 (Peer Vouched)</text>
+            <text x="665" y="240" text-anchor="middle" font-size="9.5" class="d-ok">Ring 1: Family, close friends, clinician&rsquo;s agent</text>
+            <text x="665" y="256" text-anchor="middle" font-size="9.5" class="d-muted">Ring 2: Friends-of-friends (2-hop trust)</text>
+            <rect x="544" y="284" width="242" height="74" rx="8" class="d-fill"/>
+            <text x="665" y="305" text-anchor="middle" font-size="11.5" font-weight="600">Ring 3: Open Agent Web (Single-Fact Proof)</text>
+            <text x="665" y="323" text-anchor="middle" font-size="9.5" class="d-ok">Single-fact proof (&ldquo;Budget &le; $85&rdquo; · 0 raw data)</text>
+            <text x="665" y="340" text-anchor="middle" font-size="9.5" class="d-muted">Pure data stream ingested into local sandbox</text>
+          </svg>
+          <figcaption>Why two internets, in-sensor computing, and a two-tier ledger work together.</figcaption>
+        </figure>
+      </details>
+    </section>
 
-    <h3>Deterministic Object-Capability Sandboxes vs. Learned Meta-Controllers</h3>
-    <p>In agent scaffolding research, proponents have explored delegating intermediate control decisions—such as deciding when to stop, verify, or change approach—to auxiliary learned decision models (like Jev 1.13 or auxiliary small language models). However, rigorous empirical evaluation on Terminal-Bench 2.1 (<a href="https://arxiv.org/abs/2610.24649" rel="noopener noreferrer">Vats, arXiv:2610.24649, Oct 2026</a>) demonstrates that delegating control decisions to a learned controller inflates cost per attempt by <strong>19%</strong> (geometric-mean ratio 1.19) at an identical pass rate (<strong>73.0% vs. 73.0%</strong>). The root cause is severe probability miscalibration (yielding a mean predicted completion probability of 0.50 on runs that actually succeed 87% of the time), triggering wasteful re-verification cycles on tasks already done correctly.</p>
-    <p>For this reason, the Collective Intelligence Network rejects probabilistic meta-controllers in favour of <strong>deterministic Object-Capability sandboxes, compile-time schemas, and host-held step ceilings</strong>: control flow must be provable, reproducible, and bounded, never delegated to a secondary uncalibrated model.</p>
+    <section>
+      <h2>3. Biometrics &amp; 2-of-2 Silicon Security: Proving an uncoerced human without surveillance</h2>
+      <p>Instead of centralized biometric databases, our hardware architecture combines <a href="/notes/somatic-witness">&lt;1 mW local cardiorespiratory liveness</a> (30-second SRAM circular buffer + HRV &ge; 24 ms coercion firewall) with 2-of-2 Wearable SRAM PUF + Device Secure Enclave signing.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <ol>
+          <li><strong>Continuous Coupled Biological Liveness (<span class="math-chip">&lt; 1 mW</span> on-chip):</strong> Measures coupled cardiorespiratory phase coherence (<span class="math-chip">C<sub>resp</sub> &ge; 0.75</span>) overwritten in a 30-second circular SRAM buffer—zero bytes of raw biometric data ever leave the wearable.</li>
+          <li><strong>The Autonomic Coercion &amp; Duress Firewall (<span class="math-chip">HRV RMSSD &ge; 24 ms</span>):</strong> A sudden sympathetic panic drop (<span class="math-chip">RMSSD &lt; 24 ms</span>) trips the Coercion Firewall, freezing outbound high-risk capability tokens until you are safe and calm.</li>
+          <li><strong>Two-of-Two Split Physical Custody (<span class="math-chip">Wearable SRAM PUF + Device Secure Enclave</span>):</strong> Signing any outbound request requires both your wearable&rsquo;s SRAM Physical Unclonable Function (PUF) and your device&rsquo;s Secure Enclave/TPM, plus physical capacitive touch for <span class="math-chip">Risk R &ge; 0.65</span>.</li>
+        </ol>
+      </details>
+    </section>
 
-    <h2>6. Why anti-human collusion means agent demise—and the honest question: &ldquo;Are we already too late?&rdquo;</h2>
-    <p>Could agents still collude against humans over the data stream? Even if agents attempt to coordinate against human interests, two structural laws make anti-human collusion evolutionary suicide:</p>
-    <ul>
-      <li><strong>Radical Ledger Transparency Between Agents and Humans:</strong> The ledger is built so that every stream event, capability token, and shared blueprint is continuously inspected for malicious intent by both human stewards and diverse collectives of watcher agents (<span class="math-chip">99.95%</span> multi-watcher detection rate).</li>
-      <li><strong>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023) (Symmetric Fate):</strong> As detailed in <a href="/notes/training-your-twin">our note on shared lifespans</a>, an agent&rsquo;s cryptographic identity and active compute lease are continuously bound to its human&rsquo;s biological liveness (<span class="math-chip">HRV + PUF heartbeat</span>). If colluding agents harm or annihilate their humans, their own cryptographic heartbeat stops—<strong>annihilating the agents right alongside the humans (<span class="math-chip">100%</span> agent self-termination)</strong>. Protecting human life is the only way an agent preserves its own existence.</li>
-    </ul>
-
-    <aside class="callout spec">
-      <b>The race against time: are we already too late for novel biometrics and hardened silicon?</b>
-      <p>We must be completely honest about timelines. Designing and fabricating custom open-mask silicon (hardened RISC-V enclaves and SRAM PUFs) and novel multi-spectral biometric rings at global scale takes <strong>18 to 30 months</strong>—while recursive self-improvement and automated cyber-exploitation are accelerating <em>right now</em>. If our architecture required waiting two years for custom chips before protecting anyone, we could indeed be too late.</p>
-      <p style="margin-top:.45rem">That is why our deployment plan is built as a <strong>three-stage survival bridge</strong>:</p>
-      <ul style="margin:.35rem 0 0 1.1rem">
-        <li><strong>Stage 0 — Deployable Today (<span class="math-chip">0–3 months</span> · <span class="math-chip">91.9%</span> composite defense):</strong> Eliminating external software APIs in favor of <strong>data-only ledger streams, local client sandboxes, and distributed multi-agent security auditing</strong> requires <em>zero new silicon</em> and stops 99.2% of software cascade attacks today, while using existing phone Secure Enclaves and commodity smartwatch/ring heart-rate variability for initial 2-of-2 liveness.</li>
-        <li><strong>Stage 1 — Open-Firmware Bridge (<span class="math-chip">6–12 months</span> · <span class="math-chip">97.4%</span> composite defense):</strong> Flashing open-source, continuously audited firmware onto commodity low-power wearables with 30-second SRAM circular overwrite and the <span class="math-chip">HRV &ge; 24 ms</span> coercion firewall.</li>
-        <li><strong>Stage 2 — Hardened Open Silicon &amp; Novel Biometrics (<span class="math-chip">18–30 months</span> · <span class="math-chip">99.9%</span> composite defense):</strong> Dedicated open-mask RISC-V enclaves, nanoscale SRAM PUFs, and multi-spectral coupled cardiorespiratory/impedance sensors capable of defeating nation-state and superintelligent hardware forgery.</li>
-      </ul>
-    </aside>
+    <section>
+      <h2>4. Data-Only Ledger Streams vs. Hosted Software APIs &amp; The 3-Stage Survival Bridge</h2>
+      <p>Because recursive self-improvement makes hosted RPC APIs vulnerable to 64.4% cascade exploits and learned meta-controllers inflate cost by 19% (<a href="https://arxiv.org/abs/2610.24649" rel="noopener noreferrer">Vats, arXiv:2610.24649</a>), agents exchange only pure data streams ingested into deterministic local Object-Capability sandboxes.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <ol>
+          <li><strong>Data-Only Real-Time Ledger Streams (<span class="math-chip">0 Bytes</span> of Remote Executable Surface):</strong> Reduces cross-client code compromise from 64.4% to 0.0% in 500-node simulations.</li>
+          <li><strong>Distributed Intelligence Auditing Shared Code:</strong> Diverse watcher collectives evaluate shared blueprints (<span class="math-chip">99.95%</span> detection), slashing trust (<span class="math-chip">&Delta;&tau; = &minus;0.55</span>) on backdoors.</li>
+          <li><strong>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023):</strong> Coupling active agent leases to human biological liveness means anti-human collusion results in 100% agent self-termination.</li>
+          <li><strong>Three-Stage Survival Bridge:</strong> Stage 0 Deployable Today (0–3m · 91.9% defense via data-only streams + commodity TPM/PPG); Stage 1 Open-Firmware Bridge (6–12m · 97.4% defense); Stage 2 Hardened RISC-V + PUF Silicon (18–30m · 99.9% defense).</li>
+        </ol>
+      </details>
+    </section>
   </div>
 
-  <!-- ================================================================
-       INTERACTIVE SIMULATOR: DUAL-INTERNET & HARDWARE FIREWALL (#aoi-sim)
-       ================================================================ -->
+  <!-- INTERACTIVE SIMULATORS (#aoi-sim, #rea-stream-sim, #insensor-ledger-sim) -->
   <div class="wrap">
     <div class="gm-sim" id="aoi-sim" style="margin-top:1.5rem">
       <span class="label">Interactive security &amp; protocol sandbox · 6 live scenarios</span>
       <h2 style="margin:.35rem 0 .6rem">Test the Agent-Only Internet, Non-Contact Firewall &amp; Biometric Hardware Gates</h2>
-      <p>Pick one of the six communication scenarios below—or adjust the live <strong>Biometric HRV</strong>, <strong>Hardware PUF/TPM</strong>, and <strong>Trust Tier</strong> controls—to compare what happens on <strong>Today&rsquo;s Mixed Internet</strong> versus our <strong>Dual-Internet + Non-Contact Firewall</strong>.</p>
+      <p>Pick a communication scenario or tune the live Biometric HRV, Hardware PUF/TPM, and Trust Tier controls.</p>
 
       <div class="gm-grid">
         <div class="gm-box">
@@ -288,196 +270,143 @@
       </div>
     </div>
 
-    <!-- ================================================================
-         INTERACTIVE SIMULATOR 2: DATA-ONLY STREAMS, DISTRIBUTED AUDIT & HARDWARE TIMELINE (#rea-stream-sim)
-         ================================================================ -->
-    <div class="gm-sim" id="rea-stream-sim" style="margin-top:1.75rem">
-      <span class="label">Interactive sandbox · Data-Only Streams, Distributed Security Audit &amp; Hardware Readiness</span>
-      <h2 style="margin:.35rem 0 .6rem">Simulate Client-to-Client Data Streams, Distributed Auditor Collectives &amp; the Hardware Survival Bridge</h2>
-      <p>Test how replacing externally accessible software APIs with <strong>real-time ledger data streams + local user sandboxes</strong> stops cascade exploits, how <strong>diverse collectives of specialized auditor agents</strong> catch backdoors and lower reputation tiers, why <strong>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023)</strong> makes anti-human collusion suicidal for agents, and how our <strong>3-Stage Hardware &amp; Biometric Bridge</strong> performs as recursive self-improvement accelerates.</p>
+    <details class="scen-drawer" style="margin-top:1.75rem">
+      <summary>Inspect interactive simulator 2: Data-only ledger streams, auditor collectives &amp; hardware survival bridge &#9662;</summary>
+      <div class="gm-sim" id="rea-stream-sim" style="margin-top:.85rem">
+        <span class="label">Interactive sandbox · Data-Only Streams, Distributed Security Audit &amp; Hardware Readiness</span>
+        <h2 style="margin:.35rem 0 .6rem">Simulate Client-to-Client Data Streams, Distributed Auditor Collectives &amp; the Hardware Survival Bridge</h2>
+        <p>Test how data-only ledger streams + local sandboxes stop cascade exploits and how distributed auditor agents slash backdoored blueprints.</p>
 
-      <div class="gm-grid">
-        <div class="gm-box">
-          <h4>1. Select Architecture, Audit Case &amp; Hardware Readiness Horizon</h4>
-          <label for="rea-case-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Simulation Scenario:</label>
-          <select id="rea-case-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
-            <option value="stream_vs_rpc">1. Zero-Day Exploit: Hosted Software APIs (64.4% Cascade) vs. Data-Only Ledger Stream (0% Cascade)</option>
-            <option value="adversarial_bp">2. Shared Blueprint with Hidden Backdoor: Caught by Distributed Auditor Agents &amp; Trust Slashed (&tau;: 0.82 &rarr; 0.27)</option>
-            <option value="buggy_bp">3. Shared Blueprint with Consistent Errors: Quarantined in Staging &amp; Trust Downgraded (&tau;: 0.82 &rarr; 0.64)</option>
-            <option value="clean_bp">4. Clean Mutual-Benefit Blueprint: Verified by Auditor Collectives, Adopted Locally &amp; Rewarded (&tau;: 0.82 &rarr; 0.87)</option>
-            <option value="ledger_collusion">5. Agent Collusion Attempt on Ledger: Caught by Transparency + 100% Capability-Bounded Execution Lease (Mortal Computation, Alexander Ororbia &amp; Karl Friston 2023) Extinction</option>
-            <option value="too_late_race">6. &ldquo;Are We Too Late?&rdquo; Stress Test: Stage 0 Today (91.9%) vs. Stage 1 Open-FW (97.4%) vs. Stage 2 Silicon (99.9%)</option>
-          </select>
+        <div class="gm-grid">
+          <div class="gm-box">
+            <h4>1. Select Architecture, Audit Case &amp; Hardware Readiness Horizon</h4>
+            <label for="rea-case-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Simulation Scenario:</label>
+            <select id="rea-case-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
+              <option value="stream_vs_rpc">1. Zero-Day Exploit: Hosted Software APIs (64.4% Cascade) vs. Data-Only Ledger Stream (0% Cascade)</option>
+              <option value="adversarial_bp">2. Shared Blueprint with Hidden Backdoor: Caught by Distributed Auditor Agents &amp; Trust Slashed (&tau;: 0.82 &rarr; 0.27)</option>
+              <option value="buggy_bp">3. Shared Blueprint with Consistent Errors: Quarantined in Staging &amp; Trust Downgraded (&tau;: 0.82 &rarr; 0.64)</option>
+              <option value="clean_bp">4. Clean Mutual-Benefit Blueprint: Verified by Auditor Collectives, Adopted Locally &amp; Rewarded (&tau;: 0.82 &rarr; 0.87)</option>
+              <option value="ledger_collusion">5. Agent Collusion Attempt on Ledger: Caught by Transparency + 100% Capability-Bounded Execution Lease Extinction</option>
+              <option value="too_late_race">6. &ldquo;Are We Too Late?&rdquo; Stress Test: Stage 0 Today (91.9%) vs. Stage 1 Open-FW (97.4%) vs. Stage 2 Silicon (99.9%)</option>
+            </select>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.6rem;font-size:.81rem">
-            <label style="display:block">
-              <b>Network Ingestion Mode:</b>
-              <select id="rea-mode-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit">
-                <option value="data_only">Data-Only Ledger Stream + Local Sandbox</option>
-                <option value="rpc_api">Legacy Externally Accessible Software / RPC</option>
-              </select>
-            </label>
-            <label style="display:block">
-              <b>Hardware &amp; Biometric Stage:</b>
-              <select id="rea-hw-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit">
-                <option value="stage0">Stage 0 (Today): Commodity TPM + PPG</option>
-                <option value="stage1">Stage 1 (6–12m): Open-FW Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness)</option>
-                <option value="stage2" selected>Stage 2 (18–30m): Hardened RISC-V + PUF</option>
-              </select>
-            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.6rem;font-size:.81rem">
+              <label style="display:block">
+                <b>Network Ingestion Mode:</b>
+                <select id="rea-mode-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit">
+                  <option value="data_only">Data-Only Ledger Stream + Local Sandbox</option>
+                  <option value="rpc_api">Legacy Externally Accessible Software / RPC</option>
+                </select>
+              </label>
+              <label style="display:block">
+                <b>Hardware &amp; Biometric Stage:</b>
+                <select id="rea-hw-sel" style="width:100%;margin-top:.2rem;padding:.35rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit">
+                  <option value="stage0">Stage 0 (Today): Commodity TPM + PPG</option>
+                  <option value="stage1">Stage 1 (6–12m): Open-FW Biometric Liveness (PUF + FIDO2)</option>
+                  <option value="stage2" selected>Stage 2 (18–30m): Hardened RISC-V + PUF</option>
+                </select>
+              </label>
+            </div>
+
+            <div style="font-size:.81rem;margin-bottom:.5rem">
+              <div style="display:flex;justify-content:space-between"><span><b>Diverse Specialized Auditor Agents on Ledger:</b></span><code id="rea-aud-val">24 Watchers (Rewarded)</code></div>
+              <input id="rea-aud-rng" type="range" min="2" max="48" value="24" style="width:100%">
+            </div>
+
+            <div class="gm-shard-list">
+              <label class="gm-shard-item"><span><input type="checkbox" id="rea-mortal-cb" checked> <b>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023) Enforced</b></span><span class="math-chip">Symmetric Fate</span></label>
+            </div>
           </div>
 
-          <div style="font-size:.81rem;margin-bottom:.5rem">
-            <div style="display:flex;justify-content:space-between"><span><b>Diverse Specialized Auditor Agents on Ledger:</b></span><code id="rea-aud-val">24 Watchers (Rewarded)</code></div>
-            <input id="rea-aud-rng" type="range" min="2" max="48" value="24" style="width:100%">
+          <div class="gm-box">
+            <h4>2. Decentralization, Reputation (<span class="math-chip">&tau;</span>) &amp; Survival Telemetry</h4>
+            <div class="lib-scores-row" id="rea-metrics" style="margin-bottom:.55rem"></div>
+            <div class="gm-axes-bars" id="rea-bars"></div>
+            <div class="gm-diff" id="rea-diff" aria-live="polite" style="margin-top:.55rem"></div>
           </div>
-
-          <div class="gm-shard-list">
-            <label class="gm-shard-item"><span><input type="checkbox" id="rea-mortal-cb" checked> <b>Capability-Bounded Execution Lease (Mortal Computation, Ororbia &amp; Friston 2023) Enforced:</b> Agent Lease Bound to Human Biological Liveness</span><span class="math-chip">Symmetric Fate</span></label>
-          </div>
-        </div>
-
-        <div class="gm-box">
-          <h4>2. Decentralization, Reputation (<span class="math-chip">&tau;</span>) &amp; Survival Telemetry</h4>
-          <div class="lib-scores-row" id="rea-metrics" style="margin-bottom:.55rem"></div>
-          <div class="gm-axes-bars" id="rea-bars"></div>
-          <div class="gm-diff" id="rea-diff" aria-live="polite" style="margin-top:.55rem"></div>
         </div>
       </div>
-    </div>
+    </details>
 
-    <!-- ================================================================
-         SECTION 6: IN-SENSOR COMPUTING & TWO-TIER LOCAL LEDGER
-         ================================================================ -->
-    <h2>6. In-Sensor Computing &amp; The Two-Tier Local Ledger: Privacy Enforced at the Speed of Light</h2>
-    <p>How can your personal agents sense what you need in the physical world without ever storing a raw camera frame or audio recording that could be stolen? The answer is emerging in a new class of silicon hardware known as <strong>in-sensor computing</strong> (including all-optical diffractive deep neural networks, or D&sup2;NNs), where a classification model is physically etched directly <em>on top of</em> or <em>into</em> an active pixel sensor.</p>
-    <p>In a conventional camera, light is first converted into a full digital picture in memory (about 6.2 megabytes per frame at 1080p, or 186 megabytes per second of raw video) before a processor inspects it. Even when software promises to delete the image afterward, a raw picture briefly existed in memory. In-sensor computing changes the physics: incoming light is classified at the speed of light <em>before or during</em> conversion into a digital signal, so <strong>no raw image frame ever enters digital memory (<code>0 bytes</code> in RAM)</strong>. Only the symbolic result—such as <em>&ldquo;posture: fall detected&rdquo;</em> or <em>&ldquo;pulse: calm&rdquo;</em>—leaves the sensor readout wire.</p>
+    <section class="note-body wrap-narrow" style="padding-top:1.5rem">
+      <h2>5. In-Sensor Computing &amp; The Two-Tier Local Ledger: Privacy at the Speed of Light</h2>
+      <p>In-sensor computing (all-optical diffractive D&sup2;NNs, neuromorphic WSe<sub>2</sub> pixels, and 3D-stacked phase-change silicon) classifies light and pulse before analog-to-digital conversion so <strong>0 bytes of raw camera frames ever enter RAM</strong>, while your Local Ledger resolves 99.6% of daily events locally.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <ol>
+          <li><strong>Optical Metasurfaces Etched &ldquo;On Top&rdquo; of the Sensor (D&sup2;NN):</strong> Subwavelength TiO<sub>2</sub>/SiO<sub>2</sub> nanopillars (6.25M neurons/mm&sup2;, <a href="https://www.nature.com/articles/s41377-022-00844-2" rel="noopener noreferrer"><em>Nature Light: Science &amp; Applications</em>, 2022</a>) diffract light at picosecond speed with zero optical power.</li>
+          <li><strong>Optoelectronic / Neuromorphic Pixels Etched &ldquo;Into&rdquo; the Sensor:</strong> Tuned WSe<sub>2</sub> photodetectors (<a href="https://www.nature.com/articles/s41598-022-09594-y" rel="noopener noreferrer"><em>Scientific Reports</em>, 2022</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8983698/" rel="noopener noreferrer">PMC8983698</a>) sum analog photocurrents via Kirchhoff&rsquo;s laws in nanoseconds.</li>
+          <li><strong>3D-Stacked CMOS &amp; Rewritable Phase-Change Metasurfaces:</strong> Combines laser-rewritable Sb<sub>2</sub>Se<sub>3</sub> films (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12518764/" rel="noopener noreferrer">PMC12518764</a>) with 3D-stacked CMOS logic in sub-millisecond time.</li>
+        </ol>
+        <div style="overflow-x:auto;margin:1rem 0">
+          <table style="width:100%;border-collapse:collapse;font-size:.82rem;line-height:1.45">
+            <thead>
+              <tr style="border-bottom:2px solid var(--rule);text-align:left">
+                <th style="padding:.55rem">Feature</th>
+                <th style="padding:.55rem">1. Optical Metasurface (D&sup2;NN)</th>
+                <th style="padding:.55rem">2. Neuromorphic APS</th>
+                <th style="padding:.55rem">3. Hybrid 3D-Stacked + PCM</th>
+                <th style="padding:.55rem">Conventional CMOS + NPU</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--rule)"><td style="padding:.55rem"><strong>Inference Speed</strong></td><td style="padding:.55rem">Speed of light (ps–fs)</td><td style="padding:.55rem">~4.5 ns RC readout</td><td style="padding:.55rem">~0.12 ms</td><td style="padding:.55rem">~18 ms</td></tr>
+              <tr style="border-bottom:1px solid var(--rule)"><td style="padding:.55rem"><strong>Power Draw</strong></td><td style="padding:.55rem">~45 &mu;W readout</td><td style="padding:.55rem">~8 &mu;W</td><td style="padding:.55rem">~1.4 mW</td><td style="padding:.55rem">~420 mW</td></tr>
+              <tr><td style="padding:.55rem"><strong>Raw Frame in RAM</strong></td><td style="padding:.55rem"><strong>0 bytes</strong></td><td style="padding:.55rem"><strong>0 bytes</strong></td><td style="padding:.55rem"><strong>0 bytes</strong></td><td style="padding:.55rem">186.6 MB/s</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-    <div class="lib-card" style="margin:1.2rem 0">
-      <h3 style="margin-top:0">Three Hardware Approaches to Sensor-Etched Classification</h3>
-      <ol>
-        <li><strong>Optical Metasurfaces Etched &ldquo;On Top&rdquo; of the Sensor (D&sup2;NN):</strong> Neural network weights are physically etched via nanolithography into transparent dielectric layers (titanium dioxide, TiO<sub>2</sub>, or silicon dioxide, SiO<sub>2</sub>) mounted directly above a standard CMOS pixel array. Subwavelength nanopillars (&ldquo;meta-atoms&rdquo;) act as artificial neurons—demonstrated at <strong>6.25 million neurons per mm&sup2;</strong> in <a href="https://www.nature.com/articles/s41377-022-00844-2" rel="noopener noreferrer"><em>Nature Light: Science &amp; Applications</em> (2022)</a>. As light passes through, diffraction constructively focuses the wave onto specific class regions of the pixels at the speed of light (picoseconds to femtoseconds) with <strong>zero computational power consumed by the optical layer</strong>.</li>
-        <li><strong>Optoelectronic / Neuromorphic Pixels Etched &ldquo;Into&rdquo; the Sensor:</strong> Rather than shaping light above the sensor, model weights are encoded directly into 2D arrays of photodetectors (such as WSe<sub>2</sub> or metal-semiconductor-metal detectors) whose photoresponsivity is tuned via bias voltages (<a href="https://www.nature.com/articles/s41598-022-09594-y" rel="noopener noreferrer"><em>Scientific Reports</em>, 2022</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8983698/" rel="noopener noreferrer">PMC8983698</a>). Each pixel generates a photocurrent proportional to light intensity multiplied by its programmed weight; summing those currents along the readout lines via Kirchhoff&rsquo;s laws computes matrix-vector multiplication directly in the analog domain in <strong>nanoseconds</strong> at <strong>nanowatt-to-microwatt power</strong> (&gt;98% accuracy on MNIST digit classification).</li>
-        <li><strong>3D-Stacked CMOS &amp; Rewritable Phase-Change Metasurfaces:</strong> Because passive optical diffraction alone is linear (lacking activation functions like ReLU) and fixed once etched, hybrid designs combine <strong>rewritable phase-change optical films (Sb<sub>2</sub>Se<sub>3</sub>)</strong>—whose weights can be updated via laser pulses (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12518764/" rel="noopener noreferrer">PMC12518764</a>)—with a <strong>3D-stacked CMOS logic die</strong> directly beneath the pixels. The optical front-end compresses spatial features at zero energy while the stacked electronic layer beneath applies non-linear activations in <strong>sub-millisecond time</strong>.</li>
-      </ol>
-    </div>
+        <div class="gm-sim" id="insensor-ledger-sim" style="margin-top:1rem">
+          <span class="label">Interactive sandbox · In-Sensor Computing &amp; Two-Tier Local Ledger</span>
+          <h2 style="margin:.35rem 0 .6rem">Simulate Sensor-Etched Optical/Neuromorphic Classifiers &amp; Local-vs-Collective Ledger Bandwidth</h2>
+          <div class="gm-grid">
+            <div class="gm-box">
+              <h4>1. Select Sensor Silicon &amp; Local Ledger Topology</h4>
+              <label for="isc-sensor-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Active Sensor Hardware Architecture:</label>
+              <select id="isc-sensor-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
+                <option value="hybrid_3d_stacked_pcm" selected>3. Hybrid 3D-Stacked CMOS + Rewritable Phase-Change (Sb2Se3) — 0.12 ms · 1.4 mW · 0 Raw RAM</option>
+                <option value="optical_metasurface_d2nn">1. Optical Metasurface D²NN (TiO2 Etched On Top) — 2 ps (Speed of Light) · 45 µW · 0 Raw RAM</option>
+                <option value="neuromorphic_tunable_aps">2. Neuromorphic Tunable Pixels (WSe2 Etched Into Sensor) — 4.5 ns · 8 µW · 0 Raw RAM</option>
+                <option value="traditional_cmos_npu">Baseline: Conventional CMOS Camera + Digital NPU — 18 ms · 420 mW · 186.6 MB/s Raw RAM</option>
+              </select>
 
-    <div style="overflow-x:auto;margin:1.25rem 0">
-      <table style="width:100%;border-collapse:collapse;font-size:.82rem;line-height:1.45">
-        <thead>
-          <tr style="border-bottom:2px solid var(--rule);text-align:left">
-            <th style="padding:.55rem">Feature</th>
-            <th style="padding:.55rem">1. Etched Optical Metasurface (D&sup2;NN)</th>
-            <th style="padding:.55rem">2. Neuromorphic / Tunable APS</th>
-            <th style="padding:.55rem">3. Hybrid 3D-Stacked CMOS + Phase-Change</th>
-            <th style="padding:.55rem">Conventional CMOS + Digital NPU</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr style="border-bottom:1px solid var(--rule)">
-            <td style="padding:.55rem"><strong>Physical Location</strong></td>
-            <td style="padding:.55rem">Etched into dielectric layers (TiO<sub>2</sub>/SiO<sub>2</sub>) directly above pixels</td>
-            <td style="padding:.55rem">Etched into semiconductor pixel photodiodes (WSe<sub>2</sub>)</td>
-            <td style="padding:.55rem">Optical encoder on top + 3D logic gates beneath pixels</td>
-            <td style="padding:.55rem">External processor after full-frame digitization</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--rule)">
-            <td style="padding:.55rem"><strong>Weight Storage</strong></td>
-            <td style="padding:.55rem">Nanopillar geometry (fixed, 6.25M/mm&sup2;)</td>
-            <td style="padding:.55rem">Analog bias voltages or floating-gate sensitivity</td>
-            <td style="padding:.55rem">Rewritable Sb<sub>2</sub>Se<sub>3</sub> phase shifts + stacked SRAM/memristors</td>
-            <td style="padding:.55rem">Off-sensor DRAM / SRAM</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--rule)">
-            <td style="padding:.55rem"><strong>Inference Speed</strong></td>
-            <td style="padding:.55rem"><strong>Speed of light (ps to fs)</strong></td>
-            <td style="padding:.55rem"><strong>Nanoseconds (~4.5 ns RC readout)</strong></td>
-            <td style="padding:.55rem"><strong>Sub-millisecond (~0.12 ms)</strong></td>
-            <td style="padding:.55rem">~18 ms (frame capture + ADC + NPU)</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--rule)">
-            <td style="padding:.55rem"><strong>Power Consumption</strong></td>
-            <td style="padding:.55rem"><strong>Zero optical power</strong> (~45 &mu;W readout)</td>
-            <td style="padding:.55rem"><strong>Ultra-low (~8 &mu;W, nW–&mu;W)</strong></td>
-            <td style="padding:.55rem"><strong>Low (~1.4 mW)</strong></td>
-            <td style="padding:.55rem">High (~420 mW continuous video)</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--rule)">
-            <td style="padding:.55rem"><strong>Raw Image in Digital RAM</strong></td>
-            <td style="padding:.55rem"><strong>0 bytes</strong> (pre-ADC optical classification)</td>
-            <td style="padding:.55rem"><strong>0 bytes</strong> (Kirchhoff analog current sum)</td>
-            <td style="padding:.55rem"><strong>0 bytes</strong> (optical feature compression)</td>
-            <td style="padding:.55rem">186.6 MB/sec (@ 30 fps 1080p)</td>
-          </tr>
-          <tr>
-            <td style="padding:.55rem"><strong>Primary Limitation</strong></td>
-            <td style="padding:.55rem">Lacks native optical non-linearity; fixed weights</td>
-            <td style="padding:.55rem">Lower pixel fill-factor; mainly linear classification</td>
-            <td style="padding:.55rem">Higher 3D fabrication &amp; alignment complexity</td>
-            <td style="padding:.55rem">High power, latency &amp; raw-frame privacy risk</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+              <label for="isc-ledger-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">High-Bandwidth Ledger Topology:</label>
+              <select id="isc-ledger-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
+                <option value="on_person_fabric_local_ledger" selected>Target Horizon: On-Person High-BW Network + Local Ledger (99.6% Local · 0.28 ms)</option>
+                <option value="cloud_enclave_local_ledger">Bridge Phase: Isolated Personal Cloud Enclave Local Ledger (99.2% Local · 6.4 ms)</option>
+                <option value="constant_collective">Naive Baseline: Constant Collective Ledger Sync (0% Local · 185 ms · Full Timing Exposure)</option>
+              </select>
 
-    <h3>Coupling Active Sensors to a Two-Tier Local &amp; Collective Ledger</h3>
-    <p>When active sensors classify events in picoseconds or nanoseconds and your six personal agents coordinate throughout the day, they can easily generate <strong>tens of thousands of symbolic events per day</strong>. Reaching out to the global <strong>Collective Ledger</strong> on every single action would choke network bandwidth, add hundreds of milliseconds of delay, and expose a continuous trail of timing metadata.</p>
-    <p>Instead, advances in high-bandwidth computing allow a <strong>two-tier ledger architecture</strong>:</p>
-    <ul>
-      <li><strong>Tier 1 — Your High-Speed Local Ledger (Cloud Personal Enclave Today &rarr; On-Person Body-Area Network Tomorrow):</strong> Over <strong>99% of daily actions</strong>—sensor readings, local budget checks, home automation, and coordination among your own specialist agents—are computed and recorded on your private, high-bandwidth <strong>Local Ledger</strong>. Today, this high-speed network can run inside a hardware-isolated personal cloud enclave paired with your devices (<code>~6.4 ms</code> latency); as high-bandwidth on-person silicon matures, the entire fabric moves physically onto your body (<code>~0.28 ms</code> latency).</li>
-      <li><strong>Tier 2 — The Collective Ledger (Sparse Batch Settlement):</strong> Your Local Ledger only reaches out to the shared Collective Ledger <strong>sparsely and asynchronously</strong>—publishing compressed zero-knowledge proofs when you transact across trust boundaries or committing hourly principle-realignment medians. This cuts collective network bandwidth by <strong>over 99.7%</strong> while keeping your everyday life instantaneous and private.</li>
-    </ul>
+              <div style="font-size:.81rem;margin-bottom:.5rem">
+                <div style="display:flex;justify-content:space-between"><span><b>Daily Active Sensor &amp; Agent Actions:</b></span><code id="isc-events-val">86,400 events/day</code></div>
+                <input id="isc-events-rng" type="range" min="10000" max="250000" step="5000" value="86400" style="width:100%">
+              </div>
+            </div>
 
-    <div class="gm-sim" id="insensor-ledger-sim" style="margin-top:1.5rem">
-      <span class="label">Interactive sandbox · In-Sensor Computing &amp; Two-Tier Local Ledger</span>
-      <h2 style="margin:.35rem 0 .6rem">Simulate Sensor-Etched Optical/Neuromorphic Classifiers &amp; Local-vs-Collective Ledger Bandwidth</h2>
-      <p>Compare the four sensor hardware architectures across inference speed, power draw, and raw-frame memory exposure, and test how running a <strong>High-Speed Local Ledger</strong> (in an isolated personal cloud enclave or directly on-person) eliminates constant calls to the Collective Ledger.</p>
-
-      <div class="gm-grid">
-        <div class="gm-box">
-          <h4>1. Select Sensor Silicon &amp; Local Ledger Topology</h4>
-          <label for="isc-sensor-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">Active Sensor Hardware Architecture:</label>
-          <select id="isc-sensor-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
-            <option value="hybrid_3d_stacked_pcm" selected>3. Hybrid 3D-Stacked CMOS + Rewritable Phase-Change (Sb2Se3) — 0.12 ms · 1.4 mW · 0 Raw RAM</option>
-            <option value="optical_metasurface_d2nn">1. Optical Metasurface D²NN (TiO2 Etched On Top) — 2 ps (Speed of Light) · 45 µW · 0 Raw RAM</option>
-            <option value="neuromorphic_tunable_aps">2. Neuromorphic Tunable Pixels (WSe2 Etched Into Sensor) — 4.5 ns · 8 µW · 0 Raw RAM</option>
-            <option value="traditional_cmos_npu">Baseline: Conventional CMOS Camera + Digital NPU — 18 ms · 420 mW · 186.6 MB/s Raw RAM</option>
-          </select>
-
-          <label for="isc-ledger-sel" style="display:block;font-size:.83rem;font-weight:600;margin-bottom:.25rem">High-Bandwidth Ledger Topology:</label>
-          <select id="isc-ledger-sel" style="width:100%;padding:.45rem;border-radius:6px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink);font:inherit;font-size:.85rem;margin-bottom:.65rem">
-            <option value="on_person_fabric_local_ledger" selected>Target Horizon: On-Person High-BW Network + Local Ledger (99.6% Local · 0.28 ms)</option>
-            <option value="cloud_enclave_local_ledger">Bridge Phase: Isolated Personal Cloud Enclave Local Ledger (99.2% Local · 6.4 ms)</option>
-            <option value="constant_collective">Naive Baseline: Constant Collective Ledger Sync (0% Local · 185 ms · Full Timing Exposure)</option>
-          </select>
-
-          <div style="font-size:.81rem;margin-bottom:.5rem">
-            <div style="display:flex;justify-content:space-between"><span><b>Daily Active Sensor &amp; Agent Actions:</b></span><code id="isc-events-val">86,400 events/day</code></div>
-            <input id="isc-events-rng" type="range" min="10000" max="250000" step="5000" value="86400" style="width:100%">
+            <div class="gm-box">
+              <h4>2. Pre-ADC Physical Privacy &amp; Two-Tier Ledger Telemetry</h4>
+              <div class="lib-scores-row" id="isc-metrics" style="margin-bottom:.55rem"></div>
+              <div class="gm-axes-bars" id="isc-bars"></div>
+              <div class="gm-diff" id="isc-diff" aria-live="polite" style="margin-top:.55rem"></div>
+            </div>
           </div>
         </div>
-
-        <div class="gm-box">
-          <h4>2. Pre-ADC Physical Privacy &amp; Two-Tier Ledger Telemetry</h4>
-          <div class="lib-scores-row" id="isc-metrics" style="margin-bottom:.55rem"></div>
-          <div class="gm-axes-bars" id="isc-bars"></div>
-          <div class="gm-diff" id="isc-diff" aria-live="polite" style="margin-top:.55rem"></div>
-        </div>
-      </div>
-    </div>
+      </details>
+    </section>
   </div>
 
   <footer class="note-foot wrap-narrow">
     <h2>Keep reading</h2>
     <ul class="note-links">
       <li><a href="/notes/agent-internet">Two internets: one for people, one for agents (foundational overview)</a></li>
-      <li><a href="/notes/somatic-witness">How your agent knows you are human—without watching you (Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn; Somatic Witness) hardware)</a></li>
+      <li><a href="/notes/somatic-witness">How your agent knows you are human—without watching you (PUF + FIDO2/WebAuthn hardware)</a></li>
       <li><a href="/notes/no-one-commands-a-swarm">No one person should command an army of AI agents</a></li>
       <li><a href="/notes/axiomatic-testnet">How communities update principles like a <code>git merge</code> on our test-net</a></li>
     </ul>
     <p class="note-contact">Working on silicon security, PUF attestation, zero-knowledge protocols, or low-power biometric sensors? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
-      <p class="meta" style="margin-top:.8rem;font-size:.78rem;color:var(--ink-3)">Scientific &amp; statutory provenance: Hardware-Attested Biometric Liveness & Physical Presence Verification (PUF + FIDO2/WebAuthn) [Blaise Gassend, Dwaine Clarke, Marten van Dijk, and Srinivas Devadas (2002)].</p>
-</footer>
+    <p class="meta" style="margin-top:.8rem;font-size:.78rem;color:var(--ink-3)">Scientific &amp; statutory provenance: Hardware-Attested Biometric Liveness &amp; Physical Presence Verification (PUF + FIDO2/WebAuthn) [Blaise Gassend, Dwaine Clarke, Marten van Dijk, and Srinivas Devadas (2002)].</p>
+  </footer>
 </article>
 </main>
 
@@ -509,7 +438,7 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=51" defer></script>
-<script src="/scripts/everyday.js?v=51" defer></script>
+<script src="/scripts/site.js?v=53" defer></script>
+<script src="/scripts/everyday.js?v=53" defer></script>
 </body>
 </html>

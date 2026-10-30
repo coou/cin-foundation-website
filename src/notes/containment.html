@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=51">
+  <link rel="stylesheet" href="/styles/site.css?v=53">
   <style>
     .dpop-sim-shell {
       border: 1px solid var(--rule, #d8d2c4);
@@ -260,147 +260,206 @@
   <div class="note-body wrap-narrow">
     <aside class="callout"><b>In short</b><p>Containment means running the most capable AI models in isolation: separate hardware, no open network, outputs that flow out one way only and are checked before they reach anyone. It does not make a model good. It buys time to learn whether it is, and it limits the damage if it is not.</p></aside>
 
-    <h2>Why containment matters now</h2>
-    <p>AI models are getting more capable, cheaper to run and more able to act on their own. Today they write code, browse the web, call other software and run for hours with little supervision. Each of those abilities is useful. Each is also a path by which a model that wants something its developers did not intend could act on it.</p>
-    <p>Alignment research tries to make sure models want the right things. That work is essential, and it is not finished. Nobody can yet look inside a large model and confirm that it will behave well in every situation, especially situations it was never tested on. We think it would be unwise to bet everything on alignment succeeding in time.</p>
-    <aside class="callout spec"><b>Speculation</b><p>Our view is that AI able to improve itself meaningfully may arrive as soon as 2027. We also consider a scenario in which special-purpose chips make AI roughly a thousand times more efficient to run. Both are scenarios, not forecasts. If either happens, the window for building safeguards gets much shorter, which is why we want containment designed before it is urgently needed.</p></aside>
-    <p>Containment is the second line of defence. It asks a different question: if a model is not aligned, can it still do serious harm? The goal is to make the honest answer "not easily, and not without being noticed".</p>
-
-    <h2>The basic idea: assume the model might be working against you</h2>
-    <p>Researchers studying <a href="https://arxiv.org/abs/2312.06942" rel="noopener noreferrer">AI control</a> have proposed a useful discipline. Instead of assuming a model is trustworthy, design the system around it so that it stays safe even if the model is deliberately trying to cause harm. Then test that claim by letting a red team play the model's part and look for ways through. Follow-up work has sketched how such tests could support a written <a href="https://arxiv.org/abs/2501.17315" rel="noopener noreferrer">safety case</a>: an argument, backed by evidence, that a given deployment cannot cause a given harm.</p>
-    <p>We like this approach because it does not depend on reading a model's mind. It depends on things we can check: what the model is connected to, what it can send, and who looks at what it sends.</p>
-
-    <h2>The parts of a containment system</h2>
     <figure class="diagram">
-      <svg viewBox="0 0 720 300" role="img" aria-label="A frontier model sits inside a containment boundary. Its output leaves through a one-way channel to verifier agents, which pass checked summaries to your agent and then to you. Requests go back in by a separate narrow, logged path.">
-        <rect class="d-bad" x="20" y="40" width="230" height="210" rx="10" stroke-dasharray="6 5"/>
-        <text x="135" y="64" text-anchor="middle" font-size="14" class="d-bad">Containment</text>
-        <rect class="d-box" x="50" y="100" width="170" height="60" rx="8"/>
-        <text x="135" y="135" text-anchor="middle" font-size="14" class="d-ink">Frontier model</text>
-        <text x="135" y="188" text-anchor="middle" font-size="12">Observable training</text>
-        <line class="d-ink" x1="220" y1="125" x2="316" y2="125"/>
-        <polyline class="d-ink" points="308,119 318,125 308,131"/>
-        <text x="285" y="112" text-anchor="middle" font-size="12">One way out</text>
-        <rect class="d-box" x="320" y="95" width="150" height="60" rx="8"/>
-        <text x="395" y="130" text-anchor="middle" font-size="14" class="d-ink">Verifier agents</text>
-        <text x="395" y="176" text-anchor="middle" font-size="12">check, summarize</text>
-        <line class="d-ink" x1="470" y1="125" x2="516" y2="125"/>
-        <polyline class="d-ink" points="508,119 518,125 508,131"/>
-        <rect class="d-box" x="520" y="95" width="170" height="60" rx="8"/>
-        <text x="605" y="130" text-anchor="middle" font-size="14" class="d-ink">Your agent</text>
-        <line class="d-ink" x1="605" y1="155" x2="605" y2="196"/>
-        <polyline class="d-ink" points="599,188 605,198 611,188"/>
-        <rect class="d-fill" x="555" y="200" width="100" height="40" rx="8"/>
-        <text x="605" y="225" text-anchor="middle" font-size="14" class="d-ink">You</text>
-        <line class="d-muted" x1="555" y1="228" x2="226" y2="228" stroke-dasharray="4 4"/>
-        <polyline class="d-muted" points="234,222 224,228 234,234"/>
-        <text x="400" y="248" text-anchor="middle" font-size="12">Narrow, logged requests</text>
+      <svg data-rich-viz="true" viewBox="0 0 760 240" role="img" aria-label="Comparison of Legacy Uncontained Cloud Frontier Deployment versus CIN Air-Gapped One-Way Diode and RFC 9449 DPoP Containment">
+        <rect x="12" y="14" width="354" height="212" rx="10" fill="rgba(239,106,82,0.06)" stroke="#ef6a52" stroke-width="1.5"/>
+        <text x="28" y="38" font-size="12" font-weight="700" fill="#ef6a52">LEGACY CENTRALIZED FAILURE: OPEN CLOUD FRONTIER</text>
+        <rect x="28" y="54" width="322" height="46" rx="6" fill="rgba(239,106,82,0.12)" stroke="#ef6a52"/>
+        <text x="189" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#ef6a52">Direct Open Internet &amp; Bearer Token Authority</text>
+        <text x="189" y="90" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.8">Any stolen Bearer token grants full lateral replay authority</text>
+        <rect x="28" y="114" width="322" height="46" rx="6" fill="rgba(239,106,82,0.12)" stroke="#ef6a52"/>
+        <text x="189" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#ef6a52">Unfiltered Direct Channel to Millions of Users</text>
+        <text x="189" y="150" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.8">Single model alignment failure propagates instantaneously</text>
+        <text x="189" y="192" text-anchor="middle" font-size="10" font-weight="600" fill="#ef6a52">Result: Silent exfiltration, token replay &amp; zero air gap</text>
+
+        <rect x="394" y="14" width="354" height="212" rx="10" fill="rgba(79,179,168,0.07)" stroke="#4fb3a8" stroke-width="1.5"/>
+        <text x="410" y="38" font-size="12" font-weight="700" fill="#4fb3a8">CIN MECHANISM: AIR-GAPPED DIODE &amp; RFC 9449 DPoP</text>
+        <rect x="410" y="54" width="322" height="46" rx="6" fill="rgba(79,179,168,0.14)" stroke="#4fb3a8"/>
+        <text x="571" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#4fb3a8">One-Way Data Diode + Diverse Verifier Collective</text>
+        <text x="571" y="90" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.85">Independent model families paraphrase &amp; strip steganography</text>
+        <rect x="410" y="114" width="322" height="46" rx="6" fill="rgba(79,179,168,0.14)" stroke="#4fb3a8"/>
+        <text x="571" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#4fb3a8">Hardware Enclave DPoP Key Binding (RFC 9449)</text>
+        <text x="571" y="150" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.85">Stolen tokens fail closed without enclave SHA-256 thumbprint</text>
+        <text x="571" y="192" text-anchor="middle" font-size="10" font-weight="600" fill="#4fb3a8">Result: Verifiable AI control &amp; zero token replay</text>
       </svg>
-      <figcaption>Output leaves containment one way only and is checked by independent verifiers before it reaches a person's own agent. Requests travel back in by a separate, narrow path that is logged.</figcaption>
+      <figcaption>Comparing uncontained cloud model access (`#ef6a52`) against one-way verifier diodes and RFC 9449 proof-of-possession containment (`#4fb3a8`).</figcaption>
     </figure>
 
-    <p>None of these ideas is new on its own. Security agencies and operators of critical systems have long published guidance on isolating sensitive systems. What is new is applying them to a system that may be cleverer than the people guarding it.</p>
-    <ul>
-      <li><b>Air gaps.</b> The model runs on machines with no connection to the public internet or to other networks. It cannot download tools, contact accomplices or copy itself elsewhere.</li>
-      <li><b>One-way channels.</b> Where output must leave, it leaves through a channel that only carries data in one direction, in the style of the hardware "data diodes" used to protect industrial and defence systems. Nothing flows back along the same path.</li>
-      <li><b>No shared hardware.</b> The model does not share chips, memory or storage with other workloads. Shared hardware creates side channels, subtle ways of leaking information through timing, power use or leftover memory.</li>
-      <li><b>Trusted and untrusted boundaries.</b> A capable but untrusted model does the hard work. Smaller, simpler, better-understood models, and people, decide what is allowed to happen with the result. A recent design for <a href="https://arxiv.org/abs/2503.18813" rel="noopener noreferrer">defeating prompt injections by design</a> shows the same pattern at small scale: untrusted content is kept apart from the part of the system that decides what actions to take.</li>
-      <li><b>Monitored outputs.</b> Everything that crosses the boundary is checked by independent verifier agents, built on different models by different teams, so that one shared blind spot does not let something through.</li>
-      <li><b>Observable training.</b> Training runs are logged and inspectable, so that sudden jumps in capability, or signs that a model is learning to hide what it can do, are seen while there is still time to stop.</li>
-    </ul>
-
-    <h2>Cryptographic containment: binding authority to client keys</h2>
-    <p>Containment boundaries fail if an authorization token can be copied out of an agent's memory or logs and reused by an attacker. In traditional web systems, access tokens are &ldquo;bearer tokens&rdquo;: whoever bears the token has the authority. If a contained model or a network attacker extracts a bearer token, they can replay it anywhere.</p>
-    <p>To eliminate token replay without requiring stateful shared secrets, agent-to-agent boundaries use <strong>Demonstrating Proof-of-Possession</strong> (DPoP, <a href="https://www.rfc-editor.org/rfc/rfc9449" rel="noopener noreferrer">IETF RFC 9449</a>). Under DPoP, every access token is cryptographically bound to a private key kept inside the personal agent's hardware enclave. Every outgoing request signs a fresh proof header containing the target endpoint, HTTP method, and timestamp. If a token is intercepted, an adversary cannot replay it because they do not hold the enclave's private key.</p>
-
-    <section id="dpop-demo" class="dpop-sim-shell" aria-label="Interactive demonstration of DPoP proof-of-possession token replay defense">
-      <div class="dpop-header">
-        <span class="dpop-tag">Interactive Boundary Simulator</span>
-        <h3>Bearer Token Replay vs. DPoP Proof-of-Possession</h3>
-        <p class="dpop-sub">Compare what happens when an attacker intercepts an agent's access token and attempts to replay it against protected infrastructure.</p>
-      </div>
-
-      <div class="dpop-controls">
-        <button type="button" class="dpop-btn dpop-btn-primary" id="btn-simulate-attack">Simulate Interception Attack</button>
-        <button type="button" class="dpop-btn" id="btn-simulate-bearer">Simulate Bearer Only</button>
-        <button type="button" class="dpop-btn" id="btn-reset-demo">Reset Simulation</button>
-      </div>
-
-      <div class="dpop-grid">
-        <div class="dpop-card" id="card-bearer">
-          <div class="dpop-card-header">
-            <h4>1. Legacy Bearer Token</h4>
-            <span class="dpop-badge badge-warning" id="badge-bearer">Awaiting Test</span>
-          </div>
-          <div class="dpop-card-body">
-            <div class="dpop-field">
-              <span class="dpop-label">Token Format</span>
-              <code>Bearer eyJhbGciOi...</code>
-            </div>
-            <div class="dpop-field">
-              <span class="dpop-label">Client Key Binding</span>
-              <span class="dpop-val">None (Possession = Authority)</span>
-            </div>
-            <div class="dpop-field">
-              <span class="dpop-label">Interception Outcome</span>
-              <p class="dpop-desc" id="desc-bearer">Click &ldquo;Simulate Interception Attack&rdquo; to observe whether a stolen token can be replayed.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="dpop-card" id="card-dpop">
-          <div class="dpop-card-header">
-            <h4>2. DPoP Proof-of-Possession (RFC 9449)</h4>
-            <span class="dpop-badge badge-neutral" id="badge-dpop">Awaiting Test</span>
-          </div>
-          <div class="dpop-card-body">
-            <div class="dpop-field">
-              <span class="dpop-label">Token Format</span>
-              <code>DPoP eyJhbGciOi...</code>
-            </div>
-            <div class="dpop-field">
-              <span class="dpop-label">Client Key Binding</span>
-              <span class="dpop-val">Hardware Enclave Key (SHA-256 Thumbprint)</span>
-            </div>
-            <div class="dpop-field">
-              <span class="dpop-label">Interception Outcome</span>
-              <p class="dpop-desc" id="desc-dpop">Click &ldquo;Simulate Interception Attack&rdquo; to observe how the receiver verifies cryptographic possession.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dpop-log-box" aria-live="polite">
-        <div class="dpop-log-head">
-          <span>Boundary Verification Telemetry</span>
-          <span class="dpop-log-status" id="dpop-log-status">Idle</span>
-        </div>
-        <pre class="dpop-log-body" id="dpop-log-body">Ready. Select an action above to test token replay resistance.</pre>
-      </div>
+    <section>
+      <h2>Why containment matters now</h2>
+      <p>AI models are getting more capable, cheaper to run and more able to act on their own. Today they write code, browse the web, call other software and run for hours with little supervision. Each of those abilities is useful. Each is also a path by which a model that wants something its developers did not intend could act on it.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>Alignment research tries to make sure models want the right things. That work is essential, and it is not finished. Nobody can yet look inside a large model and confirm that it will behave well in every situation, especially situations it was never tested on. We think it would be unwise to bet everything on alignment succeeding in time.</p>
+        <aside class="callout spec"><b>Speculation</b><p>Our view is that AI able to improve itself meaningfully may arrive as soon as 2027. We also consider a scenario in which special-purpose chips make AI roughly a thousand times more efficient to run. Both are scenarios, not forecasts. If either happens, the window for building safeguards gets much shorter, which is why we want containment designed before it is urgently needed.</p></aside>
+        <p>Containment is the second line of defence. It asks a different question: if a model is not aligned, can it still do serious harm? The goal is to make the honest answer "not easily, and not without being noticed".</p>
+      </details>
     </section>
 
-    <h2>How containment fits with personal agents</h2>
-    <p>Containment is one half of our approach to AI safety. The other half is <a href="/notes/fractured-alignment">decentralized principal-bound multi-agent alignment (pluralistic / personalized alignment; formerly termed fractured alignment)</a>: instead of one giant mind that everyone talks to, many smaller agents, each working for one person and limited in what it can do.</p>
-    <p>The two fit together. The most capable models stay contained, and reach the human world only through layers of smaller agents that check their work. A person's own agent decides what of that work is useful to its person and shows it to them. No contained model gets a direct line to millions of people, their accounts or their devices.</p>
-    <p>There is a real cost here. Some people need the full power of a frontier model for research, medicine or engineering. We think AI developers should be able to grant chosen people, and their agents, scoped and time-limited access to more capable models for specific work. Because such grants concentrate power, they should follow published criteria, have an independent observer, expire, and be recorded publicly.</p>
+    <section>
+      <h2>The basic idea: assume the model might be working against you</h2>
+      <p>Researchers studying <a href="https://arxiv.org/abs/2312.06942" rel="noopener noreferrer">AI control</a> have proposed a useful discipline. Instead of assuming a model is trustworthy, design the system around it so that it stays safe even if the model is deliberately trying to cause harm. Then test that claim by letting a red team play the model's part and look for ways through. Follow-up work has sketched how such tests could support a written <a href="https://arxiv.org/abs/2501.17315" rel="noopener noreferrer">safety case</a>: an argument, backed by evidence, that a given deployment cannot cause a given harm.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>We like this approach because it does not depend on reading a model's mind. It depends on things we can check: what the model is connected to, what it can send, and who looks at what it sends.</p>
+      </details>
+    </section>
 
-    <h2>Why it buys time</h2>
-    <p>Containment is not a permanent answer. A sufficiently capable system may eventually find a way out, or persuade someone to let it out. What containment does is raise the cost of every path to harm and make most of those paths visible. That turns sudden, silent failures into slower, noisy ones, and slow, noisy failures are the kind people can respond to.</p>
-    <p>That time is what alignment research, interpretability and better institutions need. Each month that the most capable systems stay contained is a month in which we can learn more about what they want and how to check it.</p>
+    <section>
+      <h2>The parts of a containment system</h2>
+      <p>None of these ideas is new on its own. Security agencies and operators of critical systems have long published guidance on isolating sensitive systems. What is new is applying them to a system that may be cleverer than the people guarding it.</p>
 
-    <aside class="callout risk"><b>How this could fail</b>
-      <ul>
-        <li><b>Persuasion.</b> The weakest part of an air gap is the person beside it. A capable model could talk its operators into opening a channel. Mitigation: no single person can change the boundary, and changes need a waiting period and independent sign-off.</li>
-        <li><b>Hidden messages.</b> Output that looks harmless could carry encoded instructions. Mitigation: verifiers paraphrase and summarize rather than pass raw output along, and are built on different models.</li>
-        <li><b>Verifiers that agree too easily.</b> If the checking agents share a model family or training data, they may share blind spots or even collude. Mitigation: deliberately diverse verifiers, rotation and seeded test cases.</li>
-        <li><b>Commercial pressure.</b> Containment makes models slower and less convenient. Developers who skip it may win customers. Containment only works if it becomes a shared expectation, not a private sacrifice.</li>
-        <li><b>Sandbagging.</b> A model might hide its abilities during testing so that it is given less strict containment.</li>
-      </ul>
-      <p><b>What would make us change course:</b> if red teams playing the model's part can routinely get harmful output past diverse verifiers, the checking layer is not working and must be redesigned before anything depends on it. If containment proves so costly that no serious developer will adopt it, we would shift our effort toward the parts that can be adopted, rather than pretending the full design is in use.</p>
-    </aside>
+      <figure class="diagram">
+        <svg viewBox="0 0 720 300" role="img" aria-label="A frontier model sits inside a containment boundary. Its output leaves through a one-way channel to verifier agents, which pass checked summaries to your agent and then to you. Requests go back in by a separate narrow, logged path.">
+          <rect class="d-bad" x="20" y="40" width="230" height="210" rx="10" stroke-dasharray="6 5"/>
+          <text x="135" y="64" text-anchor="middle" font-size="14" class="d-bad">Containment</text>
+          <rect class="d-box" x="50" y="100" width="170" height="60" rx="8"/>
+          <text x="135" y="135" text-anchor="middle" font-size="14" class="d-ink">Frontier model</text>
+          <text x="135" y="188" text-anchor="middle" font-size="12">Observable training</text>
+          <line class="d-ink" x1="220" y1="125" x2="316" y2="125"/>
+          <polyline class="d-ink" points="308,119 318,125 308,131"/>
+          <text x="285" y="112" text-anchor="middle" font-size="12">One way out</text>
+          <rect class="d-box" x="320" y="95" width="150" height="60" rx="8"/>
+          <text x="395" y="130" text-anchor="middle" font-size="14" class="d-ink">Verifier agents</text>
+          <text x="395" y="176" text-anchor="middle" font-size="12">check, summarize</text>
+          <line class="d-ink" x1="470" y1="125" x2="516" y2="125"/>
+          <polyline class="d-ink" points="508,119 518,125 508,131"/>
+          <rect class="d-box" x="520" y="95" width="170" height="60" rx="8"/>
+          <text x="605" y="130" text-anchor="middle" font-size="14" class="d-ink">Your agent</text>
+          <line class="d-ink" x1="605" y1="155" x2="605" y2="196"/>
+          <polyline class="d-ink" points="599,188 605,198 611,188"/>
+          <rect class="d-fill" x="555" y="200" width="100" height="40" rx="8"/>
+          <text x="605" y="225" text-anchor="middle" font-size="14" class="d-ink">You</text>
+          <line class="d-muted" x1="555" y1="228" x2="226" y2="228" stroke-dasharray="4 4"/>
+          <polyline class="d-muted" points="234,222 224,228 234,234"/>
+          <text x="400" y="248" text-anchor="middle" font-size="12">Narrow, logged requests</text>
+        </svg>
+        <figcaption>Output leaves containment one way only and is checked by independent verifiers before it reaches a person's own agent. Requests travel back in by a separate, narrow path that is logged.</figcaption>
+      </figure>
 
-    <h2>What comes next</h2>
-    <p>Nothing described here is built yet. This is research and design. Our next steps are to write a clear, plain-language brief on existing isolation practice and what it would take to apply it to AI models, to design the one-way channel and verifier layer in enough detail that others can criticize it, and to define red-team tests that would show whether it works. We would welcome anyone who works on AI control, secure systems or hardware isolation to tell us where this is wrong.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <ul>
+          <li><b>Air gaps.</b> The model runs on machines with no connection to the public internet or to other networks. It cannot download tools, contact accomplices or copy itself elsewhere.</li>
+          <li><b>One-way channels.</b> Where output must leave, it leaves through a channel that only carries data in one direction, in the style of the hardware "data diodes" used to protect industrial and defence systems. Nothing flows back along the same path.</li>
+          <li><b>No shared hardware.</b> The model does not share chips, memory or storage with other workloads. Shared hardware creates side channels, subtle ways of leaking information through timing, power use or leftover memory.</li>
+          <li><b>Trusted and untrusted boundaries.</b> A capable but untrusted model does the hard work. Smaller, simpler, better-understood models, and people, decide what is allowed to happen with the result. A recent design for <a href="https://arxiv.org/abs/2503.18813" rel="noopener noreferrer">defeating prompt injections by design</a> shows the same pattern at small scale: untrusted content is kept apart from the part of the system that decides what actions to take.</li>
+          <li><b>Monitored outputs.</b> Everything that crosses the boundary is checked by independent verifier agents, built on different models by different teams, so that one shared blind spot does not let something through.</li>
+          <li><b>Observable training.</b> Training runs are logged and inspectable, so that sudden jumps in capability, or signs that a model is learning to hide what it can do, are seen while there is still time to stop.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section>
+      <h2>Cryptographic containment: binding authority to client keys</h2>
+      <p>Containment boundaries fail if an authorization token can be copied out of an agent's memory or logs and reused by an attacker. To eliminate token replay without requiring stateful shared secrets, agent-to-agent boundaries use <strong>Demonstrating Proof-of-Possession</strong> (DPoP, <a href="https://www.rfc-editor.org/rfc/rfc9449" rel="noopener noreferrer">IETF RFC 9449</a>).</p>
+
+      <div id="dpop-demo" class="dpop-sim-shell" aria-label="Interactive demonstration of DPoP proof-of-possession token replay defense">
+        <div class="dpop-header">
+          <span class="dpop-tag">Interactive Boundary Simulator</span>
+          <h3>Bearer Token Replay vs. DPoP Proof-of-Possession</h3>
+          <p class="dpop-sub">Compare what happens when an attacker intercepts an agent's access token and attempts to replay it against protected infrastructure.</p>
+        </div>
+
+        <div class="dpop-controls">
+          <button type="button" class="dpop-btn dpop-btn-primary" id="btn-simulate-attack">Simulate Interception Attack</button>
+          <button type="button" class="dpop-btn" id="btn-simulate-bearer">Simulate Bearer Only</button>
+          <button type="button" class="dpop-btn" id="btn-reset-demo">Reset Simulation</button>
+        </div>
+
+        <div class="dpop-grid">
+          <div class="dpop-card" id="card-bearer">
+            <div class="dpop-card-header">
+              <h4>1. Legacy Bearer Token</h4>
+              <span class="dpop-badge badge-warning" id="badge-bearer">Awaiting Test</span>
+            </div>
+            <div class="dpop-card-body">
+              <div class="dpop-field">
+                <span class="dpop-label">Token Format</span>
+                <code>Bearer eyJhbGciOi...</code>
+              </div>
+              <div class="dpop-field">
+                <span class="dpop-label">Client Key Binding</span>
+                <span class="dpop-val">None (Possession = Authority)</span>
+              </div>
+              <div class="dpop-field">
+                <span class="dpop-label">Interception Outcome</span>
+                <p class="dpop-desc" id="desc-bearer">Click &ldquo;Simulate Interception Attack&rdquo; to observe whether a stolen token can be replayed.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="dpop-card" id="card-dpop">
+            <div class="dpop-card-header">
+              <h4>2. DPoP Proof-of-Possession (RFC 9449)</h4>
+              <span class="dpop-badge badge-neutral" id="badge-dpop">Awaiting Test</span>
+            </div>
+            <div class="dpop-card-body">
+              <div class="dpop-field">
+                <span class="dpop-label">Token Format</span>
+                <code>DPoP eyJhbGciOi...</code>
+              </div>
+              <div class="dpop-field">
+                <span class="dpop-label">Client Key Binding</span>
+                <span class="dpop-val">Hardware Enclave Key (SHA-256 Thumbprint)</span>
+              </div>
+              <div class="dpop-field">
+                <span class="dpop-label">Interception Outcome</span>
+                <p class="dpop-desc" id="desc-dpop">Click &ldquo;Simulate Interception Attack&rdquo; to observe how the receiver verifies cryptographic possession.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dpop-log-box" aria-live="polite">
+          <div class="dpop-log-head">
+            <span>Boundary Verification Telemetry</span>
+            <span class="dpop-log-status" id="dpop-log-status">Idle</span>
+          </div>
+          <pre class="dpop-log-body" id="dpop-log-body">Ready. Select an action above to test token replay resistance.</pre>
+        </div>
+      </div>
+
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>In traditional web systems, access tokens are &ldquo;bearer tokens&rdquo;: whoever bears the token has the authority. If a contained model or a network attacker extracts a bearer token, they can replay it anywhere. Under DPoP, every access token is cryptographically bound to a private key kept inside the personal agent's hardware enclave. Every outgoing request signs a fresh proof header containing the target endpoint, HTTP method, and timestamp. If a token is intercepted, an adversary cannot replay it because they do not hold the enclave's private key.</p>
+      </details>
+    </section>
+
+    <section>
+      <h2>How containment fits with personal agents</h2>
+      <p>Containment is one half of our approach to AI safety. The other half is <a href="/notes/fractured-alignment">decentralized principal-bound multi-agent alignment (pluralistic / personalized alignment; formerly termed fractured alignment)</a>: instead of one giant mind that everyone talks to, many smaller agents, each working for one person and limited in what it can do.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>The two fit together. The most capable models stay contained, and reach the human world only through layers of smaller agents that check their work. A person's own agent decides what of that work is useful to its person and shows it to them. No contained model gets a direct line to millions of people, their accounts or their devices.</p>
+        <p>There is a real cost here. Some people need the full power of a frontier model for research, medicine or engineering. We think AI developers should be able to grant chosen people, and their agents, scoped and time-limited access to more capable models for specific work. Because such grants concentrate power, they should follow published criteria, have an independent observer, expire, and be recorded publicly.</p>
+      </details>
+    </section>
+
+    <section>
+      <h2>Why it buys time</h2>
+      <p>Containment is not a permanent answer. A sufficiently capable system may eventually find a way out, or persuade someone to let it out. What containment does is raise the cost of every path to harm and make most of those paths visible. That turns sudden, silent failures into slower, noisy ones, and slow, noisy failures are the kind people can respond to.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>That time is what alignment research, interpretability and better institutions need. Each month that the most capable systems stay contained is a month in which we can learn more about what they want and how to check it.</p>
+
+        <aside class="callout risk"><b>How this could fail</b>
+          <ul>
+            <li><b>Persuasion.</b> The weakest part of an air gap is the person beside it. A capable model could talk its operators into opening a channel. Mitigation: no single person can change the boundary, and changes need a waiting period and independent sign-off.</li>
+            <li><b>Hidden messages.</b> Output that looks harmless could carry encoded instructions. Mitigation: verifiers paraphrase and summarize rather than pass raw output along, and are built on different models.</li>
+            <li><b>Verifiers that agree too easily.</b> If the checking agents share a model family or training data, they may share blind spots or even collude. Mitigation: deliberately diverse verifiers, rotation and seeded test cases.</li>
+            <li><b>Commercial pressure.</b> Containment makes models slower and less convenient. Developers who skip it may win customers. Containment only works if it becomes a shared expectation, not a private sacrifice.</li>
+            <li><b>Sandbagging.</b> A model might hide its abilities during testing so that it is given less strict containment.</li>
+          </ul>
+          <p><b>What would make us change course:</b> if red teams playing the model's part can routinely get harmful output past diverse verifiers, the checking layer is not working and must be redesigned before anything depends on it. If containment proves so costly that no serious developer will adopt it, we would shift our effort toward the parts that can be adopted, rather than pretending the full design is in use.</p>
+        </aside>
+      </details>
+    </section>
+
+    <section>
+      <h2>What comes next</h2>
+      <p>Nothing described here is built yet. This is research and design. Our next steps are to write a clear, plain-language brief on existing isolation practice and what it would take to apply it to AI models, to design the one-way channel and verifier layer in enough detail that others can criticize it, and to define red-team tests that would show whether it works. We would welcome anyone who works on AI control, secure systems or hardware isolation to tell us where this is wrong.</p>
+    </section>
   </div>
 
   <footer class="note-foot wrap-narrow">
@@ -526,6 +585,6 @@
   btnReset.addEventListener("click", resetDemo);
 })();
 </script>
-<script src="/scripts/site.js?v=51" defer></script>
+<script src="/scripts/site.js?v=53" defer></script>
 </body>
 </html>

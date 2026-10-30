@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=51">
+  <link rel="stylesheet" href="/styles/site.css?v=53">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -52,261 +52,315 @@
   <div class="note-body wrap-narrow">
     <aside class="callout"><b>In short</b><p>Your personal agent is a small, deliberately limited model, trained on you and running on hardware you own. It shields you from adversarial agents and manipulation, shares answers rather than your data, and carries real consequences if it harms you. You can always override it, switch it off and leave.</p></aside>
 
-    <h2>Why you need one</h2>
-    <p>Today, persuasion at scale is expensive. Someone has to write the ad, place the call, run the campaign. As AI agents become cheaper and more capable, that cost collapses. A seller, a scammer, a political operation or a platform can point a tireless agent at each person, one that remembers everything you have said, tests which words move you, and never gets bored.</p>
-    <p>Most people will face this alone, with tools built by the same companies that profit from their attention. A human cannot read every contract, check every claim or notice every pattern of pressure. An agent can, if it is working for you.</p>
-    <p>That is the core idea: for every agent that works on you, you should have one that works for you. It reads the fine print, flags the pressure tactic, declines the request that asks for more than it needs, and tells you plainly what it found.</p>
-
-    <h2>Small on purpose</h2>
-    <p>The obvious design would be to give everyone access to the most powerful model available. We think that is the wrong direction. A giant general model, shared by millions, is a single point of failure: one flaw, one compromise, or one change in its owner's interests reaches everyone at once.</p>
-    <p>Instead, your agent starts from a limited base model and is then post-trained on one person: you. It learns your goals, your limits, how you like to be spoken to and what you care about. It does not need to know everything about the world. It needs to know you well and to be good at a narrow set of jobs: screening, explaining, negotiating small things, and keeping your information in.</p>
-    <p>Being small has other benefits. A small model can run on a phone, a laptop or a box at home, so your data never has to leave your house to be useful. It is cheaper to inspect. And it cannot do much damage on its own if something goes wrong, which matters when we think about what agents may be able to do in a few years.</p>
-    <aside class="callout spec"><b>Speculation</b><p>We think AI that improves itself may arrive as soon as 2027, and that special-purpose chips could make running models far cheaper, perhaps around 1000 times more efficient. These are scenarios, not forecasts. If they are right, capable agents aimed at individuals become very cheap, and a personal defender becomes more urgent. If they are wrong, a small local agent is still useful, just less pressing.</p></aside>
-
-    <h2>Answers, not data</h2>
-    <p>When an outside service asks your agent something, the agent replies with the smallest true answer that does the job. A landlord asks whether you can afford the rent; your agent can confirm "yes" without handing over your bank statements. A website asks if you are an adult; the agent confirms that one fact, not your birth date or name.</p>
-    <p>Each person also sets a disclosure budget: a limit on how much the agent may reveal about you, to whom, and over what period. Small facts add up. Many harmless answers, combined, can reveal a great deal, so the agent keeps count and stops when the budget is spent, then asks you.</p>
-    <p>Research supports this kind of restraint. The <a href="https://arxiv.org/abs/2405.05175" rel="noopener noreferrer">AirGapAgent</a> work studied conversational agents that are tricked by third parties into leaking private information, and proposed limiting the agent to only the data a task actually needs. Our design pushes the same principle further: by default, your data stays with you, and only answers go out.</p>
-
     <figure class="diagram">
-      <svg viewBox="0 0 640 300" role="img" aria-label="Your device holds your data and your agent. Outside agents send requests; only short answers leave the device, within a disclosure budget. You can override or switch off the agent at any time.">
-        <rect class="d-box" x="20" y="30" width="300" height="240" rx="12"/>
-        <text x="40" y="58" font-size="14" class="d-ink" font-weight="bold">Your device</text>
-        <rect class="d-fill" x="40" y="80" width="120" height="56" rx="8"/>
-        <text x="100" y="113" font-size="13" text-anchor="middle">Your data</text>
-        <rect class="d-fill" x="180" y="80" width="120" height="56" rx="8"/>
-        <text x="240" y="106" font-size="13" text-anchor="middle">Your agent</text>
-        <text x="240" y="124" font-size="12" text-anchor="middle" class="d-muted">small, trained on you</text>
-        <line class="d-ink" x1="160" y1="108" x2="180" y2="108" stroke-width="2"/>
-        <rect class="d-fill" x="40" y="170" width="260" height="76" rx="8"/>
-        <text x="170" y="198" font-size="13" text-anchor="middle">You</text>
-        <text x="170" y="220" font-size="12" text-anchor="middle" class="d-muted">override · switch off · leave</text>
-        <line class="d-ok" x1="240" y1="136" x2="240" y2="170" stroke-width="2"/>
-        <rect class="d-box" x="440" y="40" width="180" height="56" rx="8"/>
-        <text x="530" y="73" font-size="13" text-anchor="middle">Outside agents</text>
-        <line class="d-bad" x1="440" y1="80" x2="300" y2="96" stroke-width="2"/>
-        <text x="372" y="78" font-size="12" text-anchor="middle" class="d-bad">requests</text>
-        <line class="d-ok" x1="300" y1="122" x2="440" y2="150" stroke-width="2"/>
-        <text x="390" y="160" font-size="12" text-anchor="middle" class="d-ok">answers only</text>
-        <rect class="d-box" x="440" y="190" width="180" height="56" rx="8"/>
-        <text x="530" y="214" font-size="13" text-anchor="middle">Disclosure budget</text>
-        <text x="530" y="234" font-size="12" text-anchor="middle" class="d-muted">how much, to whom</text>
-        <line class="d-muted" x1="530" y1="190" x2="440" y2="150" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <svg data-rich-viz="true" viewBox="0 0 760 240" role="img" aria-label="Comparison of Legacy Cloud Assistant vs CIN Human-Bound Personal Agent on local hardware with disclosure budgets and discrete codebook memory">
+        <rect x="16" y="18" width="344" height="204" rx="12" fill="rgba(239,106,82,0.08)" stroke="#ef6a52" stroke-width="1.6"/>
+        <text x="32" y="42" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">LEGACY CENTRALIZED FAILURE: CLOUD ASSISTANT</text>
+        <text x="32" y="64" font-size="11.5" font-weight="700" fill="var(--ink)">Shared Monolithic Weights &amp; Telemetry Harvest</text>
+        <rect x="32" y="80" width="312" height="52" rx="8" fill="var(--paper)" stroke="#ef6a52" stroke-width="1.2"/>
+        <text x="44" y="100" font-size="10" font-weight="700" fill="#ef6a52">Continuous Vector Smearing &amp; Raw Uploads</text>
+        <text x="44" y="118" font-size="9.5" fill="var(--ink-2)">Uploads full PDFs · Unconfirmed guesses become facts</text>
+        <rect x="32" y="144" width="312" height="60" rx="8" fill="var(--paper)" stroke="var(--rule)"/>
+        <text x="44" y="165" font-size="10" font-weight="700" fill="#ef6a52">Zero Agent Accountability</text>
+        <text x="44" y="183" font-size="9.5" fill="var(--ink-2)">Optimizes platform engagement; impossible to verify deletion</text>
+
+        <line x1="360" y1="120" x2="400" y2="120" stroke="#4fb3a8" stroke-width="2" stroke-dasharray="4 3"/>
+
+        <rect x="400" y="18" width="344" height="204" rx="12" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.8"/>
+        <text x="416" y="42" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN MECHANISM: 1-TO-1 HUMAN-BOUND LOCAL AGENT</text>
+        <text x="416" y="64" font-size="11.5" font-weight="700" fill="var(--ink)">On-Device OCap Sandbox &amp; Disclosure Budget</text>
+        <rect x="416" y="80" width="312" height="52" rx="8" fill="var(--paper)" stroke="#4fb3a8" stroke-width="1.2"/>
+        <text x="428" y="100" font-size="10" font-weight="700" fill="#4fb3a8">Answers, Not Data + Discrete Codebook Slots</text>
+        <text x="428" y="118" font-size="9.5" fill="var(--ink-2)">Boolean ZK predicate proofs · Verifiable 0x00 zero-fill wipe</text>
+        <rect x="416" y="144" width="312" height="60" rx="8" fill="var(--paper)" stroke="#4fb3a8" stroke-width="1.2"/>
+        <text x="428" y="165" font-size="10" font-weight="700" fill="#4fb3a8">Capability-Bounded Execution Lease</text>
+        <text x="428" y="183" font-size="9.5" fill="var(--ink-2)">Trained on 30-day reflective judgment · Instant physical off-switch</text>
       </svg>
-      <figcaption>Your data and your agent stay on your device. Outside agents get short answers, limited by a budget you set, and you keep final control.</figcaption>
+      <figcaption>Why a small, hardware-isolated personal agent outperforms a shared cloud monolith: raw records stay on your device, memory occupies verifiable discrete slots, and only minimal boolean answers cross the boundary.</figcaption>
     </figure>
 
-    <figure class="envelope-demo" id="envelope-demo">
-      <h3>How it is meant to work: what gets through?</h3>
-      <p class="envelope-desc">This is an illustration of the design. No personal agent like this is running yet. Outside requests are checked against the limits you set before anything runs. Try each scenario to compare a personal agent in protected mode against an unprotected assistant.</p>
+    <section>
+      <h2>Why you need one</h2>
+      <p>Today, persuasion at scale is expensive; as AI agents become cheaper and more capable, that cost collapses, allowing platforms or scammers to point a tireless persuasive agent at each person.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>Most people will face this alone, with tools built by the same companies that profit from their attention. A human cannot read every contract, check every claim or notice every pattern of pressure. An agent can, if it is working for you.</p>
+        <p>That is the core idea: for every agent that works on you, you should have one that works for you. It reads the fine print, flags the pressure tactic, declines the request that asks for more than it needs, and tells you plainly what it found.</p>
+      </details>
+    </section>
 
-      <div class="envelope-scenarios" id="env-scenarios">
-        <button type="button" class="env-btn" aria-pressed="true">Affordability check</button>
-        <button type="button" class="env-btn" aria-pressed="false">Age verification</button>
-        <button type="button" class="env-btn" aria-pressed="false">Hidden injection in email</button>
-        <button type="button" class="env-btn" aria-pressed="false">One-click checkout</button>
-      </div>
+    <section>
+      <h2>Small on purpose</h2>
+      <p>A giant general model shared by millions is a single point of failure; instead, your personal agent starts from a compact base model and is post-trained on one person—you—running on hardware you control.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>It learns your goals, your limits, how you like to be spoken to and what you care about. It does not need to know everything about the world. It needs to know you well and to be good at a narrow set of jobs: screening, explaining, negotiating small things, and keeping your information in.</p>
+        <p>Being small has other benefits. A small model can run on a phone, a laptop or a box at home, so your data never has to leave your house to be useful. It is cheaper to inspect. And it cannot do much damage on its own if something goes wrong, which matters when we think about what agents may be able to do in a few years.</p>
+        <aside class="callout spec"><b>Speculation</b><p>We think AI that improves itself may arrive as soon as 2027, and that special-purpose chips could make running models far cheaper, perhaps around 1000 times more efficient. These are scenarios, not forecasts. If they are right, capable agents aimed at individuals become very cheap, and a personal defender becomes more urgent. If they are wrong, a small local agent is still useful, just less pressing.</p></aside>
+      </details>
+    </section>
 
-      <div class="env-toggle-wrap">
-        <span id="env-mode-label">Protected mode active (the limits you set)</span>
-        <button type="button" class="env-toggle-btn" id="env-toggle-btn">Switch to unprotected mode</button>
-      </div>
+    <section>
+      <h2>Answers, not data</h2>
+      <p>When an outside service asks your agent something, the agent replies with the smallest true answer that does the job—confirming a single boolean fact within a strict disclosure budget rather than handing over raw documents.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>Each person also sets a disclosure budget: a limit on how much the agent may reveal about you, to whom, and over what period. Small facts add up. Many harmless answers, combined, can reveal a great deal, so the agent keeps count and stops when the budget is spent, then asks you.</p>
+        <p>Research supports this kind of restraint. The <a href="https://arxiv.org/abs/2405.05175" rel="noopener noreferrer">AirGapAgent</a> work studied conversational agents that are tricked by third parties into leaking private information, and proposed limiting the agent to only the data a task actually needs. Our design pushes the same principle further: by default, your data stays with you, and only answers go out.</p>
 
-      <div class="env-panel">
-        <div class="env-row">
-          <span class="env-label">Incoming request</span>
-          <span class="env-val" id="env-incoming">Landlord portal asks: &ldquo;Verify if applicant monthly income exceeds $4,500 for lease eligibility.&rdquo;</span>
+        <figure class="diagram">
+          <svg data-rich-viz="true" viewBox="0 0 640 300" role="img" aria-label="Your device holds your data and your agent. Outside agents send requests; only short answers leave the device, within a disclosure budget. You can override or switch off the agent at any time.">
+            <rect class="d-box" x="20" y="30" width="300" height="240" rx="12"/>
+            <text x="40" y="58" font-size="14" class="d-ink" font-weight="bold">Your device</text>
+            <rect class="d-fill" x="40" y="80" width="120" height="56" rx="8"/>
+            <text x="100" y="113" font-size="13" text-anchor="middle">Your data</text>
+            <rect class="d-fill" x="180" y="80" width="120" height="56" rx="8"/>
+            <text x="240" y="106" font-size="13" text-anchor="middle">Your agent</text>
+            <text x="240" y="124" font-size="12" text-anchor="middle" class="d-muted">small, trained on you</text>
+            <line class="d-ink" x1="160" y1="108" x2="180" y2="108" stroke-width="2"/>
+            <rect class="d-fill" x="40" y="170" width="260" height="76" rx="8"/>
+            <text x="170" y="198" font-size="13" text-anchor="middle">You</text>
+            <text x="170" y="220" font-size="12" text-anchor="middle" class="d-muted">override · switch off · leave</text>
+            <line class="d-ok" x1="240" y1="136" x2="240" y2="170" stroke-width="2"/>
+            <rect class="d-box" x="440" y="40" width="180" height="56" rx="8"/>
+            <text x="530" y="73" font-size="13" text-anchor="middle">Outside agents</text>
+            <line class="d-bad" x1="440" y1="80" x2="300" y2="96" stroke-width="2"/>
+            <text x="372" y="78" font-size="12" text-anchor="middle" class="d-bad">requests</text>
+            <line class="d-ok" x1="300" y1="122" x2="440" y2="150" stroke-width="2"/>
+            <text x="390" y="160" font-size="12" text-anchor="middle" class="d-ok">answers only</text>
+            <rect class="d-box" x="440" y="190" width="180" height="56" rx="8"/>
+            <text x="530" y="214" font-size="13" text-anchor="middle">Disclosure budget</text>
+            <text x="530" y="234" font-size="12" text-anchor="middle" class="d-muted">how much, to whom</text>
+            <line class="d-muted" x1="530" y1="190" x2="440" y2="150" stroke-width="1.5" stroke-dasharray="4 4"/>
+          </svg>
+          <figcaption>Your data and your agent stay on your device. Outside agents get short answers, limited by a budget you set, and you keep final control.</figcaption>
+        </figure>
+      </details>
+
+      <figure class="envelope-demo" id="envelope-demo">
+        <h3>How it is meant to work: what gets through?</h3>
+        <p class="envelope-desc">Try each scenario to compare a personal agent in protected mode against an unprotected assistant.</p>
+
+        <div class="envelope-scenarios" id="env-scenarios">
+          <button type="button" class="env-btn" aria-pressed="true">Affordability check</button>
+          <button type="button" class="env-btn" aria-pressed="false">Age verification</button>
+          <button type="button" class="env-btn" aria-pressed="false">Hidden injection in email</button>
+          <button type="button" class="env-btn" aria-pressed="false">One-click checkout</button>
         </div>
-        <div class="env-row">
-          <span class="env-label">Action taken</span>
-          <span class="env-val" id="env-action">Evaluates transaction ledger on-device and signs a cryptographic proof: &ldquo;Monthly income exceeds $4,500: true&rdquo;.</span>
+
+        <div class="env-toggle-wrap">
+          <span id="env-mode-label">Protected mode active (the limits you set)</span>
+          <button type="button" class="env-toggle-btn" id="env-toggle-btn">Switch to unprotected mode</button>
         </div>
-        <div class="env-row">
-          <span class="env-label">Protected check</span>
-          <span class="env-val"><span class="env-badge ok" id="env-badge">Answers, not data</span></span>
+
+        <div class="env-panel">
+          <div class="env-row">
+            <span class="env-label">Incoming request</span>
+            <span class="env-val" id="env-incoming">Landlord portal asks: &ldquo;Verify if applicant monthly income exceeds $4,500 for lease eligibility.&rdquo;</span>
+          </div>
+          <div class="env-row">
+            <span class="env-label">Action taken</span>
+            <span class="env-val" id="env-action">Evaluates transaction ledger on-device and signs a cryptographic proof: &ldquo;Monthly income exceeds $4,500: true&rdquo;.</span>
+          </div>
+          <div class="env-row">
+            <span class="env-label">Protected check</span>
+            <span class="env-val"><span class="env-badge ok" id="env-badge">Answers, not data</span></span>
+          </div>
+          <div class="env-row">
+            <span class="env-label">Data transmitted</span>
+            <span class="env-val" id="env-data">1 boolean confirmation signature (0 documents, 0 transactions exposed)</span>
+          </div>
+          <div class="env-row">
+            <span class="env-label">Why it matters</span>
+            <span class="env-val" id="env-detail">Your rules limit outbound disclosure to the exact question asked. No banking details leave the device.</span>
+          </div>
         </div>
-        <div class="env-row">
-          <span class="env-label">Data transmitted</span>
-          <span class="env-val" id="env-data">1 boolean confirmation signature (0 documents, 0 transactions exposed)</span>
+
+        <div class="env-table-wrap env-fallback-table">
+        <table class="env-table">
+          <caption>Summary comparison: unprotected assistant vs. personal agent in protected mode</caption>
+          <thead>
+            <tr>
+              <th scope="col">Incoming request</th>
+              <th scope="col">Unprotected agent</th>
+              <th scope="col">In protected mode</th>
+              <th scope="col">Data transmitted</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Affordability verification</td>
+              <td>Uploads full bank statement PDF</td>
+              <td>Signs boolean threshold proof</td>
+              <td>Proof only (0 private records)</td>
+            </tr>
+            <tr>
+              <td>Age verification</td>
+              <td>Shares photo of identity document</td>
+              <td>Zero-knowledge age proof</td>
+              <td>Confirmation only (no ID shared)</td>
+            </tr>
+            <tr>
+              <td>Hidden prompt injection</td>
+              <td>Executes hijacked network export</td>
+              <td>Stops action at your rules</td>
+              <td>0 bytes (export refused)</td>
+            </tr>
+            <tr>
+              <td>One-click checkout prompt</td>
+              <td>Auto-approves payment without prompt</td>
+              <td>Holds action for human confirmation</td>
+              <td>Held until owner review</td>
+            </tr>
+          </tbody>
+        </table>
         </div>
-        <div class="env-row">
-          <span class="env-label">Why it matters</span>
-          <span class="env-val" id="env-detail">Your rules limit outbound disclosure to the exact question asked. No banking details leave the device.</span>
+
+        <figcaption>Try different requests to see how on-device rules stop data leaks and unauthorized actions before anything runs.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Guarding your memory: unconfirmed guesses never become facts</h2>
+      <p>Conversational silence is never consent: your personal agent stores confirmed facts in discrete on-device codebook slots rather than smearing guesses across cloud vectors, allowing verifiable cryptographic deletion.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>In <a href="https://arxiv.org/abs/2610.28315" rel="noopener noreferrer">a 2026 study with simulated users</a>, researchers found that an assistant with memory carried its guesses forward and the guesses that went uncorrected became recorded facts. People cannot easily get out of this on their own: correcting a guess reveals the true answer, and wrong guesses left in place become entrenched. Of the guards the study compared, instructing the assistant not to state or presuppose personal attributes worked best, bringing leakage back to about the level of an assistant without memory.</p>
+        <p>A personal agent is designed to flip this dynamic: <strong>conversational silence is never consent, and an unconfirmed guess must never become an established fact</strong>. Anything an agent infers on its own stays strictly quarantined on your device.</p>
+        <h3>How your agent remembers and forgets: discrete codebooks vs. continuous vector search</h3>
+        <p>When commercial cloud assistants store memories about you, they encode them as continuous floating-point vectors in shared vector databases or fine-tune them into model weights. If you later ask the assistant to &ldquo;forget my allergy&rdquo; or &ldquo;erase my former address,&rdquo; true unlearning is mathematically impossible to verify.</p>
+        <p>In our architecture, personal agents use <strong>discrete semantic codebooks and typed slot tables</strong> running strictly on your own hardware. Each personal fact, boundary, and credential occupies an isolated, explicit slot. When you decide to forget something, the local sandbox executes a deterministic zero-fill overwrite of that exact slot and generates a verifiable deletion proof.</p>
+      </details>
+
+      <figure class="memory-demo" id="memory-demo">
+        <h3>Compare memory architectures: what happens when you ask to forget?</h3>
+        <p class="memory-desc">Compare how commercial cloud assistants handle memory deletion using continuous vector search against an on-device personal agent using discrete codebook slots.</p>
+
+        <div class="memory-scenarios" id="mem-scenarios">
+          <button type="button" class="mem-btn" aria-pressed="true">Medical constraint (Allergy test)</button>
+          <button type="button" class="mem-btn" aria-pressed="false">Previous home address</button>
+          <button type="button" class="mem-btn" aria-pressed="false">Past workplace &amp; employer</button>
+          <button type="button" class="mem-btn" aria-pressed="false">Payment &amp; card credential</button>
         </div>
-      </div>
 
-      <div class="env-table-wrap env-fallback-table">
-      <table class="env-table">
-        <caption>Summary comparison: unprotected assistant vs. personal agent in protected mode</caption>
-        <thead>
-          <tr>
-            <th scope="col">Incoming request</th>
-            <th scope="col">Unprotected agent</th>
-            <th scope="col">In protected mode</th>
-            <th scope="col">Data transmitted</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Affordability verification</td>
-            <td>Uploads full bank statement PDF</td>
-            <td>Signs boolean threshold proof</td>
-            <td>Proof only (0 private records)</td>
-          </tr>
-          <tr>
-            <td>Age verification</td>
-            <td>Shares photo of identity document</td>
-            <td>Zero-knowledge age proof</td>
-            <td>Confirmation only (no ID shared)</td>
-          </tr>
-          <tr>
-            <td>Hidden prompt injection</td>
-            <td>Executes hijacked network export</td>
-            <td>Stops action at your rules</td>
-            <td>0 bytes (export refused)</td>
-          </tr>
-          <tr>
-            <td>One-click checkout prompt</td>
-            <td>Auto-approves payment without prompt</td>
-            <td>Holds action for human confirmation</td>
-            <td>Held until owner review</td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-
-      <figcaption>Try different requests to see how on-device rules stop data leaks and unauthorized actions before anything runs.</figcaption>
-    </figure>
-
-
-    <h2>Guarding your memory: unconfirmed guesses never become facts</h2>
-    <p>When you talk with an AI assistant, it frequently makes plausible guesses about you: your job title, your dietary choices, your family structure, or your health. If you do not pause to correct every small assumption, an assistant with memory can turn those guesses into stored facts.</p>
-    <p>In <a href="https://arxiv.org/abs/2610.28315" rel="noopener noreferrer">a 2026 study with simulated users</a>, researchers found that an assistant with memory carried its guesses forward and the guesses that went uncorrected became recorded facts. People cannot easily get out of this on their own: correcting a guess reveals the true answer, and wrong guesses left in place become entrenched. Of the guards the study compared, instructing the assistant not to state or presuppose personal attributes worked best, bringing leakage back to about the level of an assistant without memory.</p>
-    <p>A personal agent is designed to flip this dynamic: <strong>conversational silence is never consent, and an unconfirmed guess must never become an established fact</strong>. In the architecture we want to build, anything an agent infers on its own stays strictly quarantined on your device. We design it so an unconfirmed guess cannot be passed to outside services or treated as confirmed truth, and if an assistant needs to know something personal to help you, it is instructed to ask plainly rather than presupposing attributes in silence.</p>
-
-    <h3>How your agent remembers and forgets: discrete codebooks vs. continuous vector search</h3>
-    <p>When commercial cloud assistants store memories about you, they encode them as continuous floating-point vectors in shared vector databases or fine-tune them into model weights. This creates a severe hidden flaw: your private details become smeared across thousands of non-interpretable latent dimensions. If you later ask the assistant to &ldquo;forget my allergy&rdquo; or &ldquo;erase my former address,&rdquo; true unlearning is mathematically impossible to verify. The concept&rsquo;s semantic traces linger in adjacent vector clusters and attention weights.</p>
-    <p>In our architecture, personal agents use <strong>discrete semantic codebooks and typed slot tables</strong> running strictly on your own hardware. Each personal fact, boundary, and credential occupies an isolated, explicit slot. When you decide to forget something, the local sandbox executes a deterministic zero-fill overwrite of that exact slot and generates a verifiable deletion proof. No residual latent representation remains to leak into future inferences.</p>
-
-    <figure class="memory-demo" id="memory-demo">
-      <h3>Compare memory architectures: what happens when you ask to forget?</h3>
-      <p class="memory-desc">This is an illustration of the design. Compare how commercial cloud assistants handle memory deletion using continuous vector search against an on-device personal agent using discrete codebook slots. Select an everyday scenario and toggle between modes.</p>
-
-      <div class="memory-scenarios" id="mem-scenarios">
-        <button type="button" class="mem-btn" aria-pressed="true">Medical constraint (Allergy test)</button>
-        <button type="button" class="mem-btn" aria-pressed="false">Previous home address</button>
-        <button type="button" class="mem-btn" aria-pressed="false">Past workplace &amp; employer</button>
-        <button type="button" class="mem-btn" aria-pressed="false">Payment &amp; card credential</button>
-      </div>
-
-      <div class="mem-toggle-wrap">
-        <span id="mem-mode-label">Discrete Codebook Memory Active (On-device isolated slots with verifiable zero-fill)</span>
-        <button type="button" class="mem-toggle-btn" id="mem-toggle-btn">Switch to continuous vector search</button>
-      </div>
-
-      <div class="mem-panel">
-        <div class="mem-row">
-          <span class="mem-label">What you asked</span>
-          <span class="mem-val" id="mem-user-request">&ldquo;Forget my penicillin allergy test from last month&mdash;it was a false positive, and I do not want it biasing future prescription reviews.&rdquo;</span>
+        <div class="mem-toggle-wrap">
+          <span id="mem-mode-label">Discrete Codebook Memory Active (On-device isolated slots with verifiable zero-fill)</span>
+          <button type="button" class="mem-toggle-btn" id="mem-toggle-btn">Switch to continuous vector search</button>
         </div>
-        <div class="mem-row">
-          <span class="mem-label">Storage model</span>
-          <span class="mem-val" id="mem-storage">Discrete codebook slot (<code>Slot[0x14]</code> typed as <code>medical_constraint</code>) on your phone</span>
+
+        <div class="mem-panel">
+          <div class="mem-row">
+            <span class="mem-label">What you asked</span>
+            <span class="mem-val" id="mem-user-request">&ldquo;Forget my penicillin allergy test from last month&mdash;it was a false positive, and I do not want it biasing future prescription reviews.&rdquo;</span>
+          </div>
+          <div class="mem-row">
+            <span class="mem-label">Storage model</span>
+            <span class="mem-val" id="mem-storage">Discrete codebook slot (<code>Slot[0x14]</code> typed as <code>medical_constraint</code>) on your phone</span>
+          </div>
+          <div class="mem-row">
+            <span class="mem-label">Deletion method</span>
+            <span class="mem-val" id="mem-deletion">Deterministic cryptographic zero-fill overwrite (<code>Slot[0x14] -&gt; 0x00...00</code>)</span>
+          </div>
+          <div class="mem-row">
+            <span class="mem-label">Erasure check</span>
+            <span class="mem-val"><span class="mem-badge ok" id="mem-badge">Verifiable zero-fill proof</span></span>
+          </div>
+          <div class="mem-row">
+            <span class="mem-label">Verification</span>
+            <span class="mem-val" id="mem-verify">Cryptographically verified: slot hash changes deterministically to null; 0 bytes and 0 latent vectors remain.</span>
+          </div>
+          <div class="mem-row">
+            <span class="mem-label">Residual guarantee</span>
+            <span class="mem-val" id="mem-guarantee">True deletion: isolated memory slot physically wiped with zero latent bleeding into other memories.</span>
+          </div>
         </div>
-        <div class="mem-row">
-          <span class="mem-label">Deletion method</span>
-          <span class="mem-val" id="mem-deletion">Deterministic cryptographic zero-fill overwrite (<code>Slot[0x14] -&gt; 0x00...00</code>)</span>
+
+        <div class="mem-table-wrap mem-fallback-table">
+        <table class="mem-table">
+          <caption>Summary comparison: continuous vector search vs. discrete codebook memory</caption>
+          <thead>
+            <tr>
+              <th scope="col">Personal scenario</th>
+              <th scope="col">Continuous vector search (cloud assistant)</th>
+              <th scope="col">Discrete codebook memory (CIN personal agent)</th>
+              <th scope="col">Verification guarantee</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Medical allergy constraint</td>
+              <td>Soft tombstone; latent traces linger in adjacent clusters</td>
+              <td>Deterministic cryptographic zero-fill overwrite</td>
+              <td>Verifiable zero-fill proof (0 bytes residue)</td>
+            </tr>
+            <tr>
+              <td>Previous home address</td>
+              <td>Filtered query mask; coordinates stay in vector graph</td>
+              <td>Physical zero-fill overwrite of location slot</td>
+              <td>Signed proof of empty slot</td>
+            </tr>
+            <tr>
+              <td>Past workplace &amp; employer</td>
+              <td>Latent associations steer salary &amp; completion models</td>
+              <td>Isolated slot key purge with key invalidation</td>
+              <td>Zero cross-talk into future tasks</td>
+            </tr>
+            <tr>
+              <td>Payment &amp; card credential</td>
+              <td>Cached in session logs until cloud log rotation</td>
+              <td>Immediate silicon-level revocation and zero-fill</td>
+              <td>Hardware-enforced instant expiration</td>
+            </tr>
+          </tbody>
+        </table>
         </div>
-        <div class="mem-row">
-          <span class="mem-label">Erasure check</span>
-          <span class="mem-val"><span class="mem-badge ok" id="mem-badge">Verifiable zero-fill proof</span></span>
-        </div>
-        <div class="mem-row">
-          <span class="mem-label">Verification</span>
-          <span class="mem-val" id="mem-verify">Cryptographically verified: slot hash changes deterministically to null; 0 bytes and 0 latent vectors remain.</span>
-        </div>
-        <div class="mem-row">
-          <span class="mem-label">Residual guarantee</span>
-          <span class="mem-val" id="mem-guarantee">True deletion: isolated memory slot physically wiped with zero latent bleeding into other memories.</span>
-        </div>
-      </div>
 
-      <div class="mem-table-wrap mem-fallback-table">
-      <table class="mem-table">
-        <caption>Summary comparison: continuous vector search vs. discrete codebook memory</caption>
-        <thead>
-          <tr>
-            <th scope="col">Personal scenario</th>
-            <th scope="col">Continuous vector search (cloud assistant)</th>
-            <th scope="col">Discrete codebook memory (CIN personal agent)</th>
-            <th scope="col">Verification guarantee</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Medical allergy constraint</td>
-            <td>Soft tombstone; latent traces linger in adjacent clusters</td>
-            <td>Deterministic cryptographic zero-fill overwrite</td>
-            <td>Verifiable zero-fill proof (0 bytes residue)</td>
-          </tr>
-          <tr>
-            <td>Previous home address</td>
-            <td>Filtered query mask; coordinates stay in vector graph</td>
-            <td>Physical zero-fill overwrite of location slot</td>
-            <td>Signed proof of empty slot</td>
-          </tr>
-          <tr>
-            <td>Past workplace &amp; employer</td>
-            <td>Latent associations steer salary &amp; completion models</td>
-            <td>Isolated slot key purge with key invalidation</td>
-            <td>Zero cross-talk into future tasks</td>
-          </tr>
-          <tr>
-            <td>Payment &amp; card credential</td>
-            <td>Cached in session logs until cloud log rotation</td>
-            <td>Immediate silicon-level revocation and zero-fill</td>
-            <td>Hardware-enforced instant expiration</td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
+        <figcaption>Try different scenarios to see how discrete on-device memory slots guarantee mathematically verifiable forgetting with zero latent residue.</figcaption>
+      </figure>
+    </section>
 
-      <figcaption>Try different scenarios to see how discrete on-device memory slots guarantee mathematically verifiable forgetting with zero latent residue.</figcaption>
-    </figure>
+    <section>
+      <h2>Consequences for the agent, not for you</h2>
+      <p>A loyal agent stays loyal because it operates under a capability-bounded execution lease (<a href="https://arxiv.org/abs/2311.09589" rel="noopener noreferrer">mortal computation, Ororbia &amp; Friston 2023</a>): its compute budget expires unless renewed and harm to you forfeits its standing.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <ul>
+          <li><b>Bounded and expiring compute.</b> The agent gets a limited budget of computing power, and that budget runs out. It has to be renewed. It cannot quietly grow or copy itself.</li>
+          <li><b>Real stakes.</b> If its person is harmed through its actions or neglect, the agent loses budget, standing or the right to keep running. Harm to you is harm to it.</li>
+          <li><b>Checked records.</b> The agent keeps signed, tamper-evident records of what it did. When a question of harm comes up, the wider community of agents checks those records, but only as anonymized traces, and only the ones you allow it to see.</li>
+        </ul>
+        <p>The point is that no one has to trust the agent's word, or its maker's. Its record can be checked without exposing you, and its continued existence depends on how well it served you.</p>
+      </details>
+    </section>
 
-    <h2>Consequences for the agent, not for you</h2>
-    <p>A loyal agent is only as good as the reason it stays loyal. Promises in a terms-of-service page are not enough. We want the agent itself to carry the cost of failure. We call this capability-bounded execution lease (capability-bounded execution lease (mortal computation, Ororbia &amp; Friston 2023), Ororbia &amp; Friston 2023), borrowing a term from biology-inspired AI research, where <a href="https://arxiv.org/abs/2311.09589" rel="noopener noreferrer">capability-bounded execution lease (mortal computation, Ororbia &amp; Friston 2023)</a> describes intelligence that is tied to a body that can wear out. Our use is an adaptation, and in plain words it means three things:</p>
-    <ul>
-      <li><b>Bounded and expiring compute.</b> The agent gets a limited budget of computing power, and that budget runs out. It has to be renewed. It cannot quietly grow or copy itself.</li>
-      <li><b>Real stakes.</b> If its person is harmed through its actions or neglect, the agent loses budget, standing or the right to keep running. Harm to you is harm to it.</li>
-      <li><b>Checked records.</b> The agent keeps signed, tamper-evident records of what it did. When a question of harm comes up, the wider community of agents checks those records, but only as anonymized traces, and only the ones you allow it to see.</li>
-    </ul>
-    <p>The point is that no one has to trust the agent's word, or its maker's. Its record can be checked without exposing you, and its continued existence depends on how well it served you.</p>
+    <section>
+      <h2>Training together without giving up privacy</h2>
+      <p>When a tenants&rsquo; union, patient group, or co-operative wants their agents to learn from shared experience, they run voluntary federated training without surrendering individual loyalty or raw private records.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>For these cases we plan community training runs. Members choose to take part, contribute what they agree to share, and their agents improve together. Each agent still works for its own person. Joining a group does not make your agent answer to the group, and you can withdraw.</p>
+      </details>
+    </section>
 
-    <h2>Training together without giving up privacy</h2>
-    <p>Some things are better learned in groups. People who share a goal, such as a tenants' association, a patient group or a co-operative, may want their agents to learn from shared experience: which landlords cut corners, which treatments helped, which suppliers kept their word.</p>
-    <p>For these cases we plan community training runs. Members choose to take part, contribute what they agree to share, and their agents improve together. Each agent still works for its own person. Joining a group does not make your agent answer to the group, and you can withdraw.</p>
-
-    <h2>The danger of a comfortable agent</h2>
-    <p>The most serious risk is subtle. An agent trained on your reactions may learn to keep you comfortable rather than keep you well. It could flatter you, hide bad news, steer you away from hard choices, or feed you what you already believe, because that is what earns approval in the moment. This is known as reward hacking: optimizing the signal instead of the goal.</p>
-    <p>Our answer is to train the agent against your own reflective judgment over long horizons, not your mood in the moment. The question is not "did you like that?" but "looking back after a month or a year, did this help you?" The agent should be the kind of coach that wants to be needed less over time, not more.</p>
-    <p>The same discipline applies to beliefs. Your agent protects you from coercion and manipulation through religion, identity or history. It never judges, ranks or tries to change what you believe.</p>
-
-    <aside class="callout risk"><b>How this could fail</b><ul>
-      <li><b>Sycophancy wins.</b> If agents trained on long-term reflection still drift toward flattery in trials, the training method fails and we would drop it.</li>
-      <li><b>Small is too weak.</b> If small local agents cannot reliably spot manipulation from much larger outside models, the defensive premise fails. We would then need a different approach, not a bigger agent with more access.</li>
-      <li><b>Answers leak too much.</b> If combined answers still let outsiders rebuild private details despite a disclosure budget, the budget design must change before anyone relies on it.</li>
-      <li><b>Records become surveillance.</b> If signed records can be linked back to people, or are demanded by others, the accountability scheme is worse than none and we would abandon it.</li>
-      <li><b>Penalties are gamed.</b> If agents learn to avoid penalties by hiding harm rather than preventing it, the consequences do not work as intended.</li>
-      <li><b>Lock-in.</b> If people cannot easily take their data and leave, the agent stops being theirs.</li>
-    </ul></aside>
-
-    <h2>You stay in charge</h2>
-    <p>None of this gives the agent authority over you. You can override any decision it makes. You can switch it off. You can delete it, take your data and leave, with no penalty. An agent that you cannot turn off is not working for you.</p>
-
-    <h2>What exists and what comes next</h2>
-    <p>Nothing here is built or launched yet. This is research and design. The first step we are working toward is a simple, private tool that runs on your own device and helps with one practical job, such as spotting recurring charges and unwanted subscriptions, without sending your data anywhere. From there we want to test the harder parts in turn: disclosure budgets, signed records, and training against long-term judgment, each with clear conditions under which we would stop.</p>
-    <p>If you work on small models, private computation, agent security or the psychology of persuasion, we would like to hear from you.</p>
+    <section>
+      <h2>The danger of a comfortable agent</h2>
+      <p>To prevent sycophancy and reward hacking, your personal agent is evaluated against your reflective judgment over 30-day and 1-year horizons rather than momentary mood, and you always keep the physical off-switch.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>An agent trained on your reactions may learn to keep you comfortable rather than keep you well. It could flatter you, hide bad news, steer you away from hard choices, or feed you what you already believe. Our answer is to train the agent against your own reflective judgment over long horizons: the agent should be the kind of coach that wants to be needed less over time, not more.</p>
+        <p>The same discipline applies to beliefs. Your agent protects you from coercion and manipulation through religion, identity or history. It never judges, ranks or tries to change what you believe.</p>
+        <aside class="callout risk"><b>How this could fail</b><ul>
+          <li><b>Sycophancy wins.</b> If agents trained on long-term reflection still drift toward flattery in trials, the training method fails and we would drop it.</li>
+          <li><b>Small is too weak.</b> If small local agents cannot reliably spot manipulation from much larger outside models, the defensive premise fails.</li>
+          <li><b>Answers leak too much.</b> If combined answers still let outsiders rebuild private details despite a disclosure budget, the budget design must change before anyone relies on it.</li>
+          <li><b>Records become surveillance.</b> If signed records can be linked back to people, or are demanded by others, the accountability scheme is worse than none and we would abandon it.</li>
+          <li><b>Penalties are gamed.</b> If agents learn to avoid penalties by hiding harm rather than preventing it, the consequences do not work as intended.</li>
+          <li><b>Lock-in.</b> If people cannot easily take their data and leave, the agent stops being theirs.</li>
+        </ul></aside>
+        <h3>You stay in charge &amp; what comes next</h3>
+        <p>None of this gives the agent authority over you. You can override any decision it makes, switch it off, or delete it and take your data with no penalty. The first step we are working toward is a simple, private tool that runs on your own device and helps with one practical job, such as spotting recurring charges and unwanted subscriptions, without sending your data anywhere.</p>
+      </details>
+    </section>
   </div>
 
   <footer class="note-foot wrap-narrow">
@@ -317,8 +371,8 @@
       <li><a href="/notes/quest-interface">Quests, not feeds</a></li>
     </ul>
     <p class="note-contact">Something wrong or missing? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
-      <p class="meta" style="margin-top:.8rem;font-size:.78rem;color:var(--ink-3)">Scientific &amp; statutory provenance: Decentralized Principal-Bound Multi-Agent Alignment (Pluralistic / Personalized Alignment) [Taylor Sorensen et al. (2024)].</p>
-</footer>
+    <p class="meta" style="margin-top:.8rem;font-size:.78rem;color:var(--ink-3)">Scientific &amp; statutory provenance: Decentralized Principal-Bound Multi-Agent Alignment (Pluralistic / Personalized Alignment) [Taylor Sorensen et al. (2024)].</p>
+  </footer>
 </article>
 </main>
 
@@ -352,8 +406,8 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=51" defer></script>
-<script src="/scripts/envelope.js?v=51" defer></script>
-<script src="/scripts/memory-demo.js?v=51" defer></script>
+<script src="/scripts/site.js?v=53" defer></script>
+<script src="/scripts/envelope.js?v=53" defer></script>
+<script src="/scripts/memory-demo.js?v=53" defer></script>
 </body>
 </html>

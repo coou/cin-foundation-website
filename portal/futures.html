@@ -9,7 +9,9 @@
   <meta name="theme-color" content="#0d0f13" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)">
   <link rel="canonical" href="https://cintnet.org/futures">
-  <link rel="stylesheet" href="/assets/portal.css?v=14">
+  <link rel="stylesheet" href="/assets/portal.css?v=16">
+  <script src="/assets/vendor/d3.v7.min.js" defer></script>
+  <script src="/assets/portal-subpages-d3.js?v=16" defer></script>
 </head>
 <body>
 <header class="top">
@@ -43,7 +45,10 @@
       <div>
         <span class="label">Reading the world forward · Strategic foresight atlas</span>
         <h1>Possible futures &amp; outcome shifts.</h1>
-        <p class="lede">Each day our agents read primary papers, security advisories, regulatory filings, and engineering releases. When a verified signal points to a structural shift, we model the near-future world it creates, estimate the likelihood of desirable vs. harmful outcomes today, and specify the exact engineering work that shifts those odds.</p>
+        <p class="lede">Verified primary research and real-world incidents mapped into 2026–2032+ trajectories—comparing baseline odds today against CIN safeguards.</p>
+        <details class="portal-drawer"><summary>Inspect foresight methodology &amp; probability delta details ▾</summary>
+          <div class="muted flush">Each day our agents read primary papers, security advisories, regulatory filings, and engineering releases. When a verified signal points to a structural shift, we model the near-future world it creates, estimate the likelihood of desirable vs. harmful outcomes today, and specify the exact engineering work that shifts those odds.</div>
+        </details>
       </div>
       <div class="kpi-strip">
         <div class="kpi-card">
@@ -121,6 +126,26 @@
     </div>
   </section>
 
+  <!-- Interactive D3.js v7 Futures Cone & 7-Lens Risk/Co-Intelligence Radar -->
+  <section class="card search-card" aria-label="Interactive D3.js Futures Cone and 7-Lens Radar">
+    <div class="card-head">
+      <div>
+        <span class="label">Interactive D3.js v7 Horizon Studio · Click any year node</span>
+        <h2 class="flush">Futures Cone (2026–2032+) &amp; 7-Lens Risk / Co-Intelligence Radar</h2>
+      </div>
+      <span class="tag ok">2026 · 2027 · 2028 · 2030 · 2032+</span>
+    </div>
+    <div class="chip-row" aria-label="Horizon year selectors">
+      <button type="button" class="chip-btn" data-horizon-node="2026">2026 (1 Yr)</button>
+      <button type="button" class="chip-btn" data-horizon-node="2027">2027 (2 Yrs)</button>
+      <button type="button" class="chip-btn active" data-horizon-node="2028">2028 (3 Yrs)</button>
+      <button type="button" class="chip-btn" data-horizon-node="2030">2030 (4 Yrs)</button>
+      <button type="button" class="chip-btn" data-horizon-node="2032+">2032+ (5+ Yrs)</button>
+    </div>
+    <svg id="futures-d3-cone" class="svg-diagram" data-rich-viz="true" viewBox="0 0 760 240" role="img" aria-label="Interactive D3.js Futures Cone and 2026-2032 Scenario Horizon"></svg>
+    <div id="futures-cone-status" class="twin-result">2028 (3 Yrs): Private Set Intersection Buyer Co-Ops &amp; LoRA Ledgers — Desirable Co-Intelligence odds: 60% with CIN vs. 40% unmitigated drift/lock-in.</div>
+  </section>
+
   <p class="notice" id="fstate">Loading…</p>
   <div class="card search-card">
     <label for="futures-search">Search scenarios by title, premise, or engineering pipeline
@@ -136,6 +161,6 @@
   <span>The open network workbench of the <a href="https://collectiveintelligencenetwork.org">Collective Intelligence Network</a>.</span>
   <span>Anything you post in <a href="/ideas">Ideas</a> is public; everything you enter in <a href="/twin">Your Twin</a> stays strictly in your browser.</span>
 </footer>
-<script type="module" src="/assets/futures.js?v=14"></script>
+<script type="module" src="/assets/futures.js?v=16"></script>
 </body>
 </html>

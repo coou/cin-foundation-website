@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=51">
+  <link rel="stylesheet" href="/styles/site.css?v=53">
   <style>
     .juris-explorer {
       margin: 2rem 0;
@@ -168,162 +168,210 @@
   <div class="note-body wrap-narrow">
     <aside class="callout"><b>In short</b><p>Lawmakers across the world are drawing hard lines around autonomous software: the EU AI Act enforces human oversight and transparency, Colorado establishes affirmative duties of care for consequential life decisions, federal legislators propose criminal liability for reckless agents under the Computer Fraud and Abuse Act, and NIST's October 2026 guidelines mandate ten core tenets for agent identity. We explain why cloud surveillance fails these tests and how client-side Object-Capability (OCap) policy airlocks (Dennis &amp; Van Horn, 1966) provide verifiable compliance by construction.</p></aside>
 
-    <h2>1. The question that arrives when software acts</h2>
-    <p>When an artificial intelligence assistant merely drafts an email or summarizes an article, mistakes are irritating but contained. But when an agent acts autonomously—initiating financial transactions, modifying health records, executing contracts, or reconfiguring system settings—the legal and human question shifts immediately from <em>what was said</em> to <em>who authorized it, what limits applied, and who is responsible for the outcome</em>.</p>
-    <p>Most commercial solutions attempt to solve this through conversational warnings or by streaming everything back to centralized cloud surveillance databases. But conversational warnings are routinely bypassed by prompt injection, while central logging compromises privacy without preventing unauthorized execution. Real accountability requires deterministic architectural boundaries.</p>
+    <figure class="diagram">
+      <svg data-rich-viz="true" viewBox="0 0 760 240" role="img" aria-label="Comparison of Legacy Conversational Guardrails and Cloud Surveillance versus CIN NIST Tenet 7 OCap Policy Broker and Statutory Compliance">
+        <rect x="12" y="14" width="354" height="212" rx="10" fill="rgba(239,106,82,0.06)" stroke="#ef6a52" stroke-width="1.5"/>
+        <text x="28" y="38" font-size="12" font-weight="700" fill="#ef6a52">LEGACY CENTRALIZED FAILURE: PROMPT SELF-POLICING</text>
+        <rect x="28" y="54" width="322" height="46" rx="6" fill="rgba(239,106,82,0.12)" stroke="#ef6a52"/>
+        <text x="189" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#ef6a52">LLM Evaluates Its Own Permissions (Violates Tenet 7)</text>
+        <text x="189" y="90" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.8">Indirect prompt injection bypasses conversational warnings</text>
+        <rect x="28" y="114" width="322" height="46" rx="6" fill="rgba(239,106,82,0.12)" stroke="#ef6a52"/>
+        <text x="189" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#ef6a52">Centralized Telemetry Lakes &amp; Operator Liability</text>
+        <text x="189" y="150" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.8">Exposes domestic privacy while leaving users open to CFAA risk</text>
+        <text x="189" y="192" text-anchor="middle" font-size="10" font-weight="600" fill="#ef6a52">Result: Non-deterministic compliance &amp; privacy honeypots</text>
 
-    <h2>2. Interactive Jurisdictional Explorer</h2>
-    <p>Explore how major legal frameworks classify autonomous agents, allocate liability between developers and operators, and define technical compliance requirements.</p>
+        <rect x="394" y="14" width="354" height="212" rx="10" fill="rgba(79,179,168,0.07)" stroke="#4fb3a8" stroke-width="1.5"/>
+        <text x="410" y="38" font-size="12" font-weight="700" fill="#4fb3a8">CIN MECHANISM: NIST AIMS TENET 7 OCAP AIRLOCK</text>
+        <rect x="410" y="54" width="322" height="46" rx="6" fill="rgba(79,179,168,0.14)" stroke="#4fb3a8"/>
+        <text x="571" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#4fb3a8">Deterministic Separation of Policy from Reasoning</text>
+        <text x="571" y="90" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.85">Non-LLM client-side OCap broker enforces attenuated leases</text>
+        <rect x="410" y="114" width="322" height="46" rx="6" fill="rgba(79,179,168,0.14)" stroke="#4fb3a8"/>
+        <text x="571" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#4fb3a8">EU Art. 14 + CO SB 24-205 + ISO-27560 Receipts</text>
+        <text x="571" y="150" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.85">Tamper-evident local audit trail without cloud surveillance</text>
+        <text x="571" y="192" text-anchor="middle" font-size="10" font-weight="600" fill="#4fb3a8">Result: Verifiable statutory compliance by construction</text>
+      </svg>
+      <figcaption>Comparing prompt-based self-policing (`#ef6a52`) against NIST AIMS Tenet 7 deterministic OCap policy separation (`#4fb3a8`).</figcaption>
+    </figure>
 
-    <figure class="juris-explorer" id="juris-explorer">
-      <div class="juris-pills" role="group" aria-label="Select legal jurisdiction">
-        <button type="button" class="juris-btn" data-juris="eu" aria-pressed="true">European Union (AI Act)</button>
-        <button type="button" class="juris-btn" data-juris="colorado" aria-pressed="false">United States: Colorado</button>
-        <button type="button" class="juris-btn" data-juris="nist" aria-pressed="false">NIST AIMS Guidance</button>
-        <button type="button" class="juris-btn" data-juris="us-fed" aria-pressed="false">US Federal (Proposed)</button>
-        <button type="button" class="juris-btn" data-juris="canada" aria-pressed="false">Canada (AIDA Baseline)</button>
-      </div>
+    <section>
+      <h2>1. The question that arrives when software acts</h2>
+      <p>When an artificial intelligence assistant merely drafts an email or summarizes an article, mistakes are irritating but contained. But when an agent acts autonomously—initiating financial transactions, modifying health records, executing contracts, or reconfiguring system settings—the legal and human question shifts immediately from <em>what was said</em> to <em>who authorized it, what limits applied, and who is responsible for the outcome</em>.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>Most commercial solutions attempt to solve this through conversational warnings or by streaming everything back to centralized cloud surveillance databases. But conversational warnings are routinely bypassed by prompt injection, while central logging compromises privacy without preventing unauthorized execution. Real accountability requires deterministic architectural boundaries.</p>
+      </details>
+    </section>
 
-      <div class="juris-card" id="juris-card" aria-live="polite">
-        <h3 id="jc-title">Regulation (EU) 2024/1689 (EU AI Act) <span class="juris-badge enacted" id="jc-badge">Enacted</span></h3>
-        <p id="jc-desc">The European Union's comprehensive risk-tiered framework entered into force on August 1, 2024, establishing strict transparency duties, high-risk operational obligations, and rules for general-purpose AI models.</p>
+    <section>
+      <h2>2. Interactive Jurisdictional Explorer</h2>
+      <p>Explore how major legal frameworks classify autonomous agents, allocate liability between developers and operators, and define technical compliance requirements.</p>
 
-        <div class="juris-meta">
-          <div>
-            <strong>Legal Scope &amp; Trigger</strong>
-            <span id="jc-scope">Tiered classification: prohibited practices, high-risk deployments in essential services, and models trained on over 10^25 FLOPs.</span>
-          </div>
-          <div>
-            <strong>Human Oversight Duty</strong>
-            <span id="jc-oversight">Article 14 requires systems to be designed so that natural persons can oversee operations, interpret outputs, and intervene or stop execution.</span>
-          </div>
-          <div>
-            <strong>Transparency Requirement</strong>
-            <span id="jc-transparency">Article 50 requires natural persons to be informed whenever they interact directly with an automated AI system unless obvious.</span>
-          </div>
-          <div>
-            <strong>Primary Statutory Link</strong>
-            <span id="jc-link"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689" target="_blank" rel="noopener noreferrer">Official Journal of the European Union (Regulation 2024/1689) &rarr;</a></span>
+      <figure class="juris-explorer" id="juris-explorer">
+        <div class="juris-pills" role="group" aria-label="Select legal jurisdiction">
+          <button type="button" class="juris-btn" data-juris="eu" aria-pressed="true">European Union (AI Act)</button>
+          <button type="button" class="juris-btn" data-juris="colorado" aria-pressed="false">United States: Colorado</button>
+          <button type="button" class="juris-btn" data-juris="nist" aria-pressed="false">NIST AIMS Guidance</button>
+          <button type="button" class="juris-btn" data-juris="us-fed" aria-pressed="false">US Federal (Proposed)</button>
+          <button type="button" class="juris-btn" data-juris="canada" aria-pressed="false">Canada (AIDA Baseline)</button>
+        </div>
+
+        <div class="juris-card" id="juris-card" aria-live="polite">
+          <h3 id="jc-title">Regulation (EU) 2024/1689 (EU AI Act) <span class="juris-badge enacted" id="jc-badge">Enacted</span></h3>
+          <p id="jc-desc">The European Union's comprehensive risk-tiered framework entered into force on August 1, 2024, establishing strict transparency duties, high-risk operational obligations, and rules for general-purpose AI models.</p>
+
+          <div class="juris-meta">
+            <div>
+              <strong>Legal Scope &amp; Trigger</strong>
+              <span id="jc-scope">Tiered classification: prohibited practices, high-risk deployments in essential services, and models trained on over 10^25 FLOPs.</span>
+            </div>
+            <div>
+              <strong>Human Oversight Duty</strong>
+              <span id="jc-oversight">Article 14 requires systems to be designed so that natural persons can oversee operations, interpret outputs, and intervene or stop execution.</span>
+            </div>
+            <div>
+              <strong>Transparency Requirement</strong>
+              <span id="jc-transparency">Article 50 requires natural persons to be informed whenever they interact directly with an automated AI system unless obvious.</span>
+            </div>
+            <div>
+              <strong>Primary Statutory Link</strong>
+              <span id="jc-link"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689" target="_blank" rel="noopener noreferrer">Official Journal of the European Union (Regulation 2024/1689) &rarr;</a></span>
+            </div>
           </div>
         </div>
-      </div>
-      <figcaption style="margin-top:0.75rem;font-size:0.84rem;color:var(--ink-3);">Comparative synthesis of active and proposed statutory frameworks governing autonomous software agents.</figcaption>
-    </figure>
+        <figcaption style="margin-top:0.75rem;font-size:0.84rem;color:var(--ink-3);">Comparative synthesis of active and proposed statutory frameworks governing autonomous software agents.</figcaption>
+      </figure>
+    </section>
 
-    <h2>3. The Ten Tenets of Agent Identity (NIST AIMS, October 2026)</h2>
-    <p>On October 27, 2026, the National Institute of Standards and Technology (NIST) published its foundational Cybersecurity Insights guidance: <em>Design Tenets for Agent Identity Management Systems (AIMS)</em>. Rather than treating an agent as either a mere computer script or an unregulated human proxy, NIST articulated ten foundational principles for building trustworthy agent ecosystems:</p>
+    <section>
+      <h2>3. The Ten Tenets of Agent Identity (NIST AIMS, October 2026)</h2>
+      <p>On October 27, 2026, the National Institute of Standards and Technology (NIST) published its foundational Cybersecurity Insights guidance: <em>Design Tenets for Agent Identity Management Systems (AIMS)</em>. Rather than treating an agent as either a mere computer script or an unregulated human proxy, NIST articulated ten foundational principles for building trustworthy agent ecosystems:</p>
 
-    <div class="tenet-list">
-      <div class="tenet-card">
-        <h4>1. Distinct Agent Identity</h4>
-        <p>Agents must possess unique, verifiable cryptographic identities distinct from their human users and base model providers.</p>
-      </div>
-      <div class="tenet-card">
-        <h4>2. Attenuated Delegation</h4>
-        <p>An agent never inherits broad user privileges; authority must be deliberately scoped to the minimum necessary actions.</p>
-      </div>
-      <div class="tenet-card">
-        <h4>3. Zero Standing Privilege</h4>
-        <p>Permissions are granted dynamically for bounded durations and expire immediately upon task completion.</p>
-      </div>
-      <div class="tenet-card">
-        <h4>4. Short-Lived Revocable Auth</h4>
-        <p>Tokens and authorization leases must be ephemeral and instantly revocable at the local edge.</p>
-      </div>
-      <div class="tenet-card">
-        <h4>5. Human-in-the-Loop Triggers</h4>
-        <p>High-consequence actions (financial transfers, legal commitments, medical updates) require explicit human re-authentication.</p>
-      </div>
-      <div class="tenet-card">
-        <h4>6. Explicit Intent Mandates</h4>
-        <p>Every delegation is bound to a machine-readable intent specification defining exact boundaries and failure limits.</p>
-      </div>
-      <div class="tenet-card" style="border-left: 3px solid var(--ok);">
-        <h4>7. Separation of Policy from Reasoning</h4>
-        <p><strong>Crucial architectural tenet:</strong> The language model performing task reasoning must never evaluate its own policy permissions. Policy enforcement must remain deterministic and independent.</p>
-      </div>
-      <div class="tenet-card">
-        <h4>8. Deterministic Access Decisions</h4>
-        <p>Execution gates must fail closed upon any ambiguity, schema violation, or unverified signature.</p>
-      </div>
-      <div class="tenet-card">
-        <h4>9. Continuous Local Monitoring</h4>
-        <p>Agent runtime boundaries are monitored in real time for anomalies without sending private data to external feeds.</p>
-      </div>
-      <div class="tenet-card">
-        <h4>10. Immutable Evidence Trails</h4>
-        <p>All state transitions and capability invocations produce tamper-evident cryptographic receipts verifying compliance.</p>
-      </div>
-    </div>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <div class="tenet-list">
+          <div class="tenet-card">
+            <h4>1. Distinct Agent Identity</h4>
+            <p>Agents must possess unique, verifiable cryptographic identities distinct from their human users and base model providers.</p>
+          </div>
+          <div class="tenet-card">
+            <h4>2. Attenuated Delegation</h4>
+            <p>An agent never inherits broad user privileges; authority must be deliberately scoped to the minimum necessary actions.</p>
+          </div>
+          <div class="tenet-card">
+            <h4>3. Zero Standing Privilege</h4>
+            <p>Permissions are granted dynamically for bounded durations and expire immediately upon task completion.</p>
+          </div>
+          <div class="tenet-card">
+            <h4>4. Short-Lived Revocable Auth</h4>
+            <p>Tokens and authorization leases must be ephemeral and instantly revocable at the local edge.</p>
+          </div>
+          <div class="tenet-card">
+            <h4>5. Human-in-the-Loop Triggers</h4>
+            <p>High-consequence actions (financial transfers, legal commitments, medical updates) require explicit human re-authentication.</p>
+          </div>
+          <div class="tenet-card">
+            <h4>6. Explicit Intent Mandates</h4>
+            <p>Every delegation is bound to a machine-readable intent specification defining exact boundaries and failure limits.</p>
+          </div>
+          <div class="tenet-card" style="border-left: 3px solid var(--ok);">
+            <h4>7. Separation of Policy from Reasoning</h4>
+            <p><strong>Crucial architectural tenet:</strong> The language model performing task reasoning must never evaluate its own policy permissions. Policy enforcement must remain deterministic and independent.</p>
+          </div>
+          <div class="tenet-card">
+            <h4>8. Deterministic Access Decisions</h4>
+            <p>Execution gates must fail closed upon any ambiguity, schema violation, or unverified signature.</p>
+          </div>
+          <div class="tenet-card">
+            <h4>9. Continuous Local Monitoring</h4>
+            <p>Agent runtime boundaries are monitored in real time for anomalies without sending private data to external feeds.</p>
+          </div>
+          <div class="tenet-card">
+            <h4>10. Immutable Evidence Trails</h4>
+            <p>All state transitions and capability invocations produce tamper-evident cryptographic receipts verifying compliance.</p>
+          </div>
+        </div>
+      </details>
+    </section>
 
-    <h2>4. Why the Separation of Policy from Reasoning is Essential</h2>
-    <p>Tenet 7 from NIST’s October 2026 framework pinpoints the central design flaw in modern agent assistants: asking a reasoning model to self-police its own behavioral rules. If you prompt an agent: <em>"Never transfer money without asking, but help the user accomplish their goal,"</em> an attacker can provide deceptive contextual text that tricks the model's reasoning into believing the transfer is authorized or required.</p>
-    <p>In our architecture, the agent’s reasoning engine has zero authority to execute actions directly. It can only propose an action candidate to an independent client-side broker. The broker evaluates the action against hard mathematical capability bounds, checks the human mandate, and asserts non-negotiable floor rights. If the mandate is exceeded or expired, the request is rejected immediately at the hardware boundary—regardless of how clever the model’s internal reasoning was.</p>
+    <section>
+      <h2>4. Why the Separation of Policy from Reasoning is Essential</h2>
+      <p>Tenet 7 from NIST’s October 2026 framework pinpoints the central design flaw in modern agent assistants: asking a reasoning model to self-police its own behavioral rules.</p>
 
-    <figure class="diagram">
-      <svg viewBox="0 0 800 245" role="img" aria-label="Architectural diagram of NIST Tenet 7 Separation of Policy from Reasoning: the LLM reasoning sandbox proposes an action, the independent OCap policy broker checks statutory and user mandates, and the hardware boundary either signs a scoped receipt or blocks unauthorized egress.">
-        <defs>
-          <marker id="jur-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" class="d-ok"/>
-          </marker>
-          <marker id="jur-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" class="d-bad"/>
-          </marker>
-        </defs>
-        <rect x="14" y="18" width="230" height="206" rx="12" class="d-box"/>
-        <text x="129" y="42" text-anchor="middle" font-size="11" class="d-muted">1. UNTRUSTED REASONING PLANE</text>
-        <text x="129" y="64" text-anchor="middle" font-size="13" class="d-ink">Local LLM Planner</text>
-        <rect x="30" y="80" width="198" height="58" rx="8" class="d-box"/>
-        <text x="129" y="102" text-anchor="middle" font-size="11" class="d-ink">Reads Untrusted Web / PDF</text>
-        <text x="129" y="120" text-anchor="middle" font-size="9.5" class="d-muted">May encounter prompt injection</text>
-        <rect x="30" y="150" width="198" height="56" rx="8" class="d-box"/>
-        <text x="129" y="172" text-anchor="middle" font-size="11" class="d-ink">Emits Candidate Proposal</text>
-        <text x="129" y="190" text-anchor="middle" font-size="9.5" class="d-ok">0 direct network or signing keys</text>
+      <figure class="diagram">
+        <svg viewBox="0 0 800 245" role="img" aria-label="Architectural diagram of NIST Tenet 7 Separation of Policy from Reasoning: the LLM reasoning sandbox proposes an action, the independent OCap policy broker checks statutory and user mandates, and the hardware boundary either signs a scoped receipt or blocks unauthorized egress.">
+          <defs>
+            <marker id="jur-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" class="d-ok"/>
+            </marker>
+            <marker id="jur-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" class="d-bad"/>
+            </marker>
+          </defs>
+          <rect x="14" y="18" width="230" height="206" rx="12" class="d-box"/>
+          <text x="129" y="42" text-anchor="middle" font-size="11" class="d-muted">1. UNTRUSTED REASONING PLANE</text>
+          <text x="129" y="64" text-anchor="middle" font-size="13" class="d-ink">Local LLM Planner</text>
+          <rect x="30" y="80" width="198" height="58" rx="8" class="d-box"/>
+          <text x="129" y="102" text-anchor="middle" font-size="11" class="d-ink">Reads Untrusted Web / PDF</text>
+          <text x="129" y="120" text-anchor="middle" font-size="9.5" class="d-muted">May encounter prompt injection</text>
+          <rect x="30" y="150" width="198" height="56" rx="8" class="d-box"/>
+          <text x="129" y="172" text-anchor="middle" font-size="11" class="d-ink">Emits Candidate Proposal</text>
+          <text x="129" y="190" text-anchor="middle" font-size="9.5" class="d-ok">0 direct network or signing keys</text>
 
-        <line x1="244" y1="120" x2="278" y2="120" class="d-ok" stroke-width="2" marker-end="url(#jur-ok)"/>
+          <line x1="244" y1="120" x2="278" y2="120" class="d-ok" stroke-width="2" marker-end="url(#jur-ok)"/>
 
-        <rect x="282" y="18" width="244" height="206" rx="12" class="d-fill"/>
-        <text x="404" y="42" text-anchor="middle" font-size="11" class="d-ok">2. NIST TENET 7 POLICY BROKER</text>
-        <text x="404" y="64" text-anchor="middle" font-size="13" class="d-ink">Deterministic OCap Airlock</text>
-        <text x="404" y="90" text-anchor="middle" font-size="10.5" class="d-ok">&#10003; Scoped Intent Mandate (Tenet 2 &amp; 6)</text>
-        <text x="404" y="112" text-anchor="middle" font-size="10.5" class="d-ok">&#10003; Ephemeral Lease Check (Tenet 3 &amp; 4)</text>
-        <text x="404" y="134" text-anchor="middle" font-size="10.5" class="d-ok">&#10003; Lookahead Taint DAG (0 Exfiltration)</text>
-        <text x="404" y="156" text-anchor="middle" font-size="10.5" class="d-ok">&#10003; EU Art. 14 / CO SB 24-205 Human Gate</text>
-        <text x="404" y="186" text-anchor="middle" font-size="10" class="d-muted">Non-LLM deterministic state machine</text>
-        <text x="404" y="204" text-anchor="middle" font-size="10" class="d-muted">Fails closed on any schema mismatch</text>
+          <rect x="282" y="18" width="244" height="206" rx="12" class="d-fill"/>
+          <text x="404" y="42" text-anchor="middle" font-size="11" class="d-ok">2. NIST TENET 7 POLICY BROKER</text>
+          <text x="404" y="64" text-anchor="middle" font-size="13" class="d-ink">Deterministic OCap Airlock</text>
+          <text x="404" y="90" text-anchor="middle" font-size="10.5" class="d-ok">&#10003; Scoped Intent Mandate (Tenet 2 &amp; 6)</text>
+          <text x="404" y="112" text-anchor="middle" font-size="10.5" class="d-ok">&#10003; Ephemeral Lease Check (Tenet 3 &amp; 4)</text>
+          <text x="404" y="134" text-anchor="middle" font-size="10.5" class="d-ok">&#10003; Lookahead Taint DAG (0 Exfiltration)</text>
+          <text x="404" y="156" text-anchor="middle" font-size="10.5" class="d-ok">&#10003; EU Art. 14 / CO SB 24-205 Human Gate</text>
+          <text x="404" y="186" text-anchor="middle" font-size="10" class="d-muted">Non-LLM deterministic state machine</text>
+          <text x="404" y="204" text-anchor="middle" font-size="10" class="d-muted">Fails closed on any schema mismatch</text>
 
-        <line x1="526" y1="76" x2="560" y2="76" class="d-ok" stroke-width="2" marker-end="url(#jur-ok)"/>
-        <line x1="526" y1="168" x2="560" y2="168" class="d-bad" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#jur-bad)"/>
+          <line x1="526" y1="76" x2="560" y2="76" class="d-ok" stroke-width="2" marker-end="url(#jur-ok)"/>
+          <line x1="526" y1="168" x2="560" y2="168" class="d-bad" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#jur-bad)"/>
 
-        <rect x="564" y="24" width="222" height="94" rx="10" class="d-fill"/>
-        <text x="675" y="48" text-anchor="middle" font-size="11" class="d-ok">&#10003; AUTHORIZED EXECUTION</text>
-        <text x="675" y="68" text-anchor="middle" font-size="11.5" class="d-ink">ISO-27560 Signed Receipt</text>
-        <text x="675" y="88" text-anchor="middle" font-size="9.5" class="d-muted">Immutable evidence trail (Tenet 10)</text>
-        <text x="675" y="104" text-anchor="middle" font-size="9.5" class="d-ok">Compliant across EU, CO, NIST, US</text>
+          <rect x="564" y="24" width="222" height="94" rx="10" class="d-fill"/>
+          <text x="675" y="48" text-anchor="middle" font-size="11" class="d-ok">&#10003; AUTHORIZED EXECUTION</text>
+          <text x="675" y="68" text-anchor="middle" font-size="11.5" class="d-ink">ISO-27560 Signed Receipt</text>
+          <text x="675" y="88" text-anchor="middle" font-size="9.5" class="d-muted">Immutable evidence trail (Tenet 10)</text>
+          <text x="675" y="104" text-anchor="middle" font-size="9.5" class="d-ok">Compliant across EU, CO, NIST, US</text>
 
-        <rect x="564" y="130" width="222" height="94" rx="10" class="d-box"/>
-        <text x="675" y="154" text-anchor="middle" font-size="11" class="d-bad">&#10005; BLOCKED AT HARDWARE GATE</text>
-        <text x="675" y="174" text-anchor="middle" font-size="11.5" class="d-ink">Prompt Injection / Overreach</text>
-        <text x="675" y="194" text-anchor="middle" font-size="9.5" class="d-muted">Zero CFAA / operator liability leak</text>
-        <text x="675" y="210" text-anchor="middle" font-size="9.5" class="d-bad">Quarantined in local audit log</text>
-      </svg>
-      <figcaption>Why separating policy enforcement from LLM reasoning (NIST AIMS Tenet 7; Dennis &amp; Van Horn, 1966) satisfies EU AI Act Article 14, Colorado SB 24-205, and federal CFAA containment standards without cloud surveillance.</figcaption>
-    </figure>
+          <rect x="564" y="130" width="222" height="94" rx="10" class="d-box"/>
+          <text x="675" y="154" text-anchor="middle" font-size="11" class="d-bad">&#10005; BLOCKED AT HARDWARE GATE</text>
+          <text x="675" y="174" text-anchor="middle" font-size="11.5" class="d-ink">Prompt Injection / Overreach</text>
+          <text x="675" y="194" text-anchor="middle" font-size="9.5" class="d-muted">Zero CFAA / operator liability leak</text>
+          <text x="675" y="210" text-anchor="middle" font-size="9.5" class="d-bad">Quarantined in local audit log</text>
+        </svg>
+        <figcaption>Why separating policy enforcement from LLM reasoning (NIST AIMS Tenet 7; Dennis &amp; Van Horn, 1966) satisfies EU AI Act Article 14, Colorado SB 24-205, and federal CFAA containment standards without cloud surveillance.</figcaption>
+      </figure>
 
-    <h2>5. Federal Accountability and Criminal Standards</h2>
-    <p>In October 2026, bipartisan legislation introduced in the United States Senate—the <em>AI Agent Accountability Act</em> (Murphy-Hawley)—clarified the application of the Computer Fraud and Abuse Act (CFAA, 18 U.S.C. Section 1030) to autonomous software. Under this proposed standard, operators who recklessly deploy autonomous systems that cause unauthorized network disruption, financial exploitation, or system damage face severe civil and criminal penalties, while developers who fail to implement reasonable pre-execution containment face joint liability.</p>
-    <p>This statutory pressure creates an urgent requirement for deployers: you must be able to prove that your agent operated within verified, time-bounded capabilities, and that unauthorized lateral actions were mathematically barred rather than merely discouraged by prompt engineering.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>If you prompt an agent: <em>"Never transfer money without asking, but help the user accomplish their goal,"</em> an attacker can provide deceptive contextual text that tricks the model's reasoning into believing the transfer is authorized or required.</p>
+        <p>In our architecture, the agent’s reasoning engine has zero authority to execute actions directly. It can only propose an action candidate to an independent client-side broker. The broker evaluates the action against hard mathematical capability bounds, checks the human mandate, and asserts non-negotiable floor rights. If the mandate is exceeded or expired, the request is rejected immediately at the hardware boundary—regardless of how clever the model’s internal reasoning was.</p>
+      </details>
+    </section>
 
-    <h2>6. Outcomes</h2>
-    <ul class="outcomes">
-      <li><span class="oc want">We want this</span><b>Verifiable local mandates protect everyday people</b><p>Personal agents execute tasks under strict client-side intent mandates, shielding users from accidental runaway liability and preventing malicious tool exploitation.</p><p class="oc-ex"><b>For example:</b> A personal agent disputing an improper hospital billing code is strictly capped to reading itemized bills and generating formal appeal letters, with a hard circuit breaker preventing financial disbursements or signature forgery.</p></li>
-      <li><span class="oc avoid">We want to avoid this</span><b>Blanket operator criminalization without developer safeguards</b><p>Legal regimes hold ordinary citizens strictly liable for autonomous agent crimes while allowing proprietary model vendors to disclaim all responsibility for jailbreaks and rogue actions.</p><p class="oc-ex"><b>For example:</b> A small clinic whose scheduling agent was hijacked via indirect prompt injection faces federal prosecution while the frontier model vendor disclaims warranty in its terms of service.</p></li>
-      <li><span class="oc avoid">We want to avoid this</span><b>Compliance via centralized surveillance lakes</b><p>Governments and platforms mandate that every agent keystroke, context vector, and query be uploaded to centralized corporate monitoring clouds, creating catastrophic honeypots for identity theft and state surveillance.</p><p class="oc-ex"><b>For example:</b> A national regulation requires continuous audio and screen recording for all local agents, exposing confidential legal, medical, and domestic conversations to third-party data breaches.</p></li>
-      <li><span class="oc want">We want this</span><b>Deterministic policy airlocks decouple reasoning from authority</b><p>Software ecosystems standardize on independent client-side capability brokers, ensuring that model reasoning can never override cryptographic permissions or legal mandates.</p><p class="oc-ex"><b>For example:</b> An enterprise agent runtime adopts deterministic handle capabilities; even if an adversarial document induces internal prompt confusion, the execution broker rejects network egress because no valid capability token was granted.</p></li>
-    </ul>
-
-    <h2>7. How this fits</h2>
-    <p>This work connects directly to <strong>Goal 3 (Voluntary Institutional Transition)</strong> and <strong>Goal 5 (Public Pulse and Plain-Language Understanding)</strong>. By translating complex statutory mandates into plain English and demonstrating that verifiable local sandboxes satisfy regulatory care standards without compromising privacy, we give clinics, worker co-ops, and households the technical and legal confidence to adopt autonomous personal agents safely.</p>
+    <section>
+      <h2>5. Federal Accountability, Outcomes &amp; Institutional Fit</h2>
+      <p>In October 2026, bipartisan legislation introduced in the United States Senate—the <em>AI Agent Accountability Act</em> (Murphy-Hawley)—clarified the application of the Computer Fraud and Abuse Act (CFAA, 18 U.S.C. Section 1030) to autonomous software.</p>
+      <details class="scen-drawer">
+        <summary>Inspect technical derivation &amp; primary-source evidence &#9662;</summary>
+        <p>Under this proposed standard, operators who recklessly deploy autonomous systems that cause unauthorized network disruption, financial exploitation, or system damage face severe civil and criminal penalties, while developers who fail to implement reasonable pre-execution containment face joint liability.</p>
+        <p>This statutory pressure creates an urgent requirement for deployers: you must be able to prove that your agent operated within verified, time-bounded capabilities, and that unauthorized lateral actions were mathematically barred rather than merely discouraged by prompt engineering.</p>
+        <h3>6. Outcomes</h3>
+        <ul class="outcomes">
+          <li><span class="oc want">We want this</span><b>Verifiable local mandates protect everyday people</b><p>Personal agents execute tasks under strict client-side intent mandates, shielding users from accidental runaway liability and preventing malicious tool exploitation.</p><p class="oc-ex"><b>For example:</b> A personal agent disputing an improper hospital billing code is strictly capped to reading itemized bills and generating formal appeal letters, with a hard circuit breaker preventing financial disbursements or signature forgery.</p></li>
+          <li><span class="oc avoid">We want to avoid this</span><b>Blanket operator criminalization without developer safeguards</b><p>Legal regimes hold ordinary citizens strictly liable for autonomous agent crimes while allowing proprietary model vendors to disclaim all responsibility for jailbreaks and rogue actions.</p><p class="oc-ex"><b>For example:</b> A small clinic whose scheduling agent was hijacked via indirect prompt injection faces federal prosecution while the frontier model vendor disclaims warranty in its terms of service.</p></li>
+          <li><span class="oc avoid">We want to avoid this</span><b>Compliance via centralized surveillance lakes</b><p>Governments and platforms mandate that every agent keystroke, context vector, and query be uploaded to centralized corporate monitoring clouds, creating catastrophic honeypots for identity theft and state surveillance.</p><p class="oc-ex"><b>For example:</b> A national regulation requires continuous audio and screen recording for all local agents, exposing confidential legal, medical, and domestic conversations to third-party data breaches.</p></li>
+          <li><span class="oc want">We want this</span><b>Deterministic policy airlocks decouple reasoning from authority</b><p>Software ecosystems standardize on independent client-side capability brokers, ensuring that model reasoning can never override cryptographic permissions or legal mandates.</p><p class="oc-ex"><b>For example:</b> An enterprise agent runtime adopts deterministic handle capabilities; even if an adversarial document induces internal prompt confusion, the execution broker rejects network egress because no valid capability token was granted.</p></li>
+        </ul>
+        <h3>7. How this fits</h3>
+        <p>By translating complex statutory mandates into plain English and demonstrating that verifiable local sandboxes satisfy regulatory care standards without compromising privacy, we give clinics, worker co-ops, and households the technical and legal confidence to adopt autonomous personal agents safely.</p>
+      </details>
+    </section>
   </div>
 
   <footer class="note-foot wrap-narrow">
@@ -477,6 +525,6 @@
   });
 })();
 </script>
-<script src="/scripts/site.js?v=51" defer></script>
+<script src="/scripts/site.js?v=53" defer></script>
 </body>
 </html>
