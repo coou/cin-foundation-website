@@ -1555,7 +1555,7 @@
         hrv: 50,
         puf: false,
         quorum: true,
-        desc: 'A cloud script claiming to be “your bank’s agent” contacts your money agent, but lacks 2-of-2 Wearable PUF + TPM hardware attestation.'
+        desc: 'A cloud script claiming to be “your bank’s agent” contacts your money agent, but lacks dual-chip hardware attestation (Wearable Hardware Key + Device Secure Enclave).'
       },
       low_trust: {
         plane: 'agent_to_agent',
@@ -1638,7 +1638,7 @@
         legacyOutcome = 'VULNERABLE ON TODAY’S MIXED INTERNET: The persuasive AI bot reaches your inbox/phone directly, exploiting human empathy and voice-clone urgency.';
       } else if (!pufOk) {
         allowed = false;
-        gateReason = 'BLOCKED AT SILICON PUF + TPM GATE: Missing 2-of-2 hardware attestation (Wearable SRAM PUF + Device Secure Enclave). Cloud Sybil or spoofed endpoint rejected.';
+        gateReason = 'BLOCKED AT SILICON HARDWARE GATE: Missing dual-chip attestation (Wearable Hardware Key + Device Secure Enclave). Cloud Sybil or spoofed endpoint rejected.';
         legacyOutcome = 'VULNERABLE ON TODAY’S MIXED INTERNET: Stolen API keys or spoofed domains impersonate your bank or peer at machine speed.';
       } else if (!bioOk) {
         allowed = false;
@@ -1676,7 +1676,7 @@
       if (aoiBars) {
         var checks = [
           { label: '1. Non-Contact Plane Law (No Foreign Agent → Human)', ok: nonContactOk, val: nonContactOk ? 'PASS' : 'BLOCKED' },
-          { label: '2. 2-of-2 Silicon Root (Wearable PUF + Device TPM)', ok: pufOk, val: pufOk ? 'VERIFIED' : 'MISSING' },
+          { label: '2. Dual-Chip Silicon Root (Wearable Hardware Key + Device Enclave)', ok: pufOk, val: pufOk ? 'VERIFIED' : 'MISSING' },
           { label: '3. Somatic Liveness & Coercion Firewall (HRV ≥ 24 ms)', ok: bioOk, val: hrv + ' ms (' + (bioOk ? 'CALM' : 'DURESS/BOT') + ')' },
           { label: '4. Trust Threshold Gate (trust = ' + tau.toFixed(2) + ' vs req ' + reqTau.toFixed(2) + ')', ok: tauOk, val: tauOk ? 'PASS' : 'INSUFFICIENT TRUST' },
           { label: '5. Local 3-of-6 Narrow-Agent Quorum & Touch Pin', ok: quorumOk, val: quorumOk ? '3/6 AGREED' : 'VETOED' }

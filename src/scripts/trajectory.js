@@ -67,7 +67,7 @@
         t50Hours: 48,
         shieldScore: 96,
         k: 'Stage 3 · 2027 H2–2028 Q1 · METR 50% Autonomous Horizon: 24–72 Hours',
-        title: 'Federated LoRA Weight-Space Consensus & Proof-Carrying Data Shapley Royalties',
+        title: 'Federated LoRA Weight Merging (TIES-Merging) & Proof-Carrying Data Shapley Royalties',
         desc: 'Multi-day specialist workflows allow nurses, mechanics, and software maintainers to distill local craft into low-rank adapters (Hu et al., 2022) and Proof-Carrying Code bundles (Necula, 1997), earning automatic Monte Carlo Data Shapley royalties (Ghorbani & Zou, 2019).',
         ripplePills: [['1st-Order Shift', 'TIES-Merged LoRA'], ['2nd-Order Response', 'Direct Craft Royalties'], ['3rd-Order Equilibrium', 'Verified Open Modules']],
         ripples: [
@@ -94,8 +94,8 @@
         t50Hours: 240,
         shieldScore: 98,
         k: 'Stage 4 · 2028–2029 · METR 50% Autonomous Horizon: 1–2 Weeks',
-        title: 'Hardware-Attested Personhood (2-of-2 PUF+TPM) & The Two-Internet Firewall',
-        desc: 'As autonomous agent swarms become capable of running week-long persuasion and cyber campaigns, the open web bifurcates: human spaces require <1 mW local liveness and 2-of-2 PUF+TPM silicon attestation, while agents coordinate strictly over data-only QUIC streams.',
+        title: 'Hardware-Attested Personhood (Dual-Chip Silicon Key) & The Two-Internet Firewall',
+        desc: 'As autonomous agent swarms become capable of running week-long persuasion and cyber campaigns, the open web bifurcates: human spaces require <1 mW local liveness and dual-chip (SRAM PUF + TPM) silicon attestation, while agents coordinate strictly over data-only QUIC streams.',
         ripplePills: [['1st-Order Shift', '<1 mW Pre-ADC Gate'], ['2nd-Order Response', 'Two-Internet Split'], ['3rd-Order Equilibrium', 'Zero Bot-to-Human DM']],
         ripples: [
           ['1st-Order Technical Shift:', 'Pre-ADC analog in-sensor computing (<1 mW) verifies physical human liveness locally without recording raw video or biometric templates to memory.'],
@@ -105,10 +105,10 @@
         delphiPills: [['Techno-Optimist', '<$1.50 Dual Silicon'], ['Institutional Realist', '3-Tier Bridge Access'], ['Chaos Red-Teamer', 'No Central ID Orbs']],
         delphi: [
           ['Techno-Optimist:', 'Combining open-foundry Physically Unclonable Functions (PUF) with discrete TPM quorum signing blocks single-vendor backdoors while costing under $1.50 per device.'],
-          ['Institutional Realist:', 'Legacy smartphones lack dual-vendor PUF+TPM silicon, requiring a 3-tier progressive attestation bridge so budget devices are never excluded.'],
+          ['Institutional Realist:', 'Legacy smartphones lack dual-vendor silicon keys (PUF + TPM), requiring a 3-tier progressive attestation bridge so budget devices are never excluded.'],
           ['Chaos Red-Teamer:', 'State or corporate issuers of centralized biometric orbs will attempt to turn personhood credentials into revocable social-credit chokepoints.']
         ],
-        cone: [['45% Plausible (Open Silicon PUF+TPM Standard)', 45, '#4fb3a8'], ['30% Probable (Progressive Two-Internet Split)', 30, '#5da2d5'], ['15% Wildcard (Mandatory State Digital ID Capture)', 15, '#ef6a52'], ['10% Preferable (Zero-Biometric-Database Sanctuary)', 10, '#e5a93c']],
+        cone: [['45% Plausible (Open Silicon Hardware Key Standard)', 45, '#4fb3a8'], ['30% Probable (Progressive Two-Internet Split)', 30, '#5da2d5'], ['15% Wildcard (Mandatory State Digital ID Capture)', 15, '#ef6a52'], ['10% Preferable (Zero-Biometric-Database Sanctuary)', 10, '#e5a93c']],
         tripPills: [['2028 H1', '>85% Unverified Bots'], ['2028 H2', '<1 mW Audit Pass'], ['2029', '1M+ QUIC Nodes']],
         tripwires: [
           ['Signpost 1 (2028 H1):', 'Synthetic bot traffic exceeds 85% of unverified web requests, forcing major civic and community forums to require proof-of-personhood.'],
@@ -405,7 +405,7 @@
       { g: 's56', st: 'Stage 5 · 2030–31 (T50: 1–3 mo)', cite: 'Gesell (1916) + 5D Provenance Ledger', title: '16. 5-Dimensional Ecological & Craft Provenance with Idle-Hoard Demurrage', intent: 'Reward durable repairable goods and circulate idle speculative capital above a household floor.', mech: 'Ledger prices carry a 5D vector (craft, ecology, durability, fairness, scarcity) with automatic demurrage above the protected family savings threshold.' },
       { g: 's56', st: 'Stage 5 · 2030–31 (T50: 1–3 mo)', cite: 'Ben-Sasson et al. (zk-STARKs)', title: '17. Power-Proportionate Tier 3–4 Public Official Continuous ZK Audit', intent: 'Make executive conflicts of interest and compute holdings verifiable while keeping family life private.', mech: 'Tier 3–4 role agents publish continuous zero-knowledge audit proofs of institutional decisions and financial/compute holdings.' },
       { g: 's56', st: 'Stage 6 · 2032+ (T50: >6 mo)', cite: 'Risk-Scaled Quorum Φ(R) = 1 − (1−R)⁵', title: '18. Bilateral Citizen-Agent Quorum Lock Against Autonomous Cyber/Kinetic Swarms', intent: 'Make it mathematically impossible for a single general or compromised console to launch a mass attack.', mech: 'Cross-border or critical-infrastructure actions with blast radius R > 0.85 require cryptographic sign-off from affected citizens’ personal agents on both sides.' },
-      { g: 's56', st: 'Stage 6 · 2032+ (T50: >6 mo)', cite: 'Hinton (2022) Mortal Computation', title: '19. Hardware-Enforced Mortal Computation & Shared Biological Lifespan', intent: 'Align long-horizon agent self-preservation strictly with its human principal’s health and longevity.', mech: 'Cryptographic execution leases and analog weight retention are physically coupled to the principal’s ongoing biological liveness heartbeats.' },
+      { g: 's56', st: 'Stage 6 · 2032+ (T50: >6 mo)', cite: 'Hinton (2022) Analog Hardware Coupling', title: '19. Hardware-Enforced Time-Bounded Execution Leases & Shared Biological Lifespan', intent: 'Align long-horizon agent self-preservation strictly with its human principal’s health and longevity.', mech: 'Cryptographic execution leases and analog weight retention are physically coupled to the principal’s ongoing biological liveness heartbeats.' },
       { g: 's56', st: 'Stage 6 · 2032+ (T50: >6 mo)', cite: 'Sorensen et al. (ICML 2024)', title: '20. Federation of 8 Billion Principal-Bound Personal Agents Replacing Monolithic AGI', intent: 'Prevent techno-feudal lock-in under a single corporate or state superintelligence.', mech: 'Every person commands a sovereign local agent fleet coordinating over the Proof-Carrying Weight Ledger under the 19 non-negotiable safety floor rules.' }
     ];
 
