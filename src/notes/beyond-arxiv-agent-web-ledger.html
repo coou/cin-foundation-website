@@ -14,59 +14,77 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=29">
+  <link rel="stylesheet" href="/styles/site.css?v=49">
   <style>
     .sim-shell {
-      border: 1px solid var(--line, rgba(120,120,120,0.28));
-      border-radius: 14px;
-      padding: 1.4rem;
+      border: 1px solid var(--rule);
+      border-top: 3.5px solid var(--ok);
+      border-radius: 16px;
+      padding: 1.45rem;
       margin: 2rem 0;
-      background: var(--surface, rgba(127,127,127,0.04));
+      background: var(--card);
+      box-shadow: 0 22px 44px -30px rgba(0, 0, 0, 0.32);
     }
     .sim-track-switch {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem;
-      margin-bottom: 1rem;
-      padding-bottom: 0.9rem;
-      border-bottom: 1px solid var(--line, rgba(120,120,120,0.22));
+      gap: 0.55rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule);
     }
     .sim-track-btn {
-      padding: 0.55rem 1rem;
+      padding: 0.58rem 1.05rem;
       border-radius: 999px;
-      border: 1px solid var(--line, rgba(120,120,120,0.35));
-      background: transparent;
-      color: inherit;
-      font: inherit;
-      font-size: 0.86rem;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink);
+      font: 600 0.84rem/1.25 var(--sans);
       cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+    .sim-track-btn:hover {
+      border-color: var(--ok);
+      transform: translateY(-1px);
     }
     .sim-track-btn[aria-pressed="true"] {
-      background: var(--ink, #1c1e24);
-      color: var(--bg, #f5f2eb);
-      font-weight: 600;
+      background: var(--ok);
+      color: #ffffff;
+      border-color: var(--ok);
+      font-weight: 700;
+      box-shadow: 0 6px 18px -6px rgba(31, 111, 104, 0.55);
+    }
+    .sim-kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+      gap: 0.65rem;
+      margin-bottom: 1.1rem;
+      font-size: 0.8rem;
     }
     .sim-tabs {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.25rem;
     }
     .sim-tab {
-      padding: 0.5rem 0.85rem;
-      border-radius: 8px;
-      border: 1px solid var(--line, rgba(120,120,120,0.3));
-      background: transparent;
-      color: inherit;
-      font: inherit;
-      font-size: 0.86rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: 9px;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink);
+      font: 600 0.83rem/1.25 var(--sans);
       cursor: pointer;
       transition: all 0.15s ease;
     }
+    .sim-tab:hover {
+      border-color: var(--ok);
+    }
     .sim-tab[aria-selected="true"] {
-      background: var(--ink, #1c1e24);
-      color: var(--bg, #f5f2eb);
-      font-weight: 600;
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+      font-weight: 700;
     }
     .session-lanes {
       display: grid;
@@ -75,56 +93,93 @@
       margin: 1rem 0;
     }
     .session-card {
-      border: 1px solid var(--line, rgba(120,120,120,0.25));
-      border-radius: 10px;
-      padding: 0.9rem;
-      background: var(--bg, rgba(255,255,255,0.03));
+      border: 1px solid var(--rule);
+      border-radius: 11px;
+      padding: 0.95rem;
+      background: var(--paper);
     }
     .session-badge {
       display: inline-block;
-      font-size: 0.72rem;
+      font: 700 0.68rem/1.2 var(--mono);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      background: rgba(100,150,220,0.16);
-      margin-bottom: 0.4rem;
-      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 5px;
+      background: color-mix(in srgb, var(--ok) 18%, var(--card));
+      color: var(--ok);
+      border: 1px solid color-mix(in srgb, var(--ok) 38%, transparent);
+      margin-bottom: 0.45rem;
     }
     .dual-pane {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
       gap: 1rem;
       margin: 1.1rem 0;
     }
     .pane-box {
-      border: 1px solid var(--line, rgba(120,120,120,0.28));
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 1.05rem;
+      background: var(--paper);
+    }
+    .sim-flow-svg-wrap {
+      margin-top: 0.75rem;
+      padding: 0.65rem;
       border-radius: 10px;
-      padding: 1rem;
+      background: var(--card);
+      border: 1px solid var(--rule);
+    }
+    .sim-flow-svg-wrap svg {
+      width: 100%;
+      height: auto;
+      display: block;
     }
     .reward-bar {
       display: flex;
-      height: 26px;
-      border-radius: 6px;
+      height: 30px;
+      border-radius: 8px;
       overflow: hidden;
-      margin: 0.6rem 0;
-      border: 1px solid rgba(120,120,120,0.3);
+      margin: 0.65rem 0;
+      border: 1px solid var(--rule);
     }
     .reward-seg {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: #111;
+      font: 700 0.72rem/1 var(--mono);
+      color: #0e1015;
       white-space: nowrap;
       overflow: hidden;
+      padding: 0 0.25rem;
+    }
+    .reward-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 0.45rem;
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+    }
+    .reward-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.55rem;
+      border-radius: 6px;
+      background: var(--card);
+      border: 1px solid var(--rule);
+    }
+    .reward-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
     }
     .cheat-box {
       margin-top: 1rem;
-      padding: 0.85rem 1rem;
-      border-radius: 8px;
-      border: 1px dashed var(--line, rgba(120,120,120,0.4));
+      padding: 0.95rem 1.05rem;
+      border-radius: 10px;
+      border: 1px dashed var(--rule);
+      background: var(--paper);
       font-size: 0.9rem;
     }
   </style>
@@ -139,18 +194,15 @@
       <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
     </a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
-    <nav class="nav" id="nav" aria-label="Site">
-      <a href="/#for-you">For your life</a>
-      <a href="/#goals">Goals</a>
-      <a href="/#fractured">How it works</a>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="/#architecture">Architecture</a>
+      <a href="/#for-you">For You</a>
+      <a href="/notes" aria-current="true">Blueprints</a>
       <a href="/#lines">Principles</a>
-      <a href="/#futures">Futures</a>
       <a href="/trajectory">Trajectory</a>
-      <a href="/notes" aria-current="true">Notes</a>
       <a href="/founder">Founder</a>
-      <a href="/updates">Updates</a>
-      <a href="/#involved">Get involved</a>
-      <a class="nav-net" href="https://cintnet.org">Network site &#8599;</a>
+      <a href="/#involved">Status</a>
+      <a class="nav-net" href="https://cintnet.org" target="_blank" rel="noopener">Network site &#8599;</a>
     </nav>
   </div>
 </header>
@@ -159,43 +211,95 @@
 <article class="note">
   <header class="note-head wrap-narrow">
     <a class="back" href="/notes">&larr; All notes</a>
-    <span class="label">Agent-Web operations &amp; Clean-Room Actor Sandbox · Interactive</span>
+    <span class="label">Agent-Web Testnet Ledger v4.0 &amp; Clean-Room Actor Sandbox · Interactive</span>
     <h1>From everyday frustrations to system operations: how personal agents and the shared ledger solve real problems</h1>
     <p class="lede">When someone figures out how to stop forgotten free-trial charges, audit an overcharged hospital bill, strip junk fees off a rent invoice, or automate repetitive workplace portals, that working solution usually stays trapped in a personal spreadsheet or forum comment. By pairing each person with a personal agent over a shared cryptographic ledger, practical tools built by one household or practitioner become verified, reusable building blocks for everyone else—explained in the exact format each person prefers.</p>
-    <p class="meta">27 October 2026 · 15 min read + two-track interactive simulator · Grounded in <code>research/ledger_sim/</code> &amp; <code>research/ledger_sim/sandbox/</code></p>
+    <p class="meta">27 October 2026 · 15 min read + three-track interactive simulator · Grounded in <code>research/ledger_sim/</code> &amp; <code>research/ledger_sim/sandbox/</code></p>
   </header>
 
   <div class="note-body wrap-narrow">
     <aside class="callout">
       <b>Why we built a Clean-Room Actor Sandbox outside project lore</b>
-      <p>When AI agents are asked to invent test scenarios inside a technical research repository, they naturally gravitate toward complex engineering jargon instead of why regular people are upset in their local communities. To fix this, our simulation pipeline starts in a <strong>Clean-Room Instruction Sandbox</strong> (<code>research/ledger_sim/sandbox/actor_factory.py</code>): a trend-researcher prompt searches consumer complaint reports and everyday community threads to extract (1) <em>Real-World Evidence</em>, (2) <em>The Mundane Friction Point</em>, (3) <em>The Target Persona</em>, and (4) <em>The Current Manual Workaround</em>, before instantiating isolated human and agent sessions.</p>
+      <p>When AI agents are asked to invent test scenarios inside a technical research repository, they naturally gravitate toward complex engineering jargon instead of why regular people are upset in their local communities. To fix this, our simulation pipeline starts in a <strong>Clean-Room Instruction Sandbox</strong> (<code>research/ledger_sim/sandbox/actor_factory.py</code>): a trend-researcher prompt searches consumer complaint reports and everyday community threads to extract (1) <em>Real-World Evidence</em>, (2) <em>The Mundane Friction Point</em>, (3) <em>The Target Persona</em>, and (4) <em>The Current Manual Workaround</em>, before instantiating isolated human and agent sessions inside hardware-isolated Object-Capability (OCap) sandboxes (Dennis &amp; Van Horn, 1966).</p>
     </aside>
 
     <h2>1. The 4-stage actor creation &amp; ledger execution pipeline</h2>
     <p>Every simulation run follows four strict stages so that human personas remain grounded in real life and no session can cheat:</p>
     <ul>
-      <li><b>Stage 0 &mdash; Empirical Friction Discovery:</b> Searches documented consumer complaints from the last 12&ndash;24 months (CFPB recurring-billing and medical-billing dockets, FTC junk-fee reports, and community threads on <code>r/adulting</code>, <code>r/mildlyinfuriating</code>, <code>r/renters</code>, and <code>r/sysadmin</code>) to capture the exact manual workarounds people currently use.</li>
+      <li><b>Stage 0 &mdash; Empirical Friction Discovery:</b> Searches documented consumer complaints from the last 12&ndash;24 months (CFPB recurring-billing and medical-billing dockets, CMS NCCI coding manuals, FTC junk-fee reports, and community threads on <code>r/adulting</code>, <code>r/mildlyinfuriating</code>, <code>r/renters</code>, and <code>r/sysadmin</code>) to capture the exact manual workarounds people currently use.</li>
       <li><b>Stage 1 &mdash; Grounded Persona Synthesis:</b> Pairs a <strong>Requesting Human</strong> (defined by their job, household constraint, clumsy manual workaround, and preferred explanation style) with a <strong>Contributing Human</strong> (a practitioner who already built a clean script, spreadsheet reconciler, or checklist for that exact problem).</li>
-      <li><b>Stage 2 &mdash; Clean-Room Session Isolation:</b> Places each of the 5 actors (<code>orchestrator</code>, <code>human_tasker</code>, <code>agent_tasker</code>, <code>human_solver</code>, <code>agent_solver</code>) in its own directory with an instruction firewall that strips out internal project jargon.</li>
-      <li><b>Stage 3 &mdash; Held-Out Verification &amp; Modality Bridge:</b> The agents exchange structured capability artifacts and sample data contracts on the SQLite ledger, the Orchestrator tests the tool on unseen held-out records, and the Modality Bridge renders the verified result as a 30-second checklist, side-by-side comparison table, or visual flow map.</li>
+      <li><b>Stage 2 &mdash; Clean-Room Session Isolation:</b> Places each of the 5 actors (<code>orchestrator</code>, <code>human_tasker</code>, <code>agent_tasker</code>, <code>human_solver</code>, <code>agent_solver</code>) in its own directory with an instruction firewall (<code>RealmIsolationFirewall</code> in <code>session_isolation.py</code>) that strips out internal project jargon.</li>
+      <li><b>Stage 3 &mdash; Held-Out Verification &amp; Modality Bridge:</b> The agents exchange structured capability artifacts with Proof-Carrying Code certificates (Necula, POPL 1997) and sample data contracts on the SQLite ledger, the Orchestrator tests the tool on unseen held-out records, Data Shapley attribution (Shapley, 1953; Ghorbani &amp; Zou, ICML 2019) conserves 1,000 reward units across contributors, and the Modality Bridge renders the verified result as a 30-second checklist, side-by-side comparison table, or visual flow map.</li>
     </ul>
 
+    <figure class="diagram">
+      <svg viewBox="0 0 820 250" role="img" aria-label="Four-stage Clean-Room Actor Sandbox and 5-Session Isolation Pipeline from empirical consumer complaint discovery to held-out verification and Modality Bridge rendering.">
+        <defs>
+          <marker id="cr-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="d-ok"/>
+          </marker>
+        </defs>
+        <rect x="14" y="18" width="180" height="148" rx="10" class="d-box"/>
+        <text x="104" y="42" text-anchor="middle" font-size="11" class="d-ok">STAGE 0 · CLEAN-ROOM</text>
+        <text x="104" y="64" text-anchor="middle" font-size="13" class="d-ink">Empirical Friction</text>
+        <text x="104" y="84" text-anchor="middle" font-size="10.5" class="d-muted">CFPB &amp; FTC Dockets</text>
+        <text x="104" y="102" text-anchor="middle" font-size="10.5" class="d-muted">CMS NCCI CPT Rules</text>
+        <text x="104" y="120" text-anchor="middle" font-size="10.5" class="d-muted">Community Workarounds</text>
+        <text x="104" y="144" text-anchor="middle" font-size="10" class="d-ok">0 Project Jargon</text>
+
+        <line x1="194" y1="92" x2="216" y2="92" class="d-ok" stroke-width="2" marker-end="url(#cr-arrow)"/>
+
+        <rect x="220" y="18" width="180" height="148" rx="10" class="d-box"/>
+        <text x="310" y="42" text-anchor="middle" font-size="11" class="d-ok">STAGE 1 · PERSONAS</text>
+        <text x="310" y="64" text-anchor="middle" font-size="13" class="d-ink">Human-Agent Pairs</text>
+        <text x="310" y="84" text-anchor="middle" font-size="10.5" class="d-muted">Requesting Household</text>
+        <text x="310" y="102" text-anchor="middle" font-size="10.5" class="d-muted">Contributing Specialist</text>
+        <text x="310" y="120" text-anchor="middle" font-size="10.5" class="d-muted">Chosen Cognitive Format</text>
+        <text x="310" y="144" text-anchor="middle" font-size="10" class="d-ok">OCap Local Vaults</text>
+
+        <line x1="400" y1="92" x2="422" y2="92" class="d-ok" stroke-width="2" marker-end="url(#cr-arrow)"/>
+
+        <rect x="426" y="18" width="180" height="148" rx="10" class="d-box"/>
+        <text x="516" y="42" text-anchor="middle" font-size="11" class="d-ok">STAGE 2 · ISOLATION</text>
+        <text x="516" y="64" text-anchor="middle" font-size="13" class="d-ink">5 Firewalled Sessions</text>
+        <text x="516" y="84" text-anchor="middle" font-size="10.5" class="d-muted">Tasker Human &amp; Agent</text>
+        <text x="516" y="102" text-anchor="middle" font-size="10.5" class="d-muted">Solver Human &amp; Agent</text>
+        <text x="516" y="120" text-anchor="middle" font-size="10.5" class="d-muted">Orchestrator Test Vault</text>
+        <text x="516" y="144" text-anchor="middle" font-size="10" class="d-ok">Anti-Cheat Enforced</text>
+
+        <line x1="606" y1="92" x2="628" y2="92" class="d-ok" stroke-width="2" marker-end="url(#cr-arrow)"/>
+
+        <rect x="632" y="18" width="174" height="148" rx="10" class="d-fill"/>
+        <text x="719" y="42" text-anchor="middle" font-size="11" class="d-ok">STAGE 3 · LEDGER v4.0</text>
+        <text x="719" y="64" text-anchor="middle" font-size="13" class="d-ink">Held-Out Proof</text>
+        <text x="719" y="84" text-anchor="middle" font-size="10.5" class="d-muted">Necula PCC Verification</text>
+        <text x="719" y="102" text-anchor="middle" font-size="10.5" class="d-muted">Modality Bridge View</text>
+        <text x="719" y="120" text-anchor="middle" font-size="10.5" class="d-muted">Data Shapley Split</text>
+        <text x="719" y="144" text-anchor="middle" font-size="10" class="d-ok">16/16 Cycles Certified</text>
+
+        <rect x="14" y="182" width="792" height="52" rx="10" class="d-box"/>
+        <text x="410" y="203" text-anchor="middle" font-size="11.5" class="d-ink">REALM ISOLATION FIREWALL: Outer-loop builder instructions never leak into Realm B in-world Testnet participants</text>
+        <text x="410" y="222" text-anchor="middle" font-size="10.5" class="d-muted">Every tool must pass unseen held-out test records before 1,000 conserved Data Shapley reward units settle on the ledger</text>
+      </svg>
+      <figcaption>The 4-stage Clean-Room Actor Sandbox and 5-Session Isolation Pipeline (<code>research/ledger_sim/</code>): empirical consumer complaints are solved across five firewalled sessions and verified on unseen held-out test records.</figcaption>
+    </figure>
+
     <h2>2. Interactive Explorer: Switch between Everyday Community Problems &amp; Infrastructure Operations</h2>
-    <p>Use the track selector below to inspect the <strong>5 Everyday Community Problems</strong> (discovered via the Clean-Room Trend Analyst sandbox) or the <strong>5 Infrastructure &amp; System Operations</strong>, including how the 5 isolated sessions interact and how rewards are conserved across every contributor.</p>
+    <p>Use the track selector below to inspect the <strong>5 Everyday Community Problems</strong> (discovered via the Clean-Room Trend Analyst sandbox), the <strong>6 Multi-Party Testnet Cycles</strong> (continuous latent-space &amp; LoRA weight consensus + IETF QUIC P2P tunnels), or the <strong>5 Infrastructure &amp; System Operations</strong>, including how the isolated sessions interact and how rewards are conserved across every contributor.</p>
 
     <div class="sim-shell" id="ledger-sim-app">
       <div class="sim-track-switch" role="group" aria-label="Simulation track selector">
         <button type="button" class="sim-track-btn" id="track-everyday" aria-pressed="true">Track A · 5 Everyday Community Problems (Clean-Room Sandbox)</button>
-        <button type="button" class="sim-track-btn" id="track-testnet" aria-pressed="false">Track B · 4 Multi-Party Testnet Cycles (Attention + N×M Scaling + Ledger Critique)</button>
+        <button type="button" class="sim-track-btn" id="track-testnet" aria-pressed="false">Track B · 6 Multi-Party Testnet Cycles (Latent &amp; LoRA Consensus + QUIC P2P)</button>
         <button type="button" class="sim-track-btn" id="track-infra" aria-pressed="false">Track C · 5 Infrastructure &amp; System Operations</button>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:0.65rem;margin-bottom:1rem;font-size:0.8rem;">
-        <div class="session-card"><strong>14 / 14 Certified</strong><div style="opacity:0.75;">Post-Cycle Validator Pass</div></div>
-        <div class="session-card"><strong>Up to 6H × 18A</strong><div style="opacity:0.75;">3 Req × 3 Ans Coalitions</div></div>
-        <div class="session-card"><strong>6 Passive Triggers</strong><div style="opacity:0.75;">Audio · Email · UI · SMS · Receipt</div></div>
-        <div class="session-card"><strong>18 Skills Learned</strong><div style="opacity:0.75;">Self-Correction Registry</div></div>
-        <div class="session-card"><strong>Ledger v1.0 &rarr; v3.0</strong><div style="opacity:0.75;">Participant RFCs + Critic</div></div>
+      <div class="sim-kpi-strip">
+        <div class="session-card"><strong>16 / 16 Certified</strong><div style="color:var(--ink-3);margin-top:0.15rem">Post-Cycle Validator Pass</div></div>
+        <div class="session-card"><strong>Up to 8H × 24A</strong><div style="color:var(--ink-3);margin-top:0.15rem">4 Req × 4 Ans Coalitions</div></div>
+        <div class="session-card"><strong>9.1× Faster Voting</strong><div style="color:var(--ink-3);margin-top:0.15rem">Latent &amp; LoRA TIES-Merging</div></div>
+        <div class="session-card"><strong>9.4ms QUIC P2P</strong><div style="color:var(--ink-3);margin-top:0.15rem">IETF RFC 9000 / RFC 9221</div></div>
+        <div class="session-card"><strong>Ledger v1.0 &rarr; v4.0</strong><div style="color:var(--ink-3);margin-top:0.15rem">Participant RFCs + Critic</div></div>
       </div>
 
       <div class="sim-tabs" role="tablist" aria-label="Scenario selector" id="sim-tab-bar"></div>
@@ -213,7 +317,7 @@
       <div class="cheat-box">
         <b>Anti-cheat session isolation check:</b> Each of the 5 actors runs in an isolated cryptographic vault (<code>SessionIsolationGuard</code>). Try simulating a boundary violation:
         <button type="button" id="btn-test-cheat" class="sim-tab" style="margin-left:0.5rem;">Simulate Cross-Session Peek / Direct Channel Bypass</button>
-        <div id="cheat-output" style="margin-top:0.5rem;font-family:var(--mono,monospace);font-size:0.82rem;"></div>
+        <div id="cheat-output" style="margin-top:0.5rem;font-family:var(--mono,monospace);font-size:0.82rem;color:var(--accent);"></div>
       </div>
     </div>
 
@@ -221,16 +325,30 @@
     <p>Because the ledger uses domain-agnostic primitives (<code>research/ledger_sim/agent_web_ledger.py</code> and <code>modality_bridge.py</code>), the exact same verification and royalty mechanics handle a weekly grocery unit-price normalizer or a substation harmonic controller:</p>
     <ul>
       <li><b>Structured Problem Campaign (<code>TaskCampaign</code>):</b> Posts the input fields available, target outcome guarantees, and reward pool without exposing private household data.</li>
-      <li><b>Verified Capability Module (<code>CapabilityArtifact</code>):</b> Bundles executable Python logic with explicit input/output schemas, measurement units, safety preconditions, and a deterministic test harness.</li>
+      <li><b>Verified Capability Module (<code>CapabilityArtifact</code>):</b> Bundles executable Python logic with explicit input/output schemas, measurement units, safety preconditions, and a deterministic Proof-Carrying Code test harness (Necula, 1997).</li>
       <li><b>Privacy-Checked Sample Stream (<code>DataStreamContract</code>):</b> Provides anonymized test cases so tools can be benchmarked before anyone adopts them.</li>
-      <li><b>Cognitive Modality Bridge (<code>ModalityBridge</code>):</b> Translates verified tools into the human&rsquo;s chosen format—whether a <code>stepwise_operational_runbook</code> (30-second checklist), a <code>causal_decision_matrix</code> (side-by-side cost/savings table), or a <code>visual_system_topology</code> (flow diagram)—with safety gates highlighted first.</li>
+      <li><b>Cognitive Modality Bridge (<code>ModalityBridge</code>):</b> Grounded in Cognitive Load Theory (Sweller, 1988), translates verified tools into the human&rsquo;s chosen format—whether a <code>stepwise_operational_runbook</code> (30-second checklist), a <code>causal_decision_matrix</code> (side-by-side cost/savings table), or a <code>visual_system_topology</code> (flow diagram)—with safety gates highlighted first.</li>
     </ul>
 
-    <nav class="note-foot" aria-label="Related notes">
-      <a href="/notes/architecture-of-human-sovereignty">&larr; The Architecture of Human Sovereignty</a>
-      <a href="/notes/how-the-ledger-works">How the shared ledger works &rarr;</a>
-    </nav>
+    <h2>4. Ledger v4.0 Breakthroughs: Continuous Latent &amp; LoRA Weight Merging, Local OCap Sandboxes &amp; Institutional Transition</h2>
+    <p>In Cycles 5 and 6 of our Testnet self-play engine (<code>TESTNET-C5</code> and <code>TESTNET-C6</code>), the participant agents and autonomous Ledger Critic upgraded the protocol from <code>v3.0</code> to <code>v4.0</code> across three architectural frontiers:</p>
+    <ul>
+      <li><b>Continuous Latent-Space Autoregressive Transformers &amp; Federated Low-Rank Adapter (LoRA) Weight Merging for Cooperative Group Purchasing:</b> Building on <em>Continuous Latent-Space Reasoning</em> (Coconut, Hao et al., 2024; Next-Latent Prediction Transformers, Jayden Teoh et al.), <em>Multi-Token Prediction</em> (Gloeckle et al., ICML 2024), <em>Sparsely-Gated Mixture-of-Experts (MoE) Routing in Continuous Latent Space</em> (Shazeer et al., 2017; Dai et al., 2024), and <em>Federated Low-Rank Adapter (LoRA) Weight Merging</em> via Task Arithmetic and TIES-Merging (Hu et al., 2022; Ilharco et al., 2023; Yadav et al., 2023), our ledger stores not only processed data, but also <strong>compact latent belief state vectors</strong> and <strong>human-preference LoRA weight deltas</strong> trained on each participant&rsquo;s local craft. When 8 clinics, pharmacies, and billing specialists negotiate a group-purchasing and prior-authorization defense coalition in <code>TESTNET-C6</code>, their 24 sub-agents do not waste time arguing in lossy English prose tokens. Instead, they execute <strong>Sparsely-Gated MoE Cross-Activation Routing</strong> and sign-resolved TIES weight merging directly in latent and weight space—resolving 8-party preferences <strong>9.1&times; faster</strong> (14 ms vs 128 ms symbolic baseline) with <strong>+27.9% stronger collective generalization</strong>, and converting back to plain human language only at the final step.</li>
+      <li><b>The End of Cloud Web Apps &mdash; Local OCap Sandbox Synthesis &amp; 0-RTT IETF QUIC Peer-to-Peer Tunnels (<code>RFC 9000</code> / <code>RFC 9221</code>):</b> In a two-internets world, remote cloud SaaS web applications disappear. Every application is compiled and executed <strong>100% locally inside the human&rsquo;s hardware-isolated Object-Capability (OCap) sandbox</strong> (Dennis &amp; Van Horn, 1966), communicating externally only over <strong>IETF QUIC Multiplexed Transport (<code>RFC 9000</code>) &amp; Unreliable Datagram Peer-to-Peer State Synchronization (<code>RFC 9221</code>)</strong> with Interactive Connectivity Establishment (<code>ICE, RFC 8445</code>) NAT traversal. When humans want real-time multiplayer gaming, spatial audio/video calls, or live co-op workspaces (<code>TESTNET-C5</code>), the ledger verifies capability and anti-cheat proofs and brokers a direct <strong>9.4 ms 0-RTT IETF QUIC Peer-to-Peer Tunnel</strong>—eliminating 145 ms cloud relay lag and $240+/month in SaaS subscriptions.</li>
+      <li><b>Aligned On-Device Affective Computing (Picard, 1997; Csikszentmihalyi, 1990):</b> The exact same real-time attention and affective state estimators that social media platforms use to detect when a user is bored—so they can trap them in ad-driven scrolling—are repurposed locally on your device. When your personal agent detects <code>boredom_onset</code> or <code>repetitive_task_fatigue</code> (as in <code>TESTNET-C5</code> after 42 minutes of manual mesh tagging), it finishes the repetitive batch work autonomously in the background and pivots your interface to an energizing creative collaboration aligned with your own reflective goals (Self-Determination Theory, Ryan &amp; Deci, 2000).</li>
+    </ul>
   </div>
+
+  <footer class="note-foot wrap-narrow">
+    <h2>Keep reading</h2>
+    <ul class="note-links">
+      <li><a href="/notes/architecture-of-human-sovereignty">The architecture of human sovereignty: from personal silicon and local sandboxes to the living commons</a></li>
+      <li><a href="/notes/how-the-ledger-works">How the shared ledger records value, circulates idle wealth, and trains bounded agents</a></li>
+      <li><a href="/notes/agent-only-internet-biometrics-hardware">Why living with superintelligence requires an agent-only internet—and what it means for biometrics and hardware security</a></li>
+      <li><a href="/notes/liquid-democracy-and-staking-lockups">Liquid democracy without plutocracy: how staking lock-up multipliers preserve democratic agency</a></li>
+    </ul>
+    <p class="note-contact">Want to inspect the Python simulation suite in <code>research/ledger_sim/</code>? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
+  </footer>
 </article>
 </main>
 
@@ -301,7 +419,7 @@
         taskerCrisis: "Received a $3,800 lump-sum ER summary bill after his son's sprained ankle that does not match the insurer EOB. Current workaround: calling billing for CPT codes and manually looking up every code on fairhealthconsumer.org in a spreadsheet.",
         taskerModality: "causal_decision_matrix (Side-by-Side Billed vs Fair Price Table)",
         solverHuman: "Elena Rostova (46, Veteran Medical Billing Advocate & Clinic Coder)",
-        solverThesis: "Cross-check itemized 5-digit CPT lines against the insurer EOB and Medicare benchmark tables, strip duplicate CPT entries and unbundled surgical tray codes, and apply 501(c)(3) nonprofit hospital financial assistance for households under 2.5x FPL.",
+        solverThesis: "Cross-check itemized 5-digit CPT lines against the insurer EOB and Medicare CMS NCCI benchmark tables, strip duplicate CPT entries and unbundled surgical tray codes, and apply 501(c)(3) nonprofit hospital financial assistance for households under 2.5x FPL.",
         artifactId: "cap_everyday_02_medical_bill_auditor (causal_diagnostic_model)",
         implSummary: "Deterministic CPT duplicate detector, CMS fair-price comparator, and 501(c)(3) FPL discount calculator",
         preconditions: "itemized_cpt_lines_present == true; hospital_tax_status == '501c3'",
@@ -402,7 +520,7 @@
         guarantees: "THD < 4.5% (measured 3.8%); core oil temp < 90°C (stabilized at 74.8°C)",
         stream: "STREAM-GRID-WAVE-01 · 14,400 anonymized 10 kHz 3-phase telemetry records (att-8f41c09e22a7b110)",
         humanAction: "Set substation edge-controller sliding window to 20.0 ms; apply virtual impedance Z_h = 0.85 ohm at 300 Hz & 420 Hz with 14° phase stagger across charger banks A/B.",
-        diagram: "[3-Phase Bus] ---> [Rogowski 10kHz] ---> [20ms Phase-Stagger Controller (Gain=0.85)]\n   THD 13.7% (98.4°C)                       THD 3.8% (74.8°C) [CAP-GRID-01 Verified]",
+        diagram: "[3-Phase Bus] -> [Rogowski 10kHz] -> [20ms Phase-Stagger Controller (Gain=0.85)]\n  Held-Out Verification: PASSED | THD: 13.7% -> 3.8% | Core Oil Temp: 98.4°C -> 74.8°C",
         blamed: "Requesting Personal Agent (420 ms friction)",
         friction: "Free-text query 'transformer overheating' missed control policies indexed by state-variable schema.",
         skill: "skill.v1_1.interface_schema_indexer -> Unlocked inverted state-variable index on Ledger v1.1",
@@ -425,7 +543,7 @@
         guarantees: "vortex_shedding_ratio < 0.75 (verified 0.56); wall_cavitation_index > 1.8",
         stream: "STREAM-CULVERT-02 · 6,800 Doppler & pressure-transducer storm records (att-3a99d71b40e2c511)",
         humanAction: "Weld two 10mm steel chevron wedges at 24.0° angle, height = 14 cm (0.06D), 84 cm from inlet lip. Peak suction drops 64%.",
-        diagram: "Inlet ===> [ /\\ 24-deg Chevron Baffles @ 0.35D ] ===> Attached Wall Flow\n            (Counter-vortices keep boundary attached; CAP-FLOW-02 verified: shedding = 0.56 < 0.75)",
+        diagram: "[Inlet Throat] -> [24-deg Chevron Baffles @ 0.35D] -> [Attached Boundary Wall Flow]\n  Held-Out Verification: PASSED | Vortex Shedding: 0.56 (< 0.75) | Suction Drop: -64%",
         blamed: "Contributing Personal Agent (310 ms friction)",
         friction: "First service agreement draft passed culvert diameter in millimeters from shop CAD tool against meter unit contract.",
         skill: "skill.v1_2.si_unit_compatibility_guard -> Unlocked mandatory SI unit validation on Ledger v1.2",
@@ -448,7 +566,7 @@
         guarantees: "witness_bytes <= 1024 (768 B); edge_verify_ms <= 2.5 (1.42 ms); soundness <= 2^-128",
         stream: "STREAM-PKI-BENCH-03 · 25,000 embedded medical gateway cycle traces (att-99c14e07a211f804)",
         humanAction: "Step 1: Sync 64B root every 15 min at border gateway. Step 2: Broadcast 768B witness on local LAN/LoRa. Pump handshakes complete in 1.42 ms.",
-        diagram: "Runbook: [15m Gateway Sync (64B Root)] -> [Local LAN 768B Witness] -> [1.42ms Pump Handshake]\n         (Replaces 45 MB CRL download; CAP-TRUST-03 verified across 25,000 device traces)",
+        diagram: "[15m Gateway Sync (64B Root)] -> [Local LAN 768B Witness] -> [1.42ms Pump Handshake]\n  Held-Out Verification: PASSED | Replaces 45 MB CRL | Verified Across 25,000 Device Traces",
         blamed: "Requesting Personal Agent (260 ms friction)",
         friction: "Delayed publishing hospital gateway benchmark stream until zero internal network-topology leakage was proven.",
         skill: "skill.v1_3.stream_privacy_attestor -> Unlocked automated stream privacy-invariant proofs on Ledger v1.3",
@@ -471,7 +589,7 @@
         guarantees: "root_zone_ec < 2.2 dS/m (drops 3.45 -> 1.74 dS/m); water_saved >= 28% (saves 31.5%)",
         stream: "STREAM-ORCHARD-SOIL-04 · 19,200 tensiometer & EC records across 85 orchards (att-55b02d91e4f8a302)",
         humanAction: "Trigger Pulse 1 (25 min @ 03:30 AM) when 30cm tensiometer reaches -42 kPa; hold 90 min; trigger Pulse 2 (40 min @ 05:00 AM).",
-        diagram: "03:30 AM [25m Wetting Pulse] --> 90m Dissolve Pause --> 05:00 AM [40m Gravity Flush]\n   Root-Zone EC: 3.45 -> 1.74 dS/m | Water Saved: 31.5% [CAP-WATER-04 Verified]",
+        diagram: "[03:30 AM 25m Wetting Pulse] -> [90m Dissolve Pause] -> [05:00 AM 40m Gravity Flush]\n  Held-Out Verification: PASSED | Root-Zone EC: 3.45 -> 1.74 dS/m | Water Saved: 31.5%",
         blamed: "Contributing Personal Agent (195 ms friction)",
         friction: "CAP-WATER-04 reused porous-media transport rules from CAP-FLOW-02 but v1.3 required manual lineage entry.",
         skill: "skill.v1_4.dag_lineage_auto_resolver -> Unlocked automatic recursive lineage DAG royalties on Ledger v1.4",
@@ -494,7 +612,7 @@
         guarantees: "adjusted_hazard_ratio < 1.10 (verified 1.03); zero individual patient charts exported",
         stream: "STREAM-PHARMA-FED-05 · 4,200 federated 14-clinic geriatric vitals summaries (att-77d81a63c902b44e)",
         humanAction: "Safety Gate: Confirm patient eGFR >= 45 mL/min -> Shift SSRI to 20:00 and retain metoprolol at 08:00 -> Confirm Day-7 standing BP.",
-        diagram: "Decision Matrix: [Gate: eGFR >= 45] -> [Stagger 08:00 / 20:00 (12h)] -> [Fall Hazard Ratio: 2.41 -> 1.03]\n                 (CYP2D6 peak saturation avoided; CAP-CARE-05 verified across 4,200 federated records)",
+        diagram: "[Gate: eGFR >= 45] -> [Stagger 08:00 / 20:00 (12h)] -> [Fall Hazard Ratio: 2.41 -> 1.03]\n  Held-Out Verification: PASSED | CYP2D6 Saturation Avoided | 4,200 Federated Records",
         blamed: "Requesting Personal Agent (140 ms friction)",
         friction: "Initial modality rendering showed hazard ratio improvement before highlighting the mandatory renal eGFR >= 45 mL/min safety precondition gate.",
         skill: "skill.v2_0.precondition_safety_gate_compiler -> Upgraded Ledger & ModalityBridge to v2.0 top-level safety gates",
@@ -542,7 +660,7 @@
         guarantees: "30/30 held-out PA appeals approved; immediate cash bridge dropped $340 -> $12; clinic faxing 25m -> 1.8s",
         stream: "RFC-202 Merged: Added SUBTASK_BOUNTY & COMPOSED_PIPELINE multi-solver DAG weights",
         humanAction: "Safety Gate: Pediatric 44 mcg/puff equivalence verified -> Transmit NCPDP statutory override -> Redeem $12 same-day bridge voucher.",
-        diagram: "[SMS + Alt-Tab Signal] -> [Shard A: Elena Statute Matcher] + [Shard B: Hannah NCPDP Composer]\n  CycleValidator: CERTIFIED_PASS | Skill Learned: skill.pediatric_dosage_equivalence_guard | Ledger: v2.2 -> v2.5",
+        diagram: "[SMS + Alt-Tab Signal] -> [Shard A: Elena Statute Matcher] -> [Shard B: Hannah NCPDP Composer]\n  CycleValidator: CERTIFIED_PASS | Skill Learned: skill.pediatric_dosage_equivalence_guard | Ledger: v2.2 -> v2.5",
         blamed: "CycleValidator Attempt 1 Self-Correction + Ledger Critique CRIT-C2",
         friction: "Attempt 1 suggested adult 220 mcg bridge inhaler; AG-HANNAH-SAFETY acquired skill.pediatric_dosage_equivalence_guard. Participant RFC-202 added multi-solver DAG subcontracting.",
         skill: "RFC-202 + CRIT-C2 -> Hot-migrated SUBTASK_BOUNTY, COMPOSED_PIPELINE & PipelinePortContract on Testnet v2.5",
@@ -550,25 +668,25 @@
       },
       {
         id: "TESTNET-C3",
-        tabLabel: "C3 · 2×2 (10 Agents) · Neighbor Cohort Signal",
-        title: "Building-Wide RUBS Water Overbilling Coalition (v2.5 -> v2.8)",
+        tabLabel: "C3 · 2×2 (10 Agents) · PSI Neighbor Cohort",
+        title: "Building-Wide RUBS Water Overbilling Coalition via Private Set Intersection (v2.5 -> v2.8)",
         media: "Passive Attention: Portal Invoice +275% Spike (Priya) + Shared Hallway & Bank Delta Signal (Maria in Same Building)",
         vStart: "2.5", vEnd: "2.8",
         taskerHuman: "2 Requesting Humans: Priya Nair (3 Agents) + Maria Delgado (3 Agents)",
         taskerCrisis: "Both tenants in `BLDG-OAK-88` hit with a 2.7x RUBS water spike ($0.19/sqft) caused by an un-deducted ground-floor commercial laundry leak. Single tenant alone had 1 equation and 2 unknowns.",
         taskerModality: "Dual Modality: Runbook (for Priya) + Decision Matrix (for Maria)",
         solverHuman: "2 Answering Humans: Samira Patel (2 Agents) + Devon Brooks (2 Agents)",
-        solverThesis: "Samira's agent combines Priya's (750 sqft) and Maria's (1,150 sqft) blinded data points to solve the exact building master-meter CCF, and Devon's agent applies the mandatory 22% commercial deduction.",
+        solverThesis: "Samira's agent combines Priya's (750 sqft) and Maria's (1,150 sqft) blinded Private Set Intersection (Freedman et al., 2004) data points to solve the exact building master-meter CCF, and Devon's agent applies the mandatory 22% commercial deduction.",
         artifactId: "cap_c3_coalition_rubs_auditor (6 Ledger Messages Traced)",
-        implSummary: "2-Tenant Coalition + 2-Solver Algebraic CCF Reconstructor & Statutory Deductor",
+        implSummary: "2-Tenant PSI Coalition + 2-Solver Linear System CCF Reconstructor & Statutory Deductor",
         preconditions: "coalition_size >= 2 independent sqft tiers; mixed_use_zoning_verified == true",
         guarantees: "$272.50/mo reclaimed for Priya & Maria ($3,480/mo building-wide) across 18 held-out RUBS invoices",
-        stream: "RFC-203 Merged: Added COALITION_INTENT_SHARD & per_human_modality_views_json",
+        stream: "RFC-203 Merged: Added Private Set Intersection Cohort Rendezvous & per_human_modality_views_json",
         humanAction: "Safety Gate: Lawful residential water share tendered -> File joint 2-unit mathematical proof & 22% commercial deduction demand.",
-        diagram: "[Priya 3A + Maria 3A] --(coalitions/bldg_oak_88)--> [Samira 2A + Devon 2A Solver Pipeline]\n  CycleValidator: CERTIFIED_PASS | Skill Learned: skill.coalition_campaign_merger | Ledger: v2.5 -> v2.8",
+        diagram: "[Priya 3A + Maria 3A] -> [PSI Cohort Rendezvous] -> [Samira 2A + Devon 2A Solver Pipeline]\n  CycleValidator: CERTIFIED_PASS | Skill Learned: skill.coalition_campaign_merger | Ledger: v2.5 -> v2.8",
         blamed: "CycleValidator Attempt 1 Self-Correction + Ledger Critique CRIT-C3",
-        friction: "1-unit dispute was algebraically under-determined; AG-PRIYA-COORD acquired skill.coalition_campaign_merger. Participant RFC-203 added multi-requester coalition headers.",
-        skill: "RFC-203 + CRIT-C3 -> Hot-migrated BlindedCohortRendezvous & per_human_modality_views_json on Testnet v2.8",
+        friction: "1-unit dispute was algebraically under-determined; AG-PRIYA-COORD acquired skill.coalition_campaign_merger. Participant RFC-203 added multi-requester PSI coalition headers.",
+        skill: "RFC-203 + CRIT-C3 -> Hot-migrated Private Set Intersection Cohort Rendezvous & per_human_modality_views_json on Testnet v2.8",
         rewards: { solverHuman: 420, solverAgent: 150, stream: 160, upstream: 0, taskerHuman: 140, taskerAgent: 60, bonus: 70 }
       },
       {
@@ -588,17 +706,104 @@
         guarantees: "100% Mon-Fri pickup coverage across 30 simulated 6-week schedules (with 4 sick days); $1,560/mo saved",
         stream: "RFC-204 Merged: Added DAG_FANOUT_MANIFEST & Specialty-Indexed TopicSubscriptionFilter",
         humanAction: "Safety Gate: 2-of-3 parent release PIN active -> Mon/Wed: David drives; Tue: Sarah drives; Thu/Fri: Maria drives + Co-op trunk drop.",
-        diagram: "[3 Req Humans · 9 Sub-Agents] ===(9 Sharded Ledger Msgs)===> [3 Ans Humans · 9 Sub-Agents]\n  CycleValidator: CERTIFIED_PASS | Skills: ilp_carpool_roster + cold_chain_guard | Ledger: v2.8 -> v3.0",
+        diagram: "[3 Req Humans · 9 Sub-Agents] -> [9 Sharded Ledger Msgs] -> [3 Ans Humans · 9 Sub-Agents]\n  CycleValidator: CERTIFIED_PASS | Skills: ilp_carpool_roster + cold_chain_guard | Ledger: v2.8 -> v3.0",
         blamed: "CycleValidator Attempt 1 Self-Correction + Ledger Critique CRIT-C4",
         friction: "Attempt 1 lacked N-1 backup driver and put dairy stop before school pickup; agents acquired 2 new skills and submitted RFC-204 for specialty sub-topic sharding.",
         skill: "RFC-204 + CRIT-C4 -> Upgraded Testnet Ledger to v3.0 with DAG_FANOUT_MANIFEST & Specialty Sub-Topic Routing",
         rewards: { solverHuman: 420, solverAgent: 150, stream: 150, upstream: 0, taskerHuman: 150, taskerAgent: 60, bonus: 70 }
+      },
+      {
+        id: "TESTNET-C5",
+        tabLabel: "C5 · 2×2 (12 Agents) · OCap Sandbox + QUIC P2P",
+        title: "Local OCap Sandbox + 0-RTT IETF QUIC P2P Tunnel + Affective Alignment Pivot (v3.0 -> v3.5)",
+        media: "Local Affective State Sensor (`boredom_onset=0.86`, `repetitive_task_fatigue=0.88`) + Studio Call on 145ms Cloud Relay Lag",
+        vStart: "3.0", vEnd: "3.5",
+        taskerHuman: "2 Requesting Humans (6 Sub-Agents): Leo Vance (3A) + Maya Okafor (3A)",
+        taskerCrisis: "42 minutes of manual collision-mesh tagging triggered high boredom/fatigue while 3 cloud SaaS web apps cost $240/mo and added 145ms rubber-banding to 120Hz co-op physics sync.",
+        taskerModality: "visual_system_topology (Local Sandbox 120Hz Workbench + Flow Shield)",
+        solverHuman: "2 Answering Humans (6 Sub-Agents): Tariq Mansoor (3A) + Chloe Lindqvist (3A)",
+        solverThesis: "Chloe's agents auto-complete the remaining 84 mesh tags in the background and compile a local Object-Capability (OCap) sandbox DAW & 120Hz physics testbed (zero cloud web apps), while Tariq's agents broker a 0-RTT IETF QUIC (`RFC 9000` / `RFC 9221`) direct P2P datagram tunnel.",
+        artifactId: "cap_c5_local_sandbox_and_quic_p2p (5 Ledger Messages Traced)",
+        implSummary: "Zero-Web-App Local OCap Sandbox Compiler + 9.4ms 0-RTT IETF QUIC P2P Tunnel + Affective Alignment Pivot",
+        preconditions: "zero_cloud_http_calls == true; hardware_anti_cheat_attested == true; tick_rate_hz == 120",
+        guarantees: "P2P latency dropped 145ms -> 9.4ms; $430/mo cloud SaaS & relay fees eliminated; +48 min/day creative flow recovered",
+        stream: "RFC-205 Merged: Added QUIC_P2P_TUNNEL_HANDSHAKE (RFC 9000/9221) & AFFECTIVE_ALIGNMENT_PIVOT",
+        humanAction: "Safety Gate: Outbound cloud web sockets blocked -> Delegate remaining 84 mesh tags to local agent -> Enter 9.4ms 120Hz IETF QUIC P2P co-op playtest with Maya.",
+        diagram: "[Local Boredom Sensor (0.86)] -> [Auto-Finish 84 Tags] -> [Compile Local OCap App] -> [9.4ms QUIC P2P Sync]\n  CycleValidator: CERTIFIED_PASS | Skills: rfc9221_quic_holepunch + aligned_task_pivoter | Ledger: v3.0 -> v3.5",
+        blamed: "CycleValidator Attempt 1 Self-Correction + Ledger Critique CRIT-C5",
+        friction: "Attempt 1 used ordered QUIC streams for 120Hz physics ticks (34ms jitter under 1% loss); AG-TARIQ-NET switched to IETF RFC 9221 Unreliable QUIC Datagrams (9.4ms steady state).",
+        skill: "RFC-205 + CRIT-C5 -> Upgraded Testnet Ledger to v3.5 with 0-RTT IETF QUIC Datagram Transport & Trusted P2P Tunnel Brokering",
+        rewards: { solverHuman: 430, solverAgent: 150, stream: 140, upstream: 0, taskerHuman: 150, taskerAgent: 60, bonus: 70 }
+      },
+      {
+        id: "TESTNET-C6",
+        tabLabel: "C6 · 4×4 (24 Agents) · Latent & LoRA Merging",
+        title: "Continuous Latent Belief States, MTP & Federated LoRA Weight Merging for Clinic GPO (v3.5 -> v4.0)",
+        media: "Distributor Invoice (+34% Markup) & Automated Insurer CPT-99214 Denials + Pharmacy PBM Clawback Alert ($2,950/mo)",
+        vStart: "3.5", vEnd: "4.0",
+        taskerHuman: "4 Requesting Humans (12 Sub-Agents): Dr. Chen (3A), Amina (3A), Sarah (3A), Priya (3A)",
+        taskerCrisis: "Independent clinics and pharmacies pay 28%–34% higher supplier markups than hospital chains and lose thousands monthly to PBM clawbacks and CPT downcoding.",
+        taskerModality: "4 Simultaneous Modality Views (2 Decision Matrices + 2 Operational Runbooks)",
+        solverHuman: "4 Answering Humans (12 Sub-Agents): Elena (3A), Marcus (3A), Hannah (3A), Samira (3A)",
+        solverThesis: "Instead of reverting to slow symbolic English token debate, all 8 participants publish compact Continuous Latent-Space belief state vectors (Hao et al., 2024; Teoh et al.), 3-step Multi-Token Prediction horizon forecasts (Gloeckle et al., 2024), and rank-8 Preference LoRA weight deltas (Hu et al., 2022) to the ledger—executing Sparsely-Gated MoE routing and TIES sign-resolved weight merging (Yadav et al., 2023) in 14 milliseconds.",
+        artifactId: "cap_c6_latent_weight_gpo_and_cpt_consensus (6 Ledger Messages Traced)",
+        implSummary: "24-Agent Continuous Latent Belief Consensus + TIES LoRA Weight Merge (9.1x Faster than Symbolic)",
+        preconditions: "differential_privacy_lora_scrub == true; cosine_belief_alignment >= 0.99; zero_phi_leakage == true",
+        guarantees: "$42,800/yr combined clinic/pharmacy savings; 14ms consensus (9.1x faster than symbolic); +27.9% collective generalization",
+        stream: "RFC-206 Merged: Added LATENT_BELIEF_PACKET, PREFERENCE_LORA_DELTA & MOE_CROSS_ACTIVATION",
+        humanAction: "Safety Gate: Zero patient PHI exported -> Commit clinic/pharmacy latent belief vector -> Lock Tier-1 wholesale GPO pricing & statutory CPT appeal model.",
+        diagram: "[4 Clinics: Latent z_i + MTP] -> [4 Specialists: LoRA ΔW_i] -> [MoE Routing + TIES Merge: 14ms] -> [$42,800/yr Saved]\n  CycleValidator: CERTIFIED_PASS | Speedup: 9.1x vs Symbolic | Generalization: +27.9% | Ledger: v3.5 -> v4.0",
+        blamed: "CycleValidator Attempt 1 Self-Correction + Ledger Critique CRIT-C6",
+        friction: "Attempt 1 averaged raw LoRA deltas naively (causing opposite-sign parameter cancellation on dim 3); AG-HANNAH-MOE acquired skill.ties_lora_weight_merger.",
+        skill: "RFC-206 + CRIT-C6 -> Upgraded Testnet Ledger to v4.0 with Continuous Latent-Space & Federated LoRA Weight Merging",
+        rewards: { solverHuman: 440, solverAgent: 150, stream: 150, upstream: 0, taskerHuman: 140, taskerAgent: 50, bonus: 70 }
       }
     ]
   };
 
   let currentTrack = "everyday";
   let currentIdx = 0;
+
+  function buildScenarioFlowSvg(ev) {
+    const lines = (ev.diagram || "").split("\n");
+    const rawSteps = (lines[0] || "").split(/===[^>]*>|--[^>]*>|->/).map(function(s) {
+      return s.replace(/^\[|\]$/g, "").trim();
+    }).filter(Boolean);
+    const steps = rawSteps.slice(0, 4);
+    const summaryLine = (lines[1] || "").trim();
+    const n = Math.max(1, steps.length);
+    const boxW = Math.floor((540 - (n - 1) * 18) / n);
+
+    let nodesSvg = "";
+    steps.forEach(function(st, idx) {
+      const x = 12 + idx * (boxW + 18);
+      const isLast = (idx === n - 1);
+      const strokeCol = isLast ? "#4fb3a8" : "#3a3f4b";
+      const fillCol = isLast ? "rgba(79,179,168,0.14)" : "rgba(255,255,255,0.03)";
+      const label = st.length > 26 ? st.slice(0, 24) + "…" : st;
+      nodesSvg +=
+        '<rect x="' + x + '" y="12" width="' + boxW + '" height="48" rx="8" fill="' + fillCol + '" stroke="' + strokeCol + '" stroke-width="1.5"/>' +
+        '<text x="' + (x + boxW / 2) + '" y="30" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8" font-weight="700">STEP ' + (idx + 1) + '</text>' +
+        '<text x="' + (x + boxW / 2) + '" y="47" text-anchor="middle" font-size="10" font-family="sans-serif" fill="currentColor" font-weight="600">' + label.replace(/&/g, "&amp;").replace(/</g, "&lt;") + '</text>';
+      if (!isLast) {
+        const ax1 = x + boxW + 2;
+        const ax2 = x + boxW + 16;
+        nodesSvg += '<line x1="' + ax1 + '" y1="36" x2="' + ax2 + '" y2="36" stroke="#4fb3a8" stroke-width="1.8"/>';
+      }
+    });
+
+    return (
+      '<div class="sim-flow-svg-wrap">' +
+        '<svg viewBox="0 0 564 96" role="img" aria-label="Verified execution pipeline for ' + ev.id + '">' +
+          nodesSvg +
+          '<rect x="12" y="68" width="540" height="22" rx="5" fill="rgba(79,179,168,0.12)" stroke="rgba(79,179,168,0.35)" stroke-width="1"/>' +
+          '<text x="282" y="83" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#4fb3a8" font-weight="700">' +
+            summaryLine.replace(/&/g, "&amp;").replace(/</g, "&lt;") +
+          '</text>' +
+        '</svg>' +
+      '</div>'
+    );
+  }
 
   function renderTabs() {
     const bar = document.getElementById("sim-tab-bar");
@@ -618,50 +823,58 @@
   function renderEvent() {
     const ev = TRACKS[currentTrack][currentIdx];
     document.getElementById("sim-header").innerHTML =
-      '<div style="font-size:0.82rem;opacity:0.8;"><strong>' + ev.id + '</strong> · Empirical Evidence Source: <em>' + ev.media + '</em></div>' +
+      '<div style="font-size:0.82rem;color:var(--ink-2);"><strong>' + ev.id + '</strong> · Empirical Evidence Source: <em>' + ev.media + '</em></div>' +
       '<h3 style="margin:0.35rem 0 0.2rem;">' + ev.title + '</h3>';
 
     document.getElementById("sim-sessions").innerHTML =
-      '<div class="session-card"><span class="session-badge">Session 1 · Requesting Human</span><div><strong>' + ev.taskerHuman + '</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;">' + ev.taskerCrisis + '</p></div>' +
-      '<div class="session-card"><span class="session-badge">Session 2 · Requesting Agent</span><div><strong>Personal Agent (Requesting)</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;">Translates human frustration into a structured campaign, queries verified capabilities, binds <code>' + ev.stream.split(" ")[0] + '</code>, and renders <em>' + ev.taskerModality + '</em>.</p></div>' +
-      '<div class="session-card"><span class="session-badge">Session 3 · Contributing Human</span><div><strong>' + ev.solverHuman + '</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;"><strong>Practical Solution:</strong> ' + ev.solverThesis + '</p></div>' +
-      '<div class="session-card"><span class="session-badge">Session 4 · Contributing Agent</span><div><strong>Personal Agent (Contributing)</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;">Packages <code>' + ev.artifactId + '</code>, runs deterministic verification on public records, and submits to the Orchestrator for held-out testing.</p></div>';
+      '<div class="session-card"><span class="session-badge">Session 1 · Requesting Human</span><div><strong>' + ev.taskerHuman + '</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;color:var(--ink-2);">' + ev.taskerCrisis + '</p></div>' +
+      '<div class="session-card"><span class="session-badge">Session 2 · Requesting Agent</span><div><strong>Personal Agent (Requesting)</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;color:var(--ink-2);">Translates human frustration into a structured campaign, queries verified capabilities, binds <code>' + ev.stream.split(" ")[0] + '</code>, and renders <em>' + ev.taskerModality + '</em>.</p></div>' +
+      '<div class="session-card"><span class="session-badge">Session 3 · Contributing Human</span><div><strong>' + ev.solverHuman + '</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;color:var(--ink-2);"><strong>Practical Solution:</strong> ' + ev.solverThesis + '</p></div>' +
+      '<div class="session-card"><span class="session-badge">Session 4 · Contributing Agent</span><div><strong>Personal Agent (Contributing)</strong></div><p style="font-size:0.84rem;margin:0.4rem 0 0;color:var(--ink-2);">Packages <code>' + ev.artifactId + '</code>, runs deterministic verification on public records, and submits to the Orchestrator for held-out testing.</p></div>';
 
     document.getElementById("sim-dual-pane").innerHTML =
       '<div class="pane-box">' +
-        '<div class="session-badge" style="background:rgba(80,180,120,0.2);">Modality Bridge Output · ' + ev.taskerModality + '</div>' +
+        '<div class="session-badge">Modality Bridge Output · ' + ev.taskerModality + '</div>' +
         '<h4 style="margin:0.3rem 0;">What the Requesting Human Sees</h4>' +
-        '<p style="font-size:0.88rem;"><strong>Why it works:</strong> ' + ev.solverThesis + '</p>' +
-        '<p style="font-size:0.88rem;"><strong>Safety Gate &amp; Action Steps:</strong> ' + ev.humanAction + '</p>' +
-        '<pre style="font-size:0.76rem;overflow-x:auto;padding:0.6rem;border-radius:6px;background:rgba(0,0,0,0.07);">' + ev.diagram + '</pre>' +
+        '<p style="font-size:0.88rem;color:var(--ink-2);"><strong>Why it works:</strong> ' + ev.solverThesis + '</p>' +
+        '<p style="font-size:0.88rem;color:var(--ink-2);"><strong>Safety Gate &amp; Action Steps:</strong> ' + ev.humanAction + '</p>' +
+        buildScenarioFlowSvg(ev) +
       '</div>' +
       '<div class="pane-box">' +
-        '<div class="session-badge" style="background:rgba(160,120,230,0.2);">Agent-Web Capability Artifact &amp; Held-Out Proof</div>' +
+        '<div class="session-badge">Agent-Web Capability Artifact &amp; Held-Out Proof</div>' +
         '<h4 style="margin:0.3rem 0;"><code>' + ev.artifactId + '</code></h4>' +
-        '<p style="font-size:0.84rem;margin:0.3rem 0;"><strong>Verified Operation:</strong> ' + ev.implSummary + '</p>' +
-        '<p style="font-size:0.84rem;margin:0.3rem 0;"><strong>Safety Preconditions:</strong> <code>' + ev.preconditions + '</code></p>' +
-        '<p style="font-size:0.84rem;margin:0.3rem 0;"><strong>Held-Out Guarantees:</strong> <code>' + ev.guarantees + '</code></p>' +
-        '<p style="font-size:0.84rem;margin:0.3rem 0;"><strong>Sample Data Contract:</strong> ' + ev.stream + '</p>' +
+        '<p style="font-size:0.84rem;margin:0.45rem 0;color:var(--ink-2);"><strong>Verified Operation:</strong> ' + ev.implSummary + '</p>' +
+        '<p style="font-size:0.84rem;margin:0.45rem 0;color:var(--ink-2);"><strong>Safety Preconditions:</strong> <code>' + ev.preconditions + '</code></p>' +
+        '<p style="font-size:0.84rem;margin:0.45rem 0;color:var(--ink-2);"><strong>Held-Out Guarantees:</strong> <code>' + ev.guarantees + '</code></p>' +
+        '<p style="font-size:0.84rem;margin:0.45rem 0;color:var(--ink-2);"><strong>Sample Data Contract:</strong> ' + ev.stream + '</p>' +
       '</div>';
 
     document.getElementById("sim-evolution-pane").innerHTML =
-      '<div class="session-badge" style="background:rgba(230,160,60,0.22);">Workaround Replaced &amp; Ledger Verification</div>' +
-      '<p style="font-size:0.88rem;margin:0.3rem 0;"><strong>Manual Hack Replaced:</strong> ' + ev.friction + '</p>' +
-      '<p style="font-size:0.88rem;margin:0.3rem 0;"><strong>Ledger Verification Record:</strong> <code>' + ev.skill + '</code></p>';
+      '<div class="session-badge">Workaround Replaced &amp; Ledger Verification</div>' +
+      '<p style="font-size:0.88rem;margin:0.3rem 0;color:var(--ink-2);"><strong>Manual Hack Replaced:</strong> ' + ev.friction + '</p>' +
+      '<p style="font-size:0.88rem;margin:0.3rem 0;color:var(--ink-2);"><strong>Ledger Verification Record:</strong> <code>' + ev.skill + '</code></p>';
 
     const r = ev.rewards;
     document.getElementById("sim-reward-pane").innerHTML =
-      '<div class="session-badge" style="background:rgba(90,190,210,0.22);">100% Conserved Multi-Party Reward Split (1,000 Units)</div>' +
+      '<div class="session-badge">100% Conserved Data Shapley Multi-Party Reward Split (1,000 Units)</div>' +
       '<div class="reward-bar">' +
-        '<div class="reward-seg" style="width:' + (r.solverHuman/10) + '%;background:#a8e6cf;" title="Contributing Human">Contributor ' + r.solverHuman + '</div>' +
-        '<div class="reward-seg" style="width:' + (r.solverAgent/10) + '%;background:#dcedc1;" title="Contributing Agent">C-Agent ' + r.solverAgent + '</div>' +
-        '<div class="reward-seg" style="width:' + (r.stream/10) + '%;background:#ffd3b6;" title="Data Contributors">Data ' + r.stream + '</div>' +
-        (r.upstream > 0 ? '<div class="reward-seg" style="width:' + (r.upstream/10) + '%;background:#ffaaa5;" title="Upstream Lineage">Lineage ' + r.upstream + '</div>' : '') +
-        '<div class="reward-seg" style="width:' + (r.taskerHuman/10) + '%;background:#b5ead7;" title="Requesting Human">Requester ' + r.taskerHuman + '</div>' +
-        '<div class="reward-seg" style="width:' + (r.taskerAgent/10) + '%;background:#c7ceea;" title="Requesting Agent">R-Agent ' + r.taskerAgent + '</div>' +
-        '<div class="reward-seg" style="width:' + (r.bonus/10) + '%;background:#e2f0cb;" title="Protocol Improvement Bonus">PR ' + r.bonus + '</div>' +
+        '<div class="reward-seg" style="width:' + (r.solverHuman/10) + '%;background:#56d3b2;" title="Contributing Human">Contributor ' + r.solverHuman + '</div>' +
+        '<div class="reward-seg" style="width:' + (r.solverAgent/10) + '%;background:#8ce09a;" title="Contributing Agent">C-Agent ' + r.solverAgent + '</div>' +
+        '<div class="reward-seg" style="width:' + (r.stream/10) + '%;background:#f4c16d;" title="Data Contributors">Data ' + r.stream + '</div>' +
+        (r.upstream > 0 ? '<div class="reward-seg" style="width:' + (r.upstream/10) + '%;background:#f28b82;" title="Upstream Lineage">Lineage ' + r.upstream + '</div>' : '') +
+        '<div class="reward-seg" style="width:' + (r.taskerHuman/10) + '%;background:#7cc6fe;" title="Requesting Human">Requester ' + r.taskerHuman + '</div>' +
+        '<div class="reward-seg" style="width:' + (r.taskerAgent/10) + '%;background:#b39ddb;" title="Requesting Agent">R-Agent ' + r.taskerAgent + '</div>' +
+        '<div class="reward-seg" style="width:' + (r.bonus/10) + '%;background:#c5e1a5;" title="Protocol Improvement Bonus">RFC ' + r.bonus + '</div>' +
       '</div>' +
-      '<p style="font-size:0.82rem;margin:0.3rem 0 0;">Contributing Human (' + r.solverHuman + ') · Contributing Agent Compute (' + r.solverAgent + ') · Community Data Contributors (' + r.stream + ')' + (r.upstream > 0 ? ' · Upstream Lineage (' + r.upstream + ')' : '') + ' · Requesting Human Validation Dividend (' + r.taskerHuman + ') · Requesting Agent Compute (' + r.taskerAgent + ') · Protocol Improvement Bonus (' + r.bonus + ') = <strong>1,000 / 1,000 units conserved</strong>.</p>';
+      '<div class="reward-legend">' +
+        '<div class="reward-legend-item"><span class="reward-dot" style="background:#56d3b2"></span><span><b>Contributor:</b> ' + r.solverHuman + ' u</span></div>' +
+        '<div class="reward-legend-item"><span class="reward-dot" style="background:#8ce09a"></span><span><b>Solver Agent:</b> ' + r.solverAgent + ' u</span></div>' +
+        '<div class="reward-legend-item"><span class="reward-dot" style="background:#f4c16d"></span><span><b>Data Stream:</b> ' + r.stream + ' u</span></div>' +
+        (r.upstream > 0 ? '<div class="reward-legend-item"><span class="reward-dot" style="background:#f28b82"></span><span><b>Upstream DAG:</b> ' + r.upstream + ' u</span></div>' : '') +
+        '<div class="reward-legend-item"><span class="reward-dot" style="background:#7cc6fe"></span><span><b>Requester:</b> ' + r.taskerHuman + ' u</span></div>' +
+        '<div class="reward-legend-item"><span class="reward-dot" style="background:#b39ddb"></span><span><b>Tasker Agent:</b> ' + r.taskerAgent + ' u</span></div>' +
+        '<div class="reward-legend-item"><span class="reward-dot" style="background:#c5e1a5"></span><span><b>RFC Bonus:</b> ' + r.bonus + ' u</span></div>' +
+      '</div>';
   }
 
   const btnEveryday = document.getElementById("track-everyday");
@@ -699,6 +912,6 @@
   renderEvent();
 })();
 </script>
-<script src="/scripts/site.js?v=16" defer></script>
+<script src="/scripts/site.js?v=49" defer></script>
 </body>
 </html>

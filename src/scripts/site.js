@@ -11,7 +11,7 @@
   var onScroll = function () { if (head) head.classList.toggle('scrolled', window.scrollY > 8); };
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
-  var btn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');
+  var btn = document.querySelector('.menu-btn'), nav = document.getElementById('nav') || document.getElementById('site-nav') || document.querySelector('.nav');
   if (btn && nav) {
     btn.addEventListener('click', function () {
       var open = nav.classList.toggle('open');
@@ -24,6 +24,37 @@
   }
 
   /* ---------- reliable #top & section hash navigation (compensates for sticky header & async layout shifts) ---------- */
+  /* ---------- Interactive Studio Switchers (#for-you, #fractured, #signals) ---------- */
+  function activateStudioPane(pane) {
+    if (!pane || !pane.id) return;
+    var sec = pane.closest('section') || pane.parentNode;
+    var sw = sec.querySelector('.studio-switcher');
+    var panes = [].slice.call(sec.querySelectorAll('.studio-pane'));
+    panes.forEach(function (p) {
+      var on = p === pane;
+      p.hidden = !on;
+      if (on) {
+        p.classList.add('in');
+        p.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+      }
+    });
+    if (sw) {
+      [].forEach.call(sw.querySelectorAll('[data-studio-target]'), function (btn) {
+        btn.setAttribute('aria-selected', String(btn.getAttribute('data-studio-target') === pane.id));
+      });
+    }
+    setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 20);
+  }
+
+  document.querySelectorAll('.studio-switcher').forEach(function (sw) {
+    sw.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-studio-target]');
+      if (!btn) return;
+      var targetPane = document.getElementById(btn.getAttribute('data-studio-target'));
+      if (targetPane) activateStudioPane(targetPane);
+    });
+  });
+
   var hashLockId = null, hashLockUntil = 0;
   function scrollToHashTarget(id, smooth) {
     if (!id || id === 'top') {
@@ -33,6 +64,10 @@
     }
     var target = document.getElementById(id);
     if (!target) return false;
+    var parentPane = target.closest('.studio-pane');
+    if (parentPane && parentPane.hidden) {
+      activateStudioPane(parentPane);
+    }
     // Reveal any unrevealed elements inside or on the target immediately so translateY(14px) doesn't offset it
     target.classList.add('in');
     target.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
@@ -102,7 +137,7 @@
 
   if ('IntersectionObserver' in window) {
     var links = {};
-    nav.querySelectorAll('a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    if (nav) nav.querySelectorAll('a').forEach(function (a) { var h = a.getAttribute('href') || ''; if (h.charAt(0) === '#') links[h.slice(1)] = a; });
     var secObs = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         var a = links[en.target.id];
@@ -157,6 +192,173 @@
      Zone 3 (Right):  AGENT-ONLY INTERNET · Real-Time Data-Only Ledger Stream (τ)
                       patrolled by Rewarded REA Reverse-Engineering Auditors
      ========================================================================== */
+
+  /* ---------- Interactive Personal Agent & Zero-Middleman Savings Workbench (#wedge-calc) ---------- */
+  var wbRoot = document.getElementById('wedge-calc');
+  if (wbRoot) {
+    var wbMode = 'medical';
+    var wbBtns = [].slice.call(wbRoot.querySelectorAll('[data-wb-mode]'));
+    var rng1 = document.getElementById('wb-rng-1');
+    var rng2 = document.getElementById('wb-rng-2');
+    var out1 = document.getElementById('wb-out-1');
+    var out2 = document.getElementById('wb-out-2');
+    var lbl1 = document.getElementById('wb-lbl-1');
+    var lbl2 = document.getElementById('wb-lbl-2');
+    var hint1 = document.getElementById('wb-hint-1');
+    var hint2 = document.getElementById('wb-hint-2');
+    var cb1 = document.getElementById('wb-cb-1');
+    var cb2 = document.getElementById('wb-cb-2');
+    var cbl1 = document.getElementById('wb-cbl-1');
+    var cbd1 = document.getElementById('wb-cbd-1');
+    var cbl2 = document.getElementById('wb-cbl-2');
+    var cbd2 = document.getElementById('wb-cbd-2');
+    var k1l = document.getElementById('wb-k1-lbl'), k1v = document.getElementById('wb-k1-val'), k1s = document.getElementById('wb-k1-sub');
+    var k2l = document.getElementById('wb-k2-lbl'), k2v = document.getElementById('wb-k2-val'), k2s = document.getElementById('wb-k2-sub');
+    var k3l = document.getElementById('wb-k3-lbl'), k3v = document.getElementById('wb-k3-val'), k3s = document.getElementById('wb-k3-sub');
+    var b1l = document.getElementById('wb-b1-lbl'), b1v = document.getElementById('wb-b1-val'), b1f = document.getElementById('wb-b1-fill');
+    var b2l = document.getElementById('wb-b2-lbl'), b2v = document.getElementById('wb-b2-val'), b2f = document.getElementById('wb-b2-fill');
+    var rcpt = document.getElementById('wb-receipt');
+    var fmtUsd = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+
+    var configureWbMode = function (m) {
+      wbMode = m;
+      wbBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-wb-mode') === m)); });
+      if (m === 'medical') {
+        lbl1.textContent = 'Hospital Billed Charge (ER / Outpatient EOB)';
+        rng1.min = 1200; rng1.max = 18000; rng1.step = 100; rng1.value = 3820;
+        hint1.textContent = 'Typical Level-4 emergency room visit with bundled lab & hydration line items.';
+        lbl2.textContent = 'Chargemaster Markup Over Medicare Rate';
+        rng2.min = 180; rng2.max = 650; rng2.step = 10; rng2.value = 380;
+        hint2.textContent = 'National hospital chargemaster markups average 340%–520% above statutory CMS benchmarks.';
+        cbl1.textContent = 'CMS NCCI Unbundling Audit:';
+        cbd1.textContent = 'Flags unbundled CPT 36415 venipuncture & CPT 96360 IV hydration billed alongside CPT 99284.';
+        cbl2.textContent = 'Private Set Intersection (PSI) Benchmark:';
+        cbd2.textContent = 'Compares regional settled rates across 412 local patients over IETF QUIC with 0 bytes of medical records exposed.';
+      } else if (m === 'coop') {
+        lbl1.textContent = 'Independent Clinics / Local Shops in Coalition';
+        rng1.min = 5; rng1.max = 250; rng1.step = 5; rng1.value = 65;
+        hint1.textContent = 'Members pool supply & SaaS purchasing orders via cryptographic Private Set Intersection.';
+        lbl2.textContent = 'Annual Supply & SaaS Spend per Member';
+        rng2.min = 20000; rng2.max = 400000; rng2.step = 10000; rng2.value = 120000;
+        hint2.textContent = 'Legacy Group Purchasing Organizations (GPOs) and SaaS resellers extract 18%–32% middleman tolls.';
+        cbl1.textContent = 'Private Set Intersection (Freedman et al., 2004):';
+        cbd1.textContent = 'Matches overlapping SKUs across members without revealing proprietary vendor invoices to competitors.';
+        cbl2.textContent = 'Zero-Middleman Smart Escrow over IETF QUIC:';
+        cbd2.textContent = 'Settles bulk manufacturer discounts directly peer-to-peer, compressing administrative overhead to 3.2%.';
+      } else {
+        lbl1.textContent = 'Verified Peer-Agent Executions per Month';
+        rng1.min = 200; rng1.max = 25000; rng1.step = 200; rng1.value = 4200;
+        hint1.textContent = 'Number of times other personal agents or clinics run your verified patch, checklist, or LoRA adapter.';
+        lbl2.textContent = 'Marginal Task Accuracy Gain (Data Shapley)';
+        rng2.min = 4; rng2.max = 35; rng2.step = 1; rng2.value = 18;
+        hint2.textContent = 'Measured improvement on held-out sandbox verification suites (Ghorbani & Zou, ICML 2019).';
+        cbl1.textContent = 'Proof-Carrying Code Gate (Necula, POPL 1997):';
+        cbd1.textContent = 'Requires deterministic sandbox test pass before capability executes or accrues royalties.';
+        cbl2.textContent = 'TIES-Merging LoRA Attribution (Yadav et al., 2023):';
+        cbd2.textContent = 'Preserves cryptographic contributor lineage (70% lead / 15% co-author / 15% verifiers) across weight merges.';
+      }
+      updateWb();
+    };
+
+    var updateWb = function () {
+      var v1 = Number(rng1.value), v2 = Number(rng2.value);
+      var on1 = cb1.checked, on2 = cb2.checked;
+      if (wbMode === 'medical') {
+        out1.textContent = fmtUsd(v1);
+        out2.textContent = v2 + '%';
+        var ncciSave = on1 ? Math.round(v1 * 0.298) : 0;
+        var psiSave = on2 ? Math.round((v1 - ncciSave) * Math.min(0.45, (v2 - 140) / 1100)) : 0;
+        var totalSave = ncciSave + psiSave;
+        var fair = Math.max(Math.round(v1 * 0.22), v1 - totalSave);
+        totalSave = v1 - fair;
+        var pct = Math.round((totalSave / v1) * 1000) / 10;
+        k1l.textContent = 'Legacy Hospital Bill'; k1v.textContent = fmtUsd(v1); k1s.textContent = v2 + '% chargemaster markup';
+        k2l.textContent = 'Verified Fair Settlement'; k2v.textContent = fmtUsd(fair); k2s.textContent = 'Statutory CMS NCCI + PSI median';
+        k3l.textContent = 'Your Household Savings'; k3v.textContent = fmtUsd(totalSave) + ' (' + pct + '%)'; k3s.textContent = '0 bytes leaked · 100% local OCap';
+        b1l.textContent = 'Today (Unchecked Hospital Chargemaster Bill)'; b1v.textContent = fmtUsd(v1); b1f.style.width = '100%';
+        b2l.textContent = 'With Your Personal Agent (Local CMS NCCI + PSI Audit)'; b2v.textContent = fmtUsd(fair) + ' (Saved ' + fmtUsd(totalSave) + ')';
+        b2f.style.width = Math.max(15, Math.round((fair / v1) * 100)) + '%';
+        rcpt.innerHTML = '<div><span class="r-ok">[OCAP-SANDBOX PASS]</span> Executed locally inside hardware-isolated capability boundary (Dennis &amp; Van Horn, 1966)</div>' +
+          '<div><span class="r-warn">[CMS-NCCI AUDIT]</span> ' + (on1 ? 'Unbundled CPT 36415 / 96360 modifier-59 flagged (-' + fmtUsd(ncciSave) + ')' : 'Disabled (enable to flag unbundled CPT modifiers)') + '</div>' +
+          '<div><span class="r-ok">[PSI-BENCHMARK]</span> ' + (on2 ? 'Regional 50th-percentile settlement verified across 412 local EOBs (-' + fmtUsd(psiSave) + ')' : 'Disabled (enable for regional PSI comparison)') + '</div>' +
+          '<div class="arch-links" style="margin-top:.55rem;padding-top:.45rem;border-top:1px dashed rgba(255,255,255,.2)"><a class="blueprint-badge" href="/notes/beyond-arxiv-agent-web-ledger">Open Testnet Ledger v4.0 Simulator &rarr;</a><a class="blueprint-badge" href="/notes/architecture-of-human-sovereignty">42-Scenario Sovereignty Treatise &rarr;</a></div>';
+      } else if (wbMode === 'coop') {
+        out1.textContent = v1 + ' members';
+        out2.textContent = fmtUsd(v2) + '/yr';
+        var gpoRate = 0.28;
+        var legacyFee = Math.round(v2 * gpoRate);
+        var scaleDiscount = on1 ? Math.min(0.19, Math.log10(v1 + 1) * 0.088) : 0.04;
+        var quicDirect = on2 ? 0.058 : 0;
+        var netRate = Math.max(0.032, gpoRate - scaleDiscount - quicDirect);
+        var cinFee = Math.round(v2 * netRate);
+        var saved = legacyFee - cinFee;
+        var savedPct = Math.round((saved / legacyFee) * 1000) / 10;
+        var poolVol = (v1 * v2) / 1000000;
+        k1l.textContent = 'Legacy GPO / Broker Toll'; k1v.textContent = fmtUsd(legacyFee) + '/yr'; k1s.textContent = '28.0% middleman extraction per member';
+        k2l.textContent = 'Coalition Protocol Cost'; k2v.textContent = fmtUsd(cinFee) + '/yr'; k2s.textContent = (netRate * 100).toFixed(1) + '% direct clearing overhead';
+        k3l.textContent = 'Annual Savings per Member'; k3v.textContent = fmtUsd(saved) + '/yr (' + savedPct + '%)'; k3s.textContent = '$' + poolVol.toFixed(2) + 'M pooled privately across ' + v1 + ' members';
+        b1l.textContent = 'Today (28% GPO / SaaS Broker Extraction)'; b1v.textContent = fmtUsd(legacyFee) + '/yr'; b1f.style.width = '100%';
+        b2l.textContent = 'With Private Set Intersection Buyer Co-Op'; b2v.textContent = fmtUsd(cinFee) + '/yr (Saved ' + fmtUsd(saved) + '/yr)';
+        b2f.style.width = Math.max(11, Math.round((cinFee / legacyFee) * 100)) + '%';
+        rcpt.innerHTML = '<div><span class="r-ok">[PSI-COHORT MATCH]</span> ' + v1 + ' independent clinics/shops matched SKU volume ($' + poolVol.toFixed(2) + 'M/yr) with 0 invoice leakage (Freedman et al., 2004)</div>' +
+          '<div><span class="r-ok">[QUIC-0RTT SETTLEMENT]</span> Direct manufacturer tier unlocked; middleman toll cut from 28.0% to ' + (netRate * 100).toFixed(1) + '%</div>' +
+          '<div class="arch-links" style="margin-top:.55rem;padding-top:.45rem;border-top:1px dashed rgba(255,255,255,.2)"><a class="blueprint-badge" href="/notes/companies-on-the-ledger">Companies on a Shared Ledger &rarr;</a><a class="blueprint-badge" href="/notes/beyond-arxiv-agent-web-ledger">Testnet Ledger v4.0 Simulator &rarr;</a></div>';
+      } else {
+        out1.textContent = v1.toLocaleString('en-US') + ' runs/mo';
+        out2.textContent = '+' + v2 + '% accuracy';
+        var basePerRun = 0.025 * (v2 / 10);
+        var mult = (on1 ? 1.0 : 0.35) * (on2 ? 1.0 : 0.6);
+        var grossMo = Math.round(v1 * basePerRun * mult);
+        var leadMo = Math.round(grossMo * 0.70);
+        var yr = grossMo * 12;
+        k1l.textContent = 'Cloud AI Scraping Payout'; k1v.textContent = '$0 / mo'; k1s.textContent = 'Uncompensated training ingestion';
+        k2l.textContent = 'Total Capability Royalty Pool'; k2v.textContent = fmtUsd(grossMo) + ' / mo'; k2s.textContent = fmtUsd(yr) + '/yr across guild & verifiers';
+        k3l.textContent = 'Your Lead Creator Share (70%)'; k3v.textContent = fmtUsd(leadMo) + ' / mo'; k3s.textContent = '15% co-authors · 15% peer verifiers';
+        b1l.textContent = 'Today (Centralized Cloud Scraping · 0% Creator Royalty)'; b1v.textContent = '$0 / mo'; b1f.style.width = '4%';
+        b2l.textContent = 'With Proof-Carrying Code + Data Shapley Attribution'; b2v.textContent = fmtUsd(grossMo) + ' / mo (' + fmtUsd(yr) + '/yr)';
+        b2f.style.width = Math.min(100, Math.max(18, Math.round((grossMo / 6500) * 100))) + '%';
+        rcpt.innerHTML = '<div><span class="r-ok">[PCC-VERIFIED]</span> Capability bundle passed deterministic sandbox regression suite (Necula, POPL 1997)</div>' +
+          '<div><span class="r-ok">[SHAPLEY-ROYALTY]</span> Marginal accuracy gain (+' + v2 + '%) across ' + v1.toLocaleString('en-US') + ' executions = ' + fmtUsd(grossMo) + '/mo (Ghorbani &amp; Zou, 2019)</div>' +
+          '<div class="arch-links" style="margin-top:.55rem;padding-top:.45rem;border-top:1px dashed rgba(255,255,255,.2)"><a class="blueprint-badge" href="/notes/how-the-ledger-works">How the Shared Ledger Works &rarr;</a><a class="blueprint-badge" href="/notes/beyond-arxiv-agent-web-ledger">Testnet Ledger v4.0 Simulator &rarr;</a></div>';
+      }
+    };
+
+    wbBtns.forEach(function (b) {
+      b.addEventListener('click', function () { configureWbMode(b.getAttribute('data-wb-mode')); });
+    });
+    [rng1, rng2, cb1, cb2].forEach(function (el) {
+      if (el) el.addEventListener('input', updateWb);
+      if (el) el.addEventListener('change', updateWb);
+    });
+    configureWbMode('medical');
+  }
+
+  /* ---------- Interactive Blueprint & Note Filter Toolbar (#notes-toolbar on /notes/) ---------- */
+  var notesToolbar = document.getElementById('notes-toolbar');
+  if (notesToolbar) {
+    var noteCards = [].slice.call(document.querySelectorAll('.notes-grid .note-card'));
+    var notePills = [].slice.call(notesToolbar.querySelectorAll('[data-note-cat]'));
+    var noteSearch = document.getElementById('notes-search');
+    var activeCat = 'all';
+    var filterNotes = function () {
+      var q = ((noteSearch && noteSearch.value) || '').toLowerCase().trim();
+      noteCards.forEach(function (c) {
+        var cat = c.getAttribute('data-cat') || '';
+        var matchCat = (activeCat === 'all') || (cat.indexOf(activeCat) !== -1);
+        var matchQ = !q || (c.textContent.toLowerCase().indexOf(q) !== -1);
+        c.style.display = (matchCat && matchQ) ? '' : 'none';
+      });
+    };
+    notePills.forEach(function (p) {
+      p.addEventListener('click', function () {
+        activeCat = p.getAttribute('data-note-cat');
+        notePills.forEach(function (b) { b.setAttribute('aria-pressed', String(b === p)); });
+        filterNotes();
+      });
+    });
+    if (noteSearch) noteSearch.addEventListener('input', filterNotes);
+  }
+
   var cv = document.getElementById('boundary');
   if (!cv || !cv.getContext) return;
   var ctx = cv.getContext('2d');
@@ -875,4 +1077,523 @@
   var mq = window.matchMedia('(prefers-color-scheme: dark)');
   var onTheme = function () { readColors(); if (reduce) frame(still); };
   if (mq.addEventListener) mq.addEventListener('change', onTheme); else if (mq.addListener) mq.addListener(onTheme);
+})();
+/* ==========================================================================
+   ?v=45 GLOBAL COMMAND PALETTE (Ctrl+K / Cmd+K) & BLUEPRINT SECTION TOC BAR
+   ========================================================================== */
+(function () {
+  'use strict';
+
+
+  // 0. Top 2px Spectrum Reading Progress Bar inside .site-head
+  var siteHeadEl = document.querySelector('.site-head');
+  if (siteHeadEl && !document.getElementById('read-progress')) {
+    var prog = document.createElement('div');
+    prog.id = 'read-progress';
+    prog.className = 'read-progress';
+    prog.setAttribute('aria-hidden', 'true');
+    siteHeadEl.appendChild(prog);
+    var updateProg = function () {
+      var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      var pct = Math.min(100, Math.max(0, (window.scrollY / maxScroll) * 100));
+      prog.style.width = pct.toFixed(1) + '%';
+    };
+    window.addEventListener('scroll', updateProg, { passive: true });
+    window.addEventListener('resize', updateProg, { passive: true });
+    updateProg();
+  }
+
+  // 0. Interactive 5-Pillar Blueprint Architecture Map on /notes Hub (#notes-hub-svg)
+  var hubSvg = document.getElementById('notes-hub-svg');
+  if (hubSvg) {
+    [].forEach.call(hubSvg.querySelectorAll('[data-note-cat]'), function (g) {
+      g.addEventListener('click', function () {
+        var cat = g.getAttribute('data-note-cat');
+        var pill = document.querySelector('.notes-pills [data-cat="' + cat + '"]');
+        if (pill) {
+          pill.click();
+          var grid = document.getElementById('notes-grid');
+          if (grid && grid.scrollIntoView) {
+            grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+  }
+
+  // 1. Widescreen 2-Column Hero Card + Sticky Left Scroll-Spy Rail on /notes/<slug> Pages
+  var isBlueprintDetail = location.pathname.indexOf('/notes/') === 0 && location.pathname !== '/notes/' && location.pathname !== '/notes/index.html';
+  var noteArticle = isBlueprintDetail && document.querySelector('article.note');
+  var noteHead = noteArticle && noteArticle.querySelector('.note-head');
+  var noteBody = noteArticle && noteArticle.querySelector('.note-body');
+  if (noteArticle && noteHead && noteBody && !noteHead.classList.contains('has-hero-split')) {
+    var slugPath = location.pathname.replace(/^\/notes\//, '').replace(/\.html$/, '').replace(/\/$/, '');
+    var headings = [].slice.call(noteBody.querySelectorAll('h2'));
+    var svgCount = noteBody.querySelectorAll('svg').length;
+    var simEl = noteBody.querySelector('.sim-shell, .juris-explorer, .gov-sim-panel, .dpop-sim-shell, .gm-sim, .persona-explorer, #sw-sim, #dm-calc, #aoi-sim, #rea-stream-sim, #insensor-ledger-sim, #sym-search-sim, #sch-dir');
+
+    headings.forEach(function (h, idx) {
+      if (!h.id) {
+        var s = (h.textContent || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        h.id = s || ('sec-' + (idx + 1));
+      }
+    });
+
+    // Classify note domain for custom schematic & provenance metadata
+    var domainKey = 'arch';
+    if (/ledger|value|companies|beyond-arxiv|testnet/.test(slugPath)) domainKey = 'ledger';
+    else if (/personal|twin|reclaim|quest|who-is|somatic|biometrics|sovereignty/.test(slugPath)) domainKey = 'twin';
+    else if (/containment|swarm|jurisdictions|liquid-democracy|instructions|fractured|trust/.test(slugPath)) domainKey = 'safety';
+    else if (/thirty-lives|simulations|signals|related-labs|all-principles|many-minds|collective|network/.test(slugPath)) domainKey = 'sim';
+
+    var DOMAIN_META = {
+      arch: {
+        tag: 'Pillar 1 · Two Internets & Local OCap',
+        badge: 'RFC 9000 QUIC + OCap',
+        kpi3Val: '0 Bytes',
+        kpi3Lbl: 'Cloud Telemetry Leak',
+        prov: 'IETF RFC 9000/9221 QUIC · Dennis & Van Horn (1966) OCap · Hardware PUF/TPM',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Two Internets Architecture Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Human Internet</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Hardware Liveness</text>' +
+          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">0 Foreign Bots</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">100% Human Spaces</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">OCap Sandbox</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">6 Narrow Agents</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">3-of-6 Quorum</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">Local Device Bus</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Agent Internet</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">IETF QUIC P2P</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">9.4 ms Latency</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Scoped ZK Proofs</text>' +
+        '</svg>'
+      },
+      ledger: {
+        tag: 'Pillar 2 & 3 · Attribution & 5D Ledger',
+        badge: 'PCC + Data Shapley',
+        kpi3Val: '1,000 Cr',
+        kpi3Lbl: 'Exact Conservation',
+        prov: 'Necula (POPL 1997) PCC · Shapley (1953) · Ghorbani & Zou (ICML 2019) · TIES-Merging',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Shared Attribution and 5D Ledger Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Local Sandbox</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Tasker &amp; Solver</text>' +
+          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">5-Session Iso</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">LoRA Weight Delta</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Functional Proof</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Necula 1997 PCC</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">16/16 Certified</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">Deterministic Gate</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="var(--card)" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">5D Royalty Split</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Data Shapley</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">$25k Floor Safe</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">0% Middleman Toll</text>' +
+        '</svg>'
+      },
+      twin: {
+        tag: 'Pillar 4 · Human-Bound Personal Twin',
+        badge: 'Local LoRA + PUF',
+        kpi3Val: '0 Bytes',
+        kpi3Lbl: 'Raw Biometrics Sent',
+        prov: 'Hu et al. (ICLR 2022) LoRA · Picard (1997) · Sweller (1988) · FIDO2/WebAuthn',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Human-Bound Personal Agent Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Pre-ADC Sensor</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">HRV + Piezo MMG</text>' +
+          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">50 ms Erasure</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">Duress Lock ≥24ms</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Personal Twin</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">On-Device LoRA</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Telic vs Limbic</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">100% User-Owned</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Craft Royalty</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">ZK-LSH Subspace</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Scoped Escrow</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Direct Settlement</text>' +
+        '</svg>'
+      },
+      safety: {
+        tag: 'Containment, Governance & Statutory Gate',
+        badge: 'NIST AIMS Tenet 7',
+        kpi3Val: '100%',
+        kpi3Lbl: 'Swarm Abuses Blocked',
+        prov: 'NIST AI RMF / AIMS Tenet 7 · RFC 9449 DPoP · Saltzer & Schroeder (1975) · Ostrom (1990)',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Risk-Scaled Containment and Policy Gate Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Agent Proposal</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Reasoning Plane</text>' +
+          '<text x="16" y="62" fill="var(--accent)" font-size="9" font-family="var(--mono)">0 Direct IO Keys</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">Typed AST Intent</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Policy Gate</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Φ(R) = 1−(1−R)⁵</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">3-of-6 Watchers</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">Deterministic Check</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="var(--card)" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Signed Receipt</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">RFC 9449 DPoP</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Audit Verified</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Fails Closed</text>' +
+        '</svg>'
+      },
+      sim: {
+        tag: 'Pillar 5 · Simulations, Signals & Foresight',
+        badge: 'Deterministic Suite',
+        kpi3Val: '0.87→0.58',
+        kpi3Lbl: '365d Gini Compression',
+        prov: 'Brier (1950) Proper Scoring · Dalkey & Helmer (1963) Delphi · METR Task Horizon',
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Society Simulation and Strategic Foresight Schematic">' +
+          '<rect x="6" y="8" width="106" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">30 Lives &amp; 550</text>' +
+          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">6 Continents</text>' +
+          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Tiers 0 to 4</text>' +
+          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">365-Day Monte Carlo</text>' +
+          '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="130" y="8" width="104" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
+          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">5-Step Foresight</text>' +
+          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">STEEP + Delphi</text>' +
+          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Brier Calibrated</text>' +
+          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">100% Cone Sum</text>' +
+          '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
+          '<rect x="252" y="8" width="102" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
+          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">4.2x Thriving</text>' +
+          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Care &amp; Craft</text>' +
+          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Zero Hoarding</text>' +
+          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Reproducible Code</text>' +
+        '</svg>'
+      }
+    };
+
+    var dm = DOMAIN_META[domainKey] || DOMAIN_META.arch;
+
+    // Wrap existing .note-head children into .note-head-left
+    var leftDiv = document.createElement('div');
+    leftDiv.className = 'note-head-left';
+    while (noteHead.firstChild) {
+      leftDiv.appendChild(noteHead.firstChild);
+    }
+
+    // Add compact section pills bar inside leftDiv if >= 2 headings
+    if (headings.length >= 2) {
+      var tocBar = document.createElement('nav');
+      tocBar.className = 'note-toc-bar';
+      tocBar.setAttribute('aria-label', 'In this blueprint');
+      var labelSpan = document.createElement('span');
+      labelSpan.className = 'ntb-k';
+      labelSpan.textContent = 'Jump to section:';
+      tocBar.appendChild(labelSpan);
+      var listDiv = document.createElement('div');
+      listDiv.className = 'ntb-links';
+      headings.slice(0, 6).forEach(function (h, idx) {
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        var cleanTxt = (h.textContent || '').replace(/^\s*\d+[\.\)]\s*/, '').trim();
+        a.textContent = (idx + 1) + '. ' + (cleanTxt.length > 36 ? cleanTxt.slice(0, 34) + '…' : cleanTxt);
+        listDiv.appendChild(a);
+      });
+      tocBar.appendChild(listDiv);
+      leftDiv.appendChild(tocBar);
+    }
+
+    // Build Right-Column Visual Blueprint Architecture & Provenance Card (.note-hero-card)
+    var rightCard = document.createElement('aside');
+    rightCard.className = 'note-hero-card';
+    rightCard.setAttribute('aria-label', 'Blueprint Architecture Summary');
+
+    var targetJumpHref = '#';
+    var targetJumpLabel = 'Inspect Architecture ↓';
+    if (simEl) {
+      if (!simEl.id) simEl.id = 'interactive-workbench';
+      targetJumpHref = '#' + simEl.id;
+      targetJumpLabel = 'Launch Interactive Simulator ↓';
+    } else if (headings.length > 0) {
+      targetJumpHref = '#' + headings[0].id;
+      targetJumpLabel = 'Read Technical Spec ↓';
+    }
+
+    rightCard.innerHTML =
+      '<div class="nhc-top">' +
+        '<span class="nhc-k">' + dm.tag + '</span>' +
+        '<span class="nhc-badge">' + dm.badge + '</span>' +
+      '</div>' +
+      '<div class="nhc-svg-wrap">' + dm.svg + '</div>' +
+      '<div class="nhc-kpis">' +
+        '<div class="nhc-kpi"><b>' + Math.max(1, headings.length) + ' Sections</b><span>Structured Blueprint</span></div>' +
+        '<div class="nhc-kpi"><b>' + (svgCount + 1) + ' Schematics</b><span>' + (simEl ? '+ Live Simulator' : 'Verified SVG Specs') + '</span></div>' +
+        '<div class="nhc-kpi"><b>' + dm.kpi3Val + '</b><span>' + dm.kpi3Lbl + '</span></div>' +
+      '</div>' +
+      '<div class="nhc-actions">' +
+        '<a href="' + targetJumpHref + '" class="primary">' + targetJumpLabel + '</a>' +
+        '<a href="/notes">All 30 Blueprints</a>' +
+        '<a href="https://cintnet.org/twin" target="_blank" rel="noopener">Twin Sandbox &#8599;</a>' +
+      '</div>';
+
+    noteHead.classList.add('has-hero-split');
+    noteHead.appendChild(leftDiv);
+    noteHead.appendChild(rightCard);
+
+    // Build 2-Column Widescreen Body Grid (.note-widescreen-grid) for notes with >= 3 headings
+    var skipStickyRail = slugPath === 'all-principles' || slugPath === 'thirty-lives' || slugPath === 'related-labs-and-researchers';
+    if (headings.length >= 3 && !skipStickyRail) {
+      var wsGrid = document.createElement('div');
+      wsGrid.className = 'note-widescreen-grid';
+
+      var rail = document.createElement('aside');
+      rail.className = 'note-sticky-rail';
+      rail.setAttribute('aria-label', 'Blueprint outline and provenance');
+
+      var railLinksHtml = headings.map(function (h, idx) {
+        var cleanTxt = (h.textContent || '').replace(/^\s*\d+[\.\)]\s*/, '').trim();
+        var label = (idx + 1) + '. ' + (cleanTxt.length > 42 ? cleanTxt.slice(0, 40) + '…' : cleanTxt);
+        return '<a href="#' + h.id + '" data-spy-id="' + h.id + '"' + (idx === 0 ? ' class="active"' : '') + '>' + label + '</a>';
+      }).join('');
+
+      rail.innerHTML =
+        '<div>' +
+          '<div class="nsr-k" style="margin-bottom:.45rem">In This Blueprint</div>' +
+          '<nav class="nsr-links">' + railLinksHtml + '</nav>' +
+        '</div>' +
+        '<div class="nsr-prov">' +
+          '<b>Scientific Provenance</b>' +
+          '<div>' + dm.prov + '</div>' +
+          '<div style="margin-top:.35rem;display:grid;gap:.25rem">' +
+            '<a href="/notes/beyond-arxiv-agent-web-ledger" style="color:var(--ok);font-weight:600;text-decoration:none">&rarr; Testnet Ledger v4.0</a>' +
+            '<a href="/notes/all-principles" style="color:var(--ok);font-weight:600;text-decoration:none">&rarr; 550-Principle Library</a>' +
+          '</div>' +
+        '</div>';
+
+      var mainCol = document.createElement('div');
+      mainCol.className = 'note-main-col';
+      while (noteBody.firstChild) {
+        mainCol.appendChild(noteBody.firstChild);
+      }
+
+      wsGrid.appendChild(rail);
+      wsGrid.appendChild(mainCol);
+      noteBody.appendChild(wsGrid);
+      noteArticle.classList.add('has-sticky-rail');
+
+      // Scroll-spy listener for sticky rail links
+      var spyLinks = [].slice.call(rail.querySelectorAll('[data-spy-id]'));
+      var updateSpy = function () {
+        var activeId = headings[0].id;
+        var threshold = window.scrollY + 140;
+        for (var i = 0; i < headings.length; i++) {
+          if (headings[i].offsetTop <= threshold) {
+            activeId = headings[i].id;
+          }
+        }
+        spyLinks.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('data-spy-id') === activeId);
+        });
+      };
+      window.addEventListener('scroll', updateSpy, { passive: true });
+    }
+    if (location.hash) {
+      var hashEl = document.getElementById(location.hash.slice(1));
+      if (hashEl && hashEl.scrollIntoView) {
+        setTimeout(function () { hashEl.scrollIntoView(); }, 50);
+      }
+    }
+  }
+
+
+  // 3. Scientific Provenance & Terminology Registry Filter/Search (#term-explorer)
+  var provGrid = document.getElementById('prov-grid');
+  var provPills = document.getElementById('prov-pills');
+  var provSearch = document.getElementById('prov-search');
+  if (provGrid) {
+    var activeProvCat = 'all';
+    var filterProv = function () {
+      var q = provSearch ? (provSearch.value || '').toLowerCase().trim() : '';
+      [].forEach.call(provGrid.querySelectorAll('.prov-card'), function (card) {
+        var c = card.getAttribute('data-pcat') || '';
+        var matchCat = (activeProvCat === 'all') || (c === activeProvCat);
+        var matchQ = !q || (card.textContent.toLowerCase().indexOf(q) !== -1);
+        card.style.display = (matchCat && matchQ) ? '' : 'none';
+      });
+    };
+    if (provPills) {
+      provPills.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-prov-cat]');
+        if (!b) return;
+        activeProvCat = b.getAttribute('data-prov-cat') || 'all';
+        [].forEach.call(provPills.querySelectorAll('[data-prov-cat]'), function (btn) {
+          btn.setAttribute('aria-pressed', String(btn === b));
+        });
+        filterProv();
+      });
+    }
+    if (provSearch) {
+      provSearch.addEventListener('input', filterProv);
+    }
+  }
+
+  // 2. Global Quick-Jump & Blueprint Command Palette (Ctrl+K / Cmd+K / Floating Pill)
+  if (document.getElementById('cmd-dlg')) return;
+
+  var ITEMS = [
+    { cat: 'Interactive Workbenches', title: '1. Live 3-Zone Sovereign Boundary & Firewall Canvas', sub: 'Inspect local sandbox, 6 narrow agents, and non-contact firewall', href: '/#architecture' },
+    { cat: 'Interactive Workbenches', title: '2. Cryptographic Wire-Protocol & Data Model Inspector', sub: 'OCap-QUIC Stream 0x04, Necula PCC receipts & TIES-LoRA deltas', href: '/#architecture', tab: 'pkt' },
+    { cat: 'Interactive Workbenches', title: '3. Zero-Middleman Savings & Royalties Calculator', sub: 'CMS NCCI hospital audit, PSI buyer co-op & Data Shapley royalties', href: '/#wedge-calc' },
+    { cat: 'Interactive Workbenches', title: '4. 4-Step Proof-Carrying Code & Attribution Pipeline', sub: 'Interactive trace from local problem to direct creator royalty', href: '/#em-demo' },
+    { cat: 'Interactive Workbenches', title: '5. 30-Persona Global Network Simulation', sub: 'Trace 30 real households, clinics, and creators across the network', href: '/#pe-root' },
+    { cat: 'Interactive Workbenches', title: '6. Risk-Scaled Multi-Agent Quorum & Deliberation Lock', sub: 'Byzantine quorum scaling & hardware enclave lock simulator', href: '/#swarm-lock' },
+    { cat: 'Interactive Workbenches', title: '7. Eight Non-Negotiable Architectural Invariants', sub: 'Hardware identity, mortal computation, and sovereign containment', href: '/#goals' },
+    { cat: 'Interactive Workbenches', title: '8. Sub-mW Edge Silicon & Pre-ADC Hardware Map', sub: 'Energy-per-inference vs. raw biometric containment across 5 classes', href: '/#hw' },
+    { cat: 'Interactive Workbenches', title: '9. Power-Proportionate Cryptographic Auditability', sub: '5-tier privacy vs. public accountability staircase (T0 to T4)', href: '/#power-vis' },
+    { cat: 'Interactive Workbenches', title: '10. Interactive 44-Principle Wheel & Protocol Specs', sub: 'Inspect every principle with its formal cryptographic mechanism', href: '/#lines' },
+    { cat: 'Interactive Workbenches', title: '11. 6-Stage AI Capability Trajectory & Delphi Debate', sub: 'METR horizon forecast, 3-persona Delphi debate & futures cone', href: '/#foresight-atlas' },
+    { cat: 'Interactive Workbenches', title: '12. Global Tail-Risk & Safeguard Simulator', sub: 'Test how the 8 architectural safeguards compress global tail risks', href: '/#risk-lab' },
+    { cat: 'Core Pages', title: 'Technical Blueprints Library (All 29 Papers)', sub: 'Filterable index of all 29 architectural specifications and notes', href: '/notes' },
+    { cat: 'Core Pages', title: 'Live Hourly Signal Stream & Trajectory Page', sub: '5,936 monitored sources, capability curves, and 2027-2030 scenarios', href: '/trajectory' },
+    { cat: 'Core Pages', title: 'From the Founder: Lived Experience to Protocol Matrix', sub: 'Why we are building the two internets and how to get involved', href: '/founder' },
+    { cat: 'Core Pages', title: 'Live Build Log & Recent Architectural Shipments', sub: 'Chronological engineering updates and research publications', href: '/updates' },
+    { cat: 'Key Blueprints', title: 'Blueprint: The Agent-Only Internet, Biometrics & Hardware', sub: 'IETF RFC 9000 QUIC, hardware personhood & pre-ADC affective shield', href: '/notes/agent-only-internet-biometrics-hardware' },
+    { cat: 'Key Blueprints', title: 'Blueprint: Beyond arXiv — The Agent-Web & Weight Ledger', sub: 'Proof-Carrying Code (Necula 1997), Data Shapley & TIES-Merging', href: '/notes/beyond-arxiv-agent-web-ledger' },
+    { cat: 'Key Blueprints', title: 'Blueprint: Voluntary Institutional & Market Transition', sub: 'CMS NCCI medical billing audits & Private Set Intersection co-ops', href: '/notes/voluntary-institutional-transition' },
+    { cat: 'Key Blueprints', title: 'Blueprint: Human-Bound Personal Agents & Local Privacy', sub: 'On-device LoRA adapters, craft attribution & zero cloud telemetry', href: '/notes/personal-agents' },
+    { cat: 'Key Blueprints', title: 'Blueprint: Mortal Computation & Shared Lifespan', sub: 'Hardware-enforced biological coupling and anti-coercion locks', href: '/notes/mortal-computation' },
+    { cat: 'Key Blueprints', title: 'Blueprint: All 44 Architectural Principles in Full', sub: 'Complete reference specification of all 44 network principles', href: '/notes/all-principles' }
+  ];
+
+  var trigger = document.createElement('button');
+  trigger.type = 'button';
+  trigger.id = 'cmd-trigger';
+  trigger.className = 'cmd-trigger';
+  trigger.setAttribute('aria-label', 'Quick Jump & Search across all simulators and blueprints (Ctrl+K)');
+  trigger.innerHTML = '<span class="cmd-ic">&#8981;</span><span>Quick Jump</span><kbd>&#8984;K</kbd>';
+  document.body.appendChild(trigger);
+
+  var dlg = document.createElement('dialog');
+  dlg.id = 'cmd-dlg';
+  dlg.className = 'cmd-dlg';
+  dlg.setAttribute('aria-label', 'Quick Jump and Search');
+  dlg.innerHTML =
+    '<div class="cmd-box">' +
+      '<div class="cmd-top">' +
+        '<input type="search" id="cmd-input" class="cmd-input" placeholder="Jump to any simulator, protocol spec, or blueprint (e.g. QUIC, Shapley, Quorum, Hospital)..." autocomplete="off">' +
+        '<button type="button" class="cmd-close" id="cmd-close">ESC</button>' +
+      '</div>' +
+      '<div class="cmd-list" id="cmd-list" role="listbox"></div>' +
+      '<div class="cmd-foot"><span><b>&#8593;&#8595;</b> to navigate · <b>Enter</b> to jump · <b>ESC</b> to close</span><span>12 Simulators · 29 Blueprints</span></div>' +
+    '</div>';
+  document.body.appendChild(dlg);
+
+  var input = dlg.querySelector('#cmd-input');
+  var listEl = dlg.querySelector('#cmd-list');
+  var closeBtn = dlg.querySelector('#cmd-close');
+  var activeIdx = 0;
+  var filtered = ITEMS.slice();
+
+  function renderList(q) {
+    var needle = (q || '').toLowerCase().trim();
+    filtered = ITEMS.filter(function (it) {
+      if (!needle) return true;
+      return (it.title + ' ' + it.sub + ' ' + it.cat).toLowerCase().indexOf(needle) !== -1;
+    });
+    activeIdx = 0;
+    if (!filtered.length) {
+      listEl.innerHTML = '<div class="cmd-empty">No matching simulator or blueprint. Try "QUIC", "Shapley", "Quorum", or "Blueprint".</div>';
+      return;
+    }
+    var html = '';
+    var lastCat = '';
+    filtered.forEach(function (it, i) {
+      if (it.cat !== lastCat) {
+        lastCat = it.cat;
+        html += '<div class="cmd-cat">' + it.cat + '</div>';
+      }
+      html +=
+        '<a href="' + it.href + '" class="cmd-item' + (i === activeIdx ? ' active' : '') + '" data-idx="' + i + '">' +
+          '<div><b>' + it.title + '</b><small>' + it.sub + '</small></div>' +
+          '<span class="cmd-arr">&rarr;</span>' +
+        '</a>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  function openCmd() {
+    renderList('');
+    input.value = '';
+    if (typeof dlg.showModal === 'function') dlg.showModal();
+    else dlg.setAttribute('open', '');
+    setTimeout(function () { input.focus(); }, 20);
+  }
+
+  function closeCmd() {
+    if (typeof dlg.close === 'function' && dlg.open) dlg.close();
+    else dlg.removeAttribute('open');
+  }
+
+  function selectItem(it) {
+    if (!it) return;
+    closeCmd();
+    if (it.tab) {
+      var tBtn = document.querySelector('#bd-tabs [data-tab="' + it.tab + '"]');
+      if (tBtn) tBtn.click();
+    }
+    var link = document.createElement('a');
+    link.href = it.href;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  trigger.addEventListener('click', openCmd);
+  closeBtn.addEventListener('click', closeCmd);
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) closeCmd(); });
+
+  input.addEventListener('input', function () { renderList(input.value); });
+  input.addEventListener('keydown', function (e) {
+    var items = listEl.querySelectorAll('.cmd-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (items.length) {
+        activeIdx = (activeIdx + 1) % items.length;
+        [].forEach.call(items, function (el, idx) { el.classList.toggle('active', idx === activeIdx); });
+        if (items[activeIdx].scrollIntoView) items[activeIdx].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (items.length) {
+        activeIdx = (activeIdx - 1 + items.length) % items.length;
+        [].forEach.call(items, function (el, idx) { el.classList.toggle('active', idx === activeIdx); });
+        if (items[activeIdx].scrollIntoView) items[activeIdx].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'Enter' && filtered[activeIdx]) {
+      e.preventDefault();
+      selectItem(filtered[activeIdx]);
+    }
+  });
+
+  listEl.addEventListener('click', function (e) {
+    var a = e.target.closest('.cmd-item');
+    if (!a) return;
+    e.preventDefault();
+    var idx = Number(a.getAttribute('data-idx') || 0);
+    selectItem(filtered[idx]);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (dlg.open) closeCmd(); else openCmd();
+    }
+  });
 })();

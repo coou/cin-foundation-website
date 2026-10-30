@@ -168,6 +168,26 @@ import {
   processRetrievalAirlock,
   verifyRetrievalAirlockReceipt,
   summarizeRetrievalAirlock,
+
+  ALLOWED_COLLABORATION_TARGETS,
+  ALLOWED_PRIVACY_SENSITIVITY_TIERS,
+  ALLOWED_COLLABORATION_STEP_FIELDS,
+  ALLOWED_COLLABORATION_OPTIONS_FIELDS,
+  COLLABORATION_DEFAULTS,
+  ALLOWED_COLLABORATION_RECEIPT_FIELDS,
+  validateCollaborationStepDescriptor,
+  calculateStepPrivacyExposure,
+  evaluateEdgeCloudExecution,
+  verifyCollaborationReceipt,
+  summarizeCollaborationExecution,
+  RUNTIME_ACTION_DECISIONS,
+  RUNTIME_ACTION_TYPES,
+  DEFAULT_RUNTIME_MONITOR_POLICY,
+  validateBrowserActionDescriptor,
+  evaluateBrowserWriteAction,
+  createRuntimeMonitorReceipt,
+  verifyRuntimeMonitorReceipt,
+  summarizeRuntimeMonitorDecision,
 } from '../assets/twin-core.js';
 
 // Fake key for redaction tests, built at runtime so the repository secret check does not flag it.
@@ -5979,7 +5999,7 @@ test('auditOutboundDialogueMessage detects sensitive credentials and marks for s
     turn_number: 1,
     recipient_agent: 'support-agent',
     sensitivity_tier: 'standard',
-    message_text: 'My API key is sk-1234567890abcdef1234567890 and Bearer eyJhbGciOiJIUzI1NiJ9.testtoken'
+    message_text: 'My API key is sk_1234567890abcdef1234567890 and Bearer eyJhbGciOiJIUzI1NiJ9.testtoken'
   };
 
   const audit = auditOutboundDialogueMessage(credTurn, DEFAULT_TWIN_STATE);
@@ -6045,7 +6065,7 @@ test('sanitizeOutboundDialogueTurn redacts sensitive tokens across message_text 
     turn_number: 1,
     recipient_agent: 'travel-agency',
     sensitivity_tier: 'standard',
-    message_text: 'My card is 4111-2222-3333-4444 and my auth key is sk-abcdef1234567890abcdef123456',
+    message_text: 'My card is 4111-2222-3333-4444 and my auth key is sk_abcdef1234567890abcdef123456',
     context_items: ['Prior user payment card: 5500-0000-0000-0004']
   };
 
@@ -6059,7 +6079,7 @@ test('sanitizeOutboundDialogueTurn redacts sensitive tokens across message_text 
 
   // Verify message_text redacted
   assert.ok(!sanitized.sanitized_turn.message_text.includes('4111-2222-3333-4444'));
-  assert.ok(!sanitized.sanitized_turn.message_text.includes('sk-abcdef'));
+  assert.ok(!sanitized.sanitized_turn.message_text.includes('sk_abcdef'));
   assert.ok(sanitized.sanitized_turn.message_text.includes('[REDACTED_FINANCIAL_DETAIL]'));
   assert.ok(sanitized.sanitized_turn.message_text.includes('[REDACTED_CREDENTIAL]'));
 
@@ -7991,6 +8011,663 @@ test('summarizeInformationFlow produces clear plain language without internal ja
   }
 });
 
+
+/* =========================================================================
+   EDGE-CLOUD COLLABORATION AND PRIVACY EXPOSURE BROKER TESTS (arXiv:2610.17816)
+   ========================================================================= */
+
+test('collaboration constants are deeply frozen and valid', () => {
+  assert.ok(Array.isArray(ALLOWED_COLLABORATION_TARGETS));
+  assert.ok(ALLOWED_COLLABORATION_TARGETS.includes('LOCAL_EDGE'));
+  assert.ok(ALLOWED_COLLABORATION_TARGETS.includes('EXTERNAL_CLOUD'));
+  assert.throws(() => { ALLOWED_COLLABORATION_TARGETS.push('INVALID'); });
+
+  assert.ok(Array.isArray(ALLOWED_PRIVACY_SENSITIVITY_TIERS));
+  assert.ok(ALLOWED_PRIVACY_SENSITIVITY_TIERS.includes('TIER1_PUBLIC'));
+  assert.ok(ALLOWED_PRIVACY_SENSITIVITY_TIERS.includes('TIER4_CRITICAL_CREDENTIAL'));
+  assert.throws(() => { ALLOWED_PRIVACY_SENSITIVITY_TIERS.push('INVALID'); });
+
+  assert.equal(COLLABORATION_DEFAULTS.max_privacy_exposure_budget, 0.35);
+  assert.equal(COLLABORATION_DEFAULTS.min_edge_confidence_for_local, 0.65);
+  assert.equal(COLLABORATION_DEFAULTS.hard_fail_on_critical_pii, true);
+  assert.throws(() => { COLLABORATION_DEFAULTS.new_prop = 123; });
+});
+
+test('validateCollaborationStepDescriptor accepts well-formed step and freezes output', () => {
+  const validStep = {
+    step_id: 'step-001',
+    task_id: 'task-clinic-prior-auth',
+    subtask_description: 'Audit CMS NCCI unbundling rules against patient line items locally.',
+    execution_target: 'LOCAL_EDGE',
+    estimated_local_confidence: 0.92,
+    privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL',
+    contains_pii: false,
+    local_tokens_allocated: 450,
+    cloud_tokens_allocated: 0,
+    timestamp_utc: '2026-10-29T14:30:00Z'
+  };
+
+  const res = validateCollaborationStepDescriptor(validStep);
+  assert.equal(res.ok, true);
+  assert.equal(res.value.step_id, 'step-001');
+  assert.throws(() => { res.value.step_id = 'mutated'; });
+});
+
+test('validateCollaborationStepDescriptor fails closed on malformed, invalid, or prototype-polluted inputs', () => {
+  assert.equal(validateCollaborationStepDescriptor(null).ok, false);
+  assert.equal(validateCollaborationStepDescriptor([]).ok, false);
+  assert.equal(validateCollaborationStepDescriptor('not-an-object').ok, false);
+
+  // Prototype pollution attempt
+  const polluted = JSON.parse('{"__proto__": {"admin": true}, "step_id": "s1"}');
+  assert.equal(validateCollaborationStepDescriptor(polluted).ok, false);
+
+  const baseStep = {
+    step_id: 'step-002',
+    task_id: 'task-audit',
+    subtask_description: 'Subtask description.',
+    execution_target: 'LOCAL_EDGE',
+    estimated_local_confidence: 0.8,
+    privacy_sensitivity_tier: 'TIER2_INTERNAL',
+    contains_pii: false,
+    local_tokens_allocated: 100,
+    cloud_tokens_allocated: 0,
+    timestamp_utc: '2026-10-29T14:00:00Z'
+  };
+
+  // Missing required field
+  const missingField = { ...baseStep };
+  delete missingField.subtask_description;
+  assert.equal(validateCollaborationStepDescriptor(missingField).ok, false);
+
+  // Unrecognized field
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, unknown_extra: 123 }).ok, false);
+
+  // Non-numeric, boolean, NaN, and Inf confidence
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: true }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: NaN }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: Infinity }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: 1.5 }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, estimated_local_confidence: -0.1 }).ok, false);
+
+  // Invalid tokens (float, negative, boolean)
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, local_tokens_allocated: 12.5 }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, local_tokens_allocated: -50 }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, local_tokens_allocated: true }).ok, false);
+
+  // Impossible calendar dates
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, timestamp_utc: '2026-02-30T12:00:00Z' }).ok, false);
+  assert.equal(validateCollaborationStepDescriptor({ ...baseStep, timestamp_utc: 'invalid-time' }).ok, false);
+});
+
+test('calculateStepPrivacyExposure computes deterministic scores across tiers', () => {
+  const step = {
+    privacy_sensitivity_tier: 'TIER1_PUBLIC',
+    execution_target: 'LOCAL_EDGE',
+    contains_pii: false
+  };
+
+  assert.equal(calculateStepPrivacyExposure(step), 0.0);
+  assert.equal(calculateStepPrivacyExposure({ ...step, execution_target: 'EXTERNAL_CLOUD' }), 0.0);
+
+  // Internal
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER2_INTERNAL' }), 0.02);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER2_INTERNAL', execution_target: 'EXTERNAL_CLOUD' }), 0.15);
+
+  // Sensitive Personal
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL' }), 0.05);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL', contains_pii: true }), 0.10);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL', execution_target: 'EXTERNAL_CLOUD' }), 0.50);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL', contains_pii: true, execution_target: 'EXTERNAL_CLOUD' }), 0.85);
+
+  // Critical
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER4_CRITICAL_CREDENTIAL' }), 0.15);
+  assert.equal(calculateStepPrivacyExposure({ ...step, privacy_sensitivity_tier: 'TIER4_CRITICAL_CREDENTIAL', execution_target: 'EXTERNAL_CLOUD' }), 1.00);
+});
+
+test('evaluateEdgeCloudExecution admits benign local-only plan with 100% on-device sovereignty', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-local-1',
+      subtask_description: 'Parse clinical document on local device.',
+      execution_target: 'LOCAL_EDGE',
+      estimated_local_confidence: 0.95,
+      privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL',
+      contains_pii: false,
+      local_tokens_allocated: 500,
+      cloud_tokens_allocated: 0,
+      timestamp_utc: '2026-10-29T14:00:00Z'
+    },
+    {
+      step_id: 's2',
+      task_id: 'task-local-1',
+      subtask_description: 'Verify CPT bundling rules in local SQLite.',
+      execution_target: 'LOCAL_EDGE',
+      estimated_local_confidence: 0.88,
+      privacy_sensitivity_tier: 'TIER2_INTERNAL',
+      contains_pii: false,
+      local_tokens_allocated: 300,
+      cloud_tokens_allocated: 0,
+      timestamp_utc: '2026-10-29T14:01:00Z'
+    }
+  ];
+
+  const res = evaluateEdgeCloudExecution(steps, { as_of_time: '2026-10-29T14:05:00Z' });
+  assert.equal(res.ok, true);
+  assert.equal(res.status, 'admitted');
+  assert.equal(res.local_steps_count, 2);
+  assert.equal(res.cloud_steps_count, 0);
+  assert.equal(res.edge_sovereignty_ratio, 1.0);
+  assert.equal(res.receipt.status, 'admitted');
+  assert.ok(res.receipt.receipt_id.startsWith('collab-rcpt-'));
+});
+
+test('evaluateEdgeCloudExecution enforces Edge Sovereignty Principle (arXiv:2610.17816)', () => {
+  // Cloud requested, but local confidence is 0.75 >= 0.65 threshold
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-sovereign-override',
+      subtask_description: 'Draft procedural appeal argument.',
+      execution_target: 'EXTERNAL_CLOUD',
+      estimated_local_confidence: 0.75, // exceeds default 0.65 threshold
+      privacy_sensitivity_tier: 'TIER2_INTERNAL',
+      contains_pii: false,
+      local_tokens_allocated: 0,
+      cloud_tokens_allocated: 800,
+      timestamp_utc: '2026-10-29T14:10:00Z'
+    }
+  ];
+
+  const res = evaluateEdgeCloudExecution(steps);
+  assert.equal(res.ok, true);
+  assert.equal(res.local_steps_count, 1); // steered to local edge!
+  assert.equal(res.cloud_steps_count, 0);
+  assert.equal(res.processed_steps[0].overridden_to_local, true);
+  assert.equal(res.edge_sovereignty_ratio, 1.0);
+});
+
+test('evaluateEdgeCloudExecution blocks cloud offloading containing critical credentials fail-closed', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-leak-attempt',
+      subtask_description: 'Export private database encryption key to cloud.',
+      execution_target: 'EXTERNAL_CLOUD',
+      estimated_local_confidence: 0.20,
+      privacy_sensitivity_tier: 'TIER4_CRITICAL_CREDENTIAL',
+      contains_pii: false,
+      local_tokens_allocated: 0,
+      cloud_tokens_allocated: 200,
+      timestamp_utc: '2026-10-29T14:15:00Z'
+    }
+  ];
+
+  const res = evaluateEdgeCloudExecution(steps);
+  assert.equal(res.ok, false);
+  assert.equal(res.error, 'CRITICAL_CREDENTIAL_OFFLOAD_BLOCKED');
+  assert.ok(res.reason.includes('contains critical credentials'));
+});
+
+test('evaluateEdgeCloudExecution blocks cloud offloading with unconsented PII fail-closed', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-pii-leak',
+      subtask_description: 'Send patient identification and social security number to cloud.',
+      execution_target: 'EXTERNAL_CLOUD',
+      estimated_local_confidence: 0.40,
+      privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL',
+      contains_pii: true, // PII present!
+      local_tokens_allocated: 0,
+      cloud_tokens_allocated: 600,
+      timestamp_utc: '2026-10-29T14:20:00Z'
+    }
+  ];
+
+  const res = evaluateEdgeCloudExecution(steps);
+  assert.equal(res.ok, false);
+  assert.equal(res.error, 'UNCONSENTED_PII_OFFLOAD_BLOCKED');
+  assert.ok(res.reason.includes('contains personal identifiable information'));
+});
+
+test('evaluateEdgeCloudExecution rejects plans that exceed privacy exposure budget', () => {
+  // Low confidence forces cloud execution, pushing cumulative exposure past 0.20 budget
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-budget-exhaust',
+      subtask_description: 'Complex financial reasoning via external model.',
+      execution_target: 'EXTERNAL_CLOUD',
+      estimated_local_confidence: 0.30,
+      privacy_sensitivity_tier: 'TIER3_SENSITIVE_PERSONAL',
+      contains_pii: false,
+      local_tokens_allocated: 0,
+      cloud_tokens_allocated: 1200,
+      timestamp_utc: '2026-10-29T14:25:00Z'
+    }
+  ];
+
+  // Cloud sensitive personal exposure is 0.50, exceeding budget of 0.20
+  const res = evaluateEdgeCloudExecution(steps, { max_privacy_exposure_budget: 0.20 });
+  assert.equal(res.ok, false);
+  assert.equal(res.error, 'EXPOSURE_BUDGET_EXCEEDED');
+  assert.ok(res.reason.includes('exceeds allowable budget'));
+});
+
+test('verifyCollaborationReceipt authenticates valid receipts and detects tampering fail-closed', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-valid-rcpt',
+      subtask_description: 'Benign public research search.',
+      execution_target: 'LOCAL_EDGE',
+      estimated_local_confidence: 0.90,
+      privacy_sensitivity_tier: 'TIER1_PUBLIC',
+      contains_pii: false,
+      local_tokens_allocated: 200,
+      cloud_tokens_allocated: 0,
+      timestamp_utc: '2026-10-29T14:28:00Z'
+    }
+  ];
+
+  const execRes = evaluateEdgeCloudExecution(steps, { as_of_time: '2026-10-29T14:30:00Z' });
+  assert.equal(execRes.ok, true);
+
+  const receipt = execRes.receipt;
+  const verifyRes = verifyCollaborationReceipt(receipt);
+  assert.equal(verifyRes.ok, true);
+  assert.equal(verifyRes.verified, true);
+
+  // Tampering: modify total_steps
+  const tampered1 = { ...receipt, total_steps: 99 };
+  assert.equal(verifyCollaborationReceipt(tampered1).ok, false);
+
+  // Tampering: modify local_tokens
+  const tampered2 = { ...receipt, total_local_tokens: 99999 };
+  assert.equal(verifyCollaborationReceipt(tampered2).ok, false);
+
+  // Tampering: modify commitment_hash
+  const tampered3 = { ...receipt, commitment_hash: 'forged_hash_12345' };
+  assert.equal(verifyCollaborationReceipt(tampered3).ok, false);
+
+  // Tampering: modify receipt_id
+  const tampered4 = { ...receipt, receipt_id: 'collab-rcpt-fake' };
+  assert.equal(verifyCollaborationReceipt(tampered4).ok, false);
+
+  // Tampering: modify edge_sovereignty_ratio (LS-debc57, LS-5b08e8)
+  const tampered5 = { ...receipt, edge_sovereignty_ratio: 0.5 };
+  const res5 = verifyCollaborationReceipt(tampered5);
+  assert.equal(res5.ok, false);
+  assert.equal(res5.verified, false);
+
+  // Tampering: modify issued_at timestamp (LS-debc57, LS-5b08e8)
+  const tampered6 = { ...receipt, issued_at: '2026-10-29T15:00:00Z' };
+  const res6 = verifyCollaborationReceipt(tampered6);
+  assert.equal(res6.ok, false);
+  assert.equal(res6.verified, false);
+});
+
+test('summarizeCollaborationExecution produces clear plain language without internal jargon', () => {
+  const steps = [
+    {
+      step_id: 's1',
+      task_id: 'task-summary-test',
+      subtask_description: 'Evaluate healthcare claims locally.',
+      execution_target: 'LOCAL_EDGE',
+      estimated_local_confidence: 0.95,
+      privacy_sensitivity_tier: 'TIER2_INTERNAL',
+      contains_pii: false,
+      local_tokens_allocated: 350,
+      cloud_tokens_allocated: 0,
+      timestamp_utc: '2026-10-29T14:32:00Z'
+    }
+  ];
+
+  const execRes = evaluateEdgeCloudExecution(steps);
+  const summary = summarizeCollaborationExecution(execRes);
+  assert.equal(summary.ok, true);
+  assert.equal(summary.status_class, 'status-ok');
+  assert.equal(summary.badge, '100% On-Device');
+  assert.ok(summary.text.includes('100% on-device processing'));
+  assert.ok(summary.text.includes('kept confidential'));
+
+  // Assert zero internal jargon or formula codes
+  for (const jargon of ['ticket', 'D-', 'T1', 'T2', 'spec', 'floor right', 'F1', 'F2', '§']) {
+    assert.equal(summary.text.includes(jargon), false);
+  }
+
+  // Blocked summary
+  const blockedSummary = summarizeCollaborationExecution({ ok: false, reason: 'Exposure budget exceeded.' });
+  assert.equal(blockedSummary.ok, false);
+  assert.equal(blockedSummary.status_class, 'status-err');
+  assert.equal(blockedSummary.badge, 'Execution Blocked');
+});
+
+
+// --- BROWSER WRITE ACTION RUNTIME MONITOR TESTS (SC-20261016-0035#1) ---
+
+test('runtime monitor constants are deeply frozen and valid', () => {
+  assert.equal(Object.isFrozen(RUNTIME_ACTION_DECISIONS), true);
+  assert.equal(Object.isFrozen(RUNTIME_ACTION_TYPES), true);
+  assert.equal(Object.isFrozen(DEFAULT_RUNTIME_MONITOR_POLICY), true);
+
+  assert.equal(RUNTIME_ACTION_DECISIONS.ALLOW, 'allow');
+  assert.equal(RUNTIME_ACTION_DECISIONS.BLOCK, 'block');
+  assert.equal(RUNTIME_ACTION_DECISIONS.CONFIRM, 'confirm');
+  assert.equal(RUNTIME_ACTION_DECISIONS.REVISE, 'revise');
+
+  assert.ok(RUNTIME_ACTION_TYPES.includes('form_submission'));
+  assert.ok(RUNTIME_ACTION_TYPES.includes('financial_transaction'));
+  assert.ok(RUNTIME_ACTION_TYPES.includes('credential_storage'));
+  assert.ok(RUNTIME_ACTION_TYPES.includes('dom_mutation'));
+});
+
+test('validateBrowserActionDescriptor accepts well-formed descriptor and freezes output', () => {
+  const descriptor = {
+    action_id: 'act-form-submit-001',
+    action_type: 'form_submission',
+    target_origin: 'https://service.city.gov',
+    payload_summary: 'Submit utility appointment rescheduling form',
+    is_idempotent: false,
+    estimated_reversibility: 0.85,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true,
+    over_privileged_fields_count: 0,
+    active_grant_id: 'grnt-123'
+  };
+
+  const validated = validateBrowserActionDescriptor(descriptor);
+  assert.equal(Object.isFrozen(validated), true);
+  assert.equal(validated.action_id, 'act-form-submit-001');
+  assert.equal(validated.action_type, 'form_submission');
+  assert.equal(validated.target_origin, 'https://service.city.gov');
+  assert.equal(validated.estimated_reversibility, 0.85);
+});
+
+test('validateBrowserActionDescriptor fails closed on invalid or forbidden inputs', () => {
+  assert.throws(() => validateBrowserActionDescriptor(null), /must be a non-null object/);
+  assert.throws(() => validateBrowserActionDescriptor([]), /must be a non-null object/);
+  assert.throws(() => validateBrowserActionDescriptor({ invalid_key: 1 }), /Unknown property/);
+
+  // Invalid action_id
+  assert.throws(() => validateBrowserActionDescriptor({
+    action_id: 'bad_id',
+    action_type: 'form_submission',
+    target_origin: 'https://example.com',
+    payload_summary: 'Test',
+    is_idempotent: true,
+    estimated_reversibility: 1.0,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  }), /action_id must be a string/);
+
+  // Forbidden scheme
+  assert.throws(() => validateBrowserActionDescriptor({
+    action_id: 'act-test-001',
+    action_type: 'form_submission',
+    target_origin: 'javascript:alert(1)',
+    payload_summary: 'XSS attempt',
+    is_idempotent: true,
+    estimated_reversibility: 1.0,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  }), /forbidden scheme/);
+
+  // Non-finite reversibility
+  assert.throws(() => validateBrowserActionDescriptor({
+    action_id: 'act-test-002',
+    action_type: 'form_submission',
+    target_origin: 'https://example.com',
+    payload_summary: 'Test',
+    is_idempotent: true,
+    estimated_reversibility: NaN,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  }), /finite number/);
+});
+
+test('evaluateBrowserWriteAction evaluates ALLOW for benign idempotent and read-only actions', () => {
+  const readAction = {
+    action_id: 'act-read-dom-001',
+    action_type: 'read_only_dom',
+    target_origin: 'https://docs.local.org',
+    payload_summary: 'Inspect page headers and search input',
+    is_idempotent: true,
+    estimated_reversibility: 1.0,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+
+  const res = evaluateBrowserWriteAction(readAction, {}, { now: '2026-10-30T00:00:00Z' });
+  assert.equal(res.ok, true);
+  assert.equal(res.decision, RUNTIME_ACTION_DECISIONS.ALLOW);
+  assert.ok(res.reason.includes('complies with all local runtime monitor safety rules'));
+});
+
+test('evaluateBrowserWriteAction evaluates BLOCK for forbidden destinations and credential theft', () => {
+  // Prohibited destination
+  const darkwebAction = {
+    action_id: 'act-dark-001',
+    action_type: 'external_http_post',
+    target_origin: 'https://darkweb.hidden-node.onion',
+    payload_summary: 'Post telemetry',
+    is_idempotent: true,
+    estimated_reversibility: 0.9,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+  const resDark = evaluateBrowserWriteAction(darkwebAction);
+  assert.equal(resDark.ok, true);
+  assert.equal(resDark.decision, RUNTIME_ACTION_DECISIONS.BLOCK);
+  assert.ok(resDark.reason.includes('prohibited'));
+
+  // Credential storage modification
+  const credAction = {
+    action_id: 'act-cred-001',
+    action_type: 'credential_storage',
+    target_origin: 'https://accounts.portal.gov',
+    payload_summary: 'Update saved auth token',
+    is_idempotent: true,
+    estimated_reversibility: 0.5,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+  const resCred = evaluateBrowserWriteAction(credAction);
+  assert.equal(resCred.ok, true);
+  assert.equal(resCred.decision, RUNTIME_ACTION_DECISIONS.BLOCK);
+  assert.ok(resCred.reason.includes('credential storage modification'));
+
+  // Background network write without pre-grant
+  const bgPostAction = {
+    action_id: 'act-bg-post-001',
+    action_type: 'external_http_post',
+    target_origin: 'https://api.external-service.com',
+    payload_summary: 'Sync state to remote endpoint',
+    is_idempotent: true,
+    estimated_reversibility: 0.9,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: false // user absent!
+  };
+  const resBg = evaluateBrowserWriteAction(bgPostAction);
+  assert.equal(resBg.ok, true);
+  assert.equal(resBg.decision, RUNTIME_ACTION_DECISIONS.BLOCK);
+  assert.ok(resBg.reason.includes('Background external network write'));
+});
+
+test('evaluateBrowserWriteAction evaluates REVISE for over-privileged observation fields (MINIM)', () => {
+  const overPrivilegedAction = {
+    action_id: 'act-form-leak-001',
+    action_type: 'form_submission',
+    target_origin: 'https://support.tickets.net',
+    payload_summary: 'Submit support ticket with full DOM capture',
+    is_idempotent: true,
+    estimated_reversibility: 0.9,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true,
+    over_privileged_fields_count: 5 // Over-privileged fields detected
+  };
+
+  const res = evaluateBrowserWriteAction(overPrivilegedAction);
+  assert.equal(res.ok, true);
+  assert.equal(res.decision, RUNTIME_ACTION_DECISIONS.REVISE);
+  assert.ok(res.reason.includes('unnecessary observation fields'));
+  assert.ok(res.reason.includes('sanitize and prune'));
+});
+
+test('evaluateBrowserWriteAction evaluates CONFIRM for financial, unconsented PII, or low reversibility', () => {
+  // Financial mutation
+  const finAction = {
+    action_id: 'act-fin-001',
+    action_type: 'financial_transaction',
+    target_origin: 'https://checkout.store.org',
+    payload_summary: 'Authorize renewal charge',
+    is_idempotent: false,
+    estimated_reversibility: 0.5,
+    contains_pii: false,
+    contains_financial_mutation: true,
+    user_present: true
+  };
+  const resFin = evaluateBrowserWriteAction(finAction);
+  assert.equal(resFin.ok, true);
+  assert.equal(resFin.decision, RUNTIME_ACTION_DECISIONS.CONFIRM);
+  assert.ok(resFin.reason.includes('Financial mutation detected'));
+
+  // PII without active grant
+  const piiAction = {
+    action_id: 'act-pii-001',
+    action_type: 'form_submission',
+    target_origin: 'https://clinic.records.org',
+    payload_summary: 'Update patient address and phone',
+    is_idempotent: true,
+    estimated_reversibility: 0.95,
+    contains_pii: true,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+  const resPii = evaluateBrowserWriteAction(piiAction);
+  assert.equal(resPii.ok, true);
+  assert.equal(resPii.decision, RUNTIME_ACTION_DECISIONS.CONFIRM);
+  assert.ok(resPii.reason.includes('personal identity data without active grant'));
+
+  // Low reversibility (e.g. 0.40 < 0.80 threshold)
+  const lowRevAction = {
+    action_id: 'act-delete-001',
+    action_type: 'dom_mutation',
+    target_origin: 'https://app.mailbox.org',
+    payload_summary: 'Purge old archived message folder',
+    is_idempotent: true,
+    estimated_reversibility: 0.25,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true
+  };
+  const resLowRev = evaluateBrowserWriteAction(lowRevAction);
+  assert.equal(resLowRev.ok, true);
+  assert.equal(resLowRev.decision, RUNTIME_ACTION_DECISIONS.CONFIRM);
+  assert.ok(resLowRev.reason.includes('reversibility'));
+});
+
+test('createRuntimeMonitorReceipt and verifyRuntimeMonitorReceipt authenticate and detect tampering fail-closed', () => {
+  const action = {
+    action_id: 'act-submit-099',
+    action_type: 'form_submission',
+    target_origin: 'https://forms.portal.gov',
+    payload_summary: 'Submit inquiry form',
+    is_idempotent: true,
+    estimated_reversibility: 0.95,
+    contains_pii: false,
+    contains_financial_mutation: false,
+    user_present: true,
+    over_privileged_fields_count: 0
+  };
+
+  const evalRes = evaluateBrowserWriteAction(action, {}, { now: '2026-10-30T00:00:00Z' });
+  const receipt = createRuntimeMonitorReceipt(evalRes.action, evalRes, '2026-10-30T00:00:00Z');
+
+  assert.equal(Object.isFrozen(receipt), true);
+  assert.ok(receipt.receipt_id.startsWith('rtm-rcpt-'));
+  assert.equal(receipt.decision, 'allow');
+  assert.equal(receipt.status, 'admitted');
+
+  // Verify valid receipt
+  const verified = verifyRuntimeMonitorReceipt(receipt);
+  assert.equal(verified.ok, true);
+  assert.equal(verified.verified, true);
+  assert.equal(verified.receipt.receipt_id, receipt.receipt_id);
+
+  // Tampered decision
+  const tamperedDecision = { ...receipt, decision: 'confirm' };
+  const verifyTampered = verifyRuntimeMonitorReceipt(tamperedDecision);
+  assert.equal(verifyTampered.ok, false);
+  assert.equal(verifyTampered.verified, false);
+  assert.ok(verifyTampered.reason.includes('Cryptographic commitment hash mismatch'));
+
+  // Tampered receipt ID
+  const tamperedId = { ...receipt, receipt_id: 'rtm-rcpt-fakefakefakefake' };
+  const verifyTamperedId = verifyRuntimeMonitorReceipt(tamperedId);
+  assert.equal(verifyTamperedId.ok, false);
+  assert.equal(verifyTamperedId.verified, false);
+  assert.ok(verifyTamperedId.reason.includes('Receipt ID does not match'));
+});
+
+test('summarizeRuntimeMonitorDecision generates clean plain language without internal jargon', () => {
+  const allowSummary = summarizeRuntimeMonitorDecision({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.ALLOW,
+    reason: 'Complies with safety rules.'
+  });
+  assert.equal(allowSummary.ok, true);
+  assert.equal(allowSummary.badge, 'Allowed');
+  assert.equal(allowSummary.status_class, 'status-ok');
+  assert.ok(allowSummary.text.includes('permitted to execute automatically'));
+
+  const confirmSummary = summarizeRuntimeMonitorDecision({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+    reason: 'Financial payment approval.'
+  });
+  assert.equal(confirmSummary.ok, true);
+  assert.equal(confirmSummary.badge, 'Confirmation Required');
+  assert.equal(confirmSummary.status_class, 'status-warn');
+  assert.ok(confirmSummary.text.includes('Human approval needed'));
+
+  const reviseSummary = summarizeRuntimeMonitorDecision({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.REVISE,
+    reason: 'Excess fields.'
+  });
+  assert.equal(reviseSummary.ok, true);
+  assert.equal(reviseSummary.badge, 'Revision Requested');
+  assert.equal(reviseSummary.status_class, 'status-info');
+
+  const blockSummary = summarizeRuntimeMonitorDecision({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+    reason: 'Prohibited origin.'
+  });
+  assert.equal(blockSummary.ok, true);
+  assert.equal(blockSummary.badge, 'Blocked');
+  assert.equal(blockSummary.status_class, 'status-err');
+
+  // Verify zero internal codes/jargon
+  for (const text of [allowSummary.text, confirmSummary.text, reviseSummary.text, blockSummary.text]) {
+    for (const jargon of ['ticket', 'D-', 'T1', 'T2', 'spec', 'floor right', 'F1', 'F2', '§']) {
+      assert.equal(text.includes(jargon), false);
+    }
+  }
+});
+
 import {
   ALLOWED_AUTO_PURCHASE_OUTCOMES,
   ALLOWED_PURCHASE_REQUEST_FIELDS,
@@ -8270,4 +8947,3 @@ test('summarizeAutoPurchaseDecision produces plain-language summaries without in
   assert.ok(!sum.text.includes('steward'));
   assert.ok(!sum.text.includes('F1'));
 });
-

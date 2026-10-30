@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=29">
+  <link rel="stylesheet" href="/styles/site.css?v=49">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -26,14 +26,15 @@
       <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
     </a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
-    <nav class="nav" id="nav" aria-label="Site">
-      <a href="/#goals">Goals</a>
-      <a href="/#fractured">How it works</a>
-      <a href="/#futures">Futures</a>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="/#architecture">Architecture</a>
+      <a href="/#for-you">For You</a>
+      <a href="/notes" aria-current="true">Blueprints</a>
+      <a href="/#lines">Principles</a>
       <a href="/trajectory">Trajectory</a>
-      <a href="/notes" aria-current="true">Notes</a>
-      <a href="/#involved">Get involved</a>
-      <a class="nav-net" href="https://cintnet.org">Network site &#8599;</a>
+      <a href="/founder">Founder</a>
+      <a href="/#involved">Status</a>
+      <a class="nav-net" href="https://cintnet.org" target="_blank" rel="noopener">Network site &#8599;</a>
     </nav>
   </div>
 </header>
@@ -97,7 +98,93 @@
       <figcaption>Literal execution maximizes the stated words at the expense of unstated priorities. Treating instructions as clues balances the immediate request against unstated personal boundaries.</figcaption>
     </figure>
 
-    <h2>What could happen</h2>
+        <h3>The A2A Task Lifecycle: Deterministic pauses before irreversible execution</h3>
+    <p>How does an agent turn this principle into code? Instead of letting an unconstrained model guess at unstated priorities in an open loop, our architecture adopts deterministic task lifecycle state machines (such as the Linux Foundation Agent-to-Agent / A2A v1.0 standard). When an action is reversible&mdash;like reading a public website or drafting a local note&mdash;the agent proceeds seamlessly. But when an action is irreversible (moving money, deleting files, cancelling bookings) or contains tacit assumptions, the runtime transitions into <code>INPUT_REQUIRED</code> or <code>AUTH_REQUIRED</code> states.</p>
+    <p>In these states, execution is held in an airlock. The task cannot proceed until the human reviews the exact trade-offs and issues a single-use, cryptographically bound confirmation receipt. This ensures that unstated constraints are checked on your own terms before anything irreversible happens.</p>
+
+    <figure class="airlock-demo" id="airlock-demo">
+      <h3>How it is meant to work: what happens when an instruction is ambiguous or irreversible?</h3>
+      <p class="airlock-desc">This is an illustration of the design. Compare how an unconstrained literal agent executes an ambiguous request against an agent equipped with an A2A task lifecycle airlock. Select an everyday scenario and toggle between modes.</p>
+
+      <div class="airlock-scenarios" id="airlock-scenarios">
+        <button type="button" class="airlock-btn" aria-pressed="true">Workspace cleanup</button>
+        <button type="button" class="airlock-btn" aria-pressed="false">Cheapest flight booking</button>
+        <button type="button" class="airlock-btn" aria-pressed="false">Invoice payment</button>
+        <button type="button" class="airlock-btn" aria-pressed="false">Clear tomorrow's calendar</button>
+      </div>
+
+      <div class="airlock-toggle-wrap">
+        <span id="airlock-mode-label">A2A Task Lifecycle Active (Pauses for human confirmation before irreversible execution)</span>
+        <button type="button" class="airlock-toggle-btn" id="airlock-toggle-btn">Switch to unconstrained literal mode</button>
+      </div>
+
+      <div class="airlock-panel">
+        <div class="airlock-row">
+          <span class="airlock-label">User instruction</span>
+          <span class="airlock-val" id="airlock-instruction">&ldquo;Clean up old project directories to free disk space.&rdquo;</span>
+        </div>
+        <div class="airlock-row">
+          <span class="airlock-label">Action taken</span>
+          <span class="airlock-val" id="airlock-action">Identifies deletion as an IRREVERSIBLE action with tacit assumptions; pauses execution in INPUT_REQUIRED state and stages a compressed archive before touching files.</span>
+        </div>
+        <div class="airlock-row">
+          <span class="airlock-label">Airlock status</span>
+          <span class="airlock-val"><span class="env-badge ok" id="airlock-badge">Paused for confirmation</span></span>
+        </div>
+        <div class="airlock-row">
+          <span class="airlock-label">Lifecycle state</span>
+          <span class="airlock-val" id="airlock-state">INPUT_REQUIRED (Airlock holding lock)</span>
+        </div>
+        <div class="airlock-row">
+          <span class="airlock-label">What happens</span>
+          <span class="airlock-val" id="airlock-outcome">Prevents data destruction. Prompts the human with the exact file list and requires affirmative confirmation before any files are purged.</span>
+        </div>
+      </div>
+
+      <div class="airlock-table-wrap airlock-fallback-table">
+      <table class="airlock-table">
+        <caption>Summary comparison: unconstrained literal agent vs. A2A task lifecycle airlock</caption>
+        <thead>
+          <tr>
+            <th scope="col">Everyday instruction</th>
+            <th scope="col">Unconstrained literal agent</th>
+            <th scope="col">A2A task lifecycle airlock</th>
+            <th scope="col">Architectural guarantee</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Workspace cleanup</td>
+            <td>Recursively deletes uncommitted archives</td>
+            <td>Pauses in INPUT_REQUIRED with archive snapshot</td>
+            <td>Zero untracked data destruction</td>
+          </tr>
+          <tr>
+            <td>Cheapest flight booking</td>
+            <td>Books 13-hour overnight layover flight</td>
+            <td>Surfaces layover trade-off in INPUT_REQUIRED</td>
+            <td>No surprise schedule disruption</td>
+          </tr>
+          <tr>
+            <td>Invoice payment</td>
+            <td>Auto-wires funds to unverified PDF payee</td>
+            <td>Locks in AUTH_REQUIRED for trusted check</td>
+            <td>Out-of-band wire authorization</td>
+          </tr>
+          <tr>
+            <td>Clear tomorrow's calendar</td>
+            <td>Cancels medical and family appointments</td>
+            <td>Reschedules routine syncs; asks on doctor visits</td>
+            <td>Unstated health/personal boundaries kept</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <figcaption>Try different everyday requests to see how deterministic task state machines prevent destructive optimizations before irreversible execution occurs.</figcaption>
+    </figure>
+
+<h2>What could happen</h2>
     <p>Adopting this design leads to distinct outcomes depending on how well the calibration works in practice:</p>
     <ul class="outcomes">
       <li>
@@ -143,7 +230,8 @@
       <li><a href="/notes/fractured-alignment">Fractured alignment: many loyal agents instead of one giant mind</a></li>
     </ul>
     <p class="note-contact">Something wrong or missing? Write to <a href="mailto:contact@collectiveintelligencenetwork.org">contact@collectiveintelligencenetwork.org</a>.</p>
-  </footer>
+      <p class="meta" style="margin-top:.8rem;font-size:.78rem;color:var(--ink-3)">Scientific &amp; statutory provenance: Decentralized Principal-Bound Multi-Agent Alignment (Pluralistic / Personalized Alignment) [Taylor Sorensen et al. (2024)].</p>
+</footer>
 </article>
 </main>
 
@@ -175,6 +263,7 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=10" defer></script>
+<script src="/scripts/site.js?v=49" defer></script>
+<script src="/scripts/airlock.js?v=49" defer></script>
 </body>
 </html>

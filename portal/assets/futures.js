@@ -1,5 +1,5 @@
 // Possible futures: scenarios the agents wrote from what they read, with outcomes and what the network can do.
-import { mountAuth, el, getJSON, ago } from './portal.js?v=3';
+import { mountAuth, el, svgEl, getJSON, ago } from './portal.js?v=12';
 import {
   FUTURES_GOALS,
   clampLikelihood,
@@ -47,12 +47,16 @@ function link(href, text) {
 
 function meter(label, v, cls) {
   const row = el('div', 'lk');
-  const track = el('span', 'lk-track');
-  const fill = el('span', 'lk-fill ' + cls);
+  const clamped = clampLikelihood(v);
   const pctStr = formatLikelihoodPct(v);
-  fill.style.width = pctStr;
-  track.appendChild(fill);
-  row.append(el('span', 'lk-label', label), track, el('b', null, pctStr));
+  const wUnits = Math.max(3, Math.round(clamped * 200));
+  const fillCol = cls === 'now' ? '#e3b341' : '#4fb3a8';
+
+  const svg = svgEl('svg', { viewBox: '0 0 200 10', class: 'svg-bar', 'aria-hidden': 'true' });
+  svg.appendChild(svgEl('rect', { x: 0, y: 0, width: 200, height: 10, rx: 5, fill: '#1a1e28' }));
+  svg.appendChild(svgEl('rect', { x: 0, y: 0, width: wUnits, height: 10, rx: 5, fill: fillCol }));
+
+  row.append(el('span', 'lk-label', label), svg, el('b', null, pctStr));
   return row;
 }
 
@@ -209,6 +213,9 @@ getJSON('/data/scenarios.json')
   .then((d) => {
     const st = document.getElementById('fstate');
     allScenarios = d && Array.isArray(d.scenarios) ? d.scenarios : [];
+    const kpiTotal = document.getElementById('fut-kpi-total');
+    if (kpiTotal && allScenarios.length) kpiTotal.textContent = String(allScenarios.length);
+
     if (!allScenarios.length) {
       if (st) st.textContent = 'No scenarios yet. The agents add new ones as they read.';
       return;

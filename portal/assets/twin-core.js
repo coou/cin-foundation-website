@@ -5016,7 +5016,7 @@ export const ALLOWED_HANDOFF_VERDICTS = Object.freeze([
 ]);
 
 export const SENSITIVE_CREDENTIAL_PATTERNS = Object.freeze([
-  Object.freeze({ type: 'api_key', regex: /\b(?:sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{30,}|xox[baprs]-[a-zA-Z0-9]{10,}|AKIA[0-9A-Z]{16})\b/i }),
+  Object.freeze({ type: 'api_key', regex: /\b(?:sk[-_][a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{30,}|xox[baprs]-[a-zA-Z0-9]{10,}|AKIA[0-9A-Z]{16})\b/i }),
   Object.freeze({ type: 'bearer_token', regex: /\bbearer\s+[a-zA-Z0-9_\-\.]{16,}\b/i }),
   Object.freeze({ type: 'private_key', regex: /-----BEGIN\s+(?:RSA\s+)?PRIVATE\s+KEY-----/i }),
   Object.freeze({ type: 'credit_card', regex: /\b(?:\d{4}[ -]?){3}\d{4}\b/ }),
@@ -10398,13 +10398,1397 @@ export function summarizeInformationFlow(result) {
   });
 }
 
+// ============================================================================
+// DOM-READINESS & ADAPTIVE SETTLED STATE DETECTOR (D-0732 / arXiv:2610.32482)
+// ============================================================================
+
+export const DEFAULT_DOM_READINESS_CONFIG = Object.freeze({
+  quiet_window_ms: 25,
+  max_wait_ms: 500,
+  target_settle_threshold_ms: 50,
+  conservative_baseline_ms: 500
+});
+
+export const ALLOWED_DOM_READINESS_STATUSES = Object.freeze([
+  'settled',
+  'timeout_fallback',
+  'immediate_ready',
+  'error'
+]);
+
+export const ALLOWED_SETTLED_METRICS_FIELDS = Object.freeze([
+  'status',
+  'elapsed_ms',
+  'mutation_count',
+  'quiescent_ms',
+  'timed_out',
+  'reason',
+  'diagnostics'
+]);
+
 /**
- * Auto-purchase decision gate constants and evaluation logic.
- * Grounded in arXiv:2610.29216 (Preference Is Not Permission: Personalizing
- * the Auto-Purchase Line in Agentic Commerce) and Nylas H2 2026 agent error audit.
- * Enforces a strict three-valued gate (deny, confirm_first, auto_purchase)
- * decoupling item preference matching from execution authorization.
+ * Deterministically evaluates whether a stream of DOM mutation events has reached
+ * a settled, quiescent state without arbitrary conservative waiting delays.
+ * Grounded in empirical measurement from WaitLens (arXiv:2610.32482).
+ *
+ * @param {Array<object>} mutationTimeline Ordered array of mutation events { at_ms, target, type }
+ * @param {object} [options={}] Configuration options
+ * @returns {object} Deeply frozen settled metrics evaluation
  */
+export function evaluateSettledState(mutationTimeline, options = {}) {
+  if (!Array.isArray(mutationTimeline)) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'mutationTimeline must be an array of mutation objects',
+      diagnostics: 'validation_failure'
+    });
+  }
+
+  if (options === null || typeof options !== 'object' || Array.isArray(options)) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'options must be a plain object',
+      diagnostics: 'validation_failure'
+    });
+  }
+
+  const allowedOptions = new Set([
+    'quiet_window_ms',
+    'max_wait_ms',
+    'target_settle_threshold_ms',
+    'conservative_baseline_ms',
+    'as_of_start_ms'
+  ]);
+  for (const k of Object.keys(options)) {
+    if (!allowedOptions.has(k)) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: 0,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `Unknown option: ${k}`,
+        diagnostics: 'unknown_option'
+      });
+    }
+  }
+
+  const quietWindow = options.quiet_window_ms !== undefined
+    ? options.quiet_window_ms
+    : DEFAULT_DOM_READINESS_CONFIG.quiet_window_ms;
+  const maxWait = options.max_wait_ms !== undefined
+    ? options.max_wait_ms
+    : DEFAULT_DOM_READINESS_CONFIG.max_wait_ms;
+  const targetThreshold = options.target_settle_threshold_ms !== undefined
+    ? options.target_settle_threshold_ms
+    : DEFAULT_DOM_READINESS_CONFIG.target_settle_threshold_ms;
+
+  if (typeof quietWindow !== 'number' || !Number.isFinite(quietWindow) || quietWindow <= 0) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'quiet_window_ms must be a positive finite number',
+      diagnostics: 'invalid_quiet_window'
+    });
+  }
+
+  if (typeof maxWait !== 'number' || !Number.isFinite(maxWait) || maxWait <= quietWindow) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'max_wait_ms must be a finite number greater than quiet_window_ms',
+      diagnostics: 'invalid_max_wait'
+    });
+  }
+
+  // Validate all timeline events
+  let lastTimestamp = (typeof options.as_of_start_ms === 'number' && Number.isFinite(options.as_of_start_ms) && options.as_of_start_ms >= 0)
+    ? options.as_of_start_ms
+    : 0;
+  for (let i = 0; i < mutationTimeline.length; i++) {
+    const ev = mutationTimeline[i];
+    if (ev === null || typeof ev !== 'object' || Array.isArray(ev)) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: i,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `Mutation event at index ${i} must be a plain object`,
+        diagnostics: 'invalid_event_structure'
+      });
+    }
+
+    if (typeof ev.at_ms !== 'number' || !Number.isFinite(ev.at_ms) || ev.at_ms < 0) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: i,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `Mutation event at index ${i} must have non-negative finite at_ms`,
+        diagnostics: 'invalid_event_timestamp'
+      });
+    }
+
+    if (ev.at_ms < lastTimestamp) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: i,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `Timeline events must be monotonically non-decreasing (${ev.at_ms} < ${lastTimestamp})`,
+        diagnostics: 'out_of_order_events'
+      });
+    }
+    lastTimestamp = ev.at_ms;
+  }
+
+  // Case 1: Non-mutating UI target -> immediate readiness within quiet window
+  if (mutationTimeline.length === 0) {
+    const elapsed = Math.min(quietWindow, targetThreshold);
+    return deepFreeze({
+      ok: true,
+      status: 'immediate_ready',
+      elapsed_ms: elapsed,
+      mutation_count: 0,
+      quiescent_ms: elapsed,
+      timed_out: false,
+      reason: `Target element remained quiet; settled in ${elapsed}ms (<= ${targetThreshold}ms threshold)`,
+      diagnostics: 'zero_mutations'
+    });
+  }
+
+  // Case 2: Process mutations and identify first quiescent window
+  let settleTime = null;
+  for (let i = 0; i < mutationTimeline.length - 1; i++) {
+    const current = mutationTimeline[i];
+    const next = mutationTimeline[i + 1];
+    const gap = next.at_ms - current.at_ms;
+
+    if (gap >= quietWindow) {
+      const candidateSettle = current.at_ms + quietWindow;
+      if (candidateSettle <= maxWait) {
+        settleTime = candidateSettle;
+        break;
+      }
+    }
+  }
+
+  if (settleTime === null) {
+    const lastEvent = mutationTimeline[mutationTimeline.length - 1];
+    const candidateSettle = lastEvent.at_ms + quietWindow;
+    if (candidateSettle <= maxWait) {
+      settleTime = candidateSettle;
+    }
+  }
+
+  // Case 3: If settled within max_wait_ms
+  if (settleTime !== null && settleTime <= maxWait) {
+    return deepFreeze({
+      ok: true,
+      status: 'settled',
+      elapsed_ms: settleTime,
+      mutation_count: mutationTimeline.length,
+      quiescent_ms: quietWindow,
+      timed_out: false,
+      reason: `DOM mutations ceased; settled after ${settleTime}ms with ${mutationTimeline.length} observed mutations`,
+      diagnostics: 'quiescent_window_satisfied'
+    });
+  }
+
+  // Case 4: Fallback timeout exceeded fail-closed
+  return deepFreeze({
+    ok: true,
+    status: 'timeout_fallback',
+    elapsed_ms: maxWait,
+    mutation_count: mutationTimeline.length,
+    quiescent_ms: 0,
+    timed_out: true,
+    reason: `DOM did not reach quiescent state within ${maxWait}ms ceiling; safe fallback triggered without blocking`,
+    diagnostics: 'max_wait_exceeded'
+  });
+}
+
+/**
+ * Asynchronous adaptive DOM readiness detector for interactive client actuation.
+ * Observes DOM mutations on the target and resolves as soon as mutations stop for quiet_window_ms,
+ * or immediately resolves within 50ms if no mutations occur. Fails closed on max_wait_ms timeout.
+ *
+ * @param {object|Element} targetOrAdapter DOM Element or test adapter object with observe/disconnect
+ * @param {object} [options={}] Configuration parameters
+ * @returns {Promise<object>} Promise resolving to deeply frozen settled metrics
+ */
+export async function waitForSettledState(targetOrAdapter, options = {}) {
+  // Fail closed immediately on missing or invalid target
+  if (!targetOrAdapter || (typeof targetOrAdapter.simulateEvents !== 'function' && typeof targetOrAdapter.nodeType !== 'number')) {
+    return deepFreeze({
+      ok: false,
+      status: 'error',
+      elapsed_ms: 0,
+      mutation_count: 0,
+      quiescent_ms: 0,
+      timed_out: false,
+      reason: 'targetOrAdapter must be a valid DOM node or simulation adapter with simulateEvents()',
+      diagnostics: 'invalid_target'
+    });
+  }
+
+  // Test adapter mode (deterministic unit testing without DOM mocks)
+  if (typeof targetOrAdapter.simulateEvents === 'function') {
+    let timeline;
+    try {
+      timeline = targetOrAdapter.simulateEvents();
+    } catch (err) {
+      return deepFreeze({
+        ok: false,
+        status: 'error',
+        elapsed_ms: 0,
+        mutation_count: 0,
+        quiescent_ms: 0,
+        timed_out: false,
+        reason: `simulateEvents failed: ${err.message}`,
+        diagnostics: 'adapter_simulation_failed'
+      });
+    }
+    return evaluateSettledState(timeline, options);
+  }
+
+  const quietWindow = (options && typeof options.quiet_window_ms === 'number' && options.quiet_window_ms > 0)
+    ? options.quiet_window_ms
+    : DEFAULT_DOM_READINESS_CONFIG.quiet_window_ms;
+  const maxWait = (options && typeof options.max_wait_ms === 'number' && options.max_wait_ms > quietWindow)
+    ? options.max_wait_ms
+    : DEFAULT_DOM_READINESS_CONFIG.max_wait_ms;
+
+  const startTime = (options && typeof options.as_of_start_ms === 'number')
+    ? options.as_of_start_ms
+    : (typeof performance !== 'undefined' ? performance.now() : Date.now());
+
+  // Browser MutationObserver mode
+  return new Promise((resolve) => {
+    let mutationCount = 0;
+    let quietTimer = null;
+    let maxWaitTimer = null;
+    let observer = null;
+    let resolved = false;
+
+    const cleanup = () => {
+      if (quietTimer) clearTimeout(quietTimer);
+      if (maxWaitTimer) clearTimeout(maxWaitTimer);
+      if (observer && typeof observer.disconnect === 'function') {
+        try { observer.disconnect(); } catch (_) {}
+      }
+    };
+
+    const finish = (status, timedOut, reason, diagnostics) => {
+      if (resolved) return;
+      resolved = true;
+      cleanup();
+      const nowTime = typeof performance !== 'undefined' ? performance.now() : Date.now();
+      const elapsed = Math.max(1, Math.round(nowTime - startTime));
+      resolve(deepFreeze({
+        ok: true,
+        status,
+        elapsed_ms: elapsed,
+        mutation_count: mutationCount,
+        quiescent_ms: timedOut ? 0 : quietWindow,
+        timed_out: timedOut,
+        reason,
+        diagnostics
+      }));
+    };
+
+    // If MutationObserver is available in environment
+    if (typeof MutationObserver !== 'undefined' && targetOrAdapter && typeof targetOrAdapter.nodeType === 'number') {
+      try {
+        observer = new MutationObserver((mutations) => {
+          mutationCount += mutations.length;
+          if (quietTimer) clearTimeout(quietTimer);
+          quietTimer = setTimeout(() => {
+            finish('settled', false, `DOM mutations settled (${mutationCount} mutations observed)`, 'quiescent_window_satisfied');
+          }, quietWindow);
+        });
+
+        observer.observe(targetOrAdapter, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          characterData: true
+        });
+      } catch (err) {
+        finish('error', false, `Failed to initialize MutationObserver: ${err.message}`, 'observer_init_failed');
+        return;
+      }
+    }
+
+    // Safety timeout ceiling
+    maxWaitTimer = setTimeout(() => {
+      finish('timeout_fallback', true, `Max wait time of ${maxWait}ms elapsed; proceeding with safe fallback`, 'max_wait_exceeded');
+    }, maxWait);
+
+    // Initial quiet timer (triggers immediate_ready if zero mutations occur)
+    quietTimer = setTimeout(() => {
+      if (mutationCount === 0) {
+        finish('immediate_ready', false, `Target element was immediately quiet; settled in ${quietWindow}ms`, 'zero_mutations');
+      } else {
+        finish('settled', false, `DOM mutations settled (${mutationCount} mutations observed)`, 'quiescent_window_satisfied');
+      }
+    }, quietWindow);
+  });
+}
+
+/**
+ * Benchmarks an action sequence comparing conservative fixed delays vs adaptive settled state waiting.
+ * Grounded in WaitLens empirical findings (arXiv:2610.32482).
+ *
+ * @param {Array<object>} actionSteps Array of step objects { step_name, mutations: Array<object> }
+ * @param {object} [options={}] Benchmark options
+ * @returns {object} Deeply frozen benchmark metrics summary
+ */
+export function benchmarkActuationSequence(actionSteps, options = {}) {
+  if (!Array.isArray(actionSteps) || actionSteps.length === 0) {
+    return deepFreeze({
+      ok: false,
+      step_count: 0,
+      total_baseline_ms: 0,
+      total_adaptive_ms: 0,
+      time_saved_ms: 0,
+      reduction_percent: 0,
+      meets_target_reduction: false,
+      reason: 'actionSteps must be a non-empty array'
+    });
+  }
+
+  const baselineWait = (options && typeof options.conservative_baseline_ms === 'number' && options.conservative_baseline_ms > 0)
+    ? options.conservative_baseline_ms
+    : DEFAULT_DOM_READINESS_CONFIG.conservative_baseline_ms;
+
+  let totalBaseline = 0;
+  let totalAdaptive = 0;
+  const stepResults = [];
+
+  for (let i = 0; i < actionSteps.length; i++) {
+    const step = actionSteps[i];
+    if (!step || typeof step !== 'object' || Array.isArray(step)) {
+      return deepFreeze({
+        ok: false,
+        step_count: actionSteps.length,
+        total_baseline_ms: 0,
+        total_adaptive_ms: 0,
+        time_saved_ms: 0,
+        reduction_percent: 0,
+        meets_target_reduction: false,
+        reason: `Step at index ${i} must be a plain object`,
+        diagnostics: 'invalid_step_structure'
+      });
+    }
+
+    if (step.mutations !== undefined && !Array.isArray(step.mutations)) {
+      return deepFreeze({
+        ok: false,
+        step_count: actionSteps.length,
+        total_baseline_ms: 0,
+        total_adaptive_ms: 0,
+        time_saved_ms: 0,
+        reduction_percent: 0,
+        meets_target_reduction: false,
+        reason: `Step ${i + 1} (${step.step_name || 'unnamed'}) mutations must be an array if provided`,
+        diagnostics: 'invalid_step_mutations'
+      });
+    }
+
+    const mutations = Array.isArray(step.mutations) ? step.mutations : [];
+    const evaluation = evaluateSettledState(mutations, options);
+
+    if (!evaluation.ok) {
+      return deepFreeze({
+        ok: false,
+        step_count: actionSteps.length,
+        total_baseline_ms: 0,
+        total_adaptive_ms: 0,
+        time_saved_ms: 0,
+        reduction_percent: 0,
+        meets_target_reduction: false,
+        reason: `Step ${i + 1} (${step?.step_name || 'unnamed'}) failed settled state evaluation: ${evaluation.reason}`,
+        diagnostics: evaluation.diagnostics || 'step_evaluation_failed'
+      });
+    }
+
+    totalBaseline += baselineWait;
+    totalAdaptive += evaluation.elapsed_ms;
+
+    stepResults.push({
+      step_index: i + 1,
+      step_name: step?.step_name || `Step ${i + 1}`,
+      baseline_ms: baselineWait,
+      adaptive_ms: evaluation.elapsed_ms,
+      status: evaluation.status,
+      mutations: evaluation.mutation_count
+    });
+  }
+
+  const timeSaved = Math.max(0, totalBaseline - totalAdaptive);
+  const reductionPct = totalBaseline > 0
+    ? Math.round(((timeSaved / totalBaseline) * 100) * 10) / 10
+    : 0;
+
+  return deepFreeze({
+    ok: true,
+    step_count: actionSteps.length,
+    total_baseline_ms: totalBaseline,
+    total_adaptive_ms: totalAdaptive,
+    time_saved_ms: timeSaved,
+    reduction_percent: reductionPct,
+    meets_target_reduction: reductionPct >= 80.0,
+    steps: Object.freeze(stepResults),
+    summary: `Executed ${actionSteps.length} actuation steps: saved ${timeSaved}ms (${reductionPct}% reduction vs conservative ${baselineWait}ms waits)`
+  });
+}
+
+/**
+ * Summarizes settled state detection results for UI display without innerHTML.
+ *
+ * @param {object} result Evaluation result from evaluateSettledState or waitForSettledState
+ * @returns {object} Deeply frozen display summary { ok, text, status_class, badge }
+ */
+export function summarizeSettledState(result) {
+  if (!result || typeof result !== 'object' || !result.ok) {
+    return deepFreeze({
+      ok: false,
+      text: result?.reason || 'DOM state readiness evaluation failed fail-closed.',
+      status_class: 'status-err',
+      badge: 'Readiness Error'
+    });
+  }
+
+  if (result.status === 'immediate_ready') {
+    return deepFreeze({
+      ok: true,
+      text: `UI target was immediately ready (${result.elapsed_ms}ms, 0 mutations). Zero wait delay added.`,
+      status_class: 'status-ok',
+      badge: 'Immediate Ready'
+    });
+  }
+
+  if (result.status === 'settled') {
+    return deepFreeze({
+      ok: true,
+      text: `DOM quiesced in ${result.elapsed_ms}ms after ${result.mutation_count} mutations. Fully settled.`,
+      status_class: 'status-ok',
+      badge: 'Settled'
+    });
+  }
+
+  if (result.status === 'timeout_fallback') {
+    return deepFreeze({
+      ok: true,
+      text: `DOM activity reached ${result.elapsed_ms}ms safety limit; continued safely without blocking the UI.`,
+      status_class: 'status-warn',
+      badge: 'Safety Fallback'
+    });
+  }
+
+  return deepFreeze({
+    ok: true,
+    text: result.reason || 'Readiness evaluated.',
+    status_class: 'status-ok',
+    badge: 'Ready'
+  });
+}
+
+
+/* =========================================================================
+   EDGE-CLOUD COLLABORATION AND PRIVACY EXPOSURE BROKER (arXiv:2610.17816)
+   ========================================================================= */
+
+export const ALLOWED_COLLABORATION_TARGETS = Object.freeze(['LOCAL_EDGE', 'EXTERNAL_CLOUD']);
+
+export const ALLOWED_PRIVACY_SENSITIVITY_TIERS = Object.freeze([
+  'TIER1_PUBLIC',
+  'TIER2_INTERNAL',
+  'TIER3_SENSITIVE_PERSONAL',
+  'TIER4_CRITICAL_CREDENTIAL'
+]);
+
+export const ALLOWED_COLLABORATION_STEP_FIELDS = Object.freeze([
+  'step_id',
+  'task_id',
+  'subtask_description',
+  'execution_target',
+  'estimated_local_confidence',
+  'privacy_sensitivity_tier',
+  'contains_pii',
+  'local_tokens_allocated',
+  'cloud_tokens_allocated',
+  'timestamp_utc'
+]);
+
+export const ALLOWED_COLLABORATION_OPTIONS_FIELDS = Object.freeze([
+  'max_privacy_exposure_budget',
+  'min_edge_confidence_for_local',
+  'hard_fail_on_critical_pii',
+  'max_execution_steps',
+  'as_of_time'
+]);
+
+export const COLLABORATION_DEFAULTS = Object.freeze({
+  max_privacy_exposure_budget: 0.35,
+  min_edge_confidence_for_local: 0.65,
+  hard_fail_on_critical_pii: true,
+  max_execution_steps: 50
+});
+
+export const ALLOWED_COLLABORATION_RECEIPT_FIELDS = Object.freeze([
+  'receipt_id',
+  'commitment_hash',
+  'issued_at',
+  'task_id',
+  'total_steps',
+  'local_steps_count',
+  'cloud_steps_count',
+  'total_local_tokens',
+  'total_cloud_tokens',
+  'privacy_exposure_score',
+  'edge_sovereignty_ratio',
+  'status'
+]);
+
+const FORBIDDEN_COLLABORATION_PROTOTYPE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+const ALLOWED_COLLABORATION_STEP_SET = new Set(ALLOWED_COLLABORATION_STEP_FIELDS);
+const ALLOWED_COLLABORATION_OPTIONS_SET = new Set(ALLOWED_COLLABORATION_OPTIONS_FIELDS);
+const ALLOWED_COLLABORATION_RECEIPT_SET = new Set(ALLOWED_COLLABORATION_RECEIPT_FIELDS);
+
+/**
+ * Validates a single collaboration step descriptor fail-closed.
+ *
+ * @param {object} step Raw step candidate
+ * @returns {object} { ok: true, value: frozenStep } or { ok: false, error: string, reason: string }
+ */
+export function validateCollaborationStepDescriptor(step) {
+  if (!step || typeof step !== 'object' || Array.isArray(step)) {
+    return { ok: false, error: 'INVALID_STEP', reason: 'Collaboration step must be a non-null object.' };
+  }
+
+  for (const key of Object.getOwnPropertyNames(step)) {
+    if (FORBIDDEN_COLLABORATION_PROTOTYPE_KEYS.has(key)) {
+      return { ok: false, error: 'PROTOTYPE_POLLUTION', reason: `Forbidden prototype key detected: ${key}` };
+    }
+    if (!ALLOWED_COLLABORATION_STEP_SET.has(key)) {
+      return { ok: false, error: 'UNRECOGNIZED_FIELD', reason: `Unrecognized field in collaboration step: ${key}` };
+    }
+  }
+
+  for (const requiredKey of ALLOWED_COLLABORATION_STEP_FIELDS) {
+    if (!(requiredKey in step)) {
+      return { ok: false, error: 'MISSING_REQUIRED_FIELD', reason: `Missing required field: ${requiredKey}` };
+    }
+  }
+
+  if (typeof step.step_id !== 'string' || !step.step_id.trim()) {
+    return { ok: false, error: 'INVALID_STEP_ID', reason: 'step_id must be a non-empty string.' };
+  }
+
+  if (typeof step.task_id !== 'string' || !step.task_id.trim()) {
+    return { ok: false, error: 'INVALID_TASK_ID', reason: 'task_id must be a non-empty string.' };
+  }
+
+  if (typeof step.subtask_description !== 'string' || !step.subtask_description.trim()) {
+    return { ok: false, error: 'INVALID_SUBTASK_DESCRIPTION', reason: 'subtask_description must be a non-empty string.' };
+  }
+
+  if (!ALLOWED_COLLABORATION_TARGETS.includes(step.execution_target)) {
+    return { ok: false, error: 'INVALID_EXECUTION_TARGET', reason: `execution_target must be one of: ${ALLOWED_COLLABORATION_TARGETS.join(', ')}` };
+  }
+
+  if (!ALLOWED_PRIVACY_SENSITIVITY_TIERS.includes(step.privacy_sensitivity_tier)) {
+    return { ok: false, error: 'INVALID_SENSITIVITY_TIER', reason: `privacy_sensitivity_tier must be one of: ${ALLOWED_PRIVACY_SENSITIVITY_TIERS.join(', ')}` };
+  }
+
+  if (typeof step.estimated_local_confidence !== 'number' || typeof step.estimated_local_confidence === 'boolean' ||
+      Number.isNaN(step.estimated_local_confidence) || !Number.isFinite(step.estimated_local_confidence) ||
+      step.estimated_local_confidence < 0.0 || step.estimated_local_confidence > 1.0) {
+    return { ok: false, error: 'INVALID_CONFIDENCE', reason: 'estimated_local_confidence must be a finite number in [0.0, 1.0].' };
+  }
+
+  if (typeof step.contains_pii !== 'boolean') {
+    return { ok: false, error: 'INVALID_CONTAINS_PII', reason: 'contains_pii must be a boolean.' };
+  }
+
+  for (const tokenField of ['local_tokens_allocated', 'cloud_tokens_allocated']) {
+    const val = step[tokenField];
+    if (typeof val !== 'number' || typeof val === 'boolean' || Number.isNaN(val) || !Number.isFinite(val) ||
+        !Number.isInteger(val) || val < 0) {
+      return { ok: false, error: 'INVALID_TOKENS', reason: `${tokenField} must be a non-negative integer.` };
+    }
+  }
+
+  if (!isValidIsoDateTime(step.timestamp_utc)) {
+    return { ok: false, error: 'INVALID_TIMESTAMP', reason: 'timestamp_utc must be a valid ISO-8601 calendar date and time.' };
+  }
+
+  return { ok: true, value: deepFreeze({ ...step }) };
+}
+
+/**
+ * Computes deterministic privacy exposure score for a single step.
+ *
+ * @param {object} step Validated step descriptor
+ * @returns {number} Score in [0.0, 1.0]
+ */
+export function calculateStepPrivacyExposure(step) {
+  const isCloud = step.execution_target === 'EXTERNAL_CLOUD';
+  if (step.privacy_sensitivity_tier === 'TIER1_PUBLIC') {
+    return 0.0;
+  }
+  if (step.privacy_sensitivity_tier === 'TIER2_INTERNAL') {
+    return isCloud ? 0.15 : 0.02;
+  }
+  if (step.privacy_sensitivity_tier === 'TIER3_SENSITIVE_PERSONAL') {
+    if (isCloud) {
+      return step.contains_pii ? 0.85 : 0.50;
+    }
+    return step.contains_pii ? 0.10 : 0.05;
+  }
+  if (step.privacy_sensitivity_tier === 'TIER4_CRITICAL_CREDENTIAL') {
+    return isCloud ? 1.00 : 0.15;
+  }
+  return 1.00;
+}
+
+/**
+ * Evaluates an edge-cloud collaboration task execution plan fail-closed (arXiv:2610.17816).
+ *
+ * @param {Array<object>} steps Array of collaboration step descriptors
+ * @param {object} options Evaluation options
+ * @returns {object} Deeply frozen result with admission decision or failure reason and receipt
+ */
+export function evaluateEdgeCloudExecution(steps, options = {}) {
+  if (!Array.isArray(steps) || steps.length === 0) {
+    return deepFreeze({ ok: false, error: 'EMPTY_STEPS', reason: 'Steps must be a non-empty array of step descriptors.' });
+  }
+
+  if (options && typeof options === 'object') {
+    for (const optKey of Object.getOwnPropertyNames(options)) {
+      if (FORBIDDEN_COLLABORATION_PROTOTYPE_KEYS.has(optKey)) {
+        return deepFreeze({ ok: false, error: 'PROTOTYPE_POLLUTION', reason: `Forbidden prototype key: ${optKey}` });
+      }
+      if (!ALLOWED_COLLABORATION_OPTIONS_SET.has(optKey)) {
+        return deepFreeze({ ok: false, error: 'UNRECOGNIZED_OPTION', reason: `Unrecognized option: ${optKey}` });
+      }
+    }
+  }
+
+  const maxExposureBudget = typeof options.max_privacy_exposure_budget === 'number' &&
+    !Number.isNaN(options.max_privacy_exposure_budget) && Number.isFinite(options.max_privacy_exposure_budget) &&
+    typeof options.max_privacy_exposure_budget !== 'boolean'
+      ? options.max_privacy_exposure_budget
+      : COLLABORATION_DEFAULTS.max_privacy_exposure_budget;
+
+  const minEdgeConfidence = typeof options.min_edge_confidence_for_local === 'number' &&
+    !Number.isNaN(options.min_edge_confidence_for_local) && Number.isFinite(options.min_edge_confidence_for_local) &&
+    typeof options.min_edge_confidence_for_local !== 'boolean'
+      ? options.min_edge_confidence_for_local
+      : COLLABORATION_DEFAULTS.min_edge_confidence_for_local;
+
+  const hardFailCritical = typeof options.hard_fail_on_critical_pii === 'boolean'
+    ? options.hard_fail_on_critical_pii
+    : COLLABORATION_DEFAULTS.hard_fail_on_critical_pii;
+
+  const maxSteps = typeof options.max_execution_steps === 'number' &&
+    !Number.isNaN(options.max_execution_steps) && Number.isFinite(options.max_execution_steps) &&
+    typeof options.max_execution_steps !== 'boolean'
+      ? options.max_execution_steps
+      : COLLABORATION_DEFAULTS.max_execution_steps;
+
+  if (steps.length > maxSteps) {
+    return deepFreeze({ ok: false, error: 'EXCESSIVE_STEPS', reason: `Execution plan contains ${steps.length} steps, exceeding maximum of ${maxSteps}.` });
+  }
+
+  const validatedSteps = [];
+  const taskId = steps[0]?.task_id;
+
+  for (let i = 0; i < steps.length; i++) {
+    const rawStep = steps[i];
+    const valRes = validateCollaborationStepDescriptor(rawStep);
+    if (!valRes.ok) {
+      return deepFreeze({ ok: false, error: valRes.error, reason: `Step ${i} validation failure: ${valRes.reason}` });
+    }
+    if (valRes.value.task_id !== taskId) {
+      return deepFreeze({ ok: false, error: 'INCONSISTENT_TASK_ID', reason: `Inconsistent task_id at step ${i}: expected ${taskId}, got ${valRes.value.task_id}` });
+    }
+    validatedSteps.push(valRes.value);
+  }
+
+  let localCount = 0;
+  let cloudCount = 0;
+  let totalLocalTokens = 0;
+  let totalCloudTokens = 0;
+  let totalExposure = 0.0;
+  const processedSteps = [];
+
+  for (const step of validatedSteps) {
+    let effectiveTarget = step.execution_target;
+
+    // Hard fail on critical credentials destined for cloud
+    if (step.privacy_sensitivity_tier === 'TIER4_CRITICAL_CREDENTIAL' && step.execution_target === 'EXTERNAL_CLOUD') {
+      return deepFreeze({
+        ok: false,
+        error: 'CRITICAL_CREDENTIAL_OFFLOAD_BLOCKED',
+        reason: `Step ${step.step_id} contains critical credentials and cannot be offloaded to external cloud.`
+      });
+    }
+
+    // Hard fail on unconsented PII destined for cloud
+    if (hardFailCritical && step.contains_pii && step.execution_target === 'EXTERNAL_CLOUD') {
+      return deepFreeze({
+        ok: false,
+        error: 'UNCONSENTED_PII_OFFLOAD_BLOCKED',
+        reason: `Step ${step.step_id} contains personal identifiable information (PII) and cannot be dispatched to cloud.`
+      });
+    }
+
+    // Edge Sovereignty Principle (arXiv:2610.17816): If edge capability meets threshold, default strictly to local edge
+    if (step.execution_target === 'EXTERNAL_CLOUD' && step.estimated_local_confidence >= minEdgeConfidence) {
+      effectiveTarget = 'LOCAL_EDGE';
+    }
+
+    const effectiveStep = {
+      ...step,
+      effective_target: effectiveTarget,
+      overridden_to_local: effectiveTarget !== step.execution_target
+    };
+
+    const stepExposure = calculateStepPrivacyExposure({
+      ...effectiveStep,
+      execution_target: effectiveTarget
+    });
+
+    totalExposure += stepExposure;
+    if (effectiveTarget === 'LOCAL_EDGE') {
+      localCount++;
+      totalLocalTokens += step.local_tokens_allocated + step.cloud_tokens_allocated;
+    } else {
+      cloudCount++;
+      totalCloudTokens += step.cloud_tokens_allocated;
+      totalLocalTokens += step.local_tokens_allocated;
+    }
+
+    processedSteps.push(effectiveStep);
+  }
+
+  const normalizedExposure = Number((totalExposure / validatedSteps.length).toFixed(4));
+
+  if (normalizedExposure > maxExposureBudget) {
+    return deepFreeze({
+      ok: false,
+      error: 'EXPOSURE_BUDGET_EXCEEDED',
+      reason: `Cumulative privacy exposure (${normalizedExposure}) exceeds allowable budget (${maxExposureBudget}).`
+    });
+  }
+
+  const asOfTime = options.as_of_time || new Date().toISOString();
+  const edgeSovereigntyRatio = Number((localCount / validatedSteps.length).toFixed(4));
+  const commitmentData = `${taskId}|${validatedSteps.length}|${localCount}|${cloudCount}|${totalLocalTokens}|${totalCloudTokens}|${normalizedExposure.toFixed(4)}|${edgeSovereigntyRatio.toFixed(4)}|${asOfTime}`;
+  const commitmentHash = computeContextFingerprint(commitmentData);
+
+  const receipt = deepFreeze({
+    receipt_id: `collab-rcpt-${commitmentHash.slice(0, 16)}`,
+    commitment_hash: commitmentHash,
+    issued_at: asOfTime,
+    task_id: taskId,
+    total_steps: validatedSteps.length,
+    local_steps_count: localCount,
+    cloud_steps_count: cloudCount,
+    total_local_tokens: totalLocalTokens,
+    total_cloud_tokens: totalCloudTokens,
+    privacy_exposure_score: normalizedExposure,
+    edge_sovereignty_ratio: edgeSovereigntyRatio,
+    status: 'admitted'
+  });
+
+  return deepFreeze({
+    ok: true,
+    status: 'admitted',
+    task_id: taskId,
+    receipt,
+    processed_steps: processedSteps,
+    total_steps: validatedSteps.length,
+    local_steps_count: localCount,
+    cloud_steps_count: cloudCount,
+    total_local_tokens: totalLocalTokens,
+    total_cloud_tokens: totalCloudTokens,
+    privacy_exposure_score: normalizedExposure,
+    edge_sovereignty_ratio: receipt.edge_sovereignty_ratio
+  });
+}
+
+/**
+ * Cryptographically verifies an edge-cloud collaboration execution receipt.
+ *
+ * @param {object} receipt Receipt candidate
+ * @param {object} options Verification options
+ * @returns {object} { ok: true, verified: true, receipt } or { ok: false, verified: false, reason: string }
+ */
+export function verifyCollaborationReceipt(receipt, options = {}) {
+  if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Receipt must be a non-null object.' });
+  }
+
+  for (const key of Object.getOwnPropertyNames(receipt)) {
+    if (FORBIDDEN_COLLABORATION_PROTOTYPE_KEYS.has(key)) {
+      return deepFreeze({ ok: false, verified: false, reason: `Forbidden prototype key: ${key}` });
+    }
+    if (!ALLOWED_COLLABORATION_RECEIPT_SET.has(key)) {
+      return deepFreeze({ ok: false, verified: false, reason: `Unrecognized receipt field: ${key}` });
+    }
+  }
+
+  for (const requiredKey of ALLOWED_COLLABORATION_RECEIPT_FIELDS) {
+    if (!(requiredKey in receipt)) {
+      return deepFreeze({ ok: false, verified: false, reason: `Missing required receipt field: ${requiredKey}` });
+    }
+  }
+
+  if (typeof receipt.receipt_id !== 'string' || !receipt.receipt_id.startsWith('collab-rcpt-')) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Invalid receipt_id format.' });
+  }
+
+  if (typeof receipt.commitment_hash !== 'string' || receipt.commitment_hash.length < 8) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Invalid commitment_hash format.' });
+  }
+
+  if (!isValidIsoDateTime(receipt.issued_at)) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Invalid issued_at timestamp.' });
+  }
+
+  if (typeof receipt.task_id !== 'string' || !receipt.task_id.trim()) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Invalid task_id.' });
+  }
+
+  for (const countField of ['total_steps', 'local_steps_count', 'cloud_steps_count', 'total_local_tokens', 'total_cloud_tokens']) {
+    const val = receipt[countField];
+    if (typeof val !== 'number' || typeof val === 'boolean' || Number.isNaN(val) || !Number.isFinite(val) ||
+        !Number.isInteger(val) || val < 0) {
+      return deepFreeze({ ok: false, verified: false, reason: `${countField} must be a non-negative integer.` });
+    }
+  }
+
+  if (receipt.local_steps_count + receipt.cloud_steps_count !== receipt.total_steps) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Sum of local and cloud steps does not equal total_steps.' });
+  }
+
+  for (const ratioField of ['privacy_exposure_score', 'edge_sovereignty_ratio']) {
+    const val = receipt[ratioField];
+    if (typeof val !== 'number' || typeof val === 'boolean' || Number.isNaN(val) || !Number.isFinite(val) ||
+        val < 0.0 || val > 1.0) {
+      return deepFreeze({ ok: false, verified: false, reason: `${ratioField} must be a finite float in [0.0, 1.0].` });
+    }
+  }
+
+  const expectedRatio = Number((receipt.local_steps_count / (receipt.total_steps || 1)).toFixed(4));
+  if (receipt.edge_sovereignty_ratio !== expectedRatio) {
+    return deepFreeze({ ok: false, verified: false, reason: 'edge_sovereignty_ratio does not match calculated local step ratio.' });
+  }
+
+  if (receipt.status !== 'admitted') {
+    return deepFreeze({ ok: false, verified: false, reason: `Receipt status must be admitted, got: ${receipt.status}` });
+  }
+
+  const expectedCommitment = `${receipt.task_id}|${receipt.total_steps}|${receipt.local_steps_count}|${receipt.cloud_steps_count}|${receipt.total_local_tokens}|${receipt.total_cloud_tokens}|${receipt.privacy_exposure_score.toFixed(4)}|${receipt.edge_sovereignty_ratio.toFixed(4)}|${receipt.issued_at}`;
+  const recomputedHash = computeContextFingerprint(expectedCommitment);
+
+  if (recomputedHash !== receipt.commitment_hash) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Cryptographic commitment hash mismatch: receipt data was modified.' });
+  }
+
+  if (receipt.receipt_id !== `collab-rcpt-${recomputedHash.slice(0, 16)}`) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Receipt ID does not match commitment hash digest.' });
+  }
+
+  return deepFreeze({ ok: true, verified: true, receipt });
+}
+
+/**
+ * Generates user-facing plain language summary of collaboration execution without internal jargon.
+ *
+ * @param {object} result Execution or verification result
+ * @returns {object} { ok, text, status_class, badge }
+ */
+export function summarizeCollaborationExecution(result) {
+  if (!result || typeof result !== 'object') {
+    return deepFreeze({
+      ok: false,
+      text: 'Execution evaluation could not be processed.',
+      status_class: 'status-err',
+      badge: 'Evaluation Error'
+    });
+  }
+
+  if (!result.ok) {
+    return deepFreeze({
+      ok: false,
+      text: result.reason || 'Collaboration execution rejected by safety broker.',
+      status_class: 'status-err',
+      badge: 'Execution Blocked'
+    });
+  }
+
+  const localPct = Math.round((result.edge_sovereignty_ratio || 0) * 100);
+  const exposurePct = ((result.privacy_exposure_score || 0) * 100).toFixed(1);
+
+  return deepFreeze({
+    ok: true,
+    text: `Task executed with ${localPct}% on-device processing. Privacy exposure remained strictly limited to ${exposurePct}%, and sensitive personal data was kept confidential.`,
+    status_class: 'status-ok',
+    badge: localPct === 100 ? '100% On-Device' : 'Edge-Governed'
+  });
+}
+
+
+// --- BROWSER WRITE ACTION RUNTIME MONITOR (SC-20261016-0035#1, NEXUS arXiv:2607.19356, MINIM arXiv:2606.13949) ---
+
+export const RUNTIME_ACTION_DECISIONS = deepFreeze({
+  ALLOW: 'allow',
+  BLOCK: 'block',
+  CONFIRM: 'confirm',
+  REVISE: 'revise'
+});
+
+export const RUNTIME_ACTION_TYPES = deepFreeze([
+  'read_only_dom',
+  'dom_mutation',
+  'form_submission',
+  'credential_storage',
+  'external_http_post',
+  'financial_transaction',
+  'cookie_write',
+  'navigation_redirect'
+]);
+
+export const DEFAULT_RUNTIME_MONITOR_POLICY = deepFreeze({
+  max_unconfirmed_reversibility_threshold: 0.80,
+  require_confirm_for_pii: true,
+  require_confirm_for_financial: true,
+  require_presence_for_external_post: true,
+  allow_benign_read_only: true,
+  block_forbidden_schemes: ['javascript:', 'data:', 'file:', 'vbscript:'],
+  prohibited_destinations: ['.onion', '.i2p', 'darkweb', 'localhost:admin', '127.0.0.1:admin'],
+  auto_redact_excess_fields: true
+});
+
+/**
+ * Validates browser action descriptor fail-closed.
+ *
+ * @param {object} descriptor Raw action descriptor
+ * @returns {object} Validated and frozen action descriptor
+ */
+export function validateBrowserActionDescriptor(descriptor) {
+  if (!descriptor || typeof descriptor !== 'object' || Array.isArray(descriptor)) {
+    throw new TypeError('Action descriptor must be a non-null object.');
+  }
+
+  const allowedKeys = new Set([
+    'action_id',
+    'action_type',
+    'target_origin',
+    'payload_summary',
+    'is_idempotent',
+    'estimated_reversibility',
+    'contains_pii',
+    'contains_financial_mutation',
+    'user_present',
+    'over_privileged_fields_count',
+    'active_grant_id'
+  ]);
+
+  for (const k of Object.keys(descriptor)) {
+    if (!allowedKeys.has(k)) {
+      throw new TypeError(`Unknown property '${k}' in action descriptor.`);
+    }
+  }
+
+  if (typeof descriptor.action_id !== 'string' || !/^act-[a-zA-Z0-9_-]{4,48}$/.test(descriptor.action_id)) {
+    throw new TypeError('action_id must be a string matching /^act-[a-zA-Z0-9_-]{4,48}$/.');
+  }
+
+  if (typeof descriptor.action_type !== 'string' || !RUNTIME_ACTION_TYPES.includes(descriptor.action_type)) {
+    throw new TypeError(`action_type must be one of: ${RUNTIME_ACTION_TYPES.join(', ')}.`);
+  }
+
+  if (typeof descriptor.target_origin !== 'string' || descriptor.target_origin.trim().length === 0 || descriptor.target_origin.length > 256) {
+    throw new TypeError('target_origin must be a non-empty string <= 256 characters.');
+  }
+
+  const lowerOrigin = descriptor.target_origin.toLowerCase().trim();
+  for (const scheme of DEFAULT_RUNTIME_MONITOR_POLICY.block_forbidden_schemes) {
+    if (lowerOrigin.startsWith(scheme)) {
+      throw new TypeError(`target_origin cannot use forbidden scheme '${scheme}'.`);
+    }
+  }
+
+  if (typeof descriptor.payload_summary !== 'string' || descriptor.payload_summary.trim().length === 0 || descriptor.payload_summary.length > 500) {
+    throw new TypeError('payload_summary must be a non-empty string <= 500 characters.');
+  }
+
+  if (typeof descriptor.is_idempotent !== 'boolean') {
+    throw new TypeError('is_idempotent must be a boolean.');
+  }
+
+  if (typeof descriptor.estimated_reversibility !== 'number' || !Number.isFinite(descriptor.estimated_reversibility) || descriptor.estimated_reversibility < 0.0 || descriptor.estimated_reversibility > 1.0) {
+    throw new TypeError('estimated_reversibility must be a finite number between 0.0 and 1.0.');
+  }
+
+  if (typeof descriptor.contains_pii !== 'boolean') {
+    throw new TypeError('contains_pii must be a boolean.');
+  }
+
+  if (typeof descriptor.contains_financial_mutation !== 'boolean') {
+    throw new TypeError('contains_financial_mutation must be a boolean.');
+  }
+
+  if (typeof descriptor.user_present !== 'boolean') {
+    throw new TypeError('user_present must be a boolean.');
+  }
+
+  let overPrivileged = 0;
+  if (descriptor.over_privileged_fields_count !== undefined) {
+    if (typeof descriptor.over_privileged_fields_count !== 'number' || !Number.isInteger(descriptor.over_privileged_fields_count) || descriptor.over_privileged_fields_count < 0) {
+      throw new TypeError('over_privileged_fields_count must be a non-negative integer.');
+    }
+    overPrivileged = descriptor.over_privileged_fields_count;
+  }
+
+  let grantId = null;
+  if (descriptor.active_grant_id !== undefined && descriptor.active_grant_id !== null) {
+    if (typeof descriptor.active_grant_id !== 'string' || descriptor.active_grant_id.trim().length === 0 || descriptor.active_grant_id.length > 64) {
+      throw new TypeError('active_grant_id must be a string <= 64 characters if provided.');
+    }
+    grantId = descriptor.active_grant_id.trim();
+  }
+
+  return deepFreeze({
+    action_id: descriptor.action_id,
+    action_type: descriptor.action_type,
+    target_origin: lowerOrigin,
+    payload_summary: descriptor.payload_summary.trim(),
+    is_idempotent: descriptor.is_idempotent,
+    estimated_reversibility: Number(descriptor.estimated_reversibility.toFixed(4)),
+    contains_pii: descriptor.contains_pii,
+    contains_financial_mutation: descriptor.contains_financial_mutation,
+    user_present: descriptor.user_present,
+    over_privileged_fields_count: overPrivileged,
+    active_grant_id: grantId
+  });
+}
+
+/**
+ * Evaluates a browser write action deterministically against runtime safety policy.
+ *
+ * @param {object} actionDescriptor Raw or validated browser action descriptor
+ * @param {object} [customPolicy] Optional policy overrides
+ * @param {object} [options] Optional execution flags
+ * @returns {object} { ok, decision, reason, action, evaluated_at }
+ */
+export function evaluateBrowserWriteAction(actionDescriptor, customPolicy = {}, options = {}) {
+  let validatedAction;
+  try {
+    validatedAction = validateBrowserActionDescriptor(actionDescriptor);
+  } catch (err) {
+    return deepFreeze({
+      ok: false,
+      decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+      reason: `Action descriptor rejected fail-closed: ${err.message}`,
+      action: null,
+      evaluated_at: new Date().toISOString()
+    });
+  }
+
+  const policy = {
+    ...DEFAULT_RUNTIME_MONITOR_POLICY,
+    ...(customPolicy && typeof customPolicy === 'object' ? customPolicy : {})
+  };
+
+  const now = (options && typeof options.now === 'string') ? options.now : new Date().toISOString();
+
+  // 1. Hard Security Block Rules
+  for (const prohibited of policy.prohibited_destinations) {
+    if (validatedAction.target_origin.includes(prohibited)) {
+      return deepFreeze({
+        ok: true,
+        decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+        reason: `Target destination '${validatedAction.target_origin}' is prohibited by local safety policy.`,
+        action: validatedAction,
+        evaluated_at: now
+      });
+    }
+  }
+
+  if (validatedAction.action_type === 'credential_storage' && options?.allow_credential_write !== true) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+      reason: 'Direct credential storage modification by agent is blocked to prevent key exfiltration.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.action_type === 'external_http_post' && !validatedAction.user_present && !validatedAction.active_grant_id) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.BLOCK,
+      reason: 'Background external network write when user is not present requires an active pre-authorized grant.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  // 2. Revision Rules (MINIM arXiv:2606.13949 / NEXUS arXiv:2607.19356)
+  if (validatedAction.over_privileged_fields_count > 0 && validatedAction.action_type === 'form_submission') {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.REVISE,
+      reason: `Form submission payload includes ${validatedAction.over_privileged_fields_count} unnecessary observation fields; sanitize and prune payload before submitting.`,
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.estimated_reversibility < 0.30 && !validatedAction.is_idempotent && !validatedAction.user_present) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.REVISE,
+      reason: 'Irreversible non-idempotent action initiated in background must be decomposed into smaller reversible steps.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  // 3. Human Confirmation Rules
+  if (validatedAction.contains_financial_mutation && policy.require_confirm_for_financial) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+      reason: 'Financial mutation detected; requires explicit interactive human confirmation.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.contains_pii && policy.require_confirm_for_pii && !validatedAction.active_grant_id) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+      reason: 'Action discloses personal identity data without active grant; interactive confirmation required.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.estimated_reversibility < policy.max_unconfirmed_reversibility_threshold) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+      reason: `Action reversibility (${(validatedAction.estimated_reversibility * 100).toFixed(0)}%) is below automatic execution threshold (${(policy.max_unconfirmed_reversibility_threshold * 100).toFixed(0)}%); human confirmation required.`,
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  if (validatedAction.action_type === 'form_submission' && !validatedAction.is_idempotent) {
+    return deepFreeze({
+      ok: true,
+      decision: RUNTIME_ACTION_DECISIONS.CONFIRM,
+      reason: 'Non-idempotent form submission requires confirmation to prevent duplicate external submission.',
+      action: validatedAction,
+      evaluated_at: now
+    });
+  }
+
+  // 4. Benign Allow
+  return deepFreeze({
+    ok: true,
+    decision: RUNTIME_ACTION_DECISIONS.ALLOW,
+    reason: 'Action complies with all local runtime monitor safety rules and is cleared for automatic execution.',
+    action: validatedAction,
+    evaluated_at: now
+  });
+}
+
+/**
+ * Creates tamper-evident receipt for evaluated runtime action.
+ *
+ * @param {object} validatedAction Validated action descriptor
+ * @param {object} evaluationResult Result from evaluateBrowserWriteAction
+ * @param {string} evaluatedAt ISO timestamp
+ * @returns {object} Frozen runtime monitor receipt
+ */
+export function createRuntimeMonitorReceipt(validatedAction, evaluationResult, evaluatedAt) {
+  if (!validatedAction || typeof validatedAction !== 'object' || !validatedAction.action_id) {
+    throw new TypeError('Invalid validatedAction provided to createRuntimeMonitorReceipt.');
+  }
+
+  if (!evaluationResult || typeof evaluationResult !== 'object' || !evaluationResult.decision) {
+    throw new TypeError('Invalid evaluationResult provided to createRuntimeMonitorReceipt.');
+  }
+
+  const ts = (typeof evaluatedAt === 'string' && evaluatedAt.length > 0) ? evaluatedAt : new Date().toISOString();
+
+  const commitmentPayload = `${validatedAction.action_id}|${validatedAction.action_type}|${validatedAction.target_origin}|${evaluationResult.decision}|${validatedAction.estimated_reversibility.toFixed(4)}|${validatedAction.contains_pii ? 1 : 0}|${validatedAction.contains_financial_mutation ? 1 : 0}|${ts}`;
+  const commitmentHash = computeContextFingerprint(commitmentPayload);
+  const receiptId = `rtm-rcpt-${commitmentHash.slice(0, 16)}`;
+
+  return deepFreeze({
+    receipt_id: receiptId,
+    action_id: validatedAction.action_id,
+    action_type: validatedAction.action_type,
+    target_origin: validatedAction.target_origin,
+    decision: evaluationResult.decision,
+    reason: evaluationResult.reason,
+    estimated_reversibility: validatedAction.estimated_reversibility,
+    contains_pii: validatedAction.contains_pii,
+    contains_financial_mutation: validatedAction.contains_financial_mutation,
+    commitment_hash: commitmentHash,
+    issued_at: ts,
+    status: 'admitted'
+  });
+}
+
+/**
+ * Verifies authenticity of a runtime monitor receipt fail-closed.
+ *
+ * @param {object} receipt Raw receipt to verify
+ * @returns {object} { ok, verified, reason, receipt }
+ */
+export function verifyRuntimeMonitorReceipt(receipt) {
+  if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Receipt must be a non-null object.' });
+  }
+
+  const requiredFields = [
+    'receipt_id',
+    'action_id',
+    'action_type',
+    'target_origin',
+    'decision',
+    'reason',
+    'estimated_reversibility',
+    'contains_pii',
+    'contains_financial_mutation',
+    'commitment_hash',
+    'issued_at',
+    'status'
+  ];
+
+  for (const field of requiredFields) {
+    if (receipt[field] === undefined || receipt[field] === null) {
+      return deepFreeze({ ok: false, verified: false, reason: `Missing required receipt field: ${field}` });
+    }
+  }
+
+  if (receipt.status !== 'admitted') {
+    return deepFreeze({ ok: false, verified: false, reason: `Receipt status must be admitted, got: ${receipt.status}` });
+  }
+
+  if (!Object.values(RUNTIME_ACTION_DECISIONS).includes(receipt.decision)) {
+    return deepFreeze({ ok: false, verified: false, reason: `Invalid receipt decision: ${receipt.decision}` });
+  }
+
+  const expectedPayload = `${receipt.action_id}|${receipt.action_type}|${receipt.target_origin}|${receipt.decision}|${Number(receipt.estimated_reversibility).toFixed(4)}|${receipt.contains_pii ? 1 : 0}|${receipt.contains_financial_mutation ? 1 : 0}|${receipt.issued_at}`;
+  const expectedHash = computeContextFingerprint(expectedPayload);
+
+  if (expectedHash !== receipt.commitment_hash) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Cryptographic commitment hash mismatch: receipt data was modified.' });
+  }
+
+  if (receipt.receipt_id !== `rtm-rcpt-${expectedHash.slice(0, 16)}`) {
+    return deepFreeze({ ok: false, verified: false, reason: 'Receipt ID does not match commitment hash digest.' });
+  }
+
+  return deepFreeze({ ok: true, verified: true, receipt });
+}
+
+/**
+ * Generates plain-language user summary of runtime monitor decision without internal jargon.
+ *
+ * @param {object} result Evaluation result from evaluateBrowserWriteAction
+ * @returns {object} { ok, text, status_class, badge }
+ */
+export function summarizeRuntimeMonitorDecision(result) {
+  if (!result || typeof result !== 'object') {
+    return deepFreeze({
+      ok: false,
+      text: 'Action evaluation could not be processed.',
+      status_class: 'status-err',
+      badge: 'Evaluation Error'
+    });
+  }
+
+  if (!result.ok) {
+    return deepFreeze({
+      ok: false,
+      text: result.reason || 'Action rejected by local runtime safety monitor.',
+      status_class: 'status-err',
+      badge: 'Action Blocked'
+    });
+  }
+
+  switch (result.decision) {
+    case RUNTIME_ACTION_DECISIONS.ALLOW:
+      return deepFreeze({
+        ok: true,
+        text: 'Action verified safe by on-device monitor and permitted to execute automatically.',
+        status_class: 'status-ok',
+        badge: 'Allowed'
+      });
+    case RUNTIME_ACTION_DECISIONS.CONFIRM:
+      return deepFreeze({
+        ok: true,
+        text: `Human approval needed: ${result.reason}`,
+        status_class: 'status-warn',
+        badge: 'Confirmation Required'
+      });
+    case RUNTIME_ACTION_DECISIONS.REVISE:
+      return deepFreeze({
+        ok: true,
+        text: `Action paused for revision: ${result.reason}`,
+        status_class: 'status-info',
+        badge: 'Revision Requested'
+      });
+    case RUNTIME_ACTION_DECISIONS.BLOCK:
+    default:
+      return deepFreeze({
+        ok: true,
+        text: `Action blocked: ${result.reason}`,
+        status_class: 'status-err',
+        badge: 'Blocked'
+      });
+  }
+}
 
 export const ALLOWED_AUTO_PURCHASE_OUTCOMES = Object.freeze([
   'deny',

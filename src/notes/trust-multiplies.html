@@ -14,7 +14,7 @@
   <meta property="og:image" content="/assets/images/og-image.svg">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/images/logo-192.png" type="image/png">
-  <link rel="stylesheet" href="/styles/site.css?v=29">
+  <link rel="stylesheet" href="/styles/site.css?v=49">
 </head>
 <body class="page-note">
 <a class="skip" href="#main">Skip to content</a>
@@ -26,14 +26,15 @@
       <span>Collective Intelligence Network<small>Research &amp; design project</small></span>
     </a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
-    <nav class="nav" id="nav" aria-label="Site">
-      <a href="/#goals">Goals</a>
-      <a href="/#fractured">How it works</a>
-      <a href="/#futures">Futures</a>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="/#architecture">Architecture</a>
+      <a href="/#for-you">For You</a>
+      <a href="/notes" aria-current="true">Blueprints</a>
+      <a href="/#lines">Principles</a>
       <a href="/trajectory">Trajectory</a>
-      <a href="/notes" aria-current="true">Notes</a>
-      <a href="/#involved">Get involved</a>
-      <a class="nav-net" href="https://cintnet.org">Network site &#8599;</a>
+      <a href="/founder">Founder</a>
+      <a href="/#involved">Status</a>
+      <a class="nav-net" href="https://cintnet.org" target="_blank" rel="noopener">Network site &#8599;</a>
     </nav>
   </div>
 </header>
@@ -78,6 +79,34 @@
 
     <p>The model is deliberately crude. Real trust is not the same between every pair, groups do not simply hold or break, and records can themselves be forged. It is a hypothesis to test in simulation, not a law. But the direction fits the evidence: countries where people trust each other more have tended to grow faster, and studies of small groups have found a measurable collective intelligence that depends more on how evenly members take part than on how clever each one is.</p>
 
+    <figure class="diagram" aria-label="Multiplicative Trust Score and Inverse Transparency Curve">
+      <svg viewBox="0 0 820 250" role="img" aria-label="Multiplicative trust update rule and inverse transparency curve across Tiers 0 to 4">
+        <rect x="16" y="16" width="376" height="186" rx="12" class="d-box"/>
+        <text x="32" y="42" class="d-title">1. Multiplicative Trust Dynamics</text>
+        <text x="32" y="62" class="d-sub">Hard to earn (+2%), catastrophic to betray (-65%)</text>
+        <rect x="32" y="78" width="344" height="48" rx="8" class="d-fill"/>
+        <text x="46" y="99" class="d-code">Verified Honest Delivery: τ(t+1) = τ(t) · 1.02</text>
+        <text x="46" y="116" class="d-sub">Bounded in [0, 1] · requires sustained functional proof</text>
+        <rect x="32" y="136" width="344" height="50" rx="8" class="d-box" style="stroke:var(--bad)"/>
+        <text x="46" y="157" class="d-code" style="fill:var(--bad)">Caught Deception / Backdoor: τ(t+1) = τ(t) · 0.35</text>
+        <text x="46" y="175" class="d-sub">Two violations drop trust from 0.90 -> 0.11 (quarantined)</text>
+
+        <path d="M392 109 L432 109" class="d-line"/>
+
+        <rect x="432" y="16" width="372" height="186" rx="12" class="d-fill"/>
+        <text x="448" y="42" class="d-title">2. Inverse Transparency Curve</text>
+        <text x="448" y="62" class="d-sub">Privacy for citizens, sunlight for concentrated power</text>
+        <rect x="448" y="78" width="340" height="48" rx="8" class="d-box"/>
+        <text x="462" y="99" class="d-code" style="fill:var(--ok)">Tier 0 Everyday Citizen: 100% Local Privacy</text>
+        <text x="462" y="116" class="d-sub">Zero public telemetry; only voluntary ZK capability proofs</text>
+        <rect x="448" y="136" width="340" height="50" rx="8" class="d-box"/>
+        <text x="462" y="157" class="d-code">Tier 3–4 Public &amp; Grid Roles: 100% Audit Log</text>
+        <text x="462" y="175" class="d-sub">Every high-impact agent instruction is publicly co-signed</text>
+
+        <text x="24" y="228" class="d-sub">Because every verified human has exactly 1 hardware-rooted identity, an attacker cannot reset a burned trust score by spinning up new accounts.</text>
+      </svg>
+      <figcaption>Why multiplicative trust and inverse transparency stop repeat bad actors without subjecting ordinary citizens to surveillance.</figcaption>
+    </figure>
     <h2>Transparency where power is, privacy where people are</h2>
     <p>&ldquo;Transparency&rdquo; here has a strict meaning: what an agent agreed to, what an organisation holds, what a device reported. It does not mean that people&rsquo;s lives are visible. A community that tried to raise trust by watching its members would destroy the thing it is trying to build, because people would stop being honest with it.</p>
 
@@ -140,7 +169,7 @@
   </div>
 </footer>
 
-<script src="/scripts/site.js?v=10" defer></script>
-<script src="/scripts/trust.js?v=1" defer></script>
+<script src="/scripts/site.js?v=49" defer></script>
+<script src="/scripts/trust.js?v=49" defer></script>
 </body>
 </html>
