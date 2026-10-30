@@ -23,14 +23,14 @@
         label: '1. Architecture & Silicon',
         sub: 'Two Internets · QUIC P2P · 6 Notes',
         color: '#4fb3a8',
-        cx: 175,
+        cx: 226,
         cy: 92,
         nodes: [
-          { label: 'Two Internets', href: '/notes/agent-internet', dx: -92, dy: -42 },
-          { label: 'Biometrics & Hardware', href: '/notes/agent-only-internet-biometrics-hardware', dx: -102, dy: 6 },
-          { label: 'Human Sovereignty', href: '/notes/architecture-of-human-sovereignty', dx: -76, dy: 48 },
-          { label: 'Somatic Liveness', href: '/notes/somatic-witness', dx: 4, dy: -56 },
-          { label: 'Network of Networks', href: '/notes/network-of-networks', dx: 64, dy: -46 }
+          { label: 'Two Internets', href: '/notes/agent-internet', dx: -68, dy: -40 },
+          { label: 'Biometrics & Hardware', href: '/notes/agent-only-internet-biometrics-hardware', dx: -74, dy: 4 },
+          { label: 'Human Sovereignty', href: '/notes/architecture-of-human-sovereignty', dx: -64, dy: 44 },
+          { label: 'Somatic Liveness', href: '/notes/somatic-witness', dx: 4, dy: -52 },
+          { label: 'Network of Networks', href: '/notes/network-of-networks', dx: 56, dy: -42 }
         ]
       },
       {
@@ -39,14 +39,14 @@
         label: '2. Personal Agents',
         sub: 'Local LoRA · Memory Airlock · 11 Notes',
         color: '#63b3ed',
-        cx: 645,
+        cx: 594,
         cy: 92,
         nodes: [
-          { label: 'Personal Agents', href: '/notes/personal-agents', dx: -60, dy: -48 },
-          { label: 'Training Your Twin', href: '/notes/training-your-twin', dx: 12, dy: -56 },
-          { label: 'Reclaim Profile', href: '/notes/reclaim-your-profile', dx: 92, dy: -38 },
-          { label: 'Clues Not Orders', href: '/notes/instructions-as-evidence', dx: 100, dy: 12 },
-          { label: 'Quests Not Feeds', href: '/notes/quest-interface', dx: 76, dy: 52 }
+          { label: 'Personal Agents', href: '/notes/personal-agents', dx: -52, dy: -44 },
+          { label: 'Training Your Twin', href: '/notes/training-your-twin', dx: 8, dy: -52 },
+          { label: 'Reclaim Profile', href: '/notes/reclaim-your-profile', dx: 66, dy: -38 },
+          { label: 'Clues Not Orders', href: '/notes/instructions-as-evidence', dx: 72, dy: 8 },
+          { label: 'Quests Not Feeds', href: '/notes/quest-interface', dx: 62, dy: 46 }
         ]
       },
       {
@@ -55,14 +55,14 @@
         label: '3. Ledger & Economics',
         sub: '95% Shapley · 5D Demurrage · 7 Notes',
         color: '#ecc94b',
-        cx: 175,
-        cy: 238,
+        cx: 226,
+        cy: 236,
         nodes: [
-          { label: 'Testnet Ledger v4.0', href: '/notes/beyond-arxiv-agent-web-ledger', dx: -98, dy: -12 },
-          { label: '5D Value & Demurrage', href: '/notes/how-the-ledger-works', dx: -88, dy: 38 },
-          { label: 'Liquid Democracy', href: '/notes/liquid-democracy-and-staking-lockups', dx: -14, dy: 58 },
-          { label: 'Trust Multiplies', href: '/notes/trust-multiplies', dx: 66, dy: 48 },
-          { label: 'Co-Op Companies', href: '/notes/companies-on-the-ledger', dx: -56, dy: -48 }
+          { label: 'Testnet Ledger v4.0', href: '/notes/beyond-arxiv-agent-web-ledger', dx: -72, dy: -8 },
+          { label: '5D Value & Demurrage', href: '/notes/how-the-ledger-works', dx: -66, dy: 38 },
+          { label: 'Liquid Democracy', href: '/notes/liquid-democracy-and-staking-lockups', dx: -10, dy: 54 },
+          { label: 'Trust Multiplies', href: '/notes/trust-multiplies', dx: 56, dy: 44 },
+          { label: 'Co-Op Companies', href: '/notes/companies-on-the-ledger', dx: -48, dy: -44 }
         ]
       },
       {
@@ -71,14 +71,14 @@
         label: '4. Safety & Co-Intelligence',
         sub: 'Containment · Agent Law · 12 Notes',
         color: '#ef6a52',
-        cx: 645,
-        cy: 238,
+        cx: 594,
+        cy: 236,
         nodes: [
-          { label: '7-Lens World Atlas', href: '/notes/world-standing-and-cointelligence', dx: 56, dy: -46 },
-          { label: 'No Swarm Commander', href: '/notes/no-one-commands-a-swarm', dx: 98, dy: -8 },
-          { label: 'Agent Jurisdictions', href: '/notes/ai-agent-jurisdictions', dx: 88, dy: 42 },
-          { label: 'Containing Frontier AI', href: '/notes/containment', dx: 8, dy: 58 },
-          { label: 'Principal Alignment', href: '/notes/fractured-alignment', dx: -64, dy: 48 }
+          { label: '7-Lens World Atlas', href: '/notes/world-standing-and-cointelligence', dx: 48, dy: -44 },
+          { label: 'No Swarm Commander', href: '/notes/no-one-commands-a-swarm', dx: 70, dy: -6 },
+          { label: 'Agent Jurisdictions', href: '/notes/ai-agent-jurisdictions', dx: 66, dy: 40 },
+          { label: 'Containing Frontier AI', href: '/notes/containment', dx: 8, dy: 54 },
+          { label: 'Principal Alignment', href: '/notes/fractured-alignment', dx: -54, dy: 44 }
         ]
       },
       {
@@ -90,9 +90,9 @@
         cx: 410,
         cy: 262,
         nodes: [
-          { label: '550 Principles Sim', href: '/notes/all-principles', dx: -74, dy: 46 },
-          { label: 'Weiszfeld Testnet', href: '/notes/all-principles', dx: 0, dy: 52 },
-          { label: '30-Lives Cohort Sim', href: '/notes/thirty-lives', dx: 74, dy: 46 }
+          { label: '550 Principles Sim', href: '/notes/all-principles', dx: -68, dy: 44 },
+          { label: 'Weiszfeld Testnet', href: '/notes/all-principles', dx: 0, dy: 50 },
+          { label: '30-Lives Cohort Sim', href: '/notes/thirty-lives', dx: 68, dy: 44 }
         ]
       }
     ];
@@ -109,14 +109,14 @@
     }
 
     function render(selectedCat) {
-      svg.attr('viewBox', '-80 0 980 348');
+      svg.attr('viewBox', '0 0 820 340');
       svg.selectAll('*').remove();
 
       svg.append('rect')
-        .attr('x', -76)
+        .attr('x', 4)
         .attr('y', 4)
-        .attr('width', 972)
-        .attr('height', 340)
+        .attr('width', 812)
+        .attr('height', 332)
         .attr('rx', 14)
         .attr('fill', '#12151c')
         .attr('stroke', '#2a2f3a')
@@ -446,13 +446,12 @@
           .attr('fill', b.color);
 
         leftG.append('text')
-          .attr('x', 6)
+          .attr('x', idx === 0 ? 10 : Math.min(200, xScale(b.ms) + 8))
           .attr('y', y + 20)
           .attr('font-size', 9.2)
           .attr('font-family', 'monospace')
           .attr('font-weight', 700)
-          .attr('fill', idx === 2 ? '#4fb3a8' : '#f4f1ea')
-          .attr('x', Math.min(200, xScale(b.ms) + 8))
+          .attr('fill', idx === 0 ? '#10131a' : (idx === 2 ? '#4fb3a8' : '#f4f1ea'))
           .text(b.note);
       });
 

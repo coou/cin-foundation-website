@@ -2064,7 +2064,7 @@
     svg.append('text').attr('x', 24).attr('y', 32).attr('font-size', 10.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
       .text('D3.JS V7 6-AXIS STRUCTURAL RADAR: STATUS QUO VS. OPEN WEIGHTS VS. CIN CO-INTELLIGENCE');
 
-    var cx = 184, cy = 194, maxR = 90;
+    var cx = 178, cy = 194, maxR = 86;
     [0.25, 0.5, 0.75, 1.0].forEach(function (ring) {
       svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', maxR * ring)
         .attr('fill', 'none').attr('stroke', '#2a303c').attr('stroke-dasharray', ring < 1 ? '3 3' : 'none');
@@ -2076,11 +2076,11 @@
       var x2 = cx + Math.cos(ang) * maxR;
       var y2 = cy + Math.sin(ang) * maxR;
       svg.append('line').attr('x1', cx).attr('y1', cy).attr('x2', x2).attr('y2', y2).attr('stroke', '#323846');
-      var lx = cx + Math.cos(ang) * (maxR + 22);
-      var ly = cy + Math.sin(ang) * (maxR + 16);
+      var lx = cx + Math.cos(ang) * (maxR + 18);
+      var ly = cy + Math.sin(ang) * (maxR + 14);
       var anchor = Math.abs(Math.cos(ang)) < 0.2 ? 'middle' : (Math.cos(ang) > 0 ? 'start' : 'end');
       svg.append('text').attr('x', lx).attr('y', ly + 3).attr('text-anchor', anchor)
-        .attr('font-size', 9.2).attr('font-weight', '700').attr('fill', '#d5d9e2').text(axisName);
+        .attr('font-size', 8.8).attr('font-weight', '700').attr('fill', '#d5d9e2').text(axisName);
     });
 
     function polyPoints(arr) {
@@ -2099,19 +2099,19 @@
       .attr('fill', 'rgba(79,179,168,0.28)').attr('stroke', '#4fb3a8').attr('stroke-width', 2.6);
 
     // Right panel: 6-row live D3 comparative table
-    var rx = 408, ry = 54;
-    svg.append('rect').attr('x', rx).attr('y', ry).attr('width', 328).attr('height', 278).attr('rx', 10)
+    var rx = 420, ry = 54;
+    svg.append('rect').attr('x', rx).attr('y', ry).attr('width', 316).attr('height', 278).attr('rx', 10)
       .attr('fill', '#161b24').attr('stroke', '#2c303a');
-    svg.append('text').attr('x', rx + 14).attr('y', ry + 24).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
-      .text('DIMENSION               CLOUD   OPEN    CIN');
+    svg.append('text').attr('x', rx + 12).attr('y', ry + 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+      .text('DIMENSION              CLOUD   OPEN    CIN');
 
     RADAR_AXES.forEach(function (ax, idx) {
       var y = ry + 54 + idx * 36;
-      svg.append('line').attr('x1', rx + 12).attr('y1', y - 16).attr('x2', rx + 316).attr('y2', y - 16).attr('stroke', '#252a34');
-      svg.append('text').attr('x', rx + 14).attr('y', y).attr('font-size', 9.5).attr('font-weight', '600').attr('fill', '#e9e6de').text(ax);
-      svg.append('text').attr('x', rx + 188).attr('y', y).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52').text(sqVals[idx] + '%');
-      svg.append('text').attr('x', rx + 242).attr('y', y).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c').text(owVals[idx] + '%');
-      svg.append('text').attr('x', rx + 292).attr('y', y).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8').text(cinVals[idx] + '%');
+      svg.append('line').attr('x1', rx + 10).attr('y1', y - 16).attr('x2', rx + 306).attr('y2', y - 16).attr('stroke', '#252a34');
+      svg.append('text').attr('x', rx + 12).attr('y', y).attr('font-size', 9.2).attr('font-weight', '600').attr('fill', '#e9e6de').text(ax);
+      svg.append('text').attr('x', rx + 182).attr('y', y).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52').text(sqVals[idx] + '%');
+      svg.append('text').attr('x', rx + 234).attr('y', y).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c').text(owVals[idx] + '%');
+      svg.append('text').attr('x', rx + 282).attr('y', y).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8').text(cinVals[idx] + '%');
     });
   }
 
