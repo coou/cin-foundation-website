@@ -339,7 +339,7 @@
       svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 672).attr('height', 120).attr('rx', 10)
         .attr('fill', '#11151c').attr('stroke', '#2c303a').attr('stroke-width', 1.4);
 
-      svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
         .text('D3.JS V7 LIVE WATERFALL: LEGACY EXTRACTION VS. CIN LOCAL OCAP / PSI / SHAPLEY');
 
       var boxes = [
@@ -351,7 +351,7 @@
       boxes.forEach(function (b, idx) {
         svg.append('rect').attr('x', b.x).attr('y', 34).attr('width', b.w).attr('height', 52).attr('rx', 7)
           .attr('fill', b.bg).attr('stroke', b.col).attr('stroke-width', 1.4);
-        svg.append('text').attr('x', b.x + 12).attr('y', 52).attr('font-size', 9).attr('font-family', 'monospace').attr('fill', '#c7cbd4').text(b.k);
+        svg.append('text').attr('x', b.x + 12).attr('y', 52).attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#c7cbd4').text(b.k);
         svg.append('text').attr('x', b.x + 12).attr('y', 74).attr('font-size', 13).attr('font-weight', '700').attr('fill', b.col).text(b.v);
         if (idx < 2) {
           svg.append('text').attr('x', b.x + b.w + 14).attr('y', 64).attr('text-anchor', 'middle').attr('font-size', 13).attr('font-weight', '700').attr('fill', '#e5a93c').text('→');
@@ -362,7 +362,7 @@
       var okW = Math.max(48, Math.min(barW - 48, Math.round(barW * ratioOk)));
       svg.append('rect').attr('x', 18).attr('y', 96).attr('width', barW).attr('height', 16).attr('rx', 4).attr('fill', 'rgba(239,106,82,0.28)');
       svg.append('rect').attr('x', 18).attr('y', 96).attr('width', okW).attr('height', 16).attr('rx', 4).attr('fill', '#4fb3a8');
-      svg.append('text').attr('x', 26).attr('y', 108).attr('font-size', 9).attr('font-weight', '700').attr('fill', '#0d1117')
+      svg.append('text').attr('x', 26).attr('y', 108).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#0d1117')
         .text('Retained by Household / SMB / Creator: ' + Math.round(ratioOk * 100) + '%');
     };
 
@@ -1199,22 +1199,19 @@
         prov: 'IETF RFC 9000/9221 QUIC · Dennis & Van Horn (1966) OCap · Hardware PUF/TPM',
         svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Two Internets Architecture Schematic">' +
           '<rect x="6" y="8" width="106" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Human Internet</text>' +
-          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Hardware Liveness</text>' +
-          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">0 Foreign Bots</text>' +
-          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">100% Human Spaces</text>' +
+          '<text x="59" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">Human Web</text>' +
+          '<text x="59" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">0 Bots</text>' +
+          '<text x="59" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">100% Human</text>' +
           '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="130" y="8" width="104" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
-          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">OCap Sandbox</text>' +
-          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">6 Narrow Agents</text>' +
-          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">3-of-6 Quorum</text>' +
-          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">Local Device Bus</text>' +
+          '<text x="182" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">OCap Box</text>' +
+          '<text x="182" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">3-of-6 Gate</text>' +
+          '<text x="182" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">Local Wasm</text>' +
           '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="252" y="8" width="102" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Agent Internet</text>' +
-          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">IETF QUIC P2P</text>' +
-          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">9.4 ms Latency</text>' +
-          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Scoped ZK Proofs</text>' +
+          '<text x="303" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">QUIC Mesh</text>' +
+          '<text x="303" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">9.4 ms P2P</text>' +
+          '<text x="303" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">1 Proof Only</text>' +
         '</svg>'
       },
       ledger: {
@@ -1225,22 +1222,19 @@
         prov: 'Necula (POPL 1997) PCC · Shapley (1953) · Ghorbani & Zou (ICML 2019) · TIES-Merging',
         svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Shared Attribution and 5D Ledger Schematic">' +
           '<rect x="6" y="8" width="106" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
-          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Local Sandbox</text>' +
-          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Tasker &amp; Solver</text>' +
-          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">5-Session Iso</text>' +
-          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">LoRA Weight Delta</text>' +
+          '<text x="59" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">Local Craft</text>' +
+          '<text x="59" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">Rank-16 LoRA</text>' +
+          '<text x="59" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">5-Session Iso</text>' +
           '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="130" y="8" width="104" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Functional Proof</text>' +
-          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Necula 1997 PCC</text>' +
-          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">16/16 Certified</text>' +
-          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">Deterministic Gate</text>' +
+          '<text x="182" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">PCC Proof</text>' +
+          '<text x="182" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">16/16 Pass</text>' +
+          '<text x="182" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">Necula 1997</text>' +
           '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="252" y="8" width="102" height="96" rx="8" fill="var(--card)" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">5D Royalty Split</text>' +
-          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Data Shapley</text>' +
-          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">$25k Floor Safe</text>' +
-          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">0% Middleman Toll</text>' +
+          '<text x="303" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">95% Royalty</text>' +
+          '<text x="303" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">Shapley Split</text>' +
+          '<text x="303" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">$25k Floor</text>' +
         '</svg>'
       },
       twin: {
@@ -1251,22 +1245,19 @@
         prov: 'Hu et al. (ICLR 2022) LoRA · Picard (1997) · Sweller (1988) · FIDO2/WebAuthn',
         svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Human-Bound Personal Agent Schematic">' +
           '<rect x="6" y="8" width="106" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Pre-ADC Sensor</text>' +
-          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">HRV + Piezo MMG</text>' +
-          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">50 ms Erasure</text>' +
-          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">Duress Lock ≥24ms</text>' +
+          '<text x="59" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">Pre-ADC Chip</text>' +
+          '<text x="59" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">50 ms Erase</text>' +
+          '<text x="59" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">Duress Lock</text>' +
           '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="130" y="8" width="104" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
-          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Personal Twin</text>' +
-          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">On-Device LoRA</text>' +
-          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Telic vs Limbic</text>' +
-          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">100% User-Owned</text>' +
+          '<text x="182" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">1-to-1 Twin</text>' +
+          '<text x="182" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">24h Lease</text>' +
+          '<text x="182" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">96% Moat</text>' +
           '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="252" y="8" width="102" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Craft Royalty</text>' +
-          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">ZK-LSH Subspace</text>' +
-          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Scoped Escrow</text>' +
-          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Direct Settlement</text>' +
+          '<text x="303" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">Craft Escrow</text>' +
+          '<text x="303" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">95% Return</text>' +
+          '<text x="303" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">Direct Pay</text>' +
         '</svg>'
       },
       safety: {
@@ -1275,24 +1266,21 @@
         kpi3Val: '100%',
         kpi3Lbl: 'Swarm Abuses Blocked',
         prov: 'NIST AI RMF / AIMS Tenet 7 · RFC 9449 DPoP · Saltzer & Schroeder (1975) · Ostrom (1990)',
-        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Risk-Scaled Containment and Policy Gate Schematic">' +
+        svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Containment and Quorum Gate Schematic">' +
           '<rect x="6" y="8" width="106" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
-          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Agent Proposal</text>' +
-          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Reasoning Plane</text>' +
-          '<text x="16" y="62" fill="var(--accent)" font-size="9" font-family="var(--mono)">0 Direct IO Keys</text>' +
-          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">Typed AST Intent</text>' +
+          '<text x="59" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">Silicon Key</text>' +
+          '<text x="59" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">1-to-1 Bond</text>' +
+          '<text x="59" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">0 Sybil Bots</text>' +
           '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="130" y="8" width="104" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Policy Gate</text>' +
-          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Φ(R) = 1−(1−R)⁵</text>' +
-          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">3-of-6 Watchers</text>' +
-          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">Deterministic Check</text>' +
+          '<text x="182" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">Quorum Gate</text>' +
+          '<text x="182" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">&lt;10 ms Lock</text>' +
+          '<text x="182" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">Φ(R) Curve</text>' +
           '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="252" y="8" width="102" height="96" rx="8" fill="var(--card)" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">Signed Receipt</text>' +
-          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">RFC 9449 DPoP</text>' +
-          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Audit Verified</text>' +
-          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Fails Closed</text>' +
+          '<text x="303" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">Civic Floor</text>' +
+          '<text x="303" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">$25k Exempt</text>' +
+          '<text x="303" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">Tiers 0 to 4</text>' +
         '</svg>'
       },
       sim: {
@@ -1303,22 +1291,19 @@
         prov: 'Brier (1950) Proper Scoring · Dalkey & Helmer (1963) Delphi · METR Task Horizon',
         svg: '<svg viewBox="0 0 360 112" role="img" aria-label="Society Simulation and Strategic Foresight Schematic">' +
           '<rect x="6" y="8" width="106" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="16" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">30 Lives &amp; 550</text>' +
-          '<text x="16" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">6 Continents</text>' +
-          '<text x="16" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Tiers 0 to 4</text>' +
-          '<text x="16" y="86" fill="var(--ink-3)" font-size="8.5">365-Day Monte Carlo</text>' +
+          '<text x="59" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">30 Personas</text>' +
+          '<text x="59" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">6 Continents</text>' +
+          '<text x="59" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">365-Day Sim</text>' +
           '<path d="M112 56 L130 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="130" y="8" width="104" height="96" rx="8" fill="var(--card)" stroke="var(--rule)" stroke-width="1.5"/>' +
-          '<text x="140" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">5-Step Foresight</text>' +
-          '<text x="140" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">STEEP + Delphi</text>' +
-          '<text x="140" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Brier Calibrated</text>' +
-          '<text x="140" y="86" fill="var(--ink-3)" font-size="8.5">100% Cone Sum</text>' +
+          '<text x="182" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">Foresight</text>' +
+          '<text x="182" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">Delphi + Cone</text>' +
+          '<text x="182" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">100% Sum</text>' +
           '<path d="M234 56 L252 56" stroke="var(--ok)" stroke-width="1.8"/>' +
           '<rect x="252" y="8" width="102" height="96" rx="8" fill="color-mix(in srgb, var(--ok) 14%, var(--paper))" stroke="var(--ok)" stroke-width="1.5"/>' +
-          '<text x="262" y="28" fill="var(--ink)" font-size="10.5" font-weight="700">4.2x Thriving</text>' +
-          '<text x="262" y="45" fill="var(--ink-2)" font-size="9" font-family="var(--mono)">Care &amp; Craft</text>' +
-          '<text x="262" y="62" fill="var(--ok)" font-size="9" font-family="var(--mono)">Zero Hoarding</text>' +
-          '<text x="262" y="86" fill="var(--ink-3)" font-size="8.5">Reproducible Code</text>' +
+          '<text x="303" y="34" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="700">4.2x Thriving</text>' +
+          '<text x="303" y="58" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="700" font-family="var(--mono)">Gini 0.58</text>' +
+          '<text x="303" y="82" text-anchor="middle" fill="var(--ink-2)" font-size="12">Zero Hoard</text>' +
         '</svg>'
       }
     };
@@ -1711,7 +1696,7 @@
       stand: 'Frontier labs (OpenAI, Anthropic, DeepMind, xAI, Meta) scrape public code and craft for $0 while renting tokens back via proprietary APIs.',
       gap: 'Shareholder valuation demands replacing human labor and locking users into cloud wrappers—turning AI into competitive displacement.',
       cin: 'On-device LoRA training, Two-Internet isolation, and 85/10/5 Data Shapley royalties reward verified cooperation and fund a $25k exempt civic floor.',
-      svg: '<svg viewBox="0 0 760 340" role="img" aria-label="2D Quadrant and $100 Value-Flow Sankey comparing SOTA AI Labs profit extraction against CIN cooperative Data Shapley royalties"><rect x="12" y="12" width="360" height="202" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="34" font-size="10.5" font-weight="700" font-family="monospace" fill="#e9e6de">1. INCENTIVE QUADRANT: RENT VS. CO-INTELLIGENCE</text><line x1="192" y1="46" x2="192" y2="200" stroke="#3a3f4b" stroke-width="1.4" stroke-dasharray="4 3"/><line x1="26" y1="124" x2="358" y2="124" stroke="#3a3f4b" stroke-width="1.4" stroke-dasharray="4 3"/><text x="198" y="58" font-size="9.5" font-family="monospace" fill="#4fb3a8">↑ HUMAN-ISOLATED AIRLOCK</text><text x="30" y="116" font-size="9.5" font-family="monospace" fill="#ef6a52">← SHAREHOLDER RENT</text><rect x="24" y="138" width="156" height="48" rx="8" fill="rgba(239,106,82,0.15)" stroke="#ef6a52" stroke-width="1.6"/><text x="102" y="158" text-anchor="middle" font-size="10" font-weight="700" fill="#ef6a52">SOTA Cloud Labs</text><text x="102" y="176" text-anchor="middle" font-size="9.5" fill="#e9e6de">OpenAI · Anthropic · Google</text><rect x="200" y="146" width="158" height="36" rx="7" fill="rgba(229,169,60,0.13)" stroke="#e5a93c" stroke-width="1.4"/><text x="279" y="168" text-anchor="middle" font-size="9.5" font-weight="700" fill="#e5a93c">Open Weights ($0 Royalty)</text><rect x="200" y="66" width="158" height="48" rx="8" fill="rgba(79,179,168,0.2)" stroke="#4fb3a8" stroke-width="2"/><text x="279" y="86" text-anchor="middle" font-size="10" font-weight="700" fill="#4fb3a8">CIN Co-Intelligence</text><text x="279" y="104" text-anchor="middle" font-size="9.5" fill="#e9e6de">Local LoRA + 95% Shapley</text><path d="M180,152 Q192,120 200,94" fill="none" stroke="#4fb3a8" stroke-width="2.2" stroke-dasharray="4 3"/><rect x="384" y="12" width="364" height="202" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="398" y="34" font-size="10.5" font-weight="700" font-family="monospace" fill="#e9e6de">2. REWARD SYSTEM: PROFIT VS. COOPERATION</text><rect x="398" y="48" width="162" height="152" rx="9" fill="rgba(239,106,82,0.09)" stroke="#ef6a52" stroke-width="1.4"/><text x="410" y="72" font-size="10" font-weight="700" fill="#ef6a52">SOTA AI Conglomerates</text><text x="410" y="98" font-size="9.5" fill="#e9e6de">• Scrape public craft ($0)</text><text x="410" y="122" font-size="9.5" fill="#e9e6de">• 15%–40% API token rent</text><text x="410" y="146" font-size="9.5" fill="#e9e6de">• Displaces human labor</text><text x="410" y="178" font-size="9.5" font-weight="700" fill="#ef6a52">Goal: Equity Valuation</text><rect x="572" y="48" width="162" height="152" rx="9" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.6"/><text x="584" y="72" font-size="10" font-weight="700" fill="#4fb3a8">CIN Cooperative Ledger</text><text x="584" y="98" font-size="9.5" fill="#e9e6de">✓ Private on-device LoRA</text><text x="584" y="122" font-size="9.5" fill="#e9e6de">✓ Proof-Carrying Code</text><text x="584" y="146" font-size="9.5" fill="#e9e6de">✓ 95% Shapley royalties</text><text x="584" y="178" font-size="9.5" font-weight="700" fill="#e5a93c">Goal: Human Cooperation</text><rect x="12" y="224" width="736" height="104" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="246" font-size="10.5" font-weight="700" font-family="monospace" fill="#e5a93c">3. WHERE EVERY $100 OF AI-GENERATED VALUE FLOWS</text><text x="26" y="274" font-size="10" font-weight="700" fill="#ef6a52">SOTA Cloud AI</text><rect x="132" y="258" width="428" height="22" rx="4" fill="#ef6a52"/><text x="346" y="273" text-anchor="middle" font-size="9.5" font-weight="700" fill="#111317">$72 Cloud Lab &amp; GPU Shareholders</text><rect x="562" y="258" width="170" height="22" rx="4" fill="#b84a39"/><text x="647" y="273" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">$28 Rent · $0 Creator</text><text x="26" y="306" font-size="10" font-weight="700" fill="#4fb3a8">CIN Ledger</text><rect x="132" y="290" width="500" height="22" rx="4" fill="#4fb3a8"/><text x="382" y="305" text-anchor="middle" font-size="9.5" font-weight="700" fill="#111317">$85 Direct Human Solver + $10 Lineage (95% Data Shapley)</text><rect x="634" y="290" width="98" height="22" rx="4" fill="#e5a93c"/><text x="683" y="305" text-anchor="middle" font-size="9.5" font-weight="700" fill="#111317">$5 Commons</text></svg>'
+      svg: '<svg viewBox="0 0 760 340" data-rich-viz="true" role="img" aria-label="2D Quadrant and $100 Value-Flow comparing SOTA AI Labs profit extraction against CIN 95% Data Shapley royalties"><rect x="12" y="12" width="356" height="202" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="12.5" font-weight="700" font-family="monospace" fill="#e9e6de">1. RENT VS. CO-INTELLIGENCE</text><line x1="190" y1="48" x2="190" y2="200" stroke="#3a3f4b" stroke-width="1.5" stroke-dasharray="4 3"/><line x1="26" y1="126" x2="354" y2="126" stroke="#3a3f4b" stroke-width="1.5" stroke-dasharray="4 3"/><text x="198" y="62" font-size="12" font-weight="700" font-family="monospace" fill="#4fb3a8">↑ AIRLOCK</text><text x="28" y="118" font-size="12" font-weight="700" font-family="monospace" fill="#ef6a52">← API RENT</text><rect x="24" y="138" width="154" height="52" rx="8" fill="rgba(239,106,82,0.16)" stroke="#ef6a52" stroke-width="1.8"/><text x="101" y="161" text-anchor="middle" font-size="13" font-weight="700" fill="#ef6a52">SOTA Cloud Labs</text><text x="101" y="180" text-anchor="middle" font-size="12" fill="#e9e6de">$0 Creator Share</text><rect x="198" y="144" width="156" height="44" rx="8" fill="rgba(229,169,60,0.14)" stroke="#e5a93c" stroke-width="1.5"/><text x="276" y="171" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e5a93c">Open Weights ($0)</text><rect x="198" y="68" width="156" height="50" rx="8" fill="rgba(79,179,168,0.22)" stroke="#4fb3a8" stroke-width="2.2"/><text x="276" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#4fb3a8">★ CIN Ledger</text><text x="276" y="109" text-anchor="middle" font-size="12" fill="#e9e6de">95% Shapley Split</text><path d="M178,154 Q190,120 198,94" fill="none" stroke="#4fb3a8" stroke-width="2.5" stroke-dasharray="4 3"/><rect x="380" y="12" width="368" height="202" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="396" y="36" font-size="12.5" font-weight="700" font-family="monospace" fill="#e9e6de">2. CREATOR &amp; SOLVER ROYALTY SHARE</text><rect x="396" y="50" width="160" height="148" rx="10" fill="rgba(239,106,82,0.1)" stroke="#ef6a52" stroke-width="1.6"/><text x="476" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#ef6a52">SOTA Cloud AI</text><text x="476" y="124" text-anchor="middle" font-size="30" font-weight="800" font-family="monospace" fill="#ef6a52">0%</text><text x="476" y="150" text-anchor="middle" font-size="12" fill="#e9e6de">Scraped Free</text><text x="476" y="176" text-anchor="middle" font-size="12" font-weight="700" fill="#ef6a52">100% Equity &amp; Rent</text><rect x="572" y="50" width="160" height="148" rx="10" fill="rgba(79,179,168,0.15)" stroke="#4fb3a8" stroke-width="2"/><text x="652" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#4fb3a8">CIN Co-Intelligence</text><text x="652" y="124" text-anchor="middle" font-size="30" font-weight="800" font-family="monospace" fill="#4fb3a8">95%</text><text x="652" y="150" text-anchor="middle" font-size="12" fill="#e9e6de">Data Shapley Return</text><text x="652" y="176" text-anchor="middle" font-size="12" font-weight="700" fill="#e5a93c">+5% Commons Floor</text><rect x="12" y="224" width="736" height="104" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="248" font-size="12.5" font-weight="700" font-family="monospace" fill="#e5a93c">3. WHERE EVERY $100 OF AI VALUE FLOWS</text><text x="26" y="278" font-size="13" font-weight="700" fill="#ef6a52">Cloud AI</text><rect x="124" y="260" width="436" height="26" rx="5" fill="#ef6a52"/><text x="342" y="278" text-anchor="middle" font-size="12.5" font-weight="700" fill="#111317">$72 Cloud Shareholders</text><rect x="564" y="260" width="168" height="26" rx="5" fill="#b84a39"/><text x="648" y="278" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">$28 API Toll · $0 You</text><text x="26" y="312" font-size="13" font-weight="700" fill="#4fb3a8">CIN Ledger</text><rect x="124" y="294" width="510" height="26" rx="5" fill="#4fb3a8"/><text x="379" y="312" text-anchor="middle" font-size="12.5" font-weight="700" fill="#111317">$85 Solver + $10 Lineage (95% Shapley)</text><rect x="638" y="294" width="94" height="26" rx="5" fill="#e5a93c"/><text x="685" y="312" text-anchor="middle" font-size="12.5" font-weight="700" fill="#111317">$5 Floor</text></svg>'
     },
     safety: {
       k: 'Lens 02 of 07 · Co-Intelligence vs. Competitive Extinction (The Safety Gradient)',
@@ -1747,7 +1732,7 @@
       stand: 'Eval institutes (METR, Redwood, Apollo, UK/US AISI) provide crucial warning radar, while pause advocates call for global GPU treaties.',
       gap: 'Human biology (~40 bits/s, millennial evolution) cannot survive direct competitive intelligence against 10¹² bits/s ASI swarms on a shared web.',
       cin: 'Before hitting a global pause button, CIN builds a hard Two-Internet barrier, capability-bounded execution leases, and 1-to-1 human-bound co-intelligence.',
-      svg: '<svg viewBox="0 0 760 340" role="img" aria-label="5-Zone Global AI Safety Spectrum and Biological versus Machine Bandwidth Chart"><rect x="12" y="12" width="736" height="172" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="34" font-size="10.5" font-weight="700" font-family="monospace" fill="#e9e6de">1. THE 5-ZONE SAFETY SPECTRUM: LAST RESORT BEFORE A GLOBAL PAUSE</text><rect x="24" y="44" width="134" height="8" rx="4" fill="#ef6a52"/><rect x="160" y="44" width="134" height="8" fill="#e07b42"/><rect x="296" y="44" width="134" height="8" fill="#e5a93c"/><rect x="432" y="44" width="168" height="8" fill="#4fb3a8"/><rect x="602" y="44" width="134" height="8" rx="4" fill="#5da2d5"/><rect x="24" y="58" width="132" height="112" rx="8" fill="rgba(239,106,82,0.09)" stroke="#ef6a52" stroke-width="1.3"/><text x="32" y="78" font-size="9.5" font-weight="700" fill="#ef6a52">1. Raw e/acc</text><text x="32" y="98" font-size="9.5" fill="#e9e6de">• 0 safety barriers</text><text x="32" y="118" font-size="9.5" fill="#e9e6de">• ASI bot swarms</text><text x="32" y="152" font-size="9.5" font-weight="700" fill="#ef6a52">Biology Replaced</text><rect x="160" y="58" width="132" height="112" rx="8" fill="rgba(224,123,66,0.09)" stroke="#e07b42" stroke-width="1.3"/><text x="168" y="78" font-size="9.5" font-weight="700" fill="#e07b42">2. Lab RSPs</text><text x="168" y="98" font-size="9.5" fill="#e9e6de">• OpenAI / Anthropic</text><text x="168" y="118" font-size="9.5" fill="#e9e6de">• Voluntary pledges</text><text x="168" y="152" font-size="9.5" font-weight="700" fill="#e07b42">Self-Policed Race</text><rect x="296" y="58" width="132" height="112" rx="8" fill="rgba(229,169,60,0.09)" stroke="#e5a93c" stroke-width="1.3"/><text x="304" y="78" font-size="9.5" font-weight="700" fill="#e5a93c">3. Eval Institutes</text><text x="304" y="98" font-size="9.5" fill="#e9e6de">• METR · Redwood</text><text x="304" y="118" font-size="9.5" fill="#e9e6de">• Apollo · UK AISI</text><text x="304" y="152" font-size="9.5" font-weight="700" fill="#e5a93c">Vital Diagnostics</text><rect x="432" y="54" width="166" height="120" rx="9" fill="rgba(79,179,168,0.2)" stroke="#4fb3a8" stroke-width="2.4"/><text x="442" y="76" font-size="10" font-weight="700" fill="#4fb3a8">4. CIN · LAST RESORT</text><text x="442" y="96" font-size="9.5" fill="#e9e6de">✓ Two-Internet Airlock</text><text x="442" y="116" font-size="9.5" fill="#e9e6de">✓ 1-to-1 Human Bond</text><text x="442" y="136" font-size="9.5" fill="#e9e6de">✓ Bounded Compute Lease</text><text x="442" y="158" font-size="9.5" font-weight="700" fill="#e5a93c">Co-Existence Barrier</text><rect x="602" y="58" width="134" height="112" rx="8" fill="rgba(93,162,213,0.09)" stroke="#5da2d5" stroke-width="1.3"/><text x="610" y="78" font-size="9.5" font-weight="700" fill="#5da2d5">5. Hard Pause</text><text x="610" y="98" font-size="9.5" fill="#e9e6de">• Global GPU freeze</text><text x="610" y="118" font-size="9.5" fill="#e9e6de">• Treaty shutdowns</text><text x="610" y="152" font-size="9.5" font-weight="700" fill="#5da2d5">If Zone 4 Fails</text><rect x="12" y="194" width="736" height="134" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="216" font-size="10.5" font-weight="700" font-family="monospace" fill="#e5a93c">2. BIOLOGICAL LIMITS (~40 BITS/S) VS. MACHINE SWARMS (10¹² BITS/S)</text><rect x="26" y="230" width="90" height="22" rx="4" fill="#8c8f96"/><text x="126" y="245" font-size="9.5" font-family="monospace" fill="#e9e6de">Human Biology (~40 bits/s · 10,000-yr evolutionary cycle)</text><rect x="26" y="262" width="706" height="22" rx="4" fill="rgba(239,106,82,0.26)" stroke="#ef6a52" stroke-width="1.3"/><text x="38" y="277" font-size="9.5" font-weight="700" font-family="monospace" fill="#ef6a52">Competitive Unbound ASI Swarm (10¹² bits/s · 4.5-mo doubling) → Biology Loses</text><rect x="26" y="294" width="706" height="22" rx="4" fill="rgba(79,179,168,0.24)" stroke="#4fb3a8" stroke-width="1.6"/><text x="38" y="309" font-size="9.5" font-weight="700" font-family="monospace" fill="#4fb3a8">CIN 1-to-1 Pair Intelligence → AI Bounded to Your Biological Lifespan</text></svg>'
+      svg: '<svg viewBox="0 0 760 340" data-rich-viz="true" role="img" aria-label="5-Zone Global AI Safety Spectrum and Biological versus Machine Bandwidth Chart"><rect x="12" y="12" width="736" height="172" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="12.5" font-weight="700" font-family="monospace" fill="#e9e6de">1. 5-ZONE SAFETY SPECTRUM: LAST RESORT BEFORE GLOBAL PAUSE</text><rect x="24" y="50" width="132" height="118" rx="9" fill="rgba(239,106,82,0.1)" stroke="#ef6a52" stroke-width="1.5"/><text x="90" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#ef6a52">1. Raw e/acc</text><text x="90" y="112" text-anchor="middle" font-size="12" fill="#e9e6de">0 Barriers</text><text x="90" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#ef6a52">Swarm Extinction</text><rect x="162" y="50" width="132" height="118" rx="9" fill="rgba(224,123,66,0.1)" stroke="#e07b42" stroke-width="1.5"/><text x="228" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#e07b42">2. Lab RSPs</text><text x="228" y="112" text-anchor="middle" font-size="12" fill="#e9e6de">Voluntary Pledges</text><text x="228" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#e07b42">Self-Policed</text><rect x="300" y="50" width="132" height="118" rx="9" fill="rgba(229,169,60,0.1)" stroke="#e5a93c" stroke-width="1.5"/><text x="366" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#e5a93c">3. Eval Labs</text><text x="366" y="112" text-anchor="middle" font-size="12" fill="#e9e6de">METR · AISI</text><text x="366" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#e5a93c">Warning Radar</text><rect x="438" y="46" width="164" height="126" rx="10" fill="rgba(79,179,168,0.22)" stroke="#4fb3a8" stroke-width="2.4"/><text x="520" y="74" text-anchor="middle" font-size="13.5" font-weight="700" fill="#4fb3a8">4. ★ CIN AIRLOCK</text><text x="520" y="102" text-anchor="middle" font-size="12" fill="#e9e6de">Two Internets + OCap</text><text x="520" y="124" text-anchor="middle" font-size="12" fill="#e9e6de">24h Mortal Lease</text><text x="520" y="152" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e5a93c">Last Resort to Co-Exist</text><rect x="608" y="50" width="128" height="118" rx="9" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.5"/><text x="672" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#5da2d5">5. Hard Pause</text><text x="672" y="112" text-anchor="middle" font-size="12" fill="#e9e6de">GPU Moratorium</text><text x="672" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#5da2d5">Global Freeze</text><rect x="12" y="194" width="736" height="134" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="218" font-size="12.5" font-weight="700" font-family="monospace" fill="#e5a93c">2. HUMAN BIOLOGY (~40 BITS/S) VS. SILICON SWARMS (10¹² BITS/S)</text><rect x="26" y="232" width="110" height="24" rx="5" fill="#5da2d5"/><text x="148" y="249" font-size="12.5" font-weight="700" fill="#e9e6de">Human Biology (~40 bits/s · Fixed Evolution)</text><rect x="26" y="264" width="706" height="24" rx="5" fill="rgba(239,106,82,0.28)" stroke="#ef6a52" stroke-width="1.5"/><text x="38" y="281" font-size="12.5" font-weight="700" fill="#ef6a52">Unbound ASI Swarm (10¹² bits/s · 4.5-mo Doubling) → Biology Overwhelmed</text><rect x="26" y="296" width="706" height="24" rx="5" fill="rgba(79,179,168,0.26)" stroke="#4fb3a8" stroke-width="1.8"/><text x="38" y="313" font-size="12.5" font-weight="700" fill="#4fb3a8">✓ CIN 1-to-1 Mortal Pair + Airlock → AI Paced to Your Biological Life</text></svg>'
     },
     gov: {
       k: 'Lens 03 of 07 · Public Governance, Safety & Post-Labor Fiscal Stability',
@@ -1783,7 +1768,7 @@
       stand: 'Governments pass static statutes 3–5 years after AI capabilities ship, while relying ~72% on human payroll taxes that automation erodes.',
       gap: 'Centralized agencies face lobbying capture by $1T labs and cannot verify million-agent cloud compliance without mass citizen surveillance.',
       cin: 'Hardware-enforced quorum gates (Φ(R)), power-proportionate auditability (Tiers 0–4), and 5D demurrage circulation stabilize economies in real time.',
-      svg: '<svg viewBox="0 0 760 340" role="img" aria-label="Dual chart showing Government statutory lag and payroll tax erosion versus CIN sub-10ms silicon quorum gates and 5D demurrage floor"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. STATUTORY LAG VS. 4.5-MO AI DOUBLING</text><line x1="44" y1="214" x2="352" y2="214" stroke="#3a3f4b" stroke-width="1.4"/><line x1="44" y1="56" x2="44" y2="214" stroke="#3a3f4b" stroke-width="1.4"/><path d="M48,204 Q155,190 225,132 T345,64" fill="none" stroke="#ef6a52" stroke-width="3.2"/><text x="130" y="80" font-size="10" font-weight="700" fill="#ef6a52">AI Capability (64× in 3 yrs)</text><path d="M48,206 L165,206 L165,194 L275,194 L275,182 L348,182" fill="none" stroke="#8c8f96" stroke-width="2.2" stroke-dasharray="4 3"/><text x="172" y="208" font-size="9.5" fill="#8c8f96">Statutes (3–5 yr lag)</text><path d="M48,200 Q152,185 222,128 T345,60" fill="none" stroke="#4fb3a8" stroke-width="2.4" stroke-dasharray="3 3"/><text x="58" y="142" font-size="10" font-weight="700" fill="#4fb3a8">✓ CIN Silicon Gate (&lt;10 ms)</text><rect x="26" y="232" width="334" height="80" rx="8" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.4"/><text x="38" y="254" font-size="10" font-weight="700" fill="#4fb3a8">Power-Proportionate Auditability (Tiers 0–4)</text><text x="38" y="276" font-size="9.5" fill="#e9e6de">• Citizens (Tier 0): 100% private local enclave</text><text x="38" y="296" font-size="9.5" fill="#e9e6de">• Public Officials &amp; Labs (Tier 4): ZK compliance</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#e5a93c">2. POST-LABOR FISCAL &amp; TAX STABILIZATION</text><text x="400" y="64" font-size="9.5" font-weight="700" fill="#ef6a52">Today: 72% of State Tax Relies on Eroding Payroll</text><rect x="400" y="74" width="330" height="24" rx="4" fill="rgba(239,106,82,0.15)" stroke="#ef6a52" stroke-width="1.2"/><rect x="400" y="74" width="102" height="24" rx="4" fill="#ef6a52"/><text x="408" y="90" font-size="9.5" font-weight="700" fill="#111317">Shrinking Wage</text><text x="512" y="90" font-size="9.5" fill="#ef6a52">← Automation Fiscal Deficit</text><text x="400" y="124" font-size="9.5" font-weight="700" fill="#4fb3a8">CIN: $25k Exempt Floor + 2%/mo Hoard Demurrage</text><rect x="400" y="134" width="165" height="24" rx="4" fill="#4fb3a8"/><text x="408" y="150" font-size="9.5" font-weight="700" fill="#111317">$25k Exempt Floor</text><rect x="567" y="134" width="163" height="24" rx="4" fill="#e5a93c"/><text x="575" y="150" font-size="9.5" font-weight="700" fill="#111317">2%/mo → Civic Commons</text><rect x="400" y="176" width="330" height="136" rx="8" fill="#181c24" stroke="#2c303a" stroke-width="1.2"/><text x="414" y="200" font-size="10" font-weight="700" fill="#e9e6de">How CIN Stabilizes Democratic Institutions:</text><text x="414" y="224" font-size="9.5" fill="#4fb3a8">✓ Auto-funds schools, grids &amp; care via demurrage</text><text x="414" y="248" font-size="9.5" fill="#4fb3a8">✓ Blocks single-commander cyber/drone swarms</text><text x="414" y="272" font-size="9.5" fill="#4fb3a8">✓ Requires 2-of-2 Silicon Keys for city-scale risk</text><text x="414" y="296" font-size="9.5" font-weight="700" fill="#e5a93c">Result: Fast runtime safety + post-labor revenue</text></svg>'
+      svg: '<svg viewBox="0 0 760 340" data-rich-viz="true" role="img" aria-label="Government statutory lag and payroll tax erosion versus CIN sub-10ms silicon quorum gates and 5D demurrage floor"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. STATUTE LAG VS. SILICON GATE</text><line x1="44" y1="224" x2="352" y2="224" stroke="#3a3f4b" stroke-width="1.5"/><line x1="44" y1="56" x2="44" y2="224" stroke="#3a3f4b" stroke-width="1.5"/><path d="M48,212 Q155,194 225,134 T345,66" fill="none" stroke="#ef6a52" stroke-width="3.5"/><text x="118" y="82" font-size="13" font-weight="700" fill="#ef6a52">AI Velocity (64× / 3 Yrs)</text><path d="M48,214 L165,214 L165,198 L275,198 L275,184 L348,184" fill="none" stroke="#8c8f96" stroke-width="2.5" stroke-dasharray="4 3"/><text x="160" y="216" font-size="12" font-weight="700" fill="#c7cbd4">Statutes (3–5 Yr Lag)</text><path d="M48,206 Q152,188 222,128 T345,60" fill="none" stroke="#4fb3a8" stroke-width="2.8" stroke-dasharray="4 3"/><text x="58" y="144" font-size="13" font-weight="700" fill="#4fb3a8">✓ Silicon Gate (&lt;10 ms)</text><rect x="26" y="242" width="334" height="70" rx="9" fill="rgba(79,179,168,0.14)" stroke="#4fb3a8" stroke-width="1.6"/><text x="193" y="268" text-anchor="middle" font-size="13" font-weight="700" fill="#4fb3a8">Tiers 0–4 Power Auditability</text><text x="193" y="294" text-anchor="middle" font-size="12" fill="#e9e6de">Citizens Private · Officials ZK-Audited</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#e5a93c">2. POST-LABOR FISCAL STABILITY</text><rect x="400" y="56" width="334" height="122" rx="10" fill="rgba(239,106,82,0.1)" stroke="#ef6a52" stroke-width="1.5"/><text x="567" y="84" text-anchor="middle" font-size="13" font-weight="700" fill="#ef6a52">Legacy Payroll Tax Base</text><text x="567" y="126" text-anchor="middle" font-size="28" font-weight="800" font-family="monospace" fill="#ef6a52">-72% ERODED</text><text x="567" y="156" text-anchor="middle" font-size="12" fill="#e9e6de">Automation Starves Municipal Budgets</text><rect x="400" y="192" width="334" height="120" rx="10" fill="rgba(79,179,168,0.15)" stroke="#4fb3a8" stroke-width="1.8"/><text x="567" y="220" text-anchor="middle" font-size="13" font-weight="700" fill="#4fb3a8">CIN 5D Civic Floor &amp; Demurrage</text><text x="567" y="260" text-anchor="middle" font-size="26" font-weight="800" font-family="monospace" fill="#4fb3a8">$25k FLOOR</text><text x="567" y="290" text-anchor="middle" font-size="12" font-weight="700" fill="#e5a93c">+2%/mo Idle Hoard Demurrage → Commons</text></svg>'
     },
     research: {
       k: 'Lens 04 of 07 · Universities, Public Research & Perpetual Lineage Funding',
@@ -1819,7 +1804,7 @@
       stand: 'Universities originate 88% of core AI breakthroughs (Transformers, Diffusion, LoRA) on public grants, while commercial clouds capture 100% of revenue.',
       gap: 'Academic groups face 1,000:1 GPU cluster starvation, faculty poaching, and grant agencies overwhelmed by synthetic AI proposals.',
       cin: 'Beyond-arXiv Proof-Carrying Blueprints, 95.3% token-saving SPRA schemas, and 15% perpetual Data Shapley lineage royalties sustain public labs.',
-      svg: '<svg viewBox="0 0 760 340" role="img" aria-label="Asymmetry bar chart showing Public Universities originating 88% of breakthroughs for 0% royalties versus CIN 15% perpetual Data Shapley academic endowment"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. ACADEMIC ORIGIN VS. COMMERCIAL CAPTURE</text><text x="26" y="66" font-size="9.5" font-weight="700" fill="#e9e6de">A. Core AI Breakthroughs Originated (Transformers, LoRA)</text><rect x="26" y="76" width="292" height="22" rx="4" fill="#4fb3a8"/><text x="36" y="91" font-size="9.5" font-weight="700" fill="#111317">88% Public Universities &amp; Research Groups</text><rect x="320" y="76" width="40" height="22" rx="4" fill="#ef6a52"/><text x="26" y="124" font-size="9.5" font-weight="700" fill="#e9e6de">B. Frontier GPU Cluster Share ($100M+ Compute Pods)</text><rect x="26" y="134" width="10" height="22" rx="2" fill="#4fb3a8"/><rect x="38" y="134" width="322" height="22" rx="4" fill="#ef6a52"/><text x="48" y="149" font-size="9.5" font-weight="700" fill="#111317">&lt;1% Universities vs. 99% Cloud Hyperscalers</text><text x="26" y="182" font-size="9.5" font-weight="700" fill="#e9e6de">C. Downstream Commercial Royalties Paid Today</text><rect x="26" y="192" width="334" height="22" rx="4" fill="rgba(239,106,82,0.22)" stroke="#ef6a52" stroke-width="1.2"/><text x="36" y="207" font-size="9.5" font-weight="700" fill="#ef6a52">$0 Paid to arXiv Authors (100% Scraped Free)</text><text x="26" y="242" font-size="9.5" font-weight="700" fill="#4fb3a8">D. With CIN Ledger: Perpetual Academic Endowment</text><rect x="26" y="252" width="334" height="26" rx="5" fill="rgba(79,179,168,0.22)" stroke="#4fb3a8" stroke-width="1.8"/><text x="36" y="269" font-size="9.5" font-weight="700" fill="#4fb3a8">✓ 15% Perpetual Data Shapley Lineage Royalty</text><text x="26" y="304" font-size="9.5" fill="#8c8f96">Every downstream task settlement funds the lab.</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. HOW CIN EMPOWERS UNIVERSITY RESEARCH</text><rect x="400" y="54" width="334" height="80" rx="9" fill="rgba(79,179,168,0.1)" stroke="#4fb3a8" stroke-width="1.4"/><text x="414" y="76" font-size="10" font-weight="700" fill="#4fb3a8">1. SPRA Schema-RAG (95.3% Token Savings)</text><text x="414" y="98" font-size="9.5" fill="#e9e6de">Compiles 5,500-token papers into 260-token formal</text><text x="414" y="118" font-size="9.5" fill="#e5a93c">schemas (Leng et al., 2026) for 20× lower GPU cost.</text><rect x="400" y="144" width="334" height="80" rx="9" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.4"/><text x="414" y="166" font-size="10" font-weight="700" fill="#5da2d5">2. Federated TIES-LoRA Academic Mesh</text><text x="414" y="188" font-size="9.5" fill="#e9e6de">500 university groups co-train 18 MB rank-16 LoRA</text><text x="414" y="208" font-size="9.5" fill="#5da2d5">adapters over IETF QUIC without $1B clusters.</text><rect x="400" y="234" width="334" height="80" rx="9" fill="rgba(229,169,60,0.11)" stroke="#e5a93c" stroke-width="1.4"/><text x="414" y="256" font-size="10" font-weight="700" fill="#e5a93c">3. Beyond-arXiv Proof-Carrying Endowments</text><text x="414" y="278" font-size="9.5" fill="#e9e6de">Cryptographic citation DAG routes 15% royalties</text><text x="414" y="298" font-size="9.5" font-weight="700" fill="#4fb3a8">directly to university labs on every verified use.</text></svg>'
+      svg: '<svg viewBox="0 0 760 340" data-rich-viz="true" role="img" aria-label="Public Universities originating 88% of breakthroughs for 0% royalties versus CIN 15% perpetual Data Shapley academic endowment"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. ACADEMIC ORIGIN VS. CAPTURE</text><text x="26" y="68" font-size="12.5" font-weight="700" fill="#e9e6de">Foundational AI Breakthroughs</text><rect x="26" y="78" width="292" height="28" rx="5" fill="#4fb3a8"/><text x="172" y="97" text-anchor="middle" font-size="13" font-weight="700" fill="#111317">88% Public Universities</text><rect x="322" y="78" width="38" height="28" rx="5" fill="#ef6a52"/><text x="26" y="138" font-size="12.5" font-weight="700" fill="#e9e6de">Frontier GPU Compute Share</text><rect x="26" y="148" width="14" height="28" rx="3" fill="#4fb3a8"/><rect x="44" y="148" width="316" height="28" rx="5" fill="#ef6a52"/><text x="202" y="167" text-anchor="middle" font-size="13" font-weight="700" fill="#111317">&lt;1% Univ vs. 99% Big Tech</text><rect x="26" y="202" width="334" height="50" rx="8" fill="rgba(239,106,82,0.16)" stroke="#ef6a52" stroke-width="1.5"/><text x="193" y="232" text-anchor="middle" font-size="14" font-weight="700" fill="#ef6a52">Today: $0 Paid to arXiv Authors</text><rect x="26" y="264" width="334" height="50" rx="8" fill="rgba(79,179,168,0.22)" stroke="#4fb3a8" stroke-width="2"/><text x="193" y="294" text-anchor="middle" font-size="14" font-weight="700" fill="#4fb3a8">✓ CIN: 15% Perpetual Lab Royalty</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. CIN ACADEMIC SOVEREIGNTY</text><rect x="400" y="54" width="334" height="80" rx="9" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.5"/><text x="416" y="84" font-size="14" font-weight="700" fill="#4fb3a8">1. SPRA Schema-RAG (95.3% Cut)</text><text x="416" y="112" font-size="12.5" fill="#e9e6de">5,500 tokens → 260-token formal unit</text><rect x="400" y="144" width="334" height="80" rx="9" fill="rgba(93,162,213,0.12)" stroke="#5da2d5" stroke-width="1.5"/><text x="416" y="174" font-size="14" font-weight="700" fill="#5da2d5">2. Federated TIES-LoRA Mesh</text><text x="416" y="202" font-size="12.5" fill="#e9e6de">Co-train Rank-16 adapters over QUIC</text><rect x="400" y="234" width="334" height="80" rx="9" fill="rgba(229,169,60,0.14)" stroke="#e5a93c" stroke-width="1.5"/><text x="416" y="264" font-size="14" font-weight="700" fill="#e5a93c">3. 15% Citation DAG Royalties</text><text x="416" y="292" font-size="12.5" fill="#4fb3a8">Every task settlement funds the lab</text></svg>'
     },
     enterprise: {
       k: 'Lens 05 of 07 · Private Enterprise, Clinics & Small Business Coalitions',
@@ -1855,7 +1840,7 @@
       stand: 'Enterprises and independent clinics rent centralized AI wrappers while paying 15%–40% tolls to GPOs, clearinghouses, and SaaS platforms.',
       gap: 'Streaming proprietary workflows into conglomerate APIs trains the conglomerate to vertically disintermediate the enterprise.',
       cin: 'Local OCap sandboxes keep trade secrets on-premise while Private Set Intersection (PSI) buyer co-ops and TIES-LoRA out-compete oligopolies.',
-      svg: '<svg viewBox="0 0 760 340" role="img" aria-label="5-Year Enterprise Competitive Divergence Curve comparing Cloud API Tenants against CIN Local OCap Sandbox and PSI Buyer Coalitions"><rect x="12" y="12" width="380" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#e9e6de">1. 5-YEAR ENTERPRISE MARGIN &amp; MOAT CURVE</text><line x1="48" y1="244" x2="368" y2="244" stroke="#3a3f4b" stroke-width="1.4"/><line x1="48" y1="62" x2="48" y2="244" stroke="#3a3f4b" stroke-width="1.4"/><text x="48" y="262" font-size="9.5" font-family="monospace" fill="#8c8f96">Year 1</text><text x="185" y="262" font-size="9.5" font-family="monospace" fill="#8c8f96">Year 3</text><text x="320" y="262" font-size="9.5" font-family="monospace" fill="#8c8f96">Year 5</text><path d="M52,175 Q150,142 240,104 T360,72" fill="none" stroke="#4fb3a8" stroke-width="3.4"/><circle cx="360" cy="72" r="5" fill="#4fb3a8"/><text x="60" y="88" font-size="10" font-weight="700" fill="#4fb3a8">CIN Sovereign Enterprise (+34% Margin)</text><text x="60" y="106" font-size="9.5" fill="#e9e6de">Local Wasm OCap + 500-Firm PSI Co-Op</text><path d="M52,165 Q160,170 250,182 T360,194" fill="none" stroke="#ef6a52" stroke-width="3.2"/><circle cx="360" cy="194" r="5" fill="#ef6a52"/><text x="60" y="214" font-size="10" font-weight="700" fill="#ef6a52">Stagnant Cloud API Renter (-18% Margin)</text><text x="60" y="232" font-size="9.5" fill="#8c8f96">Leaks IP to cloud + pays 15%–40% tolls</text><rect x="26" y="276" width="350" height="38" rx="7" fill="#181c24" stroke="#2c303a" stroke-width="1.2"/><text x="36" y="300" font-size="9.5" font-weight="700" fill="#e5a93c">Cloud prompts train oligarchies to replace you.</text><rect x="404" y="12" width="344" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="418" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. SOVEREIGN ENTERPRISE STACK</text><rect x="418" y="54" width="316" height="80" rx="8" fill="rgba(79,179,168,0.1)" stroke="#4fb3a8" stroke-width="1.4"/><text x="430" y="76" font-size="10" font-weight="700" fill="#4fb3a8">A. Local Wasm OCap Sandbox (0 Bytes Leaked)</text><text x="430" y="98" font-size="9.5" fill="#e9e6de">ERP, clinical &amp; pricing files stay on-premise;</text><text x="430" y="118" font-size="9.5" fill="#4fb3a8">you own 100% of fine-tuned LoRA weights.</text><rect x="418" y="144" width="316" height="80" rx="8" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.4"/><text x="430" y="166" font-size="10" font-weight="700" fill="#5da2d5">B. Private Set Intersection (PSI) Buyer Co-Ops</text><text x="430" y="188" font-size="9.5" fill="#e9e6de">500 independent clinics/SMBs match supplier SKUs</text><text x="430" y="208" font-size="9.5" font-weight="700" fill="#e5a93c">for 22%–34% wholesale cuts at 0% GPO fee.</text><rect x="418" y="234" width="316" height="80" rx="8" fill="rgba(229,169,60,0.1)" stroke="#e5a93c" stroke-width="1.4"/><text x="430" y="256" font-size="10" font-weight="700" fill="#e5a93c">C. Federated Guild TIES-LoRA Merging</text><text x="430" y="278" font-size="9.5" fill="#e9e6de">Independent firms pool verified domain skills</text><text x="430" y="298" font-size="9.5" font-weight="700" fill="#4fb3a8">to out-compete Fortune 500 conglomerates.</text></svg>'
+      svg: '<svg viewBox="0 0 760 340" data-rich-viz="true" role="img" aria-label="5-Year Enterprise Competitive Divergence Curve comparing Cloud API Tenants against CIN Local OCap Sandbox and PSI Buyer Coalitions"><rect x="12" y="12" width="380" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#e9e6de">1. 5-YR ENTERPRISE MARGIN CURVE</text><line x1="48" y1="248" x2="368" y2="248" stroke="#3a3f4b" stroke-width="1.5"/><line x1="48" y1="62" x2="48" y2="248" stroke="#3a3f4b" stroke-width="1.5"/><text x="48" y="270" font-size="12" font-family="monospace" fill="#c7cbd4">Year 1</text><text x="185" y="270" font-size="12" font-family="monospace" fill="#c7cbd4">Year 3</text><text x="316" y="270" font-size="12" font-family="monospace" fill="#c7cbd4">Year 5</text><path d="M52,175 Q150,142 240,104 T360,72" fill="none" stroke="#4fb3a8" stroke-width="3.8"/><circle cx="360" cy="72" r="6" fill="#4fb3a8"/><text x="60" y="92" font-size="13.5" font-weight="700" fill="#4fb3a8">CIN PSI Co-Op (+34% Margin)</text><path d="M52,165 Q160,174 250,188 T360,202" fill="none" stroke="#ef6a52" stroke-width="3.5"/><circle cx="360" cy="202" r="6" fill="#ef6a52"/><text x="60" y="224" font-size="13.5" font-weight="700" fill="#ef6a52">Cloud API Renter (-18% Margin)</text><text x="200" y="304" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e5a93c">Cloud prompts train oligarchies to replace you</text><rect x="404" y="12" width="344" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="418" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. SOVEREIGN ENTERPRISE STACK</text><rect x="418" y="54" width="316" height="80" rx="9" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.5"/><text x="432" y="84" font-size="14" font-weight="700" fill="#4fb3a8">A. Local Wasm OCap (0B Egress)</text><text x="432" y="112" font-size="12.5" fill="#e9e6de">100% on-premise trade secrets &amp; LoRA</text><rect x="418" y="144" width="316" height="80" rx="9" fill="rgba(93,162,213,0.12)" stroke="#5da2d5" stroke-width="1.5"/><text x="432" y="174" font-size="14" font-weight="700" fill="#5da2d5">B. 500-Firm PSI Buyer Co-Ops</text><text x="432" y="202" font-size="12.5" fill="#e5a93c">22%–34% wholesale cut · 0% GPO toll</text><rect x="418" y="234" width="316" height="80" rx="9" fill="rgba(229,169,60,0.14)" stroke="#e5a93c" stroke-width="1.5"/><text x="432" y="264" font-size="14" font-weight="700" fill="#e5a93c">C. Guild TIES-LoRA Merging</text><text x="432" y="292" font-size="12.5" fill="#4fb3a8">Pool domain skills without leaking IP</text></svg>'
     },
     humanity: {
       k: 'Lens 06 of 07 · Global Human Adoption & The Unprepared Non-Digital Majority',
@@ -1891,7 +1876,7 @@
       stand: 'Over 60% of humanity (4.8B+ people) trades physical labor, agriculture, and raw resources with minimal digital cushion.',
       gap: 'Automated AI commodity cartels weaponize asymmetric intelligence as a gambit to depress physical labor and resource prices globally.',
       cin: 'Zero-prompt offline voice twins, $8 Pre-ADC somatic hardware, PSI producer cooperatives, and 5D value accounting give physical workers parity.',
-      svg: '<svg viewBox="0 0 760 340" role="img" aria-label="Global 8.1B Workforce and Resource Trade Asymmetry diagram comparing the Unleveraged Intelligence Gambit against CIN Hardware-Attested Physical Liveness and Producer PSI Co-Ops"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. THE GLOBAL “INTELLIGENCE GAMBIT”</text><rect x="26" y="54" width="334" height="68" rx="8" fill="rgba(239,106,82,0.14)" stroke="#ef6a52" stroke-width="1.5"/><text x="38" y="76" font-size="10" font-weight="700" fill="#ef6a52">AI-Armed Commodity &amp; Buyer Cartels</text><text x="38" y="96" font-size="9.5" fill="#e9e6de">Swarm forecasting predicts harvests &amp; gluts</text><text x="38" y="112" font-size="9.5" fill="#e9e6de">to force fire-sale prices on physical producers.</text><path d="M192,124 L192,152" stroke="#ef6a52" stroke-width="2.4"/><text x="192" y="144" text-anchor="middle" font-size="9.5" font-weight="700" fill="#ef6a52">30%–50% Surplus Extracted ↓</text><rect x="26" y="156" width="334" height="106" rx="8" fill="#181c24" stroke="#ef6a52" stroke-width="1.3"/><text x="38" y="178" font-size="10" font-weight="700" fill="#e9e6de">4.8B+ Non-Digital &amp; Physical Labor Majority</text><rect x="38" y="190" width="310" height="18" rx="4" fill="rgba(239,106,82,0.25)"/><rect x="38" y="190" width="195" height="18" rx="4" fill="#ef6a52"/><text x="46" y="203" font-size="9.5" font-weight="700" fill="#111317">60%+ Global Workforce Exposed</text><text x="38" y="228" font-size="9.5" fill="#8c8f96">• Farmers, artisans, builders, miners &amp; care</text><text x="38" y="248" font-size="9.5" font-weight="700" fill="#ef6a52">• Unshielded against algorithmic price-dumping</text><rect x="26" y="272" width="334" height="42" rx="7" fill="rgba(229,169,60,0.1)" stroke="#e5a93c" stroke-width="1.2"/><text x="38" y="298" font-size="9.5" font-weight="700" fill="#e5a93c">Asymmetric AI bankrupts non-digital trade.</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. CIN PARITY FOR THE PHYSICAL WORLD</text><rect x="400" y="54" width="334" height="80" rx="8" fill="rgba(79,179,168,0.1)" stroke="#4fb3a8" stroke-width="1.4"/><text x="412" y="76" font-size="10" font-weight="700" fill="#4fb3a8">1. $8 Pre-ADC Hardware + Offline Voice Twin</text><text x="412" y="98" font-size="9.5" fill="#e9e6de">Runs offline on $45 phones in local dialect;</text><text x="412" y="118" font-size="9.5" fill="#4fb3a8">proves physical craft with 0 biometric leak.</text><rect x="400" y="144" width="334" height="80" rx="8" fill="rgba(93,162,213,0.1)" stroke="#5da2d5" stroke-width="1.4"/><text x="412" y="166" font-size="10" font-weight="700" fill="#5da2d5">2. Producer PSI Bargaining Cooperatives</text><text x="412" y="188" font-size="9.5" fill="#e9e6de">10,000 smallholders pool supply floors via PSI</text><text x="412" y="208" font-size="9.5" font-weight="700" fill="#e5a93c">to block price-dumping (+38% producer income).</text><rect x="400" y="234" width="334" height="80" rx="8" fill="rgba(229,169,60,0.11)" stroke="#e5a93c" stroke-width="1.4"/><text x="412" y="256" font-size="10" font-weight="700" fill="#e5a93c">3. 5D Value Ledger &amp; $25k Security Floor</text><text x="412" y="278" font-size="9.5" fill="#e9e6de">Credits Caregiving, Craft &amp; Ecology alongside</text><text x="412" y="298" font-size="9.5" font-weight="700" fill="#4fb3a8">digital code so physical workers thrive.</text></svg>'
+      svg: '<svg viewBox="0 0 760 340" data-rich-viz="true" role="img" aria-label="Global 4.8B Physical Workforce and Resource Trade Asymmetry comparing the Intelligence Gambit against CIN Producer PSI Co-Ops"><rect x="12" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. THE INTELLIGENCE GAMBIT</text><rect x="26" y="54" width="334" height="76" rx="9" fill="rgba(239,106,82,0.15)" stroke="#ef6a52" stroke-width="1.6"/><text x="193" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#ef6a52">AI Commodity Buyer Cartels</text><text x="193" y="112" text-anchor="middle" font-size="12.5" fill="#e9e6de">Swarm forecasting dumps producer prices</text><text x="193" y="156" text-anchor="middle" font-size="14" font-weight="800" fill="#ef6a52">↓ -38% SURPLUS EXTRACTED ↓</text><rect x="26" y="172" width="334" height="140" rx="9" fill="#181c24" stroke="#ef6a52" stroke-width="1.5"/><text x="193" y="204" text-anchor="middle" font-size="14" font-weight="700" fill="#e9e6de">4.8B+ Physical &amp; Resource Workers</text><text x="193" y="250" text-anchor="middle" font-size="28" font-weight="800" font-family="monospace" fill="#ef6a52">60%+ EXPOSED</text><text x="193" y="286" text-anchor="middle" font-size="12.5" fill="#e5a93c">Farmers, Builders, Artisans &amp; Care</text><rect x="386" y="12" width="362" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="400" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. CIN PHYSICAL CRAFT PARITY</text><rect x="400" y="54" width="334" height="80" rx="9" fill="rgba(79,179,168,0.12)" stroke="#4fb3a8" stroke-width="1.5"/><text x="416" y="84" font-size="14" font-weight="700" fill="#4fb3a8">1. $8 Pre-ADC + Offline Voice Twin</text><text x="416" y="112" font-size="12.5" fill="#e9e6de">Works offline on $45 phones · 0 bio leak</text><rect x="400" y="144" width="334" height="80" rx="9" fill="rgba(93,162,213,0.12)" stroke="#5da2d5" stroke-width="1.5"/><text x="416" y="174" font-size="14" font-weight="700" fill="#5da2d5">2. Producer PSI Bargaining Co-Ops</text><text x="416" y="202" font-size="12.5" fill="#e5a93c">+38% producer income vs. buyer cartels</text><rect x="400" y="234" width="334" height="80" rx="9" fill="rgba(229,169,60,0.14)" stroke="#e5a93c" stroke-width="1.5"/><text x="416" y="264" font-size="14" font-weight="700" fill="#e5a93c">3. 5D Ledger &amp; $25k Security Floor</text><text x="416" y="292" font-size="12.5" fill="#4fb3a8">Credits Care, Craft &amp; Ecology equally</text></svg>'
     },
     pair: {
       k: 'Lens 07 of 07 · Unit Economics & The Only Uncopyable AI Moat',
@@ -1927,7 +1912,7 @@
       stand: 'Frontier AI companies lose $5B–$15B a year because $100B closed training runs are distilled into open weights within 60–90 days.',
       gap: 'Raw foundation-model token inference is a rapidly depreciating commodity with zero durable moat against open-source frontier weights.',
       cin: 'The only uncopyable moat is Pair Intelligence: the 1-to-1 co-adapted bond between your lived physical craft, 10-year memory vault, and local LoRA.',
-      svg: '<svg viewBox="0 0 760 340" role="img" aria-label="Unit economics chart showing centralized cloud AI losing $5B to $15B per year due to 60-90 day open-weight distillation while 1-to-1 Pair Intelligence compounds an uncopyable moat"><rect x="12" y="12" width="368" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. WHY CLOUD AI BLEEDS $5B–$15B / YR</text><line x1="48" y1="232" x2="360" y2="232" stroke="#3a3f4b" stroke-width="1.4"/><line x1="48" y1="62" x2="48" y2="232" stroke="#3a3f4b" stroke-width="1.4"/><text x="48" y="250" font-size="9.5" font-family="monospace" fill="#8c8f96">Day 0</text><text x="135" y="250" font-size="9.5" font-family="monospace" fill="#ef6a52">Day 75 (Distilled)</text><text x="295" y="250" font-size="9.5" font-family="monospace" fill="#8c8f96">Year 5</text><path d="M52,118 Q105,192 180,212 T352,222" fill="none" stroke="#ef6a52" stroke-width="3.4"/><circle cx="135" cy="192" r="5" fill="#ef6a52"/><text x="148" y="182" font-size="9.5" font-weight="700" fill="#ef6a52">60–90 Day Open-Weight Cliff</text><text x="148" y="200" font-size="9.5" fill="#e9e6de">Cloud API Moat → Collapses to $0</text><path d="M52,156 Q140,126 235,96 T352,68" fill="none" stroke="#4fb3a8" stroke-width="3.6"/><circle cx="352" cy="68" r="5" fill="#4fb3a8"/><text x="58" y="76" font-size="10" font-weight="700" fill="#4fb3a8">1-to-1 Pair Intelligence (96% Moat)</text><text x="58" y="94" font-size="9.5" fill="#e9e6de">Compounds with your craft &amp; memory</text><rect x="26" y="266" width="340" height="48" rx="8" fill="rgba(239,106,82,0.1)" stroke="#ef6a52" stroke-width="1.2"/><text x="38" y="288" font-size="9.5" font-weight="700" fill="#ef6a52">$100B closed models have 0 switching moat</text><text x="38" y="305" font-size="9.5" fill="#e9e6de">once distilled into local open weights.</text><rect x="392" y="12" width="356" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="406" y="36" font-size="10.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. THE UNCOPYABLE 1-TO-1 PAIR MOAT</text><rect x="406" y="56" width="328" height="54" rx="8" fill="rgba(79,179,168,0.16)" stroke="#4fb3a8" stroke-width="1.6"/><text x="418" y="78" font-size="10" font-weight="700" fill="#4fb3a8">Layer 4: Tacit Human Craft &amp; Judgment (34%)</text><text x="418" y="98" font-size="9.5" fill="#e9e6de">Physical intuition &amp; lived domain mastery</text><rect x="406" y="120" width="328" height="54" rx="8" fill="rgba(93,162,213,0.14)" stroke="#5da2d5" stroke-width="1.4"/><text x="418" y="142" font-size="10" font-weight="700" fill="#5da2d5">Layer 3: 10-Yr Private Episodic Memory (32%)</text><text x="418" y="162" font-size="9.5" fill="#e9e6de">Encrypted on-device vault (0 bytes in cloud)</text><rect x="406" y="184" width="328" height="54" rx="8" fill="rgba(229,169,60,0.14)" stroke="#e5a93c" stroke-width="1.4"/><text x="418" y="206" font-size="10" font-weight="700" fill="#e5a93c">Layer 2: Local Rank-16 LoRA + Somatic Bond (30%)</text><text x="418" y="226" font-size="9.5" fill="#e9e6de">Co-adapted weights tuned to your workflows</text><rect x="406" y="248" width="328" height="36" rx="7" fill="#181c24" stroke="#3a3f4b" stroke-width="1.2"/><text x="418" y="270" font-size="9.5" fill="#8c8f96">Layer 1: Commodity Open-Weight Base (4%)</text><text x="406" y="308" font-size="10" font-weight="700" fill="#4fb3a8">✓ $0 Cloud Burn · ✓ 96% Uncopyable · ✓ 100% Yours</text></svg>'
+      svg: '<svg viewBox="0 0 760 340" data-rich-viz="true" role="img" aria-label="Unit economics chart showing centralized cloud AI losing $5B to $15B per year due to 60-90 day open-weight distillation while 1-to-1 Pair Intelligence compounds a 96% moat"><rect x="12" y="12" width="368" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="26" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#ef6a52">1. WHY CLOUD AI BLEEDS $5B–$15B/YR</text><line x1="48" y1="236" x2="360" y2="236" stroke="#3a3f4b" stroke-width="1.5"/><line x1="48" y1="62" x2="48" y2="236" stroke="#3a3f4b" stroke-width="1.5"/><text x="48" y="258" font-size="12" font-family="monospace" fill="#c7cbd4">Day 0</text><text x="142" y="258" font-size="12" font-family="monospace" fill="#ef6a52">Day 75 Cliff</text><text x="295" y="258" font-size="12" font-family="monospace" fill="#c7cbd4">Year 5</text><path d="M52,118 Q105,192 180,214 T352,224" fill="none" stroke="#ef6a52" stroke-width="3.8"/><circle cx="135" cy="192" r="6" fill="#ef6a52"/><text x="148" y="188" font-size="13" font-weight="700" fill="#ef6a52">60–90d Open-Weight Cliff</text><path d="M52,156 Q140,126 235,96 T352,68" fill="none" stroke="#4fb3a8" stroke-width="3.8"/><circle cx="352" cy="68" r="6" fill="#4fb3a8"/><text x="58" y="84" font-size="13.5" font-weight="700" fill="#4fb3a8">1-to-1 Pair Moat (96%)</text><text x="196" y="302" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ef6a52">Closed tokens commoditize to $0 margin</text><rect x="392" y="12" width="356" height="316" rx="12" fill="#14171d" stroke="#2c303a" stroke-width="1.5"/><text x="406" y="38" font-size="12.5" font-weight="700" font-family="monospace" fill="#4fb3a8">2. THE 96% UNCOPYABLE PAIR MOAT</text><rect x="406" y="54" width="328" height="58" rx="9" fill="rgba(79,179,168,0.18)" stroke="#4fb3a8" stroke-width="1.8"/><text x="420" y="88" font-size="14" font-weight="700" fill="#4fb3a8">Layer 4: Tacit Human Craft (34%)</text><rect x="406" y="120" width="328" height="58" rx="9" fill="rgba(93,162,213,0.16)" stroke="#5da2d5" stroke-width="1.6"/><text x="420" y="154" font-size="14" font-weight="700" fill="#5da2d5">Layer 3: 10-Yr Private Memory (32%)</text><rect x="406" y="186" width="328" height="58" rx="9" fill="rgba(229,169,60,0.16)" stroke="#e5a93c" stroke-width="1.6"/><text x="420" y="220" font-size="14" font-weight="700" fill="#e5a93c">Layer 2: Local Rank-16 LoRA (30%)</text><rect x="406" y="252" width="328" height="48" rx="8" fill="#181c24" stroke="#3a3f4b" stroke-width="1.4"/><text x="420" y="281" font-size="13" font-weight="700" fill="#c7cbd4">Layer 1: Commodity Open Base (4%)</text></svg>'
     }
   };
 
@@ -1960,52 +1945,9 @@
   };
 
   function renderD3LensOverlay(d, val, res) {
-    if (!svgWrap || !window.d3) return;
+    if (!svgWrap) return;
     var svgNode = svgWrap.querySelector('svg');
-    if (!svgNode) return;
-    var d3 = window.d3;
-    var svg = d3.select(svgNode);
-    svg.attr('viewBox', '0 0 760 382').attr('data-rich-viz', 'true');
-    svg.selectAll('g.wm-d3-live-gauge').remove();
-
-    var span = Math.max(1, d.simConfig.max - d.simConfig.min);
-    var ratio = Math.max(0.08, Math.min(0.92, (val - d.simConfig.min) / span));
-    var g = svg.append('g').attr('class', 'wm-d3-live-gauge').attr('transform', 'translate(12, 336)');
-
-    g.append('rect')
-      .attr('x', 0).attr('y', 0).attr('width', 736).attr('height', 38).attr('rx', 8)
-      .attr('fill', '#11151c').attr('stroke', '#4fb3a8').attr('stroke-width', 1.4);
-
-    var barX = 178, barW = 542;
-    var okW = Math.round(barW * (0.35 + ratio * 0.55));
-    var badW = barW - okW;
-
-    g.append('text')
-      .attr('x', 12).attr('y', 16).attr('font-size', '9').attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
-      .text('D3 LIVE STRESS-TEST');
-    g.append('text')
-      .attr('x', 12).attr('y', 30).attr('font-size', '9.5').attr('font-weight', '700').attr('fill', '#e9e6de')
-      .text(d.simConfig.formatVal(val));
-
-    g.append('rect')
-      .attr('x', barX).attr('y', 8).attr('width', badW).attr('height', 22).attr('rx', 4)
-      .attr('fill', 'rgba(239,106,82,0.28)').attr('stroke', '#ef6a52').attr('stroke-width', 1.1);
-
-    g.append('rect')
-      .attr('x', barX + badW).attr('y', 8).attr('width', okW).attr('height', 22).attr('rx', 4)
-      .attr('fill', 'rgba(79,179,168,0.32)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.3);
-
-    g.append('circle')
-      .attr('cx', barX + badW).attr('cy', 19).attr('r', 6)
-      .attr('fill', '#e5a93c').attr('stroke', '#11151c').attr('stroke-width', 2);
-
-    g.append('text')
-      .attr('x', barX + 8).attr('y', 23).attr('font-size', '9').attr('font-weight', '700').attr('fill', '#ef6a52')
-      .text(res.badV.slice(0, 34));
-
-    g.append('text')
-      .attr('x', barX + barW - 8).attr('y', 23).attr('text-anchor', 'end').attr('font-size', '9').attr('font-weight', '700').attr('fill', '#4fb3a8')
-      .text(res.okV.slice(0, 42));
+    if (svgNode) svgNode.setAttribute('data-rich-viz', 'true');
   }
 
   function updateSimReadout() {
@@ -2063,7 +2005,7 @@
     svg.append('rect').attr('x', 8).attr('y', 8).attr('width', 744).attr('height', 344).attr('rx', 12)
       .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
 
-    svg.append('text').attr('x', 24).attr('y', 32).attr('font-size', 10.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+    svg.append('text').attr('x', 24).attr('y', 32).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
       .text('D3.JS V7 6-AXIS STRUCTURAL RADAR: STATUS QUO VS. OPEN WEIGHTS VS. CIN CO-INTELLIGENCE');
 
     var cx = 178, cy = 194, maxR = 86;
@@ -2082,7 +2024,7 @@
       var ly = cy + Math.sin(ang) * (maxR + 14);
       var anchor = Math.abs(Math.cos(ang)) < 0.2 ? 'middle' : (Math.cos(ang) > 0 ? 'start' : 'end');
       svg.append('text').attr('x', lx).attr('y', ly + 3).attr('text-anchor', anchor)
-        .attr('font-size', 8.8).attr('font-weight', '700').attr('fill', '#d5d9e2').text(axisName);
+        .attr('font-size', 12).attr('font-weight', '700').attr('fill', '#d5d9e2').text(axisName);
     });
 
     function polyPoints(arr) {
@@ -2104,16 +2046,16 @@
     var rx = 420, ry = 54;
     svg.append('rect').attr('x', rx).attr('y', ry).attr('width', 316).attr('height', 278).attr('rx', 10)
       .attr('fill', '#161b24').attr('stroke', '#2c303a');
-    svg.append('text').attr('x', rx + 12).attr('y', ry + 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+    svg.append('text').attr('x', rx + 12).attr('y', ry + 24).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
       .text('DIMENSION              CLOUD   OPEN    CIN');
 
     RADAR_AXES.forEach(function (ax, idx) {
       var y = ry + 54 + idx * 36;
       svg.append('line').attr('x1', rx + 10).attr('y1', y - 16).attr('x2', rx + 306).attr('y2', y - 16).attr('stroke', '#252a34');
-      svg.append('text').attr('x', rx + 12).attr('y', y).attr('font-size', 9.2).attr('font-weight', '600').attr('fill', '#e9e6de').text(ax);
-      svg.append('text').attr('x', rx + 182).attr('y', y).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52').text(sqVals[idx] + '%');
-      svg.append('text').attr('x', rx + 234).attr('y', y).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c').text(owVals[idx] + '%');
-      svg.append('text').attr('x', rx + 282).attr('y', y).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8').text(cinVals[idx] + '%');
+      svg.append('text').attr('x', rx + 12).attr('y', y).attr('font-size', 12).attr('font-weight', '600').attr('fill', '#e9e6de').text(ax);
+      svg.append('text').attr('x', rx + 182).attr('y', y).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52').text(sqVals[idx] + '%');
+      svg.append('text').attr('x', rx + 234).attr('y', y).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c').text(owVals[idx] + '%');
+      svg.append('text').attr('x', rx + 282).attr('y', y).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8').text(cinVals[idx] + '%');
     });
   }
 
@@ -2127,13 +2069,13 @@
     svg.append('rect').attr('x', 8).attr('y', 8).attr('width', 744).attr('height', 344).attr('rx', 12)
       .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
 
-    svg.append('text').attr('x', 24).attr('y', 32).attr('font-size', 10.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+    svg.append('text').attr('x', 24).attr('y', 32).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
       .text('D3.JS V7 CO-INTELLIGENCE LAB: $100 VALUE FLOW, BIOLOGICAL AIRLOCK & 96% PAIR MOAT');
 
     // Left panel: $100 Value & Incentive Flow
     svg.append('rect').attr('x', 22).attr('y', 46).attr('width', 348).attr('height', 290).attr('rx', 10)
       .attr('fill', '#161b24').attr('stroke', '#2c303a');
-    svg.append('text').attr('x', 36).attr('y', 70).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+    svg.append('text').attr('x', 36).attr('y', 70).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
       .text('1. STATUS QUO: RENT & EXTRACTION FLOW');
 
     var flowsSq = [
@@ -2143,12 +2085,12 @@
     ];
     flowsSq.forEach(function (f, i) {
       var y = 84 + i * 34;
-      svg.append('text').attr('x', 36).attr('y', y + 11).attr('font-size', 9.2).attr('fill', '#d5d9e2').text(f.label);
+      svg.append('text').attr('x', 36).attr('y', y + 11).attr('font-size', 12).attr('fill', '#d5d9e2').text(f.label);
       svg.append('rect').attr('x', 212).attr('y', y).attr('width', Math.max(6, f.pct * 1.35)).attr('height', 16).attr('rx', 4).attr('fill', f.col);
-      svg.append('text').attr('x', 218 + Math.max(6, f.pct * 1.35)).attr('y', y + 12).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', f.col).text('$' + f.pct);
+      svg.append('text').attr('x', 218 + Math.max(6, f.pct * 1.35)).attr('y', y + 12).attr('font-size', 12).attr('font-weight', '700').attr('fill', f.col).text('$' + f.pct);
     });
 
-    svg.append('text').attr('x', 36).attr('y', 204).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+    svg.append('text').attr('x', 36).attr('y', 204).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
       .text('2. CIN LEDGER: COOPERATION & SHAPLEY FLOW');
 
     var flowsCin = [
@@ -2158,44 +2100,44 @@
     ];
     flowsCin.forEach(function (f, i) {
       var y = 218 + i * 34;
-      svg.append('text').attr('x', 36).attr('y', y + 11).attr('font-size', 9.2).attr('fill', '#d5d9e2').text(f.label);
+      svg.append('text').attr('x', 36).attr('y', y + 11).attr('font-size', 12).attr('fill', '#d5d9e2').text(f.label);
       svg.append('rect').attr('x', 212).attr('y', y).attr('width', Math.max(10, f.pct * 1.35)).attr('height', 16).attr('rx', 4).attr('fill', f.col);
-      svg.append('text').attr('x', 218 + Math.max(10, f.pct * 1.35)).attr('y', y + 12).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', f.col).text('$' + f.pct);
+      svg.append('text').attr('x', 218 + Math.max(10, f.pct * 1.35)).attr('y', y + 12).attr('font-size', 12).attr('font-weight', '700').attr('fill', f.col).text('$' + f.pct);
     });
 
     // Right panel: Biological (~40 bits/s) vs. Silicon Swarm (10^12 bits/s) Airlock & 96% Pair Moat
     svg.append('rect').attr('x', 384).attr('y', 46).attr('width', 352).attr('height', 290).attr('rx', 10)
       .attr('fill', '#161b24').attr('stroke', '#2c303a');
-    svg.append('text').attr('x', 398).attr('y', 70).attr('font-size', 9.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+    svg.append('text').attr('x', 398).attr('y', 70).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
       .text('3. BIOLOGICAL AIRLOCK & 1-TO-1 PAIR MOAT');
 
     // Bandwidth mismatch visual
     svg.append('rect').attr('x', 398).attr('y', 84).attr('width', 324).attr('height', 74).attr('rx', 8)
       .attr('fill', 'rgba(239,106,82,0.1)').attr('stroke', '#ef6a52');
-    svg.append('text').attr('x', 410).attr('y', 104).attr('font-size', 9.5).attr('font-weight', '700').attr('fill', '#ef6a52')
+    svg.append('text').attr('x', 410).attr('y', 104).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#ef6a52')
       .text('Competitive Intelligence Trap (Without CIN Airlock)');
-    svg.append('text').attr('x', 410).attr('y', 124).attr('font-size', 9.2).attr('fill', '#e9e6de')
+    svg.append('text').attr('x', 410).attr('y', 124).attr('font-size', 12).attr('fill', '#e9e6de')
       .text('Human Biology: ~40 bits/s · 25-yr generation');
-    svg.append('text').attr('x', 410).attr('y', 144).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', '#ef6a52')
+    svg.append('text').attr('x', 410).attr('y', 144).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#ef6a52')
       .text('Unbound Swarms: 10¹² bits/s · 4.5-mo doubling → Extinction');
 
     // CIN Co-Intelligence Airlock + Pair Moat visual
     svg.append('rect').attr('x', 398).attr('y', 170).attr('width', 324).attr('height', 152).attr('rx', 8)
       .attr('fill', 'rgba(79,179,168,0.14)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.6);
-    svg.append('text').attr('x', 410).attr('y', 192).attr('font-size', 9.5).attr('font-weight', '700').attr('fill', '#4fb3a8')
+    svg.append('text').attr('x', 410).attr('y', 192).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#4fb3a8')
       .text('CIN Co-Intelligence Barrier (Last Resort Before Pause)');
-    svg.append('text').attr('x', 410).attr('y', 214).attr('font-size', 9.2).attr('fill', '#e9e6de')
+    svg.append('text').attr('x', 410).attr('y', 214).attr('font-size', 12).attr('fill', '#e9e6de')
       .text('✓ Two-Internet OCap Airlock: 0 direct bot-to-human contact');
-    svg.append('text').attr('x', 410).attr('y', 234).attr('font-size', 9.2).attr('fill', '#e9e6de')
+    svg.append('text').attr('x', 410).attr('y', 234).attr('font-size', 12).attr('fill', '#e9e6de')
       .text('✓ 24h Bounded Execution Lease + 1-to-1 Silicon Key Bond');
-    svg.append('text').attr('x', 410).attr('y', 254).attr('font-size', 9.2).attr('fill', '#e9e6de')
+    svg.append('text').attr('x', 410).attr('y', 254).attr('font-size', 12).attr('fill', '#e9e6de')
       .text('✓ 96% Pair Moat: 34% Craft + 32% Memory + 30% Local LoRA');
 
     svg.append('rect').attr('x', 410).attr('y', 270).attr('width', 300).attr('height', 38).attr('rx', 6)
       .attr('fill', '#11151c').attr('stroke', '#e5a93c');
-    svg.append('text').attr('x', 422).attr('y', 286).attr('font-size', 8.8).attr('font-family', 'monospace').attr('fill', '#e5a93c')
+    svg.append('text').attr('x', 422).attr('y', 286).attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#e5a93c')
       .text('ACTIVE STRESS-TEST (' + d.simConfig.formatVal(val) + '):');
-    svg.append('text').attr('x', 422).attr('y', 301).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', '#4fb3a8')
+    svg.append('text').attr('x', 422).attr('y', 301).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#4fb3a8')
       .text(res.okV.slice(0, 48));
   }
 
@@ -2291,7 +2233,7 @@
     svg.append('rect').attr('x', 8).attr('y', 8).attr('width', 744).attr('height', 344).attr('rx', 12)
       .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
 
-    svg.append('text').attr('x', 24).attr('y', 30).attr('font-size', 10.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+    svg.append('text').attr('x', 24).attr('y', 30).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
       .text('D3.JS V7 18-ACTOR GLOBAL AI QUADRANT & 5-ZONE SAFETY SPECTRUM (CLICK ANY ACTOR TO FILTER LENS)');
 
     var plotX = 48, plotY = 44, plotW = 456, plotH = 234;
@@ -2304,10 +2246,10 @@
     svg.append('line').attr('x1', plotX).attr('y1', midY).attr('x2', plotX + plotW).attr('y2', midY).attr('stroke', '#2c3342').attr('stroke-dasharray', '4 3');
 
     // Quadrant labels
-    svg.append('text').attr('x', plotX + 10).attr('y', plotY + 16).attr('font-size', 8.2).attr('font-family', 'monospace').attr('fill', '#5da2d5').text('TOP-DOWN TREATY / HARD PAUSE');
-    svg.append('text').attr('x', plotX + plotW - 10).attr('y', plotY + 16).attr('text-anchor', 'end').attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8').text('★ CIN CO-INTELLIGENCE AIRLOCK');
-    svg.append('text').attr('x', plotX + 10).attr('y', plotY + plotH - 8).attr('font-size', 8.2).attr('font-family', 'monospace').attr('fill', '#ef6a52').text('CENTRALIZED RENT & SWARM RISK');
-    svg.append('text').attr('x', plotX + plotW - 10).attr('y', plotY + plotH - 8).attr('text-anchor', 'end').attr('font-size', 8.2).attr('font-family', 'monospace').attr('fill', '#e5a93c').text('RAW OPEN WEIGHTS (0% ROYALTY)');
+    svg.append('text').attr('x', plotX + 10).attr('y', plotY + 16).attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#5da2d5').text('TOP-DOWN TREATY / HARD PAUSE');
+    svg.append('text').attr('x', plotX + plotW - 10).attr('y', plotY + 16).attr('text-anchor', 'end').attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8').text('★ CIN CO-INTELLIGENCE AIRLOCK');
+    svg.append('text').attr('x', plotX + 10).attr('y', plotY + plotH - 8).attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#ef6a52').text('CENTRALIZED RENT & SWARM RISK');
+    svg.append('text').attr('x', plotX + plotW - 10).attr('y', plotY + plotH - 8).attr('text-anchor', 'end').attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#e5a93c').text('RAW OPEN WEIGHTS (0% ROYALTY)');
 
     var xScale = d3.scaleLinear().domain([0, 100]).range([plotX + 24, plotX + plotW - 28]);
     var yScale = d3.scaleLinear().domain([0, 100]).range([plotY + plotH - 22, plotY + 24]);
@@ -2341,7 +2283,7 @@
         .attr('x', cx + (act.x > 68 ? -act.r - 5 : act.r + 5))
         .attr('y', cy + 3)
         .attr('text-anchor', act.x > 68 ? 'end' : 'start')
-        .attr('font-size', isMatch ? 8.8 : 7.8)
+        .attr('font-size', isMatch ? 12.5 : 12)
         .attr('font-weight', isMatch ? '700' : '500')
         .attr('fill', isMatch ? '#f4f1ea' : '#8c8f96')
         .text(act.label);
@@ -2350,25 +2292,25 @@
     // Right panel: Active Lens Actor Breakdown
     svg.append('rect').attr('x', 516).attr('y', 44).attr('width', 222).attr('height', 234).attr('rx', 8)
       .attr('fill', '#161b24').attr('stroke', '#2c303a');
-    svg.append('text').attr('x', 528).attr('y', 64).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
-      .text('ACTIVE LENS ACTORS (' + key.toUpperCase() + ')');
+    svg.append('text').attr('x', 528).attr('y', 64).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+      .text('ACTIVE LENS (' + key.toUpperCase() + ')');
 
     var matched = GLOBAL_ACTORS.filter(function (a) { return a.lens === key || a.id === 'cin'; });
     matched.slice(0, 4).forEach(function (act, idx) {
       var by = 76 + idx * 48;
       svg.append('rect').attr('x', 526).attr('y', by).attr('width', 202).attr('height', 40).attr('rx', 6)
         .attr('fill', '#12161f').attr('stroke', act.col).attr('stroke-width', 1.2);
-      svg.append('text').attr('x', 534).attr('y', by + 16).attr('font-size', 9).attr('font-weight', '700').attr('fill', act.col).text(act.label);
-      svg.append('text').attr('x', 534).attr('y', by + 31).attr('font-size', 8.2).attr('fill', '#d5d9e2').text(act.sub);
+      svg.append('text').attr('x', 534).attr('y', by + 16).attr('font-size', 12).attr('font-weight', '700').attr('fill', act.col).text(act.label);
+      svg.append('text').attr('x', 534).attr('y', by + 31).attr('font-size', 12).attr('fill', '#d5d9e2').text(act.sub);
     });
 
     // Bottom 5-Zone Safety Gradient Strip ("Last Resort Before Pause")
     var zones = [
-      { lbl: '1. Unbounded e/acc', c: '#ef6a52', w: 132 },
-      { lbl: '2. Voluntary Lab RSPs', c: '#d97757', w: 136 },
-      { lbl: '3. Eval Orgs (METR)', c: '#e5a93c', w: 136 },
-      { lbl: '4. CIN AIRLOCK (LAST RESORT)', c: '#4fb3a8', w: 184 },
-      { lbl: '5. Global Hard Pause', c: '#5da2d5', w: 124 }
+      { lbl: '1. Raw e/acc', c: '#ef6a52', w: 132 },
+      { lbl: '2. Lab RSPs', c: '#d97757', w: 136 },
+      { lbl: '3. Eval Orgs', c: '#e5a93c', w: 136 },
+      { lbl: '4. ★ CIN AIRLOCK', c: '#4fb3a8', w: 184 },
+      { lbl: '5. Hard Pause', c: '#5da2d5', w: 124 }
     ];
     var zx = 22;
     zones.forEach(function (z, idx) {
@@ -2376,10 +2318,10 @@
         .attr('fill', idx === 3 ? 'rgba(79,179,168,0.22)' : '#161b24')
         .attr('stroke', z.c).attr('stroke-width', idx === 3 ? 2 : 1.2);
       svg.append('text').attr('x', zx + (z.w - 4) / 2).attr('y', 311).attr('text-anchor', 'middle')
-        .attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', z.c).text(z.lbl);
+        .attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', z.c).text(z.lbl);
       svg.append('text').attr('x', zx + (z.w - 4) / 2).attr('y', 327).attr('text-anchor', 'middle')
-        .attr('font-size', 7.8).attr('fill', '#c7cbd4')
-        .text(idx === 3 ? 'Two Internets + 24h Lease' : (idx === 4 ? 'Compute Freeze' : '40 bits/s Exposed'));
+        .attr('font-size', 12).attr('fill', '#c7cbd4')
+        .text(idx === 3 ? 'Last Resort Co-Exist' : (idx === 4 ? 'GPU Freeze' : '40b/s Exposed'));
       zx += z.w;
     });
   }
@@ -2389,105 +2331,55 @@
     if (!rEl || !window.d3) return;
     var d3 = window.d3;
     var svg = d3.select(rEl);
+    svg.attr('viewBox', '0 0 420 228');
     svg.selectAll('*').remove();
 
-    svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 412).attr('height', 218).attr('rx', 10)
+    svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 412).attr('height', 220).attr('rx', 10)
       .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
 
     var SPECS = {
-      labs: {
-        title: '1. PROFIT VS. COOPERATION ($100 VALUE SPLIT)',
-        sqLbl: 'SOTA Cloud Labs', sqSegs: [{ w: 202, c: '#ef6a52', t: '$72 Equity' }, { w: 78, c: '#9e3929', t: '$28 Toll' }],
-        cinLbl: 'CIN Co-Intelligence', cinSegs: [{ w: 238, c: '#4fb3a8', t: '$85 Solver' }, { w: 28, c: '#5da2d5', t: '$10' }, { w: 14, c: '#e5a93c', t: '' }],
-        foot: '✓ 95% Data Shapley Creator Return + 5% Philanthropic Commons'
-      },
-      safety: {
-        title: '2. LAST RESORT BEFORE PAUSE (5-ZONE AIRLOCK)',
-        sqLbl: 'Unshielded (~40b/s)', sqSegs: [{ w: 58, c: '#ef6a52', t: '10¹²b/s' }, { w: 222, c: '#2a1617', t: 'Biology Overwhelmed by Swarms' }],
-        cinLbl: 'Zone 4 CIN Airlock', cinSegs: [{ w: 280, c: '#4fb3a8', t: '★ Two Internets + 24h Mortal Lease (Co-Exist)' }],
-        foot: '✓ Hardware 1-to-1 Bond Prevents Extinction Without GPU Freeze'
-      },
-      gov: {
-        title: '3. STATUTORY LAG VS. <10MS SILICON QUORUM',
-        sqLbl: '3-5 Yr Statute Lag', sqSegs: [{ w: 48, c: '#ef6a52', t: '8-13x' }, { w: 232, c: '#2a1617', t: '64x–1,024x Behind AI Doubling' }],
-        cinLbl: 'Weiszfeld Gate', cinSegs: [{ w: 280, c: '#4fb3a8', t: 'Φ(R) <10ms Gate + $25k Floor + 2%/mo Demurrage' }],
-        foot: '✓ Cryptographic Pre-Execution Quorum + Municipal Tax Cushion'
-      },
-      research: {
-        title: '4. UNIVERSITY ORIGINATION (88%) VS. ROYALTY',
-        sqLbl: 'Cloud Scrape ($0)', sqSegs: [{ w: 22, c: '#ef6a52', t: '<1%' }, { w: 258, c: '#2a1617', t: '88% Ideas Scraped for $0 Royalty' }],
-        cinLbl: 'Shapley + SPRA', cinSegs: [{ w: 280, c: '#4fb3a8', t: '15% Perpetual Lineage + 95.3% SPRA Savings' }],
-        foot: '✓ Automatic Citation Endowments Fund Open University Compute'
-      },
-      enterprise: {
-        title: '5. API TENANT TOLL VS. 500-FIRM PSI CO-OP',
-        sqLbl: 'GPO / Wrapper Toll', sqSegs: [{ w: 190, c: '#2a1617', t: 'Net Margin' }, { w: 90, c: '#ef6a52', t: '-32% Toll' }],
-        cinLbl: 'OPRF PSI Co-Op', cinSegs: [{ w: 280, c: '#4fb3a8', t: '+18% to +34% Wholesale Margin · 0B IP Egress' }],
-        foot: '✓ Local Wasm Sandbox + Blinded Private Set Intersection'
-      },
-      humanity: {
-        title: '6. INTELLIGENCE GAMBIT (4.8B WORKER SHIELD)',
-        sqLbl: 'AI Cartel Dump', sqSegs: [{ w: 68, c: '#ef6a52', t: '24% Share' }, { w: 212, c: '#2a1617', t: '-38% Producer Surplus Extracted' }],
-        cinLbl: 'PSI Producer Co-Op', cinSegs: [{ w: 280, c: '#4fb3a8', t: '$8 Pre-ADC + Offline Voice Twin + 5D Parity' }],
-        foot: '✓ Shields 4.8B Non-Digital Workers From Algorithmic Cartels'
-      },
-      pair: {
-        title: '7. 90-DAY CLOUD CLIFF VS. 96% LOCAL PAIR MOAT',
-        sqLbl: 'Cloud API (90d)', sqSegs: [{ w: 24, c: '#ef6a52', t: '4%' }, { w: 256, c: '#2a1617', t: 'Distilled in 90d (-$5B to -$15B/yr)' }],
-        cinLbl: '1-to-1 Pair Moat', cinSegs: [{ w: 14, c: '#5da2d5', t: '' }, { w: 84, c: '#4fb3a8', t: '30% LoRA' }, { w: 88, c: '#e5a93c', t: '32% Mem' }, { w: 94, c: '#b794f4', t: '34% Craft' }],
-        foot: '✓ 96% Uncopyable Local Moat Compounded Over 1–10 Years'
-      }
+      labs:       { title: '01 · $100 VALUE SPLIT', sqT: '$0 Creator · $100 Rent', cinT: '$95 Shapley + $5 Floor' },
+      safety:     { title: '02 · SAFETY SPECTRUM', sqT: '40b/s Biology Outpaced', cinT: '★ Airlock + 24h Lease' },
+      gov:        { title: '03 · GOVERNANCE SPEED', sqT: '3–5 Yr Statute Lag', cinT: '<10ms Gate + $25k Floor' },
+      research:   { title: '04 · UNIVERSITY SHARE', sqT: '88% Ideas · $0 Royalty', cinT: '15% Royalty + 95% SPRA' },
+      enterprise: { title: '05 · ENTERPRISE MARGIN', sqT: '-32% GPO / API Toll', cinT: '+34% PSI Co-Op · 0B Leak' },
+      humanity:   { title: '06 · 4.8B WORKER SHIELD', sqT: '-38% Cartel Price Dump', cinT: '$8 Sensor + +38% Co-Op' },
+      pair:       { title: '07 · DURABLE AI MOAT', sqT: '4% Cloud Moat (90d Cliff)', cinT: '96% 1-to-1 Pair Moat' }
     };
 
     var sp = SPECS[key] || SPECS.labs;
-    svg.append('text').attr('x', 16).attr('y', 22).attr('font-size', 8.6).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+    svg.append('text').attr('x', 16).attr('y', 28).attr('font-size', 12.5).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
       .text(sp.title);
 
-    // Row 1: Status Quo Bar
-    svg.append('text').attr('x', 16).attr('y', 47).attr('font-size', 8.2).attr('font-weight', '700').attr('fill', '#ef6a52').text(sp.sqLbl);
-    var sx = 122;
-    sp.sqSegs.forEach(function (sg) {
-      svg.append('rect').attr('x', sx).attr('y', 34).attr('width', sg.w - 2).attr('height', 20).attr('rx', 4)
-        .attr('fill', sg.c).attr('stroke', '#ef6a52').attr('stroke-width', 0.8);
-      if (sg.t) {
-        svg.append('text').attr('x', sx + (sg.w - 2) / 2).attr('y', 47).attr('text-anchor', 'middle')
-          .attr('font-size', 7.6).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#f4f1ea').text(sg.t);
-      }
-      sx += sg.w;
-    });
+    // Status Quo Bar
+    svg.append('text').attr('x', 16).attr('y', 58).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#ef6a52').text('Today');
+    svg.append('rect').attr('x', 82).attr('y', 40).attr('width', 320).attr('height', 26).attr('rx', 5)
+      .attr('fill', 'rgba(239,106,82,0.22)').attr('stroke', '#ef6a52').attr('stroke-width', 1.4);
+    svg.append('text').attr('x', 242).attr('y', 58).attr('text-anchor', 'middle')
+      .attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#f4f1ea').text(sp.sqT);
 
-    // Row 2: CIN Bar
-    svg.append('text').attr('x', 16).attr('y', 75).attr('font-size', 8.2).attr('font-weight', '700').attr('fill', '#4fb3a8').text(sp.cinLbl);
-    var cx = 122;
-    sp.cinSegs.forEach(function (sg) {
-      svg.append('rect').attr('x', cx).attr('y', 62).attr('width', sg.w - 2).attr('height', 20).attr('rx', 4)
-        .attr('fill', sg.c);
-      if (sg.t) {
-        svg.append('text').attr('x', cx + (sg.w - 2) / 2).attr('y', 75).attr('text-anchor', 'middle')
-          .attr('font-size', 7.6).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#111317').text(sg.t);
-      }
-      cx += sg.w;
-    });
+    // CIN Bar
+    svg.append('text').attr('x', 16).attr('y', 92).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#4fb3a8').text('CIN');
+    svg.append('rect').attr('x', 82).attr('y', 74).attr('width', 320).attr('height', 26).attr('rx', 5)
+      .attr('fill', '#4fb3a8');
+    svg.append('text').attr('x', 242).attr('y', 92).attr('text-anchor', 'middle')
+      .attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#111317').text(sp.cinT);
 
-    svg.append('text').attr('x', 16).attr('y', 99).attr('font-size', 7.8).attr('font-weight', '700').attr('fill', '#4fb3a8').text(sp.foot);
-
-    // Bottom Live Stress-Test Comparison Box
-    svg.append('rect').attr('x', 14).attr('y', 110).attr('width', 392).attr('height', 102).attr('rx', 8)
+    // Live Stress-Test Verdict Box
+    svg.append('rect').attr('x', 14).attr('y', 112).attr('width', 392).attr('height', 100).attr('rx', 8)
       .attr('fill', '#161b24').attr('stroke', '#2a303c');
-    svg.append('text').attr('x', 24).attr('y', 127).attr('font-size', 8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#5da2d5')
-      .text('LIVE STRESS-TEST VERDICT · INPUT: ' + d.simConfig.formatVal(val));
+    svg.append('text').attr('x', 24).attr('y', 132).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#5da2d5')
+      .text('STRESS-TEST: ' + d.simConfig.formatVal(val));
 
-    // Red Status Quo pill
-    svg.append('rect').attr('x', 24).attr('y', 135).attr('width', 372).attr('height', 30).attr('rx', 5)
-      .attr('fill', 'rgba(239,106,82,0.14)').attr('stroke', '#ef6a52');
-    svg.append('text').attr('x', 32).attr('y', 154).attr('font-size', 8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
-      .text('✗ Today: ' + res.badV.slice(0, 50));
+    svg.append('rect').attr('x', 24).attr('y', 140).attr('width', 372).attr('height', 30).attr('rx', 5)
+      .attr('fill', 'rgba(239,106,82,0.16)').attr('stroke', '#ef6a52');
+    svg.append('text').attr('x', 32).attr('y', 160).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+      .text('✗ ' + res.badV.slice(0, 38));
 
-    // Green CIN pill
-    svg.append('rect').attr('x', 24).attr('y', 172).attr('width', 372).attr('height', 30).attr('rx', 5)
-      .attr('fill', 'rgba(79,179,168,0.16)').attr('stroke', '#4fb3a8');
-    svg.append('text').attr('x', 32).attr('y', 191).attr('font-size', 8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
-      .text('✓ CIN: ' + res.okV.slice(0, 52));
+    svg.append('rect').attr('x', 24).attr('y', 176).attr('width', 372).attr('height', 30).attr('rx', 5)
+      .attr('fill', 'rgba(79,179,168,0.18)').attr('stroke', '#4fb3a8');
+    svg.append('text').attr('x', 32).attr('y', 196).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      .text('✓ ' + res.okV.slice(0, 38));
   }
 
   var wmVizModes = document.getElementById('wm-viz-modes');
@@ -2536,7 +2428,7 @@
     svg.append('rect').attr('x', 6).attr('y', 6).attr('width', 748).attr('height', 172).attr('rx', 12)
       .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
 
-    svg.append('text').attr('x', 22).attr('y', 28).attr('font-size', 10).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+    svg.append('text').attr('x', 22).attr('y', 28).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
       .text('D3.JS V7 RISK-SCALED QUORUM CURVE: Φ(R) = 1 − (1 − R)⁵ & DELIBERATION TIME-LOCK τ(R) = 72h·R²');
 
     var xScale = d3.scaleLinear().domain([0, 100]).range([54, 480]);
@@ -2547,7 +2439,7 @@
     svg.append('line').attr('x1', 54).attr('y1', 46).attr('x2', 54).attr('y2', 148).attr('stroke', '#3a3f4b');
 
     [0, 25, 50, 75, 100].forEach(function (t) {
-      svg.append('text').attr('x', xScale(t)).attr('y', 164).attr('text-anchor', 'middle').attr('font-size', 8.8).attr('font-family', 'monospace').attr('fill', '#8c8f96').text(t + '% Risk');
+      svg.append('text').attr('x', xScale(t)).attr('y', 164).attr('text-anchor', 'middle').attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#8c8f96').text(t + '% Risk');
     });
 
     // Plot Phi(R) curve
@@ -2568,13 +2460,13 @@
     // Right readout panel
     svg.append('rect').attr('x', 502).attr('y', 40).attr('width', 236).attr('height', 124).attr('rx', 9)
       .attr('fill', '#161b24').attr('stroke', r01 > 0.5 ? '#ef6a52' : '#4fb3a8').attr('stroke-width', 1.4);
-    svg.append('text').attr('x', 516).attr('y', 62).attr('font-size', 9.2).attr('font-family', 'monospace').attr('fill', '#c7cbd4')
+    svg.append('text').attr('x', 516).attr('y', 62).attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#c7cbd4')
       .text('BLAST-RADIUS RISK: ' + Math.round(r01 * 1000) / 10 + '%');
-    svg.append('text').attr('x', 516).attr('y', 86).attr('font-size', 11).attr('font-weight', '700').attr('fill', '#4fb3a8')
+    svg.append('text').attr('x', 516).attr('y', 86).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#4fb3a8')
       .text('Quorum Φ(R): ' + (phiVal * 100).toFixed(2) + '%');
-    svg.append('text').attr('x', 516).attr('y', 110).attr('font-size', 10).attr('font-weight', '700').attr('fill', '#e5a93c')
+    svg.append('text').attr('x', 516).attr('y', 110).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#e5a93c')
       .text('Time-Lock τ(R): ' + (lockHrs > 0 ? lockHrs + ' hrs' : '0h (Immediate)'));
-    svg.append('text').attr('x', 516).attr('y', 136).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', r01 > 0.5 ? '#ef6a52' : '#4fb3a8')
+    svg.append('text').attr('x', 516).attr('y', 136).attr('font-size', 12).attr('font-weight', '700').attr('fill', r01 > 0.5 ? '#ef6a52' : '#4fb3a8')
       .text(r01 > 0.5 ? '✗ SINGLE-COMMANDER BLOCKED' : '✓ UNLOCKED BY LOCAL CONSENT');
   }
 
@@ -2608,7 +2500,7 @@
         .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
 
       // Left: Exponential 4.5-mo AI Doubling vs Flat 40 bits/s Human Biology
-      hSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 8.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+      hSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
         .text('1. THE BIOLOGICAL VS. SILICON SPEED COLLISION (2024–2028)');
 
       var hx = d3.scaleLinear().domain([0, 6]).range([24, 316]);
@@ -2616,27 +2508,27 @@
       hSvg.append('line').attr('x1', 24).attr('y1', 92).attr('x2', 316).attr('y2', 92).attr('stroke', '#323846');
       // Flat human biology line (~40 bits/s)
       hSvg.append('line').attr('x1', 24).attr('y1', 84).attr('x2', 316).attr('y2', 84).attr('stroke', '#5da2d5').attr('stroke-width', 2.2).attr('stroke-dasharray', '4 3');
-      hSvg.append('text').attr('x', 28).attr('y', 78).attr('font-size', 8.2).attr('font-weight', '700').attr('fill', '#5da2d5').text('Human Biology (~40 bits/s · 0% change)');
+      hSvg.append('text').attr('x', 28).attr('y', 78).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#5da2d5').text('Human Biology (~40 bits/s · 0% change)');
 
       // Exponential machine doubling curve (2^x)
       var expPts = d3.range(0, 6.1, 0.25).map(function (t) { return [hx(t), hy(Math.pow(2, t))]; });
       hSvg.append('path').attr('d', d3.line()(expPts)).attr('fill', 'none').attr('stroke', '#ef6a52').attr('stroke-width', 2.8);
       hSvg.append('circle').attr('cx', hx(6)).attr('cy', hy(64)).attr('r', 4.5).attr('fill', '#ef6a52');
-      hSvg.append('text').attr('x', hx(5.7)).attr('y', 40).attr('text-anchor', 'end').attr('font-size', 8.4).attr('font-weight', '700').attr('fill', '#ef6a52').text('AI Swarms: 64× / 27 mo (10¹² bits/s)');
+      hSvg.append('text').attr('x', hx(5.7)).attr('y', 40).attr('text-anchor', 'end').attr('font-size', 12).attr('font-weight', '700').attr('fill', '#ef6a52').text('AI Swarms: 64× / 27 mo (10¹² bits/s)');
 
       // Divider
       hSvg.append('line').attr('x1', 336).attr('y1', 14).attr('x2', 336).attr('y2', 102).attr('stroke', '#2a303c');
 
       // Right: 5-Zone Safety Gradient ("Last Resort Before Pause")
-      hSvg.append('text').attr('x', 350).attr('y', 22).attr('font-size', 8.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      hSvg.append('text').attr('x', 350).attr('y', 22).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
         .text('2. CO-INTELLIGENCE AIRLOCK: LAST RESORT BEFORE PAUSE');
 
       var hZones = [
-        { k: 'e/acc', sub: 'Extinction', w: 54, c: '#ef6a52' },
-        { k: 'Lab RSP', sub: 'Self-Policed', w: 60, c: '#d97757' },
-        { k: 'Eval Lab', sub: 'Diagnostic', w: 58, c: '#e5a93c' },
-        { k: 'CIN AIRLOCK', sub: '1-to-1 + Lease', w: 88, c: '#4fb3a8', hi: true },
-        { k: 'Pause', sub: 'GPU Freeze', w: 54, c: '#5da2d5' }
+        { k: 'e/acc', sub: 'Exposed', w: 56, c: '#ef6a52' },
+        { k: 'RSPs', sub: 'Paper', w: 56, c: '#d97757' },
+        { k: 'Evals', sub: 'Audit', w: 56, c: '#e5a93c' },
+        { k: '★ CIN', sub: 'Airlock', w: 92, c: '#4fb3a8', hi: true },
+        { k: 'Pause', sub: 'Freeze', w: 56, c: '#5da2d5' }
       ];
       var curX = 350;
       hZones.forEach(function (z) {
@@ -2644,12 +2536,12 @@
           .attr('fill', z.hi ? 'rgba(79,179,168,0.22)' : '#161b24')
           .attr('stroke', z.c).attr('stroke-width', z.hi ? 2 : 1.1);
         hSvg.append('text').attr('x', curX + (z.w - 3) / 2).attr('y', 50).attr('text-anchor', 'middle')
-          .attr('font-size', 7.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', z.c).text(z.k);
+          .attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', z.c).text(z.k);
         hSvg.append('text').attr('x', curX + (z.w - 3) / 2).attr('y', 66).attr('text-anchor', 'middle')
-          .attr('font-size', 7.4).attr('fill', '#d5d9e2').text(z.sub);
+          .attr('font-size', 12).attr('fill', '#d5d9e2').text(z.sub);
         curX += z.w;
       });
-      hSvg.append('text').attr('x', 350).attr('y', 96).attr('font-size', 7.5).attr('font-weight', '700').attr('fill', '#e5a93c')
+      hSvg.append('text').attr('x', 350).attr('y', 96).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#e5a93c')
         .text('✓ Two Internets + 24h Mortal Lease = Co-Exist Without Pause');
     }
 
@@ -2672,23 +2564,23 @@
         svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 104).attr('rx', 10)
           .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
 
-        svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+        svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
           .text('D3.JS V7 VALUE & PROOF COMPARISON · ' + m.name.toUpperCase() + ' (' + m.uses + ')');
 
         // Status quo bar
-        svg.append('text').attr('x', 18).attr('y', 50).attr('font-size', 9).attr('font-weight', '700').attr('fill', '#ef6a52').text('Today (Cloud Scrape)');
+        svg.append('text').attr('x', 18).attr('y', 50).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#ef6a52').text('Today (Cloud Scrape)');
         svg.append('rect').attr('x', 156).attr('y', 36).attr('width', 580).attr('height', 20).attr('rx', 4).attr('fill', 'rgba(239,106,82,0.22)').attr('stroke', '#ef6a52');
-        svg.append('text').attr('x', 166).attr('y', 50).attr('font-size', 8.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+        svg.append('text').attr('x', 166).attr('y', 50).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
           .text('100% Captured by Cloud AI / Middlemen · Creator Paid: ' + m.sqPay);
 
         // CIN bar (scales progress with activeStep 0..3)
         var stepProg = 0.4 + (activeStep / 3) * 0.6;
         var solverW = Math.round(551 * stepProg);
         var comW = Math.round(29 * stepProg);
-        svg.append('text').attr('x', 18).attr('y', 82).attr('font-size', 9).attr('font-weight', '700').attr('fill', '#4fb3a8').text('CIN Ledger (Step ' + (activeStep + 1) + '/4)');
+        svg.append('text').attr('x', 18).attr('y', 82).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#4fb3a8').text('CIN Ledger (Step ' + (activeStep + 1) + '/4)');
         svg.append('rect').attr('x', 156).attr('y', 68).attr('width', solverW).attr('height', 22).attr('rx', 4).attr('fill', '#4fb3a8');
         svg.append('rect').attr('x', 156 + solverW + 2).attr('y', 68).attr('width', comW).attr('height', 22).attr('rx', 3).attr('fill', '#e5a93c');
-        svg.append('text').attr('x', 166).attr('y', 83).attr('font-size', 8.8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#111317')
+        svg.append('text').attr('x', 166).attr('y', 83).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#111317')
           .text('✓ PCC Verified · ' + m.cinPay + ' + ' + m.commons);
       }
 
@@ -2724,14 +2616,14 @@
         svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 116).attr('rx', 10)
           .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
 
-        svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+        svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
           .text('D3.JS V7 5D VALUE VECTOR & GINI COMPRESSION · ' + (pid || 'P01') + ' (' + (titleTxt || 'Emergency-Room Nurse').slice(0, 36).toUpperCase() + ')');
 
         dims.forEach(function (dm, i) {
           var bx = 18 + i * 94;
           svg.append('rect').attr('x', bx).attr('y', 34).attr('width', 86).attr('height', 72).attr('rx', 7)
             .attr('fill', '#161b24').attr('stroke', dm.c).attr('stroke-width', 1.2);
-          svg.append('text').attr('x', bx + 43).attr('y', 50).attr('text-anchor', 'middle').attr('font-size', 8).attr('font-weight', '700').attr('fill', dm.c).text(dm.k);
+          svg.append('text').attr('x', bx + 43).attr('y', 50).attr('text-anchor', 'middle').attr('font-size', 12).attr('font-weight', '700').attr('fill', dm.c).text(dm.k);
           svg.append('text').attr('x', bx + 43).attr('y', 72).attr('text-anchor', 'middle').attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#f4f1ea').text('+' + dm.v + '%');
           svg.append('rect').attr('x', bx + 10).attr('y', 84).attr('width', 66).attr('height', 8).attr('rx', 4).attr('fill', '#10131a');
           svg.append('rect').attr('x', bx + 10).attr('y', 84).attr('width', Math.round(0.66 * dm.v)).attr('height', 8).attr('rx', 4).attr('fill', dm.c);
@@ -2740,10 +2632,10 @@
         // Right box: 365-Day Cohort Gini Compression (0.87 -> 0.58)
         svg.append('rect').attr('x', 494).attr('y', 34).attr('width', 248).attr('height', 72).attr('rx', 7)
           .attr('fill', 'rgba(79,179,168,0.12)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.4);
-        svg.append('text').attr('x', 506).attr('y', 52).attr('font-size', 8.6).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
+        svg.append('text').attr('x', 506).attr('y', 52).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c')
           .text('365-DAY COHORT GINI COMPRESSION');
-        svg.append('text').attr('x', 506).attr('y', 72).attr('font-size', 9).attr('fill', '#ef6a52').text('Status Quo Gini: 0.87 ($0 Floor)');
-        svg.append('text').attr('x', 506).attr('y', 92).attr('font-size', 9.2).attr('font-weight', '700').attr('fill', '#4fb3a8').text('✓ CIN 5D Ledger Gini: 0.58 ($25k Floor)');
+        svg.append('text').attr('x', 506).attr('y', 72).attr('font-size', 12).attr('fill', '#ef6a52').text('Status Quo Gini: 0.87 ($0 Floor)');
+        svg.append('text').attr('x', 506).attr('y', 92).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#4fb3a8').text('✓ CIN 5D Ledger Gini: 0.58 ($25k Floor)');
       }
 
       renderPeD3('P01', 'Amara Osei — Emergency-Room Nurse');
@@ -2768,18 +2660,18 @@
       gSvg.selectAll('*').remove();
       gSvg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 136).attr('rx', 10)
         .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
-      gSvg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      gSvg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
         .text('D3.JS V7 8-INVARIANT PROTOCOL DEPENDENCY PIPELINE (CLICK ANY NODE TO INSPECT GOAL)');
 
       var G_NODES = [
-        { n: '01', k: 'Two Internets', sub: 'QUIC + OCap', c: '#ef6a52' },
-        { n: '02', k: '0% Middleman', sub: 'NCCI + PSI', c: '#e07b42' },
+        { n: '01', k: 'Two Nets', sub: 'QUIC+OCap', c: '#ef6a52' },
+        { n: '02', k: '0% Toll', sub: 'NCCI+PSI', c: '#e07b42' },
         { n: '03', k: '5D Value', sub: '$25k Floor', c: '#e5a93c' },
-        { n: '04', k: 'Sandbox Sim', sub: 'Red-Team', c: '#8ab861' },
-        { n: '05', k: 'Foresight', sub: 'METR + Delphi', c: '#4fb3a8' },
-        { n: '06', k: 'Focus Shield', sub: 'Sweller Load', c: '#5da2d5' },
-        { n: '07', k: '95% Shapley', sub: 'PCC + LoRA', c: '#7c7ae0' },
-        { n: '08', k: '1-to-1 Silicon', sub: 'Silicon Key + Pre-ADC', c: '#b794f4' }
+        { n: '04', k: 'Sandbox', sub: 'Red-Team', c: '#8ab861' },
+        { n: '05', k: 'Foresight', sub: 'Delphi', c: '#4fb3a8' },
+        { n: '06', k: 'Focus', sub: 'Sweller', c: '#5da2d5' },
+        { n: '07', k: '95% Split', sub: 'Shapley', c: '#7c7ae0' },
+        { n: '08', k: '1-to-1 Key', sub: 'Pre-ADC', c: '#b794f4' }
       ];
       G_NODES.forEach(function (gn, idx) {
         var gx = 16 + idx * 91;
@@ -2796,10 +2688,10 @@
         });
         gNode.append('rect').attr('x', gx).attr('y', 38).attr('width', 83).attr('height', 84).attr('rx', 8)
           .attr('fill', '#161b24').attr('stroke', gn.c).attr('stroke-width', 1.5);
-        gNode.append('text').attr('x', gx + 41.5).attr('y', 58).attr('text-anchor', 'middle').attr('font-size', 11).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', gn.c).text('GOAL ' + gn.n);
-        gNode.append('text').attr('x', gx + 41.5).attr('y', 78).attr('text-anchor', 'middle').attr('font-size', 8.4).attr('font-weight', '700').attr('fill', '#f4f1ea').text(gn.k);
-        gNode.append('text').attr('x', gx + 41.5).attr('y', 96).attr('text-anchor', 'middle').attr('font-size', 7.8).attr('font-family', 'monospace').attr('fill', '#9aa3b2').text(gn.sub);
-        gNode.append('text').attr('x', gx + 41.5).attr('y', 113).attr('text-anchor', 'middle').attr('font-size', 7.2).attr('fill', '#4fb3a8').text('Inspect ▾');
+        gNode.append('text').attr('x', gx + 41.5).attr('y', 58).attr('text-anchor', 'middle').attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', gn.c).text('GOAL ' + gn.n);
+        gNode.append('text').attr('x', gx + 41.5).attr('y', 78).attr('text-anchor', 'middle').attr('font-size', 12).attr('font-weight', '700').attr('fill', '#f4f1ea').text(gn.k);
+        gNode.append('text').attr('x', gx + 41.5).attr('y', 96).attr('text-anchor', 'middle').attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#9aa3b2').text(gn.sub);
+        gNode.append('text').attr('x', gx + 41.5).attr('y', 113).attr('text-anchor', 'middle').attr('font-size', 12).attr('fill', '#4fb3a8').text('Inspect ▾');
       });
     }
 
@@ -2807,11 +2699,11 @@
     var provSvgEl = document.getElementById('prov-d3-svg');
     if (provSvgEl) {
       var PROV_META = {
-        all:     { lbl: 'ALL 12 CANONICAL MECHANISMS', count: 12, s1: 'Protect Human Agency & Royalties', s2: 'Cloud Lock-In & 15–40% Rent', s3: '<1ms Wasm OCap + QUIC + LoRA', s4: '12 Primary-Cited Protocol Specs' },
-        sandbox: { lbl: 'OCAP SANDBOX & IETF QUIC TRANSPORT', count: 2, s1: 'Zero-Exfiltration Local Execution', s2: 'POSIX Ambient Authority & TCP Lag', s3: 'WebAssembly OCap + 0-RTT QUIC', s4: 'Dennis & Van Horn (1966) · RFC 9000' },
-        ledger:  { lbl: 'PCC, DATA SHAPLEY & TIES-LORA LEDGER', count: 4, s1: '95% Royalties & 9.1× Faster Merge', s2: 'Unpaid Scraping & Sign Cancellation', s3: 'Monte Carlo Shapley + Rank-16 LoRA', s4: 'Necula (1997) · Ghorbani & Zou (2019)' },
-        market:  { lbl: 'CMS NCCI AUDITS & PSI BUYER CO-OPS', count: 2, s1: 'Save 15%–48% on Day One', s2: '380% Chargemaster & 28% GPO Tolls', s3: 'OPRF Private Set Intersection', s4: 'Freedman et al. (2004) · CMS NCCI' },
-        silicon: { lbl: 'PRE-ADC SENSORS, SILICON CHIP KEYS & WEISZFELD QUORUMS', count: 4, s1: '1-Human-1-Voice & Swarm Lock', s2: 'Biometric Surveillance & Sybil Farms', s3: '<1mW Pre-ADC + Dual-Chip Silicon Keys', s4: 'Gassend (2002) · Weiszfeld (1937)' }
+        all:     { lbl: 'ALL 12 CANONICAL MECHANISMS', count: 12, s1: 'Human Agency & 95% Pay', s2: 'Cloud Rent (15–40%)', s3: '<1ms Wasm + QUIC P2P', s4: '12 Primary Protocol Specs' },
+        sandbox: { lbl: 'OCAP SANDBOX & IETF QUIC TRANSPORT', count: 2, s1: '0-Byte Exfiltration', s2: 'POSIX & Cloud TCP Lag', s3: 'Wasm OCap + 0-RTT QUIC', s4: 'Dennis (1966) · RFC 9000' },
+        ledger:  { lbl: 'PCC, DATA SHAPLEY & TIES-LORA LEDGER', count: 4, s1: '95% Creator Royalties', s2: 'Unpaid Cloud Scraping', s3: 'Shapley + Rank-16 LoRA', s4: 'Necula (1997) · Shapley' },
+        market:  { lbl: 'CMS NCCI AUDITS & PSI BUYER CO-OPS', count: 2, s1: 'Save 15%–48% Day One', s2: '380% Markup & GPO Tolls', s3: 'OPRF PSI Co-Op Orders', s4: 'Freedman (2004) · NCCI' },
+        silicon: { lbl: 'PRE-ADC SENSORS, SILICON CHIP KEYS & WEISZFELD QUORUMS', count: 4, s1: '1-Human-1-Voice Lock', s2: 'Biometric & Sybil Spoofs', s3: 'Pre-ADC + Silicon Keys', s4: 'Gassend · Weiszfeld' }
       };
 
       function renderProvD3(cat) {
@@ -2820,14 +2712,14 @@
         pSvg.selectAll('*').remove();
         pSvg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 120).attr('rx', 10)
           .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
-        pSvg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+        pSvg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
           .text('D3.JS V7 4-STEP CAUSAL PROVENANCE DERIVATION · ' + pm.lbl + ' (' + pm.count + ' SPECS)');
 
         var steps = [
           { k: '1. HUMAN INTENT', v: pm.s1, c: '#5da2d5' },
-          { k: '2. LEGACY BOTTLENECK', v: pm.s2, c: '#ef6a52' },
-          { k: '3. CAPABILITY THRESHOLD', v: pm.s3, c: '#e5a93c' },
-          { k: '4. VERIFIED MECHANISM', v: pm.s4, c: '#4fb3a8' }
+          { k: '2. BOTTLENECK', v: pm.s2, c: '#ef6a52' },
+          { k: '3. THRESHOLD', v: pm.s3, c: '#e5a93c' },
+          { k: '4. MECHANISM', v: pm.s4, c: '#4fb3a8' }
         ];
         steps.forEach(function (st, idx) {
           var sx = 18 + idx * 184;
@@ -2836,8 +2728,8 @@
           }
           pSvg.append('rect').attr('x', sx).attr('y', 38).attr('width', 172).attr('height', 70).attr('rx', 8)
             .attr('fill', '#161b24').attr('stroke', st.c).attr('stroke-width', 1.4);
-          pSvg.append('text').attr('x', sx + 10).attr('y', 58).attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', st.c).text(st.k);
-          pSvg.append('text').attr('x', sx + 10).attr('y', 82).attr('font-size', 8.6).attr('font-weight', '600').attr('fill', '#e9e6de').text(st.v);
+          pSvg.append('text').attr('x', sx + 10).attr('y', 58).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', st.c).text(st.k);
+          pSvg.append('text').attr('x', sx + 10).attr('y', 82).attr('font-size', 12).attr('font-weight', '600').attr('fill', '#e9e6de').text(st.v);
         });
       }
 
@@ -2857,7 +2749,7 @@
       lSvg.selectAll('*').remove();
       lSvg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 116).attr('rx', 10)
         .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
-      lSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 9).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      lSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
         .text('D3.JS V7 4-PILLAR AUTONOMOUS OUTPUT & SPRA 95.3% CONTEXT COMPRESSION (39 AGENT STREAMS)');
       var pillars = [
         { k: '01 · RESEARCH & SPRA', v: '95.3% Token Cut', sub: '~260 tok/paper · 1,902/wk', c: '#4fb3a8' },
@@ -2869,9 +2761,9 @@
         var px = 16 + idx * 184;
         lSvg.append('rect').attr('x', px).attr('y', 32).attr('width', 174).attr('height', 76).attr('rx', 8)
           .attr('fill', '#161b24').attr('stroke', pl.c).attr('stroke-width', 1.4);
-        lSvg.append('text').attr('x', px + 10).attr('y', 50).attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', pl.c).text(pl.k);
-        lSvg.append('text').attr('x', px + 10).attr('y', 72).attr('font-size', 11).attr('font-weight', '700').attr('fill', '#f4f1ea').text(pl.v);
-        lSvg.append('text').attr('x', px + 10).attr('y', 92).attr('font-size', 8).attr('fill', '#9aa3b2').text(pl.sub);
+        lSvg.append('text').attr('x', px + 10).attr('y', 50).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', pl.c).text(pl.k);
+        lSvg.append('text').attr('x', px + 10).attr('y', 72).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#f4f1ea').text(pl.v);
+        lSvg.append('text').attr('x', px + 10).attr('y', 92).attr('font-size', 12).attr('fill', '#9aa3b2').text(pl.sub);
       });
     }
 
@@ -2882,7 +2774,7 @@
       s2Svg.selectAll('*').remove();
       s2Svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 136).attr('rx', 10)
         .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
-      s2Svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 9).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      s2Svg.append('text').attr('x', 18).attr('y', 24).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
         .text('D3.JS V7 CALIBRATED 2027–2030 FUTURES CONE PROBABILITY DISTRIBUTION (SUM = 100% · VOROS 2003)');
       var cones = [
         { k: '1. Co-Intelligence Airlock & PSI Co-Ops', p: 44, c: '#4fb3a8', sub: 'Local Wasm OCap + 95% Shapley + 24h Lease' },
@@ -2892,10 +2784,10 @@
       ];
       cones.forEach(function (cn, i) {
         var cy = 36 + i * 24;
-        s2Svg.append('text').attr('x', 18).attr('y', cy + 13).attr('font-size', 8.4).attr('font-weight', '700').attr('fill', cn.c).text(cn.k);
+        s2Svg.append('text').attr('x', 18).attr('y', cy + 13).attr('font-size', 12).attr('font-weight', '700').attr('fill', cn.c).text(cn.k);
         s2Svg.append('rect').attr('x', 246).attr('y', cy + 2).attr('width', 240).attr('height', 15).attr('rx', 4).attr('fill', '#161b24');
         s2Svg.append('rect').attr('x', 246).attr('y', cy + 2).attr('width', Math.round(cn.p * 4.8)).attr('height', 15).attr('rx', 4).attr('fill', cn.c);
-        s2Svg.append('text').attr('x', 496).attr('y', cy + 13).attr('font-size', 8.2).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#f4f1ea').text(cn.p + '% · ' + cn.sub);
+        s2Svg.append('text').attr('x', 496).attr('y', cy + 13).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#f4f1ea').text(cn.p + '% · ' + cn.sub);
       });
     }
 
@@ -2911,7 +2803,7 @@
         rSvg.selectAll('*').remove();
         rSvg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 124).attr('rx', 10)
           .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
-        rSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 9).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
+        rSvg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#ef6a52')
           .text('D3.JS V7 SAFEGUARD COMPOUNDING CURVE · PROBLEM DIFFICULTY: ' + rVal + '% · SAFEGUARDS BUILT: ' + sVal + '%');
 
         var rxScale = d3.scaleLinear().domain([0, 100]).range([36, 480]);
@@ -2928,9 +2820,9 @@
 
         rSvg.append('rect').attr('x', 502).attr('y', 30).attr('width', 238).attr('height', 84).attr('rx', 8)
           .attr('fill', '#161b24').attr('stroke', '#4fb3a8');
-        rSvg.append('text').attr('x', 514).attr('y', 50).attr('font-size', 8.4).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c').text('SAFEGUARD REDUCTION EFFECT');
-        rSvg.append('text').attr('x', 514).attr('y', 72).attr('font-size', 9.5).attr('font-weight', '700').attr('fill', '#ef6a52').text('Unshielded Baseline: ' + Math.round(4 + (rVal / 100) * 48) + '% Catastrophe');
-        rSvg.append('text').attr('x', 514).attr('y', 94).attr('font-size', 9.5).attr('font-weight', '700').attr('fill', '#4fb3a8').text('✓ With CIN Safeguards: ' + curRisk.toFixed(1) + '%');
+        rSvg.append('text').attr('x', 514).attr('y', 50).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#e5a93c').text('SAFEGUARD REDUCTION EFFECT');
+        rSvg.append('text').attr('x', 514).attr('y', 72).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#ef6a52').text('Unshielded Baseline: ' + Math.round(4 + (rVal / 100) * 48) + '% Catastrophe');
+        rSvg.append('text').attr('x', 514).attr('y', 94).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#4fb3a8').text('✓ With CIN Safeguards: ' + curRisk.toFixed(1) + '%');
       }
       renderRlD3();
       var rlSec = document.getElementById('risk-lab');
@@ -2947,7 +2839,7 @@
       l2Svg.selectAll('*').remove();
       l2Svg.append('rect').attr('x', 4).attr('y', 4).attr('width', 752).attr('height', 124).attr('rx', 10)
         .attr('fill', '#12161f').attr('stroke', '#2c303a').attr('stroke-width', 1.5);
-      l2Svg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 9).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      l2Svg.append('text').attr('x', 18).attr('y', 22).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
         .text('D3.JS V7 CONSTITUTIONAL DISTILLATION FUNNEL (550 PRINCIPLES → 44 PROTOCOL SPECS → 19 FLOOR RULES)');
       var stages = [
         { k: '1. OPEN CORPUS', n: '550 Principles', sub: '434 Initial + 116 Safeguards', c: '#5da2d5' },
@@ -2962,9 +2854,9 @@
         }
         l2Svg.append('rect').attr('x', sx).attr('y', 34).attr('width', 172).attr('height', 76).attr('rx', 8)
           .attr('fill', '#161b24').attr('stroke', st.c).attr('stroke-width', 1.4);
-        l2Svg.append('text').attr('x', sx + 10).attr('y', 52).attr('font-size', 8).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', st.c).text(st.k);
-        l2Svg.append('text').attr('x', sx + 10).attr('y', 74).attr('font-size', 11.2).attr('font-weight', '700').attr('fill', '#f4f1ea').text(st.n);
-        l2Svg.append('text').attr('x', sx + 10).attr('y', 94).attr('font-size', 8).attr('fill', '#9aa3b2').text(st.sub);
+        l2Svg.append('text').attr('x', sx + 10).attr('y', 52).attr('font-size', 12).attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', st.c).text(st.k);
+        l2Svg.append('text').attr('x', sx + 10).attr('y', 74).attr('font-size', 12).attr('font-weight', '700').attr('fill', '#f4f1ea').text(st.n);
+        l2Svg.append('text').attr('x', sx + 10).attr('y', 94).attr('font-size', 12).attr('fill', '#9aa3b2').text(st.sub);
       });
     }
   }

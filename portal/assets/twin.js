@@ -404,7 +404,7 @@ function drawValueRadar(values) {
       'text-anchor': 'middle',
       fill: score >= 4 ? '#4fb3a8' : '#c5c2b9',
       'font-family': 'monospace',
-      'font-size': '9.5',
+      'font-size': '12',
       'font-weight': '700'
     }, `${d.label}(${score})`));
   });
@@ -550,7 +550,7 @@ function renderTrajectoryGauge(trajectory) {
     y: 22,
     fill: '#f0ede6',
     'font-family': 'monospace',
-    'font-size': '10.5',
+    'font-size': '13',
     'font-weight': '700'
   }, `${score.toFixed(1)}/100 (${trajectory.toward_count}↑ ${trajectory.away_count}↓)`));
   host.appendChild(svg);
@@ -931,11 +931,11 @@ function drawContextBudgetBar(res) {
 
   const svg = svgEl('svg', { viewBox: '0 0 380 54', class: 'svg-diagram', 'aria-hidden': 'true' });
   svg.appendChild(svgEl('rect', { x: 0, y: 0, width: 380, height: 54, fill: '#0d0f13' }));
-  svg.appendChild(svgEl('text', { x: 14, y: 17, fill: '#4fb3a8', 'font-family': 'monospace', 'font-size': '9.5', 'font-weight': '700' },
+  svg.appendChild(svgEl('text', { x: 14, y: 17, fill: '#4fb3a8', 'font-family': 'monospace', 'font-size': '12', 'font-weight': '700' },
     `TOKEN ALLOCATION: ${used} / ${budget} TOKENS USED (${res.remaining_tokens} FREE)`));
   svg.appendChild(svgEl('rect', { x: 14, y: 24, width: 352, height: 14, rx: 7, fill: '#1a1e28' }));
   svg.appendChild(svgEl('rect', { x: 14, y: 24, width: usedW, height: 14, rx: 7, fill: '#6aa8e0' }));
-  svg.appendChild(svgEl('text', { x: 14, y: 49, fill: '#8c8a82', 'font-family': 'monospace', 'font-size': '8.5' },
+  svg.appendChild(svgEl('text', { x: 14, y: 49, fill: '#8c8a82', 'font-family': 'monospace', 'font-size': '12' },
     `Prefix cache hash: ${res.prefix_fingerprint} · Critical facts pinned first`));
   host.appendChild(svg);
 }
@@ -1028,8 +1028,8 @@ function drawAirlockSvg(res) {
       svg.appendChild(svgEl('line', { x1: s.x - 12, y1: 41, x2: s.x, y2: 41, stroke: s.c, 'stroke-width': 2 }));
     }
     svg.appendChild(svgEl('rect', { x: s.x, y: 16, width: 90, height: 50, rx: 7, fill: '#141821', stroke: s.c, 'stroke-width': 1.6 }));
-    svg.appendChild(svgEl('text', { x: s.x + 45, y: 36, 'text-anchor': 'middle', fill: '#f0ede6', 'font-family': 'sans-serif', 'font-size': '9.5', 'font-weight': '700' }, s.label));
-    svg.appendChild(svgEl('text', { x: s.x + 45, y: 52, 'text-anchor': 'middle', fill: s.c, 'font-family': 'monospace', 'font-size': '8.5', 'font-weight': '700' }, s.sub));
+    svg.appendChild(svgEl('text', { x: s.x + 45, y: 36, 'text-anchor': 'middle', fill: '#f0ede6', 'font-family': 'sans-serif', 'font-size': '12', 'font-weight': '700' }, s.label));
+    svg.appendChild(svgEl('text', { x: s.x + 45, y: 52, 'text-anchor': 'middle', fill: s.c, 'font-family': 'monospace', 'font-size': '12', 'font-weight': '700' }, s.sub));
   });
 
   host.appendChild(svg);
@@ -1149,7 +1149,7 @@ function drawLookaheadDag(steps, decision) {
       'text-anchor': 'middle',
       fill: strokeCol,
       'font-family': 'monospace',
-      'font-size': '8.5',
+      'font-size': '12',
       'font-weight': '700'
     }, `STEP ${idx + 1} · ${st.category.toUpperCase()}`));
     svg.appendChild(svgEl('text', {
@@ -1158,7 +1158,7 @@ function drawLookaheadDag(steps, decision) {
       'text-anchor': 'middle',
       fill: '#f0ede6',
       'font-family': 'sans-serif',
-      'font-size': '10',
+      'font-size': '13',
       'font-weight': '700'
     }, st.tool_name));
     const subTag = st.taints_output
@@ -1170,7 +1170,7 @@ function drawLookaheadDag(steps, decision) {
       'text-anchor': 'middle',
       fill: '#c5c2b9',
       'font-family': 'monospace',
-      'font-size': '8'
+      'font-size': '12'
     }, subTag));
   });
 
@@ -1363,12 +1363,12 @@ function drawVisualViewport(elementType, detectedText, success) {
     'stroke-width': 1.8,
     'stroke-dasharray': success ? 'none' : '4 2'
   }));
-  svg.appendChild(svgEl('text', { x: 34, y: 35, fill: '#c5c2b9', 'font-family': 'monospace', 'font-size': '8.5' },
+  svg.appendChild(svgEl('text', { x: 34, y: 35, fill: '#c5c2b9', 'font-family': 'monospace', 'font-size': '12' },
     `<input type="${elementType}">`));
-  svg.appendChild(svgEl('text', { x: 34, y: 48, fill: '#f0ede6', 'font-family': 'sans-serif', 'font-size': '9.5', 'font-weight': '700' },
+  svg.appendChild(svgEl('text', { x: 34, y: 48, fill: '#f0ede6', 'font-family': 'sans-serif', 'font-size': '12', 'font-weight': '700' },
     (detectedText || 'DOM Target').slice(0, 32)));
   svg.appendChild(svgEl('rect', { x: 256, y: 24, width: 98, height: 26, rx: 5, fill: success ? '#173330' : '#361c18' }));
-  svg.appendChild(svgEl('text', { x: 305, y: 40, 'text-anchor': 'middle', fill: col, 'font-family': 'monospace', 'font-size': '9', 'font-weight': '700' },
+  svg.appendChild(svgEl('text', { x: 305, y: 40, 'text-anchor': 'middle', fill: col, 'font-family': 'monospace', 'font-size': '12', 'font-weight': '700' },
     success ? 'DOM ALLOWED' : 'SHIELD BLOCK'));
   host.appendChild(svg);
 }
@@ -1713,21 +1713,21 @@ function drawIncomeProofSvg(feedType, threshold, qualifies) {
 
   // Private vault box
   svg.appendChild(svgEl('rect', { x: 10, y: 10, width: 222, height: 74, rx: 8, fill: '#141821', stroke: '#2e3442', 'stroke-dasharray': '4 2' }));
-  svg.appendChild(svgEl('text', { x: 20, y: 25, fill: '#8c8a82', 'font-family': 'monospace', 'font-size': '8', 'font-weight': '700' }, 'LOCAL VAULT (NEVER LEAVES DEVICE)'));
+  svg.appendChild(svgEl('text', { x: 20, y: 25, fill: '#8c8a82', 'font-family': 'monospace', 'font-size': '12', 'font-weight': '700' }, 'LOCAL VAULT (NEVER LEAVES DEVICE)'));
   svg.appendChild(svgEl('rect', { x: 20, y: 34, width: 120, height: 12, rx: 4, fill: '#6aa8e0' }));
-  svg.appendChild(svgEl('text', { x: 146, y: 43, fill: '#c5c2b9', 'font-family': 'monospace', 'font-size': '8.5' }, preAmt));
+  svg.appendChild(svgEl('text', { x: 146, y: 43, fill: '#c5c2b9', 'font-family': 'monospace', 'font-size': '12' }, preAmt));
   svg.appendChild(svgEl('rect', { x: 20, y: 54, width: postW, height: 12, rx: 4, fill: '#ef6a52' }));
-  svg.appendChild(svgEl('text', { x: 20 + postW + 6, y: 63, fill: '#f0ede6', 'font-family': 'monospace', 'font-size': '8.5' }, postAmt));
+  svg.appendChild(svgEl('text', { x: 20 + postW + 6, y: 63, fill: '#f0ede6', 'font-family': 'monospace', 'font-size': '12' }, postAmt));
 
   // ZK Gate Arrow
   svg.appendChild(svgEl('line', { x1: 232, y1: 47, x2: 258, y2: 47, stroke: col, 'stroke-width': 2 }));
 
   // Portable Receipt Box
   svg.appendChild(svgEl('rect', { x: 258, y: 14, width: 152, height: 66, rx: 8, fill: '#131c1d', stroke: col, 'stroke-width': 1.8 }));
-  svg.appendChild(svgEl('text', { x: 334, y: 32, 'text-anchor': 'middle', fill: col, 'font-family': 'monospace', 'font-size': '8.5', 'font-weight': '700' }, 'PORTABLE ZK RECEIPT'));
-  svg.appendChild(svgEl('text', { x: 334, y: 50, 'text-anchor': 'middle', fill: '#f0ede6', 'font-family': 'sans-serif', 'font-size': '10.5', 'font-weight': '700' },
+  svg.appendChild(svgEl('text', { x: 334, y: 32, 'text-anchor': 'middle', fill: col, 'font-family': 'monospace', 'font-size': '12', 'font-weight': '700' }, 'PORTABLE ZK RECEIPT'));
+  svg.appendChild(svgEl('text', { x: 334, y: 50, 'text-anchor': 'middle', fill: '#f0ede6', 'font-family': 'sans-serif', 'font-size': '13', 'font-weight': '700' },
     qualifies ? `Drop >= ${threshold}%: TRUE` : `Drop >= ${threshold}%: FALSE`));
-  svg.appendChild(svgEl('text', { x: 334, y: 66, 'text-anchor': 'middle', fill: '#c5c2b9', 'font-family': 'monospace', 'font-size': '8' }, '0 raw transactions exposed'));
+  svg.appendChild(svgEl('text', { x: 334, y: 66, 'text-anchor': 'middle', fill: '#c5c2b9', 'font-family': 'monospace', 'font-size': '12' }, '0 raw transactions exposed'));
 
   host.appendChild(svg);
 }
@@ -2010,7 +2010,7 @@ function drawContribChart(summary) {
     const w = Math.max(28, Math.round((count / summary.total) * totalW));
     const col = colors[idx % colors.length];
     svg.appendChild(svgEl('rect', { x: curX, y: 12, width: Math.min(w - 3, 366 - curX), height: 18, rx: 4, fill: col }));
-    svg.appendChild(svgEl('text', { x: curX + 6, y: 24, fill: '#0d0f13', 'font-family': 'monospace', 'font-size': '8.5', 'font-weight': '700' }, `${k}(${count})`));
+    svg.appendChild(svgEl('text', { x: curX + 6, y: 24, fill: '#0d0f13', 'font-family': 'monospace', 'font-size': '12', 'font-weight': '700' }, `${k}(${count})`));
     curX += w;
   });
   host.appendChild(svg);

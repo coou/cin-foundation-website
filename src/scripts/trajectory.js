@@ -10,6 +10,7 @@
     var svgEl = document.getElementById('traj-hero-d3-svg');
     if (!d3 || typeof d3.select !== 'function' || !svgEl) return;
 
+    svgEl.setAttribute('viewBox', '0 0 640 144');
     var svg = d3.select(svgEl);
     svg.selectAll('*').remove();
 
@@ -24,17 +25,17 @@
     /* Outer dark background rect */
     svg.append('rect')
       .attr('x', 2).attr('y', 2)
-      .attr('width', 516).attr('height', 112).attr('rx', 9)
+      .attr('width', 636).attr('height', 140).attr('rx', 9)
       .attr('fill', '#12161f')
       .attr('stroke', '#2c303a')
       .attr('stroke-width', 1.2);
 
-    /* Left Panel (x = 14..310): 30-Day Sovereignty Trajectory */
+    /* Left Panel (x = 16..374): 30-Day Sovereignty Trajectory */
     svg.append('text')
-      .attr('x', 16).attr('y', 22)
+      .attr('x', 16).attr('y', 24)
       .attr('font-family', 'ui-monospace, monospace')
-      .attr('font-size', 8.2).attr('font-weight', 700).attr('fill', '#4fb3a8')
-      .text('30-DAY SOVEREIGNTY TRAJECTORY (50.0 NEUTRAL → 70.1 TOWARD)');
+      .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#4fb3a8')
+      .text('30-DAY TRAJECTORY (50 → 70.1)');
 
     var pts = [
       { day: 0, v: 51.4 },
@@ -48,22 +49,22 @@
       { day: 29, v: 70.1 }
     ];
 
-    var xScale = d3.scaleLinear().domain([0, 29]).range([20, 302]);
-    var yScale = d3.scaleLinear().domain([47, 73]).range([98, 34]);
+    var xScale = d3.scaleLinear().domain([0, 29]).range([22, 368]);
+    var yScale = d3.scaleLinear().domain([47, 73]).range([122, 42]);
     var y50 = yScale(50.0);
 
     /* Dashed 50.0 neutral baseline */
     svg.append('line')
-      .attr('x1', 16).attr('x2', 306)
+      .attr('x1', 18).attr('x2', 372)
       .attr('y1', y50).attr('y2', y50)
       .attr('stroke', '#8c95a6').attr('stroke-width', 1)
       .attr('stroke-dasharray', '4 3').attr('opacity', 0.75);
 
     svg.append('text')
-      .attr('x', 18).attr('y', y50 + 11)
+      .attr('x', 20).attr('y', y50 + 15)
       .attr('font-family', 'ui-monospace, monospace')
-      .attr('font-size', 7.6).attr('fill', '#8c95a6')
-      .text('50.0 Neutral Baseline');
+      .attr('font-size', 12).attr('fill', '#8c95a6')
+      .text('50.0 Neutral');
 
     var areaGen = d3.area()
       .x(function (d) { return xScale(d.day); })
@@ -92,66 +93,66 @@
     var x0 = xScale(0);
     var y0 = yScale(51.4);
     svg.append('circle')
-      .attr('cx', x0).attr('cy', y0).attr('r', 3)
+      .attr('cx', x0).attr('cy', y0).attr('r', 3.5)
       .attr('fill', '#4fb3a8');
     svg.append('text')
-      .attr('x', x0 + 6).attr('y', y0 - 5)
+      .attr('x', x0 + 8).attr('y', y0 - 6)
       .attr('font-family', 'ui-monospace, monospace')
-      .attr('font-size', 8).attr('font-weight', 700).attr('fill', '#c5cad6')
+      .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#c5cad6')
       .text('51.4');
 
     /* Glowing endpoint circle (70.1) */
     var xEnd = xScale(29);
     var yEnd = yScale(70.1);
     svg.append('circle')
-      .attr('cx', xEnd).attr('cy', yEnd).attr('r', 7)
+      .attr('cx', xEnd).attr('cy', yEnd).attr('r', 7.5)
       .attr('fill', 'rgba(79, 179, 168, 0.28)')
       .attr('stroke', '#e5a93c').attr('stroke-width', 1.2);
     svg.append('circle')
-      .attr('cx', xEnd).attr('cy', yEnd).attr('r', 3.6)
+      .attr('cx', xEnd).attr('cy', yEnd).attr('r', 4)
       .attr('fill', '#4fb3a8')
       .attr('stroke', '#ffffff').attr('stroke-width', 1.2);
     svg.append('text')
-      .attr('x', xEnd - 9).attr('y', yEnd + 3)
+      .attr('x', xEnd - 11).attr('y', yEnd + 4)
       .attr('text-anchor', 'end')
       .attr('font-family', 'ui-monospace, monospace')
-      .attr('font-size', 8.6).attr('font-weight', 700).attr('fill', '#e5a93c')
+      .attr('font-size', 12.5).attr('font-weight', 700).attr('fill', '#e5a93c')
       .text('70.1');
 
     /* Divider */
     svg.append('line')
-      .attr('x1', 316).attr('x2', 316)
-      .attr('y1', 12).attr('y2', 104)
+      .attr('x1', 386).attr('x2', 386)
+      .attr('y1', 12).attr('y2', 132)
       .attr('stroke', '#262c3a').attr('stroke-width', 1);
 
-    /* Right Panel (x = 324..506): Dual-Agent Verification */
+    /* Right Panel (x = 398..624): Dual-Agent Verification */
     svg.append('text')
-      .attr('x', 326).attr('y', 22)
+      .attr('x', 398).attr('y', 24)
       .attr('font-family', 'ui-monospace, monospace')
-      .attr('font-size', 8.2).attr('font-weight', 700).attr('fill', '#e5a93c')
-      .text('DUAL-AGENT VERIFICATION');
+      .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#e5a93c')
+      .text('VERIFICATION');
 
     var rightRows = [
-      { y: 30, text: '5,977 Primary Sources', fill: '#181e2b', stroke: '#2b3344', color: '#e9e6de', dot: '#4fb3a8' },
-      { y: 56, text: '87% Dual-Agent Agreement', fill: '#181e2b', stroke: '#2b3344', color: '#4fb3a8', dot: '#5da2d5' },
-      { y: 82, text: '64x / 27mo AI Doubling Alert', fill: 'rgba(239, 106, 82, 0.14)', stroke: '#ef6a52', color: '#ef6a52', dot: '#ef6a52' }
+      { y: 34, text: '5,977 Primary Sources', fill: '#181e2b', stroke: '#2b3344', color: '#e9e6de', dot: '#4fb3a8' },
+      { y: 68, text: '87% Agent Agreement', fill: '#181e2b', stroke: '#2b3344', color: '#4fb3a8', dot: '#5da2d5' },
+      { y: 102, text: '64x / 27mo AI Alert', fill: 'rgba(239, 106, 82, 0.14)', stroke: '#ef6a52', color: '#ef6a52', dot: '#ef6a52' }
     ];
 
     rightRows.forEach(function (r) {
       svg.append('rect')
-        .attr('x', 326).attr('y', r.y)
-        .attr('width', 180).attr('height', 22).attr('rx', 4)
+        .attr('x', 398).attr('y', r.y)
+        .attr('width', 226).attr('height', 28).attr('rx', 4)
         .attr('fill', r.fill)
         .attr('stroke', r.stroke).attr('stroke-width', 1);
 
       svg.append('circle')
-        .attr('cx', 336).attr('cy', r.y + 11).attr('r', 3)
+        .attr('cx', 410).attr('cy', r.y + 14).attr('r', 3.5)
         .attr('fill', r.dot);
 
       svg.append('text')
-        .attr('x', 344).attr('y', r.y + 14)
+        .attr('x', 420).attr('y', r.y + 18)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 8.3).attr('font-weight', 700).attr('fill', r.color)
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', r.color)
         .text(r.text);
     });
   }
@@ -376,9 +377,9 @@
         .attr('fill', 'rgba(20,24,32,0.04)').attr('stroke', 'var(--rule)').attr('stroke-width', 1);
 
       root.append('text')
-        .attr('x', 56).attr('y', 40).attr('font-size', 10.5).attr('font-weight', 700)
+        .attr('x', 56).attr('y', 42).attr('font-size', 12.5).attr('font-weight', 700)
         .attr('font-family', 'monospace').attr('fill', '#4fb3a8')
-        .text('METR T50 AUTONOMOUS TASK HORIZON (LOG SCALE) VS. HUMAN OVERSIGHT');
+        .text('METR T50 HORIZON (LOG) VS. HUMAN OVERSIGHT');
 
       /* Futures Cone Fan Polygon */
       root.append('polygon')
@@ -390,9 +391,9 @@
         .attr('x1', 54).attr('y1', 205).attr('x2', 528).attr('y2', 205)
         .attr('stroke', '#ef6a52').attr('stroke-width', 2).attr('stroke-dasharray', '6 4');
       root.append('text')
-        .attr('x', 524).attr('y', 198).attr('text-anchor', 'end')
-        .attr('font-size', 9.5).attr('font-weight', 700).attr('fill', '#ef6a52')
-        .text('Unshielded Human Biological Oversight Line (~40 bits/s)');
+        .attr('x', 524).attr('y', 196).attr('text-anchor', 'end')
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#ef6a52')
+        .text('Human Oversight (~40 bits/s)');
 
       /* Uncontained Frontier Exponential Curve */
       root.append('path')
@@ -404,8 +405,8 @@
         .attr('d', 'M75,220 C162,184 249,144 336,102 C423,62 475,42 510,32')
         .attr('fill', 'none').attr('stroke', '#4fb3a8').attr('stroke-width', 3);
       root.append('text')
-        .attr('x', 68).attr('y', 68).attr('font-size', 9.5).attr('font-weight', 700).attr('fill', '#4fb3a8')
-        .text('CIN Co-Intelligence & OCap Isolation Shield Line');
+        .attr('x', 68).attr('y', 68).attr('font-size', 12).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .text('CIN Co-Intelligence & OCap Shield');
 
       /* Active Stage Vertical Highlight Hairline */
       var ax = xs[activeIdx] || 75;
@@ -414,6 +415,7 @@
         .attr('x1', ax).attr('y1', 46).attr('x2', ax).attr('y2', 232)
         .attr('stroke', '#e5a93c').attr('stroke-width', 1.5).attr('stroke-dasharray', '3 3');
 
+      var shortXLabels = ['2026', '27 H1', '27 H2', '28-29', '30-31', '2032+'];
       /* Stage Nodes along Exponential Curve */
       STAGES.forEach(function (item, i) {
         var cx = xs[i];
@@ -444,21 +446,21 @@
           .attr('stroke-width', 2);
 
         gNode.append('text')
-          .attr('x', cx).attr('y', cy - (isSel ? 15 : 10))
+          .attr('x', cx).attr('y', cy - (isSel ? 15 : 11))
           .attr('text-anchor', 'middle')
-          .attr('font-size', isSel ? 9.5 : 8.8)
+          .attr('font-size', 12)
           .attr('font-weight', isSel ? 700 : 600)
           .attr('font-family', 'monospace')
           .attr('fill', isSel ? '#e5a93c' : 'var(--ink-2)')
           .text('S' + (i + 1));
 
         gNode.append('text')
-          .attr('x', cx).attr('y', 250)
+          .attr('x', cx).attr('y', 252)
           .attr('text-anchor', 'middle')
-          .attr('font-size', 9.2)
+          .attr('font-size', 12)
           .attr('font-weight', isSel ? 700 : 500)
           .attr('fill', isSel ? 'var(--ink)' : 'var(--ink-2)')
-          .text(item.short);
+          .text(shortXLabels[i] || item.short);
       });
 
       /* Right Panel: Live Voros Futures Cone Visual Gauge */
@@ -467,22 +469,22 @@
         .attr('fill', 'rgba(20,24,32,0.04)').attr('stroke', 'var(--rule)').attr('stroke-width', 1);
 
       root.append('text')
-        .attr('x', 570).attr('y', 42).attr('font-size', 10.5).attr('font-weight', 700)
+        .attr('x', 570).attr('y', 42).attr('font-size', 12.5).attr('font-weight', 700)
         .attr('font-family', 'monospace').attr('fill', '#e5a93c')
-        .text('FUTURES CONE (' + st.short.toUpperCase() + ')');
+        .text('FUTURES CONE (' + st.short.split(':')[0].toUpperCase() + ')');
 
       var coneItems = [
-        { label: '45% Plausible (Co-Op & OCap)', pct: 45, color: '#4fb3a8' },
-        { label: '30% Probable (Baseline Friction)', pct: 30, color: '#5da2d5' },
-        { label: '15% Wildcard (Regulatory Capture)', pct: 15, color: '#ef6a52' },
-        { label: '10% Preferable (Full Sovereign Rail)', pct: 10, color: '#e5a93c' }
+        { label: '45% Plausible (Co-Op)', pct: 45, color: '#4fb3a8' },
+        { label: '30% Probable (Friction)', pct: 30, color: '#5da2d5' },
+        { label: '15% Wildcard (Capture)', pct: 15, color: '#ef6a52' },
+        { label: '10% Preferable (Sovereign)', pct: 10, color: '#e5a93c' }
       ];
 
       coneItems.forEach(function (ci, k) {
         var yBase = 68 + k * 42;
         root.append('text')
           .attr('x', 570).attr('y', yBase)
-          .attr('font-size', 9.8).attr('font-weight', 700).attr('fill', ci.color)
+          .attr('font-size', 12).attr('font-weight', 700).attr('fill', ci.color)
           .text(ci.label);
 
         root.append('rect')
@@ -502,9 +504,9 @@
       });
 
       root.append('text')
-        .attr('x', 570).attr('y', 244)
-        .attr('font-size', 9.2).attr('font-family', 'monospace').attr('fill', 'var(--ink-2)')
-        .text('Shield Coverage: ' + st.shieldScore + '% · T50: ' + st.short.split(': ')[1]);
+        .attr('x', 570).attr('y', 246)
+        .attr('font-size', 12).attr('font-family', 'monospace').attr('fill', 'var(--ink-2)')
+        .text('Shield: ' + st.shieldScore + '% · T50: ' + st.short.split(': ')[1]);
     };
 
     var renderStage = function (idx) {

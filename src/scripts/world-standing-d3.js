@@ -9,7 +9,7 @@
     {
       id: 'openai-cloud',
       name: 'OpenAI / Frontier Cloud API',
-      shortLabel: 'OpenAI Cloud',
+      shortLabel: 'OpenAI API',
       lens: 'sota-labs',
       lensLabel: '1. SOTA AI Labs',
       color: '#ef6a52',
@@ -26,7 +26,7 @@
     {
       id: 'anthropic-rsp',
       name: 'Anthropic / RSP Frontier Lab',
-      shortLabel: 'Anthropic RSP',
+      shortLabel: 'Anthropic',
       lens: 'sota-labs',
       lensLabel: '1. SOTA AI Labs',
       color: '#e07b42',
@@ -43,7 +43,7 @@
     {
       id: 'deepmind-hyperscale',
       name: 'Google DeepMind / Hyperscale',
-      shortLabel: 'DeepMind Cloud',
+      shortLabel: 'DeepMind',
       lens: 'sota-labs',
       lensLabel: '1. SOTA AI Labs',
       color: '#ef6a52',
@@ -77,7 +77,7 @@
     {
       id: 'eacc-swarms',
       name: 'Unbounded Acceleration (e/acc)',
-      shortLabel: 'Raw e/acc Swarms',
+      shortLabel: 'e/acc Swarms',
       lens: 'safety-labs',
       lensLabel: '2. AI Safety & Pause Gradient',
       color: '#ef6a52',
@@ -94,7 +94,7 @@
     {
       id: 'eval-institutes',
       name: 'METR / Redwood / Apollo / UK AISI',
-      shortLabel: 'METR & AISI Evals',
+      shortLabel: 'METR / AISI',
       lens: 'safety-labs',
       lensLabel: '2. AI Safety & Pause Gradient',
       color: '#e5a93c',
@@ -111,7 +111,7 @@
     {
       id: 'cin-airlock',
       name: 'CIN Co-Intelligence Airlock (Zone 4)',
-      shortLabel: 'CIN Airlock (Zone 4)',
+      shortLabel: 'CIN Airlock',
       lens: 'safety-labs',
       lensLabel: '2. AI Safety & Pause Gradient',
       color: '#4fb3a8',
@@ -128,7 +128,7 @@
     {
       id: 'hard-pause',
       name: 'Global Hard Compute Pause (Zone 5)',
-      shortLabel: 'Global Hard Pause',
+      shortLabel: 'Hard Pause',
       lens: 'safety-labs',
       lensLabel: '2. AI Safety & Pause Gradient',
       color: '#5da2d5',
@@ -145,7 +145,7 @@
     {
       id: 'legislatures',
       name: 'National Legislatures & Regulators',
-      shortLabel: 'Statutory Regulators',
+      shortLabel: 'Legislatures',
       lens: 'governments',
       lensLabel: '3. Governments',
       color: '#ef6a52',
@@ -162,7 +162,7 @@
     {
       id: 'state-treasuries',
       name: 'Municipal & Sovereign Tax Bases',
-      shortLabel: 'Public Treasuries',
+      shortLabel: 'Treasuries',
       lens: 'governments',
       lensLabel: '3. Governments',
       color: '#e07b42',
@@ -179,7 +179,7 @@
     {
       id: 'public-universities',
       name: 'Public Universities & arXiv Labs',
-      shortLabel: 'Public Universities',
+      shortLabel: 'Universities',
       lens: 'universities',
       lensLabel: '4. Universities',
       color: '#5da2d5',
@@ -196,7 +196,7 @@
     {
       id: 'academic-lora-mesh',
       name: 'Federated University TIES-LoRA Mesh',
-      shortLabel: 'Academic LoRA Mesh',
+      shortLabel: 'LoRA Mesh',
       lens: 'universities',
       lensLabel: '4. Universities',
       color: '#4fb3a8',
@@ -213,7 +213,7 @@
     {
       id: 'cloud-wrapper-corps',
       name: 'Cloud API Tenant Enterprises',
-      shortLabel: 'Cloud API Tenants',
+      shortLabel: 'Cloud Tenants',
       lens: 'enterprise',
       lensLabel: '5. Enterprise',
       color: '#ef6a52',
@@ -230,7 +230,7 @@
     {
       id: 'psi-buyer-coops',
       name: 'Sovereign Wasm + PSI Buyer Co-Ops',
-      shortLabel: 'PSI Buyer Co-Ops',
+      shortLabel: 'PSI Co-Ops',
       lens: 'enterprise',
       lensLabel: '5. Enterprise',
       color: '#4fb3a8',
@@ -247,7 +247,7 @@
     {
       id: 'commodity-cartels',
       name: 'Algorithmic Commodity & Buyer Cartels',
-      shortLabel: 'AI Buyer Cartels',
+      shortLabel: 'AI Cartels',
       lens: 'human-adoption',
       lensLabel: '6. Global Workforce',
       color: '#ef6a52',
@@ -264,7 +264,7 @@
     {
       id: 'physical-workforce',
       name: '4.8B+ Physical & Rural Workforce',
-      shortLabel: '4.8B Workforce',
+      shortLabel: '4.8B Workers',
       lens: 'human-adoption',
       lensLabel: '6. Global Workforce',
       color: '#e5a93c',
@@ -281,7 +281,7 @@
     {
       id: 'cloud-token-renters',
       name: 'Unprofitable Cloud Token Renters',
-      shortLabel: 'Cloud Token Burn',
+      shortLabel: 'Token Burn',
       lens: 'pair-intelligence',
       lensLabel: '7. Pair vs. Cloud Economics',
       color: '#ef6a52',
@@ -298,7 +298,7 @@
     {
       id: 'human-lora-pair',
       name: '1-to-1 Human + Local LoRA Pair',
-      shortLabel: '1-to-1 Pair Moat',
+      shortLabel: '1:1 Pair Moat',
       lens: 'pair-intelligence',
       lensLabel: '7. Pair vs. Cloud Economics',
       color: '#4fb3a8',
@@ -315,26 +315,26 @@
   ];
 
   var ZONES = [
-    { x0: 0, x1: 24, label: '1. Raw Acceleration', sub: 'Unbounded Swarms', fill: 'rgba(239, 106, 82, 0.08)', stroke: '#ef6a52' },
-    { x0: 24, x1: 48, label: '2. Cloud API Rent', sub: 'Self-Policed Labs', fill: 'rgba(224, 123, 66, 0.07)', stroke: '#e07b42' },
-    { x0: 48, x1: 68, label: '3. Eval & Statute Lag', sub: 'Diagnostics Only', fill: 'rgba(229, 169, 60, 0.07)', stroke: '#e5a93c' },
-    { x0: 68, x1: 88, label: '4. CIN Co-Intelligence', sub: 'Last Resort Airlock', fill: 'rgba(79, 179, 168, 0.16)', stroke: '#4fb3a8', highlight: true },
-    { x0: 88, x1: 100, label: '5. Hard Pause', sub: 'Global GPU Freeze', fill: 'rgba(93, 162, 213, 0.09)', stroke: '#5da2d5' }
+    { x0: 0, x1: 24, label: '1. Raw Accel', sub: 'Swarms', fill: 'rgba(239, 106, 82, 0.08)', stroke: '#ef6a52' },
+    { x0: 24, x1: 48, label: '2. Cloud Rent', sub: 'API Labs', fill: 'rgba(224, 123, 66, 0.07)', stroke: '#e07b42' },
+    { x0: 48, x1: 68, label: '3. Eval Lag', sub: 'Scorecards', fill: 'rgba(229, 169, 60, 0.07)', stroke: '#e5a93c' },
+    { x0: 68, x1: 88, label: '4. CIN Airlock', sub: 'Last Resort', fill: 'rgba(79, 179, 168, 0.16)', stroke: '#4fb3a8', highlight: true },
+    { x0: 88, x1: 100, label: '5. Pause', sub: 'Freeze', fill: 'rgba(93, 162, 213, 0.09)', stroke: '#5da2d5' }
   ];
 
   /* Deterministic non-overlapping label placement solver for #ws-ecosystem-svg */
   function computeLabelOffsets(positions, plotLeft, plotRight, plotTop, plotBottom) {
     var candidates = [
-      { dx: 0, dy: -15, anchor: 'middle' },
-      { dx: 0, dy: 21, anchor: 'middle' },
-      { dx: 14, dy: 4, anchor: 'start' },
-      { dx: -14, dy: 4, anchor: 'end' },
-      { dx: 0, dy: -26, anchor: 'middle' },
-      { dx: 0, dy: 31, anchor: 'middle' },
-      { dx: 16, dy: -10, anchor: 'start' },
-      { dx: -16, dy: -10, anchor: 'end' },
-      { dx: 16, dy: 14, anchor: 'start' },
-      { dx: -16, dy: 14, anchor: 'end' }
+      { dx: 0, dy: -16, anchor: 'middle' },
+      { dx: 0, dy: 23, anchor: 'middle' },
+      { dx: 15, dy: 4, anchor: 'start' },
+      { dx: -15, dy: 4, anchor: 'end' },
+      { dx: 0, dy: -28, anchor: 'middle' },
+      { dx: 0, dy: 34, anchor: 'middle' },
+      { dx: 17, dy: -11, anchor: 'start' },
+      { dx: -17, dy: -11, anchor: 'end' },
+      { dx: 17, dy: 16, anchor: 'start' },
+      { dx: -17, dy: 16, anchor: 'end' }
     ];
 
     var placedBoxes = [];
@@ -344,8 +344,8 @@
     var sorted = positions.slice().sort(function (a, b) { return a.cy - b.cy; });
 
     sorted.forEach(function (item) {
-      var w = item.d.shortLabel.length * 5.5 + 6;
-      var h = 11.5;
+      var w = item.d.shortLabel.length * 7.1 + 8;
+      var h = 14;
       var best = null;
       var bestPenalty = 1e9;
 
@@ -410,7 +410,7 @@
     var width = 860;
     var height = 420;
     var padL = 68;
-    var margin = { top: 56, right: 24, bottom: 48, left: padL };
+    var margin = { top: 58, right: 24, bottom: 48, left: padL };
 
     var x = d3.scaleLinear().domain([0, 100]).range([margin.left, width - margin.right]);
     var y = d3.scaleLinear().domain([0, 100]).range([height - margin.bottom, margin.top]);
@@ -471,10 +471,10 @@
 
       zoneGroup.append('rect')
         .attr('x', zx0 + 3)
-        .attr('y', 11)
+        .attr('y', 9)
         .attr('width', Math.max(20, zw - 6))
-        .attr('height', 38)
-        .attr('rx', 4)
+        .attr('height', 42)
+        .attr('rx', 5)
         .attr('fill', z.highlight ? 'rgba(79, 179, 168, 0.22)' : 'rgba(24, 29, 39, 0.9)')
         .attr('stroke', z.stroke)
         .attr('stroke-width', z.highlight ? 1.5 : 0.9)
@@ -482,20 +482,20 @@
 
       zoneGroup.append('text')
         .attr('x', (zx0 + zx1) / 2)
-        .attr('y', 25)
+        .attr('y', 26)
         .attr('text-anchor', 'middle')
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 9.2)
+        .attr('font-size', 12)
         .attr('font-weight', 700)
         .attr('fill', z.stroke)
         .text(z.label);
 
       zoneGroup.append('text')
         .attr('x', (zx0 + zx1) / 2)
-        .attr('y', 40)
+        .attr('y', 44)
         .attr('text-anchor', 'middle')
         .attr('font-family', 'system-ui, sans-serif')
-        .attr('font-size', 8.6)
+        .attr('font-size', 12)
         .attr('fill', z.highlight ? '#e9e6de' : '#9aa3b2')
         .text(z.sub);
     });
@@ -521,7 +521,7 @@
       .attr('color', '#8c95a6')
       .selectAll('text')
       .attr('font-family', 'ui-monospace, monospace')
-      .attr('font-size', 9.5);
+      .attr('font-size', 12);
 
     svg.append('g')
       .attr('transform', 'translate(' + margin.left + ',0)')
@@ -529,17 +529,17 @@
       .attr('color', '#8c95a6')
       .selectAll('text')
       .attr('font-family', 'ui-monospace, monospace')
-      .attr('font-size', 9.5);
+      .attr('font-size', 12);
 
     svg.append('text')
       .attr('x', (margin.left + width - margin.right) / 2)
-      .attr('y', height - 12)
+      .attr('y', height - 10)
       .attr('text-anchor', 'middle')
       .attr('font-family', 'ui-monospace, monospace')
-      .attr('font-size', 10)
+      .attr('font-size', 12.5)
       .attr('font-weight', 700)
       .attr('fill', '#d5d9e2')
-      .text('DEPLOYMENT & CONTAINMENT POSTURE (0% = Unbounded Swarms → 82% = CIN Airlock → 95% = Global Pause)');
+      .text('CONTAINMENT POSTURE (0% Swarms → 82% CIN Airlock → 95% Global Pause)');
 
     var midY = Math.round((margin.top + height - margin.bottom) / 2);
     svg.append('text')
@@ -549,10 +549,10 @@
       .attr('transform', 'rotate(-90, 18, ' + midY + ')')
       .attr('text-anchor', 'middle')
       .attr('font-family', 'ui-monospace, monospace')
-      .attr('font-size', 10)
+      .attr('font-size', 12.5)
       .attr('font-weight', 700)
       .attr('fill', '#4fb3a8')
-      .text('↑ HUMAN BIOLOGICAL & ECONOMIC SOVEREIGNTY (%)');
+      .text('↑ HUMAN SOVEREIGNTY (%)');
 
     var linksLayer = svg.append('g').attr('class', 'ws-vectors');
     var ghostsLayer = svg.append('g').attr('class', 'ws-ghosts');
@@ -578,12 +578,13 @@
     function renderActorComparatorD3(actor) {
       var cmpEl = document.getElementById('ws-actor-d3-svg');
       if (!d3 || !cmpEl || !actor) return;
+      cmpEl.setAttribute('viewBox', '0 0 680 134');
       var cSvg = d3.select(cmpEl);
       cSvg.selectAll('*').remove();
 
       cSvg.append('rect')
         .attr('x', 2).attr('y', 2)
-        .attr('width', 676).attr('height', 114).attr('rx', 8)
+        .attr('width', 676).attr('height', 130).attr('rx', 8)
         .attr('fill', '#11151d')
         .attr('stroke', '#28303e')
         .attr('stroke-width', 1.2);
@@ -591,48 +592,48 @@
       var mScores = actor.metrics || [20, 20, 20, 20];
       var cinScores = [95, 96, 98, 100];
       var labels = [
-        '1. Creator & Worker Value Retained',
-        '2. 60-90d Distillation Moat Durability',
-        '3. Biological Bandwidth Airlock (~40 b/s)',
-        '4. Local Data & IP Sovereignty (0-Egress)'
+        '1. Creator Value Retained',
+        '2. 90d Moat Durability',
+        '3. Bio Airlock (~40 b/s)',
+        '4. Local Data (0-Egress)'
       ];
-      var barScale = d3.scaleLinear().domain([0, 100]).range([0, 290]);
+      var barScale = d3.scaleLinear().domain([0, 100]).range([0, 280]);
 
       labels.forEach(function (lbl, idx) {
-        var ry = 14 + idx * 25;
+        var ry = 12 + idx * 29;
         var aScore = mScores[idx];
         var cScore = cinScores[idx];
 
         cSvg.append('text')
-          .attr('x', 14).attr('y', ry + 11)
+          .attr('x', 14).attr('y', ry + 14)
           .attr('font-family', 'system-ui, sans-serif')
-          .attr('font-size', 9.2).attr('font-weight', 700).attr('fill', '#d5d9e2')
+          .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#d5d9e2')
           .text(lbl);
 
         // Background track
         cSvg.append('rect')
-          .attr('x', 248).attr('y', ry + 1)
-          .attr('width', 290).attr('height', 14).attr('rx', 3)
+          .attr('x', 214).attr('y', ry + 2)
+          .attr('width', 280).attr('height', 16).attr('rx', 3)
           .attr('fill', '#1b202c');
 
         // CIN target bar (teal outline/fill)
         cSvg.append('rect')
-          .attr('x', 248).attr('y', ry + 1)
-          .attr('width', barScale(cScore)).attr('height', 14).attr('rx', 3)
+          .attr('x', 214).attr('y', ry + 2)
+          .attr('width', barScale(cScore)).attr('height', 16).attr('rx', 3)
           .attr('fill', 'rgba(79,179,168,0.22)')
           .attr('stroke', '#4fb3a8').attr('stroke-width', 1);
 
         // Selected Actor bar
         cSvg.append('rect')
-          .attr('x', 248).attr('y', ry + 3)
-          .attr('width', Math.max(4, barScale(aScore))).attr('height', 10).attr('rx', 2)
+          .attr('x', 214).attr('y', ry + 4)
+          .attr('width', Math.max(4, barScale(aScore))).attr('height', 12).attr('rx', 2)
           .attr('fill', actor.color);
 
         cSvg.append('text')
-          .attr('x', 548).attr('y', ry + 11)
+          .attr('x', 504).attr('y', ry + 14)
           .attr('font-family', 'ui-monospace, monospace')
-          .attr('font-size', 8.8).attr('font-weight', 700).attr('fill', '#e9e6de')
-          .text(aScore + '% vs. CIN ' + cScore + '%');
+          .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#e9e6de')
+          .text(aScore + '% vs CIN ' + cScore + '%');
       });
     }
 
@@ -714,7 +715,7 @@
     nodeGroups.append('text')
       .attr('class', 'ws-label')
       .attr('font-family', 'system-ui, sans-serif')
-      .attr('font-size', 9.2)
+      .attr('font-size', 12)
       .attr('font-weight', 700)
       .attr('fill', '#e9e6de')
       .text(function (d) { return d.shortLabel; });
@@ -817,8 +818,8 @@
         state.cinActive = !state.cinActive;
         cinToggle.setAttribute('aria-pressed', state.cinActive ? 'true' : 'false');
         cinToggle.textContent = state.cinActive
-          ? 'CIN Co-Intelligence Architecture: ACTIVE (Zone 4 Shift)'
-          : 'Toggle CIN Co-Intelligence Architecture: OFF (Status Quo)';
+          ? 'CIN Co-Intelligence: ACTIVE'
+          : 'CIN Co-Intelligence: OFF';
         render(true);
       });
     }
@@ -905,26 +906,26 @@
       svg.append('text')
         .attr('x', 24).attr('y', 28)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 10.5).attr('font-weight', 700).attr('fill', '#e9e6de')
-        .text('MODE 1 · WHERE EVERY $100 OF AI-ERA VALUE FLOWS ACROSS 4 INSTITUTIONAL REGIMES');
+        .attr('font-size', 13).attr('font-weight', 700).attr('fill', '#e9e6de')
+        .text('MODE 1 · $100 VALUE FLOW ACROSS 4 REGIMES');
 
       svg.append('text')
         .attr('x', 836).attr('y', 28).attr('text-anchor', 'end')
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 9.5).attr('font-weight', 700).attr('fill', '#4fb3a8')
-        .text('Automation: ' + simState.autoShare + '% · CIN Creator Split: $' + directSolver + ' + $' + lineageShare + ' + $' + floorShare);
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .text('Auto: ' + simState.autoShare + '% · CIN Split: $' + directSolver + '+$' + lineageShare + '+$' + floorShare);
 
       // Legend row
       var legends = [
-        { x: 24, color: '#ef6a52', text: 'Cloud / Middleman Rent' },
-        { x: 224, color: '#b84a39', text: 'API Markup / Toll' },
-        { x: 404, color: '#4fb3a8', text: 'Direct Human Solver ($' + directSolver + ')' },
-        { x: 624, color: '#e5a93c', text: 'Lineage ($' + lineageShare + ') + $25k Floor ($' + floorShare + ')' }
+        { x: 24, color: '#ef6a52', text: 'Cloud Rent' },
+        { x: 164, color: '#b84a39', text: 'API Toll' },
+        { x: 294, color: '#4fb3a8', text: 'Direct Solver ($' + directSolver + ')' },
+        { x: 504, color: '#e5a93c', text: 'Lineage ($' + lineageShare + ') + Floor ($' + floorShare + ')' }
       ];
       legends.forEach(function (lg) {
-        svg.append('rect').attr('x', lg.x).attr('y', 42).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', lg.color);
-        svg.append('text').attr('x', lg.x + 15).attr('y', 51)
-          .attr('font-family', 'system-ui, sans-serif').attr('font-size', 9.2).attr('fill', '#c5cad6')
+        svg.append('rect').attr('x', lg.x).attr('y', 41).attr('width', 11).attr('height', 11).attr('rx', 2).attr('fill', lg.color);
+        svg.append('text').attr('x', lg.x + 16).attr('y', 51)
+          .attr('font-family', 'system-ui, sans-serif').attr('font-size', 12).attr('fill', '#c5cad6')
           .text(lg.text);
       });
 
@@ -932,43 +933,43 @@
         {
           y: 72,
           title: '1. SOTA Cloud Oligopoly',
-          sub: '$' + cloudRent + ' Cloud/GPU Equity + $' + apiMarkup + ' API Markup + $0 Creator',
+          sub: '$' + cloudRent + ' Cloud + $' + apiMarkup + ' API ($0 Creator)',
           titleColor: '#ef6a52',
           segs: [
-            { w: cloudRent, fill: '#ef6a52', textColor: '#111317', label: '$' + cloudRent + ' Cloud Equity / GPU Rent' },
-            { w: apiMarkup, fill: '#b84a39', textColor: '#ffffff', label: '$' + apiMarkup + ' API · $0 Creator' }
+            { w: cloudRent, fill: '#ef6a52', textColor: '#111317', label: '$' + cloudRent + ' Cloud / GPU Rent' },
+            { w: apiMarkup, fill: '#b84a39', textColor: '#ffffff', label: '$' + apiMarkup + ' API' }
           ]
         },
         {
           y: 132,
-          title: '2. University Research Squeeze',
-          sub: '88% Foundational Math Originated → <1% GPUs & $0 Royalty',
+          title: '2. University Research',
+          sub: '88% Math → <1% GPU & $0 Royalty',
           titleColor: '#5da2d5',
           segs: [
-            { w: 88, fill: '#263a50', stroke: '#5da2d5', textColor: '#e9e6de', label: '88% Foundational Math Originated ($0 API Royalty)' },
-            { w: 12, fill: '#ef6a52', textColor: '#111317', label: '<1% GPU' }
+            { w: 88, fill: '#263a50', stroke: '#5da2d5', textColor: '#e9e6de', label: '88% Foundational Math ($0 Royalty)' },
+            { w: 12, fill: '#ef6a52', textColor: '#111317', label: '' }
           ]
         },
         {
           y: 192,
-          title: '3. Legacy Enterprise & Clinic',
-          sub: entToll + '% Lost to SaaS, PBM & GPO Extraction + IP Egress',
+          title: '3. Legacy Enterprise',
+          sub: entToll + '% Lost to SaaS, PBM & GPO',
           titleColor: '#e07b42',
           segs: [
-            { w: entToll, fill: '#e07b42', textColor: '#111317', label: '$' + entToll + ' SaaS / PBM / GPO Loss' },
-            { w: entKeep, fill: '#2c3442', textColor: '#d5d9e2', label: '$' + entKeep + ' Net Margin Retained (Trade Secrets Exposed)' }
+            { w: entToll, fill: '#e07b42', textColor: '#111317', label: '$' + entToll + ' Toll' },
+            { w: entKeep, fill: '#2c3442', textColor: '#d5d9e2', label: '$' + entKeep + ' Retained (IP Exposed)' }
           ]
         },
         {
           y: 252,
-          title: '4. CIN Co-Intelligence Ledger',
-          sub: '$' + directSolver + ' Solver + $' + lineageShare + ' Lineage (' + totalCreator + '% Creator) + $' + floorShare + ' Floor',
+          title: '4. CIN Shapley Ledger',
+          sub: totalCreator + '% Creator + $' + floorShare + ' Citizen Floor',
           titleColor: '#4fb3a8',
           highlight: true,
           segs: [
-            { w: directSolver, fill: '#4fb3a8', textColor: '#111317', label: '$' + directSolver + ' Direct Human Solver + $' + lineageShare + ' Lineage (' + totalCreator + '% Return)' },
+            { w: directSolver, fill: '#4fb3a8', textColor: '#111317', label: '$' + directSolver + ' Direct Solver (' + totalCreator + '% Creator)' },
             { w: lineageShare, fill: '#5da2d5', textColor: '#111317', label: '' },
-            { w: floorShare, fill: '#e5a93c', textColor: '#111317', label: '$' + floorShare }
+            { w: floorShare, fill: '#e5a93c', textColor: '#111317', label: '' }
           ]
         }
       ];
@@ -977,13 +978,13 @@
         svg.append('text')
           .attr('x', 24).attr('y', r.y + 15)
           .attr('font-family', 'system-ui, sans-serif')
-          .attr('font-size', 10.5).attr('font-weight', 700).attr('fill', r.titleColor)
+          .attr('font-size', 13).attr('font-weight', 700).attr('fill', r.titleColor)
           .text(r.title);
 
         svg.append('text')
-          .attr('x', 24).attr('y', r.y + 31)
+          .attr('x', 24).attr('y', r.y + 32)
           .attr('font-family', 'ui-monospace, monospace')
-          .attr('font-size', 8.8).attr('fill', '#9aa3b2')
+          .attr('font-size', 12).attr('fill', '#9aa3b2')
           .text(r.sub);
 
         var cur = 0;
@@ -1001,13 +1002,13 @@
             .attr('stroke', seg.stroke || (r.highlight ? '#4fb3a8' : 'none'))
             .attr('stroke-width', seg.stroke || r.highlight ? 1.2 : 0);
 
-          if (seg.label && sw > 36) {
+          if (seg.label && sw > 64) {
             svg.append('text')
               .attr('x', sx0 + sw / 2)
               .attr('y', r.y + 22)
               .attr('text-anchor', 'middle')
               .attr('font-family', 'ui-monospace, monospace')
-              .attr('font-size', 9.3)
+              .attr('font-size', 12)
               .attr('font-weight', 700)
               .attr('fill', seg.textColor)
               .text(seg.label);
@@ -1023,59 +1024,59 @@
         .attr('color', '#8c95a6')
         .selectAll('text')
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 9.2);
+        .attr('font-size', 12);
 
       svg.append('text')
         .attr('x', 430).attr('y', 344).attr('text-anchor', 'middle')
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 9.5).attr('font-weight', 700).attr('fill', '#e5a93c')
-        .text('CIN $25k/yr Exempt Citizen Floor Is Funded via 2%/mo Demurrage on Idle Hoards + 95% Data Shapley Attribution');
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#e5a93c')
+        .text('$25k Exempt Citizen Floor Funded via 2%/mo Demurrage + 95% Data Shapley');
     }
 
     function renderBandwidthMode(svg) {
       var tradeShare = Math.round(24 + (simState.psiWorkforce / 95) * 68);
       if (topBadge) {
-        topBadge.textContent = '~40 BITS/S VS. 10¹² BITS/S · 4.8B WORKFORCE TRADE SHARE: ' + tradeShare + '%';
+        topBadge.textContent = '~40 B/S VS. 10¹² B/S · WORKFORCE SHARE: ' + tradeShare + '%';
       }
 
       svg.append('text')
         .attr('x', 24).attr('y', 28)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 10.2).attr('font-weight', 700).attr('fill', '#e9e6de')
-        .text('MODE 2 · BIOLOGICAL (~40 BITS/S) VS. SILICON SWARM (10¹² BITS/S) & 5 CONTAINMENT ZONES');
+        .attr('font-size', 13).attr('font-weight', 700).attr('fill', '#e9e6de')
+        .text('MODE 2 · BIO (~40 B/S) VS. SWARM (10¹² B/S) & 5 ZONES');
 
       svg.append('text')
         .attr('x', 836).attr('y', 28).attr('text-anchor', 'end')
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 9.5).attr('font-weight', 700).attr('fill', '#4fb3a8')
-        .text('10¹⁰× Bandwidth Gap Bridged · Airlock: ' + simState.airlockCover + '%');
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .text('10¹⁰× Gap Bridged · Airlock: ' + simState.airlockCover + '%');
 
       var logScale = d3.scaleLog().domain([1, 1e13]).range([264, 824]);
 
       var channels = [
         {
           y: 48,
-          title: 'Human Biological Channel',
-          sub: '~40 bits/s · 25-yr generation · 4.8B physical workers',
+          title: 'Human Biology',
+          sub: '~40 bits/s · 4.8B workers',
           val: 40,
           color: '#8c95a6',
-          rightNote: '~40 bits/s Conscious Channel (Unshielded 4.8B trade share: 78% → 24%)'
+          rightNote: '~40 b/s Channel (Trade: 78% → 24%)'
         },
         {
           y: 94,
-          title: 'Unbounded Competitive AI Swarms',
-          sub: '10¹² bits/s · 4.5-mo METR T50 doubling · ms self-play',
+          title: 'Unbounded AI Swarms',
+          sub: '10¹² bits/s · 4.5-mo×2',
           val: 1e12,
           color: '#ef6a52',
-          insideNote: '10¹² bits/s Machine Coordination · 4.5-Month Doubling Outpaces Biology 10¹⁰×'
+          insideNote: '10¹² b/s Swarms Outpace Biology 10¹⁰×'
         },
         {
           y: 140,
-          title: 'CIN Airlock + 24h Mortal Lease',
-          sub: 'Two Internets · 1:1 Hardware Bond · $8 Pre-ADC Witness',
+          title: 'CIN Zone 4 Airlock',
+          sub: 'Two Internets · $8 Pre-ADC',
           val: Math.pow(10, 4 + (simState.airlockCover / 100) * 7.5),
           color: '#4fb3a8',
-          insideNote: 'CIN Zone 4 Airlock Bridges 10¹⁰× Gap · 4.8B Trade Share Restored to ' + tradeShare + '%'
+          insideNote: 'Zone 4 Restores Trade Share to ' + tradeShare + '%'
         }
       ];
 
@@ -1083,13 +1084,13 @@
         svg.append('text')
           .attr('x', 24).attr('y', ch.y + 14)
           .attr('font-family', 'system-ui, sans-serif')
-          .attr('font-size', 10).attr('font-weight', 700).attr('fill', ch.color === '#8c95a6' ? '#e9e6de' : ch.color)
+          .attr('font-size', 13).attr('font-weight', 700).attr('fill', ch.color === '#8c95a6' ? '#e9e6de' : ch.color)
           .text(ch.title);
 
         svg.append('text')
-          .attr('x', 24).attr('y', ch.y + 28)
+          .attr('x', 24).attr('y', ch.y + 30)
           .attr('font-family', 'ui-monospace, monospace')
-          .attr('font-size', 8.7).attr('fill', '#9aa3b2')
+          .attr('font-size', 12).attr('fill', '#9aa3b2')
           .text(ch.sub);
 
         var bw = Math.max(24, logScale(ch.val) - 264);
@@ -1103,24 +1104,24 @@
           svg.append('text')
             .attr('x', 264 + bw + 10).attr('y', ch.y + 20)
             .attr('font-family', 'ui-monospace, monospace')
-            .attr('font-size', 9.2).attr('font-weight', 700).attr('fill', '#e9e6de')
+            .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#e9e6de')
             .text(ch.rightNote);
         } else if (ch.insideNote) {
           svg.append('text')
             .attr('x', 274).attr('y', ch.y + 20)
             .attr('font-family', 'ui-monospace, monospace')
-            .attr('font-size', 9.2).attr('font-weight', 700).attr('fill', '#111317')
+            .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#111317')
             .text(ch.insideNote);
         }
       });
 
       // Bottom Panel: 5 Safety & Containment Zones
       var zoneCards = [
-        { x: 20, w: 152, color: '#ef6a52', title: 'Zone 1: Raw Accel', l1: 'Unbounded Swarms', l2: '0 runtime barriers', l3: '78% → 24% trade drop' },
-        { x: 180, w: 152, color: '#e07b42', title: 'Zone 2: Lab RSPs', l1: 'Self-Policed Labs', l2: 'Voluntary pledges', l3: 'Eroded by race' },
-        { x: 340, w: 156, color: '#e5a93c', title: 'Zone 3: Eval & Lag', l1: '36-Mo Statute Lag', l2: 'METR/AISI scorecards', l3: 'No runtime airlock' },
-        { x: 504, w: 174, color: '#4fb3a8', title: 'Zone 4: CIN Airlock', l1: 'Two Internets + 24h Lease', l2: '1:1 Bond + $8 Pre-ADC', l3: 'Bridges 10¹⁰× Gap', highlight: true },
-        { x: 686, w: 154, color: '#5da2d5', title: 'Zone 5: Hard Pause', l1: 'Global GPU Freeze', l2: 'Treaty FLOP cap', l3: 'If Zone 4 fails' }
+        { x: 20, w: 152, color: '#ef6a52', title: '1. Raw Accel', l1: 'Open Swarms', l2: '0 barriers', l3: '78%→24% drop' },
+        { x: 180, w: 152, color: '#e07b42', title: '2. Lab RSPs', l1: 'Self-Policed', l2: 'Pledges only', l3: 'Race eroded' },
+        { x: 340, w: 156, color: '#e5a93c', title: '3. Eval Lag', l1: '36-Mo Lag', l2: 'Scorecards', l3: 'No airlock' },
+        { x: 504, w: 174, color: '#4fb3a8', title: '4. CIN Airlock', l1: 'Two Internets', l2: '1:1 + Pre-ADC', l3: '10¹⁰× Bridge', highlight: true },
+        { x: 686, w: 154, color: '#5da2d5', title: '5. Hard Pause', l1: 'GPU Freeze', l2: 'FLOP treaty', l3: 'Last resort' }
       ];
 
       zoneCards.forEach(function (zc) {
@@ -1132,27 +1133,27 @@
           .attr('stroke-width', zc.highlight ? 2.2 : 1.3);
 
         svg.append('text')
-          .attr('x', zc.x + 10).attr('y', 218)
+          .attr('x', zc.x + 10).attr('y', 220)
           .attr('font-family', 'ui-monospace, monospace')
-          .attr('font-size', 9.5).attr('font-weight', 700).attr('fill', zc.color)
+          .attr('font-size', 12.5).attr('font-weight', 700).attr('fill', zc.color)
           .text(zc.title);
 
         svg.append('text')
-          .attr('x', zc.x + 10).attr('y', 246)
+          .attr('x', zc.x + 10).attr('y', 250)
           .attr('font-family', 'system-ui, sans-serif')
-          .attr('font-size', 9.2).attr('font-weight', 700).attr('fill', '#e9e6de')
+          .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#e9e6de')
           .text(zc.l1);
 
         svg.append('text')
-          .attr('x', zc.x + 10).attr('y', 272)
+          .attr('x', zc.x + 10).attr('y', 280)
           .attr('font-family', 'system-ui, sans-serif')
-          .attr('font-size', 9).attr('fill', '#b8c0ce')
+          .attr('font-size', 12).attr('fill', '#b8c0ce')
           .text(zc.l2);
 
         svg.append('text')
           .attr('x', zc.x + 10).attr('y', 316)
           .attr('font-family', 'ui-monospace, monospace')
-          .attr('font-size', 9).attr('font-weight', 700).attr('fill', zc.highlight ? '#e5a93c' : zc.color)
+          .attr('font-size', 12).attr('font-weight', 700).attr('fill', zc.highlight ? '#e5a93c' : zc.color)
           .text(zc.l3);
       });
     }
@@ -1164,20 +1165,20 @@
       var yrNMoat = Math.min(96, Math.round(66 + ((yrN - 1) / 9) * 30));
 
       if (topBadge) {
-        topBadge.textContent = dDays + 'D DISTILLATION CLIFF (-$' + annualBurn + 'B/YR BURN) · YR-' + yrN + ' PAIR MOAT: ' + yrNMoat + '%';
+        topBadge.textContent = dDays + 'D CLIFF (-$' + annualBurn + 'B/YR) · YR-' + yrN + ' MOAT: ' + yrNMoat + '%';
       }
 
       svg.append('text')
         .attr('x', 24).attr('y', 28)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 10.2).attr('font-weight', 700).attr('fill', '#e9e6de')
-        .text('MODE 3 · 10-YEAR PAIR MOAT (66% → 96%) VS. CLOUD AI DISTILLATION CLIFF (-$' + annualBurn + 'B/YR)');
+        .attr('font-size', 13).attr('font-weight', 700).attr('fill', '#e9e6de')
+        .text('MODE 3 · 10-YR PAIR MOAT (66%→96%) VS. CLOUD CLIFF');
 
       svg.append('text')
         .attr('x', 836).attr('y', 28).attr('text-anchor', 'end')
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 9.5).attr('font-weight', 700).attr('fill', '#4fb3a8')
-        .text('Distillation: ' + dDays + 'd · Year-' + yrN + ' Pair Moat: ' + yrNMoat + '%');
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .text('Cliff: ' + dDays + 'd · Yr-' + yrN + ' Moat: ' + yrNMoat + '%');
 
       // Left Panel: 10-Year Trajectory
       svg.append('rect')
@@ -1185,12 +1186,12 @@
         .attr('fill', '#151922').attr('stroke', '#2a2f3a').attr('stroke-width', 1.3);
 
       svg.append('text')
-        .attr('x', 32).attr('y', 66)
+        .attr('x', 32).attr('y', 68)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 9.8).attr('font-weight', 700).attr('fill', '#4fb3a8')
-        .text('1. 10-YR MOAT: PAIR INTELLIGENCE VS. CLOUD BURN');
+        .attr('font-size', 12.5).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .text('1. 10-YR MOAT VS. CLOUD BURN');
 
-      var x = d3.scaleLinear().domain([1, 10]).range([64, 428]);
+      var x = d3.scaleLinear().domain([1, 10]).range([68, 426]);
       var y = d3.scaleLinear().domain([0, 100]).range([292, 86]);
 
       var xAxis = d3.axisBottom(x).ticks(5).tickFormat(function (d) { return 'Yr ' + d; });
@@ -1200,13 +1201,13 @@
         .attr('transform', 'translate(0,292)')
         .call(xAxis)
         .attr('color', '#8c95a6')
-        .selectAll('text').attr('font-family', 'ui-monospace, monospace').attr('font-size', 8.8);
+        .selectAll('text').attr('font-family', 'ui-monospace, monospace').attr('font-size', 12);
 
       svg.append('g')
-        .attr('transform', 'translate(64,0)')
+        .attr('transform', 'translate(68,0)')
         .call(yAxis)
         .attr('color', '#8c95a6')
-        .selectAll('text').attr('font-family', 'ui-monospace, monospace').attr('font-size', 8.8);
+        .selectAll('text').attr('font-family', 'ui-monospace, monospace').attr('font-size', 12);
 
       var years = d3.range(1, 11);
       var pairPts = years.map(function (yr) {
@@ -1242,16 +1243,16 @@
         .attr('cx', x(yrN)).attr('cy', y(yrNMoat)).attr('r', 5).attr('fill', '#4fb3a8');
 
       svg.append('text')
-        .attr('x', 82).attr('y', 102)
+        .attr('x', 82).attr('y', 104)
         .attr('font-family', 'system-ui, sans-serif')
-        .attr('font-size', 9.5).attr('font-weight', 700).attr('fill', '#4fb3a8')
-        .text('1-to-1 Pair Moat: 66% → 96% Uncopyable');
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .text('1:1 Pair Moat: 66% → 96%');
 
       svg.append('text')
-        .attr('x', 132).attr('y', 252)
+        .attr('x', 112).attr('y', 252)
         .attr('font-family', 'system-ui, sans-serif')
-        .attr('font-size', 9.3).attr('font-weight', 700).attr('fill', '#ef6a52')
-        .text('Cloud AI Margin (' + dDays + 'd Cliff · -$' + annualBurn + 'B/yr Burn)');
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#ef6a52')
+        .text('Cloud Margin (' + dDays + 'd · -$' + annualBurn + 'B/yr)');
 
       // Right Panel: Stacked Breakdown of Year-N Pair Moat
       svg.append('rect')
@@ -1259,10 +1260,10 @@
         .attr('fill', '#151922').attr('stroke', '#2a2f3a').attr('stroke-width', 1.3);
 
       svg.append('text')
-        .attr('x', 480).attr('y', 66)
+        .attr('x', 480).attr('y', 68)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 9.8).attr('font-weight', 700).attr('fill', '#e5a93c')
-        .text('2. YEAR-' + yrN + ' PAIR MOAT STACKED BREAKDOWN');
+        .attr('font-size', 12.5).attr('font-weight', 700).attr('fill', '#e5a93c')
+        .text('2. YR-' + yrN + ' PAIR MOAT BREAKDOWN');
 
       var scaleFactor = yrNMoat / 96;
       var craftPct = Math.round(34 * scaleFactor);
@@ -1271,31 +1272,31 @@
       var openPct = 100 - yrNMoat;
 
       var layers = [
-        { y: 88, label: '1. Tacit Human Craft & Judgment', pct: craftPct, ref: '34% at Yr 10', color: '#4fb3a8', desc: 'Embodied domain intuition never on public web' },
-        { y: 146, label: '2. 10-Yr Private Episodic Memory', pct: memPct, ref: '32% at Yr 10', color: '#5da2d5', desc: 'Encrypted local OCap longitudinal context' },
-        { y: 204, label: '3. On-Device Rank-16 LoRA Weights', pct: loraPct, ref: '30% at Yr 10', color: '#e5a93c', desc: 'Personal preference weights (Hu et al., 2022)' },
-        { y: 262, label: '4. Commodity Open Backbone', pct: openPct, ref: '4% at Yr 10', color: '#ef6a52', desc: 'Distilled in ' + dDays + ' days toward bare electricity cost' }
+        { y: 88, label: '1. Tacit Craft (' + craftPct + '%)', pct: craftPct, color: '#4fb3a8', desc: 'Embodied human domain judgment' },
+        { y: 146, label: '2. Episodic Memory (' + memPct + '%)', pct: memPct, color: '#5da2d5', desc: 'Encrypted local OCap history' },
+        { y: 204, label: '3. Local LoRA (' + loraPct + '%)', pct: loraPct, color: '#e5a93c', desc: 'On-device rank-16 weights' },
+        { y: 262, label: '4. Open Base (' + openPct + '%)', pct: openPct, color: '#ef6a52', desc: 'Distilled in ' + dDays + 'd to power cost' }
       ];
 
       var barScale = d3.scaleLinear().domain([0, 45]).range([0, 340]);
 
       layers.forEach(function (ly) {
         svg.append('text')
-          .attr('x', 480).attr('y', ly.y + 12)
+          .attr('x', 480).attr('y', ly.y + 14)
           .attr('font-family', 'system-ui, sans-serif')
-          .attr('font-size', 9.5).attr('font-weight', 700).attr('fill', ly.color)
-          .text(ly.label + ' (' + ly.pct + '% · ' + ly.ref + ')');
+          .attr('font-size', 12).attr('font-weight', 700).attr('fill', ly.color)
+          .text(ly.label);
 
         var bw = Math.max(18, Math.min(340, barScale(ly.pct)));
         svg.append('rect')
-          .attr('x', 480).attr('y', ly.y + 18)
-          .attr('width', bw).attr('height', 16).attr('rx', 4)
+          .attr('x', 480).attr('y', ly.y + 20)
+          .attr('width', bw).attr('height', 15).attr('rx', 4)
           .attr('fill', ly.color);
 
         svg.append('text')
-          .attr('x', 480).attr('y', ly.y + 46)
+          .attr('x', 480).attr('y', ly.y + 50)
           .attr('font-family', 'ui-monospace, monospace')
-          .attr('font-size', 8.6).attr('fill', '#9aa3b2')
+          .attr('font-size', 12).attr('fill', '#9aa3b2')
           .text(ly.desc);
       });
     }
@@ -1383,7 +1384,7 @@
       if (cMoat) cMoat.textContent = cloudMoat + '% Commodity Base';
       if (pMoat) pMoat.textContent = pairMoat + '% Uncopyable Moat';
       if (svgLabel) {
-        svgLabel.textContent = 'Yr-' + y + ' Pair Moat: ' + pairMoat + '% (34% Craft + 32% Memory + 30% LoRA) · ' + d + 'd Cliff';
+        svgLabel.textContent = 'Yr-' + y + ' Pair Moat: ' + pairMoat + '% · ' + d + 'd Cliff';
       }
       if (pairBar) {
         pairBar.setAttribute('width', String(Math.round(pairMoat * 3.1)));
@@ -1406,62 +1407,63 @@
     if (!d3) return;
 
     function drawDualMiniGauge(svgEl, badPct, okPct, badLabel, okLabel) {
+      svgEl.setAttribute('viewBox', '0 0 680 64');
       var svg = d3.select(svgEl);
       svg.selectAll('*').remove();
 
       svg.append('rect')
         .attr('x', 1).attr('y', 1)
-        .attr('width', 678).attr('height', 52).attr('rx', 7)
+        .attr('width', 678).attr('height', 62).attr('rx', 7)
         .attr('fill', '#12151d')
         .attr('stroke', '#28303e')
         .attr('stroke-width', 1.1);
 
-      var scale = d3.scaleLinear().domain([0, 100]).range([0, 230]);
+      var scale = d3.scaleLinear().domain([0, 100]).range([0, 190]);
 
       // Row 1: Legacy / Status Quo
       svg.append('text')
-        .attr('x', 12).attr('y', 19)
+        .attr('x', 12).attr('y', 23)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 8.8).attr('font-weight', 700).attr('fill', '#ef6a52')
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#ef6a52')
         .text('STATUS QUO');
 
       svg.append('rect')
-        .attr('x', 96).attr('y', 9)
-        .attr('width', 230).attr('height', 12).attr('rx', 3)
+        .attr('x', 112).attr('y', 10)
+        .attr('width', 190).attr('height', 15).attr('rx', 3)
         .attr('fill', '#1c212d');
 
       svg.append('rect')
-        .attr('x', 96).attr('y', 9)
-        .attr('width', Math.max(4, scale(badPct))).attr('height', 12).attr('rx', 3)
+        .attr('x', 112).attr('y', 10)
+        .attr('width', Math.max(4, scale(badPct))).attr('height', 15).attr('rx', 3)
         .attr('fill', '#ef6a52');
 
       svg.append('text')
-        .attr('x', 336).attr('y', 19)
+        .attr('x', 312).attr('y', 23)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 8.9).attr('font-weight', 700).attr('fill', '#e9e6de')
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#e9e6de')
         .text(badLabel);
 
       // Row 2: CIN Co-Intelligence
       svg.append('text')
-        .attr('x', 12).attr('y', 41)
+        .attr('x', 12).attr('y', 49)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 8.8).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#4fb3a8')
         .text('CIN PROTOCOL');
 
       svg.append('rect')
-        .attr('x', 96).attr('y', 31)
-        .attr('width', 230).attr('height', 12).attr('rx', 3)
+        .attr('x', 112).attr('y', 36)
+        .attr('width', 190).attr('height', 15).attr('rx', 3)
         .attr('fill', '#1c212d');
 
       svg.append('rect')
-        .attr('x', 96).attr('y', 31)
-        .attr('width', Math.max(6, scale(okPct))).attr('height', 12).attr('rx', 3)
+        .attr('x', 112).attr('y', 36)
+        .attr('width', Math.max(6, scale(okPct))).attr('height', 15).attr('rx', 3)
         .attr('fill', '#4fb3a8');
 
       svg.append('text')
-        .attr('x', 336).attr('y', 41)
+        .attr('x', 312).attr('y', 49)
         .attr('font-family', 'ui-monospace, monospace')
-        .attr('font-size', 8.9).attr('font-weight', 700).attr('fill', '#4fb3a8')
+        .attr('font-size', 12).attr('font-weight', 700).attr('fill', '#4fb3a8')
         .text(okLabel);
     }
 
@@ -1482,8 +1484,8 @@
             gaugeEl,
             4,
             95,
-            '$0 Cloud API Royalty · 72% GPU Equity Capture',
-            '$' + shapleyK + 'k/yr Data Shapley (95%) + $' + commonsK + 'k Commons (5%)'
+            '$0 Royalty · 72% Cloud Rent',
+            '$' + shapleyK + 'k Shapley (95%) + $' + commonsK + 'k Floor'
           );
         } else if (key === 'safety') {
           var sEl = document.getElementById('ws-ls-safety-val');
@@ -1494,8 +1496,8 @@
             gaugeEl,
             bioPct,
             98,
-            '~40 b/s Biology Overwhelmed by 10^' + gapExp + '× Swarm Gap',
-            'Zone 4 Airlock + 24h Mortal Lease (Last Resort Before Pause)'
+            '~40 b/s vs 10^' + gapExp + '× Swarm Gap',
+            'Zone 4 Airlock + 24h Mortal Lease'
           );
         } else if (key === 'gov') {
           var gEl = document.getElementById('ws-ls-gov-val');
@@ -1506,8 +1508,8 @@
             gaugeEl,
             statPct,
             96,
-            '36-Mo Statute Lag (' + mult + '× Behind 4.5-Mo AI Doubling)',
-            '<10ms Silicon Quorum Gate + $25k Exempt Floor (2%/mo)'
+            '36-Mo Lag (' + mult + '× Behind AI)',
+            '<10ms Quorum + $25k Floor (2%/mo)'
           );
         } else if (key === 'research') {
           var rEl = document.getElementById('ws-ls-research-val');
@@ -1517,8 +1519,8 @@
             gaugeEl,
             2,
             95,
-            '$0 arXiv Cloud Scrape · <1% University GPU Share',
-            '+$' + endowK + 'k/yr (15% Shapley Endowment) + 95.3% SPRA Token Cut'
+            '$0 arXiv Scrape · <1% GPUs',
+            '+$' + endowK + 'k/yr Shapley + 95.3% SPRA Cut'
           );
         } else if (key === 'enterprise') {
           var eEl = document.getElementById('ws-ls-enterprise-val');
@@ -1528,8 +1530,8 @@
             gaugeEl,
             28,
             94,
-            '-32% GPO/PBM/SaaS Toll · Cloud Prompt IP Leakage',
-            '+' + savings + '% PSI Co-Op Wholesale Margin · 0B Local Wasm Egress'
+            '-32% GPO/SaaS Toll · IP Leaked',
+            '+' + savings + '% PSI Co-Op · 0B Wasm Egress'
           );
         } else if (key === 'humanity') {
           var hEl = document.getElementById('ws-ls-humanity-val');
@@ -1540,8 +1542,8 @@
             gaugeEl,
             24,
             share,
-            '-38% AI Cartel Price Dump (78% → 24% Trade Share)',
-            '+' + payBoost + '% Producer Pay (' + share + '% Parity) + $8 Pre-ADC + 5D Credit'
+            '-38% Cartel Dump (24% Share)',
+            '+' + payBoost + '% Pay (' + share + '% Parity) + $8 Pre-ADC'
           );
         } else if (key === 'pair') {
           var pEl = document.getElementById('ws-ls-pair-val');
@@ -1552,8 +1554,8 @@
             gaugeEl,
             cMoat,
             pMoat,
-            cMoat + '% Cloud API Moat (60-90d Cliff · -$5B to -$15B/yr Burn)',
-            pMoat + '% Uncopyable Pair Moat (Craft + 10-Yr Memory + Local LoRA)'
+            cMoat + '% Cloud Moat (60-90d Cliff)',
+            pMoat + '% Pair Moat (Craft + 10y LoRA)'
           );
         }
       }

@@ -125,7 +125,7 @@
 
       root.append('text')
         .attr('x', 28).attr('y', 34)
-        .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '9.5').attr('font-weight', '700')
+        .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
         .text('1-TO-1 PAIR INTELLIGENCE MOAT VS. 60-90 DAY CLOUD DISTILLATION CLIFF');
 
       var chartX0 = 52, chartX1 = 430, chartY0 = 198, chartY1 = 52;
@@ -149,7 +149,7 @@
           .attr('stroke', '#1f2533').attr('stroke-width', 1);
         root.append('text')
           .attr('x', chartX0 - 6).attr('y', gy + 3)
-          .attr('text-anchor', 'end').attr('fill', '#8c8a82').attr('font-family', 'monospace').attr('font-size', '8')
+          .attr('text-anchor', 'end').attr('fill', '#8c8a82').attr('font-family', 'monospace').attr('font-size', '12')
           .text(gp + '%');
       }
 
@@ -164,7 +164,7 @@
           .attr('x', xForYear(yr)).attr('y', chartY0 + 14)
           .attr('text-anchor', 'middle')
           .attr('fill', yr === y ? '#4fb3a8' : '#8c8a82')
-          .attr('font-family', 'monospace').attr('font-size', '8')
+          .attr('font-family', 'monospace').attr('font-size', '12')
           .attr('font-weight', yr === y ? '700' : '400')
           .text('Y' + yr);
       }
@@ -183,7 +183,7 @@
 
       root.append('text')
         .attr('x', chartX0 + 68).attr('y', yForPct(18) - 6)
-        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('60-90 Day Cloud AI Distillation Cliff (Commoditized)');
 
       // Uncopyable Pair Moat curve
@@ -215,7 +215,7 @@
 
       root.append('text')
         .attr('x', Math.min(335, Math.max(68, selX - 42))).attr('y', selY + 26)
-        .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+        .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('Yr ' + y + ': ' + d.uncopyable + '% Uncopyable');
 
       // Right Panel: 4 Stacked Pair Moat Layers + Local OCap Firewall
@@ -225,7 +225,7 @@
 
       root.append('text')
         .attr('x', 476).attr('y', 34)
-        .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '9.5').attr('font-weight', '700')
+        .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
         .text('YEAR ' + y + ' STACKED PAIR MOAT & OCAP FIREWALL');
 
       var layers = [
@@ -242,12 +242,12 @@
 
         root.append('text')
           .attr('x', 476).attr('y', ly + 11)
-          .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '9.5').attr('font-weight', '700')
+          .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '13').attr('font-weight', '700')
           .text(lay.label + ' (' + lay.pct + '%)');
 
         root.append('text')
           .attr('x', 476).attr('y', ly + 23)
-          .attr('fill', '#8c8a82').attr('font-family', 'monospace').attr('font-size', '7.8')
+          .attr('fill', '#8c8a82').attr('font-family', 'monospace').attr('font-size', '12')
           .text(lay.desc);
 
         root.append('rect')
@@ -266,7 +266,7 @@
 
       root.append('text')
         .attr('x', 604).attr('y', 214)
-        .attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+        .attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('OCAP SANDBOX: ' + d.uncopyable + '% UNCOPYABLE · 0 BYTES EGRESS');
     }
 
@@ -392,7 +392,7 @@
 
       root.append('text')
         .attr('x', 28).attr('y', 34)
-        .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '9.5').attr('font-weight', '700')
+        .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
         .text('INTERACTIVE FUTURES CONE (2026-2032+) · CLICK ANY HORIZON NODE');
 
       // Cone polygons expanding from 2026 (x=78, y=126) to 2032+ (x=434)
@@ -427,12 +427,12 @@
       // Trajectory labels
       root.append('text')
         .attr('x', 84).attr('y', 58)
-        .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+        .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('▲ Co-Intelligent Local Sandbox Trajectory (With CIN)');
 
       root.append('text')
         .attr('x', 84).attr('y', 194)
-        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('▼ Unmitigated Cloud Lock-In & Extraction Risk');
 
       // Horizon vertical slices & clickable nodes
@@ -481,7 +481,7 @@
             .attr('x', nx).attr('y', 213)
             .attr('text-anchor', 'middle')
             .attr('fill', isSel ? '#0d0f13' : '#f0ede6')
-            .attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+            .attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
             .text(node.key);
         })(HORIZON_NODES[idx], idx);
       }
@@ -493,7 +493,7 @@
 
       root.append('text')
         .attr('x', 613).attr('y', 32)
-        .attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+        .attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('7-LENS RADAR (' + active.key + '): TODAY VS. CIN');
 
       var cxR = 613, cyR = 122, maxR = 64;
@@ -525,7 +525,7 @@
         var lblY = Math.round(cyR + Math.sin(angle) * (maxR + 13));
         root.append('text')
           .attr('x', lblX).attr('y', lblY + 3)
-          .attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '8')
+          .attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '12')
           .text(RADAR_AXES[ax]);
 
         var bVal = (active.radarBase[ax] || 30) / 100;
@@ -546,7 +546,7 @@
 
       root.append('text')
         .attr('x', 613).attr('y', 214)
-        .attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+        .attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('WITH CIN: ' + active.cinPct + '% DESIRABLE · BASELINE: ' + active.basePct + '%');
     }
 
@@ -668,7 +668,7 @@
 
       root.append('text')
         .attr('x', 26).attr('y', 30)
-        .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '9.2').attr('font-weight', '700')
+        .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
         .text('5-PILLAR COLLECTIVE IDEA CONSTELLATION · CLICK A PILLAR NODE');
 
       var hubX = 236, hubY = 114;
@@ -698,12 +698,12 @@
 
       root.append('text')
         .attr('x', hubX).attr('y', hubY - 3)
-        .attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+        .attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('HOURLY');
 
       root.append('text')
         .attr('x', hubX).attr('y', hubY + 8)
-        .attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.5')
+        .attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12')
         .text('TRIAGE HUB');
 
       // 5 Pillar Nodes
@@ -725,12 +725,12 @@
 
           gP.append('text')
             .attr('x', pil.x).attr('y', pil.y - 3)
-            .attr('text-anchor', 'middle').attr('fill', pil.color).attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+            .attr('text-anchor', 'middle').attr('fill', pil.color).attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
             .text(pil.label);
 
           gP.append('text')
             .attr('x', pil.x).attr('y', pil.y + 10)
-            .attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '8')
+            .attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '12')
             .text('Category: ' + pil.category);
         })(IDEA_PILLARS[idx]);
       }
@@ -742,7 +742,7 @@
 
       root.append('text')
         .attr('x', 486).attr('y', 32)
-        .attr('fill', active.color).attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+        .attr('fill', active.color).attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('SELECTED PILLAR MECHANISM');
 
       root.append('text')
@@ -764,7 +764,7 @@
         if (lines[ln]) {
           root.append('text')
             .attr('x', 486).attr('y', 74 + ln * 15)
-            .attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '9.2')
+            .attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '13')
             .text(lines[ln]);
         }
       }
@@ -775,12 +775,12 @@
 
       root.append('text')
         .attr('x', 496).attr('y', 142)
-        .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+        .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('WORKBENCH ROUTING TARGET:');
 
       root.append('text')
         .attr('x', 496).attr('y', 158)
-        .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '8.5')
+        .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '12')
         .text('Form category -> "' + active.category + '"');
 
       var jumpBtn = root.append('g')
@@ -797,7 +797,7 @@
 
       jumpBtn.append('text')
         .attr('x', 609).attr('y', 197)
-        .attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+        .attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('PROPOSE IDEA IN THIS PILLAR ↓');
 
       if (shouldScroll && formEl && typeof formEl.scrollIntoView === 'function') {
@@ -913,7 +913,7 @@
 
       root.append('text')
         .attr('x', 26).attr('y', 30)
-        .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+        .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('5D COOPERATIVE REWARD VECTOR VS. 1D SPECULATIVE EXTRACTION');
 
       for (var dIdx = 0; dIdx < RECOG_DIMENSIONS.length; dIdx++) {
@@ -936,7 +936,7 @@
           gRow.append('text')
             .attr('x', 30).attr('y', rowY + 14)
             .attr('fill', isSel ? '#ffffff' : '#f0ede6')
-            .attr('font-family', 'sans-serif').attr('font-size', '9.5')
+            .attr('font-family', 'sans-serif').attr('font-size', '13')
             .attr('font-weight', isSel ? '700' : '600')
             .text(dim.label);
 
@@ -960,7 +960,7 @@
 
           gRow.append('text')
             .attr('x', 378).attr('y', rowY + 14)
-            .attr('fill', dim.color).attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+            .attr('fill', dim.color).attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
             .text(dim.cinScore + '% vs ' + dim.specScore + '%');
         })(RECOG_DIMENSIONS[dIdx], dIdx);
       }
@@ -972,7 +972,7 @@
 
       root.append('text')
         .attr('x', 472).attr('y', 30)
-        .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+        .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('BRIER FORECAST CALIBRATION CURVE');
 
       var bx0 = 496, bx1 = 724, by0 = 182, by1 = 48;
@@ -1018,17 +1018,17 @@
 
       root.append('text')
         .attr('x', bx1 - 8).attr('y', by0 - 20).attr('text-anchor', 'end')
-        .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+        .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('● CIN Audited (Brier ' + active.brier + ')');
 
       root.append('text')
         .attr('x', bx1 - 8).attr('y', by0 - 8).attr('text-anchor', 'end')
-        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8')
+        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12')
         .text('--- 1D Hype Drift (Brier 0.314)');
 
       root.append('text')
         .attr('x', Math.round((bx0 + bx1) / 2)).attr('y', 204)
-        .attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '8')
+        .attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '12')
         .text('Predicted Probability (0%-100%) vs. Observed Truth');
     }
 
@@ -1145,7 +1145,7 @@
 
       root.append('text')
         .attr('x', 26).attr('y', 34)
-        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('1. SILICON SWARM INTERNET');
 
       root.append('text')
@@ -1166,13 +1166,13 @@
           .attr('rx', 5).attr('fill', 'rgba(239,106,82,0.16)').attr('stroke', '#ef6a52');
         root.append('text')
           .attr('x', 36).attr('y', sy + 15)
-          .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8.5').attr('font-weight', '700')
+          .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '12').attr('font-weight', '700')
           .text('⚡ ' + swarmVectors[s]);
       }
 
       root.append('text')
         .attr('x', 122).attr('y', 228).attr('text-anchor', 'middle')
-        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+        .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('4.5-Month Capability Doubling');
 
       root.append('rect')
@@ -1181,12 +1181,12 @@
 
       root.append('text')
         .attr('x', 380).attr('y', 34).attr('text-anchor', 'middle')
-        .attr('fill', cfg.statusColor).attr('font-family', 'monospace').attr('font-size', '9.2').attr('font-weight', '700')
+        .attr('fill', cfg.statusColor).attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
         .text('2. TWO-INTERNET OCAP AIRLOCK');
 
       root.append('text')
         .attr('x', 380).attr('y', 52).attr('text-anchor', 'middle')
-        .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+        .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('Active Lease: ' + (k === 0 ? 'REVOKED (0ms Cut)' : k + 'h Mortal Lease'));
 
       root.append('rect')
@@ -1209,11 +1209,11 @@
           .attr('rx', 5).attr('fill', '#151b24').attr('stroke', '#2a3342');
         root.append('text')
           .attr('x', 278).attr('y', gy + 16)
-          .attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '8.4')
+          .attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '12')
           .text(gates[g][0]);
         root.append('text')
           .attr('x', 482).attr('y', gy + 16).attr('text-anchor', 'end')
-          .attr('fill', cfg.statusColor).attr('font-family', 'monospace').attr('font-size', '8.4').attr('font-weight', '700')
+          .attr('fill', cfg.statusColor).attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
           .text(gates[g][1]);
       }
 
@@ -1223,7 +1223,7 @@
 
       root.append('text')
         .attr('x', 638).attr('y', 34).attr('text-anchor', 'middle')
-        .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+        .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text('3. HUMAN BIOLOGY & TWIN');
 
       root.append('text')
@@ -1244,11 +1244,11 @@
           .attr('rx', 5).attr('fill', '#162230').attr('stroke', '#4fb3a8');
         root.append('text')
           .attr('x', 554).attr('y', hy + 12)
-          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
           .text(humanLayers[h][0]);
         root.append('text')
           .attr('x', 554).attr('y', hy + 23)
-          .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8')
+          .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '12')
           .text(humanLayers[h][1]);
       }
 
@@ -1349,7 +1349,7 @@
 
         root.append('text')
           .attr('x', 26).attr('y', 34)
-          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '9.2').attr('font-weight', '700')
+          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
           .text('1. FOUR CONSTANT DAILY OUTPUT PILLARS (CLICK ANY PILLAR)');
 
         for (var p = 0; p < DASH_PILLARS.length; p++) {
@@ -1370,12 +1370,12 @@
 
             gRow.append('text')
               .attr('x', 34).attr('y', py + 15)
-              .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '9.2').attr('font-weight', '700')
+              .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '13').attr('font-weight', '700')
               .text(pil.name);
 
             gRow.append('text')
               .attr('x', 34).attr('y', py + 29)
-              .attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '7.8')
+              .attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '12')
               .text(pil.metric);
 
             gRow.append('rect')
@@ -1388,7 +1388,7 @@
 
             gRow.append('text')
               .attr('x', 228 + barW - 8).attr('y', py + 21).attr('text-anchor', 'end')
-              .attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+              .attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
               .text(pil.share + '% SLA');
           })(DASH_PILLARS[p], p);
         }
@@ -1400,12 +1400,12 @@
 
         root.append('text')
           .attr('x', 472).attr('y', 34)
-          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
           .text('2. SPRA SCHEMA-RAG & RRSI TELEMETRY');
 
         root.append('text')
           .attr('x', 472).attr('y', 56)
-          .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+          .attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
           .text('Raw Narrative Volume: ~5,500 tokens (100%)');
         root.append('rect')
           .attr('x', 472).attr('y', 64).attr('width', 260).attr('height', 18)
@@ -1413,7 +1413,7 @@
 
         root.append('text')
           .attr('x', 472).attr('y', 102)
-          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
           .text('Compiled SPRA Unit: ~260 tokens (-95.3%)');
         root.append('rect')
           .attr('x', 472).attr('y', 110).attr('width', 260).attr('height', 18)
@@ -1434,11 +1434,11 @@
             .attr('rx', 4).attr('fill', '#161c27').attr('stroke', '#283142');
           root.append('text')
             .attr('x', 480).attr('y', ry + 14)
-            .attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '8')
+            .attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '12')
             .text(rrsiStats[r][0]);
           root.append('text')
             .attr('x', 724).attr('y', ry + 14).attr('text-anchor', 'end')
-            .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+            .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
             .text(rrsiStats[r][1]);
         }
       } else {
@@ -1453,7 +1453,7 @@
 
         root.append('text')
           .attr('x', 26).attr('y', 34)
-          .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+          .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
           .text('REALM A: 39 BUILDER STREAMS');
 
         var lanes = [
@@ -1469,11 +1469,11 @@
             .attr('rx', 6).attr('fill', '#161d29').attr('stroke', '#2e384d');
           root.append('text')
             .attr('x', 36).attr('y', ly + 15)
-            .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8.6').attr('font-weight', '700')
+            .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '12').attr('font-weight', '700')
             .text(lanes[l][0]);
           root.append('text')
             .attr('x', 36).attr('y', ly + 27)
-            .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '7.8')
+            .attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '12')
             .text(lanes[l][1] + ' · Antigravity Harness');
         }
 
@@ -1484,11 +1484,11 @@
 
         root.append('text')
           .attr('x', 380).attr('y', 36).attr('text-anchor', 'middle')
-          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.8').attr('font-weight', '700')
+          .attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
           .text('REALM ISOLATION');
         root.append('text')
           .attr('x', 380).attr('y', 50).attr('text-anchor', 'middle')
-          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
+          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
           .text('FIREWALL (0 BLEED)');
 
         var fwChecks = [
@@ -1504,7 +1504,7 @@
             .attr('rx', 5).attr('fill', '#0f1918').attr('stroke', '#4fb3a8');
           root.append('text')
             .attr('x', 380).attr('y', fy + 17).attr('text-anchor', 'middle')
-            .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+            .attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
             .text('✓ ' + fwChecks[f]);
         }
 
@@ -1515,7 +1515,7 @@
 
         root.append('text')
           .attr('x', 490).attr('y', 34)
-          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
+          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
           .text('REALM B: TESTNET ACTORS');
 
         var actors = [
@@ -1531,11 +1531,11 @@
             .attr('rx', 6).attr('fill', '#1b1914').attr('stroke', '#473b22');
           root.append('text')
             .attr('x', 500).attr('y', ay + 15)
-            .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8.6').attr('font-weight', '700')
+            .attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '12').attr('font-weight', '700')
             .text(actors[a][0]);
           root.append('text')
             .attr('x', 500).attr('y', ay + 27)
-            .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.8')
+            .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12')
             .text(actors[a][1]);
         }
       }

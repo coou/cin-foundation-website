@@ -101,74 +101,74 @@
     var LENSES = [
       {
         id: 'lens-1',
-        label: '1. SOTA AI Labs (Profit vs. Cooperation)',
+        label: '1. SOTA AI Labs (Profit vs. Co-Op)',
         color: '#4fb3a8',
         metric: '95% Data Shapley',
         notes: [
-          { slug: 'how-the-ledger-works', href: '/notes/how-the-ledger-works', match: 'how-the-ledger-works' },
-          { slug: 'beyond-arxiv-agent-web-ledger', href: '/notes/beyond-arxiv-agent-web-ledger', match: 'beyond-arxiv-agent-web-ledger' }
+          { slug: 'ledger-works', href: '/notes/how-the-ledger-works', match: 'how-the-ledger-works' },
+          { slug: 'beyond-arxiv', href: '/notes/beyond-arxiv-agent-web-ledger', match: 'beyond-arxiv-agent-web-ledger' }
         ]
       },
       {
         id: 'lens-2',
-        label: '2. AI Safety (Last Resort Before Pause)',
+        label: '2. AI Safety (Before Global Pause)',
         color: '#ef6a52',
-        metric: 'Two Internets + 24h Lease',
+        metric: '2 Doors + 24h Lease',
         notes: [
           { slug: 'containment', href: '/notes/containment', match: 'containment' },
           { slug: 'agent-internet', href: '/notes/agent-internet', match: 'agent-internet' },
-          { slug: 'no-one-commands-a-swarm', href: '/notes/no-one-commands-a-swarm', match: 'no-one-commands-a-swarm' }
+          { slug: 'swarm-lock', href: '/notes/no-one-commands-a-swarm', match: 'no-one-commands-a-swarm' }
         ]
       },
       {
         id: 'lens-3',
-        label: '3. Governments (3-5yr Lag vs. <10ms Gate)',
+        label: '3. Governments (<10ms Policy Gate)',
         color: '#ecc94b',
-        metric: 'Weiszfeld Quorum + $25k Floor',
+        metric: 'Quorum + $25k Floor',
         notes: [
-          { slug: 'ai-agent-jurisdictions', href: '/notes/ai-agent-jurisdictions', match: 'ai-agent-jurisdictions' },
-          { slug: 'liquid-democracy-lockups', href: '/notes/liquid-democracy-and-staking-lockups', match: 'liquid-democracy-and-staking-lockups' }
+          { slug: 'jurisdictions', href: '/notes/ai-agent-jurisdictions', match: 'ai-agent-jurisdictions' },
+          { slug: 'liquid-voting', href: '/notes/liquid-democracy-and-staking-lockups', match: 'liquid-democracy-and-staking-lockups' }
         ]
       },
       {
         id: 'lens-4',
-        label: '4. Universities (88% Ideas vs. 15% Royalty)',
+        label: '4. Universities (15% Open Royalty)',
         color: '#63b3ed',
-        metric: '15% Shapley + 95.3% SPRA',
+        metric: '15% + 95.3% SPRA',
         notes: [
-          { slug: 'related-labs-and-researchers', href: '/notes/related-labs-and-researchers', match: 'related-labs-and-researchers' },
-          { slug: 'instructions-as-evidence', href: '/notes/instructions-as-evidence', match: 'instructions-as-evidence' }
+          { slug: 'related-labs', href: '/notes/related-labs-and-researchers', match: 'related-labs-and-researchers' },
+          { slug: 'clues-proof', href: '/notes/instructions-as-evidence', match: 'instructions-as-evidence' }
         ]
       },
       {
         id: 'lens-5',
-        label: '5. Private Enterprise (PSI Co-Op vs. Toll)',
+        label: '5. Private Enterprise (PSI Co-Op)',
         color: '#b794f4',
         metric: '+34% Margin · 0B Leak',
         notes: [
-          { slug: 'companies-on-the-ledger', href: '/notes/companies-on-the-ledger', match: 'companies-on-the-ledger' },
-          { slug: 'weiszfeld-git-merge-testnet', href: '/notes/all-principles', match: 'testnet' }
+          { slug: 'co-op-firms', href: '/notes/companies-on-the-ledger', match: 'companies-on-the-ledger' },
+          { slug: 'testnet-quorum', href: '/notes/all-principles', match: 'testnet' }
         ]
       },
       {
         id: 'lens-6',
-        label: '6. Global Workforce (4.8B Shield vs. Cartel)',
+        label: '6. Global Workforce (4.8B Shield)',
         color: '#68d391',
-        metric: '$8 Pre-ADC + 5D Credit',
+        metric: '$8 Ring + 5D Credit',
         notes: [
           { slug: 'thirty-lives', href: '/notes/thirty-lives', match: 'thirty-lives' },
-          { slug: 'somatic-witness', href: '/notes/somatic-witness', match: 'somatic-witness' },
-          { slug: 'value-system', href: '/notes/value-system', match: 'value-system' }
+          { slug: 'somatic-liveness', href: '/notes/somatic-witness', match: 'somatic-witness' },
+          { slug: '5d-value', href: '/notes/value-system', match: 'value-system' }
         ]
       },
       {
         id: 'lens-7',
-        label: '7. Pair Intelligence (90d Cliff vs. 96% Moat)',
+        label: '7. Pair Intelligence (96% Moat)',
         color: '#f6ad55',
         metric: '96% Local Pair Moat',
         notes: [
           { slug: 'personal-agents', href: '/notes/personal-agents', match: 'personal-agents' },
-          { slug: 'training-your-twin', href: '/notes/training-your-twin', match: 'training-your-twin' },
+          { slug: 'train-twin', href: '/notes/training-your-twin', match: 'training-your-twin' },
           { slug: 'reclaim-profile', href: '/notes/reclaim-your-profile', match: 'reclaim-your-profile' }
         ]
       }
@@ -216,23 +216,23 @@
     }
 
     function renderConstellation(selectedCat) {
-      svg.attr('viewBox', '0 0 820 340');
+      svg.attr('viewBox', '0 0 820 380');
       svg.selectAll('*').remove();
 
       svg.append('rect')
         .attr('x', 4)
         .attr('y', 4)
         .attr('width', 812)
-        .attr('height', 332)
+        .attr('height', 372)
         .attr('rx', 14)
         .attr('fill', '#12151c')
         .attr('stroke', '#2a2f3a')
         .attr('stroke-width', 1.5);
 
       var hubX = 410;
-      var hubY = 132;
+      var hubY = 148;
 
-      [85, 165, 245].forEach(function (r) {
+      [90, 175, 255].forEach(function (r) {
         svg.append('circle')
           .attr('cx', hubX)
           .attr('cy', hubY)
@@ -285,23 +285,24 @@
             });
 
           g.append('circle')
-            .attr('r', 5)
+            .attr('r', 5.5)
             .attr('fill', '#181c26')
             .attr('stroke', p.color)
             .attr('stroke-width', 1.8);
 
           var isTopBottom = Math.abs(n.dx) <= 32 && Math.abs(n.dy) >= 40;
           var anchor = isTopBottom ? 'middle' : (n.dx < 0 ? 'end' : 'start');
-          var tx = isTopBottom ? 0 : (n.dx < 0 ? -8 : 8);
-          var ty = isTopBottom ? (n.dy < 0 ? -9 : 14) : 3.5;
+          var tx = isTopBottom ? 0 : (n.dx < 0 ? -9 : 9);
+          var ty = isTopBottom ? (n.dy < 0 ? -10 : 16) : 4;
 
           g.append('text')
             .attr('x', tx)
             .attr('y', ty)
             .attr('text-anchor', anchor)
-            .attr('font-size', 9.2)
+            .attr('font-size', 12)
+            .attr('font-weight', 600)
             .attr('font-family', 'sans-serif')
-            .attr('fill', '#d5d9e2')
+            .attr('fill', '#e9e6de')
             .text(n.label);
         });
       });
@@ -320,10 +321,10 @@
           });
 
         g.append('rect')
-          .attr('x', -78)
-          .attr('y', -22)
-          .attr('width', 156)
-          .attr('height', 44)
+          .attr('x', -94)
+          .attr('y', -24)
+          .attr('width', 188)
+          .attr('height', 48)
           .attr('rx', 10)
           .attr('fill', isSelected ? 'rgba(79,179,168,0.18)' : '#171b24')
           .attr('stroke', p.color)
@@ -333,7 +334,7 @@
           .attr('x', 0)
           .attr('y', -4)
           .attr('text-anchor', 'middle')
-          .attr('font-size', 10)
+          .attr('font-size', 12)
           .attr('font-weight', 700)
           .attr('font-family', 'monospace')
           .attr('fill', p.color)
@@ -341,9 +342,9 @@
 
         g.append('text')
           .attr('x', 0)
-          .attr('y', 12)
+          .attr('y', 14)
           .attr('text-anchor', 'middle')
-          .attr('font-size', 9)
+          .attr('font-size', 12)
           .attr('font-family', 'sans-serif')
           .attr('fill', '#cfd3dc')
           .text(p.sub);
@@ -358,16 +359,16 @@
         });
 
       centerG.append('circle')
-        .attr('r', 46)
+        .attr('r', 52)
         .attr('fill', '#192328')
         .attr('stroke', '#4fb3a8')
         .attr('stroke-width', 2.2);
 
       centerG.append('text')
         .attr('x', 0)
-        .attr('y', -10)
+        .attr('y', -12)
         .attr('text-anchor', 'middle')
-        .attr('font-size', 9.5)
+        .attr('font-size', 12)
         .attr('font-weight', 700)
         .attr('font-family', 'monospace')
         .attr('fill', '#4fb3a8')
@@ -377,7 +378,7 @@
         .attr('x', 0)
         .attr('y', 6)
         .attr('text-anchor', 'middle')
-        .attr('font-size', 11)
+        .attr('font-size', 13.5)
         .attr('font-weight', 700)
         .attr('font-family', 'serif')
         .attr('fill', '#f4f1ea')
@@ -385,23 +386,23 @@
 
       centerG.append('text')
         .attr('x', 0)
-        .attr('y', 20)
+        .attr('y', 23)
         .attr('text-anchor', 'middle')
-        .attr('font-size', 9)
+        .attr('font-size', 12)
         .attr('font-family', 'monospace')
         .attr('fill', '#9aa3b2')
         .text('Click to Filter');
     }
 
     function renderLensesMatrix() {
-      svg.attr('viewBox', '0 0 820 340');
+      svg.attr('viewBox', '0 0 820 380');
       svg.selectAll('*').remove();
 
       svg.append('rect')
         .attr('x', 4)
         .attr('y', 4)
         .attr('width', 812)
-        .attr('height', 332)
+        .attr('height', 372)
         .attr('rx', 14)
         .attr('fill', '#12151c')
         .attr('stroke', '#2a2f3a')
@@ -409,38 +410,38 @@
 
       svg.append('text')
         .attr('x', 18)
-        .attr('y', 24)
-        .attr('font-size', 9.5)
+        .attr('y', 26)
+        .attr('font-size', 12.5)
         .attr('font-weight', 700)
         .attr('font-family', 'monospace')
         .attr('fill', '#4fb3a8')
-        .text('7 GLOBAL STANDING LENSES → BLUEPRINTS MATRIX (CLICK ANY ROW TO FILTER CARDS OR CHIP TO OPEN)');
+        .text('7 GLOBAL LENSES → BLUEPRINTS MATRIX (CLICK ROW TO FILTER OR CHIP TO OPEN)');
 
       var resetG = svg.append('g')
-        .attr('transform', 'translate(668, 10)')
+        .attr('transform', 'translate(652, 10)')
         .style('cursor', 'pointer')
         .on('click', function () {
           window.location.href = '/notes/world-standing-and-cointelligence';
         });
       resetG.append('rect')
-        .attr('width', 136)
-        .attr('height', 20)
+        .attr('width', 152)
+        .attr('height', 24)
         .attr('rx', 6)
         .attr('fill', '#192328')
         .attr('stroke', '#4fb3a8')
         .attr('stroke-width', 1.2);
       resetG.append('text')
-        .attr('x', 68)
-        .attr('y', 13.5)
+        .attr('x', 76)
+        .attr('y', 16)
         .attr('text-anchor', 'middle')
-        .attr('font-size', 8.5)
+        .attr('font-size', 12)
         .attr('font-weight', 700)
         .attr('font-family', 'monospace')
         .attr('fill', '#4fb3a8')
         .text('Open 7-Lens Atlas →');
 
       LENSES.forEach(function (lens, idx) {
-        var ry = 36 + idx * 42;
+        var ry = 40 + idx * 46;
         var isSelected = activeLensId === lens.id;
         var isFocused = activeLensId === 'all' || isSelected;
 
@@ -457,7 +458,7 @@
           .attr('x', 0)
           .attr('y', 0)
           .attr('width', 792)
-          .attr('height', 36)
+          .attr('height', 40)
           .attr('rx', 8)
           .attr('fill', isSelected ? 'rgba(79,179,168,0.16)' : '#171b24')
           .attr('stroke', isSelected ? lens.color : '#262b38')
@@ -467,32 +468,24 @@
           .attr('x', 0)
           .attr('y', 0)
           .attr('width', 5)
-          .attr('height', 36)
+          .attr('height', 40)
           .attr('rx', 3)
           .attr('fill', lens.color);
 
         rowG.append('text')
-          .attr('x', 14)
-          .attr('y', 22)
-          .attr('font-size', 9.6)
+          .attr('x', 12)
+          .attr('y', 25)
+          .attr('font-size', 12)
           .attr('font-weight', 700)
           .attr('font-family', 'monospace')
           .attr('fill', lens.color)
           .text(lens.label);
 
-        rowG.append('text')
-          .attr('x', 278)
-          .attr('y', 22)
-          .attr('font-size', 10)
-          .attr('font-family', 'monospace')
-          .attr('fill', '#8c8f96')
-          .text('→');
-
-        var chipX = 282;
+        var chipX = 276;
         lens.notes.forEach(function (n) {
-          var chipW = Math.max(82, n.slug.length * 5.2 + 14);
+          var chipW = Math.max(88, n.slug.length * 6.8 + 12);
           var chipG = rowG.append('g')
-            .attr('transform', 'translate(' + chipX + ', 6)')
+            .attr('transform', 'translate(' + chipX + ', 7)')
             .on('click', function (ev) {
               ev.stopPropagation();
               window.location.href = n.href;
@@ -500,7 +493,7 @@
 
           chipG.append('rect')
             .attr('width', chipW)
-            .attr('height', 24)
+            .attr('height', 26)
             .attr('rx', 6)
             .attr('fill', '#11151d')
             .attr('stroke', lens.color)
@@ -509,9 +502,9 @@
 
           chipG.append('text')
             .attr('x', chipW / 2)
-            .attr('y', 15.5)
+            .attr('y', 17.5)
             .attr('text-anchor', 'middle')
-            .attr('font-size', 8.4)
+            .attr('font-size', 12)
             .attr('font-family', 'monospace')
             .attr('fill', '#e9e6de')
             .text(n.slug);
@@ -520,20 +513,20 @@
         });
 
         rowG.append('rect')
-          .attr('x', 612)
-          .attr('y', 6)
-          .attr('width', 172)
-          .attr('height', 24)
+          .attr('x', 610)
+          .attr('y', 7)
+          .attr('width', 174)
+          .attr('height', 26)
           .attr('rx', 6)
           .attr('fill', 'rgba(79,179,168,0.12)')
           .attr('stroke', lens.color)
           .attr('stroke-width', 1.1);
 
         rowG.append('text')
-          .attr('x', 698)
-          .attr('y', 21.5)
+          .attr('x', 697)
+          .attr('y', 24)
           .attr('text-anchor', 'middle')
-          .attr('font-size', 8.7)
+          .attr('font-size', 12)
           .attr('font-weight', 700)
           .attr('font-family', 'monospace')
           .attr('fill', lens.color)
@@ -675,7 +668,7 @@
       leftG.append('text')
         .attr('x', 0)
         .attr('y', 12)
-        .attr('font-size', 10)
+        .attr('font-size', 12)
         .attr('font-weight', 700)
         .attr('font-family', 'monospace')
         .attr('fill', '#4fb3a8')
@@ -702,7 +695,7 @@
         leftG.append('text')
           .attr('x', 0)
           .attr('y', y)
-          .attr('font-size', 10)
+          .attr('font-size', 12)
           .attr('font-weight', 600)
           .attr('fill', '#d5d9e2')
           .text(b.label);
@@ -726,7 +719,7 @@
         leftG.append('text')
           .attr('x', idx === 0 ? 10 : Math.min(200, xScale(b.ms) + 8))
           .attr('y', y + 20)
-          .attr('font-size', 9.2)
+          .attr('font-size', 12)
           .attr('font-family', 'monospace')
           .attr('font-weight', 700)
           .attr('fill', idx === 0 ? '#10131a' : (idx === 2 ? '#4fb3a8' : '#f4f1ea'))
@@ -745,7 +738,7 @@
       rightG.append('text')
         .attr('x', 0)
         .attr('y', 12)
-        .attr('font-size', 10)
+        .attr('font-size', 12)
         .attr('font-weight', 700)
         .attr('font-family', 'monospace')
         .attr('fill', '#ecc94b')
@@ -776,7 +769,7 @@
             .attr('x', curX + w / 2)
             .attr('y', 64)
             .attr('text-anchor', 'middle')
-            .attr('font-size', 9.5)
+            .attr('font-size', 12)
             .attr('font-family', 'monospace')
             .attr('font-weight', 700)
             .attr('fill', '#10131a')
@@ -804,7 +797,7 @@
         rightG.append('text')
           .attr('x', lx + 10)
           .attr('y', ly + 17)
-          .attr('font-size', 9.2)
+          .attr('font-size', 12)
           .attr('font-weight', 700)
           .attr('fill', s.color)
           .text(s.label);
@@ -812,7 +805,7 @@
         rightG.append('text')
           .attr('x', lx + 10)
           .attr('y', ly + 33)
-          .attr('font-size', 10)
+          .attr('font-size', 12)
           .attr('font-family', 'monospace')
           .attr('fill', '#e9e6de')
           .text(s.units + ' u (' + (s.units / 10).toFixed(0) + '%)');
@@ -821,7 +814,7 @@
       rightG.append('text')
         .attr('x', 0)
         .attr('y', 212)
-        .attr('font-size', 9.5)
+        .attr('font-size', 12)
         .attr('font-family', 'monospace')
         .attr('fill', '#4fb3a8')
         .text('✓ Held-Out Proof Verified · ' + meta.name);
@@ -914,7 +907,7 @@
       plotG.append('text')
         .attr('x', 22)
         .attr('y', 28)
-        .attr('font-size', 10)
+        .attr('font-size', 12)
         .attr('font-weight', 700)
         .attr('font-family', 'monospace')
         .attr('fill', '#4fb3a8')
@@ -978,7 +971,7 @@
           .attr('x', 0)
           .attr('y', s.y < 100 ? -16 : 24)
           .attr('text-anchor', 'middle')
-          .attr('font-size', 9.2)
+          .attr('font-size', 12)
           .attr('font-weight', 700)
           .attr('font-family', 'monospace')
           .attr('fill', s.color)
@@ -1003,7 +996,7 @@
         .attr('x', 0)
         .attr('y', -18)
         .attr('text-anchor', 'middle')
-        .attr('font-size', 9.5)
+        .attr('font-size', 12)
         .attr('font-weight', 700)
         .attr('font-family', 'monospace')
         .attr('fill', '#ffffff')
@@ -1021,7 +1014,7 @@
       rightG.append('text')
         .attr('x', 0)
         .attr('y', 10)
-        .attr('font-size', 10)
+        .attr('font-size', 12)
         .attr('font-weight', 700)
         .attr('font-family', 'monospace')
         .attr('fill', statusColor)
@@ -1030,7 +1023,7 @@
       rightG.append('text')
         .attr('x', 0)
         .attr('y', 28)
-        .attr('font-size', 11.5)
+        .attr('font-size', 12.5)
         .attr('font-weight', 700)
         .attr('fill', '#f4f1ea')
         .text(statusLabel);
@@ -1049,7 +1042,7 @@
         rightG.append('text')
           .attr('x', 0)
           .attr('y', ry)
-          .attr('font-size', 9.5)
+          .attr('font-size', 12)
           .attr('font-weight', isCur ? 700 : 500)
           .attr('fill', isCur ? '#ffffff' : '#cfd3dc')
           .text((isCur ? '▸ ' : '') + r.label + ' (' + r.score + '%)');
@@ -1075,7 +1068,7 @@
       rightG.append('text')
         .attr('x', 0)
         .attr('y', 216)
-        .attr('font-size', 9.2)
+        .attr('font-size', 12)
         .attr('font-family', 'monospace')
         .attr('fill', '#9aa3b2')
         .text('Click any shard cluster or toggle left controls');
@@ -1673,95 +1666,91 @@
 
       function renderMode(mode) {
         currentMode = mode;
-        svg.attr('viewBox', '0 0 780 220');
+        svg.attr('viewBox', '0 0 780 232');
         svg.selectAll('*').remove();
 
         svg.append('rect')
           .attr('x', 2)
           .attr('y', 2)
           .attr('width', 776)
-          .attr('height', 216)
+          .attr('height', 228)
           .attr('rx', 10)
           .attr('fill', '#12151c')
           .attr('stroke', '#2a2f3a')
           .attr('stroke-width', 1.4);
 
         if (mode === 'compare') {
-          // Header
           svg.append('text')
             .attr('x', 20)
-            .attr('y', 24)
-            .attr('font-size', 9.8)
+            .attr('y', 25)
+            .attr('font-size', 12.5)
             .attr('font-weight', 700)
             .attr('font-family', 'monospace')
             .attr('fill', '#4fb3a8')
-            .text('1. BENCHMARK · ' + spec.title);
+            .text('1. BENCHMARK · ' + spec.title.slice(0, 40));
 
-          // Legend
-          svg.append('rect').attr('x', 508).attr('y', 14).attr('width', 9).attr('height', 9).attr('rx', 2).attr('fill', '#ef6a52');
-          svg.append('text').attr('x', 522).attr('y', 22).attr('font-size', 9).attr('font-family', 'monospace').attr('fill', '#ef6a52').text('Status Quo');
-          svg.append('rect').attr('x', 602).attr('y', 14).attr('width', 9).attr('height', 9).attr('rx', 2).attr('fill', '#4fb3a8');
-          svg.append('text').attr('x', 616).attr('y', 22).attr('font-size', 9).attr('font-family', 'monospace').attr('fill', '#4fb3a8').text('CIN Mechanism');
+          svg.append('rect').attr('x', 492).attr('y', 14).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', '#ef6a52');
+          svg.append('text').attr('x', 507).attr('y', 23).attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#ef6a52').text('Status Quo');
+          svg.append('rect').attr('x', 602).attr('y', 14).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', '#4fb3a8');
+          svg.append('text').attr('x', 617).attr('y', 23).attr('font-size', 12).attr('font-family', 'monospace').attr('fill', '#4fb3a8').text('CIN Mechanism');
 
-          var xScale = d3.scaleLinear().domain([0, 100]).range([0, 310]);
+          var xScale = d3.scaleLinear().domain([0, 100]).range([0, 290]);
 
           spec.compare.forEach(function (row, idx) {
-            var y = 44 + idx * 50;
+            var y = 44 + idx * 52;
             svg.append('text')
               .attr('x', 20)
-              .attr('y', y + 14)
-              .attr('font-size', 10)
+              .attr('y', y + 16)
+              .attr('font-size', 12.5)
               .attr('font-weight', 700)
               .attr('fill', '#e9e6de')
               .text(row.label);
 
-            // Track background
             svg.append('rect')
-              .attr('x', 238)
+              .attr('x', 248)
               .attr('y', y)
-              .attr('width', 310)
-              .attr('height', 14)
+              .attr('width', 290)
+              .attr('height', 15)
               .attr('rx', 4)
               .attr('fill', '#1b1f2a');
 
             svg.append('rect')
-              .attr('x', 238)
+              .attr('x', 248)
               .attr('y', y)
               .attr('width', Math.max(8, xScale(row.sqVal)))
-              .attr('height', 14)
+              .attr('height', 15)
               .attr('rx', 4)
               .attr('fill', '#ef6a52')
               .attr('opacity', 0.88);
 
             svg.append('text')
-              .attr('x', 558)
-              .attr('y', y + 11)
-              .attr('font-size', 9.2)
+              .attr('x', 548)
+              .attr('y', y + 12)
+              .attr('font-size', 12)
               .attr('font-family', 'monospace')
               .attr('fill', '#ef6a52')
               .text(row.sqText);
 
-            // CIN bar
             svg.append('rect')
-              .attr('x', 238)
-              .attr('y', y + 18)
-              .attr('width', 310)
-              .attr('height', 14)
+              .attr('x', 248)
+              .attr('y', y + 20)
+              .attr('width', 290)
+              .attr('height', 15)
               .attr('rx', 4)
               .attr('fill', '#1b1f2a');
 
             svg.append('rect')
-              .attr('x', 238)
-              .attr('y', y + 18)
+              .attr('x', 248)
+              .attr('y', y + 20)
               .attr('width', Math.max(12, xScale(row.cinVal)))
-              .attr('height', 14)
+              .attr('height', 15)
               .attr('rx', 4)
               .attr('fill', '#4fb3a8');
 
             svg.append('text')
-              .attr('x', 558)
-              .attr('y', y + 29)
-              .attr('font-size', 9.2)
+              .attr('x', 548)
+              .attr('y', y + 32)
+              .attr('font-size', 12)
               .attr('font-weight', 700)
               .attr('font-family', 'monospace')
               .attr('fill', '#4fb3a8')
@@ -1770,26 +1759,26 @@
 
           svg.append('text')
             .attr('x', 20)
-            .attr('y', 206)
-            .attr('font-size', 9)
+            .attr('y', 216)
+            .attr('font-size', 12)
             .attr('font-family', 'monospace')
             .attr('fill', '#9aa3b2')
-            .text('Scientific & Statutory Provenance: ' + spec.cite);
+            .text('Provenance: ' + spec.cite);
         } else if (mode === 'causal') {
           svg.append('text')
             .attr('x', 20)
-            .attr('y', 24)
-            .attr('font-size', 9.8)
+            .attr('y', 25)
+            .attr('font-size', 12.5)
             .attr('font-weight', 700)
             .attr('font-family', 'monospace')
             .attr('fill', '#63b3ed')
-            .text('2. FOUR-STEP CAUSAL PROOF CHAIN · HUMAN INTENT → BOTTLENECK → THRESHOLD → CIN MECHANISM');
+            .text('2. CAUSAL PROOF CHAIN · INTENT → BOTTLENECK → THRESHOLD → MECHANISM');
 
           var stepMeta = [
-            { tag: 'STEP 1 · HUMAN INTENT', col: '#63b3ed' },
-            { tag: 'STEP 2 · LEGACY BOTTLENECK', col: '#ef6a52' },
-            { tag: 'STEP 3 · CAPABILITY GATE', col: '#ecc94b' },
-            { tag: 'STEP 4 · CIN MECHANISM', col: '#4fb3a8' }
+            { tag: '1 · INTENT', col: '#63b3ed' },
+            { tag: '2 · BOTTLENECK', col: '#ef6a52' },
+            { tag: '3 · THRESHOLD', col: '#ecc94b' },
+            { tag: '4 · MECHANISM', col: '#4fb3a8' }
           ];
 
           spec.causal.forEach(function (node, idx) {
@@ -1800,9 +1789,9 @@
             if (idx < 3) {
               svg.append('line')
                 .attr('x1', x + 172)
-                .attr('y1', y + 70)
+                .attr('y1', y + 74)
                 .attr('x2', x + 188)
-                .attr('y2', y + 70)
+                .attr('y2', y + 74)
                 .attr('stroke', sm.col)
                 .attr('stroke-width', 2);
             }
@@ -1810,7 +1799,7 @@
             var g = svg.append('g').attr('transform', 'translate(' + x + ',' + y + ')');
             g.append('rect')
               .attr('width', 172)
-              .attr('height', 142)
+              .attr('height', 150)
               .attr('rx', 10)
               .attr('fill', '#171b24')
               .attr('stroke', sm.col)
@@ -1818,8 +1807,8 @@
 
             g.append('text')
               .attr('x', 12)
-              .attr('y', 22)
-              .attr('font-size', 8.8)
+              .attr('y', 24)
+              .attr('font-size', 12)
               .attr('font-weight', 700)
               .attr('font-family', 'monospace')
               .attr('fill', sm.col)
@@ -1827,37 +1816,36 @@
 
             g.append('text')
               .attr('x', 12)
-              .attr('y', 46)
-              .attr('font-size', 10.5)
+              .attr('y', 48)
+              .attr('font-size', 12.5)
               .attr('font-weight', 700)
               .attr('fill', '#f4f1ea')
-              .text(node.title);
+              .text(node.title.slice(0, 20));
 
-            // Wrap node.sub into two lines
             var words = node.sub.split(' ');
             var mid = Math.ceil(words.length / 2);
-            var line1 = words.slice(0, mid).join(' ');
-            var line2 = words.slice(mid).join(' ');
+            var line1 = words.slice(0, mid).join(' ').slice(0, 24);
+            var line2 = words.slice(mid).join(' ').slice(0, 24);
 
             g.append('text')
               .attr('x', 12)
-              .attr('y', 68)
-              .attr('font-size', 9.2)
+              .attr('y', 72)
+              .attr('font-size', 12)
               .attr('fill', '#cfd3dc')
               .text(line1);
 
             g.append('text')
               .attr('x', 12)
-              .attr('y', 84)
-              .attr('font-size', 9.2)
+              .attr('y', 90)
+              .attr('font-size', 12)
               .attr('fill', '#cfd3dc')
               .text(line2);
 
             g.append('rect')
-              .attr('x', 12)
-              .attr('y', 102)
-              .attr('width', 148)
-              .attr('height', 26)
+              .attr('x', 10)
+              .attr('y', 108)
+              .attr('width', 152)
+              .attr('height', 28)
               .attr('rx', 6)
               .attr('fill', '#11141b')
               .attr('stroke', sm.col)
@@ -1865,51 +1853,50 @@
 
             g.append('text')
               .attr('x', 86)
-              .attr('y', 119)
+              .attr('y', 126)
               .attr('text-anchor', 'middle')
-              .attr('font-size', 9)
+              .attr('font-size', 12)
               .attr('font-weight', 700)
               .attr('font-family', 'monospace')
               .attr('fill', sm.col)
-              .text(node.metric);
+              .text(node.metric.slice(0, 20));
           });
 
           svg.append('text')
             .attr('x', 20)
-            .attr('y', 204)
-            .attr('font-size', 9)
+            .attr('y', 216)
+            .attr('font-size', 12)
             .attr('font-family', 'monospace')
             .attr('fill', '#4fb3a8')
-            .text('✓ Primary Citation Chain: ' + spec.cite);
+            .text('✓ Primary Citation: ' + spec.cite);
         } else {
-          // Mode 3: Scale / Trajectory Stress-Test Curve
           svg.append('text')
             .attr('x', 20)
-            .attr('y', 24)
-            .attr('font-size', 9.8)
+            .attr('y', 25)
+            .attr('font-size', 12.5)
             .attr('font-weight', 700)
             .attr('font-family', 'monospace')
             .attr('fill', '#ecc94b')
-            .text('3. STRESS-TEST TRAJECTORY · ' + spec.title);
+            .text('3. STRESS-TEST TRAJECTORY · ' + spec.title.slice(0, 42));
 
-          var chartX = d3.scalePoint().domain(spec.xLabels).range([48, 468]);
-          var chartY = d3.scaleLinear().domain([0, 105]).range([178, 44]);
+          var chartX = d3.scalePoint().domain(spec.xLabels).range([54, 464]);
+          var chartY = d3.scaleLinear().domain([0, 105]).range([184, 46]);
 
           [25, 50, 75, 100].forEach(function (tick) {
             var ty = chartY(tick);
             svg.append('line')
-              .attr('x1', 44)
+              .attr('x1', 48)
               .attr('y1', ty)
-              .attr('x2', 474)
+              .attr('x2', 472)
               .attr('y2', ty)
               .attr('stroke', 'rgba(255,255,255,0.06)')
               .attr('stroke-dasharray', '3 3');
 
             svg.append('text')
-              .attr('x', 38)
-              .attr('y', ty + 3)
+              .attr('x', 42)
+              .attr('y', ty + 4)
               .attr('text-anchor', 'end')
-              .attr('font-size', 8.8)
+              .attr('font-size', 12)
               .attr('font-family', 'monospace')
               .attr('fill', '#8c8f96')
               .text(tick + '%');
@@ -1919,9 +1906,9 @@
             var lx = chartX(lbl);
             svg.append('text')
               .attr('x', lx)
-              .attr('y', 196)
+              .attr('y', 206)
               .attr('text-anchor', 'middle')
-              .attr('font-size', 9)
+              .attr('font-size', 12)
               .attr('font-family', 'monospace')
               .attr('fill', '#cfd3dc')
               .text(lbl);
@@ -1932,7 +1919,7 @@
 
           var areaGen = d3.area()
             .x(function (d) { return chartX(d.x); })
-            .y0(178)
+            .y0(184)
             .y1(function (d) { return chartY(d.y); })
             .curve(d3.curveMonotoneX);
 
@@ -1979,31 +1966,29 @@
               .attr('stroke-width', 2);
           });
 
-          // Right Callout Box
-          var boxG = svg.append('g').attr('transform', 'translate(494, 38)');
+          var boxG = svg.append('g').attr('transform', 'translate(488, 38)');
           boxG.append('rect')
-            .attr('width', 266)
-            .attr('height', 160)
+            .attr('width', 272)
+            .attr('height', 172)
             .attr('rx', 10)
             .attr('fill', '#171b24')
             .attr('stroke', '#4fb3a8')
             .attr('stroke-width', 1.5);
 
           boxG.append('text')
-            .attr('x', 14)
+            .attr('x', 12)
             .attr('y', 24)
-            .attr('font-size', 9.2)
+            .attr('font-size', 12)
             .attr('font-weight', 700)
             .attr('font-family', 'monospace')
             .attr('fill', '#4fb3a8')
-            .text(spec.scaleBadge);
+            .text(spec.scaleBadge.slice(0, 32));
 
-          // Wrap spec.scaleSummary into 4 lines (~38 chars per line)
           var sWords = spec.scaleSummary.split(' ');
           var lines = [];
           var curLine = '';
           sWords.forEach(function (w) {
-            if ((curLine + ' ' + w).trim().length > 39 && lines.length < 4) {
+            if ((curLine + ' ' + w).trim().length > 33 && lines.length < 4) {
               lines.push(curLine.trim());
               curLine = w;
             } else {
@@ -2012,22 +1997,23 @@
           });
           if (curLine) lines.push(curLine);
 
-          lines.slice(0, 5).forEach(function (ln, lIdx) {
+          lines.slice(0, 4).forEach(function (ln, lIdx) {
             boxG.append('text')
-              .attr('x', 14)
-              .attr('y', 48 + lIdx * 16)
-              .attr('font-size', 9.2)
+              .attr('x', 12)
+              .attr('y', 48 + lIdx * 20)
+              .attr('font-size', 12)
               .attr('fill', '#d5d9e2')
-              .text(ln);
+              .text(ln.slice(0, 35));
           });
 
           boxG.append('text')
-            .attr('x', 14)
-            .attr('y', 144)
-            .attr('font-size', 8.8)
+            .attr('x', 12)
+            .attr('y', 152)
+            .attr('font-size', 12)
+            .attr('font-weight', 700)
             .attr('font-family', 'monospace')
             .attr('fill', '#ecc94b')
-            .text('CIN: ' + spec.cinCurve[5] + '% vs. Status Quo: ' + spec.sqCurve[5] + '%');
+            .text('CIN: ' + spec.cinCurve[5] + '% vs. Legacy: ' + spec.sqCurve[5] + '%');
         }
       }
 
@@ -2051,6 +2037,7 @@
       }
     });
   }
+  var mountNoteWorkbench = initUniversalNoteD3;
 
   /* ------------------------------------------------------------------------
      5. PROGRESSIVE DISCLOSURE HELPERS FOR ALL-PRINCIPLES & PRINCIPLE-TESTNET

@@ -570,58 +570,14 @@ function selectD3Root(svgNode) {
   return null;
 }
 
-// Mode 1 overlay: live D3 stress-test split gauge (#pwm-d3-live-overlay)
+// Mode 1 overlay: no-op because #pwm-right-d3-svg displays the live stress-test verdict at large scale
 function renderPwmD3Overlay(d, val, res) {
   if (!window.d3) return;
   const activeSvg = document.querySelector(`#pwm-svg-box [data-pwm-svg="${currentPwmKey}"]`);
   if (!activeSvg) return;
   const d3 = window.d3;
   d3.selectAll('#pwm-d3-live-overlay, g.pwm-d3-live-gauge').remove();
-
-  const svg = d3.select(activeSvg);
-  svg.attr('viewBox', '0 0 760 382').attr('data-rich-viz', 'true');
-
-  const span = Math.max(1, d.sim.max - d.sim.min);
-  const ratio = Math.max(0.08, Math.min(0.92, (val - d.sim.min) / span));
-  const g = svg.append('g')
-    .attr('id', 'pwm-d3-live-overlay')
-    .attr('class', 'pwm-d3-live-gauge')
-    .attr('transform', 'translate(12, 336)');
-
-  g.append('rect')
-    .attr('x', 0).attr('y', 0).attr('width', 736).attr('height', 38).attr('rx', 8)
-    .attr('fill', '#11151c').attr('stroke', '#4fb3a8').attr('stroke-width', 1.4);
-
-  const barX = 178, barW = 542;
-  const okW = Math.round(barW * (0.35 + ratio * 0.55));
-  const badW = barW - okW;
-
-  g.append('text')
-    .attr('x', 12).attr('y', 16).attr('font-size', '9').attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
-    .text('D3 LIVE STRESS-TEST');
-  g.append('text')
-    .attr('x', 12).attr('y', 30).attr('font-size', '9.5').attr('font-weight', '700').attr('fill', '#e9e6de')
-    .text(d.sim.fmt(val));
-
-  g.append('rect')
-    .attr('x', barX).attr('y', 8).attr('width', badW).attr('height', 22).attr('rx', 4)
-    .attr('fill', 'rgba(239,106,82,0.28)').attr('stroke', '#ef6a52').attr('stroke-width', 1.1);
-
-  g.append('rect')
-    .attr('x', barX + badW).attr('y', 8).attr('width', okW).attr('height', 22).attr('rx', 4)
-    .attr('fill', 'rgba(79,179,168,0.32)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.3);
-
-  g.append('circle')
-    .attr('cx', barX + badW).attr('cy', 19).attr('r', 6)
-    .attr('fill', '#e5a93c').attr('stroke', '#11151c').attr('stroke-width', 2);
-
-  g.append('text')
-    .attr('x', barX + 8).attr('y', 23).attr('font-size', '9').attr('font-weight', '700').attr('fill', '#ef6a52')
-    .text(res.badV.slice(0, 34));
-
-  g.append('text')
-    .attr('x', barX + barW - 8).attr('y', 23).attr('text-anchor', 'end').attr('font-size', '9').attr('font-weight', '700').attr('fill', '#4fb3a8')
-    .text(res.okV.slice(0, 48));
+  d3.select(activeSvg).attr('viewBox', '0 0 760 340').attr('data-rich-viz', 'true');
 }
 
 // Mode 2: Dedicated D3 6-Axis Structural Radar + 6-Row Metric Table (#pwm-d3-radar-svg)
@@ -648,14 +604,14 @@ function renderPwmD3Radar(d, val, res) {
     .attr('fill', '#131720').attr('stroke', '#282f3d').attr('stroke-width', 1.4);
 
   root.append('text')
-    .attr('x', 26).attr('y', 32).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '9.5').attr('font-weight', '700')
-    .text(`D3 6-AXIS STRUCTURAL RADAR · ${currentPwmKey.toUpperCase()} LENS`);
+    .attr('x', 26).attr('y', 36).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text(`6-AXIS RADAR · ${currentPwmKey.toUpperCase()}`);
 
   root.append('text')
-    .attr('x', 26).attr('y', 47).attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '8.2')
-    .text(`Stress-Test Input: ${d.sim.fmt(val)}`);
+    .attr('x', 26).attr('y', 56).attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '12')
+    .text(`Input: ${d.sim.fmt(val)}`);
 
-  const cx = 204, cy = 190, maxR = 96;
+  const cx = 204, cy = 188, maxR = 88;
   const rings = [0.25, 0.5, 0.75, 1.0];
 
   rings.forEach((rk) => {
@@ -672,12 +628,12 @@ function renderPwmD3Radar(d, val, res) {
   });
 
   const shortAxisLabels = [
-    '1. Human Sovereignty',
-    '2. Royalties (95%)',
-    '3. Swarm Containment',
-    '4. Local Privacy (0B)',
-    '5. Compute Access',
-    '6. Pair Moat (96%)'
+    '1. Sovereignty',
+    '2. Royalties',
+    '3. Airlock',
+    '4. 0-Egress',
+    '5. Compute',
+    '6. 96% Moat'
   ];
 
   const cloudPts = [];
@@ -692,12 +648,12 @@ function renderPwmD3Radar(d, val, res) {
       .attr('x1', cx).attr('y1', cy).attr('x2', axX).attr('y2', axY)
       .attr('stroke', '#283042').attr('stroke-width', 1);
 
-    const lblR = maxR + 20;
+    const lblR = maxR + 24;
     const lx = Math.round(cx + Math.cos(ang) * lblR);
-    const ly = Math.round(cy + Math.sin(ang) * (maxR + 14));
+    const ly = Math.round(cy + Math.sin(ang) * (maxR + 18));
     root.append('text')
-      .attr('x', lx).attr('y', ly + 3)
-      .attr('text-anchor', 'middle').attr('fill', '#e9e6de').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+      .attr('x', lx).attr('y', ly + 4)
+      .attr('text-anchor', 'middle').attr('fill', '#e9e6de').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
       .text(shortAxisLabels[i]);
 
     const cR = (cloudScores[i] / 100) * maxR;
@@ -708,20 +664,17 @@ function renderPwmD3Radar(d, val, res) {
     cinPts.push(`${Math.round(cx + Math.cos(ang) * nR)},${Math.round(cy + Math.sin(ang) * nR)}`);
   }
 
-  // Polygon 1: Status Quo Cloud/Institutions (Red)
   root.append('polygon')
     .attr('points', cloudPts.join(' '))
-    .attr('fill', 'rgba(239,106,82,0.20)').attr('stroke', '#ef6a52').attr('stroke-width', 1.8);
+    .attr('fill', 'rgba(239,106,82,0.22)').attr('stroke', '#ef6a52').attr('stroke-width', 2);
 
-  // Polygon 2: Raw Open Weights (Amber)
   root.append('polygon')
     .attr('points', openPts.join(' '))
-    .attr('fill', 'rgba(227,179,65,0.15)').attr('stroke', '#e3b341').attr('stroke-width', 1.8).attr('stroke-dasharray', '4 2');
+    .attr('fill', 'rgba(227,179,65,0.16)').attr('stroke', '#e3b341').attr('stroke-width', 2).attr('stroke-dasharray', '4 2');
 
-  // Polygon 3: CIN Co-Intelligence (Teal)
   root.append('polygon')
     .attr('points', cinPts.join(' '))
-    .attr('fill', 'rgba(79,179,168,0.26)').attr('stroke', '#4fb3a8').attr('stroke-width', 2.6);
+    .attr('fill', 'rgba(79,179,168,0.28)').attr('stroke', '#4fb3a8').attr('stroke-width', 2.8);
 
   for (let i = 0; i < 6; i++) {
     const ang = (Math.PI * 2 * i) / 6 - Math.PI / 2;
@@ -729,22 +682,22 @@ function renderPwmD3Radar(d, val, res) {
     root.append('circle')
       .attr('cx', Math.round(cx + Math.cos(ang) * nR))
       .attr('cy', Math.round(cy + Math.sin(ang) * nR))
-      .attr('r', 3.8).attr('fill', '#4fb3a8').attr('stroke', '#0d0f13').attr('stroke-width', 1.2);
+      .attr('r', 4.5).attr('fill', '#4fb3a8').attr('stroke', '#0d0f13').attr('stroke-width', 1.4);
   }
 
   // Legend at bottom of Left Panel
   root.append('rect')
-    .attr('x', 24).attr('y', 316).attr('width', 360).attr('height', 22).attr('rx', 5)
+    .attr('x', 24).attr('y', 312).attr('width', 360).attr('height', 26).attr('rx', 6)
     .attr('fill', '#0e1218').attr('stroke', '#222836');
   root.append('text')
-    .attr('x', 34).attr('y', 330).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-    .text('● Status Quo Cloud (Red)');
+    .attr('x', 36).attr('y', 329).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('● Cloud');
   root.append('text')
-    .attr('x', 162).attr('y', 330).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-    .text('▲ Raw Open Weights (Amber)');
+    .attr('x', 150).attr('y', 329).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('▲ Open Weights');
   root.append('text')
-    .attr('x', 292).attr('y', 330).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-    .text('◆ CIN (Teal)');
+    .attr('x', 298).attr('y', 329).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('◆ CIN');
 
   // Right Panel: Live 6-Row Metric Table
   root.append('rect')
@@ -752,63 +705,52 @@ function renderPwmD3Radar(d, val, res) {
     .attr('fill', '#131720').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
 
   root.append('text')
-    .attr('x', 420).attr('y', 32).attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '9.2').attr('font-weight', '700')
-    .text('6-ROW STRUCTURAL METRIC TABLE');
+    .attr('x', 420).attr('y', 36).attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text('6-AXIS SCORE COMPARISON');
 
   root.append('text')
-    .attr('x', 420).attr('y', 48).attr('fill', '#8c8a82').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
-    .text('AXIS DIMENSION');
+    .attr('x', 420).attr('y', 56).attr('fill', '#8c8a82').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('DIMENSION');
   root.append('text')
-    .attr('x', 628).attr('y', 48).attr('text-anchor', 'end').attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+    .attr('x', 612).attr('y', 56).attr('text-anchor', 'end').attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
     .text('CLOUD');
   root.append('text')
-    .attr('x', 678).attr('y', 48).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+    .attr('x', 672).attr('y', 56).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
     .text('OPEN');
   root.append('text')
-    .attr('x', 732).attr('y', 48).attr('text-anchor', 'end').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+    .attr('x', 732).attr('y', 56).attr('text-anchor', 'end').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
     .text('CIN');
 
   for (let r = 0; r < 6; r++) {
-    const ry = 56 + r * 41;
+    const ry = 66 + r * 44;
     root.append('rect')
-      .attr('x', 418).attr('y', ry).attr('width', 318).attr('height', 36).attr('rx', 6)
+      .attr('x', 418).attr('y', ry).attr('width', 318).attr('height', 38).attr('rx', 6)
       .attr('fill', '#171c27').attr('stroke', '#252c3b');
 
     root.append('text')
-      .attr('x', 426).attr('y', ry + 15).attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8.6').attr('font-weight', '700')
-      .text(PWM_RADAR_AXES[r]);
+      .attr('x', 426).attr('y', ry + 18).attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '12').attr('font-weight', '700')
+      .text(shortAxisLabels[r]);
 
     root.append('text')
-      .attr('x', 628).attr('y', ry + 15).attr('text-anchor', 'end').attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+      .attr('x', 612).attr('y', ry + 18).attr('text-anchor', 'end').attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
       .text(`${cloudScores[r]}%`);
     root.append('text')
-      .attr('x', 678).attr('y', ry + 15).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+      .attr('x', 672).attr('y', ry + 18).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
       .text(`${openScores[r]}%`);
     root.append('text')
-      .attr('x', 730).attr('y', ry + 15).attr('text-anchor', 'end').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
+      .attr('x', 730).attr('y', ry + 18).attr('text-anchor', 'end').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
       .text(`${cinScores[r]}%`);
 
-    // Mini 3-segment progress comparison bar
     root.append('rect')
-      .attr('x', 426).attr('y', ry + 23).attr('width', 302).attr('height', 6).attr('rx', 3)
+      .attr('x', 426).attr('y', ry + 26).attr('width', 302).attr('height', 6).attr('rx', 3)
       .attr('fill', '#0d1017');
     root.append('rect')
-      .attr('x', 426).attr('y', ry + 23).attr('width', Math.round(3.02 * cinScores[r])).attr('height', 6).attr('rx', 3)
-      .attr('fill', '#4fb3a8').attr('opacity', '0.45');
+      .attr('x', 426).attr('y', ry + 26).attr('width', Math.round(3.02 * cinScores[r])).attr('height', 6).attr('rx', 3)
+      .attr('fill', '#4fb3a8').attr('opacity', '0.55');
     root.append('rect')
-      .attr('x', 426).attr('y', ry + 23).attr('width', Math.round(3.02 * openScores[r])).attr('height', 6).attr('rx', 3)
-      .attr('fill', '#e3b341').attr('opacity', '0.7');
-    root.append('rect')
-      .attr('x', 426).attr('y', ry + 23).attr('width', Math.round(3.02 * cloudScores[r])).attr('height', 6).attr('rx', 3)
+      .attr('x', 426).attr('y', ry + 26).attr('width', Math.round(3.02 * cloudScores[r])).attr('height', 6).attr('rx', 3)
       .attr('fill', '#ef6a52');
   }
-
-  root.append('rect')
-    .attr('x', 418).attr('y', 306).attr('width', 318).attr('height', 32).attr('rx', 6)
-    .attr('fill', '#142623').attr('stroke', '#4fb3a8');
-  root.append('text')
-    .attr('x', 577).attr('y', 325).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-    .text(res.okV.slice(0, 48));
 }
 
 // Mode 3: Dedicated D3 Co-Intelligence Flow & Bandwidth Sim (#pwm-d3-flow-svg)
@@ -831,17 +773,17 @@ function renderPwmD3Flow(d, val, res) {
     .attr('fill', '#131720').attr('stroke', '#282f3d').attr('stroke-width', 1.4);
 
   root.append('text')
-    .attr('x', 26).attr('y', 32).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '9.2').attr('font-weight', '700')
-    .text(`1. $100 VALUE & INCENTIVE FLOW (${currentPwmKey.toUpperCase()})`);
+    .attr('x', 26).attr('y', 36).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text(`1. $100 VALUE FLOW (${currentPwmKey.toUpperCase()})`);
 
   // Top sub-card: Status Quo Extraction
   root.append('rect')
-    .attr('x', 24).attr('y', 44).attr('width', 338).attr('height', 126).attr('rx', 8)
-    .attr('fill', 'rgba(239,106,82,0.08)').attr('stroke', '#ef6a52').attr('stroke-width', 1.3);
+    .attr('x', 24).attr('y', 48).attr('width', 338).attr('height', 132).attr('rx', 8)
+    .attr('fill', 'rgba(239,106,82,0.09)').attr('stroke', '#ef6a52').attr('stroke-width', 1.5);
 
   root.append('text')
-    .attr('x', 36).attr('y', 62).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8.6').attr('font-weight', '700')
-    .text('STATUS QUO EXTRACTION ($100 GROSS VALUE)');
+    .attr('x', 36).attr('y', 72).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text('TODAY: CLOUD EXTRACTION');
 
   const rentShare = Math.min(82, Math.round(fData.cloudRent + ratio * 6));
   const tollShare = 100 - rentShare;
@@ -849,206 +791,159 @@ function renderPwmD3Flow(d, val, res) {
   const tollW = 314 - rentW;
 
   root.append('rect')
-    .attr('x', 36).attr('y', 74).attr('width', rentW).attr('height', 22).attr('rx', 4)
+    .attr('x', 36).attr('y', 84).attr('width', rentW).attr('height', 30).attr('rx', 5)
     .attr('fill', '#ef6a52');
   root.append('text')
-    .attr('x', 44).attr('y', 89).attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-    .text(`$${rentShare} Cloud / Institutional Capture`);
+    .attr('x', 46).attr('y', 104).attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text(`$${rentShare} Cloud Equity`);
 
   root.append('rect')
-    .attr('x', 36 + rentW).attr('y', 74).attr('width', tollW).attr('height', 22).attr('rx', 4)
+    .attr('x', 36 + rentW).attr('y', 84).attr('width', tollW).attr('height', 30).attr('rx', 5)
     .attr('fill', '#9e3929');
   root.append('text')
-    .attr('x', 36 + rentW + Math.round(tollW / 2)).attr('y', 89).attr('text-anchor', 'middle').attr('fill', '#ffffff').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
-    .text(`$${tollShare} Toll`);
-
-  root.append('path')
-    .attr('d', 'M 54 102 C 110 124, 210 124, 330 116')
-    .attr('fill', 'none').attr('stroke', '#ef6a52').attr('stroke-width', 2).attr('stroke-dasharray', '4 3');
+    .attr('x', 36 + rentW + Math.round(tollW / 2)).attr('y', 104).attr('text-anchor', 'middle').attr('fill', '#ffffff').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text(`$${tollShare}`);
 
   root.append('text')
-    .attr('x', 36).attr('y', 142).attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8.5')
-    .text('Creator / Solver Royalty Retained: $0 (Scraped Free)');
+    .attr('x', 36).attr('y', 142).attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '13').attr('font-weight', '700')
+    .text('Creator Royalty: $0 (Scraped Free)');
   root.append('text')
-    .attr('x', 36).attr('y', 158).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
-    .text(res.badV.slice(0, 46));
+    .attr('x', 36).attr('y', 166).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text(res.badV.slice(0, 36));
 
   // Bottom sub-card: CIN 85% Solver + 10% Lineage + 5% Floor
   root.append('rect')
-    .attr('x', 24).attr('y', 182).attr('width', 338).attr('height', 152).attr('rx', 8)
-    .attr('fill', 'rgba(79,179,168,0.11)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.6);
+    .attr('x', 24).attr('y', 192).attr('width', 338).attr('height', 142).attr('rx', 8)
+    .attr('fill', 'rgba(79,179,168,0.12)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.8);
 
   root.append('text')
-    .attr('x', 36).attr('y', 200).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.6').attr('font-weight', '700')
-    .text('CIN CO-INTELLIGENCE: 85% SOLVER + 10% LINEAGE + 5% FLOOR');
+    .attr('x', 36).attr('y', 216).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text('WITH CIN: 95% SHAPLEY + 5% FLOOR');
 
   const sW = Math.round(3.14 * fData.solverShare);
   const lW = Math.round(3.14 * fData.lineageShare);
   const cW = 314 - sW - lW;
 
   root.append('rect')
-    .attr('x', 36).attr('y', 212).attr('width', sW).attr('height', 24).attr('rx', 4)
+    .attr('x', 36).attr('y', 228).attr('width', sW).attr('height', 30).attr('rx', 5)
     .attr('fill', '#4fb3a8');
   root.append('text')
-    .attr('x', 44).attr('y', 228).attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-    .text(`$${fData.solverShare} Direct Solver (${fData.solverShare}%)`);
+    .attr('x', 46).attr('y', 248).attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text(`$${fData.solverShare} Solver (${fData.solverShare}%)`);
 
   root.append('rect')
-    .attr('x', 36 + sW).attr('y', 212).attr('width', lW).attr('height', 24).attr('rx', 4)
+    .attr('x', 36 + sW).attr('y', 228).attr('width', lW).attr('height', 30).attr('rx', 5)
     .attr('fill', '#6aa8e0');
-  root.append('text')
-    .attr('x', 36 + sW + Math.round(lW / 2)).attr('y', 228).attr('text-anchor', 'middle').attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-    .text(`$${fData.lineageShare}`);
 
   root.append('rect')
-    .attr('x', 36 + sW + lW).attr('y', 212).attr('width', cW).attr('height', 24).attr('rx', 4)
+    .attr('x', 36 + sW + lW).attr('y', 228).attr('width', cW).attr('height', 30).attr('rx', 5)
     .attr('fill', '#e3b341');
 
-  // Sankey flow lines from $100 pool to 3 cooperative buckets
-  root.append('path')
-    .attr('d', 'M 60 242 C 60 268, 90 272, 90 286')
-    .attr('fill', 'none').attr('stroke', '#4fb3a8').attr('stroke-width', 3);
-  root.append('path')
-    .attr('d', 'M 210 242 C 210 268, 210 272, 210 286')
-    .attr('fill', 'none').attr('stroke', '#6aa8e0').attr('stroke-width', 2.2);
-  root.append('path')
-    .attr('d', 'M 320 242 C 320 268, 305 272, 305 286')
-    .attr('fill', 'none').attr('stroke', '#e3b341').attr('stroke-width', 2);
-
   root.append('text')
-    .attr('x', 36).attr('y', 302).attr('fill', '#e9e6de').attr('font-family', 'monospace').attr('font-size', '8')
-    .text('85% Solver · 10% Shapley Lineage · 5% Commons Floor');
+    .attr('x', 36).attr('y', 286).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '13').attr('font-weight', '700')
+    .text(`$${fData.solverShare} Direct + $${fData.lineageShare} Lineage + $${fData.commonsShare} Floor`);
   root.append('text')
-    .attr('x', 36).attr('y', 322).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-    .text(res.okV.slice(0, 46));
+    .attr('x', 36).attr('y', 314).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text(res.okV.slice(0, 36));
 
-  // Right Half: Biological (~40 bits/s) vs. Silicon Swarm (10^12 bits/s) Airlock & 96% Pair Moat Meter
+  // Right Half: Biology (~40 bits/s) vs. Silicon Swarm Airlock & 96% Pair Moat Meter
   root.append('rect')
     .attr('x', 386).attr('y', 12).attr('width', 362).attr('height', 336).attr('rx', 10)
     .attr('fill', '#131720').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
 
   root.append('text')
-    .attr('x', 400).attr('y', 32).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
-    .text('2. BIOLOGY (~40 BITS/S) VS. SWARM (10¹² BITS/S) AIRLOCK');
+    .attr('x', 400).attr('y', 36).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text('2. OCAP AIRLOCK & 96% PAIR MOAT');
 
-  // Node A: Biological Human (~40 bits/s)
+  // Node A: Biological Human
   root.append('rect')
-    .attr('x', 400).attr('y', 48).attr('width', 104).attr('height', 112).attr('rx', 8)
-    .attr('fill', '#17222b').attr('stroke', '#6aa8e0').attr('stroke-width', 1.4);
+    .attr('x', 400).attr('y', 50).attr('width', 104).attr('height', 114).attr('rx', 8)
+    .attr('fill', '#17222b').attr('stroke', '#6aa8e0').attr('stroke-width', 1.6);
   root.append('text')
-    .attr('x', 452).attr('y', 70).attr('text-anchor', 'middle').attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '8.5').attr('font-weight', '700')
-    .text('HUMAN BIOLOGY');
+    .attr('x', 452).attr('y', 76).attr('text-anchor', 'middle').attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('BIOLOGY');
   root.append('text')
-    .attr('x', 452).attr('y', 90).attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '10').attr('font-weight', '700')
-    .text('~40 bits/s');
+    .attr('x', 452).attr('y', 106).attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '15').attr('font-weight', '700')
+    .text('40 b/s');
   root.append('text')
-    .attr('x', 452).attr('y', 110).attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '8')
-    .text('Reflective Intent');
-  root.append('text')
-    .attr('x', 452).attr('y', 126).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.8')
-    .text('1-to-1 Somatic Key');
+    .attr('x', 452).attr('y', 136).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'sans-serif').attr('font-size', '12').attr('font-weight', '700')
+    .text('1:1 Key');
 
-  // Center Airlock Shield: OCap + 24h Mortal Lease
+  // Center Airlock Shield
   root.append('rect')
-    .attr('x', 518).attr('y', 44).attr('width', 108).attr('height', 120).attr('rx', 9)
-    .attr('fill', '#142623').attr('stroke', '#4fb3a8').attr('stroke-width', 2);
+    .attr('x', 516).attr('y', 46).attr('width', 112).attr('height', 122).attr('rx', 9)
+    .attr('fill', '#142623').attr('stroke', '#4fb3a8').attr('stroke-width', 2.2);
   root.append('text')
-    .attr('x', 572).attr('y', 64).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-    .text('OCAP AIRLOCK');
+    .attr('x', 572).attr('y', 74).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('AIRLOCK');
   root.append('text')
-    .attr('x', 572).attr('y', 82).attr('text-anchor', 'middle').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
-    .text('24h Mortal Lease');
+    .attr('x', 572).attr('y', 104).attr('text-anchor', 'middle').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '14').attr('font-weight', '700')
+    .text('24h Lease');
   root.append('text')
-    .attr('x', 572).attr('y', 100).attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '8')
-    .text('0 Bytes Raw Egress');
-  root.append('text')
-    .attr('x', 572).attr('y', 118).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.8')
-    .text('Φ(R) <10ms Gate');
-  root.append('text')
-    .attr('x', 572).attr('y', 146).attr('text-anchor', 'middle').attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-    .text('Swarms Blocked');
+    .attr('x', 572).attr('y', 134).attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '12').attr('font-weight', '700')
+    .text('0B Egress');
 
-  // Node B: Silicon Swarm (10^12 bits/s)
+  // Node B: Silicon Swarm
   root.append('rect')
-    .attr('x', 640).attr('y', 48).attr('width', 96).attr('height', 112).attr('rx', 8)
-    .attr('fill', '#241619').attr('stroke', '#ef6a52').attr('stroke-width', 1.4);
+    .attr('x', 640).attr('y', 50).attr('width', 96).attr('height', 114).attr('rx', 8)
+    .attr('fill', '#241619').attr('stroke', '#ef6a52').attr('stroke-width', 1.6);
   root.append('text')
-    .attr('x', 688).attr('y', 70).attr('text-anchor', 'middle').attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-    .text('SILICON SWARM');
+    .attr('x', 688).attr('y', 76).attr('text-anchor', 'middle').attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('SWARM');
   root.append('text')
-    .attr('x', 688).attr('y', 90).attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '9.5').attr('font-weight', '700')
-    .text('10¹² bits/s');
+    .attr('x', 688).attr('y', 106).attr('text-anchor', 'middle').attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '15').attr('font-weight', '700')
+    .text('10¹² b/s');
   root.append('text')
-    .attr('x', 688).attr('y', 110).attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '7.8')
-    .text('4.5-Mo Doubling');
-  root.append('text')
-    .attr('x', 688).attr('y', 126).attr('text-anchor', 'middle').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.5')
-    .text('QUIC P2P Mesh');
+    .attr('x', 688).attr('y', 136).attr('text-anchor', 'middle').attr('fill', '#ef6a52').attr('font-family', 'sans-serif').attr('font-size', '12').attr('font-weight', '700')
+    .text('Gated');
 
-  // Conduits between Biology, Airlock, and Swarm
-  root.append('line')
-    .attr('x1', 504).attr('y1', 96).attr('x2', 518).attr('y2', 96)
-    .attr('stroke', '#4fb3a8').attr('stroke-width', 2.4);
-  root.append('line')
-    .attr('x1', 626).attr('y1', 84).attr('x2', 640).attr('y2', 84)
-    .attr('stroke', '#ef6a52').attr('stroke-width', 2.2).attr('stroke-dasharray', '3 2');
-  root.append('line')
-    .attr('x1', 626).attr('y1', 114).attr('x2', 640).attr('y2', 114)
-    .attr('stroke', '#4fb3a8').attr('stroke-width', 2.2);
+  root.append('line').attr('x1', 504).attr('y1', 106).attr('x2', 516).attr('y2', 106).attr('stroke', '#4fb3a8').attr('stroke-width', 2.5);
+  root.append('line').attr('x1', 628).attr('y1', 106).attr('x2', 640).attr('y2', 106).attr('stroke', '#ef6a52').attr('stroke-width', 2.5).attr('stroke-dasharray', '3 2');
 
-  // Bottom Meter: 96% Pair Moat Meter & Co-Intelligence Transition
+  // Bottom Meter: 96% Pair Moat Meter
   root.append('rect')
-    .attr('x', 400).attr('y', 182).attr('width', 336).attr('height', 152).attr('rx', 8)
+    .attr('x', 400).attr('y', 186).attr('width', 336).attr('height', 148).attr('rx', 8)
     .attr('fill', '#161b26').attr('stroke', '#2c3446');
 
   const dynamicMoat = Math.min(99, Math.max(84, Math.round(fData.moatPct + (ratio - 0.5) * 6)));
   root.append('text')
-    .attr('x', 412).attr('y', 202).attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '8.6').attr('font-weight', '700')
-    .text(`96% PAIR MOAT METER (ACTIVE LENS: ${dynamicMoat}% UNCOPYABLE)`);
+    .attr('x', 414).attr('y', 214).attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text(`LOCAL PAIR MOAT: ${dynamicMoat}% UNCOPYABLE`);
 
-  // 4 Stacked Pair Moat segments
   const segs = [
-    { lbl: '4% Base', w: 18, c: '#6aa8e0' },
+    { lbl: '4%', w: 22, c: '#6aa8e0' },
     { lbl: '30% LoRA', w: 94, c: '#4fb3a8' },
-    { lbl: '32% Memory', w: 98, c: '#e3b341' },
-    { lbl: '34% Craft', w: 102, c: '#9d7fe8' }
+    { lbl: '32% Mem', w: 96, c: '#e3b341' },
+    { lbl: '34% Craft', w: 98, c: '#9d7fe8' }
   ];
-  let curX = 412;
+  let curX = 414;
   segs.forEach((sg) => {
     root.append('rect')
-      .attr('x', curX).attr('y', 212).attr('width', sg.w - 2).attr('height', 20).attr('rx', 3)
+      .attr('x', curX).attr('y', 228).attr('width', sg.w - 3).attr('height', 28).attr('rx', 4)
       .attr('fill', sg.c);
-    if (sg.w >= 40) {
+    if (sg.w >= 80) {
       root.append('text')
-        .attr('x', curX + Math.round(sg.w / 2)).attr('y', 225).attr('text-anchor', 'middle')
-        .attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7.4').attr('font-weight', '700')
+        .attr('x', curX + Math.round(sg.w / 2)).attr('y', 247).attr('text-anchor', 'middle')
+        .attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
         .text(sg.lbl);
     }
     curX += sg.w;
   });
 
-  root.append('text')
-    .attr('x', 412).attr('y', 252).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
-    .text(fData.airlockNote);
-
-  // Transition progress bar from Competitive Extinction/Rent -> Co-Intelligence
-  const transW = Math.round(312 * (0.55 + ratio * 0.41));
+  const transW = Math.round(308 * (0.55 + ratio * 0.41));
   root.append('rect')
-    .attr('x', 412).attr('y', 264).attr('width', 312).attr('height', 16).attr('rx', 4)
+    .attr('x', 414).attr('y', 274).attr('width', 308).attr('height', 26).attr('rx', 5)
     .attr('fill', '#291515').attr('stroke', '#ef6a52');
   root.append('rect')
-    .attr('x', 412).attr('y', 264).attr('width', transW).attr('height', 16).attr('rx', 4)
+    .attr('x', 414).attr('y', 274).attr('width', transW).attr('height', 26).attr('rx', 5)
     .attr('fill', '#173a36').attr('stroke', '#4fb3a8');
   root.append('text')
-    .attr('x', 420).attr('y', 275).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-    .text(`Co-Intelligence Transition (${d.sim.fmt(val)})`);
+    .attr('x', 424).attr('y', 292).attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text(`Pair Advantage: ${d.sim.fmt(val)}`);
 
   root.append('text')
-    .attr('x', 412).attr('y', 300).attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '8.2')
-    .text('Unbound cloud swarms commoditize in 60–90 days;');
-  root.append('text')
-    .attr('x', 412).attr('y', 316).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
-    .text('1-to-1 Pair Intelligence compounds permanently on device.');
+    .attr('x', 414).attr('y', 320).attr('fill', '#4fb3a8').attr('font-family', 'sans-serif').attr('font-size', '12').attr('font-weight', '700')
+    .text('Compounds 100% locally on your device');
 }
 
 // Mode 4: Dedicated D3 18-Actor Global AI Ecosystem Quadrant + 5-Zone Safety Gradient (#pwm-d3-quadrant-svg)
@@ -1078,16 +973,12 @@ function renderPwmD3Quadrant(d, val, res) {
   const root = selectD3Root(quadEl);
   if (!root) return;
 
-  const span = Math.max(1, d.sim.max - d.sim.min);
-  const ratio = Math.max(0.08, Math.min(0.95, (val - d.sim.min) / span));
-
   root.append('rect')
     .attr('x', 0).attr('y', 0).attr('width', 760).attr('height', 360).attr('rx', 12)
     .attr('fill', '#0d0f13');
 
-  // Top-Left Panel: 18-Actor 4-Quadrant Coordinate Plane
   const qx0 = 12, qy0 = 12, qw = 468, qh = 264;
-  const plotX0 = 46, plotX1 = 464, plotY0 = 248, plotY1 = 40;
+  const plotX0 = 36, plotX1 = 462, plotY0 = 244, plotY1 = 46;
   const plotW = plotX1 - plotX0;
   const plotH = plotY0 - plotY1;
   const midX = Math.round((plotX0 + plotX1) / 2);
@@ -1098,61 +989,51 @@ function renderPwmD3Quadrant(d, val, res) {
     .attr('fill', '#131720').attr('stroke', '#282f3d').attr('stroke-width', 1.4);
 
   root.append('text')
-    .attr('x', 24).attr('y', 29).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '9').attr('font-weight', '700')
-    .text(`D3 18-ACTOR GLOBAL QUADRANT · ACTIVE LENS: ${currentPwmKey.toUpperCase()}`);
+    .attr('x', 24).attr('y', 34).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text(`18-ACTOR QUADRANT · ${currentPwmKey.toUpperCase()}`);
 
-  // 4 Quadrant background shading
   root.append('rect')
     .attr('x', plotX0).attr('y', midY).attr('width', midX - plotX0).attr('height', plotY0 - midY)
     .attr('fill', 'rgba(239,106,82,0.08)');
   root.append('rect')
     .attr('x', midX).attr('y', plotY1).attr('width', plotX1 - midX).attr('height', midY - plotY1)
-    .attr('fill', 'rgba(79,179,168,0.11)');
+    .attr('fill', 'rgba(79,179,168,0.12)');
 
-  // Quadrant divider lines
   root.append('line')
     .attr('x1', midX).attr('y1', plotY1).attr('x2', midX).attr('y2', plotY0)
-    .attr('stroke', '#323a4c').attr('stroke-width', 1.3).attr('stroke-dasharray', '4 3');
+    .attr('stroke', '#323a4c').attr('stroke-width', 1.5).attr('stroke-dasharray', '4 3');
   root.append('line')
     .attr('x1', plotX0).attr('y1', midY).attr('x2', plotX1).attr('y2', midY)
-    .attr('stroke', '#323a4c').attr('stroke-width', 1.3).attr('stroke-dasharray', '4 3');
-
-  // Quadrant corner watermarks & Axis labels
-  root.append('text')
-    .attr('x', plotX0 + 6).attr('y', plotY0 - 6).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-    .text('Q3: CENTRALIZED RENT + UNBOUNDED SWARM');
-  root.append('text')
-    .attr('x', plotX1 - 6).attr('y', plotY0 - 6).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-    .text('Q4: OPEN WEIGHTS ($0 ROYALTY / NO AIRLOCK)');
-  root.append('text')
-    .attr('x', plotX0 + 6).attr('y', plotY1 + 11).attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-    .text('Q2: TREATY FREEZE / STATUTORY LAG');
-  root.append('text')
-    .attr('x', plotX1 - 6).attr('y', plotY1 + 11).attr('text-anchor', 'end').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-    .text('Q1: SOVEREIGN 1-TO-1 CO-INTELLIGENCE');
+    .attr('stroke', '#323a4c').attr('stroke-width', 1.5).attr('stroke-dasharray', '4 3');
 
   root.append('text')
-    .attr('x', midX).attr('y', 268).attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
-    .text('X: Centralized Rent (0%) → Sovereign 1-to-1 Ownership (100%)');
+    .attr('x', plotX0 + 8).attr('y', plotY0 - 8).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('Q3: CLOUD RENT');
+  root.append('text')
+    .attr('x', plotX1 - 8).attr('y', plotY0 - 8).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('Q4: OPEN WEIGHTS');
+  root.append('text')
+    .attr('x', plotX0 + 8).attr('y', plotY1 + 16).attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('Q2: HARD PAUSE');
+  root.append('text')
+    .attr('x', plotX1 - 8).attr('y', plotY1 + 16).attr('text-anchor', 'end').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('Q1: CIN 1:1 PAIR');
 
   root.append('text')
-    .attr('x', 24).attr('y', midY).attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-    .attr('transform', `rotate(-90, 24, ${midY})`)
-    .text('Y: Unbounded Competitive AI -> Co-Intelligence Airlock');
+    .attr('x', midX).attr('y', 266).attr('text-anchor', 'middle').attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('X: Cloud Rent (0%) → Local Ownership (100%)');
 
   const mapX = (xv) => Math.round(plotX0 + (xv / 100) * plotW);
   const mapY = (yv) => Math.round(plotY0 - (yv / 100) * plotH);
 
-  // Draw transition vectors from highlighted status-quo actor to highlighted CIN actor
   const lensActors = PWM_GLOBAL_ACTORS.filter((a) => a.lens === currentPwmKey || a.lens === 'all');
   const sqActor = lensActors.find((a) => a.x < 50) || PWM_GLOBAL_ACTORS[0];
   const cinActor = lensActors.find((a) => a.x >= 70 && a.lens === currentPwmKey) || PWM_GLOBAL_ACTORS[17];
 
   root.append('path')
     .attr('d', `M ${mapX(sqActor.x)} ${mapY(sqActor.y)} Q ${midX} ${midY - 18} ${mapX(cinActor.x)} ${mapY(cinActor.y)}`)
-    .attr('fill', 'none').attr('stroke', '#4fb3a8').attr('stroke-width', 2.2).attr('stroke-dasharray', '5 3');
+    .attr('fill', 'none').attr('stroke', '#4fb3a8').attr('stroke-width', 2.6).attr('stroke-dasharray', '5 3');
 
-  // Plot all 18 actors
   PWM_GLOBAL_ACTORS.forEach((actor) => {
     const isMatch = actor.lens === currentPwmKey || actor.lens === 'all';
     const ax = mapX(actor.x);
@@ -1169,91 +1050,75 @@ function renderPwmD3Quadrant(d, val, res) {
 
     if (isMatch) {
       gNode.append('circle')
-        .attr('cx', ax).attr('cy', ay).attr('r', 10)
-        .attr('fill', 'none').attr('stroke', actor.color).attr('stroke-width', 1.5).attr('opacity', '0.65');
+        .attr('cx', ax).attr('cy', ay).attr('r', 12)
+        .attr('fill', 'none').attr('stroke', actor.color).attr('stroke-width', 1.8).attr('opacity', '0.7');
     }
 
     gNode.append('circle')
-      .attr('cx', ax).attr('cy', ay).attr('r', isMatch ? 5.8 : 3.6)
+      .attr('cx', ax).attr('cy', ay).attr('r', isMatch ? 7 : 4.5)
       .attr('fill', actor.color)
-      .attr('stroke', '#0d0f13').attr('stroke-width', 1.4)
-      .attr('opacity', isMatch ? '1' : '0.52');
+      .attr('stroke', '#0d0f13').attr('stroke-width', 1.5)
+      .attr('opacity', isMatch ? '1' : '0.45');
 
-    const alignEnd = actor.x > 65;
-    gNode.append('text')
-      .attr('x', alignEnd ? ax - 8 : ax + 8)
-      .attr('y', ay + 3)
-      .attr('text-anchor', alignEnd ? 'end' : 'start')
-      .attr('fill', isMatch ? '#f0ede6' : '#8c8a82')
-      .attr('font-family', 'sans-serif')
-      .attr('font-size', isMatch ? '8.2' : '7.1')
-      .attr('font-weight', isMatch ? '700' : '400')
-      .text(`${actor.id}. ${actor.name}`);
+    if (isMatch) {
+      const alignEnd = actor.x > 65;
+      gNode.append('text')
+        .attr('x', alignEnd ? ax - 12 : ax + 12)
+        .attr('y', ay + 4)
+        .attr('text-anchor', alignEnd ? 'end' : 'start')
+        .attr('fill', '#f0ede6')
+        .attr('font-family', 'sans-serif')
+        .attr('font-size', '12')
+        .attr('font-weight', '700')
+        .text(`#${actor.id} ${actor.name}`);
+    }
   });
 
-  // Top-Right Panel: Highlighted Lens Actors & Coordinates
+  // Top-Right Panel: Highlighted Lens Actors
   root.append('rect')
     .attr('x', 490).attr('y', 12).attr('width', 258).attr('height', 264).attr('rx', 10)
     .attr('fill', '#131720').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
 
   root.append('text')
-    .attr('x', 502).attr('y', 30).attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '8.8').attr('font-weight', '700')
-    .text(`HIGHLIGHTED LENS ACTORS (${currentPwmKey.toUpperCase()})`);
+    .attr('x', 502).attr('y', 36).attr('fill', '#f0ede6').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text(`ACTIVE LENS (${currentPwmKey.toUpperCase()})`);
 
-  root.append('text')
-    .attr('x', 502).attr('y', 44).attr('fill', '#8c8a82').attr('font-family', 'monospace').attr('font-size', '7.5')
-    .text(`Click any node on quadrant to switch lens · ${d.sim.fmt(val)}`);
-
-  lensActors.slice(0, 4).forEach((act, idx) => {
-    const ry = 54 + idx * 46;
+  lensActors.slice(0, 3).forEach((act, idx) => {
+    const ry = 50 + idx * 70;
     root.append('rect')
-      .attr('x', 500).attr('y', ry).attr('width', 238).attr('height', 40).attr('rx', 6)
-      .attr('fill', '#171c27').attr('stroke', act.color).attr('stroke-width', 1.2);
+      .attr('x', 500).attr('y', ry).attr('width', 238).attr('height', 60).attr('rx', 6)
+      .attr('fill', '#171c27').attr('stroke', act.color).attr('stroke-width', 1.5);
 
     root.append('text')
-      .attr('x', 508).attr('y', ry + 15).attr('fill', act.color).attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-      .text(`#${act.id} ${act.name} (X:${act.x}% · Y:${act.y}%)`);
+      .attr('x', 510).attr('y', ry + 24).attr('fill', act.color).attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+      .text(`#${act.id} ${act.name.slice(0, 20)}`);
 
     root.append('text')
-      .attr('x', 508).attr('y', ry + 29).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.8')
-      .text(act.role);
+      .attr('x', 510).attr('y', ry + 46).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '12')
+      .text(act.role.slice(0, 28));
   });
 
-  root.append('rect')
-    .attr('x', 500).attr('y', 240).attr('width', 238).attr('height', 26).attr('rx', 5)
-    .attr('fill', '#142623').attr('stroke', '#4fb3a8');
-  root.append('text')
-    .attr('x', 619).attr('y', 256).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-    .text(res.okV.slice(0, 48));
-
-  // Bottom Strip: 5-Zone Safety Gradient: Last Resort Before Pause
+  // Bottom Strip: 5-Zone Safety Gradient
   root.append('rect')
     .attr('x', 12).attr('y', 284).attr('width', 736).attr('height', 64).attr('rx', 10)
     .attr('fill', '#131720').attr('stroke', '#2c3446').attr('stroke-width', 1.4);
 
-  root.append('text')
-    .attr('x', 24).attr('y', 301).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.6').attr('font-weight', '700')
-    .text('5-ZONE SAFETY GRADIENT: LAST RESORT BEFORE PAUSE (BIOLOGY ~40 BITS/S VS. 10¹² BITS/S SWARMS)');
-
   const zones = [
-    { z: 'Zone 1: Raw e/acc',       sub: '0 Barriers · Swarm Flood',    c: '#ef6a52', x: 24,  w: 136, hi: false },
-    { z: 'Zone 2: Voluntary RSPs',  sub: 'Self-Policed · Race Eroded',  c: '#e07b42', x: 166, w: 136, hi: false },
-    { z: 'Zone 3: Eval Labs',       sub: 'METR/AISI Diagnostics Only',  c: '#e3b341', x: 308, w: 136, hi: false },
-    { z: 'Zone 4: CIN Airlock',     sub: '24h Lease · Last Resort',     c: '#4fb3a8', x: 450, w: 152, hi: true  },
-    { z: 'Zone 5: Hard Pause',      sub: 'Global GPU Treaty Freeze',    c: '#6aa8e0', x: 608, w: 128, hi: false }
+    { z: '1. Raw e/acc',  c: '#ef6a52', x: 24,  w: 136, hi: false },
+    { z: '2. Lab RSPs',   c: '#e07b42', x: 166, w: 136, hi: false },
+    { z: '3. Eval Labs',  c: '#e3b341', x: 308, w: 136, hi: false },
+    { z: '4. ★ Airlock',  c: '#4fb3a8', x: 450, w: 152, hi: true  },
+    { z: '5. Hard Pause', c: '#6aa8e0', x: 608, w: 128, hi: false }
   ];
 
   zones.forEach((zn) => {
     root.append('rect')
-      .attr('x', zn.x).attr('y', 308).attr('width', zn.w).attr('height', 32).attr('rx', 6)
+      .attr('x', zn.x).attr('y', 298).attr('width', zn.w).attr('height', 36).attr('rx', 6)
       .attr('fill', zn.hi ? 'rgba(79,179,168,0.22)' : '#171c27')
-      .attr('stroke', zn.c).attr('stroke-width', zn.hi ? 2.2 : 1.2);
+      .attr('stroke', zn.c).attr('stroke-width', zn.hi ? 2.2 : 1.4);
     root.append('text')
-      .attr('x', zn.x + 8).attr('y', 321).attr('fill', zn.c).attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
+      .attr('x', zn.x + Math.round(zn.w / 2)).attr('y', 321).attr('text-anchor', 'middle').attr('fill', zn.c).attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
       .text(zn.z);
-    root.append('text')
-      .attr('x', zn.x + 8).attr('y', 333).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.4')
-      .text(zn.sub);
   });
 }
 
@@ -1270,338 +1135,88 @@ function renderPwmRightInfographicD3(d, val, res) {
     .attr('x', 0).attr('y', 0).attr('width', 380).attr('height', 310).attr('rx', 10)
     .attr('fill', '#0d0f13');
 
-  // Top Card (y=8..168): Bespoke Lens Visual Comparison
+  // Top Card (y=8..164): Big Visual TODAY vs. WITH CIN Comparison
   root.append('rect')
-    .attr('x', 8).attr('y', 8).attr('width', 364).attr('height', 160).attr('rx', 9)
-    .attr('fill', '#131720').attr('stroke', '#282f3d').attr('stroke-width', 1.4);
+    .attr('x', 8).attr('y', 8).attr('width', 364).attr('height', 156).attr('rx', 9)
+    .attr('fill', '#131720').attr('stroke', '#282f3d').attr('stroke-width', 1.5);
 
-  if (currentPwmKey === 'labs') {
-    root.append('text')
-      .attr('x', 18).attr('y', 25).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-      .text('01 · PROFIT VS. COOPERATION SPLIT ($100 FLOW)');
-
-    // SOTA Cloud Labs box
-    root.append('rect')
-      .attr('x', 18).attr('y', 33).attr('width', 344).attr('height', 56).attr('rx', 6)
-      .attr('fill', 'rgba(239,106,82,0.09)').attr('stroke', '#ef6a52').attr('stroke-width', 1.2);
-    root.append('text')
-      .attr('x', 26).attr('y', 47).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
-      .text('SOTA Cloud Labs: 72% Equity + 28% API Toll + $0 Creator');
-    root.append('rect')
-      .attr('x', 26).attr('y', 54).attr('width', 236).attr('height', 16).attr('rx', 3)
-      .attr('fill', '#ef6a52');
-    root.append('text')
-      .attr('x', 144).attr('y', 65).attr('text-anchor', 'middle').attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-      .text('72% Shareholder Capture');
-    root.append('rect')
-      .attr('x', 264).attr('y', 54).attr('width', 90).attr('height', 16).attr('rx', 3)
-      .attr('fill', '#9e3929');
-    root.append('text')
-      .attr('x', 309).attr('y', 65).attr('text-anchor', 'middle').attr('fill', '#ffffff').attr('font-family', 'monospace').attr('font-size', '7.2').attr('font-weight', '700')
-      .text('28% Toll · $0');
-    root.append('text')
-      .attr('x', 26).attr('y', 82).attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '7.4')
-      .text('Public craft scraped free; rented back as closed API tokens');
-
-    // CIN Ledger box
-    root.append('rect')
-      .attr('x', 18).attr('y', 95).attr('width', 344).attr('height', 64).attr('rx', 6)
-      .attr('fill', 'rgba(79,179,168,0.12)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
-    root.append('text')
-      .attr('x', 26).attr('y', 109).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
-      .text('CIN Ledger: 85% Direct Solver + 10% Shapley + 5% Floor');
-    root.append('rect')
-      .attr('x', 26).attr('y', 116).attr('width', 274).attr('height', 18).attr('rx', 3)
-      .attr('fill', '#4fb3a8');
-    root.append('text')
-      .attr('x', 163).attr('y', 128).attr('text-anchor', 'middle').attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-      .text('85% Direct Solver');
-    root.append('rect')
-      .attr('x', 302).attr('y', 116).attr('width', 32).attr('height', 18).attr('rx', 3)
-      .attr('fill', '#6aa8e0');
-    root.append('text')
-      .attr('x', 318).attr('y', 128).attr('text-anchor', 'middle').attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7').attr('font-weight', '700')
-      .text('10%');
-    root.append('rect')
-      .attr('x', 336).attr('y', 116).attr('width', 18).attr('height', 18).attr('rx', 3)
-      .attr('fill', '#e3b341');
-    root.append('text')
-      .attr('x', 26).attr('y', 149).attr('fill', '#e9e6de').attr('font-family', 'monospace').attr('font-size', '7.4')
-      .text('Proof-Carrying Code + 95% Data Shapley Royalty Split');
-  } else if (currentPwmKey === 'safety') {
-    root.append('text')
-      .attr('x', 18).attr('y', 25).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
-      .text('02 · LAST RESORT BEFORE PAUSE (5-ZONE THERMOMETER)');
-
-    const sZones = [
-      { lbl: '1. Raw e/acc',  sub: '0 Barriers',   c: '#ef6a52', x: 18,  w: 64, hi: false },
-      { lbl: '2. Lab RSPs',   sub: 'Self-Policed', c: '#e07b42', x: 85,  w: 64, hi: false },
-      { lbl: '3. Eval Labs',  sub: 'METR / AISI',  c: '#e3b341', x: 152, w: 64, hi: false },
-      { lbl: '4. ★ Airlock',  sub: '24h Lease',    c: '#4fb3a8', x: 219, w: 78, hi: true  },
-      { lbl: '5. Pause',      sub: 'GPU Freeze',   c: '#6aa8e0', x: 300, w: 62, hi: false }
-    ];
-    sZones.forEach((z) => {
-      root.append('rect')
-        .attr('x', z.x).attr('y', 34).attr('width', z.w).attr('height', 60).attr('rx', 5)
-        .attr('fill', z.hi ? 'rgba(79,179,168,0.22)' : '#171c27')
-        .attr('stroke', z.c).attr('stroke-width', z.hi ? 2 : 1.1);
-      root.append('text')
-        .attr('x', z.x + Math.round(z.w / 2)).attr('y', 51).attr('text-anchor', 'middle')
-        .attr('fill', z.c).attr('font-family', 'monospace').attr('font-size', '7.1').attr('font-weight', '700')
-        .text(z.lbl);
-      root.append('text')
-        .attr('x', z.x + Math.round(z.w / 2)).attr('y', 66).attr('text-anchor', 'middle')
-        .attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '6.9')
-        .text(z.sub);
-      if (z.hi) {
-        root.append('text')
-          .attr('x', z.x + Math.round(z.w / 2)).attr('y', 84).attr('text-anchor', 'middle')
-          .attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '6.6').attr('font-weight', '700')
-          .text('[LAST RESORT]');
-      }
-    });
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 102).attr('width', 344).attr('height', 58).attr('rx', 6)
-      .attr('fill', '#171c27').attr('stroke', '#2c3446');
-    root.append('text')
-      .attr('x', 26).attr('y', 117).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-      .text('~40 b/s Biology vs. 10¹² b/s Silicon Swarm Meter');
-    root.append('rect')
-      .attr('x', 26).attr('y', 124).attr('width', 68).attr('height', 14).attr('rx', 3)
-      .attr('fill', '#6aa8e0');
-    root.append('text')
-      .attr('x', 60).attr('y', 134).attr('text-anchor', 'middle').attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '6.8').attr('font-weight', '700')
-      .text('~40 b/s Bio');
-    root.append('rect')
-      .attr('x', 98).attr('y', 124).attr('width', 256).attr('height', 14).attr('rx', 3)
-      .attr('fill', 'rgba(79,179,168,0.25)').attr('stroke', '#4fb3a8');
-    root.append('text')
-      .attr('x', 226).attr('y', 134).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7').attr('font-weight', '700')
-      .text('10¹² b/s Swarm Gated by OCap Airlock');
-    root.append('text')
-      .attr('x', 26).attr('y', 152).attr('fill', '#c5c2b9').attr('font-family', 'monospace').attr('font-size', '7.2')
-      .text('Two-Internet Isolation + 24h Lease + Φ(R) Quorum Gate');
-  } else if (currentPwmKey === 'gov') {
-    root.append('text')
-      .attr('x', 18).attr('y', 25).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
-      .text('03 · STATUTORY LAG VS. SILICON QUORUM GATE Φ(R)');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 34).attr('width', 344).attr('height', 30).attr('rx', 5)
-      .attr('fill', 'rgba(239,106,82,0.14)').attr('stroke', '#ef6a52');
-    root.append('text')
-      .attr('x', 26).attr('y', 52).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-      .text('36–60 Mo Statute Lag (8–13 AI Doublings Behind)');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 70).attr('width', 344).attr('height', 30).attr('rx', 5)
-      .attr('fill', 'rgba(79,179,168,0.18)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
-    root.append('text')
-      .attr('x', 26).attr('y', 88).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-      .text('★ <10ms Weiszfeld Quorum Gate Φ(R) Hardware Lock');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 106).attr('width', 168).attr('height', 54).attr('rx', 6)
-      .attr('fill', '#142623').attr('stroke', '#4fb3a8');
-    root.append('text')
-      .attr('x', 102).attr('y', 125).attr('text-anchor', 'middle').attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-      .text('$25k Exempt Floor');
-    root.append('text')
-      .attr('x', 102).attr('y', 144).attr('text-anchor', 'middle').attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.4')
-      .text('0% tax on household base');
-
-    root.append('rect')
-      .attr('x', 194).attr('y', 106).attr('width', 168).attr('height', 54).attr('rx', 6)
-      .attr('fill', '#241e14').attr('stroke', '#e3b341');
-    root.append('text')
-      .attr('x', 278).attr('y', 125).attr('text-anchor', 'middle').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.2').attr('font-weight', '700')
-      .text('2%/mo Demurrage');
-    root.append('text')
-      .attr('x', 278).attr('y', 144).attr('text-anchor', 'middle').attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.4')
-      .text('Funds post-labor commons');
-  } else if (currentPwmKey === 'research') {
-    root.append('text')
-      .attr('x', 18).attr('y', 25).attr('fill', '#6aa8e0').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
-      .text('04 · UNIVERSITY BREAKTHROUGHS VS. ROYALTY GAP');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 35).attr('width', 302).attr('height', 24).attr('rx', 4)
-      .attr('fill', '#4fb3a8');
-    root.append('text')
-      .attr('x', 26).attr('y', 50).attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-      .text('88% Fundamental Breakthroughs (Public Univs)');
-    root.append('rect')
-      .attr('x', 322).attr('y', 35).attr('width', 40).attr('height', 24).attr('rx', 4)
-      .attr('fill', '#ef6a52');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 67).attr('width', 344).attr('height', 28).attr('rx', 5)
-      .attr('fill', 'rgba(239,106,82,0.16)').attr('stroke', '#ef6a52');
-    root.append('text')
-      .attr('x', 26).attr('y', 84).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-      .text('<1% Academic GPU Access · $0 Cloud Royalty Paid');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 103).attr('width', 344).attr('height', 56).attr('rx', 6)
-      .attr('fill', 'rgba(79,179,168,0.15)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
-    root.append('text')
-      .attr('x', 26).attr('y', 121).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
-      .text('★ 15% Perpetual Shapley Academic Endowment');
-    root.append('text')
-      .attr('x', 26).attr('y', 138).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-      .text('95.3% SPRA Token Compression (~260 tok/paper)');
-    root.append('text')
-      .attr('x', 26).attr('y', 152).attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '7.2')
-      .text('Federated Rank-16 TIES-LoRA mesh over QUIC P2P');
-  } else if (currentPwmKey === 'enterprise') {
-    root.append('text')
-      .attr('x', 18).attr('y', 25).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
-      .text('05 · MIDDLEMAN TOLL VS. 500-FIRM PSI CO-OP');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 35).attr('width', 344).attr('height', 54).attr('rx', 6)
-      .attr('fill', 'rgba(239,106,82,0.11)').attr('stroke', '#ef6a52');
-    root.append('text')
-      .attr('x', 26).attr('y', 53).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
-      .text('-15% to -40% GPO / PBM / Wrapper Extraction');
-    root.append('text')
-      .attr('x', 26).attr('y', 71).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.5')
-      .text('Cloud API prompts leak proprietary clinic & SMB trade secrets');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 97).attr('width', 344).attr('height', 62).attr('rx', 6)
-      .attr('fill', 'rgba(79,179,168,0.14)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.6);
-    root.append('text')
-      .attr('x', 26).attr('y', 115).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
-      .text('★ +18% to +34% OPRF PSI Co-Op Wholesale Margin');
-    root.append('text')
-      .attr('x', 26).attr('y', 133).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-      .text('0 Bytes Wasm OCap Egress · Freedman (2004) PSI');
-    root.append('text')
-      .attr('x', 26).attr('y', 149).attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '7.3')
-      .text('500 independent clinics & firms bargain as one co-op');
-  } else if (currentPwmKey === 'humanity') {
-    root.append('text')
-      .attr('x', 18).attr('y', 25).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
-      .text('06 · INTELLIGENCE GAMBIT (4.8B NON-DIGITAL WORKERS)');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 35).attr('width', 344).attr('height', 54).attr('rx', 6)
-      .attr('fill', 'rgba(239,106,82,0.12)').attr('stroke', '#ef6a52');
-    root.append('text')
-      .attr('x', 26).attr('y', 53).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.9').attr('font-weight', '700')
-      .text('Producer Share Collapse: 78% → 24% (AI Cartels)');
-    root.append('text')
-      .attr('x', 26).attr('y', 71).attr('fill', '#e9e6de').attr('font-family', 'sans-serif').attr('font-size', '7.5')
-      .text('Algorithmic buyer cartels dump physical commodity prices');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 97).attr('width', 344).attr('height', 62).attr('rx', 6)
-      .attr('fill', 'rgba(79,179,168,0.14)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.6);
-    root.append('text')
-      .attr('x', 26).attr('y', 115).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.9').attr('font-weight', '700')
-      .text('★ $8 Pre-ADC Liveness + Offline Voice Twin');
-    root.append('text')
-      .attr('x', 26).attr('y', 133).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '7.6').attr('font-weight', '700')
-      .text('PSI Producer Co-Op (+15% to +38% Pay) + 5D Credit');
-    root.append('text')
-      .attr('x', 26).attr('y', 149).attr('fill', '#c5c2b9').attr('font-family', 'sans-serif').attr('font-size', '7.3')
-      .text('Hardware-attested physical craft parity on $45 phones');
-  } else {
-    // pair lens
-    root.append('text')
-      .attr('x', 18).attr('y', 25).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8.1').attr('font-weight', '700')
-      .text('07 · 60-90D DISTILLATION CLIFF VS. 96% PAIR MOAT');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 35).attr('width', 344).attr('height', 50).attr('rx', 6)
-      .attr('fill', 'rgba(239,106,82,0.12)').attr('stroke', '#ef6a52');
-    root.append('text')
-      .attr('x', 26).attr('y', 53).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
-      .text('Cloud API Moat Decay: 100% → 4% in 90d');
-    root.append('text')
-      .attr('x', 26).attr('y', 71).attr('fill', '#e9e6de').attr('font-family', 'monospace').attr('font-size', '7.4')
-      .text('-$5B to -$15B/yr Cloud Burn (Distilled to Open Weights)');
-
-    root.append('rect')
-      .attr('x', 18).attr('y', 93).attr('width', 344).attr('height', 66).attr('rx', 6)
-      .attr('fill', 'rgba(79,179,168,0.13)').attr('stroke', '#4fb3a8').attr('stroke-width', 1.6);
-    root.append('text')
-      .attr('x', 26).attr('y', 109).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.8').attr('font-weight', '700')
-      .text('4-Layer Local Pair Moat = 96% Uncopyable');
-
-    const moatLayers = [
-      { l: '4%',  w: 24,  c: '#6aa8e0' },
-      { l: '30% LoRA', w: 96, c: '#4fb3a8' },
-      { l: '32% Mem',  w: 102, c: '#e3b341' },
-      { l: '34% Craft', w: 106, c: '#9d7fe8' }
-    ];
-    let mx = 26;
-    moatLayers.forEach((ml) => {
-      root.append('rect')
-        .attr('x', mx).attr('y', 116).attr('width', ml.w - 2).attr('height', 18).attr('rx', 3)
-        .attr('fill', ml.c);
-      root.append('text')
-        .attr('x', mx + Math.round(ml.w / 2)).attr('y', 128).attr('text-anchor', 'middle')
-        .attr('fill', '#111317').attr('font-family', 'monospace').attr('font-size', '6.9').attr('font-weight', '700')
-        .text(ml.l);
-      mx += ml.w;
-    });
-    root.append('text')
-      .attr('x', 26).attr('y', 149).attr('fill', '#e9e6de').attr('font-family', 'monospace').attr('font-size', '7.2')
-      .text('4% Base + 30% LoRA + 32% Memory + 34% Craft = 96%');
-  }
-
-  // Bottom Card (y=176..302): Live Stress-Test Visual Verdict & 3-Pillar Architecture Badges
-  root.append('rect')
-    .attr('x', 8).attr('y', 176).attr('width', 364).attr('height', 126).attr('rx', 9)
-    .attr('fill', '#131720').attr('stroke', '#4fb3a8').attr('stroke-width', 1.4);
+  const lensSummary = {
+    labs:       { t: '01 · CREATOR ROYALTY SPLIT',       badPct: 12, okPct: 95, badLbl: '0% Royalty · 28% Toll', okLbl: '95% Shapley + 5% Floor' },
+    safety:     { t: '02 · HUMAN AGENCY RETAINED',       badPct: 18, okPct: 97, badLbl: 'Swarm Outpaces 40 b/s',  okLbl: '24h Lease + Airlock' },
+    gov:        { t: '03 · RUNTIME CIVIC LOCKS',         badPct: 14, okPct: 96, badLbl: '3–5 Yr Statute Lag',     okLbl: '<10ms Gate + $25k Floor' },
+    research:   { t: '04 · ACADEMIC ROYALTY RETURN',     badPct: 6,  okPct: 95, badLbl: '$0 Paid to arXiv Labs',  okLbl: '15% Endowment + SPRA' },
+    enterprise: { t: '05 · WHOLESALE MARGIN RETAINED',   badPct: 24, okPct: 96, badLbl: '-28% Middleman Toll',    okLbl: '+34% PSI Co-Op Margin' },
+    humanity:   { t: '06 · PHYSICAL PRODUCER SHARE',     badPct: 22, okPct: 94, badLbl: '-38% Cartel Price Dump', okLbl: '$8 Liveness + PSI Co-Op' },
+    pair:       { t: '07 · DEFENSIBLE LOCAL MOAT',       badPct: 8,  okPct: 96, badLbl: '90-Day Cloud Decay',     okLbl: '96% 1-to-1 Pair Moat' }
+  }[currentPwmKey] || { t: 'LENS COMPARISON', badPct: 14, okPct: 95, badLbl: 'Status Quo Rent', okLbl: 'CIN Co-Intelligence' };
 
   root.append('text')
-    .attr('x', 18).attr('y', 193).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
-    .text('LIVE STRESS-TEST VERDICT');
+    .attr('x', 20).attr('y', 32).attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
+    .text(lensSummary.t);
+
+  // TODAY bar
+  const badW = Math.max(44, Math.round(3.4 * lensSummary.badPct));
+  root.append('rect')
+    .attr('x', 20).attr('y', 44).attr('width', 340).attr('height', 48).attr('rx', 7)
+    .attr('fill', '#191316').attr('stroke', '#ef6a52').attr('stroke-width', 1.4);
+  root.append('rect')
+    .attr('x', 20).attr('y', 44).attr('width', badW).attr('height', 48).attr('rx', 7)
+    .attr('fill', 'rgba(239,106,82,0.28)');
   root.append('text')
-    .attr('x', 362).attr('y', 193).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '8').attr('font-weight', '700')
+    .attr('x', 32).attr('y', 64).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('TODAY (STATUS QUO)');
+  root.append('text')
+    .attr('x', 32).attr('y', 82).attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '14').attr('font-weight', '700')
+    .text(lensSummary.badLbl);
+
+  // WITH CIN bar
+  const okW = Math.max(120, Math.round(3.4 * lensSummary.okPct));
+  root.append('rect')
+    .attr('x', 20).attr('y', 102).attr('width', 340).attr('height', 50).attr('rx', 7)
+    .attr('fill', '#111d1c').attr('stroke', '#4fb3a8').attr('stroke-width', 1.8);
+  root.append('rect')
+    .attr('x', 20).attr('y', 102).attr('width', okW).attr('height', 50).attr('rx', 7)
+    .attr('fill', 'rgba(79,179,168,0.28)');
+  root.append('text')
+    .attr('x', 32).attr('y', 122).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('WITH CIN CO-INTELLIGENCE');
+  root.append('text')
+    .attr('x', 32).attr('y', 142).attr('fill', '#f0ede6').attr('font-family', 'sans-serif').attr('font-size', '15').attr('font-weight', '700')
+    .text(lensSummary.okLbl);
+
+  // Bottom Card (y=172..302): Live Stress-Test Verdict
+  root.append('rect')
+    .attr('x', 8).attr('y', 172).attr('width', 364).attr('height', 130).attr('rx', 9)
+    .attr('fill', '#131720').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
+
+  root.append('text')
+    .attr('x', 20).attr('y', 196).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text('STRESS-TEST');
+  root.append('text')
+    .attr('x', 360).attr('y', 196).attr('text-anchor', 'end').attr('fill', '#e3b341').attr('font-family', 'monospace').attr('font-size', '13').attr('font-weight', '700')
     .text(d.sim.fmt(val));
 
-  const badBarW = Math.round(344 * Math.max(0.32, 0.88 - ratio * 0.42));
+  const badBarW = Math.round(340 * Math.max(0.32, 0.88 - ratio * 0.42));
   root.append('rect')
-    .attr('x', 18).attr('y', 200).attr('width', 344).attr('height', 28).attr('rx', 5)
-    .attr('fill', '#191316').attr('stroke', '#ef6a52').attr('stroke-width', 1.1);
+    .attr('x', 20).attr('y', 206).attr('width', 340).attr('height', 38).attr('rx', 6)
+    .attr('fill', '#191316').attr('stroke', '#ef6a52').attr('stroke-width', 1.3);
   root.append('rect')
-    .attr('x', 18).attr('y', 200).attr('width', badBarW).attr('height', 28).attr('rx', 5)
-    .attr('fill', 'rgba(239,106,82,0.22)');
+    .attr('x', 20).attr('y', 206).attr('width', badBarW).attr('height', 38).attr('rx', 6)
+    .attr('fill', 'rgba(239,106,82,0.24)');
   root.append('text')
-    .attr('x', 25).attr('y', 218).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-    .text(res.badV.slice(0, 48));
+    .attr('x', 30).attr('y', 230).attr('fill', '#ef6a52').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text(res.badV.slice(0, 34));
 
-  const okBarW = Math.round(344 * Math.min(1, 0.52 + ratio * 0.48));
+  const okBarW = Math.round(340 * Math.min(1, 0.55 + ratio * 0.45));
   root.append('rect')
-    .attr('x', 18).attr('y', 234).attr('width', 344).attr('height', 28).attr('rx', 5)
-    .attr('fill', '#111d1c').attr('stroke', '#4fb3a8').attr('stroke-width', 1.3);
+    .attr('x', 20).attr('y', 252).attr('width', 340).attr('height', 38).attr('rx', 6)
+    .attr('fill', '#111d1c').attr('stroke', '#4fb3a8').attr('stroke-width', 1.5);
   root.append('rect')
-    .attr('x', 18).attr('y', 234).attr('width', okBarW).attr('height', 28).attr('rx', 5)
-    .attr('fill', 'rgba(79,179,168,0.26)');
+    .attr('x', 20).attr('y', 252).attr('width', okBarW).attr('height', 38).attr('rx', 6)
+    .attr('fill', 'rgba(79,179,168,0.28)');
   root.append('text')
-    .attr('x', 25).attr('y', 252).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '7.5').attr('font-weight', '700')
-    .text(res.okV.slice(0, 48));
-
-  // 3-Pillar Architecture Badges
-  const badges = [
-    { lbl: 'OCap Airlock (0B)', x: 18,  w: 110, c: '#6aa8e0', bg: '#15202b' },
-    { lbl: '95% Shapley Split', x: 135, w: 110, c: '#4fb3a8', bg: '#132623' },
-    { lbl: '24h Mortal Lease',  x: 252, w: 110, c: '#e3b341', bg: '#241e14' }
-  ];
-  badges.forEach((bg) => {
-    root.append('rect')
-      .attr('x', bg.x).attr('y', 270).attr('width', bg.w).attr('height', 22).attr('rx', 4)
-      .attr('fill', bg.bg).attr('stroke', bg.c).attr('stroke-width', 1.1);
-    root.append('text')
-      .attr('x', bg.x + Math.round(bg.w / 2)).attr('y', 284).attr('text-anchor', 'middle')
-      .attr('fill', bg.c).attr('font-family', 'monospace').attr('font-size', '7.1').attr('font-weight', '700')
-      .text(bg.lbl);
-  });
+    .attr('x', 30).attr('y', 276).attr('fill', '#4fb3a8').attr('font-family', 'monospace').attr('font-size', '12').attr('font-weight', '700')
+    .text(res.okV.slice(0, 34));
 }
 
 function setNodeHidden(node, isHidden) {

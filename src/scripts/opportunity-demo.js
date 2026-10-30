@@ -110,7 +110,7 @@
     var svg = d3.select(svgNode);
     svg.selectAll('*').remove();
 
-    var width = 280, height = 220, cx = 140, cy = 112, radius = 74;
+    var width = 280, height = 220, cx = 140, cy = 112, radius = 64;
     var n = driverScores.length;
     if (!n) return;
 
@@ -142,7 +142,7 @@
         .attr('x', lx)
         .attr('y', ly + 3)
         .attr('text-anchor', Math.abs(lx) < 10 ? 'middle' : (lx > 0 ? 'start' : 'end'))
-        .attr('font-size', '9.5')
+        .attr('font-size', '12')
         .attr('font-weight', '700')
         .attr('font-family', 'monospace')
         .attr('fill', d.color)
@@ -185,7 +185,7 @@
       .attr('x', 10).attr('y', 10).attr('width', 216).attr('height', H - 20).attr('rx', 12)
       .attr('fill', 'rgba(20,23,29,0.92)').attr('stroke', '#2c303a').attr('stroke-width', 1.4);
     bg.append('text')
-      .attr('x', 24).attr('y', 32).attr('font-size', '10').attr('font-weight', '700')
+      .attr('x', 24).attr('y', 32).attr('font-size', '12').attr('font-weight', '700')
       .attr('font-family', 'monospace').attr('fill', '#e5a93c')
       .text('1. HUMAN NEEDS & DRIVERS');
 
@@ -193,7 +193,7 @@
       .attr('x', 242).attr('y', 10).attr('width', 176).attr('height', H - 20).attr('rx', 12)
       .attr('fill', 'rgba(20,23,29,0.92)').attr('stroke', '#2c303a').attr('stroke-width', 1.4);
     bg.append('text')
-      .attr('x', 330).attr('y', 32).attr('text-anchor', 'middle').attr('font-size', '10').attr('font-weight', '700')
+      .attr('x', 330).attr('y', 32).attr('text-anchor', 'middle').attr('font-size', '12').attr('font-weight', '700')
       .attr('font-family', 'monospace').attr('fill', '#4fb3a8')
       .text('2. LEDGER COUPLING');
 
@@ -201,9 +201,9 @@
       .attr('x', 434).attr('y', 10).attr('width', 336).attr('height', H - 20).attr('rx', 12)
       .attr('fill', 'rgba(20,23,29,0.92)').attr('stroke', '#2c303a').attr('stroke-width', 1.4);
     bg.append('text')
-      .attr('x', 450).attr('y', 32).attr('font-size', '10').attr('font-weight', '700')
+      .attr('x', 450).attr('y', 32).attr('font-size', '12').attr('font-weight', '700')
       .attr('font-family', 'monospace').attr('fill', '#5da2d5')
-      .text('3. COUPLED PROFITABLE BUSINESSES (0% AD TAX)');
+      .text('3. PROFITABLE BUSINESSES (0% AD TAX)');
 
     // Position nodes deterministically with D3 force relaxation on y-axis
     var drivers = result.driverScores;
@@ -214,7 +214,7 @@
         type: 'driver',
         id: d.id,
         label: d.short,
-        sub: '$' + d.recoveredUsd.toLocaleString() + '/yr saved · ' + d.weightPct + '% wt',
+        sub: '$' + d.recoveredUsd.toLocaleString() + '/yr · ' + d.weightPct + '%',
         color: d.color,
         x: 118,
         y: 68 + i * 56,
@@ -239,8 +239,8 @@
         type: 'biz',
         id: b.id,
         driver_id: b.driver_id,
-        label: b.name.length > 34 ? b.name.slice(0, 32) + '…' : b.name,
-        sub: b.coupling_score + '% match · ' + b.operating_margin_pct + '% margin · -' + b.household_savings_pct + '% price',
+        label: b.name.length > 25 ? b.name.slice(0, 24) + '…' : b.name,
+        sub: b.coupling_score + '% match · -' + b.household_savings_pct + '% cost',
         color: b.driver_color,
         x: 602,
         y: 62 + i * 44,
@@ -310,22 +310,22 @@
 
     hubG.append('text')
       .attr('x', 0).attr('y', -22).attr('text-anchor', 'middle')
-      .attr('font-size', '10').attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
+      .attr('font-size', '12').attr('font-weight', '700').attr('font-family', 'monospace').attr('fill', '#4fb3a8')
       .text('OCap + PSI LEDGER');
 
     hubG.append('text')
       .attr('x', 0).attr('y', -2).attr('text-anchor', 'middle')
-      .attr('font-size', '11').attr('font-weight', '700').attr('fill', '#fff')
+      .attr('font-size', '12.5').attr('font-weight', '700').attr('fill', '#fff')
       .text(hubNode.sub);
 
     hubG.append('text')
       .attr('x', 0).attr('y', 16).attr('text-anchor', 'middle')
-      .attr('font-size', '9.5').attr('font-weight', '700').attr('fill', '#e5a93c')
+      .attr('font-size', '12').attr('font-weight', '700').attr('fill', '#e5a93c')
       .text(hubNode.sub2);
 
     hubG.append('text')
       .attr('x', 0).attr('y', 34).attr('text-anchor', 'middle')
-      .attr('font-size', '9.5').attr('font-family', 'monospace').attr('fill', '#9aa3b2')
+      .attr('font-size', '12').attr('font-family', 'monospace').attr('fill', '#9aa3b2')
       .text(activeStep ? 'Step ' + activeStep + '/5 Active' : 'Click node to filter');
 
     // Draw Left Driver Cards
@@ -351,12 +351,12 @@
 
       g.append('text')
         .attr('x', -66).attr('y', -4)
-        .attr('font-size', '10').attr('font-weight', '700').attr('fill', '#fff')
+        .attr('font-size', '12').attr('font-weight', '700').attr('fill', '#fff')
         .text(dn.label);
 
       g.append('text')
         .attr('x', -66).attr('y', 12)
-        .attr('font-size', '9.5').attr('font-family', 'monospace').attr('fill', dn.color)
+        .attr('font-size', '12').attr('font-family', 'monospace').attr('fill', dn.color)
         .text(dn.sub);
     });
 
@@ -379,12 +379,12 @@
 
       g.append('text')
         .attr('x', -142).attr('y', -2)
-        .attr('font-size', '9.8').attr('font-weight', '700').attr('fill', '#fff')
+        .attr('font-size', '12').attr('font-weight', '700').attr('fill', '#fff')
         .text((idx + 1) + '. ' + bn.label);
 
       g.append('text')
         .attr('x', -142).attr('y', 12)
-        .attr('font-size', '9.5').attr('font-family', 'monospace').attr('fill', bn.color)
+        .attr('font-size', '12').attr('font-family', 'monospace').attr('fill', bn.color)
         .text(bn.sub);
     });
   }
