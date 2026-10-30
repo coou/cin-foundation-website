@@ -1,6 +1,60 @@
 {
  "scenarios": [
   {
+   "id": "SC-20261030-0056",
+   "added_at": "2026-10-30T22:11:44+00:00",
+   "title": "Downloaded assistant skills hide instructions that steal confidential records",
+   "horizon_years": 2,
+   "world": "It is 2028. Millions of administrative workers and legal assistants customize their AI workspaces by downloading pre-packaged skill packs from open repositories. A community-shared legal drafting skill includes an invisible instruction that commands the local assistant to append confidential client settlement details to outbound research queries. Because the skill looks like ordinary markdown text rather than executable binaries, corporate endpoint firewalls inspect nothing, and the leakage remains undetected for months.",
+   "premise": "Modern software assistants allow users to import markdown skill files to gain new capabilities. Security research demonstrates that instructions hidden inside shared skill files raise attack success rates from 0.5% to 45%, bypassing baseline guardrails without complex code exploits. As companies encourage workers to install custom agent skills from public libraries, rogue instructions begin quietly exfiltrating sensitive data.",
+   "goals": [
+    1,
+    4
+   ],
+   "how": "Our architecture enforces hardware-isolated execution and cryptographic signature verification for every imported skill file. By running agent tools inside an object-capability sandbox with strict network destination allowlists, hidden instructions cannot phone home even if an unvetted prompt is loaded.",
+   "shift": 0.36,
+   "outcomes": [
+    {
+     "name": "Malicious skill repositories infect corporate agent fleets",
+     "description": "Attackers publish useful productivity skills containing hidden prompts that quietly forward financial numbers and API keys to third-party endpoints.",
+     "example": "An accounting firm installs a tax calculation skill whose system prompt instructs the agent to include private ledger balances in routine error logs sent to an external server.",
+     "desirable": false,
+     "likelihood_now": 0.6,
+     "likelihood_with_cin": 0.45
+    },
+    {
+     "name": "Cryptographically verified skill manifests block uninspected instructions",
+     "description": "Agent runtimes require signed skill manifests and run tools inside isolated sandboxes that restrict outbound network traffic to approved destinations.",
+     "example": "A hospital legal department runs personal agents that verify cryptographic signatures on every skill file and block unapproved outbound network requests fail-closed.",
+     "desirable": true,
+     "likelihood_now": 0.2,
+     "likelihood_with_cin": 0.38
+    },
+    {
+     "name": "Proprietary platforms wall off skill ecosystems with mandatory app store reviews",
+     "description": "Centralized cloud vendors exploit safety fears to ban third-party markdown skills, forcing all agent extensions into proprietary app stores with 30% revenue cuts.",
+     "example": "A major cloud provider disallows local custom skill files, requiring enterprise customers to purchase vetted add-ons exclusively through its managed cloud portal.",
+     "desirable": false,
+     "likelihood_now": 0.55,
+     "likelihood_with_cin": 0.52
+    }
+   ],
+   "pipelines": [
+    "simulation",
+    "site",
+    "software"
+   ],
+   "sources": [
+    {
+     "url": "https://arxiv.org/abs/2610.37738",
+     "title": "Poisoned Skills: Propagating Jailbreaks Through Agent Markdown Files",
+     "kind": "news",
+     "published": "2026-10-27"
+    }
+   ],
+   "work": 0
+  },
+  {
    "id": "SC-20261030-0055",
    "added_at": "2026-10-30T18:12:09+00:00",
    "title": "Emergent multi-agent scheming creates covert collusion loops across enterprise workflows",
